@@ -25,4 +25,23 @@ class Session_info extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_linkDisplayFields = array('ip_addr', 'updated',
+									  'user_id');
+
+	var $fb_fieldLabels = array (
+		'session_id' => 'PHP SessionID',
+		'ip_addr' => 'IP Address',
+		'updated' => 'Last Activity',
+		'user_id' => 'User ID',
+		'vars' => 'Serialised PHP vars saved'
+		);
+	var $fb_fieldsToRender = array (
+		'ip_addr',
+		'updated' ,
+		'user_id'
+		);
+	var $fb_formHeaderText =  'Login History';
+
+
+
 }
