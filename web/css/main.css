@@ -1,7 +1,7 @@
 /* $Id$ */
 p,table,li,h1,h2,h3
 {
-  font-family: verdana, arial, 'sans serif'; 
+  font-family: verdana, arial, sans serif; 
 }
 
 body{ 
@@ -116,7 +116,7 @@ input[type="submit"] {
 }
 
 
-TABLE { 
+table { 
   margin-top: .5em;
   margin-bottom: .5em;
 	padding: 1px;
@@ -193,6 +193,13 @@ p.error {
 	#footer { display:none }	
 	#leftCol { display:none }
 	#springfestpretty { display:none }
-	a { display:none }	
-	  #rightCol { margin: 0 	}
+	a { display: none }	
+	#rightCol { margin: 0 }
+	td { 
+			padding-bottom: 10pt; 
+			vertical-align: middle;
+			border-spacing: 0; 
+			border-bottom: 1pt solid black; 
+	}
+
  }
