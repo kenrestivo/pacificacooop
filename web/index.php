@@ -69,13 +69,9 @@
 				These can be family, friends, business associates, etc. 
 				They will be sent formal invitations on behalf of the School. 
 				You must enter at least 10 names by $cutoffdate<br>";
-		#show them what they've already got, don pardo
-		nameSummary($id);
 
-		#show a table of names, if, um, there are names there.
-		if(nameCount($id) > 0){
-			showNames($id);
-		}
+		#show them what they've already got, don pardo
+		showNames($id);
 
 		print "<br>Enter more names here. 
 					Remember to click 'Save Names' 

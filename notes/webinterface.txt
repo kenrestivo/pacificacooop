@@ -72,6 +72,8 @@ OK, CODE!
 			report broken ones DONE
 				create an array of arrays
 				redisplay the form, but it will show up as an error form
+		should also check that it isn't a duplicate, 
+			that someone else hasn't entered it already
 
 admin code
 	drawing the chooser (as above and in reprots.txt)

@@ -126,6 +126,7 @@ create table coop.leads (
 	company varchar(255),
 	addr varchar(255),
 	addrcont varchar(255),
+	city varchar(255),
 	state varchar(255),
 	zip varchar(255),
 	country varchar(255),
