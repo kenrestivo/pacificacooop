@@ -65,14 +65,24 @@ class PostPaypal
 			$incobj = $this->factoryWrapper('income');
 			$paypalobj->get($this->uid);
 
+            //don't dupe. XXX this is dumb. what do i do about refunds?
+            $incobj->txn_id = $paypalobj->txn_id;
+            if($incobj->find()){
+                return;   
+            }
+
 			foreach (array('txn_id','check_number') as $key => $val){ 
 				$incobj->$val = $paypalobj->txn_id;
 			}
 			foreach (array('bookkeeper_date','cleared_date') as $key => $val){ 
 				$incobj->$val = $paypalobj->confirm_date;
 			}
-			$incobj->payer = sprintf("%s %s", $paypalobj->first_name, $paypalobj->last_name);
+			$incobj->payer = sprintf("%s %s", 
+                                     $paypalobj->first_name, 
+                                     $paypalobj->last_name);
 
+            $incobj->amount = $paypalobj->payment_gross;
+            $incobj->school_year = findSchoolYear();
 	}
 
 
