@@ -25,7 +25,7 @@ NFSNDOCROOT=/nfsn/content/paccoop/htdocs
 NFSNLIVEPATH=$(NFSNDOCROOT)/sf/
 LIVEHERE=../livesite/
 NFSNDEVPATH=$(NFSNDOCROOT)/sf-dev/
-DEVHERE=../web/
+DEVHERE=../web-online/
 XCLUDE='*dbhost*' 
 
 
@@ -69,6 +69,9 @@ commit-dev:
 	(cd $(DEVPATH); cvs commit -m "syncing")
 
 sync-live: commit-live download-live
+
+#TODO do a cvs update after downloading?
+sync-dev: download-dev
 	
 
 
