@@ -9,8 +9,8 @@
 			 (ice-9 slib))
 (require 'printf)
 
-(write-line "XXX fix the worker thing, it doesn't work!")
-generate error here
+ (write-line "XXX fix the worker thing AND the email!, they don't work!")
+ generate error here
 
 (define *rasta* (make-hash-table 3))
 

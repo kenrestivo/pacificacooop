@@ -85,44 +85,69 @@ insert into groups set
 
 -- events
 insert into events set
-			eventid = 1,
-			description = "Christmas Tree Field Trip";
+			event_id = 1,
+			description = "Christmas Tree Field Trip",
 			notes = "Christmas tree farm. All insurance and drivers licenses must be up-to-date.",
 			url = 'insurance.php'
 ;
 
 insert into events set
-			eventid = 2,
-			description = "Parent Ed Meeting";
+			event_id = 2,
+			description = "Parent Education Meeting",
+			notes = "Mandatory meeting for all parents"
+;
 
 insert into events set
-			eventid = 3,
+			event_id = 3,
+			realm = 'nag',
 			description = "Springfest Invitation Names Due";
-			notes = "Everyone must enter a list of 10 people to be invited to Springfest ",
+			notes = "Each family must enter a list of 10 people to be invited to Springfest ",
 			url = '10names.php'
 ;
 
 insert into events set
-			eventid = 4,
+			event_id = 4,
+			realm = 'nag',
 			description = "Springfest Auction Donation Items Due",
 			url = 'auction.php',
-			notes = "Everyone must enter at least 1 auction donation online"
+			notes = "Each family must enter at least 1 auction donation online"
 ;
+
+insert into events set
+			event_id = 5,
+			realm = 'enhancement',
+			description = "Fall Enhancement Cutoff Date",
+			url = 'enhancement.php',
+			notes = "Each family must complete their fall enhancement hours before this date"
+;
+
+
+insert into events set
+			event_id = 6,
+			realm = 'enhancement',
+			description = "Spring Enhancement Cutoff Date",
+			url = 'enhancement.php',
+			notes = "Each family must complete their spring enhancement hours before this date"
+;
+
 
 -- calendar items for this first online year. TEMP!
-insert into cal set
-			eventid = 4,
-			eventdate = "2003-12-18",
+insert into calendar_events set
+			event_id = 4,
+			school_year = '2003-2004',
+			event_date = "2003-12-18",
 ;
 
-insert into cal set
-			eventid = 3,
-			eventdate = "2003-11-04"
+insert into calendar_events set
+			event_id = 3,
+			school_year = '2003-2004',
+			event_date = "2003-11-04"
 ;
 
-insert into cal set
-			eventid = 1,
-			eventdate = "2003-12-12"
+insert into calendar_events set
+			event_id = 1,
+			school_year = '2003-2004',
+			event_date = "2003-12-12"
 ;
 
 -- the territories

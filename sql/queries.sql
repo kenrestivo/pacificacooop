@@ -187,9 +187,11 @@ select income.*, families.name
 -- show the total auction item_value (for a family)
 select families.name, sum(auction_donation_items.item_value) as item_value
     from families
-        left join auction_items_families_join on families.family_id = auction_items_families_join.family_id
+        left join auction_items_families_join 
+            on families.family_id = auction_items_families_join.family_id
         left join auction 
-        on auction_items_families_join.auction_donation_item_id = auction_donation_items.auction_donation_item_id
+            on auction_items_families_join.auction_donation_item_id = 
+                auction_donation_items.auction_donation_item_id
     group by families.family_id
 
 -- money totals
@@ -556,6 +558,7 @@ select  auction_items_families_join.family_id  ,
               on companies_income_join.company_id = companies.company_id
           left join income 
             on companies_income_join.income_id = income.income_id    
+                and income.cleared_date > '2000-01-01'
                 and income.school_year = '2004-2005'
            and income.thank_you_id is null
           left join companies_in_kind_join
@@ -574,13 +577,13 @@ select  auction_items_families_join.family_id  ,
 
 ---- the infamous parent-popup query
 select count(distinct(parents.parent_id)) as count, 
-		parent_id, parents.last_name, parents.first_name 
-	from parents 
-		left join kids on parents.family_id = kids.family_id 
-		left join enrollment on kids.kid_id = enrollment.kid_id 
-	where enrollment.school_year = '2004-2005' 
-	group by parents.last_name, parents.first_name 
-	order by parents.last_name, parents.first_name
+        parent_id, parents.last_name, parents.first_name 
+    from parents 
+        left join kids on parents.family_id = kids.family_id 
+        left join enrollment on kids.kid_id = enrollment.kid_id 
+    where enrollment.school_year = '2004-2005' 
+    group by parents.last_name, parents.first_name 
+    order by parents.last_name, parents.first_name
 
 -- find the duplicate or non-existent workers!!
 select name, families.family_id,
@@ -601,6 +604,12 @@ CREATE TABLE temp (
   PRIMARY KEY  (temp_id)
 ) ;
 
-
+-- income by month
+ select concat(monthname(check_date), ' ', year(check_date)) as Month, 
+        sum(payment_amount) as Total 
+    from income 
+    where school_year = '2004-2005' 
+    group by Month 
+    order by check_date;
 
 --- EOF

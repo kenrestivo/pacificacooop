@@ -23,12 +23,38 @@
 require_once('CoopObject.php');
 require_once('DB/DataObject.php');
 require_once('object-config.php');
+require_once('utils.inc');
 
 
 //////////////////////////////////////////
 /////////////////////// THANKYOU CLASS
 class Enhancement
 {
+	var $schoolYear; // cache of this year's, um, year.
+
+	// month number, hour number
+	var lateStarts = array(
+		9 => 4,
+		10 => 3,
+		11 => 2,
+		12 => 1,
+		// i don't separate out fall/spring here
+		1 => 4, 
+		3 => 3,
+		4 => 2
+		5 => 1
+		);
+
+
+
+	function Enhancement ($schoolYear = false)
+		{
+			// guess it and cache it
+			$this->schoolYear = findSchoolYear($schoolYear);
+
+		}
+	
+
 
 } // END ENHANCEMENT CLASS
 

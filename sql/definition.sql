@@ -1,7 +1,7 @@
 --  $Id$
 --  database schema for co-op database
 
--- Copyright (C) 2003,2004  ken restivo <ken@restivo.org>
+-- Copyright (C) 2003-2005  ken restivo <ken@restivo.org>
 --
 -- This program is free software; you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -89,6 +89,7 @@ CREATE TABLE calendar_events (
   status enum('Active','Tentative','Cancelled') default 'Active',
   keep_event_hidden_until_date datetime default NULL,
   event_date datetime default NULL,
+  school_year varchar(50) default NULL,
   PRIMARY KEY  (calendar_event_id),
 ) ;
 
@@ -231,6 +232,7 @@ CREATE TABLE enrollment (
 CREATE TABLE events (
   event_id int(32) NOT NULL unique auto_increment,
   description varchar(255) default NULL,
+  realm varchar(55) default NULL,
   notes longtext,
   url varchar(255) default NULL,
   PRIMARY KEY  (event_id),
@@ -384,6 +386,7 @@ CREATE TABLE nag_indulgences (
   granted_date date default NULL,
   indulgence_type enum('Everything','Invitations','Family Auctions',
     'Quilt Fee','Solicitation Auctions') default NULL,
+  school_year varchar(50) default NULL,
   family_id int(32) default NULL,
   PRIMARY KEY  (nag_indulgence_id),
 ) ;
@@ -790,10 +793,22 @@ CREATE TABLE companies_in_kind_join (
 
 CREATE TABLE thank_you (
   thank_you_id int(32) NOT NULL unique auto_increment,
+  date_printed date default NULL,
   date_sent date default NULL,
   family_id int(32) default NULL,
    method  enum('Other', 'Letter', 'WebPage', 'Email') default NULL,
    PRIMARY KEY  (thank_you_id)
 ) ;
+
+
+CREATE TABLE thank_you_templates (
+  thank_you_template_id int(32) NOT NULL unique auto_increment,
+  template longtext,
+   school_year varchar(50) default NULL,
+   PRIMARY KEY  (thank_you_template_id)
+) ;
+
+
+
 
 -- EOF
