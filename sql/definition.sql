@@ -499,8 +499,12 @@ CREATE TABLE springfest_attendees (
   springfest_attendee_id int(32) NOT NULL unique auto_increment,
   paddle_number int(32) default NULL,
   ticket_id int(32) default NULL,
+  lead_id int(32) default NULL,
+  company_id int(32) default NULL,
+  parent_id int(32) default NULL,
 	temp_name varchar(255) default NULL,
-  school_year varchar(50) default NULL,  -- XXX do i want this here?
+  school_year varchar(50) default NULL,  
+  income_id int(32) default NULL,
   PRIMARY KEY  (springfest_attendee_id)
 ) ;
 
