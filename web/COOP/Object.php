@@ -315,6 +315,7 @@ class coopObject
 			$this->obj->school_year = findSchoolYear();
 		}
 
+	/// XXX this is not really used. instead, i overload insert
 	function getCounter($column, $schoolyear = false)
 		{
 			if(!$schoolyear){

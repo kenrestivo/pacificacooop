@@ -36,4 +36,39 @@ class Parents extends DB_DataObject
 	var $fb_linkOrderFields = array ('last_name', 'first_name');
 	var $fb_enumFields = array ('type', 'worker');
 	var $fb_fieldsToRender = array ('last_name', 'first_name', 'type', 'worker');
+	function fb_linkConstraints()
+		{
+			// ugly, but consisent. only shows parents for this year
+
+			//$this->debugLevel(2);
+			$fam = DB_DataObject::factory('families'); 
+ 			if (PEAR::isError($fam)){
+				user_error("Tickets.php::linkconstraint(): db badness", 
+						   E_USER_ERROR);
+			}
+			
+			$kids = DB_DataObject::factory('kids'); 
+ 			if (PEAR::isError($kids)){
+				user_error("Tickets.php::linkconstraint(): db badness", 
+						   E_USER_ERROR);
+			}
+			
+			$enrol = DB_DataObject::factory('enrollment'); 
+ 			if (PEAR::isError($enrol)){
+				user_error("Tickets.php::linkconstraint(): db badness", 
+						   E_USER_ERROR);
+			}
+			$enrol->school_year = findSchoolYear();
+			//$enrol->whereAdd('dropout_date is null or dropout_date < "2000-01-01"');
+			$kids->joinAdd($enrol);
+			$fam->joinAdd($kids);
+			$this->joinAdd($fam);
+
+			$this->selectAdd();
+			$this->selectAdd('parents.parent_id, parents.first_name, parents.last_name');
+
+		}
+
+
+
 }

@@ -173,8 +173,16 @@ class coopForm extends CoopObject
 			//confessObj($this, 'this');
 			$link = explode(':', $this->forwardLinks[$key]);
 			$sub =& new CoopObject(&$this->page, $link[0], &$this);
-			$sub->obj->orderBy(implode(', ', 
-									   $sub->obj->fb_linkDisplayFields));
+			if(is_callable(array($sub->obj, 'fb_linkConstraints'))){
+				$sub->obj->fb_linkConstraints();
+			} else {
+				$sub->defaultConstraints();
+			}
+			//TODO add linkorderfields
+			foreach($sub->obj->fb_linkDisplayFields as $field){
+				$ldf[] = sprintf("%s.%s", $sub->table, $field);
+			}
+			$sub->obj->orderBy(implode(', ', $ldf));
 			$sub->obj->find();
 			while($sub->obj->fetch()){
 				$options[(string)$sub->obj->$link[1]] = 

@@ -89,8 +89,6 @@ class Tickets extends DB_DataObject
 				$pado = new CoopObject(&$page, 'springfest_attendees', &$top);
 				$pado->obj->ticket_id = $this->ticket_id;
 				$pado->obj->entry_type  = 'Automatic';
-				$pado->obj->paddle_number = $pado->getCounter('paddle_number',
-															 $this->school_year);
 				$pado->obj->school_year = $this->school_year;
 				$pado->obj->insert();
 			}

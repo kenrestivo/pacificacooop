@@ -33,4 +33,34 @@ class Families extends DB_DataObject
 		);
 	//var $fb_crossLinks = array(array('table' => 'families_income_join',
 	//'fromField' => 'family_id', 'toField' => 'income_id'));
+
+	function fb_linkConstraints()
+		{
+			// ugly, but consisent. only shows families for this year
+
+
+			$kids = DB_DataObject::factory('kids'); 
+ 			if (PEAR::isError($kids)){
+				user_error("Tickets.php::linkconstraint(): db badness", 
+						   E_USER_ERROR);
+			}
+			
+			$enrol = DB_DataObject::factory('enrollment'); 
+ 			if (PEAR::isError($enrol)){
+				user_error("Tickets.php::linkconstraint(): db badness", 
+						   E_USER_ERROR);
+			}
+			$enrol->school_year = findSchoolYear();
+			$enrol->whereAdd('dropout_date is null or dropout_date < "2000-01-01"');
+			$kids->joinAdd($enrol);
+			$this->joinAdd($kids);
+
+			$this->selectAdd();
+			$this->selectAdd('families.family_id, families.name');
+
+		}
+
+
+
+
 }

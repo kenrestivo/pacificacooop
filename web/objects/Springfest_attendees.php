@@ -49,8 +49,30 @@ class Springfest_attendees extends DB_DataObject
 	var $fb_fieldsToRender = array ('paddle_number' , 'ticket_id' , 
 									'lead_id' , 'company_id', 'parent_id' 
 		);
+	
+	//the paddle number
+	function insert()
+		{
+			if(!$this->school_year){
+				$this->school_year  = findSchoolYear();
+			}
+			$clone = $this;
+			$clone->query(sprintf("update counters set 
+						counter = last_insert_id(counter+1) 
+				where column_name='paddle_number' 
+						and school_year = '%s'", 
+								  $this->school_year));
+            $db =& $clone->getDatabaseConnection();
 
-									
+            $id =& $db->getOne('select last_insert_id()');
+            if (DB::isError($data)) {
+                die($data->getMessage());
+            }
+
+			//print "id $id<br>";
+			$this->paddle_number = $id;
+			parent::insert();
+		}
 
 
 }
