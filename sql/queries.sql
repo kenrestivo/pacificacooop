@@ -475,36 +475,37 @@ select  auction_items_families_join.family_id  ,
               on companies_auction_join.company_id = companies.company_id
           left join auction_donation_items 
               on companies_auction_join.auction_donation_item_id = 
-                auction_donation_items.auction_donation_item_id
+                auction_donation_items.auction_donation_item_id 
+                    and auction_donation_items.school_year = '2004-2005'
           left join companies_income_join 
               on companies_income_join.company_id = companies.company_id
           left join income 
             on companies_income_join.income_id = income.income_id    
+                and income.school_year = '2004-2005'
           left join companies_in_kind_join
                 on companies_in_kind_join.company_id = companies.company_id
          left join in_kind_donations
                 on in_kind_donations.in_kind_donation_id =
-                    companies_in_kind_join.in_kind_donation_id
-        where auction_donation_items.school_year = '2004-2005'
-            or income.school_year = '2004-2005'
-            or in_kind_donations.school_year = '2004-2005'
-    group by companies.company_id 
+                    companies_in_kind_join.in_kind_donation_id 
+                    and in_kind_donations.school_year = '2004-2005'
+           group by companies.company_id  
+        having cash_donations > 0 or auction_donations > 0 
+            or in_kind_donations > 0
      order by  cash_donations desc, auction_donations desc,
         in_kind_donations desc, companies.company_name asc;
 
 -- simpler query for just money
  select company_name, sum(income.payment_amount) as cash_donations
        from companies
-           left join companies_income_join 
-              on companies_income_join.company_id = companies.company_id
-          left join income 
-            on companies_income_join.income_id = income.income_id    
+           left join companies_income_join using (company_id)
+          left join income using (income_id)    
          where income.school_year = '2004-2005'
      group by companies.company_id 
      order by  cash_donations desc, companies.company_name asc;
 
 -- simpler non-cash donations screen
- select company_name, 
+
+ select company_name, sum(income.payment_amount) as cash_donations,
       sum(auction_donation_items.item_value) as auction_donations,
         sum(in_kind_donations.item_value) as in_kind_donations
       from companies
@@ -512,16 +513,62 @@ select  auction_items_families_join.family_id  ,
               on companies_auction_join.company_id = companies.company_id
           left join auction_donation_items 
               on companies_auction_join.auction_donation_item_id = 
-                auction_donation_items.auction_donation_item_id
+                auction_donation_items.auction_donation_item_id 
+                    and auction_donation_items.school_year = '2004-2005'
+          left join companies_income_join 
+              on companies_income_join.company_id = companies.company_id
+          left join income 
+            on companies_income_join.income_id = income.income_id    
+                and income.school_year = '2004-2005'
           left join companies_in_kind_join
                 on companies_in_kind_join.company_id = companies.company_id
          left join in_kind_donations
                 on in_kind_donations.in_kind_donation_id =
-                    companies_in_kind_join.in_kind_donation_id
-        where auction_donation_items.school_year = '2004-2005'
-            or in_kind_donations.school_year = '2004-2005'
-    group by companies.company_id 
-     order by   auction_donations desc,
+                    companies_in_kind_join.in_kind_donation_id 
+                    and in_kind_donations.school_year = '2004-2005'
+           group by companies.company_id  
+    having cash_donations > 0 or auction_donations > 0 
+        or in_kind_donations > 0
+     order by  cash_donations desc, auction_donations desc,
         in_kind_donations desc, companies.company_name asc;
 
---- Eof
+
+-- check thank-you's
+ select company_name, sum(income.payment_amount) as cash_donations,
+      sum(auction_donation_items.item_value) as auction_donations,
+        sum(in_kind_donations.item_value) as in_kind_donations
+      from companies
+          left join companies_auction_join 
+              on companies_auction_join.company_id = companies.company_id
+          left join auction_donation_items 
+              on companies_auction_join.auction_donation_item_id = 
+                auction_donation_items.auction_donation_item_id 
+                    and auction_donation_items.school_year = '2004-2005'
+          left join companies_income_join 
+              on companies_income_join.company_id = companies.company_id
+          left join income 
+            on companies_income_join.income_id = income.income_id    
+                and income.school_year = '2004-2005'
+          left join companies_in_kind_join
+                on companies_in_kind_join.company_id = companies.company_id
+         left join in_kind_donations
+                on in_kind_donations.in_kind_donation_id =
+                    companies_in_kind_join.in_kind_donation_id 
+                        and in_kind_donations.school_year = '2004-2005'
+           group by companies.company_id  
+     having cash_donations > 0 or auction_donations > 0 
+                or in_kind_donations > 0
+     order by  cash_donations desc, auction_donations desc,
+        in_kind_donations desc, companies.company_name asc;
+
+---- the infamous parent-popup query
+select count(distinct(parents.parent_id)) as count, 
+		parent_id, parents.last_name, parents.first_name 
+	from parents 
+		left join kids on parents.family_id = kids.family_id 
+		left join enrollment on kids.kid_id = enrollment.kid_id 
+	where enrollment.school_year = '2004-2005' 
+	group by parents.last_name, parents.first_name 
+	order by parents.last_name, parents.first_name
+
+--- EOF
