@@ -322,6 +322,8 @@ CREATE TABLE invitation_rsvps (
   income_id int(32) default NULL,
   ticket_quantity int(5) default NULL,
   lead_id int(32) default NULL,
+ ticket_type enum('Paid for','Included with package', 'Member','VIP','Freebie','Other') default NULL,
+  school_year varchar(50) default NULL,
   PRIMARY KEY  (invitation_rsvps_id),
 ) ;
 
