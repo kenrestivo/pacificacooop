@@ -78,10 +78,9 @@ select max(ins.expires) as exp, parents.familyid, families.name, ins.policynum, 
     -- note: in an actualy scripted query, i'll add where parents.familyid =
 
 --- show kids and enrollment
-select kids.*, enrol.sess 
+select kids.*, enrollment.* 
     from kids 
-        left join attendance on attendance.kidsid = kids.kidsid 
-        left join enrol on enrol.enrolid = attendance.enrolid;
+        left join enrollment using (kidsid);
 
 -- show all springfest payments
 select families.name, sum(inc.amount) as total
@@ -362,36 +361,35 @@ select ticket_quantity , amount, last, first, addr , addrcont, city ,
 	order by leads.last, leads.first;
 
 -- the family summary
-create temporary table enrolled (
+create temporary table enrolled_temp (
 	name varchar(255),
-    sess enum ('AM', 'PM'),
+    am_pm_session enum ('AM', 'PM'),
     familyid int(32) not null unique,
     phone varchar(20)
 );
-insert into enrolled
-select families.name, enrol.sess, 
+insert into enrolled_temp
+select families.name, enrollment.am_pm_session,
     families.familyid , families.phone
         from families 
            left join kids on kids.familyid = families.familyid
-           left join attendance on kids.kidsid = attendance.kidsid
-           left join enrol on attendance.enrolid = enrol.enrolid
-        where enrol.semester = '2003-2004'
-            and attendance.dropout is null
+           left join enrollment on kids.kidsid = enrollment.kidsid
+        where enrollment.school_year = '2003-2004'
+            and enrollment.dropout_date is null
     group by families.familyid
-    order by enrol.sess, families.name;
+    order by enrollment.am_pm_session, families.name;
 
 -- the enhancement hours, sold separately
-select enrolled.name as Family_Name,
+select enrolled_temp.name as Family_Name,
     sum(if(enhancement_hours.hours, enhancement_hours.hours,0)) as Total, 
-	enrolled.sess as Session, enrolled.phone as Phone
-	from enrolled
+	enrolled_temp.am_pm_session as Session, enrolled_temp.phone as Phone
+	from enrolled_temp
            left join parents 
-               on parents.familyid = enrolled.familyid
+               on parents.familyid = enrolled_temp.familyid
            left join enhancement_hours 
                on parents.parentsid = enhancement_hours.parentsid
-	group by enrolled.familyid
+	group by enrolled_temp.familyid
 	having Total < 4
-	order by enrolled.sess, enrolled.name;
+	order by enrolled_temp.am_pm_session, enrolled_temp.name;
 
 -- so often used, it needs to be here
 select privs.*, users.name 

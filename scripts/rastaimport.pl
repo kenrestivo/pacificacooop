@@ -255,7 +255,8 @@ sub checkOneParent()
 		#	AND check for parents which don't match the family name in there?
 		#		i.e. if my $famid is NOT what's in the db!
 		if($ritem{'familyid'} != $famid){
-			print "ERROR! $famid for $first $last has changed!\n";
+			printf("ERROR! $first $last has changed from famid %d to famid %d!\n",
+				  $famid, $ritem{'familyid'} );
 			exit(1);
 		}
 		if($opt_v){
@@ -508,7 +509,7 @@ sub checkChanges(){
 		if( $session eq $ritem{'sess'} || $ritem{'dropout'} ){
 			#TODO change the session, and undrop them (they ARE enrolled)
 			#	ugh.. deal with semester (i.e. 2003-2004)
-			printf ("%s %s was dropped out. un-dropping them\n",
+			printf("%s %s was dropped out. un-dropping them\n",
 				$ritem{'first'}, $ritem{'last'}
 			);
 		}
