@@ -239,8 +239,15 @@ class coopView extends CoopObject
 			$tab->addRow(array($this->title()), 'bgcolor=#9999cc', 'TH'); 
 
 			while($this->obj->fetch()){
+				//confessObj($this, 'onelinetable');
 				$mainlink = $this->concatLinkFields(&$this->obj);
-				$tab->addRow(array($mainlink));
+
+				$idx = $this->obj->{$this->pk};
+				$meat = $this->page->selfURL($mainlink, 
+											 "entry0[$this->pk]=$idx&action=details",
+											 $this->legacyPage);
+
+				$tab->addRow(array($meat));
 			
 			}
 			//	$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
