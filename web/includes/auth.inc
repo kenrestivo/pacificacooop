@@ -1100,7 +1100,6 @@ displayAuth($p, $u, $realm, $pretty)
 {
 
 	print "<h3>$pretty \n";
-	$realm = 'auction';
 	if($p['grouplevel'] < ACCESS_VIEW){
 		printf("for the %s Family. </h3>
 				(You are authorized to %s the %s Family's %s).\n", 
