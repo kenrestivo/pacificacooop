@@ -61,8 +61,8 @@ group by companies.company_id
 having cash_donations >= %d and cash_donations < %d
 order by company_name
 ", 
-										 $sp->obj->sponsorship_price,
-										 $previous));
+								$sp->obj->sponsorship_price,
+								$previous));
 		$previous = $sp->obj->sponsorship_price;
 
 		$sponsors = ''; // because HTML sucks
@@ -78,7 +78,7 @@ order by company_name
 		}
 		if($co->obj->N){
 			$res .= sprintf(
-				'<ul><p><b>%s Contributors ($%.0f and above)</b></p>%s</ul>', 
+				'<ul><p><b>%s Contributors</b> ($%.0f and above)</p>%s</ul>', 
 				$sp->obj->sponsorship_name,
 				$sp->obj->sponsorship_price,
 				$sponsors);
