@@ -63,8 +63,9 @@ switch($_REQUEST['action']){
 
 
 	 /////////// what's included
+	 $included = array();
 	 $auc = new CoopObject(&$cp, 'auction_donation_items', $none);
-	 $auc->obj->debugLevel(2);
+	 //$auc->obj->debugLevel(2);
 	 $apj =& new CoopObject(&$cp, 'auction_packages_join', &$auc);
 	 $apj->obj->{$atd->pk} = $atd->obj->{$atd->pk};
 	 $auc->obj->joinAdd($apj->obj);
@@ -78,17 +79,11 @@ switch($_REQUEST['action']){
 		 $included[]= '';
 	 }
 
-	 ///////////// the orphans to add
+	 ///////////// the porphans to add
 	 $auc = new CoopObject(&$cp, 'auction_donation_items', $none);
 	 //$auc->obj->debugLevel(2);
-	 $auc->obj->query(sprintf('
-		select auction_donation_items.* from auction_donation_items
-				left join auction_packages_join using (auction_donation_item_id)
-				where (package_id != %d 
-					or auction_packages_join.auction_donation_item_id is null) 
-					and auction_donation_items.school_year = "%s"',
-							  $atd->obj->{$atd->pk},
-							  findSchoolYear()));
+	 $auc->obj->school_year = findSchoolYear();
+	 $auc->obj->find();
 	 while($auc->obj->fetch()){
 		 $allpossible[$auc->obj->{$auc->pk}] =  
 			 sprintf('%.42s...', 
@@ -97,11 +92,23 @@ switch($_REQUEST['action']){
 
 	 }
 
-	 $atd->form->addElement('advmultselect', 'auction_donation_item_id', 
+
+	 /// HEY ASSHOLE!!! THIS IS IT HIDING IN HERE!!
+	 $el =& $atd->form->addElement('advmultselect', 'auction_donation_item_id', 
 					   'Auction Items:', $allpossible);
 
+	 print "INCLUDED: " .serialize($included);
 	 confessArray($included,'included');
-	 $atd->form->setDefaults(array('auction_donation_item_id' => $included));
+	 print "REQUEST: " . serialize($_REQUEST['auction_donation_item_id']);
+
+	 $atd->form->setDefaults(array('auction_donation_item_id' =>
+								   isset(
+									   $_REQUEST['_qf__' . 
+												 $atd->form->_attributes['name']]) ?
+								   $_REQUEST['auction_donation_item_id'] :
+								   $included
+								 ));
+							 //confessObj($atd->form, 'form');
 
 	 // ugly assthrus
 	 $atd->form->addElement('hidden', 'action', 'addremove'); 
@@ -119,9 +126,10 @@ switch($_REQUEST['action']){
 		 print $cp->selfURL('Look again', 
 							array('action' => 'addremove',
 								$atd->pk => $_REQUEST[$atd->pk]));
-	 } else {
-		 print $atd->form->toHTML();
+		 $atd->form->freeze();
 	 }
+	 print $atd->form->toHTML();
+
 
 	 break;
 		
