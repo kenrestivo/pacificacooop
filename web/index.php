@@ -25,7 +25,7 @@
 	require_once("insurancefuncs.inc");
 	require_once("calendarfuncs.inc");
 	require_once("adminfuncs.inc");
-	require_once("pkg/pkg_checkin_funcs.inc");
+	require_once("pkg_checkin_funcs.inc");
 	//require_once("solicitfuncs.inc");
 
 	print "<HTML>
@@ -73,7 +73,7 @@
 
 	//packaging check in
 	showMenuRow($auth, $u, 'Springfest Packaging Inventory', 
-		'pkgCheckinSummary', 'packaging', 'pkg/packaging_checkin.php' );
+		'pkgCheckinSummary', 'packaging', 'packaging_checkin.php' );
 
 	/* package management
 	showMenuRow($auth, $u, 'Springfest Package Management', 
