@@ -1,7 +1,7 @@
 --  $Id$
 --  database schema for co-op database
 
--- Copyright (C) 2003  ken restivo <ken@restivo.org>
+-- Copyright (C) 2003,2004  ken restivo <ken@restivo.org>
 --
 -- This program is free software; you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -245,6 +245,8 @@ create table events (
 	description varchar(255),
     notes longtext,
     url varchar(255),
+	-- TODO: enum for things the program will need? i.e. start dates, etc?
+	-- or, as mike suggested, just make them not-user-editable?
 	primary key (eventid)
 );
 	
@@ -447,6 +449,17 @@ create table enhancement_hours (
     primary key (enhancement_hour_id)
 );
 
+
+-- blog entries
+create table blog_entry (
+    blog_entry_id int(32) not null unique auto_increment,
+    parentsid int(32),
+	short_title varchar(255),
+	body longtext,
+	show_on_members_page enum('Unknown', 'Yes', 'No'),
+	show_on_public_page enum('Unknown', 'Yes', 'No'),
+    primary key (blog_entry_id)
+);
 
 
 -- the user/passwords used by the web view page AND my update tool..
