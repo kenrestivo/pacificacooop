@@ -41,7 +41,7 @@ OK, CODE!
 10names code
 	drawing the popup
 		query all families. doy.
-		if there's an id in POSTVARS, use that one as default. otherwise, CHOOSE ONE
+		if there's an id in POSTVARS, use that one as default. otherwise, CHOOSE
 	drawing the basic parent and kids info
 		tested tables: col for parents, col for kids
 		simple query: into table
@@ -53,7 +53,8 @@ OK, CODE!
 	handling the submission of the web form
 		checking data
 			everything into an array?
-			HTTPPOST them all, dump them in an array (even though arrays in php SUCK!)
+			HTTPPOST them all, dump them in an array 
+				(even though arrays in php SUCK!)
 			all required fields are there, valid data, etc.
 			name hasn't already been entered? (by whom?)
 		bitching people out if the data is mis-entered
@@ -74,6 +75,7 @@ arch
 		.dbfuncs.inc/php
 		.common.php
 			most everything!
+				assume it goes here
 				popup, parentinfo
 		.globals.inc
 			the HTTPVARS globals etc
@@ -89,8 +91,6 @@ arch
 			else draw 
 				the basic parentid,kids, names
 				and the form!
-			
-			
 		header/footer stuff
 	10names.php
 		specifics to this thing
