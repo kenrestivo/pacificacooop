@@ -52,6 +52,7 @@ OK, CODE!
 	drawing the web form
 		name the fields in a loop: name1, name2, addr1, addr2
 		invis field with parentid: because there'll be no popup on this page
+		will need a delete button! so people can remove them
 	czeching
 		go through all rows (entry1-x)
 			ok, check
