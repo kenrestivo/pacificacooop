@@ -93,59 +93,6 @@ class paypalForm
 		}
     
 
-	// the new improved form
-	function &buildRSVP(&$cp, $responsecode)
-		{
-			
-			$form =& new HTML_QuickForm( 'Springfest RSVP', 'rsvpform');
-			
-			// ticket quantity box NOTE: use "invoice" when sumbitting to paypal
-			$tick[] =& HTML_QuickForm::createElement('text', 
-												   'ticket_quantity', 
-												   'Yes! Please reserve', 
-												   'size="4"');
-			$tick[] =& new HTML_QuickForm_static('moretext', false,
-											'<b>tickets at $25 per person</b>');
-			//confessArray($tick, 'tick');
-			$form->addGroup($tick, false, 'Yes! Please reserve', '&nbsp;');
-			
-			// dynamically add OTHER box based on its presence
-			$form->addElement('text', 'other_amount', 
-							  'I/we will be unable to attend, 
-				but would like to make a tax-deductible contribution of: ',
-							  'size="4"');
-			
-			// a frozen TOTAL DONATION box too, before they paypal in
-			$form->addElement('submit', 'verify', 'Next>>');
-			
-			$form->setDefaults(array('other_amount' => '$'));
-
-			// important
-			if(SID){
-				$form->addElement('hidden', 'coop', session_id()); 
-			}
-			
-			//TODO pass through ANY OTHER VARS!
-			// i.e. the lead id, weirdo paypal.php vars, etc
-			$form->addElement('hidden', 'response_code', 
-							  $_REQUEST['response_code']); 
-
-			$form->applyFilter('__ALL__', 'trim');
-			foreach(array('response_code', 'other_amount', 'ticket_quantity') as $col){
-				$form->applyFilter($col, array(&$this, 'numericOnly'));
-			}
-			
-			return $form;
-			
-		} // END BUILDRSVP
-
-	function numericOnly($val)
-		{
-			print "HEY [$val]";
-			$res = preg_replace('/\D/', '', $val);
-			print "HO [$res]";
-			return $res;
-		}
 	
 } // end paypalform class
 
