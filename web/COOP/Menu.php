@@ -82,30 +82,32 @@ class CoopMenu extends HTML_Menu
 
 	function kenRender($type = 'sitemap')
 		{
-			$this->setMenuType($type);
-			//print $this->getCurrentURL();
+	
 			switch($type){
 			case 'sitemap':
 				$this->renderer =& new HTML_Menu_DirectTreeRenderer();
 				$this->render($this->renderer, $type);
-				return($this->renderer->toHTML());
+				$res = $this->renderer->toHTML();
 				break;
 			case 'urhere':
 				$this->renderer =& new HTML_Menu_DirectRenderer();
-				$this->renderer->setMenuType($type);
-				 $this->renderer->setMenuTemplate(
+				$this->renderer->setMenuTemplate(
  					'<span class="menutext"><table border="0">',
  					'</span></table>');
 				 //print "HEYY HEEYY";
 				$this->render($this->renderer, $type);
 				//	confessArray($this->getPath(), "apath");
-				if(count($this->getPath()) < 2){
-					return "";
-				}
-				return($this->renderer->toHTML());
+ 				if(count($this->getPath()) < 2){
+ 					return "";
+ 				}
+				$res = $this->renderer->toHTML();
 			break;
+			default:
+				return "BROKEN TYPE $type";
+				break;
 			}
-			return "BROKEN TYPE $type";
+			confessObj($this , "menures");
+			return $res;
 		}
 
 	function callbacksToMenu($everything)
@@ -223,13 +225,6 @@ class CoopMenu extends HTML_Menu
 
 		}
 
-	//useless wrapper around get urhere
-	function urhere()
-		{
-			if(in_array($this->getCurrentURL(), array_keys($this->_urlMap))){
-				return $this->get('urhere');
-			}
-		}
 
 } // END COOPMENU CLASS
 
