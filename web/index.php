@@ -72,7 +72,7 @@
 					$incomecallbacks, $pkgcheckincallbacks,  
 					$solicit_company_callbacks, $solicit_auction_callbacks,
 					$solicit_cash_callbacks, 
-					$raffle_income_callbacks, $raffle_location_callbacks
+					$raffle_location_callbacks, $raffle_income_callbacks, 
 		);
 
 	
