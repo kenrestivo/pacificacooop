@@ -77,6 +77,13 @@ class PostPaypal
 			$this->paypal_obj =& $this->factoryWrapper('accounting_paypal');
 			$this->paypal_obj->get($this->uid);
             
+            // duck out if no custom. 
+            ///XXX this will create orphaned cash tho! fix this dammit
+            if(!$this->paypal_obj->custom){
+                return;
+            }
+            
+            // ok let's go now
             $this->parseCustom();
 			if($this->postIncome()){
                 $this->postFamily(); // TODO: handle leads/companies too

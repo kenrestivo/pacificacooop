@@ -25,7 +25,7 @@ require_once("session-init.php");
 setupDB();
 setupErrors(); //*sigh* have to do this SECOND since it looks at dbhost :-/
 
-
+require_once("PostPaypal.php");
 
 ////////////////
 class IPN
@@ -148,13 +148,12 @@ class IPN
 				|| $_POST['payment_status'] == "Pending")
 			{
 				// we have a successful transaction! 
-				// check for valid transaction... sanity czechs
-				// update income here!				
-				// get incomeid
-				// split out the accountnumber, 
-						//then the familyid/leadid/companyid
-				//date too... ugly regexps
-				//finally save to the appropriate tables
+				// TODO check for valid transaction... sanity czechs
+				
+            	//finally save to the appropriate tables
+                $pp =& new PostPaypal;
+                $pp->postTransaction($this->paypal_id);
+			
 	
 			} //fi     
 			print $_POST['payment_status'];
