@@ -47,6 +47,7 @@ class ThankYou
 	var $from; // FROM: who sent the letter. will get filled in with
 			   // name of solicitor
 	var $email; // EMAIL: email address
+	var $thank_you_id; // cache of the unique id for this thankyounote
 
 	//TODO: put this in a file, and fopen it, or in a DB blob!
 	// if i put in in a db, schoolyearify them, and grab this years or latest
@@ -395,13 +396,14 @@ http://www.pacificacoop.org/
 
 		}
 
-	// populates a thank-you note with what's already in that note.
-	function recoverExisting()
+	function guessCompany($company_id_array)
 		{
-			// COMPANY
-			$co = new CoopView(&$this->cp, 'companies', &$top);
-			$co->obj->$pk = $id;
-			$co->obj->find(true);
+			foreach(array_unique($company_id_array) as $cid){
+				$co =& new CoopObject(&$this->cp, 'companies', 
+									   &$top);
+				$co->obj->company_id = $cid;
+				$co->obj->find(true);
+			}
 
 			foreach(array('company_name', 'address1', 'address2') as $var){
 				if($co->obj->$var){
@@ -414,20 +416,32 @@ http://www.pacificacoop.org/
 											 $co->obj->zip);		
 			$this->name = sprintf('%s %s', $co->obj->first_name, 
 								  $co->obj->last_name);
+		}
+
+	// populates a thank-you note with what's already in that note.
+	// XXX hideous, nasty duplication of code. i need to abstract out
+	// the display from the finding, and pass objects instead
+	function recoverExisting($tid)
+		{
+
+			$this->thank_you_id = $tid;
+
+			// TODO insert date of THANK YOU, not today's date
+
 
 			//INCOME
-			$co = new CoopObject(&$this->cp, 'companies_income_join', &$top);
-			$co->obj->$pk = $id;
 			$real = new CoopView(&$this->cp, 'income', &$co);
-			$real->obj->school_year = $sy;
-			$real->obj->orderBy('school_year desc');
-			$real->obj->joinadd($co->obj);
-			$real->obj->whereAdd('thank_you_id is null
-								and cleared_date > "2000-01-01" ');
+			$real->obj->thank_you_id = $this->thank_you_id;
 			$found = $real->obj->find();
 			while($real->obj->fetch()){
 				$cashtotal += $real->obj->payment_amount;
-				$soliciting_families[]= $real->obj->family_id;
+				// OMG. this is so fucking ugly, i can't describe it
+				$sf =& new CoopObject(&$this->cp , 
+									  'companies_income_join', &$real);
+				$sf->obj->joinAdd($real->obj);
+				$sf->obj->find(true);
+				$soliciting_families[]= $sf->obj->family_id;
+				$company_guess_hack[] =$sf->obj->company_id;
 			}
 			if($found){
 				$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
@@ -435,49 +449,47 @@ http://www.pacificacoop.org/
 				
 
 			//AUCTION
-			$co = new CoopObject(&$this->cp, 'companies_auction_join', 
-								 &$top);
-			$co->obj->$pk = $id;
 			$real = new CoopView(&$this->cp, 'auction_donation_items', 
 								 &$co);
-			$real->obj->orderBy('school_year desc');
-			$real->obj->school_year = $sy;
-			$real->obj->whereAdd('thank_you_id is null 
-						and date_received > "2000-01-01" ');
-			$real->obj->joinadd($co->obj);
+			$real->obj->thank_you_id = $this->thank_you_id;
 			$found = $real->obj->find();
 			while($real->obj->fetch()){
 				$this->items_array[] = sprintf("%d %s (total value $%01.02f)",
 											   $real->obj->quantity,
 											   $real->obj->item_description,
 											   $real->obj->item_value);
-				$soliciting_families[]= $real->obj->family_id;
-				
+				$sf =& new CoopObject(&$this->cp , 
+									  'companies_auction_join', &$real);
+				$sf->obj->joinAdd($real->obj);
+				$sf->obj->find(true);
+				$soliciting_families[]= $sf->obj->family_id;
+				$company_guess_hack[] =$sf->obj->company_id;
 			}
 
 			//IN-KIND
-			$co = new CoopObject(&$this->cp, 'companies_in_kind_join', 
-								 &$top);
-			$co->obj->$pk = $id;
 			$real = new CoopView(&$this->cp, 'in_kind_donations', 
 								 &$co);
-			$real->obj->orderBy('school_year desc');
-			$real->obj->school_year = $sy;
-			$real->obj->whereAdd('thank_you_id is null
-						and date_received > "2000-01-01" ');
-			$real->obj->joinadd($co->obj);
+			$real->obj->thank_you_id = $this->thank_you_id;
 			$real->obj->find();
 			while($real->obj->fetch()){
 				$this->items_array[] = sprintf("%d %s total value $%01.02f",
 											   $real->obj->quantity,
 											   $real->obj->item_description,
 											   $real->obj->item_value);
-				$soliciting_families[]= $real->obj->family_id;
+				$sf =& new CoopObject(&$this->cp , 
+									  'companies_in_kind_join', &$real);
+				$sf->obj->joinAdd($real->obj);
+				$sf->obj->find(true);
+				$soliciting_families[]= $sf->obj->family_id;
+				$company_guess_hack[] =$sf->obj->company_id;
 			}
-	
+
+		
 			// ugh. go get the soliciting parent
 			$this->guessParents($soliciting_families);
 
+			//  COMPANIES BROKEN! have to guess from income or inkind. bah. 
+			$this->guessCompany($company_guess_hack);
 		}
 
 } // END THANK YOU CLASS
