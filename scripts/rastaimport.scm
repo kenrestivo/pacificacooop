@@ -4,6 +4,7 @@
 
 (use-modules (kenlib) (srfi srfi-1)
 			 (srfi srfi-13)
+			 (srfi srfi-14)
 			 (database simplesql)
 			 (ice-9 slib))
 (require 'printf)
@@ -12,6 +13,7 @@
 
 (define *debug-flag* #t)
 
+(define *school-year* "2004-2005") ; this'll be a function, today, or now()
 
 ;; be sure to modify this if the damn thing ever changes
 (define *header* '("Last Name"
@@ -31,12 +33,36 @@
 
 ;;;;;;;;;;;;;;; functions for updating the database
 
-(define (check-session-changes line header)
-  #t)
+;; TODO: write a function to *update* enrollment, i.e. when people switch from am/pm
+;; if needed! hopefully i'll have the web interface working before anyone changes sessions
+
+;; the session stuff. find this first, then the family stuff.
+(define (check-for-new-enrollment line header)
+  (let* ((kid-id (check-for-new-kid line header))
+		 (enrollments (simplesql-query *dbh*
+						   (sprintf #f "
+				select enrollment_id, kidsid, am_pm_session, start_date, dropout_date
+						from enrollment
+						where kidsid = %d and
+						school_year = '%s'"
+									kid-id
+									*school-year*))))
+	(if (> (length enrollments) 1)
+		(db-ref-last (choose-duplicates enrollments) "enrollment_id") ;gotcha!
+		(safe-sql *dbh* (sprintf #f "
+						insert into enrollment set 
+								kidsid = %d,
+								start_date = '%s',
+								am_pm_session = '%s'"
+								 kid-id
+								 *school-year* 
+								 (rasta-find "session" line header)
+								 )))))
+
 
 (define (db-updates line header)
   (check-for-new-kid line header)
-  (check-session-changes line header))
+  (check-for-new-enrollment line header))
 
 ;; TODO: prompt user instead! pick amongst them
 (define (choose-duplicates db-res)
@@ -69,8 +95,10 @@
   (let ((kids (simplesql-query *dbh*
 						(sprintf #f "
 				select kidsid, last, first, familyid from kids
-					where soundex(first) = soundex('%s')
+					where (soundex(first) = soundex('%s') or
+						first like \"%%%s%%\")
 						and soundex(last) = soundex('%s') "
+								 (rasta-find "Child" line header)
 								 (rasta-find "Child" line header)
 								 (rasta-find "Last Name" line header)
 								 ))))
@@ -103,8 +131,11 @@
 ;; wrapper around between: remove the header and footer crap
 (define (clean-up-rasta rasta header session)
   (hash-set! rasta session
-			 (between  header (make-list (length header) #f)
-					   (hash-ref rasta session))))
+			 (between  header
+					   (make-list (length header) #f)
+					   (map
+						(lambda (x) (safe-string-trim x))
+						(hash-ref rasta session)))))
 
 ;; each line.
 (define (process-rasta-line rasta header session line )
