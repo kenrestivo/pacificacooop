@@ -79,7 +79,7 @@ backup-live::
 	$(MAKE) backup DBUSER=input DBHOST=127.0.0.1 DBPORT=$(FARPORT) PW=$(BKPW)
 
 ssh-tunnel::
-	ssh -n -f -N -L$(FARPORT):$(REALDB):3306 ken@phx5.nearlyfreespeech.net
+	ssh -n -f -N -L$(FARPORT):$(REALDB):3306 ken@phx1.nearlyfreespeech.net
 
 #EOF
 
