@@ -353,7 +353,7 @@ contact management
 	territory table  DONE
 		description (crespi, rockaway, etc)
 	territory-family (persistence!) join table
-		include sessionid! this'll change year-to-year!
+		include semester! this'll change year-to-year!
 	contactnotes table
 		contactid
 		entered/updated (don't allow updates! it's history, it stays)
@@ -362,12 +362,14 @@ contact management
 		to handle any stray non-categorized donations. ugly but will need this.
 
 raffle tickets: this is join to income, basically
-	raffle_tickets
-		date given to shirley
-		amount
-		locationid (join)
+	income_raffle_join
+		incid(join)
+		raffle_location_id(join)
 	raffle_locations
-		description
+		location_name
+		description?
+	location_semester_join!!
+		raffle_location_id(join)
 		semester (they will change next year)
 
 ad insertion 

@@ -23,32 +23,44 @@ use coop;
 -- accounts
 insert into coa set
 			acctnum = 1,
+			join_to_table = "families",
 			description = "SpringFest 10-names forfeit fee";
 
 
 insert into coa set
 			acctnum = 2,
+			join_to_table = "families",
 			description = "SpringFest food/quilt fee";
 
 insert into coa set
 			acctnum = 3,
+			join_to_table = "families",
 			description = "SpringFest auction item forfeit fee";
 
 insert into coa set
 			acctnum = 4,
+			join_to_table = "families",
 			description = "SpringFest Misc Cash donation";
 
 insert into coa set
 			acctnum = 5,
+			join_to_table = "companies",
 			description = "SpringFest Program Ad Insertion";
 
 insert into coa set
 			acctnum = 6,
+			join_to_table = "leads,companies",
 			description = "SpringFest Ticket Purchase";
 
 insert into coa set
 			acctnum = 7,
+			join_to_table = "companies",
 			description = "SpringFest Sponsorship Package";
+
+insert into coa set
+			acctnum = 8,
+			join_to_table = "raffle_locations",
+			description = "SpringFest Raffle Ticket Sales";
 
 
 -- groups

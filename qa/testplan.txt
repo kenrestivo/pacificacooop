@@ -1,0 +1,57 @@
+Now that TestCaseMaker runs, I want to start building organised test cases for it to do.
+
+It's a cool tool: basically it's a web proxy that saves the user's GET/POST actions to a text file. The file can then be edited to call built-in functions to check for things. Then, you run the text file, and the actions are replayed and errors checked, and results dumped to a file.
+
+So, you set it up and then start browsing like a normal user. It records what you do, and then you can go in and refine later.
+
+Capturing someone surfing is very helpful. Capturing someone surfing RANDOMLY is less helpful. It's a multi-dimensional matrix of things must be tested: so far a 4x10x2x4x4xN matrix ;-) 
+
+Here's what I'm thinking in terms of organising the task:
+
+each operation
+	add
+	view
+	edit
+	delete
+
+each slice/view
+	login
+	10names
+	auction
+	money
+	packaging-inventory
+	packaging-management
+	solicitation-companies
+	solicitation-auctions
+	solicitation-territories
+	raffles-cashreceipts
+	raffles-locations
+	... more to come
+	
+each user type
+	privileged
+		and variations thereof!
+	unprivileged
+
+each type of input
+	correct
+	with various user-input errors
+		a looong list of them!
+	with duplicates
+		and various permutations of dupeignore fields!
+	cancel
+
+contents of responses
+	was the result page the expected response? 
+	did it show the user an error?
+	any Error/Warning messages from PHP?
+		would have to make php display them in html, not to logs
+
+
+Big task. Right now I'm probably going to start writing cases for the new stuff: solicitation, raffles, packaging.  Any thoughts on how to prioritise this? Want to split it up and take a portion yourself? The thing is really quite pleasant to use.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

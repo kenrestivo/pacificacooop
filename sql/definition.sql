@@ -160,6 +160,7 @@ create table coa (
     acctnum int(32) not null unique,
 	description varchar(255),
 	acctype enum ('Income', 'Expense', 'Equity'),
+	join_to_table varchar(255),
 	primary key (acctnum)
 );
 
@@ -332,6 +333,33 @@ create table audit_trail(
     audit_user_id int(32),
 	updated timestamp,
     primary key (audit_trail_id)
+);
+
+-- glue table for many-to-many: territories to families (and sessions!)
+create table territories_families_join (
+    territories_families_id int(32) not null unique auto_increment,
+	territory_id int(32),
+	familyid int(32),
+	semester varchar(50),
+    primary key (territories_families_id)
+);
+
+
+-- raffle locations
+create table raffle_locations(
+    raffle_location_id int(32) not null unique auto_increment,
+	location_name varchar(255),
+	description varchar(255),
+    primary key (raffle_location_id)
+);
+
+
+-- glue table for many-to-many: territories to families (and sessions!)
+create table raffle_income_join (
+    raffle_income_join_id int(32) not null unique auto_increment,
+	raffle_location_id int(32),
+	incid int(32),
+    primary key (raffle_income_join_id)
 );
 
 
