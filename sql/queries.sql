@@ -148,5 +148,12 @@ select attendance.*, kids.first, kids.last, families.name
 	left join families on kids.familyid = families.familyid
 	order by families.name
 
+-- for the delete checking
+select kids.first, kids.last, enrol.semester, enrol.sess
+	from attendance
+	left join enrol on attendance.enrolid = enrol.enrolid
+	left join kids on kids.kidsid = attendance.kidsid
+	where enrol.semester = '2003-2004'  and attendance.dropout is null
+
 
 --- EOF

@@ -125,6 +125,7 @@ sub unBaby()
 {
 	my $annoying = shift;
 	$annoying =~ s/(.+?)\s*\(.*\)\s*/$1/;
+	$annoying =~ s/^\s*(.+?)\s*$/$1/;
 	return($annoying);
 }
 
@@ -439,28 +440,28 @@ sub deleteReverse(){
 				if($start == 1){
 					print "DEBUG deleteRev() this is the start row!\n";
 				}
-			} else {
-				#a blank line means END of data
-				$end = $start && !$vr ? 1 : $end;
+			}
+			#a blank line means END of data
+			$end = $start && !$vr ? 1 : $end;
 
-				#i only want to do stuff if i've already passed the start row
-				if($start && !$end){
-					printf("DEBUG\tlookign at %s %s for match\n",
-						$ws->{'Cells'}[$row][3]->Value,
-						&unBaby($ws->{'Cells'}[$row][0]->Value) 
-					);
-					#FINALLY! count occurences of this thing!
-					if($ritem{'first'} eq 
-						$ws->{'Cells'}[$row][3]->Value &&
-						$ritem{'last'} eq 
-							&unBaby($ws->{'Cells'}[$row][0]->Value) )
-					{
-						printf("DEBUG found %s %s !\n",
-								$ritem{'first'}, $ritem{'last'} );
-						$cnt++;
-					}
+			#i only want to do stuff if i've already passed the start row
+			if($start > 1 && !$end){
+				printf("DEBUG\tlookign at %s %s for match\n",
+					$ws->{'Cells'}[$row][3]->Value,
+					&unBaby($ws->{'Cells'}[$row][0]->Value) 
+				);
+				#FINALLY! count occurences of this thing!
+				if($ritem{'first'} eq 
+					&unBaby($ws->{'Cells'}[$row][3]->Value) &&
+					$ritem{'last'} eq 
+						&unBaby($ws->{'Cells'}[$row][0]->Value) )
+				{
+					printf("DEBUG found %s %s !\n",
+							$ritem{'first'}, $ritem{'last'} );
+					$cnt++;
 				}
 			}
+
 			$row++;
 		} #end spreadsheet walk
 		#ok, what do to if it's not there?
@@ -520,8 +521,8 @@ sub iterateSheets()
 		}
 		print "DEBUG checking headers...\n";
 		&iterateRows($ws, $session, \&checkHeaders, 'header');
-		#print "DEBUG dropping the deleted ones...\n";
-		#&deleteReverse($ws, $session); #go backwards and see waz up
+		print "DEBUG dropping the deleted ones...\n";
+		&deleteReverse($ws, $session); #go backwards and see waz up
 		print "DEBUG checking new kids...\n";
 		&iterateRows($ws, $session, \&checkNewKids, 'row');
 		print "DEBUG checking new parents...\n";
