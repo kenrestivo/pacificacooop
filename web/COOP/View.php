@@ -41,9 +41,10 @@ class coopView extends CoopObject
 
 	function createLegacy($callbacks, $perms = false)
 		{
+			
 				// TODO guess if not provided? look thru indexedeverything
 			$this->legacyCallbacks = $callbacks; 
-
+		  
 			//  calculate if not provided
 			if(!$perms){
 				$perms = getAuthLevel($this->page->auth, 
@@ -194,12 +195,16 @@ class coopView extends CoopObject
 	function toArray()
 		{
 			
-			foreach($this->obj->toArray() as $key => $val){
+			$row = $this->obj->toArray();
+			foreach($row as $key => $val){
 				// this is where the fun begins.
 				if($this->isPermittedField($key)){
 					$res[] = $this->checkLinkField(&$this->obj, $key, $val);
 				}
 			}
+
+			$res[] = $this->recordButtons($row);
+
 
 			// the Simple Version. useful for debuggin'
 			//return array_values($this->obj->toArray());
@@ -221,7 +226,8 @@ class coopView extends CoopObject
 				}
 			}
 			
-			$tab->addRow($res, 'bgcolor=#9999cc', 'TH'); 
+			$res[] = 'Actions';
+			$tab->addRow($res, 'bgcolor=#9999cc align=left', 'TH'); 
 		}
 
 	function title()
@@ -280,10 +286,16 @@ class coopView extends CoopObject
 	
 	function recordButtons(&$row)
 		{
-			return recordButtons($row, $this->legacyCallbacks, 
-								 $this->legacyPerms, 
-								 $this->page->userStruct, "");
+ 		 	return recordButtons($row, $this->legacyCallbacks, 
+ 								 $this->legacyPerms, 
+ 								 $this->page->userStruct, "",
+								 1);
+			
 		}
+
+
+
+
 	function actionButtons($showview = 0)
 		{
 			

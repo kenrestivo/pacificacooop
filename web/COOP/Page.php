@@ -41,6 +41,7 @@ class coopPage
 {
 	var $auth;
 	var $debug;
+	var $indexed_all; 			// legacy stuff. ALL of the callbacks
 	var $userStruct;				// cache of legacy info ($u)
 	
 	function coopPage($debug = false)
