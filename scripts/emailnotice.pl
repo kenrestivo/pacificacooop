@@ -159,48 +159,12 @@ sub itemhack()
 sub getlicenseinfo()
 {
 	my $pararref = shift;
-	my $queryobj;
-	my $itemref;
-	my @results;
-	my $item;
-	my $query;
 	my $pars;
-	my %everthang;
-	my %tmp;
 	my @total;
 
-
 	foreach $pars (@$pararref){
-		$pid = $pars->{'parentsid'};
-		$query = "
-			select unix_timestamp(max(lic.expires)) as exp, 
-				lic.last, lic.first, lic.middle, lic.state, lic.licensenum
-			from lic 
-				where lic.parentsid = $pid
-			group by lic.parentsid
-			order by exp asc";
-		$opt_v && print "getlicenseinfo(): doing <$query>\n"; #debug only
-		$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
-		$queryobj->execute() or die "couldn't execute $!\n";
-		$opt_v && printf("getlicenseinfo(): checking licenses for  %s %s <%d>\n", 
-				$pars->{'first'}, $pars->{'last'}, $pid
-				);
-
-		while ($itemref = $queryobj->fetchrow_hashref){
-			push(@results, &itemhack($itemref)); #yes, that's right, a referene
-			if($opt_v){
-				printf("getlicenseinfo(): returned exp %s for %s %s num %s\n",
-					$itemref->{'exp'},
-					$itemref->{'first'}, $itemref->{'last'},
-					$itemref->{'licensenum'}
-				);
-			}
-		} # end while
-		$opt_v && printf("getlicenseinfo(): got %d licenses for parent %d\n", 
-					scalar @results, $pid);
-
 		#this is so bizarre
-		$everthang{'licarref'} = \@results;
+		$everthang{'licarref'} = &parentlicensehack($pars);
 		$everthang{'parref'} = $pars;
 		push(@total, &itemhack(\%everthang)); #yes, that's right, a referene
 	}
@@ -213,13 +177,55 @@ sub getlicenseinfo()
 	return \@total; # massive.
 }# END GETLICENSEINFO
 
+sub parentlicensehack()
+{
+	my $pars = shift;
+	my $itemref;
+	my @results;
+	my $item;
+	my $query;
+	my $queryobj;
+	my $pid;
+
+	$pid = $pars->{'parentsid'};
+	$query = "
+		select unix_timestamp(max(lic.expires)) as exp, 
+			lic.last, lic.first, lic.middle, lic.state, lic.licensenum
+		from lic 
+			where lic.parentsid = $pid
+		group by lic.parentsid
+		order by exp asc";
+	$opt_v && print "parentlicensehack(): doing <$query>\n"; #debug only
+	$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
+	$queryobj->execute() or die "couldn't execute $!\n";
+	$opt_v && printf("parentlicensehack(): checking licenses for  %s %s <%d>\n", 
+			$pars->{'first'}, $pars->{'last'}, $pid
+			);
+
+	while ($itemref = $queryobj->fetchrow_hashref){
+		$item = &itemhack($itemref);
+		if($opt_v){
+			printf("parentlicensehack(): returned exp %s for %s %s num %s\n",
+				$item->{'exp'},
+				$item->{'first'}, $item->{'last'},
+				$item->{'licensenum'}
+			);
+		}
+		push(@results, $item); #yes, that's right, a referene
+	} # end while
+	$opt_v && printf("parentlicensehack(): returning %d licenses for parent %d\n", 
+				scalar @results, $pid);
+	return \@results;
+
+}
+
 sub debugstruct()
 {
 	my $whatsit = shift;
 	my $level = shift;
 	my $item;
 
-	printf("%*s", -($level*5), "");
+	printf("%*s", -($level*4), "");
 	if( $whatsit =~ /ARRAY/){
 		printf("array of %d elements\n", scalar @$whatsit);
 		foreach $item (@$whatsit){
@@ -230,7 +236,7 @@ sub debugstruct()
 		printf("hash of %d elements\n", scalar %$whatsit);
 		$level++;
 		foreach $item (sort(keys %$whatsit)) {
-			printf("%*s", -($level*5), "");
+			printf("%*s", -($level*4), "");
 			printf("key: <%s>\n", $item);
 			&debugstruct($whatsit->{$item}, $level + 1);
 		}
