@@ -283,8 +283,10 @@ class coopPage
 			$pager_parms = array (
 				'mode' => 'Sliding',
 				'perPage' => 10,
-				'urlVar' => 'pageID' . $this->table, 
-				'sessionVar' => 'pageID' . $this->table, 
+                'urlVar' => sprintf('%s%s_pageID',
+                                    SID ?  SID . '&' : "",
+                                    $table) ,
+                'sessionVar' => 'pageID' . $this->table, 
 				'delta' => 2,
                 'useSessions' => 1,
                 'itemData' => $pager_item_data
