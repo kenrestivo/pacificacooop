@@ -832,7 +832,9 @@ loggedOutState($auth, $states)
 		$olduser = sprintf("User '%s' logged out.", $uinfo['username']);
 	}
 
-	//TODO destroy th session here!! read docs.
+	//destroy th session here!! read docs.
+	$_SESSION = array();
+	session_destroy();
 
 	return changeState($auth, $states, 'needlogin', 1);
 	
