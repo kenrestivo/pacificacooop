@@ -147,16 +147,16 @@ insert into territories set
 ;
 
 insert into territories set
-			territory_id = 5,
-			description = "Corporate/Financial/Government"
+            territory_id = 5,
+            description = "Corporate/Financial/Government"
 ;
 insert into territories set
-			territory_id = 6,
-			description = "Pedro Point"
+            territory_id = 6,
+            description = "Pedro Point"
 ;
 insert into territories set
-			territory_id = 7,
-			description = "Palmetto"
+            territory_id = 7,
+            description = "Palmetto"
 ;
 
 
@@ -219,5 +219,37 @@ insert into sources  set
 insert into sources  set
             source_id = 3,
             description = "Misc Advertising";
+
+
+--- ad sizes
+insert into ad_sizes set
+    ad_size_description = "Back Page or Inside Front/Back Cover",
+    ad_price = 250,
+    school_year = '2004-2005';
+
+insert into ad_sizes set
+    ad_size_description = "Full Page",
+    ad_price = 150,
+    school_year = '2004-2005';
+
+
+insert into ad_sizes set
+    ad_size_description = "1/2 Page",
+    ad_price =  85,
+    school_year = '2004-2005';
+
+
+insert into ad_sizes set
+    ad_size_description = "1/4 Page",
+    ad_price = 50,
+    school_year = '2004-2005';
+
+
+insert into ad_sizes set
+    ad_size_description = "Business Card",
+    ad_price = 30,
+    school_year = '2004-2005';
+
+
 
 -- EOF

@@ -52,7 +52,7 @@
 		 (apply simplesql-open "mysql"
 				(read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf"))))
 	(replace-new dbh table-mapping "leads" "companies"  )	
- 	(remove-old dbh redundant-old-cols "companies")			
+;; 	(remove-old dbh redundant-old-cols "companies")
 	(simplesql-close *dbh*)))
 
 

@@ -199,10 +199,14 @@ select chart_of_accounts.item_description, sum(item_value)  as total
 
 
 --- audit trails
-select audit_trail.*, users.name 
-    from audit_trail
-        left join users on users.user_id = audit_trail.audit_user_id
-    order by updated desc;
+select date_format(updated, '%W, %M %D %Y %r') as updated, 
+    index_id, name 
+    from audit_trail 
+        left join users on audit_trail.audit_user_id = users.user_id 
+    where index_id < 1000 and table_name = 'leads' 
+        and updated like "200411%" 
+	order by updated ;
+
 
 -- logins
 select session_info.ip_addr, session_info.updated, users.name 

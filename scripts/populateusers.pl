@@ -29,6 +29,7 @@ use Getopt::Std;
 
 getopts('rvth:p:d:') or &usage();
 
+$schoolyear = '2004-2005';
 
 #the access hash
 # in perl, the hash keys should NOT be quoted, or all hell will break loose!!
@@ -95,7 +96,8 @@ $rquery = "select families.name, families.family_id
 			left join leads on families.family_id = leads.family_id
 		left join kids on kids.family_id = families.family_id
 		left join enrollment on kids.kid_id = enrollment.kid_id
-		where enrollment.dropout_date is NULL
+		where enrollment.school_year = $schoolyear and
+				enrollment.dropout_date is NULL
 	group by families.family_id\n";
 if($opt_v){
 	print "doing <$rquery>\n"; 
@@ -107,7 +109,7 @@ while ($ritemref = $rqueryobj->fetchrow_hashref){
 	%ritem = %$ritemref;
 
 	$uid = &addUser($ritem{'name'}. " Family", $ritem{'family_id'});
-	&addDefaultPrivs($uid, \@familydefaults);
+	&addDefaultPrivs($uid, \@familydefaults, $opt_r);
 	## TODO add group privileges as well!
 
 } # end while
@@ -116,7 +118,7 @@ while ($ritemref = $rqueryobj->fetchrow_hashref){
 #add users for teachers
 foreach $teacher (@teachers){
 	$uid = &addUser($teacher);
-	&addDefaultPrivs($uid, \@teacherdefaults);
+	&addDefaultPrivs($uid, \@teacherdefaults, $opt_r);
 }
 
 $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";

@@ -85,20 +85,31 @@
 (define chairs
   '(
 	("solicitation" . "bauer")
-	))
+	("packaging" . "White-Roger+Michelle")
+    ("invitations" . "david")
+    ("raffle" . "ambrose")
+    ("tickets" "stangeland")
+    ("money" "devry")
+		))
 
 
 
 (define (update-2004-2005)
   (let ((dbh (apply simplesql-open "mysql"
 					(read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf"))))
-	;; first the admins
-	(springfest-gods dbh '("vreeland" "cooke"))
 	;; now the solicitation
 	 (solicits dbh
 			   '("depriest" "refino" "kaitz" "solano" "mrad" "gaffney" "bauer"))
-	;; finally the chairs, overriding all
+     (packaging "white-roger+michelle" "walker" "pacheco")
+     (program "treckeme" "stewart")
+     (publicity "manning-villlar" "cunniffe" "glasman" "klieder" "simonson")
+     (raffle "ambrose" "cresci-torres" )
+     (tickets "fitzpatrick" "stangeland")
+     (invitations "david" )
+     ;; the chairs, overriding defaults
 	 (do-chairs dbh chairs)
+	 ;; finally the admins, overriding al;
+	 (springfest-gods dbh '("vreeland" "cooke"))
 	 (simplesql-close dbh)))
 
 

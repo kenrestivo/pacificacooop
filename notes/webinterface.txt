@@ -885,3 +885,25 @@ donation, etc
 	territories, and named accounts
 	everyone else, call anywhere
 	check entering 10/27, meet 10/25
+
+--------------------
+gui stuff
+	ways to display:
+		1) all in one. edit and save everything together
+			easier for ADDING, but scary for editing: too much saved 
+		2) line by line each with their own screens.
+			easier for editing
+				MAYBE... a pain in the ass if there are recursive nests
+					how do i know which struct to display?
+					how do i know which to RETURN to!??!
+					and how does it know what to display from vars vs db?
+	showUsers() screen is gonna be interesting
+		username
+			user <tab> realm1 <tab> realm2 <tab> realm3 
+			group <tab> realm1 <tab> realm2 <tab> realm3 
+		or username
+			realm1 <tab> user <tab> group
+			realm2 <tab> user <tab> group
+			realm3 <tab> user <tab> group
+			which is how it's in the db:
+			i think i'm kinda stuck with that one
