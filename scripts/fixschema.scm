@@ -54,7 +54,7 @@
 		((and (equal? (car line) "primary")
 			  (equal? (cadr line) "key"))
 		 (add-primary-key *current-table* line))
-		(else (save-schama-column! *current-table* line))))
+		(else (save-schema-column! *current-table* line))))
 
 
 ;; utliity: discard any -- comment lines
@@ -115,7 +115,7 @@
   (let* (
 		 (old-table (car change-line))
 		 (old-col (second change-line))
-		 (new-col (last change-line))
+		 (new-col  (car (last change-line 1)))
 		 (long-def (assoc-ref (assoc-ref schema old-table) old-col))
 		 )
 	(if long-def
