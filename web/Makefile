@@ -22,7 +22,7 @@ NFSNRSYNC=/nfsn/bin/rsync
 NFSNUSR=ken
 NFSNHOST=phx3.nearlyfreespeech.net
 NFSNPATH=/nfsn/content/paccoop/htdocs/sf
-HERE=./
+HERE=../livesite/
 XCLUDE='*dbhost*' 
 
 
