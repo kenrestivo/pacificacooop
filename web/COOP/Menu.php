@@ -96,7 +96,8 @@ class CoopMenu extends HTML_Menu
  					'<span class="menutext"><table border="0">',
  					'</span></table>');
 				 //print "HEYY HEEYY";
-				return($this->get($type));
+				$this->render($this->renderer, $type);
+				return($this->renderer->toHTML());
 			break;
 			}
 			return "BROKEN TYPE $type";
@@ -173,7 +174,7 @@ class CoopMenu extends HTML_Menu
 			$u = getUser($this->page->auth['uid']);	// ugh.
 
 
-			$tab =& new HTML_Table;
+			$tab =& new HTML_Table('width="100%"');
 
 			$tab->addRow(array(
 							 sprintf("<h3>Welcome %s!</h3>", $u['username']),

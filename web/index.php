@@ -57,12 +57,11 @@ $menu->createLegacy(&$cp);
 	
 	$u = getUser($auth['uid']);
 
-	topNavigation($auth, $u);
-//confessObj($menu, 'menu');
-//$menu->forceCurrentURL('/coop-dev/10names.php');
-//print $menu->get('urhere');
-
+	print $menu->topNavigation();
 	print "\n<hr>\n";
+//confessObj($menu, 'menu');
+
+
 
 //confessObj($menu, "menuonb");
 print '<div id="leftcol">';

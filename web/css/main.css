@@ -52,7 +52,7 @@ div.box { border: solid;
 }
 
 #rightCol {
-  margin-left: 20%;
+  margin-left: 17%;
 }
 
 input, textarea, select {
@@ -63,3 +63,5 @@ input[type="submit"] {
   cursor: pointer;
   cursor: hand;
 }
+
+footer {  }

@@ -142,7 +142,9 @@ function done()
 {
 	global $coop_sendto;
 
-	print '<div id="bottom"><hr>';
+
+	print '<hr>';
+//	print '<div id="footer"><hr>';
 	printf("<br><small>If anything on this site appears to be not working properly, 
 			email <a href='mailto:%s'>%s</a> or call %s at %s</small></div>",
 			$coop_sendto['email_address'], $coop_sendto['email_address'], 
@@ -150,6 +152,7 @@ function done()
 	/* AUUGH! testcasetool is case sensitive, and for some reason apache
 		lowers the case of my tags only when checkloing was used. weird.
 	*/
+	print "</div>";				// closes out main div. a hack.
 	print"</body> </html> ";
 	session_write_close();		// redundant?
 	exit;
