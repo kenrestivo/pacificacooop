@@ -76,17 +76,17 @@
 	{
 		$tennamespaid = checkPayments($row['familyid'], 1);
 		$quiltpaid = checkPayments($row['familyid'], 2);
-		$auctiontotal = checkAuction($row['familyid']);
+		$auction = checkAuction($row['familyid']);
 		$tennamesdone = ($row[cntlead] >= 10);
 
 		#some nifty running totals
 		$total['leads'] += $row[cntlead];
 		$total['tennames'] += $tennamespaid['amount'];
 		$total['quilt'] += $quiltpaid['amount'];
-		$total['auction'] += $auctiontotal;
+		$total['auction'] += $auction['total']; //symmetry!
 
 		#don't print this row if it's already complete
-		if ($nagonlychecked && (($tennamespaid['amount'] >= 50) || $tennamesdone) && ($quiltpaid['amount'] >=45) && ($auctiontotal >= 50))
+		if ($nagonlychecked && (($tennamespaid['amount'] >= 50) || $tennamesdone) && ($quiltpaid['amount'] >=45) && ($auction['total'] >= 50))
 			continue;
 	
 		print "<tr><td>\n";
@@ -104,8 +104,8 @@
 		if($quiltpaid['notes'])
 			printf("<br>%s",$quiltpaid['notes']);
 		print "</td><td align='center'>";
-		if ($auctiontotal > 0)
-			printf("$%01.2f", $auctiontotal);
+		if ($auction['total'] > 0)
+			printf("$%01.2f", $auction['total']);
 		print "</td><td align='center'>";
 		print $row[sess];
 		print "</td><td align='center'>";
@@ -195,15 +195,21 @@ checkAuction($familyid)
 		$i = 0;
 		while($row = mysql_fetch_array($list))
 		{
-			$amount += $row['amount'];
+			$result['total'] += $row['amount'];
 		}
-		//print "DEBUG [$amount]";
+
+		/* keep these separate, someone may want to know which was which
+		*/
+		$result['total'] += $result['donated'];
+
 
 		// check if they paid in any forfiet fees!
-		$tmp = checkPayments($familyid, 3);
-		$amount += $tmp['amount'];
+		$tmp = checkPayments($familyid, 3); //returns array.
+		$result['forfeit'] = $tmp['amount'];
+		$result['total'] +=  $result['forfeit'];
+		
 
-		return $amount;
+		return $result;
 }/* END CHECKAUCTION */
 
 
