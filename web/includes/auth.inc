@@ -44,13 +44,13 @@ define('ACCESS_DELETE', 700);
 define('ACCESS_ADMIN', 800);
 
 $accessnames = array(  
-		  0 => _ACCESS_NONE,
-		100 => _ACCESS_SUMMARY,
-		200 => _ACCESS_VIEW,
-		500 => _ACCESS_EDIT,
-		600 => _ACCESS_ADD,
-		700 => _ACCESS_DELETE,
-		800 => _ACCESS_ADMIN
+		  0 => 'None',
+		100 => 'See totals',
+		200 => 'View details',
+		500 => 'Edit',
+		600 => 'Add',
+		700 => 'Delete',
+		800 => 'Administer permissions'
 );
 
 
@@ -379,6 +379,29 @@ getUser($uid)
 	return $savedrow;
 
 }/* END GETUSER */
+
+
+
+/******************
+	SHOWACCESSLEVELS
+	prints out a description of user permissions for this realm
+	inputs: perms struct, and a realm name
+	outputs: text showing what the user's perms are
+******************/
+function
+showAccessLevels($p, $pfield, $realm)
+{
+	global $accessnames;
+	$i = 0;
+	while (list($key, $val) = each($accessnames)){
+		//print "[$key] ";
+		if($key <= $p[$pfield] && $key > 0){
+			printf("%s%s",  $i ? ", " : "", $accessnames[$key]);
+			$i++;
+		}
+	}
+	reset ($accessnames);
+}/* END SHOWACCESSLEVELS */
 
 
 
