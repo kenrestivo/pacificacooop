@@ -417,6 +417,7 @@ create table packages (
 	package_title varchar(255), 
 	package_description longtext,
     package_value decimal(9,2),
+	item_type enum ('Product', 'Service'),
     primary key (package_id)
 );
 
