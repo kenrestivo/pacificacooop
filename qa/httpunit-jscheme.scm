@@ -4,7 +4,7 @@
 ;; (load "/mnt/kens/ki/proj/coop/qa/httpunit-jscheme.scm")
 
 ;; use proper libraries!! figure out how.
-(load "/mnt/kens/ki/is/scheme/lib/kenlib.scm")
+(load "/mnt/kens/ki/is/scheme/lib/kenlib-generic.scm")
 
 (define wtc (new 'net.sourceforge.jwebunit.WebTestCase))
 
@@ -41,6 +41,7 @@
   (invoke wtc 'assertLinkPresentWithText "View")
   )
 
+;;; the "dialog" is the httpunit object, basically
 (define (dump-page wtc)
   (let* ((dl (invoke wtc 'getDialog))) ;; the httpunit object
 	(invoke dl 'getResponseText)
@@ -68,4 +69,15 @@
    links  #f)
 
   )
+
+(define (visit-all-links wtc)
+  (let ((links (vector->list (invoke (get-response wtc) 'getLinks)) ))
+	(for-each (lambda (link)
+				(invoke link 'click) (write-line (string-append
+											   (invoke link 'asText) " > "
+											   (invoke link 'getURLString)))
+				(invoke wtc 'assertTextPresent "</html>"))
+			  (cddr links)) ;; skip main menu
+  ))
+
 ;;EOF
