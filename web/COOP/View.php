@@ -41,17 +41,22 @@ class coopView extends CoopObject
 	var $legacyPerms; 			// cache of permissions for this page ($p)
 	//var $legacyFields;  //YAGNI. i hope
 
-	function createLegacy($callbacks, $perms = false)
+	function createLegacy($callbacks)
 		{
 			
-				// TODO guess if not provided? look thru indexedeverything
+			// sanity check to ease debugging
+			if(!is_array($callbacks)){
+				user_error("CoopView:createLegacy(): callbacks not an array", 
+						   E_USER_ERROR);
+			}
+
+		// TODO guess if not provided? look thru indexedeverything
 			$this->legacyCallbacks = $callbacks; 
 		  
-			//  calculate if not provided
-			if(!$perms){
-				$perms = getAuthLevel($this->page->auth, 
-									  $this->legacyCallbacks['realm']);
-			}
+			//  calculate always! it keeps realms straight
+			$perms = getAuthLevel($this->page->auth, 
+								  $this->legacyCallbacks['realm']);
+	
 			$this->legacyPerms = $perms;
 	
 		}
@@ -358,6 +363,15 @@ class coopView extends CoopObject
 								$this->pk, $obj->{$this->pk});
 			}
 			return $res;
+		}
+
+	function checkMenuLevel()
+		{
+			return checkMenuLevel($this->page->auth, 
+								  $this->page->userStruct, 
+								  $this->legacyCallbacks, 
+								  $this->legacyCallbacks['fields']);
+		
 		}
 
 } // END COOP VIEW CLASS
