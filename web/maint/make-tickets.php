@@ -34,6 +34,7 @@ $cp = new coopPage( $debug);
 $cp->pageTop();
 
 $atd = new CoopView(&$cp, 'tickets', $none);
+$sy=findSchoolYear();
  
 
 $menu =& new CoopMenu();
@@ -55,6 +56,8 @@ $user = $p['user_level'] >= $level ? 1 : 0;
 // }
 
 print $cp->selfURL('Make Family Tickets', array('action' => 'maketickets'));
+print $cp->selfURL('Make Paddles for all tickets', 
+				   array('action' => 'makepaddles'));
 
 // cheap dispatcher
 //confessArray($_REQUEST,'req');
@@ -62,7 +65,6 @@ switch($_REQUEST['action']){
 
 	//// MAKE TICKETS
  case 'maketickets':
-	 $sy=findSchoolYear();
 	 $fam =& new CoopObject(&$cp, 'families', &$none);
 	 // note: account_number = 2 is quilt/food fee. you get a ticket if you drop.
 	 $fam->obj->query("
@@ -103,7 +105,12 @@ order by families.name;
 
 //////MAKE PADDLES
  case  'makepaddles':
-	 
+	 $atd->obj->school_year = $sy;
+	 $atd->obj->find();
+	 while($atd->obj->fetch()){
+		 //confessObj($atd->obj, 'atd');
+		 $atd->obj->updatePaddles(&$cp);
+	 }
 	 break;
 		
  default:

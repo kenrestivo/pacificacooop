@@ -48,8 +48,14 @@ class Tickets extends DB_DataObject
 
 	var $fb_requiredFields = array('ticket_type_id', 'ticket_quantity');
 
-	function updatePaddles()
+	function updatePaddles(&$page)
 		{
+
+			if($this->ticket_id < 1){
+				user_error('tickets::updatepaddles ticketid <1', 
+						   E_USER_NOTICE);
+				return;
+			}
 
 			// calc how many are present,  to delete or add
 			$pad = DB_DataObject::factory('springfest_attendees'); 
@@ -57,26 +63,36 @@ class Tickets extends DB_DataObject
 				user_error("Tickets.php::updatePaddles(): db badness", 
 						   E_USER_ERROR);
 			}
-			$pad->query(sprintf("select 
+			//confessObj($this, 'this');
+
+			$db =& $this->getDatabaseConnection();
+
+            $data =& $db->getRow(sprintf("select school_year, ticket_id,
 						sum(if(entry_type='Automatic',1,0)) as automatic, 
 						sum(if(entry_type='Manual',1,0)) as manual
 						from springfest_attendees
-						where ticket_id = %d", $this->ticket_id));
-			$pad->find(true);
-			$man = $pad->manual;
-			$auto = $pad->automatic;
+						where ticket_id = %d group by ticket_id", 
+								$this->ticket_id),
+								 array(), DB_FETCHMODE_ASSOC);
+            if (DB::isError($data)) {
+                die($data->getMessage());
+            }
+
+			//confessArray($data, 'data');
+			$man = $data['manual'];
+			$auto = $data['automatic'];
 			
+			print "ticket $this->ticket_id man $man auto $auto<br>";
 			// add tickets
 			$toadd = $this->ticket_quantity - ($man + $auto);
 			while($toadd-- > 0){
-				$pad = DB_DataObject::factory('springfest_attendees'); 
-				if (PEAR::isError($pad)){
-					user_error("Tickets.php::updatePaddles(): db badness", 
-							   E_USER_ERROR);
-				}
-				$pad->ticket_id = $this->ticket_id;
-				$pad->entry_type  = 'Automatic';
-				$pad->insert();
+				$pado = new CoopObject(&$page, 'springfest_attendees', &$top);
+				$pado->obj->ticket_id = $this->ticket_id;
+				$pado->obj->entry_type  = 'Automatic';
+				$pado->obj->paddle_number = $pado->getCounter('paddle_number',
+															 $this->school_year);
+				$pado->obj->school_year = $this->school_year;
+				$pado->obj->insert();
 			}
 
 			// find out how many paddles can be deleted
