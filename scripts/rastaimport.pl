@@ -26,19 +26,19 @@ my $xls = new Spreadsheet::ParseExcel;
 #1.1 Normal Excel97
 my $bk = $xls->Parse('../imports/PM.xls');
 
-my($row, $col, $wk, $cell);
+my($row, $col, $wk, $cell, $sh);
 print "FILE  :", $bk->{File} , "\n";
 print "COUNT :", $bk->{SheetCount} , "\n";
 print "AUTHOR:", $bk->{Author} , "\n";
 
-for(my $sh=0; $sh < $bk->{SheetCount} ; $sh++) {
+for($sh=0; $sh < $bk->{SheetCount} ; $sh++) {
 																					$wk = $bk->{Worksheet}[$sh];
 	print "--------- SHEET:", $wk->{Name}, "\n";
 
-	my $row = $wk->{MinRow} ;
+	$row = $wk->{MinRow} ;
 	while(defined $wk->{MaxRow} && $row <= $wk->{MaxRow}){
 		print "ROW $row -------\n";
-		my $col = $wk->{MinCol} ;
+		$col = $wk->{MinCol} ;
 		while(defined $wk->{MaxCol} && $col <= $wk->{MaxCol}){
 			$cell = $wk->{Cells}[$row][$col];
 			print "( $row , $col ) =>", $cell->Value, "\n" if($cell);
