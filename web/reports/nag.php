@@ -244,5 +244,5 @@ sortColumns($text, $sortby, $sortdir, $nag)
 </BODY>
 </HTML>
 
-<!-- END INDEX -->
+<!-- END NAG -->
 
