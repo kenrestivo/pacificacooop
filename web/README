@@ -88,6 +88,9 @@ auth
 			whether the desired action is on the user's own family or another
 			the user's USERLEVEL privileges
 			the user's GROUPLEVEL privileges
+	savealways: a hack. if this flag exists, ignore the perms system :-/
+		this is for index fields and such
+		
 
 
 the main state machine

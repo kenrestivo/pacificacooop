@@ -348,6 +348,7 @@ create table companies (
 );
 
 -- glue table for many-to-many: companies to auction items
+-- TODO: use NEW table and fieldnames!
 create table saglue (
     saglueid int(32) not null unique auto_increment,
 	auctionid int(32),
