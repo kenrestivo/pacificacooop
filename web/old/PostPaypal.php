@@ -181,7 +181,7 @@ class PostPaypal
 
 			// here come da hokey hackies
 			if($table == 'tickets'){
-				$obj->ticket_type = 'Paid for';
+				$obj->ticket_type_id = 1; // paid for
 				$obj->school_year = findSchoolYear();
 				$obj->ticket_quantity = $this->paypal_obj->invoice;
 			} 

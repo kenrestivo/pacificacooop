@@ -34,10 +34,12 @@ class Tickets extends DB_DataObject
 		'company_id' => 'Invitee- from Solicitation',
 		'family_id' => 'Family- tickets for members',
 		'school_year' => 'School Year',
-		'ticket_type' => 'Type of Ticket'
+		'ticket_type_id' => 'Type of Ticket',
+		'vip_flag' => 'VIP?'
 		);
 	var $fb_fieldsToRender = array ('ticket_quantity',
-									'school_year', 'ticket_type', 'income_id'
+									'school_year', 'ticket_type', 'income_id',
+									'vip_flag','ticket_type_id'
 		);
 	var $fb_formHeaderText = "Springfest Event Tickets";
 
