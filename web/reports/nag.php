@@ -46,29 +46,42 @@
 	print "<font size=10>\n";
 	print "<table border='0'>";
 
-	$query = "select families.name, families.phone, count(leads.leadsid) as cntlead
+	$query = "select families.name, families.phone, count(leads.leadsid) as cntlead, enrol.sess
 	       	from families 
-       		left join leads on families.familyid = leads.familyid
-		group by families.name\n";
-
+       			left join leads on families.familyid = leads.familyid
+			left join kids on kids.familyid = families.familyid
+			left join keglue on keglue.kidsid = kids.kidsid
+			left join enrol on enrol.enrolid = keglue.enrolid
+		group by enrol.sess, families.name\n";
+		
 	if ($latechecked)
 		$query = $query . "having cntlead < 10\n";
 
-	$query = $query . "order by cntlead desc, families.name;";
+	$query = $query . "order by enrol.sess, cntlead desc, families.name;";
 
 	$list = mysql_query($query);
 	
 	echo mysql_error();
 
-	print "<tr><td><em>Family Name</em></td><td><em>Leads Submitted</em></td><td><em>Phone</em></td></tr>\n";
+	print "<tr>\n";
+	print "\t<td><em><u>Family Name</u></em></td>\n";
+	print "\t<td align='center'><em><u>Leads Submitted</u></em></td>\n";
+	print "\t<td align='center'><em><u>Amount Paid</u></em></td>\n";
+	print "\t<td align='center'><em><u>Session</u></em></td>\n";
+	print "\t<td align='center'><em><u>Phone</u></em></td>\n";
+	print "</tr>\n";
 	
 	while($row = mysql_fetch_array($list))
 	{
 		print "<tr><td>\n";
 		print $row[name];
-		print "</td><td>";
+		print "</td><td align='center'>";
 		print $row[cntlead];
-		print "</td><td>";
+		print "</td><td align='center'>";
+		print "TBD";
+		print "</td><td align='center'>";
+		print $row[sess];
+		print "</td><td align='center'>";
 		print $row[phone];
 		print "</td></tr>\n";
 	}
