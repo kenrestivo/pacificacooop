@@ -22,13 +22,12 @@ MASTERHOST=bc
 DBNAME=coop
 TEMPFILE=/tmp/export.sql
 DATE=${shell date +%Y.%m.%d.%H.%M.%S}
-DATAFILE=backups/coopbackup-data$(DATE)
-DEFFILE=backups/coopbackup-defs$(DATE)
+DATAFILE=backups/$(DBNAME)-$(DBHOST)-data.$(DATE)
+DEFFILE=backups/$(DBNAME)-$(DBHOST)-defs.$(DATE)
 TABS=cooptabs$(DATE)
 DB=coop
 DBPORT=3306
 DBUSER=ken
-TABLES=ins veh lic kids enrol parents kpglue keglue
 
 all::
 	@echo "not so fast... get specific"
@@ -43,15 +42,6 @@ dummy::
 
 reports::
 	mysql -u $(DBUSER) -p -h $(DBHOST) -P $(DBPORT) $(DBNAME) < queries.sql
-
-#XXX this is fucking bro$(DBUSER). why? it works from shell, but not from makefile
-tabdump:
-	-(mkdir backups; cd backups)
-	(mkdir  $(TABS); cd $(TABS))
-	for i in $(TABLES); do \
-		echo "===== exproting $$i=== " ; \
-		mysql -B -e "select * from $$i" $(DB) > $$i.txt ;\
-	done
 
 
 backup-defs::
@@ -80,6 +70,11 @@ backup-data:
 backup: backup-defs backup-data
 	-mkdir backups/
 	-mv *.bz2 backups/
+
+backup-local: backup
+
+backup-live::
+	$(MAKE) backup DBUSER=input DBHOST=127.0.0.1 DBPORT=2299 
 		
 #EOF
 
