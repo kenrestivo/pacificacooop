@@ -28,7 +28,7 @@ class Ticket_type extends DB_DataObject
 	var $fb_linkDisplayFields = array('description');
 	var $fb_fieldLabels = array ('description' => "Description",
 								 'paid_flag' => 'Paid?');
-	var $fb_formHeaderText = "Springfest Ticket Types";
+	var $fb_formHeaderText = "Springfest Reservation Types";
 
 	function getTypes($paid = 'both')
 		{

@@ -29,19 +29,19 @@ class Tickets extends DB_DataObject
     ###END_AUTOCODE
 	var $fb_fieldLabels = array(
         'income_id' => "Payment Information",
-		'ticket_quantity' => 'Number of tickets',
+		'ticket_quantity' => 'Number of Reservations',
 		'lead_id' => 'Invitee- from Invitations',
 		'company_id' => 'Invitee- from Solicitation',
-		'family_id' => 'Family- tickets for members',
+		'family_id' => 'Family- Reservations for members',
 		'school_year' => 'School Year',
-		'ticket_type_id' => 'Type of Ticket',
+		'ticket_type_id' => 'Type of Reservation',
 		'vip_flag' => 'VIP?'
 		);
 	var $fb_fieldsToRender = array ('ticket_quantity',
 									'school_year', 'ticket_type', 'income_id',
 									'vip_flag','ticket_type_id'
 		);
-	var $fb_formHeaderText = "Springfest Event Tickets";
+	var $fb_formHeaderText = "Springfest Event Reservations";
 
 	var $fb_linkDisplayFields = array('lead_id', 'income_id');
 

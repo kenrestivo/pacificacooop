@@ -34,7 +34,7 @@ class Springfest_attendees extends DB_DataObject
 	var $fb_linkDisplayFields = array('paddle_number');	
 	var $fb_fieldLabels = array (
 		'paddle_number' => 'Paddle Number',
-		'invitation_rsvps_id' => 'Ticket Holder',
+		'invitation_rsvps_id' => 'Reservation Holder',
 		'lead_id' => 'Invitee',
 		'company_id' => 'Company',
 		'parent_id' => 'Parent',
