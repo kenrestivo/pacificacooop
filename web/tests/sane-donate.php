@@ -45,6 +45,35 @@ function showUser(&$cp, $leadid)
 		return $address;
 }
 
+function getCodeForm(&$cp)
+{
+	$form =& new HTML_QuickForm( 'Springfest RSVP', 'getcodeform');
+	$form->addElement('text', 'response_code', 
+					  'Please enter your Response Code here:', 
+					  'size="4"');
+	$form->addElement('submit', 'verifyuser', 'Next>>');
+	
+	// important
+	if(SID){
+		$form->addElement('hidden', 'coop', session_id()); 
+	}
+	
+	$form->applyFilter('__ALL__', 'trim');
+	$form->addRule('response_code', 
+				   'Response code is required.', 
+				   'required', 'client');
+	$form->addRule('response_code', 
+				   'Response codes are all numbers, no letters or spaces.', 
+				   'numeric', 'client');
+	
+	// add custom rule: check db!
+	if($form->validate()){
+		donateDispatcher(&$cp, 'verifyuser');
+	} else {
+		print $form->toHTML();
+		}
+	
+}
 
 function donateDispatcher(&$cp, $action = false)
 {
@@ -56,31 +85,7 @@ function donateDispatcher(&$cp, $action = false)
 
 	switch($action){
 	case 'getcode':
-		$form =& new HTML_QuickForm( 'Springfest RSVP', 'getcodeform');
-		$form->addElement('text', 'response_code', 
-						  'Please enter your Response Code here:', 
-						  'size="4"');
-		$form->addElement('submit', 'verifyuser', 'Next>>');
-		
-		// important
-		if(SID){
-			$form->addElement('hidden', 'coop', session_id()); 
-		}
-		
-		$form->applyFilter('__ALL__', 'trim');
-		$form->addRule('response_code', 
-					   'Response code is required.', 
-					   'required', 'client');
-		$form->addRule('response_code', 
-					   'Response codes are all numbers, no letters or spaces.', 
-					   'numeric', 'client');
-
-		// add custom rule: check db!
-		if($form->validate()){
-			donateDispatcher(&$cp, 'verifyuser');
-		} else {
-			print $form->toHTML();
-		}
+		getCodeForm(&$cp);
 		break;
 		
 	case 'verifyuser':
