@@ -48,4 +48,62 @@ class Tickets extends DB_DataObject
 
 	var $fb_requiredFields = array('ticket_type_id', 'ticket_quantity');
 
+	function updatePaddles()
+		{
+
+			// calc how many are present,  to delete or add
+			$pad = DB_DataObject::factory('springfest_attendees'); 
+ 			if (PEAR::isError($pad)){
+				user_error("Tickets.php::updatePaddles(): db badness", 
+						   E_USER_ERROR);
+			}
+			$pad->query(sprintf("select 
+						sum(if(entry_type='Automatic',1,0)) as automatic, 
+						sum(if(entry_type='Manual',1,0)) as manual
+						from springfest_attendees
+						where ticket_id = %d", $this->ticket_id));
+			$pad->find(true);
+			$man = $pad->manual;
+			$auto = $pad->automatic;
+			
+			// add tickets
+			$toadd = $this->ticket_quantity - ($man + $auto);
+			while($toadd-- > 0){
+				$pad = DB_DataObject::factory('springfest_attendees'); 
+				if (PEAR::isError($pad)){
+					user_error("Tickets.php::updatePaddles(): db badness", 
+							   E_USER_ERROR);
+				}
+				$pad->ticket_id = $this->ticket_id;
+				$pad->entry_type  = 'Automatic';
+				$pad->insert();
+			}
+
+			// find out how many paddles can be deleted
+			// if there aren't enough automatics to delete, return error
+			$todelete = ($man + $auto) - $this->ticket_quantity;
+			if($todelete > 0 && $todelete > $auto){
+				user_error("tickets:updateapaddles: there are only $auto automatic entries, but you need to delete $todelete ones", E_USER_NOTICE);
+				return false;
+			}
+
+			if($todelete > 0){
+				//if  ticket q < found, delete the remaining automatics
+				$pad = DB_DataObject::factory('springfest_attendees'); 
+				if (PEAR::isError($pad)){
+					user_error("Tickets.php::updatePaddles(): db badness", 
+							   E_USER_ERROR);
+				}
+				$pad->ticket_id = $this->ticket_id;
+				$pad->entry_type = 'Automatic';
+				$pad->find();
+				while($pad->fetch() && $todelete-- > 0){
+					$pad->delete();
+				}
+			}
+
+			return true;
+		}
+
+
 }

@@ -59,6 +59,8 @@ print $cp->selfURL('Make Family Tickets', array('action' => 'maketickets'));
 // cheap dispatcher
 //confessArray($_REQUEST,'req');
 switch($_REQUEST['action']){
+
+	//// MAKE TICKETS
  case 'maketickets':
 	 $sy=findSchoolYear();
 	 $fam =& new CoopObject(&$cp, 'families', &$none);
@@ -97,8 +99,11 @@ order by families.name;
 			 $sav->insert();
 		 }
 	 }
+	 break;
 
-
+//////MAKE PADDLES
+ case  'makepaddles':
+	 
 	 break;
 		
  default:
