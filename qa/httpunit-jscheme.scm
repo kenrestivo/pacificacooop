@@ -71,13 +71,19 @@
   )
 
 (define (visit-all-links wtc)
+  (get-to-main-page wtc)
   (let ((links (vector->list (invoke (get-response wtc) 'getLinks)) ))
-	(for-each (lambda (link)
-				(invoke link 'click) (write-line (string-append
-											   (invoke link 'asText) " > "
-											   (invoke link 'getURLString)))
-				(invoke wtc 'assertTextPresent "</html>"))
-			  (cddr links)) ;; skip main menu
-  ))
+	(for-each
+	 (lambda (link)
+	   (let ((url (invoke link 'getURLString)))
+		 ;; test here for email
+		 (invoke link 'click) (write-line (string-append
+										   (invoke link 'asText) " > "
+										   url))
+		 (invoke wtc 'assertTextPresent "</html>")))
+	 ;; skip main menu (first two) and email (last)
+	 (cddr (list-head links
+					  (- (length links) 1))))))
+	 
 
 ;;EOF
