@@ -63,9 +63,10 @@
 	$dir = $parth['dirname'] ;
 	if(preg_match('/member/', $dir) > 0  ){
 		require_once("members.inc");
+		$everything = $members_everything;
 	} else {
 		require_once("everything.inc");
-	}
+		$everything = $sf_everything;	}
 	
     while ( list( $key, $val ) = each($everything)) {
 		user_error(sprintf("main(): showing row for %s", $val['description']),
