@@ -43,6 +43,10 @@ class coopObject
 
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
 		{
+			if(!$page || !$table){
+				user_error("coopObject: blank page or table object passed", 
+						   E_USER_ERROR);
+			}
 
 			$this->page = $page;
 			$this->table = $table ;

@@ -369,7 +369,8 @@ setupDB($urlonly = false)
 	*/
 	$parth = pathinfo($_SERVER['SCRIPT_FILENAME']);
 	$dir = $parth['dirname'] ;
-	if(preg_match('/-dev/', $dir) > 0  && $dbhost != "bc"){
+	if(preg_match('/-dev/', $dir) > 0  && $dbhost != "bc" && 
+				$dbhost != 'localhost'){
 		$dbname = "coop_dev";
 	} else {
 		$dbname = "coop";

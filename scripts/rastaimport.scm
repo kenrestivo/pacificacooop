@@ -119,6 +119,7 @@ generate error here
 			   (last-insert-id *dbh*)))))
 
 
+;; the engine, which actually goes through and makes the changes
 (define (db-updates line header)
   (check-for-new-kid line header)
   (check-for-new-enrollment line header)
