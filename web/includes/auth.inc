@@ -763,6 +763,11 @@ nullPassState($auth, $states)
 		return changeState($auth, $states, 'needinput', 1);
 	}
 
+	// insecure, weak password
+	if(weakPass($auth['pwd'])){ // NOTE this assumes a cleartext pwd!!
+		return changeState($auth, $states, 'insecurepass', 1);
+	}
+
 	//no confirmation password. need one
 	if(!$auth['confirm']){
 		return changeState($auth, $states, 'needconfirm', 1);
@@ -772,11 +777,6 @@ nullPassState($auth, $states)
 	// TODO: use a hash in pwd, so i'm not passing the pwd around!
 	if($auth['pwd'] != $auth['confirm']){
 		return changeState($auth, $states, 'confirmwrong', 1);
-	}
-
-	// insecure, weak password
-	if(weakPass($auth['pwd'])){ // NOTE this assumes a cleartext pwd!!
-		return changeState($auth, $states, 'insecurepass', 1);
 	}
 
 	// wow! we made it! a good password! let's save it, shall we?
