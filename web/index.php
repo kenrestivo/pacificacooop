@@ -39,6 +39,8 @@
 	require_once("nag.inc");
 	require_once("indulgences.inc");
 	require_once("invitation_cash.inc");
+ 	require_once("packages.inc");
+ 	require_once("ticket_sales.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -78,6 +80,7 @@
 				  $incomecallbacks, $pkgcheckincallbacks,  
 				  $solicit_company_callbacks, $solicit_auction_callbacks,
 				  $solicit_cash_callbacks, 
+				  $ticket_sales_callbacks, 
 				  $raffle_location_callbacks, $raffle_income_callbacks, 
 				  $flyer_company_callbacks,  $flyer_delivery_callbacks ,
 				  $nag_callbacks, $indulgence_callbacks

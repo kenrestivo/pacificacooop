@@ -59,9 +59,14 @@ the fieldstruct
 			i.e. the value of the 'linkfield', not of the field itself
 		savealways: a hack. if this flag exists, ignore the perms system :-/
 			this is for index fields and such
-		uniqueness: an array of fields to search for unique-distinguising stuff
+		uniqueness: array of fields to search for unique-distinguising stuff
 			in a pop-up. if the display field has dupes, 
 				dig through this looking for uniqueness to display
+		showall: if there's a uniqueness, show this number of columns ALWAYS
+			it's smart enough to not let you show more columns than exist.
+			so if uniqueness => array('col1, 'col2', 'col3')
+			if you set showall=> 2, it'll ALWAYS show col1 and col2
+				even if it's unique at col1 and col2+ aren't needed
 		check_jointo: for popups. only show the entries where 
 			the linktable is in the $callbacks['join'] somewhere
 			NOTE! for this to work, there must be a join_to_table column
@@ -77,6 +82,7 @@ callbacks struct
 	mainindex: the unique id (index) field in the maintable
 	realm: privilege realm for this view. 
 	countindex: the field in $fields which should be where'd for counting
+ 		this can be a linkfield or not.
 	sumfield: sets the mode of the count to 'sum', using this field for totals
 	fields: the NAME of the fieldspec array. eventually will be REFERENCE here
 	joins: a recursive array of arrays of join info, 
