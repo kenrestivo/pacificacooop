@@ -123,8 +123,7 @@ class coopForm extends CoopObject
 				$this->insert();
 			}
 
-			saveAudit($this->table, $this->obj->{$this->pk}, 
-					  $this->page->auth['uid']);
+			$this->saveAudit();
 					
 			return true;
 		}

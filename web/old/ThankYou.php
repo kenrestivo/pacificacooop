@@ -346,14 +346,8 @@ http://www.pacificacoop.org/
 					$co->obj->method = $save; /// HACK!
 					$co->obj->insert();
 					$this->thank_you_id = $co->lastInsertID();
-					
-					// the audit trail dude
-					// TODO copy/paste this later into my framework
-					$aud =& new CoopView(&$this->cp, 'audit_trail', &$top);
-					$aud->obj->table_name = $co->obj->__table; // or whatever
-					$aud->obj->index_id = $this->thank_you_id;
-					$aud->obj->audit_user_id = $this->cp->auth['uid'];
-					$aud->obj->insert();
+					// do audit AFTER last insertid above!
+					$co->saveAudit();
 				}
 				
 				// COMPANY
