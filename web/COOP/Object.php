@@ -23,9 +23,6 @@
 require_once('CoopPage.php');
 require_once('DB/DataObject.php');
 require_once("HTML/Table.php");
-require_once 'HTML/QuickForm.php';
-require_once('DB/DataObject/FormBuilder.php');
-require_once('Pager/Pager.php');
 require_once('object-config.php');
 
 //////////////////////////////////////////
@@ -53,9 +50,10 @@ class coopObject
 			$this->recurseLevel = $level;
 			$this->parentCO = $parentCO;
 			
-			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
+			$this->obj =& DB_DataObject::factory($this->table); // & instead?
 			if (PEAR::isError($obj)){
-				die ($obj->getMessage ());
+				 user_error("coopObject::constructor: " . $obj->getMessage(),
+							E_USER_ERROR);
 			}
 			//confessObj($this->obj, "CONSTRUCTOR object for $this->table");
 
