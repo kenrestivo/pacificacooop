@@ -216,7 +216,7 @@ concepts/data structures
 		10names, money, 3x5 cards, roster, insurance, menu, users
 	uid: a user, distinct from family, but linked to a family.
 	level(action): levels of authorisation for this user and realm
-		none, summary, view detail, edit, add, delete, all
+		none, summary, view detail, edit, add, delete, admin(superuser)
 
 auth.inc: the library functions
 	checkToken(): check that the token is valid for this uid
