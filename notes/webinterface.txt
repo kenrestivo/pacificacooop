@@ -256,33 +256,30 @@ auth.inc: the library functions
 		outputs: error messages as needed
 		returns: a token if success, otherwise 0.
 		pseudocode:
-			if there is a confirm password also, check that the hash matches
+			if there is a confirm password also, check that they are the same
 				i.e. they have entered the exact same password twice
-				if it does, save new password	
-					then call generateToken() and return the token!
 				if it doesn't, complain passwords don't match,
 					complaint is a form with "try again" button
 						and a familyid as an invisiblefield
 					return 0
-			else 
-				if they do NOT have a password in db (i.e. first time), 
-					check that it's an acceptable new password 
-						(minimum length)
-						if OK, 
-							show a confirm "choosing new password, 
-								please retype to make sure"
-							generateToken on this, 
-								and stuff token into an invisible field
-							link back to $SELF
-							return 0
-						else 
-							complain about bad length, 
-								show "try again" form with familyid
-							and return 0
-				else
-					if there is a password in the db, check it, 
-						generate token, and show menu
-						passing token thru invisibly
+			if they do NOT have a password in db (i.e. first time), 
+				check that it's an acceptable new password 
+					(minimum length)
+					if OK, 
+						show a confirm "choosing new password, 
+							please retype to make sure"
+						generateToken on this, 
+							and stuff token into an invisible field
+						link back to $SELF
+						return 0
+					else 
+						complain about bad length, 
+							show "try again" form with familyid
+						and return 0
+			else
+				if there is a password in the db, check it, 
+					generate token, and show menu
+					passing token thru invisibly
 
 
 menu.php: a nice launching point for things!
