@@ -23,14 +23,24 @@
   ("users" "userid")
   ("veh" "vidnum") ))
 
-(define sql-length
+(define sql-length 
   (lambda (tabinfo) 
-	 (> (vector-length 
-	  (sql-query 0 
-				 (sprintf #f "select * from %s where audit_user_id is not null"
-						  (car tabinfo)))) 1 )))
-	
+	(> (vector-length 
+		(sql-query 0 
+	 			   (sprintf #f "select * from %s where audit_user_id is not null"
+							(car tabinfo)))) 1 )))
 
-(for-each (lambda (x) (sql-length x)) fixems)
+			;;"replace into audit_trail 
+				;;		(table_name, index_id, audit_user_id, updated) 
+	
+(define move-audits
+  (lambda (tabinfo)
+		(sql-query 0 
+				   (sprintf #f 
+					"select '%s', %s, audit_user_id, %s 
+						from %s where audit_user_id is not null"
+					(car tabinfo) (cadr tabinfo) "entered" (car tabinfo)))))
+	
+(for-each (lambda (x) (if (sql-length x) (move-audits x))) fixems)
 
 ;;; EOF
