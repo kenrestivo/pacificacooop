@@ -136,7 +136,7 @@ class coopPage
 				//print "table $key vars $val<br>";
 				if(is_array($val) && array_key_exists('action', $val)){
 					$needles[$key] = $val;
-					// override session now
+					// override session1 now
 					$_SESSION[$key] = $val;
 				}
 			}
@@ -215,6 +215,7 @@ class coopPage
 			}
 		}
 
+
 	function detailForm($id = false )
 		{
 	
@@ -238,6 +239,7 @@ class coopPage
 				if ($res){
 					$this->obj->debug('processed successfully', 
 								'detailform', 0);
+					saveAudit($this->table, $id, $this->auth['uid']);
 					// XXX make sure i don't have to unset id's first!
 					///  next action
 					print "PRICESSING SEUCCSSCUL";
