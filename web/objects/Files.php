@@ -29,7 +29,7 @@ class Files extends DB_DataObject
 ###END_AUTOCODE
 
 
-	var	$kenPath = "../../files/"; // NOTE! for the tests folder
+	var	$kenPath = "../files/"; // NOTE! for the tests folder
 
     var $fb_timeFields = array ('upload_date');
     var $fb_fieldLabels = array( 'file_description' => "Description of file");
@@ -66,9 +66,12 @@ class Files extends DB_DataObject
                 $this->disk_filename = $unique_filename;
                 $this->original_filename = $actual['name'];
                 $this->mime_type = $actual['type'];
-                $this->upload_date = date("Y-m-d H:m:s");
+                $this->upload_date = date("Y-m-d H:i:s");
                 $this->file_size = $actual['size'];
-                // NOTE: assume school_year taken care of
+				// XXX bah! perms! chown, yuck. safe mode sucks.
+				$this->file_date = date('Y-m-d H:i:s',
+										filemtime($actual['tmp_name']));
+				// NOTE: assume school_year taken care of
                 // by CoopPage::setFormDefaults
                 return parent::insert();
             }

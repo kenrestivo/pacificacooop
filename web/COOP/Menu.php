@@ -216,10 +216,18 @@ class CoopMenu extends HTML_Menu
 					'url' => $page->selfURL(
 						false, 'tables[companies][action]=list')),
 				array(
-					'title' => 'Invitations Test',
+					'title' => 'New Invitations Test',
 					'url' => $page->selfURL(
-						false, 'tables[invitations][action]=list')));
-
+						false, 'tables[invitations][action]=list')),
+				array(
+					'title' => 'Files Test',
+					'url' => $page->selfURL(
+						false, 'tables[files][action]=list')),
+				array(
+					'title' => 'Leads Test',
+					'url' => $page->selfURL(
+						false, 'tables[leads][action]=list')));
+	
 
 			$this->setMenu($heirmenu);
 

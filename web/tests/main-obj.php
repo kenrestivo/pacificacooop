@@ -2,6 +2,7 @@
 
 //$Id$
 
+chdir("../");                   // XXX only for "test" dir hack!
 require_once('CoopPage.php');
 require_once('CoopMenu.php');
 
@@ -17,7 +18,7 @@ $cp->pageTop();
 $menu =& new CoopMenu;
 $menu->create(&$cp);
 print $menu->topNavigation();
-print $menu->toHTML();
+print $menu->kenRender();
 $cp->engine();
 
 //global $_DB_DATAOBJECT;
