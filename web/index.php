@@ -37,10 +37,23 @@ print "<p>&nbsp;</p>";
 				and the form!
 */
 	
-print "<table border='0'>";
-print "<tr><td>Which Family? (Your child's last name)&nbsp;</td><td>";
-	familyPopup($HTTP_POST_VARS['familyid']); 
-print "</td></tr></table>";
+if(!$HTTP_POST_VARS['familyid']){
+	#there is no familyid, let the user select one
+	familyPopup(0);  #0 means, don't pre-select any family. just CHOOSE ONE
+} elseif($HTTP_POST_VARS['Save']){
+	#we are trying to save form data. this is what life is all about.
+	#TODO: good stuff here!
+} else {
+	#show a family's info, and giving them a form to enter data
+	printf ("<p>DEBUG: the id you chose was %d</p>\n", 
+			$HTTP_POST_VARS['familyid']);
+	familyDetail($HTTP_POST_VARS['familyid']);
+
+
+}
+
+
+
 
 
 print "</BODY></HTML>";

@@ -77,6 +77,8 @@ select max(ins.expires) as exp, parents.familyid, families.name, ins.policynum, 
 	order by exp desc;
 	-- note: in an actualy scripted query, i'll add where parents.familyid =
 
+--- show kids and enrollment
+select kids.*, enrol.sess from kids left join keglue on keglue.kidsid = kids.kidsid left join enrol on enrol.enrolid = keglue.enrolid;
 
 
 --- EOF
