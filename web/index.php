@@ -22,8 +22,9 @@
 	require_once("financefuncts.inc");
 	require_once("roster.inc");
 	require_once("10names.inc");
-//	require_once("insurancefuncs.inc");
-//	require_once("calendarfuncs.inc");
+	require_once("insurancefuncs.inc");
+	require_once("calendarfuncs.inc");
+	require_once("adminfuncs.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -72,15 +73,17 @@
 	showMenuRow($auth, $u, 'Springfest Fees and Cash Donations', 
 		'incomeSummary', 'money', 'money.php');
 
-	/* insurance 
+	/* insurance */
 	showMenuRow($auth, $u, 'Insurance and Drivers Licence Information', 
 		'insuranceSummary', 'insurance', 'insurance.php');
-	*/
 
-	/* calendar 
+	/* calendar */
 	showMenuRow($auth, $u, 'Calendar of Events', 
 		'calSummary', 'calendar', 'calendar.php');
-	*/
+
+	/* admin */
+	showMenuRow($auth, $u, 'User Administration', 
+		'adminSummary', 'user', 'admin.php');
 
 	print "</table>";
 

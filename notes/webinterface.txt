@@ -277,6 +277,15 @@ auth.inc: the library functions
 					if suid is authorised to change this user
 
 
+user notes
+	users != roster, so ann edminster can add/edit families with impunity
+		without giving her permissions on users
+	hmm. this could be neat! 
+		someone that has admin privs on a realm, can edit privs FOR THAT REALM!
+		so... i can give carrie admin privs for invitations, donations, money
+			and give admin privs on all realms to matt.
+		user realm is for adding/deleting users (or, admin privs on user realm)
+
 
 menu.php: a nice launching point for things!
 	call auth.inc:login() and die if it fails. else...
