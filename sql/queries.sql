@@ -20,8 +20,8 @@
 -- just a test query. all kids.
 select last, first 
 	from kids 
-		left join keglue on kids.kidsid = keglue.kidsid 
-		left join enrol on enrol.enrolid = keglue.enrolid 
+		left join attendance on kids.kidsid = attendance.kidsid 
+		left join enrol on enrol.enrolid = attendance.enrolid 
 	where enrol.sess = "PM";
 
 -- contact info for all parents, showing who is and isn't a worker
@@ -80,8 +80,8 @@ select max(ins.expires) as exp, parents.familyid, families.name, ins.policynum, 
 --- show kids and enrollment
 select kids.*, enrol.sess 
 	from kids 
-		left join keglue on keglue.kidsid = kids.kidsid 
-		left join enrol on enrol.enrolid = keglue.enrolid;
+		left join attendance on attendance.kidsid = kids.kidsid 
+		left join enrol on enrol.enrolid = attendance.enrolid;
 
 -- show all springfest payments
 select families.name, sum(inc.amount) as total
@@ -96,8 +96,8 @@ select families.name, sum(inc.amount) as total
 select families.name, enrol.sess 
 	from families
 		left join kids on kids.familyid = families.familyid
-		left join keglue on keglue.kidsid = kids.kidsid 
-		left join enrol on enrol.enrolid = keglue.enrolid
+		left join attendance on attendance.kidsid = kids.kidsid 
+		left join enrol on enrol.enrolid = attendance.enrolid
 	group by families.familyid
 	order by enrol.sess, families.name
 
@@ -136,8 +136,8 @@ select  inc.incid, inc.checknum, inc.payer, coa.description, inc.amount,
 	order by inc.checkdate desc
 
 -- query for deleting/updating session stuff
-select * from keglue 
-	left join kids on keglue.kidsid = kids.kidsid 
+select * from attendance 
+	left join kids on attendance.kidsid = kids.kidsid 
 	left join families on kids.familyid = families.familyid 
 	where families.name like "%hearne%";
 

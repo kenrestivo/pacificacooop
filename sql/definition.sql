@@ -86,11 +86,12 @@ create table coop.enrol(
 );
 
 -- glue table for many-to-many: kids to enrolmment sessions
-create table coop.keglue (
-    keglueid int(32) not null auto_increment,
+create table coop.attendance (
+    attendanceid int(32) not null auto_increment,
 	kidsid int(32),
 	enrolid int(32),
-    primary key (keglueid)
+	dropout enum ('No', 'Yes'),
+    primary key (attendanceid)
 );
 
 -- parents who have insurance and/or licenses. (many-to-many to kids)

@@ -45,14 +45,14 @@
 	print "<font size=10>\n";
 	print "<table border='0'>";
 
-	#TODO: semester is hard-coded for next year, let the user choose it
+	#TODO: semester is hard-coded. for next year, let the user choose it
 	$query = "select families.name, families.familyid, families.phone, 
 				count(leads.leadsid) as cntlead, enrol.sess
 	       	from families 
        			left join leads on families.familyid = leads.familyid
 			left join kids on kids.familyid = families.familyid
-			left join keglue on keglue.kidsid = kids.kidsid
-			left join enrol on enrol.enrolid = keglue.enrolid
+			left join attendance on attendance.kidsid = kids.kidsid
+			left join enrol on enrol.enrolid = attendance.enrolid
 		where enrol.semester like \"2003-2004\"
 		group by enrol.sess, families.name
 		order by enrol.sess, cntlead desc, families.name\n";
