@@ -170,6 +170,7 @@ create table inc (
     incid int(32) not null unique auto_increment,
 	checknum varchar(255),
 	checkdate date,
+	bookkeeper_date date,
 	payer varchar(255),
     acctnum int(32),
     amount decimal(9,2),
@@ -361,6 +362,7 @@ create table raffle_locations(
 create table raffle_income_join (
     raffle_income_join_id int(32) not null unique auto_increment,
 	raffle_location_id int(32),
+	familyid int(32), -- XXX goddammit!
 	incid int(32),
     primary key (raffle_income_join_id)
 );
@@ -399,7 +401,7 @@ create table nag_indulgences(
 create table invitation_rsvps (
     invitation_rsvps_id int(32) not null unique auto_increment,
 	incid int(32),
-	ticket_quantity int(5), --XXX conditional hack! handle income right!
+	ticket_quantity int(5), -- XXX conditional hack! handle income right!
 	leadsid int(32),
     primary key (invitation_rsvps_id)
 );
