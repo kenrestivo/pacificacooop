@@ -191,6 +191,10 @@ class coopPage
 	function setFormDefaults(&$form)
 		{
 			
+			$sy =& $form->getElement('school_year');
+			if($sy && $sy->getValue() == ""){
+				$sy->setValue(findSchoolYear());
+			}
 		}
 
 	function detailForm($id = false )
@@ -208,10 +212,7 @@ class coopPage
 			$form =& $this->build->getForm();
             //confessObj($form, "form");
   			//$form->freeze();
-			$sy =& $form->getElement('school_year');
-			if($sy && $sy->getValue() == ""){
-				$sy->setValue(findSchoolYear());
-			}
+			$this->setFormDefaults(&$form);
 			if($form->validate ()){
 				$res = $form->process (array 
 									   (&$this->build, 'processForm'), 
