@@ -34,10 +34,17 @@
 				 "School Job"))
 
 ;;;;;;;;;;;;;;; functions for updating the database
-
+;; easy version:  (string-join (cdr (string-tokenize long-parent)))
 (define (split-first-last long-parent)
-  ;; TODO
-  )
+  (let* ((name-list (string-tokenize long-parent))
+		 (middle-index (list-index
+					   (lambda (x) (or (equal? x "Ann")
+									   (equal? x "Jo")))
+					   name-list)))
+	(if (false-if-exception (< 0 middle-index))
+		(list (string-join (safe-list-head name-list (+ 1 middle-index)))
+			  (string-join (list-tail name-list  (+ 1 middle-index))))
+		(list (car name-list) (string-join (cdr name-list))))))
 
 ;; check for each parent column
 (define (check-for-new-parent line header column-to-check)
@@ -105,7 +112,10 @@
 
 (define (db-updates line header)
   (check-for-new-kid line header)
-  (check-for-new-enrollment line header))
+  (check-for-new-enrollment line header)
+  (map (lambda (col)
+		 (check-for-new-parent line header col))
+	   '("Mom Name *" "Dad/Partner *")))
 
 ;; TODO: prompt user instead! pick amongst them
 (define (choose-duplicates db-res)
