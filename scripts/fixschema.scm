@@ -6,7 +6,7 @@
 			 (database simplesql))
 (require 'printf)
 
-;;(load "/mnt/kens/ki/is/scheme/lib/kenlib.scm")
+(load "/mnt/kens/ki/is/scheme/lib/kenlib.scm")
 
 ;; XXX note, this is fakery. you'll need to manually put in the root pw's
 ;;(define dbh (simplesql-open 'mysql "coop" "127.0.0.1" "paccoop" "test" "2299"))
@@ -71,10 +71,14 @@
 ;; TODO i have to fish the definition out of the definition.sql,
 ;; or out of a mysqldump somewhere
 (define (rename-column-query items)
-  (let ((sp (string-split (car items) #\.))
-		(new (string-split (cadr items) #\.)))
-	(sprintf #f "alter table %s change column %s %s"
-				 (car sp) (cadr sp) (cadr new))) )
+  (let* ((sp (string-split (car items) #\.))
+		(new (string-split (cadr items) #\.))
+		(long-def (assoc-ref (assoc-ref new-schema (car sp)) (cadr sp)))
+		)
+	(if long-def
+		(sprintf #f "alter table %s change column %s %s %s"
+				 (car sp) (cadr sp) (cadr new) long-def)
+		(sprintf #f "ignoring %s:%s" (car sp) (cadr sp)) ) ))
 
 ;;; the easy one: tables.
 (define (rename-table-query items)
