@@ -47,7 +47,7 @@ print $cp->selfURL('View Sponsorships');
 
 //confessObj($cp, 'cp');
 $level = ACCESS_EDIT;
-$p = getAuthLevel($cp->auth, 'solicitation');
+$p = getAuthLevel($cp->auth, 'solicit_money');
 $admin = $p['group_level'] >= $level ? 1 : 0;
 $user = $p['user_level'] >= $level ? 1 : 0;
 
