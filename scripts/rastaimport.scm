@@ -111,7 +111,7 @@
 				insert into kids set 
 							last = '%s' ,
 							first = '%s' ,
-							date_of_birth = %s,
+							date_of_birth = '%s',
 							familyid = %d "
 									   (rasta-find "Last Name" line header)
 									   (rasta-find "Child" line header)
