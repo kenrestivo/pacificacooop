@@ -37,7 +37,9 @@ class Income extends DB_DataObject
 	var $fb_linkDisplayFields = array('payer', 
 									  'payment_amount', 
 									  'check_date');
-	
+	var $fb_fieldsToRender= array("check_number", "check_date", "payer", "account_number", 
+								  "note", "bookkeeper_date", "cleared_date");
+
 //	var $fb_crossLinks = array(array('table' => 'families_income_join', 
 	//'fromFild' => 'income_id', 'toField' => 'family_id'));
 }
