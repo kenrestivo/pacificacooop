@@ -161,6 +161,6 @@ done ();
 ?>
 
 
-<!-- END MAKE SPONSORSHIPS -->
+<!-- END FIND ORPHANED -->
 
 
