@@ -16,6 +16,7 @@ require_once("HTML/Table.php");
 require_once('DB/DataObject.php');
 require_once('DB/DataObject/FormBuilder.php');
 require_once('Pager/Pager.php');
+require_once('Mail.php');
 
 //require_once('FAIL-NOW.php');
 

@@ -21,8 +21,7 @@ function thankyoutest($url, $name, $all)
 
 ////////////MAIN
 
-$formurl = "http://www/coop-dev/thankyou.php";
-//$formurl = "http://www.pacificacoop.org/sf/thankyou.php";
+$formurl = "../thankyou.php";
 
 print "<html><head><title>thank you note test</title></head>";
 print "<body>";
@@ -37,7 +36,8 @@ print thankyoutest($formurl, "Test PayPal Thank You",
 						 'first_name' => 'Test',
 						 'last_name' => 'Donor',
 						 'address_country' => 'USA',
-						 'confirm_date' => '20041110220022'
+						 'confirm_date' => '20041110220022',
+						 'payer_email' => 'ken@restivo.org'
 					   ));
 
 print "</body></html>";
