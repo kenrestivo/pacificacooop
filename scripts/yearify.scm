@@ -13,6 +13,14 @@
 ;;;;;;;;;;;;;;;
 ;; main
 
+;; NOTE: this will *not* move any old data around.
+;; it is for both the OLD and NEW database schemata
+;; you need a new-architecture  script to do it
+(for-each (lambda (args) (apply add-new-column *dbh* args))
+		  '(("kids" "date_of_birth" "date" #f)
+			("families" "address" "varchar(255)" #f)
+			("families" "email" "varchar(255)" #f)))
+
 ;; NOTE! this is for NEW column names but OLD schema.
 ;; i need to run this *after* running fixschema
 (for-each  (lambda (table)
@@ -23,13 +31,6 @@
 			 "income"
 			 "springfest_attendees"
 			 "territories"))
-
-;; NOTE: this will *not* move any old data around.
-;; you need a new-architecture  script to do it
-(for-each (lambda (args) (apply add-new-column *dbh* args))
-		  '(("kids" "date_of_birth" "date" #f)
-			("families" "address" "varchar(255)" #f)
-			("families" "email" "varchar(255)" #f)))
 
 (simplesql-close *dbh*)
 
