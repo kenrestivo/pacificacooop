@@ -32,6 +32,7 @@ class Auction_donation_items extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_linkDisplayFields = array('item_description');
+	var $fb_selectAddEmpty = array ('package_id');
 	var $fb_fieldLabels = array ('item_description' => 'Item Description');
 	var $fb_enumFields = array ('item_type');
 

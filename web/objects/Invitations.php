@@ -37,4 +37,4 @@ class Invitations extends DB_DataObject
 			
 		}
 
-}
+	var $fb_selectAddEmpty = array ('family_id');}

@@ -18,6 +18,16 @@ require_once('object-config.php');
 
 //DB_DataObject::debugLevel(5);
 
+function confessObj($obj, $text)
+{
+
+    print"<pre>";
+    print "======== $text ============\n";
+    print htmlentities(print_r($obj, 1));
+    print "</pre>";
+ 
+}
+
 //////////////////////////////////////////
 /////////////////////// COOP CLASS
 class coopPage
@@ -82,7 +92,7 @@ class coopPage
  
 	function engine(){
 		$tabarr = $this->findTables($_REQUEST);
-		confessArray($tabarr, "tables");
+		//confessArray($tabarr, "tables");
 		foreach($tabarr as $table => $vals){
 			$this->setup($table);
 				//	print_r($cp);
@@ -185,13 +195,15 @@ class coopPage
 			//print_r($this);
 			$id = $id ? $id : $_SESSION[$this->table]['id'];
 			$this->obj->get($id);
-			$this->build =& DB_DataObject_FormBuilder::create ($this->obj);
-			$form = new HTML_QuickForm(); // XXX should i use selfurl?
+			$this->obj->fb_submitText = "Save"; // hack. it ignores conf 
+            $this->build =& DB_DataObject_FormBuilder::create (&$this->obj);
+            //confessObj($this->build, "build");
+            $form =& new HTML_QuickForm(); 
 			$form->addElement('html', thruAuth($this->auth, 1));
-			$this->build->useForm($form);
+            $this->build->useForm($form);
 			$form =& $this->build->getForm();
-			//$form->freeze();
-			//print_r($form);
+            //confessObj($form, "form");
+  			//$form->freeze();
 			if($form->validate ()){
 				$res = $form->process (array 
 									   (&$this->build, 'processForm'), 
@@ -244,20 +256,21 @@ class coopPage
 			return $res;
 		}
 
-	function showCrosslink($id)
+	function showCrosslink($id, $idx)
 		{
-			$myobj = $this->obj;
-			$build =& DB_DataObject_FormBuilder::create (
-				$myobj);
-			$form =& $build->getForm();
-			$form->freeze();
-			//print_r($form);
-			$myobj->get($id);
-			$myobj->find();
-			$dosdv = 
-				$build->getDataObjectSelectDisplayValue(&$obj);
-			return $dosdv;
-		}
+			
+            $myobj = $this->obj;
+            $myobj->get($id);
+            $thisLink = explode(":", $allLinks[$idx]);
+            //confessArray ($thisLink, "thislink");
+            $damn = $myobj->getLink($thisLink[1]);
+            
+                //confessArray($damn, "linkobj");
+            // ack will need to use fbdisplay
+            $gah = "_" . $thislink[0];
+            return $damn;
+           
+        }
 
 
 	function listTable($table = false)
@@ -269,7 +282,7 @@ class coopPage
 				$primaryKey = $keys[0];
 			}
 			
-		//	$this->showCrosslink(1);
+            print "HEY" . $this->showCrosslink(10, 'family_id' );
 			
 			$tab =& new HTML_Table();
 

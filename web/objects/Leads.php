@@ -44,4 +44,5 @@ class Leads extends DB_DataObject
 									'zip', 'country', 'phone');
 	var $fb_enumFields = array ('relation', 'source'); // make this a link
 	var $fb_linkDisplayFields = array ('last_name', 'first_name', 'address1');
+	var $fb_selectAddEmpty = array ('source_id');
 }

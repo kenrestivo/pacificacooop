@@ -56,7 +56,7 @@ use constant _ACCESS_ADMIN => 800;
 #default privs for all families
 #  				group, 					user, 				item
 @familydefaults =  (
-	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "invitations" ],
+	[ _ACCESS_SUMMARY, _ACCESS_ADD, "invitations" ],
 	[ _ACCESS_SUMMARY, _ACCESS_VIEW, "invitations_cash" ],
 	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "auction" ],
 	[ _ACCESS_VIEW, _ACCESS_VIEW, "calendar" ],

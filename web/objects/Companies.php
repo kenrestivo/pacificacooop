@@ -37,4 +37,5 @@ class Companies extends DB_DataObject
 	var $fb_linkDisplayFields = array('company_name', 'address1', 'phone');
 	var $fb_fieldLabels = array ('company_name' => 'Company Name');
 	var $fb_enumFields = array ('flyer_ok');
+	var $fb_selectAddEmpty = array ('territory_id');
 }
