@@ -201,7 +201,7 @@ checkPass($uid, $clearpass)
 	// passwords are stored as HASHES in database, remember?
 	$md5pass = strtolower(md5($clearpass));
 
-	if($storedpass == $md5pass)){
+	if($storedpass == $md5pass){
 		return generateToken($uid, $md5pass);
 	}	
 	
@@ -333,6 +333,50 @@ function loginPopup($uid)
 	
 
 /******************
+	LOGINFORM
+	inputs: auth struct, type(password, confirm, both), and user(show, hide)
+******************/
+function
+loginForm($auth, $type = 'password', $user = 'show', $statusline)
+{
+
+	// say hi.
+	print "<p>$statusline</p>";
+
+	printf("<FORM METHOD=POST ACTION='%s'>", 
+					$_SERVER['PHP_SELF']);
+	thruAuth($auth);
+	//user popup (or display) stuff
+	if($user == 'show'){
+		print "Choose user name: \n";
+		loginPopup($auth);
+	} else {
+		printf("For %s\n", getUser($auth['uid']));
+	}
+
+	//password stuff
+	if($type == 'password' || $type == 'both'){
+		if($auth['state'] == 'needconfirm'){
+			print "Please choose a new password and type it here: \n";
+		} else {
+			print "Enter password: \n";
+		}
+		print "<INPUT TYPE=password NAME='auth[pwd]'>";
+	}
+
+	//confirm stuff
+	if($type == 'confirm' || $type == 'both'){
+		print "Please re-type your password to confirm it: \n";
+		print "<INPUT TYPE=password NAME='auth[confirm]'>";
+	}
+
+	printf("<INPUT TYPE=submit NAME='login' VALUE='LogIn'>");
+	printf("<INPUT TYPE=cancel NAME='cancel' VALUE='Cancel'>");
+    print "</FORM>";
+}/* END LOGINFORM */
+
+
+/******************
 	LOGIN
 	the state machine
 		only returns if it either needs more user input or is finished!
@@ -344,7 +388,7 @@ function loginPopup($uid)
 function
 logIn($auth)
 {
-	confessArray($auth, "logIn()");
+	confessArray($auth, 'logIn()');
 
 	$states = array(
 		loggedout => array (
@@ -387,76 +431,34 @@ logIn($auth)
 					description => "User is logged in"
 					)
 	);
+
 	
 	/* start the pachinko machine. 
 		no way out unless user input needed, or success */
 	do {
 
+		$state = $auth['state'];
 		fwrite(STDERR, "logIn(): entering %s\n",
-			$states[$auth['state']]['description']);
+			$states[$state]['description']);
 
 		
 		// sanity check the struct passed in
-		while (list($key, $val) = each($states[$auth['state']['required'])){
+		while (list($key, $val) = each($states[$state]['required'])){
 			if(!$auth[$val]){
 				fwrite(STDERR, "ERROR! $val required for state. logging out\n");
 				$auth['state'] = 'loggedout'; // force it outta here
+				$state = $auth['state']; // XXX hack!
 			}
 		}
 		reset($auth);
 
 		// dispatch the appropriate action for this state, and collect result
-		$newauth = $states[$auth['state']]['func']($auth);
-	} while ($newauth['state'] != "needinput" );
+		$auth = $states[$state]['func']($auth);
+	} while ($auth['state'] != "needinput");
 
-	return($newauth);
+	return($auth);
 
 }/* END LOGIN  */
-
-
-
-/******************
-	LOGINFORM
-	inputs: auth struct, type(password, confirm, both), and user(show, hide)
-******************/
-function
-loginForm($auth, $type == 'password', $user == 'show', $statusline)
-{
-
-	// say hi.
-	print "<p>$statusline</p>";
-
-	printf("<FORM METHOD=POST ACTION='%s'>", 
-					$_SERVER['PHP_SELF']);
-	thruAuth($auth);
-	//user popup (or display) stuff
-	if($user == 'show'){
-		print "Choose user name: \n";
-		loginPopup($auth);
-	} else {
-		printf("For %s\n", getUser($auth['uid']));
-	}
-
-	//password stuff
-	if($type == 'password' || $type == 'both'){
-		if($auth['state'] == 'needconfirm'){
-			print "Please choose a new password and type it here: \n";
-		} else {
-			print "Enter password: \n";
-		}
-		print "<INPUT TYPE=password NAME='auth[pwd]'>";
-	}
-
-	//confirm stuff
-	if($type == 'confirm' || $type == 'both'){
-		print "Please re-type your password to confirm it: \n";
-		print "<INPUT TYPE=password NAME='auth[confirm]'>";
-	}
-
-	printf("<INPUT TYPE=submit NAME='login' VALUE='LogIn'>");
-	printf("<INPUT TYPE=cancel NAME='cancel' VALUE='Cancel'>");
-    print "</FORM>";
-}/* END LOGINFORM */
 
 
 
@@ -598,7 +600,6 @@ wrongPassState($auth)
 			state => "loggedout" // explicitly set it
 	);
 
-	print ;
 	loginForm($newauth, 'password', 'hide', "Bad password. Try again." );
 
 	$newauth['state'] = "needinput";
