@@ -499,9 +499,10 @@ function
 dateJava()
 {
 	// wrapped in comments to make old browsems ignore it
+
 	return '<script type="text/javascript" language="javascript">
 			<!-- Begin 
-function todaysDate(fieldname) {
+function todaysDate(fieldname,formname) {
 var mydate=new Date()
 var theyear=mydate.getYear()
 if (theyear < 1000)
@@ -518,7 +519,7 @@ var displayfirst=themonth
 var displaysecond=theday
 var displaythird=theyear
 
-document.forms[0][fieldname].value=displayfirst+"/"+displaysecond+"/"+displaythird
+document.forms[formname][fieldname].value=displayfirst+"/"+displaysecond+"/"+displaythird
 
 }			// End -->
 			</script>';
