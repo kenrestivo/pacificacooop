@@ -64,11 +64,11 @@
 	$u = getUser($auth['uid']);
 
 	topNavigation($auth, $u);
-	print "<hr>\n";
+	print "\n<hr>\n";
 
 	print "<p>Please choose an action:</p>";
 
-	print "<table border=1>";
+	print "\n\n<table border=1>\n";
 	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
 
 	//and heeere they are!
@@ -94,7 +94,6 @@
 	*/
 
 
-	print "</table>";
 
 	/* admin 
 	XXX can't use standard showMenuRow? 
@@ -103,7 +102,7 @@
 		'adminSummary', 'user', 'admin.php');
 	*/
 
-	print "</table>";
+	print "\n</table>\n\n";
 
 	familyDetail($u['familyid']);
 

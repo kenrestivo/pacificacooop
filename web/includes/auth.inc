@@ -473,42 +473,42 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					$_SERVER['PHP_SELF']);
-	print "<table border=1>";
+	print "\n<table border=1>\n";
 	//user popup (or display) stuff
-	print "<tr>";
+	print "\n<tr>\n";
 	if($user == 'show'){
-		print "<td>Select user name:</td>\n";
-		print "<td>";
+		print "\t<td>Select user name:\n</td>\n";
+		print "\t<td>";
 		loginPopup($auth['uid']);
-		print "</td>";
+		print "</td>\n";
 	} else {
 		$u = getUser($auth['uid']);
-		printf("<td>Logging in %s...</td>\n", $u['username']);
+		printf("\n<td>Logging in %s...</td>\n", $u['username']);
 	}
-	print "</tr>";
+	print "</tr>\n";
 
 	//password stuff
-	print "<tr>";
+	print "\n<tr>\n";
 	if($type == 'password' || $type == 'both'){
 		if($type == 'both'){ //XXX hack. i can't pass the REAL state thru.
 			print "<td>Please type in your new password here: </td>\n";
 		} else {
-			print "<td>Enter password 
+			print "\t<td>Enter password 
 				(or leave blank if you don't have one yet): </td>\n";
 		}
-		print "<td><INPUT TYPE=password NAME='auth[pwd]'></td>";
+		print "\t<td><INPUT TYPE=password NAME='auth[pwd]'></td>\n";
 	}
-	print "</tr>";
+	print "</tr>\n";
 
 	//confirm stuff
-	print "<tr>";
+	print "\n<tr>\n";
 	if($type == 'confirm' || $type == 'both'){
-		print "<td>Please re-type your password to confirm it: </td>\n";
-		print "<td><INPUT TYPE=password NAME='auth[confirm]'></td>";
+		print "\t<td>Please re-type your password to confirm it: </td>\n";
+		print "\t<td><INPUT TYPE=password NAME='auth[confirm]'></td>\n";
 	}
-	print "</tr>";
+	print "</tr>\n";
 
-	print "</table>";
+	print "\n</table>\n";
 
 	/* NOTE! thruAuth MUST be here at the bottom of the form! 
 		if i put it at the top of the form, then SID is set for some reason
