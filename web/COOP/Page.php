@@ -343,20 +343,9 @@ class coopPage
 } // END CLASS
 
 
-//MAIN
-//$_SESSION['toptable'] 
-
-
-$cp =& new coopPage();
-$cp->pageTop();
-$cp->engine();
-
-done();
-
-
 ////KEEP EVERTHANG BELOW
 
 ?>
-<!-- END TEST -->
+<!-- END COOP PAGE -->
 
 
