@@ -81,7 +81,7 @@ savePass($uid, $clearpass)
 		return 0;
 	}
 
-	error_log("saving $uid, $hash, [$query]", o);
+	//error_log("saving $uid, $hash, [$query]", o);
 	print "Your new password is saved! Please remember it\n";
 	
 	return generateToken($uid, $hash);
@@ -340,6 +340,8 @@ function loginPopup($uid)
 /******************
 	LOGINFORM
 	inputs: auth struct, type(password, confirm, both), and user(show, hide)
+	outputs: a nice login entry form.
+	TODO clean this up if possible. it's ugly. but then, hey, it's html!
 ******************/
 function
 loginForm($auth, $type = 'password', $user = 'show', $statusline)
@@ -357,7 +359,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 		loginPopup($auth['uid']);
 	} else {
 		$u = getUser($auth['uid']);
-		printf("For %s\n", $u['username']);
+		printf("Logging in %s...\n", $u['username']);
 	}
 
 	//password stuff
@@ -396,12 +398,14 @@ logIn($auth)
 {
 	//confessArray($auth, 'logIn($auth) called with');
 
+	// vital information for each state.
 	$states = array(
 		unknown => array (
 					func => "unknownState",
 					description => "Indeterminate state."
 					),
 		loggedout => array (
+					required => array ( "uid"),
 					func => "loggedOutState",
 					description => "Logged out"
 					),
@@ -427,7 +431,7 @@ logIn($auth)
 					),
 		confirmwrong => array (
 					func => "confirmWrongState",
-					required => array ( "uid", "pwd", "confirm"),
+					required => array ( "uid"),
 					description => "Confirmation password doesn't match"
 					),
 		insecurepass => array (
@@ -456,33 +460,51 @@ logIn($auth)
 	do {
 
 
-		$state = $auth['state'];
-		error_log("logIn(): in $state", 0);
+		// are all our required inputs present?
+		$auth = sanityCheck($auth, $states);
 
-		
-		// sanity check the struct passed in
-		// TODO: turn this into a proper state!! maybe, "botched"?
-		if ($states[$state]['required']){
-			while (list($key, $val) = each($states[$state]['required'])){
-				if(!$auth[$val]){
-					error_log("ERROR! $val required for state. logging out", 0);
-					$auth['state'] = 'loggedout'; // force it outta here
-					$state = $auth['state']; // XXX hack!
-				}
-			}
-			reset($auth);
-		}
+		$state = $auth['state']; // easier on the eyes!
+
+		error_log("logIn(): in $state", 0);
 
 		/* confessArray($auth, sprintf("login() calling %s() with", 
 				$states[$state]['func'] )); 
 		*/
+
 		// dispatch the appropriate action for this state, and collect result
 		$auth = $states[$state]['func']($auth);
+
 	} while ($auth['state'] != "needinput" && $auth['state'] != 'loggedin');
 
 	return($auth);
 
 }/* END LOGIN  */
+
+
+/******************
+	SANITYCHECK
+	make sure a state has the minimum inputs required for it
+	inputs: an auth struct, and a states struct to compare it to
+	returns: the auth struct, with new state if needed
+******************/
+function
+sanityCheck($auth, $states)
+{
+	$state = $auth['state'];
+	// TODO: turn this into a proper state!! maybe, "botched"?
+	if ($states[$state]['required']){
+		while (list($key, $val) = each($states[$state]['required'])){
+			if(!$auth[$val]){
+				//print "Security violation occurred. You've been logged out.";
+				error_log("sanityCheck(): ERROR! $val required for state $state. logging out", 0);
+				$auth['state'] = 'loggedout'; // force it outta here
+			}
+		}
+		reset($auth);
+	}
+	return $auth;
+}/* END SANITYCHECK */
+
 
 
 /******************
@@ -523,6 +545,21 @@ unknownState($auth)
 		$newauth['state'] = 'loggedout'; 
 		return $newauth;
 	}
+	
+	// if there's no password stored for this user
+	if($auth['uid'] && !getPass($auth['uid'])){
+		error_log(
+			sprintf("unknownState(): uid %d in db, but null password", 
+				$auth['uid']) , 
+			0);
+		$newauth['uid'] = $auth['uid']; 
+		if($auth['pwd']){
+			// they attempted to enter a NEW password, so pass it thru.
+			$newauth['pwd'] = $auth['pwd']; 
+		}
+		$newauth['state'] = 'nullpass'; 
+		return $newauth;
+	}
 
 	// ok, they supplied a password. now... let's check it.
 	if($auth['pwd'] && $auth['uid'] ){
@@ -532,7 +569,7 @@ unknownState($auth)
 		$token = checkPass($auth['uid'], $auth['pwd']);
 		if($token){
 			error_log("unknownState(): password matches!", 0);
-			//hooray!! the password is correct!
+			//hooray!! the password is correct! pass it thru
 			$newauth['token'] = $token;
 			$newauth['state'] = 'loggedin'; 
 			return $newauth;
@@ -544,17 +581,6 @@ unknownState($auth)
 			return $newauth;
 		}
 	} 
-	
-	// if there's no password stored for this user
-	if($auth['uid'] && !getPass($auth['uid'])){
-		error_log(
-			sprintf("unknownState(): uid %d in db, but null password", 
-				$auth['uid']) , 
-			0);
-		$newauth['uid'] = $auth['uid']; 
-		$newauth['state'] = 'nullpass'; 
-		return $newauth;
-	}
 
 	// no pass, no uid, no dice!
 	if(!($auth['uid'] && $auth['pwd'])){
@@ -618,6 +644,7 @@ nullPassState($auth)
 
 	//no confirmation password. need one
 	if(!$auth['confirm']){
+		$newauth['pwd'] = $auth['pwd'];
 		$newauth['state'] = 'needconfirm'; 
 		return $newauth;
 	}
@@ -653,10 +680,13 @@ needConfirmState($auth)
 {
 	$newauth = array(
 			uid => $auth['uid'],
-			state => "needconfirm" // explicitly set it
+			pwd => $auth['pwd'], // TODO use a hash in future?
+			state => "nullpass" // send me back into nullpass when user returns
 	);
-	$newauth['state'] = "loggedout";
-	loginForm($newauth, 'both', 'hide', 
+	$newauth['state'] = "nullpass";
+	loginForm($newauth, 
+			$auth['pwd'] ? 'confirm': 'both', 
+			'hide', 
 			"Please type in the SAME password again, just to make sure.");
 	$newauth['state'] = "needinput";
 	return $newauth;
@@ -711,9 +741,8 @@ confirmWrongState($auth)
 {
 	$newauth = array(
 			uid => $auth['uid'],
-			state => "loggedout" // explicitly set it
+			state => "nullpass" // explicitly set it
 	);
-	$newauth['state'] = "loggedout";
 	loginForm($newauth, 'both', 'hide',
 		"Passwords do not match. Please try again." );
 
