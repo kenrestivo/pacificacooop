@@ -28,7 +28,7 @@ class Auction_purchases extends DB_DataObject
 	var $fb_linkDisplayFields = array('package_id', 'package_sale_price', 
 									  'springfest_attendee_id');
 	var $fb_fieldLabels = array (
-		'springfest_attendee_id' => 'Springfest Attendee',
+		'springfest_attendee_id' => 'Paddle Number',
 		'package_id' => "Auction Package Purchased",
 		'package_sale_price' => 'Final Bid Price',
 		'income_id' => "Payment Information"
