@@ -25,6 +25,7 @@ use POSIX;
 use DBI;
 use Mail::Sendmail;
 use Getopt::Std;
+use strict 'refs';
 
 
 #opt processing
@@ -168,7 +169,7 @@ sub getlicenseinfo()
 	my %tmp;
 	my @total;
 
-	#TODO perhaps heirarchal hashen. this glumps all parents together in one array.
+
 	foreach $pars (@$pararref){
 		$pid = $pars->{'parentsid'};
 		$query = "
@@ -186,20 +187,19 @@ sub getlicenseinfo()
 				);
 
 		while ($itemref = $queryobj->fetchrow_hashref){
-			$item = &itemhack($itemref); #store a local copy, because mysql will blow it away!
-			push(@results, $item); #yes, that's right, a referene
+			push(@results, &itemhack($itemref)); #yes, that's right, a referene
 			if($opt_v){
 				printf("getlicenseinfo(): returned exp %s for %s %s num %s\n",
-					$item->{'exp'},
-					$item->{'first'}, $item->{'last'},
-					$item->{'licensenum'}
+					$itemref->{'exp'},
+					$itemref->{'first'}, $itemref->{'last'},
+					$itemref->{'licensenum'}
 				);
 			}
 		} # end while
+		$opt_v && printf("getlicenseinfo(): got %d licenses for parent %d\n", 
+					scalar @results, $pid);
 
 		#this is so bizarre
-		$opt_v && printf("getlicenseinfo(): returning %d licenses\n", 
-					scalar @total);
 		$everthang{'licarref'} = \@results;
 		$everthang{'parref'} = $pars;
 		push(@total, &itemhack(\%everthang)); #yes, that's right, a referene
@@ -208,10 +208,38 @@ sub getlicenseinfo()
 	$opt_v && printf("getlicenseinfo(): returning %d total\n", 
 		scalar @total);
 
+	&debugstruct(\@total, 0);
 
 	return \@total; # massive.
 }# END GETLICENSEINFO
 
+sub debugstruct()
+{
+	my $whatsit = shift;
+	my $level = shift;
+	my $item;
+
+	if( $whatsit =~ /ARRAY/){
+		printf("array of %d elements\n", scalar @$whatsit);
+		foreach $item (@$whatsit){
+			&debugstruct($item, $level + 1);
+		}
+	} 
+	elsif( $whatsit =~ /HASH/){
+		printf("hash of %d elements\n", scalar %$whatsit);
+		foreach $item (sort(keys %$whatsit)) {
+			printf("key: <%s>\n", $item);
+			&debugstruct($whatsit->{$item}, $level + 1);
+		}
+
+	} 
+	elsif( $whatsit =~ /SCALAR/){
+		printf("scalar: <%s>\n", $$whatsit);
+	} else {
+		printf("scalar: <%s>\n", $whatsit);
+	}
+
+}
 
 
 ######################
