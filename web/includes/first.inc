@@ -22,8 +22,9 @@
 
 
 setupDB();
-setupErrors();
+setupErrors(); //*sigh* have to do this SECOND since it looks at dbhost :-/
 sessionSetup();
+
 
 user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
 		session_id(), $_SESSION['auth']['state']), E_USER_NOTICE);	
@@ -118,36 +119,35 @@ errorHandler($errno, $msg, $filename, $linenum, $vars)
 function
 sessionSetup()
 {
+
 	user_error("sessionSetup(): setting up session", E_USER_NOTICE);
 
-    // Stop adding SID to URLs. annoying and not all ISPs allow it
-    ini_set('session.use_trans_sid', 0);
+	// Stop adding SID to URLs. annoying and not all ISPs allow it
+	ini_set('session.use_trans_sid', 0);
 
-    // How to store data
-    ini_set('session.serialize_handler', 'php');
+	// How to store data
+	ini_set('session.serialize_handler', 'php');
 
-    // cookies suck.
-    ini_set('session.use_cookies', 0);
+	/* Name of our var TODO: make this a constant! use it EVERWHERE!
+	ini_set('session.name', 'coop'); */
 
-    // Name of our var TODO: make this a constant! use it EVERWHERE!
-    ini_set('session.name', 'coop');
+	// Garbage collection
+	ini_set('session.gc_probability', 1);
 
-    // Garbage collection
-    ini_set('session.gc_probability', 1);
+	// Inactivity timeout for user sessions
+	//TODO ini_set('session.gc_maxlifetime', $mins * 60);
 
-    // Inactivity timeout for user sessions
-    //TODO ini_set('session.gc_maxlifetime', $mins * 60);
-
-    /* Session handlers */
-    ini_set('session.save_handler', 'user');
-    session_set_save_handler("openSess",
-                             "closeSess",
-                             "readSess",
-                             "writeSess",
-                             "destroySess",
-                             "GCsess");
+	/* Session handlers */	
+	session_set_save_handler("openSess",
+								"closeSess",
+								"readSess",
+								"writeSess",
+								"destroySess",
+								"GCsess");
+	session_name("coop");
 	session_start();
-
+	user_error(sprintf("started session with id [%s]", session_id()), 
+			E_USER_NOTICE);
 
     return true;
 } /* END SESSIONSETUP */
@@ -186,15 +186,16 @@ function
 readSess($sessid)
 {
 
+	$vars = '';
+
 	if($sessid == ""){
 		user_error("readSess: called with null session id!!", 
 			E_USER_NOTICE);
-		return("");
+		return($vars);
 	}
 	user_error("readSess: reading session id for [$sessid]", 
 		E_USER_NOTICE);
 
-	$vars = '';
 
 	#DO THE QUERY
 	$q = "select vars from session_info where session_id = '$sessid'";
@@ -224,7 +225,7 @@ function
 writeSess($sessid, $vars)
 {
 	if(!($vars && $sessid)){
-		user_error("writeSess: empty vars [$vars] or sessionid [$sessid]", 
+		user_error(sprintf("writeSess: empty vars [%s] or sessionid [%s] or %s ", $vars, $sessid, session_id()), 
 			E_USER_WARNING);
 		return(false);
 	}
@@ -323,10 +324,12 @@ setupDB()
 	if(!($dbuser && $dbpwd && $dbhost)){
 		user_error("ack! db user/host/pwd globals not defined", E_USER_ERROR);
 	} 
+	/* XXX MAJOR SECURITY HOLE! DO NOT DO THIS ON PRODUCTION CODE!
 	else {
 		user_error("setupDB(): connecting to $dbhost as $dbuser with $dbpwd", 
 			E_USER_NOTICE);
 	}
+	*/
 
 	/*  handle dev stuff. 
 		special-case hack around bc, where i don't use a -dev database 
@@ -349,7 +352,7 @@ setupDB()
 	}
 
 	mysql_select_db($dbname) or die ("can't use $dbname! ack!\n");
-}/* END  */
+}/* END  SETUPDB */
 
 
 ?>
