@@ -32,7 +32,9 @@ define('FIRST_SPRINGFEST', 1972);
 /////////////////////// THANKYOU CLASS
 class ThankYou
 {
-	//TODO: put this in a file, and fopen it
+	//TODO: put this in a file, and fopen it, or in a DB blob!
+	// if i put in in a db, schoolyearify them, and grab this years or latest
+	// so they can override it in the future
 	var $template = 
 "[:DATE:]
 
@@ -130,7 +132,7 @@ http://www.pacificacoop.org/
 
 			//TODO: hack for the "tagline" at the bottom. preg_match?
 			// if it starts with a " and ends with a ", curly and bolditalic
-		
+			
 			return $text;
 		}
 
