@@ -29,12 +29,12 @@
 		<h2>Pacifica Co-Op Nursery School</h2>
 	";
 
-	confessArray($HTTP_POST_VARS, "vars");
+//	confessArray($HTTP_POST_VARS, "vars");
 
 	$auth = logIn($HTTP_POST_VARS['auth']);
 
 	print "index.php. logIn() returns with:";
-	confessArray($auth, "afterlogin");
+//	confessArray($auth, "afterlogin");
 	error_log("   ");
 
 	print "</BODY> </HTML>"

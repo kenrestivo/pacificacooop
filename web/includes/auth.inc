@@ -405,13 +405,14 @@ logIn($auth)
 					description => "Indeterminate state."
 					),
 		loggedout => array (
-					required => array ( "uid"),
 					func => "loggedOutState",
+					want => array ( "uid"),
 					description => "Logged out"
 					),
 		nullpass => array (
 					func => "nullPassState",
 					required => array ( "uid"),
+					want => array ( "pwd", "confirm"),
 					description => "User has no password in database"
 					),
 		wrongpass => array (
@@ -495,7 +496,10 @@ sanityCheck($auth, $states)
 	if ($states[$state]['required']){
 		while (list($key, $val) = each($states[$state]['required'])){
 			if(!$auth[$val]){
-				//print "Security violation occurred. You've been logged out.";
+				/* TODO maybe report this to the user? 
+						or, if i'm being hacked, not?
+				print "Security violation occurred. You've been logged out.";
+				*/
 				error_log("sanityCheck(): ERROR! $val required for state $state. logging out", 0);
 				$auth['state'] = 'loggedout'; // force it outta here
 			}
@@ -542,6 +546,7 @@ unknownState($auth)
 			sprintf("unknownState(): uid %d present, but user not in db", 
 				$auth['uid'])
 		, 0);
+		$newauth['uid'] = $auth['uid'];
 		$newauth['state'] = 'loggedout'; 
 		return $newauth;
 	}
