@@ -51,7 +51,7 @@ my $validrowmin = 8;
 
 
 our($opt_t, $opt_v); #loathe perl
-getopts('v:t') or &usage();
+getopts('vt') or &usage();
 
 &main();
 
@@ -125,8 +125,10 @@ sub checkHeaders()
 	#check that my header rows haven't changed on me, and puke if they have
 	#TODO in future, programatise the assignment of headers, so they can move
 
-	printf("DEBUG the header cb, is a ref to an %s\n", ref($rowref));
-	#&debugStruct($rowref);
+	if($opt_v){
+		printf("DEBUG the header cb, is a ref to an %s\n", ref($rowref));
+		#&debugStruct($rowref);
+	}
 } #END CHECKHEADERS
 
 
@@ -161,7 +163,9 @@ sub checkNewFamily()
 	my $cnt = 0;
 	my $perlsucks = 0;
 
-	print "DEBUG checkNewFamily() called\n";
+	if($opt_v){
+		print "DEBUG checkNewFamily() called\n";
+	}
 
 	$name = $$rowref[0];
 	
@@ -169,22 +173,28 @@ sub checkNewFamily()
 	#i want EXACT matches on familyname, none of this %% crap
 	$rquery = "select * from families where name like \"$name\" ";
 
-	print "DEBUG doing <$rquery>\n"; #debug only
+	if($opt_v){
+		print "DEBUG doing <$rquery>\n"; #debug only
+	}
 	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 	$rqueryobj->execute() or die "couldn't execute $!\n";
 
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
 		%ritem = %$ritemref;
-		printf("DEBUG %d %s %s\n",
-			$ritem{'familyid'},
-			$ritem{'name'},
-			$ritem{'phone'}
-		);
+		if($opt_v){
+			printf("DEBUG %d %s %s\n",
+				$ritem{'familyid'},
+				$ritem{'name'},
+				$ritem{'phone'}
+			);
+		}
 		$cnt++;
 	}
 
 	if($cnt){
-		print "DEBUG: yes, this family is in the db\n";
+		if($opt_v){
+			print "DEBUG: yes, this family is in the db\n";
+		}
 		return($ritem{'familyid'});
 	} 
 	
@@ -194,7 +204,9 @@ sub checkNewFamily()
 	",
 		$name, $$rowref[6]
 	);
-	print "DEBUG doing <$query>\n";
+	if($opt_v){
+		print "DEBUG doing <$query>\n";
+	}
 	unless ($opt_t){
 		print STDERR $dbh->do($query) . "\n";
 		return($dbh->{'mysql_insertid'});
@@ -227,7 +239,9 @@ sub checkOneParent()
 		$first, $last, $first, $famid
 	) ;
 
-	print "DEBUG doing <$rquery>\n"; #debug only
+	if($opt_v){
+		print "DEBUG doing <$rquery>\n"; #debug only
+	}
 	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 	$rqueryobj->execute() or die "couldn't execute $!\n";
 
@@ -244,7 +258,9 @@ sub checkOneParent()
 			print "ERROR! $famid for $first $last has changed!\n";
 			exit(1);
 		}
-		print "DEBUG: yes, this parent is in the db\n";
+		if($opt_v){
+			print "DEBUG: yes, this parent is in the db\n";
+		}
 		return($ritem{'parentsid'});
 	} 
 	#otherwise, add him or her!
@@ -262,7 +278,9 @@ sub checkOneParent()
 		#in the meantime, i have to make a stupid sexist guess
 		$ptype eq 'Mom' ? 'Yes' : 'No'
 	);
-	print "DEBUG doing <$query>\n";
+	if($opt_v){
+		print "DEBUG doing <$query>\n";
+	}
 	unless ($opt_t){
 		print STDERR $dbh->do($query) . "\n";
 		return($dbh->{'mysql_insertid'});
@@ -303,7 +321,9 @@ sub checkNewParents()
 	my %ritem;
 	my $cnt =  0;
 
-	print "DEBUG checkNewParents($session) called\n";
+	if($opt_v){
+		print "DEBUG checkNewParents($session) called\n";
+	}
 
 	$famid = &checkNewFamily($rowref);
 	if($famid < 1){
@@ -344,7 +364,9 @@ sub checkNewKids()
 	my $cnt =  0;
 	my $famid =  0;
 
-	print "DEBUG checkNewKids($session) called\n";
+	if($opt_v){
+		print "DEBUG checkNewKids($session) called\n";
+	}
 
 	#search in db. if kid isn't there, 
 	#	look for family, it should add one if needed.
@@ -357,7 +379,9 @@ sub checkNewKids()
 		$$rowref[3], $name
 	);
 
-	print "DEBUG doing <$rquery>\n"; #debug only
+	if($opt_v){
+		print "DEBUG doing <$rquery>\n"; #debug only
+	}
 	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 	$rqueryobj->execute() or die "couldn't execute $!\n";
 
@@ -368,7 +392,9 @@ sub checkNewKids()
 	}
 
 	if($cnt){
-		print "DEBUG: yes, this kid is in the db\n";
+		if($opt_v){
+			print "DEBUG: yes, this kid is in the db\n";
+		}
 		#TODO check its attendance! and add/change its attendance here!
 		#	i.e. move it from AM to PM
 		return $ritem{'kidsid'};
@@ -390,7 +416,9 @@ sub checkNewKids()
 	",
 		$name, $$rowref[3], $famid
 	);
-	print "DEBUG doing <$query>\n";
+	if($opt_v){
+		print "DEBUG doing <$query>\n";
+	}
 	unless ($opt_t){
 		print STDERR $dbh->do($query) . "\n";
 		$kidsid = $dbh->{'mysql_insertid'};
@@ -411,7 +439,9 @@ sub checkNewKids()
 		#	this MUST be fixed before the end of the school year!
 		$kidsid, $session eq 'AM' ? 1 : 2
 	);
-	print "DEBUG doing <$query>\n";
+	if($opt_v){
+		print "DEBUG doing <$query>\n";
+	}
 	unless ($opt_t){
 		print STDERR $dbh->do($query) . "\n";
 		return $dbh->{'mysql_insertid'};
@@ -456,15 +486,19 @@ sub deleteReverse()
 				and attendance.dropout is null
 	";
 
-	print "DEBUG doing <$rquery>\n"; #debug only
+	if($opt_v){
+		print "DEBUG doing <$rquery>\n"; #debug only
+	}
 	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 	$rqueryobj->execute() or die "couldn't execute $!\n";
 
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
 		%ritem = %$ritemref; #allocate this, so it persists
 
-		printf("DEBUG iterating thru, looking for %s %s\n",
-				$ritem{'first'}, $ritem{'last'} );
+		if($opt_v && $opt_v > 1){
+			printf("DEBUG iterating thru, looking for %s %s\n",
+					$ritem{'first'}, $ritem{'last'} );
+		}
 
 		#ok, iterate through the sheet looking for this kid.
 		$row = $ws->{'MinRow'} ;
@@ -484,7 +518,9 @@ sub deleteReverse()
 				#this is my header row!
 				$start++;
 				if($start == 1){
-					print "DEBUG deleteRev() this is the start row!\n";
+					if($opt_v){
+						print "DEBUG deleteRev() this is the start row!\n";
+					}
 				}
 			}
 			#a blank line means END of data
@@ -492,18 +528,22 @@ sub deleteReverse()
 
 			#i only want to do stuff if i've already passed the start row
 			if($start > 1 && !$end){
-				printf("DEBUG\tlookign at %s %s for match\n",
-					$ws->{'Cells'}[$row][3]->Value,
-					&unBaby($ws->{'Cells'}[$row][0]->Value) 
-				);
+				if($opt_v && $opt_v > 1){
+					printf("DEBUG\tlookign at %s %s for match\n",
+						$ws->{'Cells'}[$row][3]->Value,
+						&unBaby($ws->{'Cells'}[$row][0]->Value) 
+					);
+				}
 				#FINALLY! count occurences of this thing!
 				if($ritem{'first'} eq 
 					&unBaby($ws->{'Cells'}[$row][3]->Value) &&
 					$ritem{'last'} eq 
 						&unBaby($ws->{'Cells'}[$row][0]->Value) )
 				{
-					printf("DEBUG found %s %s !\n",
-							$ritem{'first'}, $ritem{'last'} );
+					if($opt_v){
+						printf("DEBUG found %s %s !\n",
+								$ritem{'first'}, $ritem{'last'} );
+					}
 					$cnt++;
 				}
 			}
@@ -513,8 +553,10 @@ sub deleteReverse()
 		#ok, what do to if it's not there?
 		if($cnt < 1){
 			#it's been dropped
-			printf("DEBUG %s %s has been dropped OR moved from $session !\n",
-				$ritem{'first'}, $ritem{'last'} );
+			if($opt_v){
+				printf("DEBUG %s %s has been dropped OR moved from $session !\n",
+					$ritem{'first'}, $ritem{'last'} );
+			}
 			#TODO check 'sess' versus $session and deduce that they moved!
 			#	HANDLE THIS RIGHT! do i drop them here and then add them later?
 			$query = sprintf("update attendance set 
@@ -526,7 +568,9 @@ sub deleteReverse()
 				#	this MUST be fixed before the end of the school year!
 				$ritem{'kidsid'}, $session eq 'AM' ? 1 : 2
 			);
-			print "DEBUG doing <$query>\n";
+			if($opt_v){
+				print "DEBUG doing <$query>\n";
+			}
 			unless ($opt_t){
 				print STDERR $dbh->do($query) . "\n";
 				return $dbh->{'mysql_insertid'};
@@ -565,15 +609,15 @@ sub iterateSheets()
 		if($ws->{'Name'} !~ /Schedule/){
 			next;
 		}
-		print "DEBUG checking headers...\n";
+		print "checking headers on $session...\n";
 		&iterateRows($ws, $session, \&checkHeaders, 'header');
-		print "DEBUG dropping the deleted ones...\n";
+		print "dropping the deleted ones in $session...\n";
 		&deleteReverse($ws, $session); #go backwards and see waz up
-		print "DEBUG checking new kids...\n";
+		print "checking new kids in $session...\n";
 		&iterateRows($ws, $session, \&checkNewKids, 'row');
-		print "DEBUG checking new parents...\n";
+		print "checking new parents $session...\n";
 		&iterateRows($ws, $session, \&checkNewParents, 'row');
-		print "DEBUG checking for changes...\n";
+		print "checking for changes in $session...\n";
 		&iterateRows($ws, $session, \&checkChanges, 'row');
 
 	} 
@@ -629,7 +673,9 @@ sub extractRow()
 		if($cell) {
 			$row[$i] = &unBaby($cell->Value);
 			#	look up nifty perl tricks for this
-			printf("extractRow ( $rownum , $i ) => %s\n", $cell->Value) ;
+			if($opt_v){
+				printf("extractRow ( $rownum , $i ) => %s\n", $cell->Value) ;
+			}
 		}
 	}
 
@@ -656,9 +702,11 @@ sub iterateRows()
 
 	$row = $ws->{'MinRow'} ;
 	$maxrow = $ws->{'MaxRow'} ;
-	printf("--------- iterateRows: %s : from %d to %d rows\n", 
-		$ws->{Name}, $row, $maxrow
-	);
+	if($opt_v){
+		printf("--------- iterateRows: %s : from %d to %d rows\n", 
+			$ws->{Name}, $row, $maxrow
+		);
+	}
 
 	while(defined $maxrow && $row <= $maxrow){
 		$col = $ws->{'MinCol'} ;
@@ -667,14 +715,18 @@ sub iterateRows()
 		#determine if we have a header row
 		$vr = &validRow($ws, $row, $col, $maxcol);
 
-		printf("iterateRows $row ------- from %d to %d cols, %d with data\n", 
-			$col, $maxcol, $vr);
+		if($opt_v){
+			printf("iterateRows $row ------- from %d to %d cols, %d with data\n", 
+				$col, $maxcol, $vr);
+		}
 
 		if ($vr > $validrowmin){
 			#this is my header row!
 			$start++;
 			if($start == 1){
-				print "DEBUG this is the start row!\n";
+				if($opt_v){
+					print "DEBUG this is the start row!\n";
+				}
 				if($checkCb && $type eq 'header'){
 					&$checkCb(&extractRow($ws, $row, $col, $maxcol), $session);
 				}
