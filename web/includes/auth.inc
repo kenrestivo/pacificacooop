@@ -831,6 +831,15 @@ function
 checkLoginState($auth, $states)
 {
 
+	// it is possible for a user to enter a password but have none in db!
+	if(!getPass($auth['uid'])){
+		user_error(
+			sprintf("checkLoginState(): uid %d in db, but null password", 
+				$auth['uid']) , 
+			E_USER_NOTICE);
+		return changeState($auth, $states, 'nullpass', 1);
+	}
+
 	//with new javascript thing, they may put in a BLANK password.
 	if(!$auth['pwd']){
 		user_error(
@@ -839,15 +848,6 @@ checkLoginState($auth, $states)
 			E_USER_NOTICE);
 		//just loop around!
 		return changeState($auth, $states, 'needlogin', 1);
-	}
-
-	// it is possible for a user to enter a password but have none in db!
-	if(!getPass($auth['uid'])){
-		user_error(
-			sprintf("checkLoginState(): uid %d in db, but null password", 
-				$auth['uid']) , 
-			E_USER_NOTICE);
-		return changeState($auth, $states, 'nullpass', 1);
 	}
 
 	$token = checkPass($auth['uid'], $auth['pwd']);
@@ -997,6 +997,7 @@ function
 wrongPassState($auth, $states)
 {
 
+	$auth['pwd'] = $auth['confirm'] = NULL;
 	loginForm(changeState($auth, $states, 'needlogin', 1),
 		'password', 'hide', 
 		"<font color='#ff0000'>Incorrect password</font>. Please try again. Remember to check your CAPS LOCK key. Also, your husband, wife, or partner may already have entered a password for you. You may want to ask them." );
@@ -1026,6 +1027,7 @@ noUserState($auth, $states)
 function
 confirmWrongState($auth, $states)
 {
+	$auth['pwd'] = $auth['confirm'] = NULL; //explicitly whack!
 	loginForm(changeState($auth, $states, 'nullpass', 1),
 		'both', 'hide',
 		"Passwords do not match. Please try again." );
@@ -1042,6 +1044,7 @@ confirmWrongState($auth, $states)
 function
 insecurePassState($auth, $states)
 {
+	$auth['pwd'] = $auth['confirm'] = NULL; //explicitly whack!
 	loginForm(changeState($auth, $states, 'nullpass', 1),
 			'both', 'hide',
 			sprintf("Weak password, please make it at least %d letters 
