@@ -107,4 +107,24 @@ select families.name, enrol.sess
 	group by dt 
 	order by entered;
 
+-- the excel export report
+select leads.leadsid  as responsecode
+		,leads.last    
+		,leads.first  
+		,leads.salut 
+		,leads.title
+		,leads.company 
+		,leads.addr   
+		,leads.addrcont
+		,leads.city   
+		,leads.state 
+		,leads.zip  
+		,leads.country
+		,leads.relation 
+		,date_format(leads.entered, '%m/%d/%Y %T') as entered
+		,families.name as familyname
+	from leads
+		left join families on leads.familyid = families.familyid
+	order by leads.last, leads.first
+
 --- EOF
