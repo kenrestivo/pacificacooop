@@ -62,8 +62,10 @@ while($line = <IMPORT>){
 		$h{$f} = $fields[$i];
 		$i++;
 	}
-	&addThem(\%h);
+	$ds += &addThem(\%h);
 }
+
+print "suppressed $ds duplicates\n";
 
 close(IMPORT) or die "coulnt' close $filename $!\n";
 $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
@@ -108,10 +110,10 @@ addThem()
 	#gotta check first that they don't already exist!
 	$count = 0; #again, just to be sure
 	$rquery = sprintf("select count(leadsid) as counter from leads 
-				where last = '%s' ", $f{'last'}
+				where last = %s ", $dbh->quote($f{'last'})
 	);
 	unless($opt_f){
-		$rquery .= sprintf(" and addr = '%s' ",  $f{'addr'});
+		$rquery .= sprintf(" and addr = %s ",  $dbh->quote($f{'addr'}));
 	}
 	if($opt_v){
 		print "doing <$rquery>\n"; 
@@ -126,19 +128,19 @@ addThem()
 
 	#ok. DO it!
 	if($count){
-		if($opt_v){
-			printf("matched %d rows already present for %s %s\n", 
-				$count, $f{'last'}, $f{'addr'});
-		}
+		printf("%d possible duplicate for <%s> <%s>\n", 
+			$count, $f{'last'},  $f{'addr'});
 		$ds += $count;
 	} else {
 		$query = "insert into leads set ";
 		$i = 0;
 		foreach $key (keys %f){ 
-			$query .= sprintf(" %s %s = '%s' ",
-						$i++ ? "," : "",
-						$key, $f{$key}	
-				);
+			if($f{$key} !~ /^\W*$/){
+				$query .= sprintf(" %s %s = %s ",
+							$i++ ? "," : "",
+							$key, $dbh->quote($f{$key})
+					);
+			}
 		}
 		$query .= " relation = 'Alumni', source = 'Springfest', familyid = 0";
 		if($opt_v){
@@ -149,7 +151,7 @@ addThem()
 		}
 	}
 
-	print "suppressed $ds duplicates\n";
+	return $ds;
 
 } #END ADDTHEM
 
