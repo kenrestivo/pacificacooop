@@ -34,7 +34,8 @@ class In_kind_donations extends DB_DataObject
 		'item_value' => 'Estimated TOTAL Value ($)' ,
 		"date_received" => "Date Item received" ,
 		"school_year" => "School Year" ,
-		"in_kind_donation_id" => "Unique ID" 
+		"in_kind_donation_id" => "Unique ID" ,
+		"thank_you_id" => "Thank-You Sent" 
 		);
 	var $fb_linkDisplayFields = array('item_description');
 

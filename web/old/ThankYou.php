@@ -33,6 +33,7 @@ define('FIRST_SPRINGFEST', 1972);
 /////////////////////// THANKYOU CLASS
 class ThankYou
 {
+	var $cp ;  // alias to coop page object
 	/// list of fields:
 	var $date ; // DATE: date of letter
 	var $name; // NAME: address of who it gets sent to
@@ -81,6 +82,11 @@ Pacifica, Ca 94044
 650 355-3272
 http://www.pacificacoop.org/
 ";
+
+	function ThankYou(&$cp)
+		{
+			$this->cp = $cp;
+		}
 
 	// a factory method
 	function substitute()
@@ -281,7 +287,7 @@ http://www.pacificacoop.org/
 	
 		}
 
-	function findThanksNeeded(&$cp, $pk, $id)
+	function findThanksNeeded($pk, $id)
 		{
 
 			// if i'm going to save objects, don't createlegacy them.
@@ -291,7 +297,7 @@ http://www.pacificacoop.org/
 			$sy = findSchoolYear();
 
 			// COMPANY
-			$co = new CoopView(&$cp, 'companies', &$top);
+			$co = new CoopView(&$this->cp, 'companies', &$top);
 			$co->obj->$pk = $id;
 			$co->obj->find(true);
 
@@ -308,34 +314,36 @@ http://www.pacificacoop.org/
 								  $co->obj->last_name);
 
 			//INCOME
-			$co = new CoopObject(&$cp, 'companies_income_join', &$top);
+			$co = new CoopObject(&$this->cp, 'companies_income_join', &$top);
 			$co->obj->$pk = $id;
-			$real = new CoopView(&$cp, 'income', &$co);
+			$real = new CoopView(&$this->cp, 'income', &$co);
 			$real->obj->school_year = $sy;
 			$real->obj->orderBy('school_year desc');
 			$real->obj->joinadd($co->obj);
 			$real->obj->whereAdd('thank_you_id is null
 								and cleared_date > "2000-01-01" ');
-			$real->obj->find();
+			$found = $real->obj->find();
 			while($real->obj->fetch()){
 				$cashtotal += $real->obj->payment_amount;
 				$soliciting_families[]= $real->obj->family_id;
 			}
-			$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
+			if($found){
+				$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
+			}
 				
 
 			//AUCTION
-			$co = new CoopObject(&$cp, 'companies_auction_join', 
+			$co = new CoopObject(&$this->cp, 'companies_auction_join', 
 								 &$top);
 			$co->obj->$pk = $id;
-			$real = new CoopView(&$cp, 'auction_donation_items', 
+			$real = new CoopView(&$this->cp, 'auction_donation_items', 
 								 &$co);
 			$real->obj->orderBy('school_year desc');
 			$real->obj->school_year = $sy;
 			$real->obj->whereAdd('thank_you_id is null 
 						and date_received > "2000-01-01" ');
 			$real->obj->joinadd($co->obj);
-			$real->obj->find();
+			$found = $real->obj->find();
 			while($real->obj->fetch()){
 				$this->items_array[] = sprintf("%d %s (total value $%01.02f)",
 											   $real->obj->quantity,
@@ -346,10 +354,10 @@ http://www.pacificacoop.org/
 			}
 
 			//IN-KIND
-			$co = new CoopObject(&$cp, 'companies_in_kind_join', 
+			$co = new CoopObject(&$this->cp, 'companies_in_kind_join', 
 								 &$top);
 			$co->obj->$pk = $id;
-			$real = new CoopView(&$cp, 'in_kind_donations', 
+			$real = new CoopView(&$this->cp, 'in_kind_donations', 
 								 &$co);
 			$real->obj->orderBy('school_year desc');
 			$real->obj->school_year = $sy;
@@ -366,8 +374,15 @@ http://www.pacificacoop.org/
 			}
 	
 			// ugh. go get the soliciting parent
-			foreach(array_unique($soliciting_families) as $fam){
-				$par =& new CoopObject(&$cp, 'parents', 
+			$this->guessParents($soliciting_families);
+		}
+
+
+	// takes array of familyid's, and fills in this->from with the parents
+	function guessParents($family_id_array)
+		{
+				foreach(array_unique($family_id_array) as $fam){
+				$par =& new CoopObject(&$this->cp, 'parents', 
 								 &$top);
 				$par->obj->family_id = $fam;
 				$par->obj->type = 'Mom';
@@ -375,9 +390,94 @@ http://www.pacificacoop.org/
 				$solicit_parents[] = sprintf("%s %s", 
 											 $par->obj->first_name, 
 											 $par->obj->last_name);
-				
 			}
 			$this->from = implode(", ", $solicit_parents);
+
+		}
+
+	// populates a thank-you note with what's already in that note.
+	function recoverExisting()
+		{
+			// COMPANY
+			$co = new CoopView(&$this->cp, 'companies', &$top);
+			$co->obj->$pk = $id;
+			$co->obj->find(true);
+
+			foreach(array('company_name', 'address1', 'address2') as $var){
+				if($co->obj->$var){
+					$this->address_array[] = $co->obj->$var;
+				}
+			}
+			$this->address_array[] = sprintf("%s %s, %s", 
+											 $co->obj->city,
+											 $co->obj->state,
+											 $co->obj->zip);		
+			$this->name = sprintf('%s %s', $co->obj->first_name, 
+								  $co->obj->last_name);
+
+			//INCOME
+			$co = new CoopObject(&$this->cp, 'companies_income_join', &$top);
+			$co->obj->$pk = $id;
+			$real = new CoopView(&$this->cp, 'income', &$co);
+			$real->obj->school_year = $sy;
+			$real->obj->orderBy('school_year desc');
+			$real->obj->joinadd($co->obj);
+			$real->obj->whereAdd('thank_you_id is null
+								and cleared_date > "2000-01-01" ');
+			$found = $real->obj->find();
+			while($real->obj->fetch()){
+				$cashtotal += $real->obj->payment_amount;
+				$soliciting_families[]= $real->obj->family_id;
+			}
+			if($found){
+				$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
+			}
+				
+
+			//AUCTION
+			$co = new CoopObject(&$this->cp, 'companies_auction_join', 
+								 &$top);
+			$co->obj->$pk = $id;
+			$real = new CoopView(&$this->cp, 'auction_donation_items', 
+								 &$co);
+			$real->obj->orderBy('school_year desc');
+			$real->obj->school_year = $sy;
+			$real->obj->whereAdd('thank_you_id is null 
+						and date_received > "2000-01-01" ');
+			$real->obj->joinadd($co->obj);
+			$found = $real->obj->find();
+			while($real->obj->fetch()){
+				$this->items_array[] = sprintf("%d %s (total value $%01.02f)",
+											   $real->obj->quantity,
+											   $real->obj->item_description,
+											   $real->obj->item_value);
+				$soliciting_families[]= $real->obj->family_id;
+				
+			}
+
+			//IN-KIND
+			$co = new CoopObject(&$this->cp, 'companies_in_kind_join', 
+								 &$top);
+			$co->obj->$pk = $id;
+			$real = new CoopView(&$this->cp, 'in_kind_donations', 
+								 &$co);
+			$real->obj->orderBy('school_year desc');
+			$real->obj->school_year = $sy;
+			$real->obj->whereAdd('thank_you_id is null
+						and date_received > "2000-01-01" ');
+			$real->obj->joinadd($co->obj);
+			$real->obj->find();
+			while($real->obj->fetch()){
+				$this->items_array[] = sprintf("%d %s total value $%01.02f",
+											   $real->obj->quantity,
+											   $real->obj->item_description,
+											   $real->obj->item_value);
+				$soliciting_families[]= $real->obj->family_id;
+			}
+	
+			// ugh. go get the soliciting parent
+			$this->guessParents($soliciting_families);
+
 		}
 
 } // END THANK YOU CLASS

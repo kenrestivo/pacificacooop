@@ -39,7 +39,8 @@ class Income extends DB_DataObject
 									  'payment_amount', 
 									  'check_date');
 	var $fb_fieldsToRender= array("check_date", "payer", 'school_year',
-								  "account_number", "payment_amount", "note");
+								  "account_number", "payment_amount", "note",
+								  'thank_you_id');
 
 	var $fb_fieldLabels = array( 
 		"family_id" => "Co-Op Family",
@@ -49,7 +50,8 @@ class Income extends DB_DataObject
 		'payment_amount' => 'Amount ($)' ,
 		"account_number" => "Account",
 		"note" => "Misc Notes" ,
-		"school_year" => "School Year" 
+		"school_year" => "School Year" ,
+		"thank_you_id" => "Thank-You Sent" 
 		);
 //	var $fb_crossLinks = array(array('table' => 'families_income_join', 
 	//'fromFild' => 'income_id', 'toField' => 'family_id'));
