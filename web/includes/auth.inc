@@ -30,6 +30,7 @@
 
 
 require_once("shared.inc");
+require_once("session.inc");
 
 define('MIN_PASS', 5);
 
@@ -824,10 +825,14 @@ function
 loggedOutState($auth, $states)
 {
 
+	global $_SESSION;
+
 	if($auth['uid']){
 		$uinfo = getUser($auth['uid']);
 		$olduser = sprintf("User '%s' logged out.", $uinfo['username']);
 	}
+
+	//TODO destroy th session here!! read docs.
 
 	return changeState($auth, $states, 'needlogin', 1);
 	
