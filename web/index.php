@@ -45,8 +45,8 @@ if(!$HTTP_POST_VARS['familyid']){
 	#TODO: good stuff here!
 } else {
 	#show a family's info, and giving them a form to enter data
-	printf ("<p>DEBUG: the id you chose was %d</p>\n", 
-			$HTTP_POST_VARS['familyid']);
+	/* printf ("<p>DEBUG: the id you chose was %d</p>\n", 
+			$HTTP_POST_VARS['familyid']); */
 	familyDetail($HTTP_POST_VARS['familyid']);
 
 
