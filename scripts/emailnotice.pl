@@ -62,21 +62,20 @@ $rqueryobj->execute() or die "couldn't execute $!\n";
 while ($famref = $rqueryobj->fetchrow_hashref){
 	$id = $famref->{'familyid'};
 
-	$insref = &getinsuranceinfo($id);
-	$licref = &getlicenseinfo($id);
+	$insarref = &getinsuranceinfo($id);
+	$licarref = &getlicenseinfo($id);
 
 	#TODO the entire architecture of this thing is botched!
 	#	i MUST handle the case of more than one working parent!
 	#	i.e. BOTH their drivers licenses must be up to date.
 
 	# the report of people i need to call or write a note to!
-	if(!$famref->{'email'}){
-		print &fieldTripReport($famref, $insref, $licref, $checkdate, 1);
-	}
-	#if($famref->{'email'}){
-	#	&emailReminder($famref, $insref, $licref, $checkdate, 1);
-
+	#if(!$famref->{'email'}){
+	#	print &fieldTripReport($famref, $insarref, $licarref, $checkdate, 1);
 	#}
+	if($famref->{'email'}){
+		&emailReminder($famref, $insarref, $licarref, $checkdate, 1);
+	}
 
 } # end while
 
@@ -95,6 +94,7 @@ sub getlicenseinfo()
 	my $famid = shift;
 	my $queryobj;
 	my $itemref;
+	my @results;
 	my %item;
 	my $query = "
 		select unix_timestamp(max(lic.expires)) as exp, 
@@ -111,13 +111,11 @@ sub getlicenseinfo()
 
 	while ($itemref = $queryobj->fetchrow_hashref){
 		%item = %$itemref; #store a local copy, because mysql will blow it away!
+		push(@results, \%item); #yes, that's right, a referene
 	} # end while
 
-	if($queryobj->rows() > 1){
-		print STDERR "\tERROR! more than one row returned for lic on $famid\n";
-	}
 
-	return \%item;
+	return \@results; # ref to the results which is an array of refs!
 }# END GETLICENSEINFO
 
 
@@ -131,6 +129,7 @@ sub getinsuranceinfo()
 	my $queryobj;
 	my $itemref;
 	my %item;
+	my @results;
 	my $query = "
 		select unix_timestamp(max(ins.expires)) as exp, parents.familyid, 
 			ins.policynum, ins.companyname, ins.last, ins.first
@@ -151,13 +150,10 @@ sub getinsuranceinfo()
 		#	$famid, $item{'last'}, $item{'first'}, 
 		#	strftime('%m/%d/%Y', localtime($item{'exp'})),
 		#	$item{'policynum'});
+		push(@results, \%item); #yes, that's right, a referene
 	} # end while
 
-	if($queryobj->rows() > 1){
-		print STDERR "\tWARNING! multiple rows returned for ins on <$famid>\n";
-	}
-
-	return \%item;
+	return \@results; # yes, a ref to the results
 
 } #END GETINSURANCEINFO
 
@@ -169,10 +165,12 @@ sub getinsuranceinfo()
 sub emailReminder()
 {
 	my $famref = shift;
-	my $insref = shift;
-	my $licref = shift;
+	my $insarref = shift;
+	my $licarref = shift;
 	my $checkdate = shift;
 	my $onlyexpired = shift;
+	my $insref;
+	my $licref;
 	my $m = "";
 	my $if = 0; # insurance flag
 	my $lf = 0; # license flag
@@ -185,46 +183,50 @@ sub emailReminder()
 	$m .= "Hello! My job this year is to keep track of the automobile insurance and driver's license information for the school.\n\n";
 
 	#insurance
-	if($insref->{'exp'}){
-		if($insref->{'exp'} < $checkdate){
-			$m .= sprintf(
-					"The '%s' insurance card on file for the %s family expired on %s.\n\n",
+	foreach $insref (@$insarref){
+		if($insref->{'exp'}){
+			if($insref->{'exp'} < $checkdate){
+				$m .= sprintf(
+						"The '%s' insurance card on file for the %s family expired on %s.\n\n",
 
-					$insref->{'companyname'},
-					$famref->{'name'},
-					strftime('%m/%d/%Y', localtime($insref->{'exp'})) 
-				);
+						$insref->{'companyname'},
+						$famref->{'name'},
+						strftime('%m/%d/%Y', localtime($insref->{'exp'})) 
+					);
+				$if++;
+			}
+		} else {
+			$m .= sprintf("The school doesn't have any insurance card on file for the %s family (or, at least, I couldn't find it).\n\n",
+						$famref->{'name'});
 			$if++;
+			$newbie++;
 		}
-	} else {
-		$m .= sprintf("The school doesn't have any insurance card on file for the %s family (or, at least, I couldn't find it).\n\n",
-					$famref->{'name'});
-		$if++;
-		$newbie++;
 	}
 	
 	#license
-	if($licref->{'exp'}){
-		if($licref->{'exp'} < $checkdate){
-			$m .= sprintf(
-					"The copy of the %s driver's license on file for %s %s %s expired on %s.\n\n",
-					$licref->{'state'},
-					$licref->{'first'},
-					$licref->{'middle'},
-					$licref->{'last'},
-					strftime('%m/%d/%Y', localtime($licref->{'exp'})) 
-			);
+	foreach $licref (@$licarref){
+		if($licref->{'exp'}){
+			if($licref->{'exp'} < $checkdate){
+				$m .= sprintf(
+						"The copy of the %s driver's license on file for %s %s %s expired on %s.\n\n",
+						$licref->{'state'},
+						$licref->{'first'},
+						$licref->{'middle'},
+						$licref->{'last'},
+						strftime('%m/%d/%Y', localtime($licref->{'exp'})) 
+				);
+				$lf++;
+			}
+		} else {
+				$m .= sprintf(
+						"%s couldn't find any driver's license on file for the working parent on the roster, %s %s.\n\n",
+						$if ? "I also" : "I",
+						$famref->{'first'},
+						$famref->{'last'}
+				);
 			$lf++;
+			$newbie++;
 		}
-	} else {
-			$m .= sprintf(
-					"%s couldn't find any driver's license on file for the working parent on the roster, %s %s.\n\n",
-					$if ? "I also" : "I",
-					$famref->{'first'},
-					$famref->{'last'}
-			);
-		$lf++;
-		$newbie++;
 	}
 
 	if($newbie > 1){
@@ -252,10 +254,11 @@ sub emailReminder()
 	#ok, finish up.
 	if($if || $lf){
 		#confirm
-		printf("\n--------------\n<%s>\nemail the above message to %s %s?\n",
+		printf("\n--------------\n<%s>\nemail the above message to %s %s (%s)?\n",
 			$m,
 			$famref->{'first'},
 			$famref->{'last'},
+			$famref->{'email'},
 			);
 		$res = <STDIN>;
 		if($res =~ /^[yY]/){
@@ -266,8 +269,8 @@ sub emailReminder()
 					);
 			#SEND!
 			#XXX aaack! BOTH of these want getopts (or gtk) for safety
-			sendmail(%mail) or die $Mail::Sendmail::error;
-			&updateNags($famref->{'parentsid'});
+			#sendmail(%mail) or die $Mail::Sendmail::error;
+			#&updateNags($famref->{'parentsid'});
 			printf("result: <%s>\n", $Mail::Sendmail::log);
 		}
 		return 1;
@@ -304,8 +307,10 @@ sub humantounix()
 sub fieldTripReport()
 {
 	my $famref = shift;
-	my $insref = shift;
-	my $licref = shift;
+	my $insarref = shift;
+	my $licarref = shift;
+	my $licref;
+	my $insref;
 	my $checkdate = shift;
 	my $onlyexpired = shift;
 	my $badness = "";
@@ -326,36 +331,40 @@ sub fieldTripReport()
 			);
 
 	#insurance
-	if($insref->{'exp'}){
-		if($insref->{'exp'} < $checkdate){
-			$badness .= sprintf(
-					"\t- Insurance expired: %s Company: %s Policy#: %s \n",
-					strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
-					$insref->{'companyname'},
-					$insref->{'policynum'}
-				);
+	foreach $insref (@$insarref){
+		if($insref->{'exp'}){
+			if($insref->{'exp'} < $checkdate){
+				$badness .= sprintf(
+						"\t- Insurance expired: %s Company: %s Policy#: %s \n",
+						strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
+						$insref->{'companyname'},
+						$insref->{'policynum'}
+					);
+				$flag++;
+			}
+		} else {
+			$badness .= "\t- No insurance information for this family\n";
 			$flag++;
 		}
-	} else {
-		$badness .= "\t- No insurance information for this family\n";
-		$flag++;
 	}
-	
+		
 	#license
-	if($licref->{'exp'}){
-		if($licref->{'exp'} < $checkdate){
-			$badness .= sprintf(
-					"\t- License expired: %s Driver's Name: %s %s %s \n",
-					strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
-					$licref->{'first'},
-					$licref->{'middle'},
-					$licref->{'last'}
-			);
+	foreach $licref (@$licarref){
+		if($licref->{'exp'}){
+			if($licref->{'exp'} < $checkdate){
+				$badness .= sprintf(
+						"\t- License expired: %s Driver's Name: %s %s %s \n",
+						strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
+						$licref->{'first'},
+						$licref->{'middle'},
+						$licref->{'last'}
+				);
+				$flag++;
+			}
+		} else {
+			$badness .= "\t- No license information for working parent\n";
 			$flag++;
 		}
-	} else {
-		$badness .= "\t- No license information for working parent\n";
-		$flag++;
 	}
 
 	if($flag){
