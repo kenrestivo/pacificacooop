@@ -116,7 +116,7 @@ function confessArray($fields, $message)
 	print "<pre>";
 	print "DEBUG $message\n";
 	if(is_array($fields)){
-		htmlentities(print_r($fields, true));
+		print htmlentities(print_r($fields,true));
 		reset($fields);
 	} else {
 		print "um... <$fields> is not an array\n";
