@@ -5,6 +5,7 @@
 
 ;; use proper libraries!! figure out how.
 (load "/mnt/kens/ki/is/scheme/lib/kenlib-generic.scm")
+(load "/mnt/kens/ki/is/scheme/lib/post-url-skij.scm")
 
 (define wtc (new 'net.sourceforge.jwebunit.WebTestCase))
 
@@ -80,10 +81,21 @@
 		 (invoke link 'click) (write-line (string-append
 										   (invoke link 'asText) " > "
 										   url))
-		 (invoke wtc 'assertTextPresent "</html>")))
-	 ;; skip main menu (first two) and email (last)
-	 (cddr (list-head links
+		 (invoke wtc 'assertTextPresent "</html>")
+		 ;;(validate-html wtc)
+		 ))
+		 ;; skip main menu (first two) and email (last)
+		 (cddr (list-head links
 					  (- (length links) 1))))))
-	 
+
+
+(define (validate-html wtc)
+  (let ((html (dump-page wtc)))
+	(post-url "http://fred/w3c-markup-validator/check"
+			  (list (list "uploaded_file" html) '("ss" "1")))
+	;; TODO: check it for <h2 id="result" class="valid">
+	;; and save it if it's not present
+	))
+
 
 ;;EOF
