@@ -62,7 +62,7 @@ class coopView extends CoopObject
 		}
 
 	// formats object is current in this object, um, as a table
-	function simpletable($find= 1)
+	function simpletable($find= true)
 		{
 			if($find){
 				$found = $this->obj->find();

@@ -190,7 +190,7 @@ class coopForm extends CoopObject
 			
 			$this->processCrossLinks($vars);
 					
-			return true;
+			return print "<p>Entry was successful!</p>";
 		}
 
 
@@ -386,7 +386,10 @@ class coopForm extends CoopObject
 				//duplication of selectoptions
 				$this->page->debug > 3 && $this->obj->debugLevel(2);
 				$far = new CoopObject(&$this->page, $ft, $this);
-				$far->obj->school_year = findSchoolYear(); // XXX AUUGH!
+				// IIRC this has a different name in FB. use theirs!
+ 				if(is_callable(array($far->obj, 'fb_linkConstraints'))){
+					$far->obj->fb_linkConstraints();
+				} 
 				$far->obj->orderBy(implode(', ', 
 										   $far->obj->fb_linkDisplayFields));
 				$far->obj->find();

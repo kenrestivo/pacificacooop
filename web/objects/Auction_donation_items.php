@@ -56,4 +56,10 @@ class Auction_donation_items extends DB_DataObject
 									 'toField' => 'package_id',
 									 'type' => 'select'));
 
+	function fb_linkConstraints()
+		{
+			$this->school_year = findSchoolYear(); 
+			$this->whereAdd("date_received > '2000-01-01'");
+		}
+
 }
