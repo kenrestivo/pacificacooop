@@ -1,23 +1,5 @@
 <!-- $Id$ -->
-
-
-<!-- TODO this is most of the stuff that needs to be prettyfied -->
-<!-- i've built this page as an html shell, with php stuck in the middle. -->
-
-<HTML>
-<HEAD>
-	<TITLE>Springfest Fundraising</TITLE>
-</HEAD>
-
-<BODY>
-
-<h2>Pacifica Co-Op Nursery School Springfest Invitation Form</h2>
-
 <?php
-	# main sprintfest page
-	# NOTE to matt: this is the page where most of the graphical stuff is designed to go
-	# all the grody inner workings are encapsulated in functions
-	# the outer HTML shell is pretty much fair game
 
 	#  Copyright (C) 2003  ken restivo <ken@restivo.org>
 	# 
@@ -36,79 +18,21 @@
 	#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 	require_once("shared.php");
-	require_once("10names.php");
 
-	#useful for form debugging. 
-	#some host's security policies tend to break globals. use this to check.
-	#confessVars();
+	print "<HTML>
+		<HEAD>
+			<TITLE>Springfest Fundraising</TITLE>
+		</HEAD>
 
-	#fish $id out of the globals and keep it here nice and close. 
-	#because, if i have to type that monster one more time...
-	$id = $HTTP_POST_VARS['familyid'];
-		
-	if(!$id){
-		#there is no familyid, let the user select one
-		familyPopup(0);  #0 means, don't pre-select any family. just CHOOSE ONE
+		<BODY>
 
-	} elseif($HTTP_POST_VARS['savenames']){
-		#we are trying to save form data. this is what life is all about.
-
-		if(processNames($HTTP_POST_VARS) == 0){
-			#*whew* ok, everything went well. confirm this, and let them do more
-
-			#show a family's info
-			happyFriendlyHello($id);
-
-			nameSummary($id);
-
-			#for debugging, to show all records
-			#MH: REMOVE THIS FOR THE RELEASE, 
-			# BECAUSE ANYONE CAN VIEW ANYONE'S NAMES - SECURITY ISSUE
-			#nameTable($id);
-
-			print "<br>Feel free to enter more names if you like!<br>";
-
-			#finally, give them a form to enter data!
-			oneNameForm($id);
-		}
+		<h2>Pacifica Co-Op Nursery School</h2>
+	";
 
 
-	} else {
-		#ok we know what family we are, so give 'em the main form entry screen
-		#printf ("<p>DEBUG: the id you chose was %d</p>\n", $id);
 
-		#show a family's info
-		happyFriendlyHello($id);
 
-		#TODO : get the cutoff date from the database, 
-		#so it someone can change it next year without having to edit this code
-		print "<p>Every family must provide the names of ten people who 
-				should be invited to attend or donate to Springfest. 
-				These can be family, friends, business associates, etc. 
-				They will be sent formal invitations on behalf of the School. 
-				You must enter at least ten names by $cutoffdate</p>";
+	print "</BODY> </HTML>"
 
-		#show them what they've already got, don pardo
-		nameSummary($id);
-
-		#uncomment for debugging, to show all records
-		#nameTable($id);
-
-		print "<p>Enter a name here.
-					Remember to click 'Save' 
-					at the bottom of this screen when you are done!</p>";
-		#finally, give them a form to enter data!
-		oneNameForm($id);
-
-		print"<p>NOTE: 'First Name(s)' can include spouse/partner names, as in:
-				 'Bob and Mary', or 'Mary Doe and Bob'</p>";
-		print "<p>Items with an asterisk (<font color='#ff0000'>*</font>) are required.</p>";
-
-	}
-	# end of inner php code
 ?>
-
-</BODY>
-</HTML>
-
 <!-- END INDEX -->
