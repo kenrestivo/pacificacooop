@@ -472,7 +472,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	// say hi.
 	print "<p>$statusline</p>";
 
-	printf("<FORM METHOD=POST ACTION='%s'>", 
+	printf("<div><FORM METHOD=POST ACTION='%s'>", 
 					$_SERVER['PHP_SELF']);
 	print "\n<table border=1>\n";
 	//user popup (or display) stuff
@@ -525,7 +525,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	printf("<INPUT TYPE=submit NAME='login' VALUE='%s'>",
 		$type == 'confirm' || $type == 'both' ? 'Save New Password' : 'Log In');
 	printf("<INPUT TYPE=submit NAME='logout' VALUE='Cancel'>");
-    print "</FORM>";
+    print "</FORM></div>";
 }/* END LOGINFORM */
 
 

@@ -101,7 +101,6 @@ input, textarea, select {
 }
 
 input[type="submit"] {
-  cursor: pointer;
   cursor: hand;
 }
 

@@ -93,6 +93,8 @@ callbacks struct
 	sumfield: sets the mode of the count to 'sum', using this field for totals
 	description: long description for top menu
 	shortdesc: short description for sidebar or popup treemenu
+	allyears: don't schoolyearify (the default is to schoolyearify)
+		that means, show all records for all years, not just this one
 	fields: the NAME of the fieldspec array. eventually will be REFERENCE here
 	joins: a recursive array of arrays of join info, 
 		in order of joining (important!)
