@@ -52,7 +52,7 @@ class paypalForm extends HTML_QuickForm
 			$this->addElement('hidden', 'cmd', '_xclick');
 			$this->addElement('hidden', 'business', $this->account);
 			$this->addElement('hidden', 'item_name', $title);
-			$this->addElement("hidden", "item_number", "EmailBlast");
+			$this->addElement("hidden", "item_number", $_REQUEST['source'] ? $_REQUEST['source'] : "EmailBlast");
 			$this->addElement("hidden", "quantity", "1");
 			$this->addElement("hidden", "page_style", "Primary");
 			$this->addElement("hidden", "notify_url", "http://www.pacificacoop.org/sf$urlsuffix/ipn.php");
