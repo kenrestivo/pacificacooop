@@ -24,6 +24,7 @@ require_once "HTML/QuickForm.php";
 require_once "HTML/QuickForm/group.php";
 require_once('CoopObject.php');
 require_once('HTML/QuickForm.php');
+require_once('HTML/QuickForm/static.php');
 
 
 class paypalForm
@@ -99,41 +100,26 @@ class paypalForm
 			$form =& new HTML_QuickForm( 'Springfest RSVP', 'rsvpform');
 			
 			// ticket quantity box NOTE: use "invoice" when sumbitting to paypal
-			$form->addElement('text', 'ticket_quantity', 
-							  'Number of tickets ($25/ea):', 
-							  'size="4"');
-			
-			//popup for sponsor levels: grab from dbdo
-			$stypes['none'] = '-- CHOOSE ONE --';
-			$spon =& new CoopObject(&$cp, 'sponsorship_types', &$nothing);
-			$spon->obj->school_year = '2004-2005';
-			$spon->obj->orderBy('sponsorship_price desc');
-			$spon->obj->find();
-			while($spon->obj->fetch()){
-				$stypes[$spon->obj->sponsorship_price] = 
-					sprintf('%s ($%.0f)', $spon->obj->sponsorship_name,
-							$spon->obj->sponsorship_price);
-			}
-			$stypes['other'] = 'Other...';
-			//confessArray($stypes, 'stypes');
-			
-			$combo[] =& HTML_QuickForm::createElement('select', 
-													  'sponsor_amount', 
-													  'Sponsorship Level', 
-													  $stypes);
+			$tick[] =& HTML_QuickForm::createElement('text', 
+												   'ticket_quantity', 
+												   'Yes! Please reserve', 
+												   'size="4"');
+			$tick[] =& new HTML_QuickForm_static('moretext', false,
+											'<b>tickets at $25 per person</b>');
+			//confessArray($tick, 'tick');
+			$form->addGroup($tick, false, 'Yes! Please reserve', '&nbsp;');
 			
 			// dynamically add OTHER box based on its presence
-			$combo[] =& HTML_QuickForm::createElement('text', 'other_amount', 
-													  'Other Amount:',
-													  'size="4"');
-			
-			$form->addGroup($combo, false,  'Additional Donation ($):', 
-							'&nbsp;Other Amount: ');
-			
+			$form->addElement('text', 'other_amount', 
+							  'I/we will be unable to attend, 
+				but would like to make a tax-deductible contribution of: ',
+							  'size="4"');
 			
 			// a frozen TOTAL DONATION box too, before they paypal in
 			$form->addElement('submit', 'verify', 'Next>>');
 			
+			$form->setDefaults(array('other_amount' => '$'));
+
 			// important
 			if(SID){
 				$form->addElement('hidden', 'coop', session_id()); 

@@ -13,6 +13,9 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
 $debug = 1;
 
+
+
+
 function donateDispatcher(&$cp, $action = false)
 {
 // there are other actions but thay happen in IPN and postpaypal
@@ -59,8 +62,8 @@ function donateDispatcher(&$cp, $action = false)
 			printf("<p>I'm sorry, there is no such code as %d. You may have mistyped or the code on your invitation may not be legible.</p>",
 				   $_REQUEST['response_code']);
 			// nice idea, but fux0red
-			//$_SESSION['response_code'] = NULL;
-			//$_REQUEST['response_code'] = NULL;
+			//unset($_SESSION['response_code']);
+			//unset($_REQUEST['response_code']);
 			//donateDispatcher(&$cp, 'getcode');
  			print $cp->selfURL("Please try again.", 
  							   array($_REQUEST['response_code'],
