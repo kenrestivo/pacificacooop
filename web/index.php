@@ -27,11 +27,20 @@ print "<HTML><HEAD><TITLE>Springfest Fundraising</TITLE></HEAD><BODY>";
 print "<h2>Pacifica Co-Op Nursery School Springfest Invitation Entry</h2>";
 print "<p>&nbsp;</p>";
 
-
+/*		if no familyid, 
+				draw the chooser,
+				done
+			else if there is form stuff (how to tell?)
+				do the datachecking	
+			else draw 
+				the basic parentid,kids, names
+				and the form!
+*/
+	
 print "<table border='0'>";
-print "<tr><td>Which Family? (Children's last name)</td><td>";
-	familyPopup(0); #this prints the actual pop-up. value 0 is, um, nothing.
-print "</td></tr>";
+print "<tr><td>Which Family? (Your child's last name)&nbsp;</td><td>";
+	familyPopup($HTTP_POST_VARS['familyid']); 
+print "</td></tr></table>";
 
 
 print "</BODY></HTML>";
