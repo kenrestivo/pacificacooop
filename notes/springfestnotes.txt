@@ -49,7 +49,7 @@ three database projects
 		reminder: you've entered x names, you need x more names to get 10.
 		check that someone else didn't already enter the name? i.e. duplicates
 
-contacts: carolklyver@sbcglobal.org, matt@omidyar.org, ken@restivo.org
+contacts: carolklyver@sbcglobal.net, matt@omidyar.org, ken@restivo.org
 		
 	
 dates:

@@ -49,13 +49,13 @@ OK, CODE!
 	drawing the names-to-date info DONE
 		simple query, again.
 		it would be nice to show how many days left until cutoffdate
-	drawing the web form
+	drawing the web form DONE
 		name the fields in a loop: name1, name2, addr1, addr2
 		invis field with parentid: because there'll be no popup on this page
-		will need a delete button! so people can remove them
-	czeching
+		will need a cancel button! so people can get outta there
+	czeching DONE
 		go through all rows (entry1-x)
-			ok, check
+			ok, check DONE
 				compare with the $fields global
 				check that required's have data in 'em
 				check that they're less than len or 254 (maybe)
@@ -65,14 +65,14 @@ OK, CODE!
 						i'll need to htmlspecialchars() the data first!
 					stuff the error description into => error
 						and red comments showing what is wrong/missing
-			if they are ok, save them!
+			if they are ok, save them! DONE
 				send the row array to a save function
 					i will need mysql_escape_string() for db insertion!
 						or addslashes()
 			report broken ones DONE
 				create an array of arrays
 				redisplay the form, but it will show up as an error form
-		should also check that it isn't a duplicate, 
+		should also check that it isn't a duplicate,  DONE
 			that someone else hasn't entered it already
 
 admin code
