@@ -30,8 +30,11 @@ XCLUDE='*dbhost*'
 
 
 
-all::
+all: help
 
+help::
+	@echo "Please choose a target"
+	@egrep "^[a-z-_]*:" Makefile | awk '{print $$1}'
 
 upload-live::
 	rsync -e ssh \
