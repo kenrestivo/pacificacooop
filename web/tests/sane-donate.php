@@ -10,15 +10,17 @@ require_once('paypal.php');
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
-$debug = 0;
+$debug = 1;
 
 // TODO: make it leagal html, and test it
 
 
 //DB_DataObject::debugLevel(2);
-confessArray($_REQUEST, 'request');
 
 $cp = new coopPage( $debug);
+
+$cp->header();
+
 $_SESSION=$_REQUEST; 			// keep sessioninit happy
 
 print $cp->selfURL('Refresh');

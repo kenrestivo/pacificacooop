@@ -99,7 +99,8 @@ class paypalForm
 			$form =& new HTML_QuickForm( 'Springfest RSVP', 'rsvpform');
 			
 			// ticket quantity box NOTE: use "invoice" when sumbitting to paypal
-			$form->addElement('text', 'ticket_quantity', 'Number of tickets:', 
+			$form->addElement('text', 'ticket_quantity', 
+							  'Number of tickets ($25/ea):', 
 							  'size="4"');
 			
 			//popup for sponsor levels: grab from dbdo
@@ -126,7 +127,8 @@ class paypalForm
 													  'Other Amount:',
 													  'size="4"');
 			
-			$form->addGroup($combo, 'combo', 'Donate:', '&nbsp;Other Amount: ');
+			$form->addGroup($combo, false,  'Donate:', 
+							'&nbsp;Other Amount: ');
 			
 			
 			// a frozen TOTAL DONATION box too, before they paypal in

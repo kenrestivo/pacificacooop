@@ -55,10 +55,11 @@ class coopPage
 			$this->auth = $auth;
 			$this->userStruct =  getUser($auth['uid']);
 		}
- 
-	function pageTop()
+
+
+	// NOTE! prints directly to screen, doesn't return output!
+	function header()
 		{
-			
 			global $metalinks; // from first.inc. bah.
 			printf('<HTML lang="en">
 		<HEAD> %s
@@ -72,17 +73,22 @@ class coopPage
 				   $metalinks);
 			
 			
-				$this->confessArray($_REQUEST, "test REQUEST");
-				$this->confessArray($_SESSION, "test SESSION");
-				$this->confessArray($_SERVER, "test SERVER");
-
-
+			$this->confessArray($_REQUEST, "test REQUEST");
+			$this->confessArray($_SESSION, "test SESSION");
+			$this->confessArray($_SERVER, "test SERVER", 2);
+			
+			
 			warnDev();
-
+			
 			user_error("CoopPage.php: ------- NEW PAGE --------", 
 					   E_USER_NOTICE);
 
-
+		}
+ 
+	function pageTop()
+		{
+			$this->header();
+		
 			$this->auth = logIn($_REQUEST);
 
 			$this->confessArray($this->auth, 'auth -- post login');
@@ -112,9 +118,9 @@ class coopPage
 			return $indexed_everything;
 		} 
 
-	function confessArray($array, $message)
+	function confessArray($array, $message, $level = 1)
 		{
-			if($this->debug < 1){
+			if($this->debug < $level){
 				return;
 			}
 			confessArray($array, $message);
