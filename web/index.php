@@ -22,6 +22,8 @@
 	require_once("financefuncts.inc");
 	require_once("roster.inc");
 	require_once("10names.inc");
+	require_once("insurancefuncs.inc");
+	require_once("calendarfuncs.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -90,6 +92,32 @@
 	actionButtons($auth, $p, $u, $u['familyid'], 'money', 
 		'money.php' , $s + $admin);
 	print "</td><tr>";
+
+	//insurance 
+	$p = getAuthLevel($auth, 'insurance');
+	$admin = $p['grouplevel'] >= ACCESS_EDIT ? 1 : 0;
+	if($admin){ //ONLY for admins, right now
+		print "<tr>";
+		print "<td>Insurance and Drivers' Licence Information</td><td>";
+		$s = insuranceSummary($u['familyid']);
+		print "</td><td align=center>";
+		actionButtons($auth, $p, $u, $u['familyid'], 'insurance', 
+			'insurance.php' , $s + $admin);
+		print "</td><tr>";
+	}
+
+	//calendar 
+	$p = getAuthLevel($auth, 'calendar');
+	$admin = $p['grouplevel'] >= ACCESS_EDIT ? 1 : 0;
+	if($admin){ //ONLY for admins, right now
+		print "<tr>";
+		print "<td>Calendar of Events</td><td>";
+		$s = calSummary($u['familyid']);
+		print "</td><td align=center>";
+		actionButtons($auth, $p, $u, $u['familyid'], 'calendar', 
+			'calendar.php' , $s + $admin);
+		print "</td><tr>";
+	}
 
 	print "</table>";
 
