@@ -139,7 +139,8 @@ union all
      left join in_kind_donations as ikd
               on cikj.in_kind_donation_id = 
                 ikd.in_kind_donation_id
- 
+
+-- this one works! 
 -- with groups
 select left(company_name, 20) as company,
         left(concat_ws(' ', first_name, last_name), 20) as name,
@@ -188,5 +189,6 @@ left join
     as pur
         on pur.company_id = companies.company_id
 group by companies.company_id
+having cash_donations > 0 or auction_purchases > 0 or auction_donations > 0 or in_kind_donations > 0
 order by cash_donations desc, auction_purchases desc, 
     auction_donations desc, in_kind_donations desc;
