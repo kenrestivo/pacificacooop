@@ -225,27 +225,27 @@ sub debugstruct()
 	my $level = shift;
 	my $item;
 
-	printf("%*s", -($level*4), "");
+	printf("\n%*s", -($level*4), "");
 	if( $whatsit =~ /ARRAY/){
-		printf("array of %d elements\n", scalar @$whatsit);
+		printf("array of %d elements", scalar @$whatsit);
 		foreach $item (@$whatsit){
 			&debugstruct($item, $level + 1);
 		}
 	} 
 	elsif( $whatsit =~ /HASH/){
-		printf("hash of %d elements\n", scalar %$whatsit);
+		printf("hash of %d elements", scalar %$whatsit);
 		$level++;
 		foreach $item (sort(keys %$whatsit)) {
-			printf("%*s", -($level*4), "");
-			printf("key: <%s>\n", $item);
+			printf("\n%*s", -($level*4), "");
+			printf("key: <%s> ", $item);
 			&debugstruct($whatsit->{$item}, $level + 1);
 		}
 
 	} 
 	elsif( $whatsit =~ /SCALAR/){
-		printf("scalar ref <%s>\n", $$whatsit);
+		printf("scalar ref <%s>", $$whatsit);
 	} else {
-		printf("value <%s>\n", $whatsit);
+		printf("value <%s>", $whatsit);
 	}
 
 }
@@ -497,8 +497,9 @@ sub fieldTripReport()
 		unless(scalar @$licarref){
 				#TODO put in the parent's name here, dude
 				$badness .= 
-					sprintf("\t- No license information for working parent %s\n",
-						$parref->{'first'}
+					sprintf("\t- No license information for working parent %s %s\n",
+						$parref->{'first'},
+						$parref->{'last'}
 		);
 				$licexp++;
 		}
