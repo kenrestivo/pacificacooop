@@ -19,7 +19,7 @@ $cp->pageTop();
 
 
 
-$view =& new CoopView(&$cp, 'companies');
+$view =& new CoopView(&$cp, 'families');
 $pk = $view->getPK(); // XXX hack! use the get() form instead if you know index
 $view->obj->$pk = 22;
 print $view->recurseTable();

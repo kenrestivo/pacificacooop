@@ -61,6 +61,7 @@ class coopView
 	function getBackLinks()
 		{
 			
+//			confessObj($this, "view");
 			global $_DB_DATAOBJECT;
 			//confessObj($_DB_DATAOBJECT, "dataobject");
 			$tab =  $this->obj->tableName();
@@ -76,7 +77,7 @@ class coopView
 				}
 			}
 			$this->backlinks = $res;
-			$this->page->confessArray($this->backlinks,"backlinks");
+			$this->page->confessArray($res,"backlinks");
 			return $this->backlinks;
 		}
 	
@@ -112,7 +113,7 @@ class coopView
 		{
 			$nearkey = $this->pk;	
 			foreach($this->backlinks as $backtable => $farkey){
-				$subview =& new CoopView(&$page, $backtable);
+				$subview =& new CoopView($this->page, $backtable);
 				$subview->obj->$nearkey = $this->obj->$farkey;
 				$this->addSubTable(&$tab, $subview->recurseTable());
 			}
