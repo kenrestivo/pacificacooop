@@ -31,6 +31,7 @@ print '<HTML>
 //DB_DataObject::debugLevel(5);
 
 confessArray($_REQUEST, "test REQUEST");
+confessArray($_SESSION, "test SESSION");
 
 ///
 warnDev();
@@ -168,8 +169,7 @@ $obj->find();					// new find with limit.
 $hdr = 0;
 while ($obj->fetch()){
 	$build =& DB_DataObject_FormBuilder::create ($obj);
-	$dosdv = $build->getDataObjectSelectDisplayValue(&$obj);
-//	print "DOSDV $dosdv\n";
+
 	$ar = array_merge(sprintf('<a href="%s?action=detail&id=%s&table=%s">
 						Edit</a><br>',
 							  $_SERVER['PHP_SELF'], 
@@ -191,6 +191,14 @@ while ($obj->fetch()){
 	
 }
 
+/// DOSDVHACK
+$obj->limit();
+$obj->find();
+$dosdv = $build->getDataObjectSelectDisplayValue(&$obj);
+print "DOSDV $dosdv\n";
+
+
+/// DRAW THE LIST
 printf('<p><a href="%s?action=detail&table=%s">Add new</a></p>', 
 	   $_SERVER['PHP_SELF'], $table) ;
 
