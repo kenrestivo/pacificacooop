@@ -608,15 +608,20 @@ http://www.pacificacoop.org/
 				$sf =& new CoopObject(&$this->cp , 
 									  'leads_income_join', &$real);
 				$sf->obj->joinAdd($save);
-				$sf->obj->find(true);
-				$lead_guess_hack[]= $sf->obj->lead_id;
+				$lijfound = $sf->obj->find(true);
+				if($lijfound){
+					$lead_guess_hack[]= $sf->obj->lead_id;
+				}
 
 				$sf =& new CoopObject(&$this->cp , 
 									  'tickets', &$real);
 				$sf->obj->joinAdd($save);
-				$sf->obj->find(true);
-				$lead_guess_hack[]= $sf->obj->lead_id;
-
+				$ticketfound = $sf->obj->find(true);
+				if($ticketfound){
+					$lead_guess_hack[]= $sf->obj->lead_id;
+					$this->items_array[] = sprintf('%d tickets to Springfest',
+											   $sf->obj->ticket_quantity);
+				}
 			}
 			if($found){
 				$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
