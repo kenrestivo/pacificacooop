@@ -314,7 +314,7 @@ sub getinsuranceinfo()
 #	EMAILREMINDER
 #	XXX totally broken. needs to be rewritten based on new structs!
 ######################
-sub emailReminder()
+sub oldEmailReminder()
 {
 	my $famref = shift;
 	my $insarref = shift;
@@ -328,7 +328,7 @@ sub emailReminder()
 	my $lf = 0; # license flag
 	my $newbie = 0;
 
-	print "emailReminder() is totally broken. it must be rewritten based on new structs\n";
+	print "oldEmailReminder() is totally broken. it must be rewritten based on new structs\n";
 	exit 1;
 
 	$opt_v && printf("emailreminder(): lic %d ins %d\n", $licref->{'exp'}, $insref->{'exp'});
@@ -409,35 +409,47 @@ sub emailReminder()
 
 	#ok, finish up.
 	if($if || $lf){
-		#confirm
-		printf("\n--------------\n<%s>\nemail the above message to %s %s (%s)?\n",
-			$m,
-			$famref->{'first'},
-			$famref->{'last'},
-			$famref->{'email'},
-			);
-		$res = <STDIN>;
-		if($res =~ /^[yY]/){
-			%mail = ( 	To => $famref->{'email'},
-						From => 'ken@restivo.org',
-						Subject=> "Insurance Information for Co-Op",
-						Message => $m,
-					);
-			#SEND!
-			if($opt_s){
-				&sendmail(%mail) or die $Mail::Sendmail::error;
-				&updateNags($famref->{'parentsid'});
-				printf("result: <%s>\n", $Mail::Sendmail::log);
-			} else {
-				print "-----\nNOTE!!! this is a dry run, no email will actually be sent\n";
-			}
-		}
+		&mailIt($m, $famref);
 		return 1;
 	} else {
 		return 0;
 	}
 
 } #END EMAILREMINDER
+
+######################
+#	MAILIT
+#	takes a message and a famref
+######################
+sub
+mailIt()
+{
+	my $m = shift;
+	my $famref = shift;
+	printf("\n--------------\n<%s>\nemail the above message to %s %s (%s)?\n",
+		$m,
+		$famref->{'first'},
+		$famref->{'last'},
+		$famref->{'email'},
+		);
+	$res = <STDIN>;
+	if($res =~ /^[yY]/){
+			%mail = (       To => $famref->{'email'},
+					From => 'ken@restivo.org',
+					Subject=> "Insurance Information for Co-Op",
+					Message => $m,
+				);
+		#SEND!
+		if($opt_s){
+			&sendmail(%mail) or die $Mail::Sendmail::error;
+			&updateNags($famref->{'parentsid'});
+			printf("result: <%s>\n", $Mail::Sendmail::log);
+		} else {
+			print "-----\nNOTE!!! this is a dry run, no email will actually be sent\n";
+		}
+	}
+	
+}# END MAILIT
 
 
 ######################
