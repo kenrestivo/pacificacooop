@@ -11,6 +11,7 @@
 
 (define schema '()) ;; well, here it is.
 (define current-table "") ;; there has to be a more schemey way 
+(define tables '()) ;; hack. need to handle tables last.
 
 (define debug-flag #t)
 
@@ -25,7 +26,6 @@
 
 
 ;;;;;;;; definition-processing stuff
-
 (define (add-primary-key table line)
   (add-sub-alist schema table "primary key"
 				 (unparen (caddr line))) )
@@ -113,15 +113,19 @@
 
 ;;; the easy one: tables.
 (define (rename-table items)
-   (doit (sprintf #f "rename table %s to %s"
-		   (car items) (cadr items))))
+  (doit (sprintf #f "rename table %s to %s"
+				 (car items) (cadr items))))
+
+;;i have to save these up, because i have to handle join keys first 
+(define (save-table items)
+  (set! tables (append tables (list items))))
 
 ;; simple dispatcher, using cute scheme-ism
 ;; in the file, tables don't have .'s in them, columns do.
 (define (process-change items)
   ((if (string-index (car items) #\.)
-	  rename-column
-	  rename-table )
+	   rename-column
+	   save-table )
    items))
 
 
@@ -138,11 +142,13 @@
 		 (string-split line #\space)))
 	  (close p) )))
 
+
 ;;;;;;;;;;;;;;;
 ;; main
 
 (load-definition "/mnt/kens/ki/proj/coop/sql/definition.sql")
 (fix-schema "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
+(for-each rename-table tables)			; finally, follow up with tables
 
 (simplesql-close dbh)
 
