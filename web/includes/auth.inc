@@ -437,34 +437,6 @@ function loginPopup($uid)
 	
 
 /******************
-	LOGOUTFORM
-	outputs: a nice logout button
-******************/
-function
-logoutForm()
-{
-	printf("<FORM METHOD=POST ACTION='%s'>", 
-					"index.php"); //force it to go back to index
-	printf("<INPUT TYPE=submit NAME='logout' VALUE='Log Out'>");
-    print "</FORM>";
-}/* END LOGOUTFORM */
-
-/******************
-	MAINMENUFORM
-	inputs: auth struct
-	outputs: a nice main menbu button.
-******************/
-function
-mainMenuForm($auth)
-{
-	printf("<FORM METHOD=POST ACTION='%s'>", 
-					"index.php"); //force it to go back to index
-	thruAuth($auth);
-	printf("<INPUT TYPE=submit NAME='menu' VALUE='Main Menu'>");
-    print "</FORM>";
-}/* END MAINMENUFORM */
-
-/******************
 	LOGINFORM
 	inputs: auth struct, type(password, confirm, both), and user(show, hide)
 	outputs: a nice login entry form.
@@ -1020,22 +992,15 @@ insecurePassState($auth, $states)
 
 /******************
 	LOGGEDINSTATE
+	show who i am, and buttons.
+	i do *not* want this to evolve (devolve?) into a menu system
 ******************/
 function
 loggedInState($auth, $states)
 {
-	$uinfo = getUser($auth['uid']);
-	print "<table  width='100%' border=0>";
-	/* trying to build a user interface out of html 
-		is like trying to build a bookshelf out of mashed potatoes. 
+	/* TODO: log it for future session logging?
+	user_error("user so-and-so logged in", E_USER_NOTICE);
 	*/
-	print "<tr>"; 
-	printf("<td><h3>Welcome %s!</h3></td>\n", $uinfo['username']);
-	print "<td>";
-	mainMenuForm($auth);
-	print "</td><td>";
-	logoutForm();
-	print "</td></tr></table>";
 	return changeState($auth, $states, 'loggedin', 1);
 }/* END LOGGEDINSTATE */
 

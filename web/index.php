@@ -38,7 +38,6 @@
 
 	$auth = logIn($pv);
 
-	print "<hr>\n";
 	$u = getUser($auth['uid']);
 
 
@@ -47,15 +46,18 @@
 		done();
 	}
 	
+	topNavigation($auth, $u);
+	print "<hr>\n";
+
 	print "<p>Please choose an action:</p>";
 
 	print "<table border=1>";
 	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
-
 	/* hmm. i see a repetitive pattern here. and... wherever i see a pattern, 
 		i can't resist abstracting it out into a libraray function. 
 		so... guess what's gonna be next here 
 	*/
+
 	//auction items
 	print "<tr>";
 	$p = getAuthLevel($auth, 'auction');
