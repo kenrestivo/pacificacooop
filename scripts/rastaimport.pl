@@ -47,7 +47,11 @@ use Getopt::Std;
 
 my $dbh;
 
-getopts('dv') or &usage();
+#XXX these don't work!
+my $opt_t;
+my $opt_v;
+
+getopts('vt') or &usage();
 
 &main();
 
@@ -60,6 +64,10 @@ exit 0;
 
 sub usage()
 {
+    print STDERR "usage: $0 [-t -v ] \n";
+	#TODO pass in session as a param, and REQUIRE it!
+    print STDERR "\t-t debug (don't actually DO anything!)\n";
+    print STDERR "\t-v verbose \n";
 
 	exit(1);
 }
@@ -118,7 +126,7 @@ sub unBaby()
 {
 	my $annoying = shift;
 	$annoying =~ s/(.+?)\s*\(baby\)\s*/$1/;
-	return $annoying;
+	return($annoying);
 }
 
 sub checkNewFamily(){
@@ -131,6 +139,7 @@ sub checkNewFamily(){
 	my ($rquery , $rqueryobj , $ritemref, $query, $name) ;
 	my %ritem;
 	my $cnt = 0;
+	my $perlsucks = 0;
 
 	$name = &unBaby($$rowref[0]);
 	
@@ -143,12 +152,18 @@ sub checkNewFamily(){
 	$rqueryobj->execute() or die "couldn't execute $!\n";
 
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		%ritem = %$ritemref;
+		printf("DEBUG %d %s %s\n",
+			$ritem{'familyid'},
+			$ritem{'name'},
+			$ritem{'phone'}
+		);
 		$cnt++;
 	}
 
 	if($cnt){
 		print "DEBUG: yes, this family is in the db\n";
-		return $$ritemref['familyid'];
+		return($ritem{'familyid'});
 	} 
 	
 	$query = sprintf("insert into families set 
@@ -158,8 +173,10 @@ sub checkNewFamily(){
 		$name, $$rowref[6]
 	);
 	print "DEBUG doing <$query>\n";
-	#print STDERR $dbh->do($query) . "\n";
-	#return $dbh->{'mysql_insertid'};
+	unless ($opt_t){
+		print STDERR $dbh->do($query) . "\n";
+		return($dbh->{'mysql_insertid'});
+	}
 }
 
 
@@ -194,12 +211,12 @@ sub checkOneParent(){
 	if($cnt){
 		#	AND check for parents which don't match the family name in there?
 		#		i.e. if my $famid is NOT what's in the db!
-		if($$ritemref['familyid'] != $famid){
+		if($$ritemref{'familyid'} != $famid){
 			print "ERROR! $famid for $first $last has changed!\n";
 			exit(1);
 		}
 		print "DEBUG: yes, this parent is in the db\n";
-		return $$ritemref['parentsid'];
+		return($$ritemref{'parentsid'});
 	} 
 	#otherwise, add him or her!
 	$query = sprintf("insert into parents set 
@@ -217,8 +234,10 @@ sub checkOneParent(){
 		$ptype eq 'Mom' ? 'Yes' : 'No'
 	);
 	print "DEBUG doing <$query>\n";
-	#print STDERR $dbh->do($query) . "\n";
-	#return $dbh->{'mysql_insertid'};
+	unless ($opt_t){
+		print STDERR $dbh->do($query) . "\n";
+		return($dbh->{'mysql_insertid'});
+	}
 }
 
 sub fixLastNames()
@@ -269,9 +288,10 @@ sub checkNewKids(){
 	my $rowref = shift;
 	my $session = shift;
 	my ($rquery , $rqueryobj , $ritemref, $query);
-	my ($kidsid, $name, $famid) ;
+	my ($kidsid, $name) ;
 	my %ritem;
 	my $cnt =  0;
+	my $famid =  0;
 
 	#search in db. if kid isn't there, 
 	#	look for family, it should add one if needed.
@@ -295,12 +315,12 @@ sub checkNewKids(){
 
 	if($cnt){
 		print "DEBUG: yes, this kid is in the db\n";
-		return $$ritemref['kidsid'];
+		return $$ritemref{'kidsid'};
 	} 
 	
 	#otherwise, insert the new kid!
 	#	first, get or insert its family
-	$famid = &checkNewFamily($rowref);	
+	$famid = &checkNewFamily($rowref);
 	if($famid < 1){
 		print "ERROR! familyid $famid\n";
 		exit(1);
@@ -315,8 +335,10 @@ sub checkNewKids(){
 		$name, $$rowref[3], $famid
 	);
 	print "DEBUG doing <$query>\n";
-	#print STDERR $dbh->do($query) . "\n";
-	#$kidsid = $dbh->{'mysql_insertid'};
+	unless ($opt_t){
+		print STDERR $dbh->do($query) . "\n";
+		$kidsid = $dbh->{'mysql_insertid'};
+	}
 	
 	#add them to ATTENDANCE too! 
 	#	i am assuming that, since they are NEW kids, 
@@ -334,8 +356,10 @@ sub checkNewKids(){
 		$kidsid, $session eq 'AM' ? 1 : 2
 	);
 	print "DEBUG doing <$query>\n";
-	#print STDERR $dbh->do($query) . "\n";
-	#return $dbh->{'mysql_insertid'};
+	unless ($opt_t){
+		print STDERR $dbh->do($query) . "\n";
+		return $dbh->{'mysql_insertid'};
+	}
 
 	#add parent here too? why not, we know we need them/one
 	&checkNewParents($rowref, $famid);	
