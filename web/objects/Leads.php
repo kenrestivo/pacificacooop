@@ -63,5 +63,6 @@ class Leads extends DB_DataObject
 								 'country' => "Country", 
 								 'phone' => "Phone Number", 
 									'do_not_contact'=> "Do Not Contact After");
+	var  $kr_longTitle = "Springfest Invitation Contacts";
 //	var $fb_preGenerateForm
 }

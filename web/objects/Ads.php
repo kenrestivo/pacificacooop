@@ -30,7 +30,31 @@ class Ads extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $fb_linkDisplayFields = array ('ad_description');
+	var $fb_linkDisplayFields = array ('ad_size_id' , 'ad_description');
 	var $fb_textFields = array ('ad_copy');
 	var $fb_enumFields = array ('artwork_provided');
+	var $kr_longTitle = 'Springfest Ads';
+	var $fb_fieldLabels = array(
+		"company_id" => "Company Name",
+		"ad_size_id" => "Ad size",
+		"artwork_provided" => "Customer will provide their own artwork?",
+		"artwork_received" => "Date Artwork Received (MM/DD/YYYY)" ,
+		"ad_copy" => "Type Ad Copy here (if applicable)" ,
+		"family_id" => "Soliciting Family",
+		"school_year" => "School Year (YYYY-YYYY)" ,
+		'income_id' =>  'Payment Summary',
+		'lead_id' => "Invitee"
+		);
+
+	var $fb_fieldsToRender = array("company_id" => "Company Name",
+		"ad_size_id" => "Ad size",
+		"artwork_provided" => "Customer will provide their own artwork?",
+		"artwork_received" => "Date Artwork Received (MM/DD/YYYY)" ,
+		"ad_copy" => "Type Ad Copy here (if applicable)" ,
+		"family_id" => "Soliciting Family",
+		"school_year" => "School Year (YYYY-YYYY)" ,
+		'income_id' =>  'Payment Summary',
+		
+								   'lead_id' => "Invitee");
+
 }
