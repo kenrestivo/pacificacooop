@@ -71,7 +71,7 @@ class coopView extends CoopObject
 			
 			while($this->obj->fetch()){
 				//$tab->addRow(array_values($this->obj->toArray()));
-				$tab->addRow($this->toArray());
+				$tab->addRow($this->toArray(),'valign="top"');
 			
 			}
 			
@@ -290,7 +290,8 @@ class coopView extends CoopObject
 
 				$tab->addRow(array($meat,
 								  $this->recordButtons(
-									  $this->obj->toArray())));
+									  $this->obj->toArray())),
+							 'valign="top"');
 			
 			}
 			$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
