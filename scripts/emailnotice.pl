@@ -57,18 +57,20 @@ $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 $rqueryobj->execute() or die "couldn't execute $!\n";
 
 while ($famref = $rqueryobj->fetchrow_hashref){
-	$id = $$famref{'familyid'};
+	$id = $famref->{'familyid'};
 	$flag  = 0;
 
 	$insref = &getinsuranceinfo($id);
 	$licref = &getlicenseinfo($id);
 
 	#only send 'em if they're null or too late
-	if(!$$insref{'exp'} || $$insref{'exp'} < $checkdate){
+	if(!$insref->{'exp'} || $insref->{'exp'} < $checkdate){
+		printf("DEBUG %d ins %s\n", $id, $insref->{'exp'});
 		$flag++;
 	}
 
-	if(!$$licref{'exp'} || $$licref{'exp'} < $checkdate){
+	if(!$licref->{'exp'} || $licref->{'exp'} < $checkdate){
+		printf("DEBUG %d lic %s\n", $id, $licref->{'exp'});
 		$flag++;
 	}
 
@@ -194,31 +196,31 @@ sub expiredReport()
 	#families
 	$badness .= sprintf(
 				"%s %s %s \n-------------\n",
-				$$famref{'name'} ? $$famref{'name'} : "",
-				$$famref{'phone'} ? $$famref{'phone'} : "",
-				$$famref{'email'} ? $$famref{'email'} : ""
+				$famref->{'name'} ? $famref->{'name'} : "",
+				$famref->{'phone'} ? $famref->{'phone'} : "",
+				$famref->{'email'} ? $famref->{'email'} : ""
 			);
 
 	#insurance
-	if($$insref{'exp'} < $checkdate){
+	if($insref->{'exp'} < $checkdate){
 			$badness .= sprintf(
 					"\tins %s company %s policy %s \n",
-					strftime('%m/%d/%Y', localtime($$insref{'exp'})) ,
-					$$insref{'companyname'},
-					$$insref{'policynum'}
+					strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
+					$insref->{'companyname'},
+					$insref->{'policynum'}
 				);
 	} else {
 			$badness .= "\tno insururance info\n";
 	}
 	
 	#license
-	if($$licref{'exp'} < $checkdate){
+	if($licref->{'exp'} < $checkdate){
 		$badness .= sprintf(
 				"\tlic %s driver %s %s %s \n",
-				strftime('%m/%d/%Y', localtime($$licref{'exp'})) ,
-				$$licref{'first'},
-				$$licref{'middle'},
-				$$licref{'last'}
+				strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
+				$licref->{'first'},
+				$licref->{'middle'},
+				$licref->{'last'}
 		);
 	} else {
 			$badness .= "\tno license info\n";
