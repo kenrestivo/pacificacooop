@@ -82,9 +82,9 @@ savePass($uid, $clearpass)
 	}
 
 	//error_log("saving $uid, $hash, [$query]", o);
-	print "Your new password is saved! 
+	print "Your new password is saved! <br>
 			You'll need to use this new password from now on 
-			whenever you access this site. 
+			whenever you access this site. <br>
 			Please remember it\n";
 	
 	return generateToken($uid, $hash);
@@ -358,32 +358,45 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	if($auth){ //hey, it could happen...
 		thruAuth($auth);
 	}
+	print "<table border=1>";
 	//user popup (or display) stuff
+	print "<tr>";
 	if($user == 'show'){
-		print "Select user name: \n";
+		print "<td>Select user name:</td>\n";
+		print "<td>";
 		loginPopup($auth['uid']);
+		print "</td>";
 	} else {
 		$u = getUser($auth['uid']);
-		printf("Logging in %s...\n", $u['username']);
+		printf("<td>Logging in %s...</td>\n", $u['username']);
 	}
+	print "</tr>";
 
 	//password stuff
+	print "<tr>";
 	if($type == 'password' || $type == 'both'){
 		if($type == 'both'){ //XXX hack. i can't pass the REAL state thru.
-			print "Please choose a new password and type it here: \n";
+			print "<td>Please choose a new password and type it here: </td>\n";
 		} else {
-			print "Enter password: \n";
+			print "<td>Enter password 
+				(or leave blank if you don't have one yet): </td>\n";
 		}
-		print "<INPUT TYPE=password NAME='auth[pwd]'>";
+		print "<td><INPUT TYPE=password NAME='auth[pwd]'></td>";
 	}
+	print "</tr>";
 
 	//confirm stuff
+	print "<tr>";
 	if($type == 'confirm' || $type == 'both'){
-		print "Please re-type your password to confirm it: \n";
-		print "<INPUT TYPE=password NAME='auth[confirm]'>";
+		print "<td>Please re-type your password to confirm it: </td>\n";
+		print "<td><INPUT TYPE=password NAME='auth[confirm]'></td>";
 	}
+	print "</tr>";
 
-	printf("<INPUT TYPE=submit NAME='login' VALUE='LogIn'>");
+	print "</table>";
+
+	printf("<INPUT TYPE=submit NAME='login' VALUE='%s'>",
+		$type == 'confirm' || $type == 'both' ? 'Save New Password' : 'Log In');
 	printf("<INPUT TYPE=submit NAME='cancel' VALUE='Cancel'>");
     print "</FORM>";
 }/* END LOGINFORM */
@@ -500,6 +513,7 @@ logIn($auth)
 		// dispatch the appropriate action for this state, and collect result
 		$func = $states[$state]['func'];
 		if($func){
+			// we want the func. gotta have the func. y'all...
 			$auth = $func($auth, $states);
 		}
 	} while(!$states[$state]['terminus']);
@@ -760,8 +774,19 @@ nullPassState($auth, $states)
 	}
 
 	// wow! we made it! a good password! let's save it, shall we?
-	$newauth['token'] = savePass($auth['uid'], $auth['pwd']);
-	return changeState($auth, $states, 'loggedin', 1);
+	$token = savePass($auth['uid'], $auth['pwd']);
+	if($token){
+		$newauth =  changeState($auth, $states, 'loggedin', 1);
+		$newauth['token'] = $token;
+	} else {
+		//something eeeevil happened, send email message!
+		error_log("Couldn't save password?", 1, "ken@restivo.org");
+		//TODO use the custom error reporting functions
+		print "Couldn't save password! 
+				Something really, really bad happened.\n";
+		return changeState($auth, $states, 'needlogin', 1);
+	}
+	return $newauth;
 
 }/* END NULLPASSSTATE */
 
