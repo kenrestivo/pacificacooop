@@ -1,8 +1,10 @@
-<?php
+<?php 
 
-	require_once("shared.inc");
+require_once("shared.inc");
+require_once("HTML/QuickForm.php");
+require_once("DB.php");
 
-	print "<HTML>
+print "<HTML>
 		<HEAD>
 			<TITLE>TESTING</TITLE>
 		</HEAD>
@@ -12,38 +14,78 @@
 	";
 
 
-	print " here i am <br>\n";
+$dbh =& DB::connect("mysql://input:test@bc/coop");
+if (DB::isError($dbh)) {
+    die($dbh->getMessage());
+}
 
-	printf("<FORM METHOD=POST ACTION='%s'>", 
-					$_SERVER['PHP_SELF']);
-	print "\n<table border=1>\n";
-	//user popup (or display) stuff
-	print "\n<tr>\n";
-		print "\t<td>Select user name:\n</td>\n";
+function
+formOne()
+{
+	$form = new HTML_QuickForm('test', 'get');
+	$form->addElement('header', 'testheader', 'this is a test');
+	$form->addElement('text', 'testtext', 'What is your name?');
+	$form->addElement('header', 'testheader1', 'cani have another?');
 
-		print "\t<td>";
-///here
-		print "</td>\n";
+	$form->addElement('reset', 'clearbutton', 'Clear');
+	$form->addElement('submit', 'submitbutton', 'Submit');
 
-	print "</tr>\n";
-
-	//password stuff
-	print "\n<tr>\n";
-			print "<td>Please type in your new password here: </td>\n";
-		print "\t<td><INPUT TYPE=text NAME='top[auth][pwd]'></td>\n";
-	print "</tr>\n";
+	$form->addRule('testtext', ' name is required', 'required', '', 'client');
 
 
-	print "\n</table>\n";
+	if ($form->validate()) {
+		// If the form validates then freeze the data
+		$form->freeze();
+	}
 
 
-	printf("<INPUT TYPE=submit NAME='login' VALUE='%s'>",
-		$type == 'confirm' || $type == 'both' ? 'Save New Password' : 'Log In');
-	printf("<INPUT TYPE=submit NAME='logout' VALUE='Cancel'>");
-    print "</FORM>";
-	
-	confessArray($_POST, "postvars");
-	confessArray($GLOBALS, "globals");
+	$form->display();
+}
 
+function
+formTwo()
+{
+
+
+	$defaults = array ( test2text => 'horsehockey',
+						test1text => 'sheepshit');
+
+	$form = new HTML_QuickForm('test2', 'put');
+	$form->addElement('header', 'test2header', 'this is also a test');
+	$form->addElement('text', 'test1text', 'What is your slock?');
+	$form->addElement('text', 'test2text', 'What is your penis size?');
+	$sumbits[] = 
+		&HTML_QuickForm::createElement('reset', 'clear2button', 'Clear');
+	$sumbits[] = 
+		&HTML_QuickForm::createElement('submit', 'submit2button', 'Submit');
+	$form->addGroup($sumbits, 'sumbit buttons', 'you sumbit!', '&nbsp;');
+
+	$form->applyFilter(__ALL__, 'trim');
+
+	$form->addRule('testtext', 'Penis size required', 
+				   'required', '', 'client');
+
+	if ($form->validate()) {
+		// If the form validates then freeze the data
+		$form->freeze();
+		
+		confessArray($_POST, "postvars");
+		confessArray($GLOBALS, "globals");
+		
+
+	} else {
+		$form->setDefaults($defaults);
+		$form->display();	
+	}
+}
+
+formOne();
+formTwo();
+
+done();
+
+$dbh->disconnect();
 
 ?>
+
+ 
