@@ -32,6 +32,7 @@ the fieldstruct
 			in reports, and in entry forms
 		dupeignore: don't check this field when calculating duplicates
 			i.e. leave the value in this field out of any "select's"
+			NOTE: NEVER EVER make an index field (i.e. unique id) a dupeignore
 		duplicates: DEPRECIATED! not used.
 		invisible: don't show it. ever. do pass it through, however!
 		len: maximum length of this field, in chars. html enforces this.
