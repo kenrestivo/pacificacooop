@@ -87,9 +87,20 @@ class Tickets extends DB_DataObject
 			$toadd = $this->ticket_quantity - ($man + $auto);
 			while($toadd-- > 0){
 				$pado = new CoopObject(&$page, 'springfest_attendees', &$top);
+				$clone = $pado->obj;
 				$pado->obj->ticket_id = $this->ticket_id;
 				$pado->obj->entry_type  = 'Automatic';
 				$pado->obj->school_year = $this->school_year;
+
+				if($this->family_id > 0){
+					// check for parents, tag them otherwise
+				}
+				IF($this->lead_id){
+					// make sure at least one automatic has this leadid
+					$clone->lead_id = $this->lead_id;
+					$found = $clone->find();
+				}
+
 				$pado->obj->insert();
 			}
 

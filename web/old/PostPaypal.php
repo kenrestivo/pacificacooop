@@ -183,7 +183,9 @@ class PostPaypal
 			if($table == 'tickets'){
 				$obj->ticket_type_id = 1; // paid for
 				$obj->school_year = findSchoolYear();
-				$obj->ticket_quantity = $this->paypal_obj->invoice;
+				// evil hack to use invoice number
+				list($hokey, $tq) = explode(':', $this->paypal_obj->invoice);
+				$obj->ticket_quantity = $tq;
 			} 
 			
 		
