@@ -4,7 +4,7 @@ $Id$
 instead of using some off-the-shelf open-source php web application framework (which i SHOULD have done!) i wrote my own set of gui widgets and database abstractions. in retrospect this was an error but i'm stuck with it now. so, i'm documenting it so that anyone maintaining this (including myself) can figure out what's what.
 
 general philosophy
-	i'm a gtk/gnome xwindows guy. i hate html. so, i abstracted out all the html, and wrote a set of "widgets" to do things: draw popups, display fields, etc. this isn't new: postnuke and other such systems take a similar approach.
+	i'm a gtk/gnome linux guy. i hate html. so, i abstracted out all the html, and wrote a set of "widgets" to do things: draw popups, display fields, etc. this isn't new: postnuke and other such systems take a similar approach.
 
 
 the fieldstruct
@@ -20,6 +20,8 @@ the fieldstruct
 					populated with any values the user input
 		choices: force type to be a popup field
 			the choices are an array supplied... these are displayed
+			each choice can also be an array itself! 
+				with 'set' and 'show' being the option value and the display
 		def: the default value. this is the MOST important field!
 			this is either the default value that the PROGRAMMER entered,
 			or the value that teh user entered. yes overloads suck.
@@ -184,8 +186,7 @@ passing variables around
 
 the main state machine
 	each web page is basically a state machine. html is stateless, and i hate that. so, i made it stateful by passing stuff through. it does NOT deal with cookies since many browsers have them turned off. and, since we avoid client-side javascript, it has to do lots of back-and-forth to get data validated, etc.
-	here are the possible states,
-		and the actions and TODO the args that their callbacks take:
+	here are the possible states, and the actions and TODO the args that their callbacks take:
 			'confirmdelete': display the fields, read-only, with confirm box
 			'delete': delete the fields.
 			'edit' : prepopulate with data, and show it to the user for editing
