@@ -2,6 +2,7 @@ TODO testing stuff
 
 figure out how to assert tests on non-wtc html: i.e. the validateresp
 	or, just use a plain ol' regexp!
+	how do they work in skij though?
 
 finally we get to the "basic" stuff
 	edit a record 
