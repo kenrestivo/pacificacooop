@@ -2,11 +2,9 @@
 
 
 #$Id$
-# deduces the user names from the family names
-# i shouldn't need again, after i put user-adding into the rastaimport script
-# until then, if i manually add families, i DEFINITELY neeed this!
+# one-off to bring ann edminster's stuff in
 
-# Copyright (C) 2003  ken restivo <ken@restivo.org>
+# Copyright (C) 2003,2004  ken restivo <ken@restivo.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,51 +28,19 @@ use Getopt::Std;
 getopts('rvth:p:d:') or &usage();
 
 
-#the access hash
-# in perl, the hash keys should NOT be quoted, or all hell will break loose!!
-%access = (
-	0 => 'ACCESS_NONE',
-	100 => 'ACCESS_SUMMARY' ,
-	200 => 'ACCESS_VIEW' ,
-	300 => 'ACCESS_VIEWALL' ,
-	500 => 'ACCESS_EDIT' ,
-	600 => 'ACCESS_ADD' ,
-	700 => 'ACCESS_DELETE' ,
-	800 => 'ACCESS_ADMIN' 
+@fn = (
+	"salut" ,
+	"first" ,
+	"last"  ,
+	"title" ,
+	"company" ,
+	"addr" ,
+	"addrcont"  ,
+	"city"  ,
+	"state" ,
+	"zip" ,
+	"country"
 );
-
-use constant _ACCESS_NONE => 0;
-use constant _ACCESS_SUMMARY => 100;
-use constant _ACCESS_VIEW => 200;
-use constant _ACCESS_VIEWALL => 300;
-use constant _ACCESS_EDIT => 500;
-use constant _ACCESS_ADD => 600;
-use constant _ACCESS_DELETE => 700;
-use constant _ACCESS_ADMIN => 800;
-
-
-#default privs for all families
-#  				group, 					user, 				item
-@familydefaults =  (
-	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "invitations" ],
-	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "auction" ],
-	[ _ACCESS_VIEW, _ACCESS_VIEW, "calendar" ],
-	[ _ACCESS_NONE, _ACCESS_VIEW, "money" ],
-	[ _ACCESS_NONE, _ACCESS_VIEW, "insurance" ],
-	[ _ACCESS_VIEW, _ACCESS_EDIT, "roster" ],
-	[ _ACCESS_NONE, _ACCESS_VIEW, "user" ]
-);
-
-@teacherdefaults =  (
-	[ _ACCESS_VIEW, _ACCESS_EDIT, "roster" ],
-	[ _ACCESS_DELETE, _ACCESS_VIEW, "calendar" ],
-	[ _ACCESS_NONE, _ACCESS_VIEW, "money" ],
-	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "auction" ],
-	[ _ACCESS_DELETE, _ACCESS_EDIT, "insurance" ],
-	[ _ACCESS_NONE, _ACCESS_VIEW, "user" ]
-);
-
-@teachers = ("Teacher Sandy", "Teacher Catherine", "Teacher Pat");
 
 ### main code starts here
 
@@ -85,51 +51,34 @@ $dbname = $opt_d ? $opt_d : "coop_dev";
 $dbh = DBI->connect("DBI:mysql:$dbname:$host$port", "input", "test" )
     or die "can't connect to database $!\n";
 
-
-#approximate list of families
-$rquery = "select families.name, families.familyid
-		from families 
-			left join leads on families.familyid = leads.familyid
-		left join kids on kids.familyid = families.familyid
-		left join attendance on attendance.kidsid = kids.kidsid
-		left join enrol on enrol.enrolid = attendance.enrolid
-		where attendance.dropout is NULL
-	group by families.familyid\n";
-if($opt_v){
-	print "doing <$rquery>\n"; 
-}
-$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
-$rqueryobj->execute() or die "couldn't execute $!\n";
-
-while ($ritemref = $rqueryobj->fetchrow_hashref){
-	%ritem = %$ritemref;
-
-	$uid = &addUser($ritem{'name'}. " Family", $ritem{'familyid'});
-	&addDefaultPrivs($uid, \@familydefaults);
-	## TODO add group privileges as well!
-
-} # end while
-
-
-#add users for teachers
-foreach $teacher (@teachers){
-	$uid = &addUser($teacher);
-	&addDefaultPrivs($uid, \@teacherdefaults);
+#get the stuff
+$filename = shift;
+open(IMPORT , $filename) or die "coulnt' open $filename $!\n";
+while($line = <IMPORT>){
+	(@fields) = split(/\t/, $line);
+	&addThem(&makeHash(\@fields, \@fn));
 }
 
+close(IMPORT) or die "coulnt' close $filename $!\n";
 $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
 exit 0;
 #END MAIN
 ########################
 
+sub
+makeHash()
+{
+
+
+
+} #END MAKEHASH
 
 sub
-addDefaultPrivs()
+addThem()
 {
-	my $uid = shift;
-	my $defref = shift;
-	my $reset = shift;
+	my $fr = shift;
+	my %f = %$fr;
 	my $arref;
 	my $query;
 	my $count = 0;
@@ -139,50 +88,32 @@ addDefaultPrivs()
 	my $rqueryobj;
 
 	#NOW, add the privs
-	foreach $arref (@$defref){
-		$count = 0; #gotta reset this each time!
-		if($opt_v){
-			printf("\tsurfing through privs: %d %d %s\n", 
-				$$arref[0], $$arref[1], $$arref[2]);
-		}
-		#gotta check first that they don't already exist!
-		$rquery = sprintf("select count(privid) as counter from privs 
-					where userid = %d and realm = '%s'", $uid, $$arref[2]
-		);
-		if($opt_v){
-			print "doing <$rquery>\n"; 
-		}
-		$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
-		$rqueryobj->execute() or die "couldn't execute $!\n";
+	#gotta check first that they don't already exist!
+	$count = 0; #again, just to be sure
+	$rquery = sprintf("select count(privid) as counter from privs 
+				where userid = %d and realm = '%s'", $uid, $$arref[2]
+	);
+	if($opt_v){
+		print "doing <$rquery>\n"; 
+	}
+	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+	$rqueryobj->execute() or die "couldn't execute $!\n";
 
-		while ($ritemref = $rqueryobj->fetchrow_hashref){
-			$count += $$ritemref{'counter'};
+	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		$count += $$ritemref{'counter'};
 
-		} # end while
-	
-		#ok. DO it!
-		if($count){
-			if($opt_v){
-				printf("matched %d rows already present for %d %s\n", 
-					$count, $uid, $$arref[2]);
-			}
-			if(!$reset){
-				next; #important! we don't wanto to whack the privs!!
-			}
-			print "resetting privs for uid <$uid>\n";
-			$query = sprintf("
-				update privs set grouplevel = %d, userlevel = %d 
-				where userid = %d and realm = '%s' ", 
-				 $$arref[0], $$arref[1], $uid, $$arref[2]);
-		} else {
-			printf("adding privs for realm <%s> uid <%d>\n",
-					$$arref[2], $uid
-				);
-			$query = sprintf("insert into privs set 
-					userid = %d, grouplevel = %d, 
-					userlevel = %d, realm = '%s' ", 
-				$uid, $$arref[0], $$arref[1], $$arref[2]);
+	} # end while
+
+	#ok. DO it!
+	if($count){
+		if($opt_v){
+			printf("matched %d rows already present for %d %s\n", 
+				$count, $uid, $$arref[2]);
 		}
+		$query = sprintf("insert into privs set 
+				userid = %d, grouplevel = %d, 
+				userlevel = %d, realm = '%s' ", 
+			$uid, $$arref[0], $$arref[1], $$arref[2]);
 		if($opt_v){
 			print "doing <$query>\n";
 		}
@@ -191,7 +122,7 @@ addDefaultPrivs()
 		}
 	}
 
-}
+} #END ADDTHEM
 
 sub
 addUser()
