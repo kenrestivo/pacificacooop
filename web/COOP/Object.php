@@ -113,10 +113,15 @@ class coopObject
 			if(!$links[$key]){
 				return $val;
 			}
+			
+			if(!$obj->$key){
+				return $val;
+			}
 
 			//ok, we have run the fucking gauntlet here.
 			//confessObj($obj, 
 //					   "checkLinkField() from $this->table: obj with links for $key of $val");
+
 			$subobj = $obj->getLink($key); 
 	//confessObj($subobj, "checkLInkFild() subobj $subobj->__table for $key of $val");
 
