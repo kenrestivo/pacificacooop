@@ -308,7 +308,7 @@ http://www.pacificacoop.org/
 			// do NOT use this anywhere that you're not sure of that.
 	
 				if($save){
-						//TODO: save a new thankyou, and cache ists insertid	
+					//TODO: save a new thankyou, and cache ists insertid	
 					$co = new CoopObject(&$this->cp, 
 										 'thank_you', &$nothing);
 					$co->obj->date_sent = date('Y-m-d');
@@ -317,9 +317,9 @@ http://www.pacificacoop.org/
 					$co->obj->insert();
 					$this->thank_you_id = $co->lastInsertID();
 				}
-
+				
 				// COMPANY
-			// find company
+				// find company
 			$co = new CoopView(&$this->cp, 'companies', &$top);
 			$co->obj->$pk = $id;
 			$co->obj->find(true);
@@ -373,7 +373,7 @@ http://www.pacificacoop.org/
 								 &$co);
 			$real->obj->orderBy('school_year desc');
 			$real->obj->school_year = $sy;
-			$real->obj->whereAdd('thank_you_id is null 
+			$real->obj->whereAdd('thank_you_id is null
 						and date_received > "2000-01-01" ');
 			$real->obj->joinadd($co->obj);
 			$found = $real->obj->find();
