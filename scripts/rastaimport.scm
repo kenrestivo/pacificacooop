@@ -30,6 +30,26 @@
 
 ;;;;;;;;;;;;;;; functions for updating the database
 
+;; find family
+(define (check-for-new-family line header)
+  (let (families (safe-sql *dbh*
+						   (sprintf #f "
+				select familyid, name, phone from families
+						where name like \"%%%s%%\" and phone like \"%%%s%%\""
+									(rasta-find "Last Name")
+									(rasta-find "Phone"))))
+	(cond ((> 2 (false-if-exception (length families)))
+		   (error "duplicate families" families))
+		  ((list? families) (db-ref-last families "familyid")) ;gotcha!
+		  (else
+		   (safe-sql (sprintf #f "
+						insert into families set
+								name = '%s',
+								phone = '%s'"
+							  (rasta-find "Last Name")
+							  (rasta-find "Phone")
+							  ))))))
+
 ;; find kid
 (define (check-for-new-kid line header)
   (let ((kids (safe-sql *dbh*
@@ -43,14 +63,14 @@
 		   (error "duplicate kids" kids))
 		  ((list? kids) (db-ref-last kids "kidsid")) ; got it!
 		  (else
-		   (safe-sql sprintf("
+		   (safe-sql (sprintf #f ("
 				insert into kids set 
 							last = '%s' ,
 							first = '%s' ,
 							familyid = %d "
 							 (rasta-find "Last Name" line header)
 							 (rasta-find "Child" line header)
-							 (check-family line header)))))))
+							 (check-for-new-family line header))))))))
 
 ;;;;;;;;;; functions for navigating through the rasta structure (accessors?)
 (define (rasta-find key line header)
