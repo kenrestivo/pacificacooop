@@ -324,11 +324,11 @@ CREATE TABLE insurance_information (
 ) ;
 
 --
--- Table structure for table `invitation_rsvps`
+-- Table structure for table `tickets`
 --
 
 CREATE TABLE tickets (
-  invitation_rsvps_id int(32) NOT NULL unique auto_increment,
+  ticket_id int(32) NOT NULL unique auto_increment,
   income_id int(32) default NULL,
   ticket_quantity int(5) default NULL,
   family_id int(32) default NULL,
@@ -336,7 +336,7 @@ CREATE TABLE tickets (
   company_id int(32) default NULL,
  ticket_type enum('Paid for','Included with package', 'Member','VIP','Freebie','Other') default NULL,
   school_year varchar(50) default NULL,
-  PRIMARY KEY  (invitation_rsvps_id),
+  PRIMARY KEY  (ticket_id),
 ) ;
 
 --
@@ -498,10 +498,7 @@ CREATE TABLE sources (
 CREATE TABLE springfest_attendees (
   springfest_attendee_id int(32) NOT NULL unique auto_increment,
   paddle_number int(32) default NULL,
-  invitation_rsvps_id int(32) default NULL,
-  lead_id int(32) default NULL,
-  company_id int(32) default NULL,
-  parent_id int(32) default NULL,
+  ticket_id int(32) default NULL,
 	temp_name varchar(255) default NULL,
   school_year varchar(50) default NULL,  -- XXX do i want this here?
   PRIMARY KEY  (springfest_attendee_id)
@@ -718,14 +715,6 @@ CREATE TABLE ads (
 ) ;
 
 
---- UNUSED! we use invitation_rsvps for this
-CREATE TABLE tickets (
-  ticket_id int(32) NOT NULL unique auto_increment,
-  income_id int(32) default NULL,
-  ticket_quantity int(5) default NULL,
-  lead_id int(32) default NULL,
-  PRIMARY KEY  (ticket_id)
-) ;
 
 
 CREATE TABLE sponsorship_types (

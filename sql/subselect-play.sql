@@ -93,3 +93,36 @@ left join
             and iks.item_value is not null
 where companies.company_id = 82;
  
+
+-- adding income now
+select distinct left(company_name, 20) as name, 
+        auct.item_value as auction_donations,
+        iks.item_value as in_kind_donations,
+        incs.payment_amount as cash_donations
+from companies
+left join 
+    (select  item_value, company_id
+     from companies_auction_join  as caj
+     left join auction_donation_items  as adi
+              using (auction_donation_item_id))
+    as auct
+        on auct.company_id = companies.company_id
+        and auct.item_value is not null
+left join 
+    (select  item_value, company_id
+     from companies_in_kind_join as cikj
+     left join in_kind_donations as ikd
+                using(in_kind_donation_id)) 
+    as iks
+        on iks.company_id = companies.company_id
+            and iks.item_value is not null
+left join 
+    (select  payment_amount, company_id
+     from companies_income_join as cij
+     left join income as inc
+            using(income_id))
+    as incs
+        on incs.company_id = companies.company_id
+            and incs.payment_amount is not null
+where companies.company_id = 114;
+ 

@@ -29,4 +29,9 @@ grant select, insert, update, delete, create on coop.* to springfest@'%'
 grant select, insert, update, delete on coop.* to springfest@localhost
     identified by '92xPi9';
 
+use mysql;
+update user set password = old_password('test') where User = 'input';
+update user set password = old_password('92xPi9') where User = 'springfest';
+flush privileges;
+
 -- EOF

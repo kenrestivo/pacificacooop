@@ -102,7 +102,8 @@
 ;; a silly driver around visit-all-links
 (define (many-visit-hack wtc)
   (for-each (lambda (family)
-			(visit-all-links wtc (string-append family " Family")))
-		  '("Cooke" "Bartlett" "Restivo" "Walker")))
+			  (write-line (string-append ".....checking " family))
+			  (visit-all-links wtc (string-append family " Family")))
+			'("Cooke" "Bartlett" "Restivo" "Walker")))
 
 ;;EOF

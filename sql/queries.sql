@@ -614,7 +614,30 @@ CREATE TABLE temp (
 
 
 --- attempt to fix leads
-select temp_name, invitation_rsvps.invitation_rsvps_id from springfest_attendees left join invitation_rsvps using (lead_id) where invitation_rsvps.lead_id is not null;
+select temp_name, invitation_rsvps.invitation_rsvps_id 
+    from springfest_attendees 
+        left join invitation_rsvps using (lead_id) 
+    where invitation_rsvps.lead_id is not null;
 
+--- find orphaned thankyous
+-- would make a good subselect here: update where
+ select * 
+    from auction_donation_items 
+        left join thank_you using(thank_you_id) 
+    where auction_donation_items.thank_you_id is not null 
+        and thank_you.thank_you_id is null;
+
+-- find orphned thankyous
+	select * from income 
+		left join thank_you using (thank_you_id) 
+		where income.thank_you_id is not null 
+			and thank_you.thank_you_id is null;
+
+-- reset all thankyous
+-- USE ONLY FOR TESTING!
+delete from thank_you;
+update in_kind_donations set thank_you_id = NULL;
+update income set thank_you_id = NULL;
+update auction_donation_items set thank_you_id = NULL;
 
 --- EOF

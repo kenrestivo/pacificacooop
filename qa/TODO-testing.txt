@@ -1,6 +1,7 @@
 TODO testing stuff
 
-a test case for mike, to show my bug
+figure out how to assert tests on non-wtc html: i.e. the validateresp
+	or, just use a plain ol' regexp!
 
 finally we get to the "basic" stuff
 	edit a record 
@@ -61,3 +62,17 @@ start with REALLY simple shit
 	go through all the links from the main page
 	and make sure they WORK. i.e. i get an html at the end
 		useful for checking for WARNINGS
+
+----------------
+STUCK
+
+----------------
+BELOW THE LINE
+
+----------------
+NOWHERE
+
+----------------
+DONE
+
+a test case for mike, to show my bug
