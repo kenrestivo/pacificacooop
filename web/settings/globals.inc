@@ -16,15 +16,16 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-    global $HTTP_GET_VARS;
-    global $HTTP_POST_VARS;
-    global $_SERVER;
+global $HTTP_GET_VARS;
+global $HTTP_POST_VARS;
+global $_SERVER;
 
-	#XXX hack
-	$cutoffdate = "11/02/2004";
-	$auctioncutoff = "12/18/2004";
-	$solicitcutoff = "02/14/2005";
-	$packagingcutoff = "02/14/2005";
+//XXX hack
+$cutoffdate = "11/02/2004";
+$auctioncutoff = "12/18/2004";
+$solicitcutoff = "02/14/2005";
+$packagingcutoff = "02/14/2005";
+$paypal_debug = 1;
 
 ?>
 

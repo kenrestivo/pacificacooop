@@ -28,23 +28,31 @@ require_once "HTML/QuickForm/group.php";
 class paypalForm extends HTML_QuickForm
 {
 	var $title;
+	var $account = 'beecooke@yahoo.com';
+	var $server = 'https://www.paypal.com/cgi-bin/webscr';
 
 
-	function paypalForm($title,  $formname, $headerflag = 1)
+	function paypalForm($title,  $formname, $debug = 0, $headerflag = 1)
 		{
 			$this->title = $title;
+			if($debug){
+				$this->account = "billing@restivo.org"  ;
+				$this->server = 
+					'https://www.sandbox.paypal.com/cgi-bin/webscr';
+			}
 			
-			$this->HTML_QuickForm($formname, 'get', 
-								  'https://www.paypal.com/cgi-bin/webscr');
+			$this->HTML_QuickForm($formname, 'get', $this->server);
 			if($headerflag){
 				$this->addElement('header', 'tickets', $title);
 			}	
 			$this->addElement('hidden', 'cmd', '_xclick');
-			$this->addElement('hidden', 'business', 'beecooke@yahoo.com');
+			$this->addElement('hidden', 'business', $this->account);
 			$this->addElement('hidden', 'item_name', $title);
 			$this->addElement("hidden", "item_number", "EmailBlast");
 			$this->addElement("hidden", "quantity", "1");
 			$this->addElement("hidden", "page_style", "Primary");
+			$this->addElement("hidden", "notify_url", 
+							  "http://www.pacificacoop.org/sf/ipn.php");
 			$this->addElement("hidden", "return", 
 							  "http://www.pacificacoop.org/sf/thankyou.php");
 			$this->addElement("hidden", "cancel", 
@@ -63,7 +71,7 @@ class paypalForm extends HTML_QuickForm
 				$prices[] = "-- Choose One--"; 
 			}
 			foreach($prices_raw as $descr => $price){
-\				$prices[$price] = sprintf($descr, $price) ;
+				$prices[$price] = sprintf($descr, $price) ;
 			}
 			$sel =& HTML_QuickForm::createElement(
 				"select", $fieldname, "Select one:", $prices, 
