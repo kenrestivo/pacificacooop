@@ -10,23 +10,21 @@
 (invoke gtc 'setBaseUrl "http://www/coop-dev")
 
 ;; choose family
-(define choose-family
-  (lambda(wtc)
+(define (choose-family wtc)
 	(begin
 	  (invoke wtc 'beginAt "/")
 	  ;; TODO add asserts that this is the RIGHT page
 	  (invoke wtc 'assertTextPresent "</html>")
 	  (invoke wtc 'assertFormPresent )
 	  (invoke wtc 'assertSubmitButtonPresent "login")
-
+b
 	  (invoke wtc 'selectOption "auth[uid]" "Restivo Family")
 	  (invoke wtc 'assertSubmitButtonPresent "login")
 	  (invoke wtc 'submit "login")
-	  )))
+	  ))
 
 ;;enter password
-(define enter-password
-  (lambda (wtc)
+(define (enter-password wtc)
 	(begin
 	  (invoke wtc 'assertTextPresent "</html>")
 	  (invoke wtc 'assertFormPresent )
@@ -35,23 +33,21 @@
 
 	  (invoke wtc 'setFormElement "auth[pwd]" "tester")
 	  (invoke wtc 'submit "login")
-	  )))
+	  ))
 
-(define main-page-ok
-  (lambda (wtc)
+(define (main-page-ok wtc)
 	(begin
 	  (invoke wtc 'assertTextPresent "</html>")
 	  (invoke wtc 'assertLinkPresentWithText "Log Out")
 	  (invoke wtc 'assertLinkPresentWithText "Enter New")
 	  (invoke wtc 'assertLinkPresentWithText "View")
-	  )))
+	  ))
 
-(define dump-page
-  (lambda(wtc)
+(define (dump-page wtc)
 	(begin
 	(let* ((dl (invoke wtc 'getDialog))) ;; the httpunit object
 	  (invoke dl 'getResponseText)
-	  ))))
+	  )))
 
 (define get-response
   (lambda(wtc)
@@ -80,15 +76,14 @@
 
 
 ;; holder for things i'm still experimenting with.
-(define misc-shit
-  (lambda(wtc)
+(define (misc-shit wtc)
 	(begin
 	  ;; tab stuff
 	  (define tabs (invoke (get-response wtc) 'getTables))
 	  ;; link stuff
 	  (define links (invoke (get-response wtc) 'getLinks))
-	  (for-each-vector (lambda(v) (pp (invoke v 'getParameterNames)))
+  (for-each-vector (lambda(v) (pp (invoke v 'getParameterNames)))
 					   links  #f)
 
-	  )))
+	  ))
 ;;EOF
