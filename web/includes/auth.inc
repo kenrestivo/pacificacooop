@@ -171,12 +171,22 @@ checkToken($uid, $token)
 /******************
 	CHECKAUTHLEVEL
 	check that this uid is authorised to do this action
-	inputs: uid, token, realm, level(action)
+	inputs: auth structure
 	returns: 0 if ok, 1 if failure
 ******************/
 function
-checkAuthLevel($uid, $token, $realm, $level)
+checkAuthLevel($auth)
 {
+	$uid = $auth['uid'];
+	$token = $auth['token']; 
+	$realm = $auth['realm'];
+	$level = $auth['level'];
+
+	if(!($uid && $realm && $token && $level){
+		print "checkAuthLevel(): ERROR not enough info\n";
+		return 1;
+	}
+
 	if(($err = checkToken($uid, $token) > 0){
 		return $err;
 	}
@@ -186,7 +196,7 @@ checkAuthLevel($uid, $token, $realm, $level)
 			SELECT * FROM privs 
 				left join users on users.userid = privs.userid
 			WHERE privs.userid = %d 
-				and privs.realm = '%s'
+				and (privs.realm = '%s' or privs.realm = 'all')
 				and privs.level > %d
 			--",
 			$uid, $realm, $level
@@ -261,23 +271,55 @@ displayLogin($uid, $token)
 
 }/* END DISPLAYLOGIN */
 
+
+
+/******************
+	LOGINPOPUP
+	drawing the popup
+		query all users. doy.
+		if an id is passed in, use that one as default. 
+		otherwise, CHOOSE ONE
+	inputs: uid
+	outputs: renders the popup
+******************/
+function loginPopup($uid)
+{
+	printf("<select name='auth[uid]' SINGLE>\n",
+		$entrynum, $fname
+	);
+	print "<option value='0'>CHOOSE ONE</option>\n";
+
+	#DO THE QUERY
+	$listq = mysql_query(" select * from users order by name");
+	$err = mysql_error();
+	if($err){
+		print "loginPopup(): [$listq]: $err\n";
+	}
+	while($row = mysql_fetch_array($listq)){
+		$sel = $row['userid'] == $uid ? " selected" : "";
+		printf("<option value='%d' %s>%s</option>\n", 
+			$row['userid'], $sel, $row['name']);
+ 
+	}
+	print "\n</select>";
+}/* END LOGINPOPUP */
 	
 
 /******************
 	LOGIN
 	logs a user in. abstracted here to be used in several places
 		functions like a main() for common auth functions
-	inputs: HTTP_VARS
+	inputs: an auth struct
 	outputs: error messages as needed
-	returns: a token if success, otherwise 0.
+	returns: a token if the user is now successfully logged in, otherwise 0.
 ******************/
 function
-logIn($vars)
+logIn($auth)
 {
-	$uid = $vars['uid'];
-	$pwd = $vars['pwd'];
-	$confirm = $vars['confirm'];
-	$token = $vars['token'];
+	$uid = $auth['uid'];
+	$pwd = $auth['pwd'];
+	$confirm = $auth['confirm'];
+	$token = $auth['token'];
 
 	//hmm. they are supplying a password! must be a new/change request
 	if($pwd){
@@ -293,18 +335,38 @@ logIn($vars)
 		return $token; //cool, they're already logged in
 	}
 
-	//no password or token passed in
+	//ok! no password or token passed in, so throw up a login screen
+
 	$oldpwhash = getPass($uid);		
 
-	/*
-		variation on the family name popup, with USERid's (may differ)
-			if familyid passed in, pre-select it
-		if there already IS a password for this family,
-			text: please CHOOSE a new one now and type it in here twice
-			show new pass and confirmation
-		else
-			password entry field
-	*/
+	print "<table border='0'>";
+	print "<tr><td>Please log in:</td></tr>";
+	#print "DEBUG: $id";
+	printf("<FORM METHOD=POST ACTION='%s'>", 
+			$_SERVER['PHP_SELF']);
+	print "<tr><td>Your child's last name:</td>";
+	loginPopup($uid); 
+	print "</td></tr>";
+	if($oldpwhash){
+		// if there already IS a password for this family
+		print "<tr><td>Your password:</td>";
+	} else {
+		print "<tr><td>Please make up a NEW password for yourself 
+					and type it here:</td>";
+	}
+	print "<td><INPUT TYPE=password NAME='auth[pwd]'></td>";
+	print "</tr>"; // html sucks
+
+	if($oldpwhash){
+		// confirmation for new user
+		print "<tr><td>Please type your new password again to confirm:</td>";
+		print "<td><INPUT TYPE=password NAME='auth[confirm]'></td></tr>";
+	}
+	print "<tr><td>INPUT TYPE=submit NAME='login' VALUE='LogIn'></td></tr>";
+    print "</FORM>";
+	print "</table>";
+
+	return 0;
 
 }/* END LOGIN  */
 
