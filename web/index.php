@@ -35,7 +35,6 @@ printf('<HTML lang="en">
 
 		<BODY>
 
-		<div id="page">
 		<div id="header">
 				<h2>Pacifica Co-Op Nursery School Data Entry</h2>',
 	   $metalinks);
