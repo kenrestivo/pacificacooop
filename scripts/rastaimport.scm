@@ -24,7 +24,7 @@
 
 (define (process-rasta-line header session line )
   (set! *rasta* (append *rasta* (list
-								   (list-head (parse-csv line)
+								   (safe-list-head (parse-csv line)
 										 (length header))))))
 
 (define (clean-up-rasta rasta header)
