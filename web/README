@@ -73,6 +73,11 @@ the fieldstruct
 			the linktable is in the $callbacks['join'] somewhere
 			NOTE! for this to work, there must be a join_to_table column
 				in the sql table 'linktable', which the popuputll then checks
+			 for cases where each individual entry has a different jointo
+		joins: an array of arrays of joins, just like for $callbacks.
+			use this if you need to do school year or any hairy popup joins
+		school_year: which school year to constrain this to. 
+			this looks wrong to me, but here it is anyway. and it works
 		realname: if this $fieldname is a NASTY HACK AROUND MYSQL, then
 				'realname' is the REAL name of the field
 
