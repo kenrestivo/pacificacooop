@@ -124,8 +124,11 @@ sub checkHeaders(){
 sub unBaby()
 {
 	my $annoying = shift;
+	#remove the (baby) and (nickname) crap
 	$annoying =~ s/(.+?)\s*\(.*\)\s*/$1/;
+	#*sigh* clean up data entry screwups
 	$annoying =~ s/^\s*(.+?)\s*$/$1/;
+	#TODO eliminate doublespaces within! i.e. "  " to " "
 	return($annoying);
 }
 
@@ -143,7 +146,7 @@ sub checkNewFamily(){
 
 	print "DEBUG checkNewFamily() called\n";
 
-	$name = &unBaby($$rowref[0]);
+	$name = $$rowref[0];
 	
 
 	#i want EXACT matches on familyname, none of this %% crap
@@ -235,7 +238,7 @@ sub checkOneParent(){
 		$famid, $last, $first, $ptype, $$rowref[7],
 		#TODO AACK!!! I WILL NEED TO CHECK WORKING PARENT HERE!!
 		#	which means, i'll need the fucking CELL. dammit.
-		#in the meantime, i make a stupid sexist guess
+		#in the meantime, i have to make a stupid sexist guess
 		$ptype eq 'Mom' ? 'Yes' : 'No'
 	);
 	print "DEBUG doing <$query>\n";
@@ -278,10 +281,10 @@ sub checkNewParents(){
 	}
 
 	#*sigh* the annoyance of excel. why not create a "baby" checkbox. grr.
-	$famname = &unBaby($$rowref[0]);
+	$famname = $$rowref[0];
 
 	#check the mom's name
-	$nameref = &fixLastNames($famname, &unBaby($$rowref[1]));
+	$nameref = &fixLastNames($famname, $$rowref[1]);
 	$something = &checkOneParent($rowref, $famid,  
 		$$nameref{'last'}, $$nameref{'first'}, 'Mom');
 
@@ -289,7 +292,7 @@ sub checkNewParents(){
 	#i have to namecheck the mom AND the dad's name. 
 	#	seriously, it's the 21st centry
 	#	TODO somehow guess dad or partner? um, how?
-	$nameref = &fixLastNames($famname, &unBaby($$rowref[2]));
+	$nameref = &fixLastNames($famname, $$rowref[2]);
 	$something = &checkOneParent($rowref, $famid,  
 		$$nameref{'last'}, $$nameref{'first'}, 'Dad');
 
@@ -311,7 +314,7 @@ sub checkNewKids(){
 	#search in db. if kid isn't there, 
 	#	look for family, it should add one if needed.
 	#	then add the kid
-	$name = &unBaby($$rowref[0]);
+	$name = $$rowref[0];
 
 	$rquery = sprintf("select * from kids 
 			where first like \"%%%s%%\" and last like \"%%%s%%\"
@@ -581,10 +584,7 @@ sub extractRow()
 		#brutally ugly, but NECESSARY!. must exist, and must have data
 		$cell = $ws->{'Cells'}[$rownum][$i];
 		if($cell) {
-			$row[$i] = $cell->Value;
-			#*sigh* clean up data entry screwups
-			$row[$i] =~ s/^\s*(.+?)\s*$/$1/;
-			#TODO eliminate doublespaces within! i.e. "  " to " "
+			$row[$i] = &unBaby($cell->Value);
 			#	look up nifty perl tricks for this
 			printf("extractRow ( $rownum , $i ) => %s\n", $cell->Value) ;
 		}
