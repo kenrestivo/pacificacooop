@@ -702,13 +702,13 @@ changeState($auth, $states, $newstate, $wanted = 0, $savedauth = NULL)
 	if($states[$newstate]['required']){
 		while (list($key, $val) = each($states[$newstate]['required'])){
 			if($savedauth && $savedauth[$val]){
-				user_error(sprintf("changeState: keeping saved %s auth[%s] = %s", 
-					"required", $val, $savedauth[$val]), 
+				user_error(sprintf("changeState(%s): keeping saved %s auth[%s] = %s", 
+					$newstate, "required", $val, $savedauth[$val]), 
 						E_USER_NOTICE);
 				$newauth[$val] = $savedauth[$val];
 			} else if($auth[$val]){
-				user_error(sprintf("changeState: keeping passed %s auth[%s] = %s", 
-					"required" , $val, $auth[$val]), 
+				user_error(sprintf("changeState(%s): keeping passed %s auth[%s] = %s", 
+					$newstate, "required" , $val, $auth[$val]), 
 						E_USER_NOTICE);
 				$newauth[$val] = $auth[$val];
 			}
@@ -718,13 +718,13 @@ changeState($auth, $states, $newstate, $wanted = 0, $savedauth = NULL)
 	if($wanted && $states[$newstate]['wanted']){
 		while (list($key, $val) = each($states[$newstate]['wanted'])){
 			if($savedauth && $savedauth[$val]){
-				user_error(sprintf("changeState: keeping saved %s auth[%s] = %s", 
-					"wanted", $val, $savedauth[$val] ), 
+				user_error(sprintf("changeState(%s): keeping saved %s auth[%s] = %s", 
+					$newstate, "wanted", $val, $savedauth[$val] ), 
 						E_USER_NOTICE);
 				$newauth[$val] = $savedauth[$val];
 			} else if($auth[$val]){
-				user_error(sprintf("changeState: keeping passed %s auth[%s] = %s ", 
-					"required", $val, $savedauth[$val]), 
+				user_error(sprintf("changeState(%s): keeping passed %s auth[%s] = %s ", 
+					$newstate, "required", $val, $savedauth[$val]), 
 						E_USER_NOTICE);
 				$newauth[$val] = $auth[$val];
 			}
