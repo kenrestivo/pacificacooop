@@ -197,7 +197,7 @@ class coopForm extends CoopObject
 				user_error("save couldn't get its pk", E_USER_ERROR);
 			}
 
-			if($this->page->debug > 2){
+			if($this->page->debug > 1){
 				$this->obj->debugLevel(2);
 			}
 			if($this->page->debug > 3){
