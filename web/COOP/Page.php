@@ -230,8 +230,7 @@ class coopPage
 		{
 
 			$count = $this->obj->find();
-			$res .= "$count total records found<br>";
-
+		
 			/// pager driver calculations
 			for($i = 1; $i <= $count; $i++){
 				$pager_item_data[] = $i;
@@ -251,7 +250,10 @@ class coopPage
 			//confessArray($pager_result_data, "pagerresult");
 			//confessArray($pager_links, "pagerlinks");
 			
-			$res .= $pager_links['all'];
+            $res .= sprintf("%d total records found, in %d pages<br>",
+                $count, $pager->numPages());
+            $res .= $pager_links['all'];
+            $_SESSION[$this->table]['pageID']= $pager->getCurrentPageID();
 			
 			return $res;
 		}
