@@ -47,10 +47,8 @@ use Getopt::Std;
 
 my $dbh;
 
-#XXX these don't work!
-my $opt_t ;
-my $opt_v;
 
+our($opt_t, $opt_v); #loathe perl
 getopts('vt') or &usage();
 
 &main();
@@ -382,23 +380,24 @@ sub checkChanges(){
 	#XXX should i call the newkids, etc here?
 }
 
-
-sub checkDeletes(){
+sub deleteReverse(){
 	my $ws = shift;
 	my $session = shift;
 	my ($rquery , $rqueryobj , $ritemref) ;
+	my ($row, $maxrow, $col, $maxcol, $vr, $start, $end, $cnt) ;
 	my %ritem;
 	#this one goes through the logic BACKWARDSS!
 	#it selects * from kids where they haven't dropped out,
 	# then iterates through the sheet looking for them
-	#if it doesn't find them, it drops them. (confirm first!!?)
 
 	$rquery = "
-		select kids.first, kids.last, families.name
+		select kids.first, kids.last, enrol.semester, enrol.sess
 			from attendance
 			left join enrol on attendance.enrolid = enrol.enrolid
 			left join kids on kids.kidsid = attendance.kidsid
-			left join families on kids.familyid = families.familyid
+			where enrol.semester = '2003-2004'  
+				and enrol.sess = '$session'
+				and attendance.dropout is null
 	";
 
 	print "DEBUG doing <$rquery>\n"; #debug only
@@ -407,9 +406,65 @@ sub checkDeletes(){
 
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
 		%ritem = %$ritemref; #allocate this, so it persists
-		#TODO add callback opaque data for these: a ritemref!
-		&iterateRows($ws, $session, \&checkNewKids, 'row', \%ritem);
-	}
+
+		printf("DEBUG iterating thru, looking for %s %s\n",
+				$ritem{'first'}, $ritem{'last'} );
+
+		#ok, iterate through the sheet looking for this kid.
+		$row = $ws->{'MinRow'} ;
+		$maxrow = $ws->{'MaxRow'} ;
+		$cnt = 0; #none found so far!
+		$start = $end = 0; #none found so far!
+
+		while(defined $maxrow && $row <= $maxrow){
+			$col = $ws->{'MinCol'} ;
+			$maxcol = $ws->{'MaxCol'} ;
+			
+			#determine if we have a header row
+			$vr = &validRow($ws, $row, $col, $maxcol);
+
+			if ($vr == $maxcol){
+				#this is my header row!
+				#print "DEBUG this is the start row!\n";
+				$start++;
+			} else {
+				#a blank line means END of data
+				$end = $start && !$vr ? 1 : $end;
+
+				#i only want to do stuff if i've already passed the start row
+				if($start && !$end){
+					printf("DEBUG\tlookign at %s %s for match\n",
+						$ws->{'Cells'}[$row][3]->Value,
+						&unBaby($ws->{'Cells'}[$row][0]->Value) 
+					);
+					#FINALLY! count occurences of this thing!
+					if($ritem{'first'} eq 
+						$ws->{'Cells'}[$row][3]->Value &&
+						$ritem{'last'} eq 
+							&unBaby($ws->{'Cells'}[$row][0]->Value) )
+					{
+						printf("DEBUG found %s %s !\n",
+								$ritem{'first'}, $ritem{'last'} );
+						$cnt++;
+					}
+				}
+			}
+			$row++;
+		} #end spreadsheet walk
+		#ok, what do to if it's not there?
+		if($cnt < 1){
+			#it's been dropped
+			printf("DEBUG %s %s has been dropped OR moved from $session !\n",
+				$ritem{'first'}, $ritem{'last'} );
+			#TODO check 'sess' versus $session and deduce that they moved!
+
+		} elsif ($cnt > 1){
+			#error! we have TWO matches??!
+			printf("ERROR %s %s is in the roster twice??!\n",
+				$ritem{'first'}, $ritem{'last'} );
+			exit(1);
+		}
+	} #end ritem walk
 	
 }
 
@@ -436,7 +491,7 @@ sub iterateSheets()
 			next;
 		}
 		&iterateRows($ws, $session, \&checkHeaders, 'header');
-		#&checkDeletes($ws, $session); #TODO add the callback data!
+		&deleteReverse($ws, $session); #go backwards and see waz up
 		&iterateRows($ws, $session, \&checkNewKids, 'row');
 		&iterateRows($ws, $session, \&checkNewParents, 'row');
 		&iterateRows($ws, $session, \&checkChanges, 'row');
@@ -512,6 +567,7 @@ sub iterateRows()
 	my $session = shift;
 	my $checkCb = shift;
 	my $type = shift;
+	my $cbdata = shift;
 	my $start = 0;
 	my $end = 0;
 	my $vr = 0;
@@ -543,10 +599,13 @@ sub iterateRows()
 
 			#i only want to do stuff if i've already passed the start row
 			if($start && !$end){
+				printf("ROW $row ------- from %d to %d cols\n", 
+					$col, $maxcol);
 				if($checkCb && $type eq 'row'){
-					printf("ROW $row ------- from %d to %d cols\n", 
-						$col, $maxcol);
 					&$checkCb(&extractRow($ws, $row, $col, $maxcol), $session);
+				} elsif ($checkCb && $type eq 'rev' && $cbdata){
+					&$checkCb(&extractRow($ws, $row, $col, $maxcol), 
+						$session, $cbdata);
 				}
 			}
 		}
