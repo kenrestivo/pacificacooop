@@ -24,6 +24,7 @@
 use strict;
 use Spreadsheet::ParseExcel;
 use DBI;
+use Getopt::Std;
 
 
 #my %fieldarray = {
@@ -46,12 +47,23 @@ use DBI;
 
 my $dbh;
 
+getopts('dv') or &usage();
+
 &main();
 
 exit 0;
 
 #END GLOBAL AREA
 ###################################################
+
+
+
+sub usage()
+{
+
+	exit(1);
+}
+
 
 #######################
 #	DEBUGSTRUCT
@@ -112,6 +124,42 @@ sub unBaby()
 sub checkNewFamily(){
 	#look for a family. add a new one if it's not there, 
 	#	and return the insertid
+	#search in db. if kid isn't there, 
+	#	look for family, it should add one if needed.
+	#	then add the kid
+	my $rowref = shift;
+	my ($rquery , $rqueryobj , $ritemref, $query, $name) ;
+	my %ritem;
+	my $cnt = 0;
+
+	$name = &unBaby($$rowref[0]);
+	
+
+	#i want EXACT matches on familyname, none of this %% crap
+	$rquery = "select * from families where name like \"$name\" ";
+
+	print "DEBUG doing <$rquery>\n"; #debug only
+	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+	$rqueryobj->execute() or die "couldn't execute $!\n";
+
+	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		$cnt++;
+	}
+
+	if($cnt){
+		print "DEBUG: yes, this family is in the db\n";
+		return $$ritemref['familyid'];
+	} 
+	
+	$query = sprintf("insert into families set 
+			name = '%s' ,
+			phone = '%s'
+	",
+		$name, $$rowref[6]
+	);
+	print "DEBUG doing <$query>\n";
+	#print STDERR $dbh->do($query) . "\n";
+	#return $dbh->{'mysql_insertid'};
 }
 
 sub checkNewParents(){
@@ -124,13 +172,16 @@ sub checkNewParents(){
 
 sub checkNewKids(){
 	my $rowref = shift;
-	my ($rquery , $rqueryobj , $ritemref) ;
+	my $session = shift;
+	my ($rquery , $rqueryobj , $ritemref, $query);
+	my ($kidsid, $name, $famid) ;
 	my %ritem;
-	my $cnt;
+	my $cnt =  0;
 
 	#search in db. if kid isn't there, 
 	#	look for family, it should add one if needed.
 	#	then add the kid
+	$name = &unBaby($$rowref[0]);
 
 	$rquery = sprintf("select * from kids 
 			where first like \"%%%s%%\" and last like \"%%%s%%\"
@@ -142,6 +193,7 @@ sub checkNewKids(){
 	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 	$rqueryobj->execute() or die "couldn't execute $!\n";
 
+	#TODO check for duplicates already in there?
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
 		$cnt++;
 	}
@@ -151,10 +203,45 @@ sub checkNewKids(){
 		return $$ritemref['kidsid'];
 	} 
 	
-	#TODO otherwise, insert the new kid!
-	#	first, its family
-	#           $insertId = $dbh->{'mysql_insertid'}
+	#otherwise, insert the new kid!
+	#	first, get or insert its family
+	$famid = &checkNewFamily($rowref);	
+	if($famid < 1){
+		print "ERROR! familyid $famid\n";
+		exit(1);
+	}
+
+	#OK, add the little munchkin!
+	$query = sprintf("insert into kids set 
+			last = '%s' ,
+			first = '%s' ,
+			familyid = %d 
+	",
+		$name, $$rowref[3], $famid
+	);
+	print "DEBUG doing <$query>\n";
+	#print STDERR $dbh->do($query) . "\n";
+	#$kidsid = $dbh->{'mysql_insertid'};
 	
+	#add them to ATTENDANCE too! 
+	#	i am assuming that, since they are NEW kids, 
+	#	there aren't any entries for them in the attendance base yet!
+	#if($kidsid < 1){
+	#	print "ERROR! kidsid $kidsid\n";
+	#	exit(1);
+	#}
+	$query = sprintf("insert into attendance set 
+			kidsid = %d ,
+			enrolid = '%s'
+	",
+		#XXX i have horribly hacked this to HARD CODE for 2003-2004 session!
+		#	this MUST be fixed before the end of the school year!
+		$kidsid, $session eq 'AM' ? 1 : 2
+	);
+	print "DEBUG doing <$query>\n";
+	#print STDERR $dbh->do($query) . "\n";
+	#return $dbh->{'mysql_insertid'};
+
 	#TODO acc parent here too? why not, we know we need them/one
 	
 }
@@ -316,7 +403,7 @@ sub iterateRows()
 			#this is my header row!
 			#print "DEBUG this is the start row!\n";
 			if($checkCb && $type eq 'header'){
-				&$checkCb(&extractRow($ws, $row, $col, $maxcol));
+				&$checkCb(&extractRow($ws, $row, $col, $maxcol), $session);
 			}
 			$start++;
 		} else {
