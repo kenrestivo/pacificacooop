@@ -318,8 +318,8 @@ getAuthLevel($auth, $targetrealm)
 		user_error("getAuthLevel(): [$query]: $err", E_USER_ERROR);
 	}
 				
-	if (mysql_num_rows($listq) != 1){
-		user_error(sprintf("getAuthLevel(): You may NOT have more than one entry for userid %d and realm %d (and later, group)! The database is corrupted!", $auth['uid'], $realm), 
+	if (mysql_num_rows($listq) > 1){
+		user_error(sprintf("getAuthLevel(): You may NOT have more than one entry for userid %d and realm %s (and later, group)! The database is corrupted!", $auth['uid'], $targetrealm), 
 			E_USER_ERROR);
 		return 0; // there can beeee... only one!
 	}                  

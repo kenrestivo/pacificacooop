@@ -25,7 +25,7 @@
 	require_once("insurancefuncs.inc");
 	require_once("calendarfuncs.inc");
 	require_once("adminfuncs.inc");
-	require_once("solicitfuncs.inc");
+	//require_once("solicitfuncs.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -74,9 +74,10 @@
 	showMenuRow($auth, $u, 'Springfest Fees and Cash Donations', 
 		'incomeSummary', 'money', 'money.php');
 
-	//solicitation items
+	/* solicitation items
 	showMenuRow($auth, $u, 'Springfest Solicitation', 
 		'solicitSummary', 'solicitation', 'solicitation.php');
+	*/
 
 	/* insurance */
 	showMenuRow($auth, $u, 'Insurance and Drivers Licence Information', 

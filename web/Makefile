@@ -63,10 +63,10 @@ download-dev::
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)/ $(DEVHERE)
 
 commit-live:
-	(cd $(LIVEPATH); cvs commit -m "syncing")
+	(cd $(LIVEHERE); cvs commit -m "syncing")
 
 update-dev:
-	(cd $(DEVPATH); cvs update )
+	(cd $(DEVHERE); cvs update )
 
 sync-live: commit-live download-live
 
