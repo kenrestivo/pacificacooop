@@ -339,7 +339,7 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 	}
 	$s = count($headers);
 	//confessArray($headers, "headers($s)");
-	user_error("showRawQuery(): count $s", E_USER_NOTICE);
+	user_error("showRawQuery([$q]): count $s", E_USER_NOTICE);
 	if($dogt){
 		$grand[0] = 'GRAND TOTAL'; // always 0!
 		//confessArray($grand, "grand($s)");
