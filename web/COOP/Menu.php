@@ -6,6 +6,8 @@ require_once 'HTML/Menu.php';
 require_once 'HTML/Menu/DirectTreeRenderer.php';
 
 require_once('shared.inc');
+include('everything.inc');	
+include('members.inc');
 
 class CoopMenu extends HTML_Menu
 {
@@ -31,9 +33,8 @@ class CoopMenu extends HTML_Menu
 			$this->page =& $page;
 
 			// grab the legacy stuff
-			include('everything.inc');
+		
 			$sf = $this->page->indexEverything($sf_everything);
-			include('members.inc');
 			$members = $this->page->indexEverything($members_everything);
 
 			$this->indexed_all = array_merge($members, $sf);
