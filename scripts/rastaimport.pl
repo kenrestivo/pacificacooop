@@ -140,6 +140,8 @@ sub checkNewFamily(){
 	my $cnt = 0;
 	my $perlsucks = 0;
 
+	print "DEBUG checkNewFamily() called\n";
+
 	$name = &unBaby($$rowref[0]);
 	
 
@@ -266,6 +268,8 @@ sub checkNewParents(){
 	my %ritem;
 	my $cnt =  0;
 
+	print "DEBUG checkNewParents($session) called\n";
+
 	$famid = &checkNewFamily($rowref);
 	if($famid < 1){
 		print "ERROR! familyid $famid\n";
@@ -300,6 +304,8 @@ sub checkNewKids(){
 	my %ritem;
 	my $cnt =  0;
 	my $famid =  0;
+
+	print "DEBUG checkNewKids($session) called\n";
 
 	#search in db. if kid isn't there, 
 	#	look for family, it should add one if needed.
@@ -512,10 +518,15 @@ sub iterateSheets()
 		if($ws->{'Name'} !~ /Schedule/){
 			next;
 		}
+		print "DEBUG checking headers...\n";
 		&iterateRows($ws, $session, \&checkHeaders, 'header');
+		#print "DEBUG dropping the deleted ones...\n";
 		#&deleteReverse($ws, $session); #go backwards and see waz up
+		print "DEBUG checking new kids...\n";
 		&iterateRows($ws, $session, \&checkNewKids, 'row');
+		print "DEBUG checking new parents...\n";
 		&iterateRows($ws, $session, \&checkNewParents, 'row');
+		print "DEBUG checking for changes...\n";
 		&iterateRows($ws, $session, \&checkChanges, 'row');
 
 	} 
@@ -597,7 +608,7 @@ sub iterateRows()
 
 	$row = $ws->{'MinRow'} ;
 	$maxrow = $ws->{'MaxRow'} ;
-	printf("--------- SHEET:%s : from %d to %d rows\n", 
+	printf("--------- iterateRows: %s : from %d to %d rows\n", 
 		$ws->{Name}, $row, $maxrow
 	);
 
@@ -620,20 +631,22 @@ sub iterateRows()
 					&$checkCb(&extractRow($ws, $row, $col, $maxcol), $session);
 				}
 			}
-		} else {
+		}
+
+		$end = $start && $vr < 1 ? 1 : $end;
+
+		if($start > 1 && !$end) {
 			#a blank line means END of data
-			$end = $start && !$vr ? 1 : $end;
 
 			#i only want to do stuff if i've already passed the start row
-			if($start && !$end){
-				if($checkCb && $type eq 'row'){
-					&$checkCb(&extractRow($ws, $row, $col, $maxcol), $session);
-				} elsif ($checkCb && $type eq 'rev' && $cbdata){
-					&$checkCb(&extractRow($ws, $row, $col, $maxcol), 
-						$session, $cbdata);
-				}
+			if($checkCb && $type eq 'row'){
+				&$checkCb(&extractRow($ws, $row, $col, $maxcol), $session);
+			} elsif ($checkCb && $type eq 'rev' && $cbdata){
+				&$checkCb(&extractRow($ws, $row, $col, $maxcol), 
+					$session, $cbdata);
 			}
 		}
+
 		$row++;
 	}
 } #END ITERATEROWS
