@@ -38,7 +38,7 @@
 	print "<hr>\n";
 
 	//confessArray($auth, "index.php. login() returns with");
-	error_log("   ");
+	trigger_error("comin down the mountain....", E_USER_NOTICE);
 
 	if($auth['state'] != 'loggedin'){
 		done();
