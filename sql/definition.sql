@@ -237,6 +237,8 @@ CREATE TABLE families (
   family_id int(32) NOT NULL unique auto_increment,
   name varchar(255) default NULL,
   phone varchar(20) default NULL,
+	address varchar(255) default NULL,
+	email varchar (255) default NULL,
   PRIMARY KEY  (family_id),
 ) ;
 
@@ -329,7 +331,8 @@ CREATE TABLE kids (
   kid_id int(32) NOT NULL unique auto_increment,
   last_name varchar(255) default NULL,
   first_name varchar(255) default NULL,
-  family_id int(32) default NULL,
+	date_of_birth date default NULL, 
+ family_id int(32) default NULL,
   PRIMARY KEY  (kid_id),
 ) ;
 
