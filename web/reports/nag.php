@@ -35,6 +35,7 @@
 
 	printf("<form method=POST ACTION='%s'>\n", $_SERVER['PHP_SELF']);
 	
+	#TODO:  unpaidchecked? or something like that
 	$latechecked =  $HTTP_POST_VARS['lateonly'] ? "checked" : "";
 	printf("\t<input type='checkbox' name='lateonly' %s>", $latechecked);
 	
@@ -75,6 +76,10 @@
 	while($row = mysql_fetch_array($list))
 	{
 		$paid = checkPayments($row['familyid']);
+
+		#don't print this row if it's already paid up
+		if($unpaidchecked && $paid > 0)
+			continue;
 
 		print "<tr><td>\n";
 		print $row[name];
