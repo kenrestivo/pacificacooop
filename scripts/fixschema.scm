@@ -14,6 +14,16 @@
 ;; if it is a COLUMN, i'll want to do:
 ;;(cons (car tl) (string-join (cdr tl)))
 
+
+;; clean sql definition line
+;; TODO! must combine before yanking ,'s!
+(define (clean-line line)
+		 (map (lambda (y)
+				 (regexp-substitute/global #f  "[ \t]" y  'pre 'post)) 
+		  (map (lambda (x)
+				 (regexp-substitute/global #f  ",$" x  'pre 'post)) 
+			   (delete "" line))))
+
 ;; make sure it is a valid line
 (define (valid-def-line l)
 	  (if (and 
@@ -67,15 +77,5 @@
 
 
 
-
-
-;; clean sql definition line
-;; TODO! must combine before yanking ,'s!
-(define (clean-line line)
-		 (map (lambda (y)
-				 (regexp-substitute/global #f  "[ \t]" y  'pre 'post)) 
-		  (map (lambda (x)
-				 (regexp-substitute/global #f  ",$" x  'pre 'post)) 
-			   (delete "" line))))
 
 ;; EOF
