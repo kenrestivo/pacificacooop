@@ -9,7 +9,7 @@ DATE=${shell date +%Y.%m.%d.%H.%M.%S}
 DATAFILE=coopbackup-data$(DATE)
 DEFFILE=coopbackup-defs$(DATE)
 TABS=cooptabs$(DATE)
-TABLES=ins veh lic kids enrol parents kpglue
+TABLES=ins veh lic kids enrol parents kpglue keglue
 
 all::
 	@echo "not so fast... get specific"
@@ -25,8 +25,10 @@ dummy::
 reports::
 	mysql -u ken -p -h $(DBHOST) $(DBNAME) < queries.sql
 
+#XXX this is fucking broken. why? it works from shell, but not from makefile
 tabdump:
-	mkdir  $(TABS); cd $(TABS)
+	-(mkdir backups; cd backups)
+	(mkdir  $(TABS); cd $(TABS))
 	for i in $(TABLES); do \
 		echo "===== exproting $$i=== " ; \
 		mysql -B -e "select * from $$i" coop > $$i.txt ;\

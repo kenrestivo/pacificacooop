@@ -21,10 +21,9 @@ create table coop.ins(
 
 -- vehicle information (one-to-many to insurance)
 create table coop.veh(
-    vehid int(32) not null auto_increment,
+    vidnum varchar(17) not null,
     insid int(32),
-    vidnum varchar(17),
-    primary key (vehid)
+    primary key (vidnum)
 );
 
 -- license information
@@ -53,13 +52,20 @@ create table coop.kids(
     primary key (kidsid)
 );
 
--- enrollment info (one-to-many to kids)
+-- enrollment info (many-to-many to kids)
 create table coop.enrol(
     enrolid int(32) not null auto_increment,
 	semester varchar(50),
 	sess enum ('AM', 'PM'),
-	kidsid int(32),
     primary key (enrolid)
+);
+
+-- glue table for many-to-many: kids to enrolmment sessions
+create table coop.keglue (
+    keglueid int(32) not null auto_increment,
+	kidsid int(32),
+	enrolid int(32),
+    primary key (keglueid)
 );
 
 -- parents who have insurance and/or licenses. (many-to-many to kids)
