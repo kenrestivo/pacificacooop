@@ -119,34 +119,58 @@ class coopForm extends CoopObject
 		{
 			
 			//$this->obj->debugLevel(2);
+
 			$old = $this->obj; // copy, not ref!
 			
-			// hack around nulls
-			foreach($vars as $key => $val){
-				// i'm duplicating saveok here, basically
-				
-				if($val){
-					$cleanvars[$key] = $val;
-				}
-			}
-
-			$this->obj->setFrom($cleanvars);
 		
-			if($vars[$this->pk]){
-				$old->get($vars[$this->pk]);
-				if(!$old->find(true)){
-					user_error("save couldn't get its pk", E_USER_ERROR);
-				}
-				
-				$this->obj->update($old);
+			$this->obj->setFrom($this->scrubForSave($vars));
+
+			// better way to guess?
+			if($vars[$this->pk]){		
+				$this->update(&$old);
 			} else {
-				user_error("new not implemented yet", E_USER_ERROR);
+				$this->insert();
 			}
 			//saveAudit($this->table, $id, $page->auth['uid']);
 					
 			return true;
 		}
 
+
+	function scrubForSave($vars)
+		{
+			// hack around nulls
+			foreach($vars as $key => $val){
+				
+				// i'm duplicating saveok here, basically
+				
+				if($val){
+					$cleanvars[$key] = $val;
+				}
+			}
+			return $cleanvars;
+
+		}
+
+	
+	function update(&$old)
+		{
+			
+			$old->get($vars[$this->pk]);
+			if(!$old->find(true)){
+				user_error("save couldn't get its pk", E_USER_ERROR);
+			}
+			
+			$this->obj->update($old);
+		
+			return $this->obj->{$this->pk};
+		}
+
+
+	function insert()
+		{
+			user_error("new not implemented yet", E_USER_ERROR);
+		}
 
 
 } // END COOP FORM CLASS
