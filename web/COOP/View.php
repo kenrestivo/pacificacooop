@@ -31,6 +31,7 @@ class coopView extends CoopObject
 {
 
 	var $legacyCallbacks;			// hack for old callbacks
+	var $permissions; 				//  new perms structure
 	var $legacyPerms; 			// cache of permissions for this page ($p)
 	var $extraRecordButtons;  // HACK for non-standard actions, i.e. thankyous
 	//var $legacyFields;  //YAGNI. i hope
@@ -338,12 +339,14 @@ class coopView extends CoopObject
 			}
 
 			//confessObj($this, 'this');
-			$res .= $this->page->selfURL('Edit', 
+			if($this->permissions){
+				return $this->page->selfURL('Edit', 
 									  array( 
 										  'action' => 'edit',
 										  'table' => $this->table,
 										  $this->pk => $this->obj->{$this->pk}
 										  ));
+			}
 			return $res;
 		}
 
@@ -362,7 +365,11 @@ class coopView extends CoopObject
 										 $this->legacyCallbacks, 
 										 $showview,  1);
 			}
-			
+
+			//if($this->permissions){
+				//return new stuff
+			//}
+
 			return $res;
 		}
 

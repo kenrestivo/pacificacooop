@@ -38,7 +38,8 @@ class Companies extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $fb_linkDisplayFields = array('company_name', 'last_name','first_name');
+	var $fb_linkDisplayFields = array('company_name', 'last_name',
+									  'first_name');
 	var $fb_fieldLabels = array (
 		'company_name' => 'Company Name',
 		"family_id" => 'Is this company owned by a Co-Op Family?',

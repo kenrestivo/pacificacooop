@@ -45,8 +45,12 @@ class coopForm extends CoopObject
 			if($sid =thruAuthCore($this->page->auth)){
 				$hackform->addElement('hidden', 'coop', $sid); 
 			}
-			$hackform->addElement('hidden', 'action', 'process');
+
 			$hackform->addElement('hidden', 'table', $this->table);
+			$hackform->addElement('hidden', 'action', 'process');
+
+			// NOTE i can't use facking [] here. bummer
+			$this->build->elementNamePrefix = $this->table . '-';
 			
 			$this->build->useForm($hackform);
 			$form =& $this->build->getForm();
