@@ -19,9 +19,11 @@
 
 	require_once("first.inc");
 	require_once("shared.inc");
-	require_once("auth.inc");
+		require_once("auth.inc");
 
-	require_once("everything.inc");
+	require_once("roster.inc");
+
+
 
 	print "<HTML>
 		<HEAD>
@@ -55,6 +57,14 @@
 	print "\n\n<table border=1>\n";
 	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
 
+	//narsty-ass ugly hack
+	$parth = pathinfo($_SERVER['SCRIPT_FILENAME']);
+	$dir = $parth['dirname'] ;
+	if(preg_match('/member/', $dir) > 0  ){
+		require_once("members.inc");
+	} else {
+		require_once("everything.inc");
+	}
 	
     while ( list( $key, $val ) = each($everything)) {
 		user_error(sprintf("main(): showing row for %s", $val['description']),

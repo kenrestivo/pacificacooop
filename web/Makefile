@@ -18,9 +18,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-NFSNRSYNC=/nfsn/bin/rsync 
+#NFSNRSYNC="--rsync-path=/nfsn/bin/rsync"
 NFSNUSR=ken
-NFSNHOST=phx3.nearlyfreespeech.net
+NFSNHOST=phx1.nearlyfreespeech.net
 NFSNDOCROOT=/nfsn/content/paccoop/htdocs
 NFSNLIVEPATH=$(NFSNDOCROOT)/sf/
 LIVEHERE=../livesite/
@@ -40,14 +40,15 @@ help::
 upload-live::
 	-rm $(LIVEHERE)/.\#*
 	rsync -e ssh \
-		--rsync-path=$(NFSNRSYNC) -avxWcC  \
+		$(NFSNRSYNC) \
+		-avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
 		$(LIVEHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNLIVEPATH)
 
 download-live::
 	rsync -e ssh \
-		--rsync-path=$(NFSNRSYNC) -avxWcC  \
+		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
 		--exclude '*.sql' \
@@ -56,14 +57,14 @@ download-live::
 upload-dev:: 
 	-rm $(DEVHERE)/.\#*
 	rsync -e ssh \
-		--rsync-path=$(NFSNRSYNC) -avxWcC  \
+		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
 		$(DEVHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)
 
 download-dev::
 	rsync -e ssh \
-		--rsync-path=$(NFSNRSYNC) -avxWcC  \
+		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
 		--exclude '*.sql' \

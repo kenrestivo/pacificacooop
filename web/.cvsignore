@@ -4,4 +4,5 @@ Entries
 Root
 dbhost.inc
 .swp
-.rej
+~
+.emacs.desktop
