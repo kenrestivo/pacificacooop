@@ -80,11 +80,11 @@ Sincerely,
 
 [:FROM:]
 
-Pacifica Co-op Nursery School
-548 Carmel Avenue
-Pacifica, Ca 94044
-650 355-3272
-http://www.pacificacoop.org/
+P.S.	The Internal Revenue Code requires us to acknowledge our tax-deductible contribution in writing and to confirm that we provided no goods or services in consideration for your gift.  The Pacifica Co-op Nursery School is a 501(c)(3) non-profit organization (Tax ID # 94-1527749).  Please keep this acknowledgement with your tax records.
+
+Pacifica Co-op Nursery School 
+548 Carmel Avenue Pacifica, Ca 94044 
+650 355-3272 http://www.pacificacoop.org/
 ";
 
 	function ThankYou(&$cp)
