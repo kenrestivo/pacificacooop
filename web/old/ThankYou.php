@@ -380,8 +380,7 @@ http://www.pacificacoop.org/
 
 			// format auction
 			while($real->obj->fetch()){
-				$this->items_array[] = sprintf("%d %s (total value $%01.02f)",
-											   $real->obj->quantity,
+				$this->items_array[] = sprintf("%s (total value $%01.02f)",
 											   $real->obj->item_description,
 											   $real->obj->item_value);
 				$soliciting_families[]= $real->obj->family_id;
@@ -409,8 +408,7 @@ http://www.pacificacoop.org/
 
 			//format in-kind
 			while($real->obj->fetch()){
-				$this->items_array[] = sprintf("%d %s total value $%01.02f",
-											   $real->obj->quantity,
+				$this->items_array[] = sprintf("%s total value $%01.02f",
 											   $real->obj->item_description,
 											   $real->obj->item_value);
 				$soliciting_families[]= $real->obj->family_id;
@@ -507,8 +505,7 @@ http://www.pacificacoop.org/
 			$real->obj->thank_you_id = $this->thank_you_id;
 			$found = $real->obj->find();
 			while($real->obj->fetch()){
-				$this->items_array[] = sprintf("%d %s (total value $%01.02f)",
-											   $real->obj->quantity,
+				$this->items_array[] = sprintf("%s (total value $%01.02f)",
 											   $real->obj->item_description,
 											   $real->obj->item_value);
 				$sf =& new CoopObject(&$this->cp , 
@@ -525,8 +522,7 @@ http://www.pacificacoop.org/
 			$real->obj->thank_you_id = $this->thank_you_id;
 			$real->obj->find();
 			while($real->obj->fetch()){
-				$this->items_array[] = sprintf("%d %s total value $%01.02f",
-											   $real->obj->quantity,
+				$this->items_array[] = sprintf("%s total value $%01.02f",
 											   $real->obj->item_description,
 											   $real->obj->item_value);
 				$sf =& new CoopObject(&$this->cp , 

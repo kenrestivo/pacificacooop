@@ -35,6 +35,9 @@ class coopView extends CoopObject
 	var $extraRecordButtons;  // HACK for non-standard actions, i.e. thankyous
 	//var $legacyFields;  //YAGNI. i hope
 
+	// i will need the old-skool callbacks and perms
+	// in order to use the old-skool buttons and actions calculations
+	// when i have new-skool button and dispatcher, this will be depreciated
 	function createLegacy($callbacks)
 		{
 			
@@ -200,11 +203,19 @@ class coopView extends CoopObject
 	function toArray()
 		{
 						
+			$table = $this->obj->table();
 			$row = $this->obj->toArray();
 			foreach($row as $key => $val){
 				// this is where the fun begins.
 				if($this->isPermittedField($key)){
-					$res[] = $this->checkLinkField(&$this->obj, $key, $val);
+					// XXX better way to do all this dispatching
+					if($table[$key] & DB_DATAOBJECT_MYSQLTIMESTAMP){ 
+						$res[] = timestamp_db_php($val);
+					} else if ($table[$key] &  DB_DATAOBJECT_DATE){
+						$res[] = sql_to_human_date($val);
+					} else {
+						$res[] = $this->checkLinkField(&$this->obj, $key, $val);
+					}
 				}
 			}
 

@@ -208,10 +208,14 @@ timestamp_db_php($date)
 	$hour   = substr($date,8,2);
 	$minute = substr($date,10,2);
 	$second = substr($date,12,2);
+	$ampm = $hour < 12 ? "AM" : "PM";
+	if($hour > 12){
+		$hour -= 12;
+	}
 	/*$epoch = date("U", mktime($time[0],$time[1],$time[2],
 						$datebreak[1],$datebreak[2],$datebreak[0])); */
-	$datetime = sprintf("%02d/%02d/%04d&nbsp;%02d:%02d:%02d",
-						$month, $day, $year,$hour,$minute, $second );
+	$datetime = sprintf("%02d/%02d/%04d&nbsp;%02d:%02d:%02d %s",
+						$month, $day, $year,$hour,$minute, $second, $ampm );
 	return $datetime;
 } /* EDN TIMESTAMPEDBPHP */
 
