@@ -45,5 +45,6 @@ class Leads extends DB_DataObject
 									'do_not_contact');
 	var $fb_enumFields = array ('relation', 'source'); // make this a link
 	var $fb_linkDisplayFields = array ('last_name', 'first_name', 'address1');
-	var $fb_selectAddEmpty = array ('source_id');
+	var $fb_selectAddEmpty = ('source_id', 'family_id');
+//	var $fb_preGenerateForm
 }

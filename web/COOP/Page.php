@@ -261,7 +261,6 @@ class coopPage
 			//print_r($this);
 			$id = $id ? $id : $_SESSION[$this->table]['id'];
 			$this->obj->get($id);
-			$this->obj->fb_submitText = "Save"; // hack. it ignores conf 
             $this->build =& DB_DataObject_FormBuilder::create (&$this->obj);
             //confessObj($this->build, "build");
             $form =& new HTML_QuickForm(); 
@@ -422,8 +421,8 @@ class coopPage
 
 				// this may not actually belong here
 			$res .= $this->selfURL('Add New', 
-							sprintf('tables[%s][action]=detail', 
-									$this->table));
+							sprintf('tables[%s][action]=detail&tables[%s][id]=', 
+									$this->table, $this->table));
 				 
 			$res .= $this->selfURL('Close', 
 							sprintf('tables[%s][action]=done', 
