@@ -238,9 +238,11 @@ class coopPage
 			$pager_parms = array (
 				'mode' => 'Sliding',
 				'perPage' => 10,
-				'urlVar' => $this->table . '[pageID]',
+				'urlVar' => $this->table . '_pageID', // does not like heir?
+				'sessionVar' => $this->table . '_pageID', 
 				'delta' => 2,
-				'itemData' => $pager_item_data
+                'useSessions' => 1,
+                'itemData' => $pager_item_data
 				);
 			$pager =& new Pager($pager_parms);
 			$pager_result_data = $pager->getPageData();
@@ -253,8 +255,7 @@ class coopPage
             $res .= sprintf("%d total records found, in %d pages<br>",
                 $count, $pager->numPages());
             $res .= $pager_links['all'];
-            $_SESSION[$this->table]['pageID']= $pager->getCurrentPageID();
-			
+            			
 			return $res;
 		}
 
