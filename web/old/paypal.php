@@ -45,7 +45,7 @@ class paypalForm extends HTML_QuickForm
                 $urlsuffix = "-dev";
             }
 			
-			$this->HTML_QuickForm($formname, 'get', $this->server);
+			$this->HTML_QuickForm($formname, 'get', $this->server, false, 1);
 			if($headerflag){
 				$this->addElement('header', 'tickets', $title);
 			}	
