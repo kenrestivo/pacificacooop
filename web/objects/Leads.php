@@ -65,4 +65,41 @@ class Leads extends DB_DataObject
 									'do_not_contact'=> "Do Not Contact After");
 	var  $fb_formHeaderText = "Springfest Invitation Contacts";
 //	var $fb_preGenerateForm
+
+	// can be called with no leadid if it's already in the object itself
+	// and no find is needed
+	// this is used in RSVP and tickets
+	function showUser($leadid = false)
+		{
+			if($leadid){
+				$this->lead_id = $leadid;
+				$found = $this->find(true);
+				if(!$found){
+					return false;
+				}
+			}
+			// ripped from thankyou, mostly. should abstract it out!
+			$address_array[] = implode(' ', array($this->salutation,
+												  $this->first_name,
+												  $this->last_name
+										   ));
+
+			// note: it's company in leads, company_name in companies. fock.
+			foreach(array('title', 'company', 'address1', 'address2') 
+					as $var)
+			{
+				if($this->$var){
+					$address_array[] = $this->$var;
+				}
+			}
+			$address_array[] = sprintf("%s %s, %s", 
+									   $this->city,
+									   $this->state,
+									   $this->zip);		
+			$address = implode('<br>', $address_array);
+
+			return $address;
+		}
+
+
 }

@@ -5,12 +5,12 @@
 chdir("../");                   // XXX only for "test" dir hack!
 require_once('first.inc');
 require_once('CoopPage.php');
-require_once('RSVPWizard.php');
+require_once('TicketWizard.php');
 
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
-$debug = 0;
+$debug = 1;
 
 
 $cp = new coopPage( $debug);
@@ -23,7 +23,7 @@ $cp->header();
 print $cp->selfURL('Refresh');
 
 
-$wiz =& new RSVPWizard(&$cp);
+$wiz =& new TicketWizard(&$cp);
 $wiz->run();
 
 $_SESSION=$_REQUEST; 			// keep sessioninit happy
