@@ -22,6 +22,7 @@
 use Time::Local; 
 use POSIX;
 use DBI;
+use Mail::Sendmail;
 
 #arggh
 $in = shift;
@@ -64,12 +65,17 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	$insref = &getinsuranceinfo($id);
 	$licref = &getlicenseinfo($id);
 
+	#TODO the entire architecture of this thing is botched!
+	#	i MUST handle the case of more than one working parent!
+	#	i.e. BOTH their drivers licenses must be up to date.
+
 	# the report of people i need to call or write a note to!
 	#if(!$famref->{'email'}){
 	#	print &fieldTripReport($famref, $insref, $licref, $checkdate, 1);
 	#}
 	if($famref->{'email'}){
-		print &emailReminder($famref, $insref, $licref, $checkdate, 1);
+		&emailReminder($famref, $insref, $licref, $checkdate, 1);
+
 	}
 
 } # end while
@@ -171,14 +177,13 @@ sub emailReminder()
 	#	$licref->{'exp'}, $insref->{'exp'});
 	#
 
-	$m .= "Subject: Insurance Information for Co-Op\n\n";
 	$m .= "Hello! My job this year is to keep track of the automobile insurance and driver's license information for the school.\n\n";
 
 	#insurance
 	if($insref->{'exp'}){
 		if($insref->{'exp'} < $checkdate){
 			$m .= sprintf(
-					"The %s insurance card on file for the %s family expired on %s.\n\n",
+					"The '%s' insurance card on file for the %s family expired on %s.\n\n",
 
 					$insref->{'companyname'},
 					$famref->{'name'},
@@ -225,7 +230,7 @@ sub emailReminder()
 
 	$m .= "If you could, please place a copy of ";
 	if($if){
-		$m .= "your current insurance card (the one that you keep in your car)"
+		$m .= "your current insurance card (the one that most people keep in their car)"
 	}
 	if($lf && $if){
 		$m .= " and ";
@@ -241,9 +246,26 @@ sub emailReminder()
 
 	#ok, finish up.
 	if($if || $lf){
-		return $m;
+		#confirm
+		printf("\n--------------\n<%s>\nemail the above message to %s %s?\n",
+			$m,
+			$famref->{'first'},
+			$famref->{'last'},
+			);
+		$res = <STDIN>;
+		if($res =~ /^[yY]/){
+			%mail = ( 	To => $famref->{'email'},
+						From => 'ken@restivo.org',
+						Subject=> "Insurance Information for Co-Op",
+						Message => $m,
+					);
+			#SEND!
+			sendmail(%mail) or die $Mail::Sendmail::error;
+			printf("result: <%s>\n", $Mail::Sendmail::log);
+		}
+		return 1;
 	} else {
-		return "";
+		return 0;
 	}
 
 } #END EMAILREMINDER
