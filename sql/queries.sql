@@ -137,23 +137,39 @@ select  inc.incid, inc.checknum, inc.payer, coa.description, inc.amount,
 
 -- query for deleting/updating session stuff
 select * from attendance 
-	left join kids on attendance.kidsid = kids.kidsid 
-	left join families on kids.familyid = families.familyid 
+		left join kids on attendance.kidsid = kids.kidsid 
+		left join families on kids.familyid = families.familyid 
 	where families.name like "%hearne%";
 
 -- show the kids that need to be add/dropped
 select attendance.*, kids.first, kids.last, families.name
 	from attendance
-	left join kids on kids.kidsid = attendance.kidsid
-	left join families on kids.familyid = families.familyid
+		left join kids on kids.kidsid = attendance.kidsid
+		left join families on kids.familyid = families.familyid
 	order by families.name
 
 -- for the delete checking
 select kids.first, kids.last, enrol.semester, enrol.sess
 	from attendance
-	left join enrol on attendance.enrolid = enrol.enrolid
-	left join kids on kids.kidsid = attendance.kidsid
+		left join enrol on attendance.enrolid = enrol.enrolid
+		left join kids on kids.kidsid = attendance.kidsid
 	where enrol.semester = '2003-2004'  and attendance.dropout is null
+
+-- find orphaned auctionss
+select auction.*, families.name 
+	from auction 
+		left join faglue on faglue.auctionid = auction.auctionid 
+		left join families on families.familyid = faglue.familyid 
+	where faglue.familyid is null 
+	order by auctionid
+
+-- find orphaned checks (serious)
+select inc.*, families.name 
+	from inc 
+		left join figlue on figlue.incid = inc.incid 
+		left join families on families.familyid = figlue.familyid 
+	where figlue.familyid is null 
+	order by incid
 
 
 --- EOF
