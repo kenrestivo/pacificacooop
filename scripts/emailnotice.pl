@@ -75,7 +75,7 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	}
 
 	if($flag){
-		print &expiredReport($famref, $insref, $licref);
+		print &expiredReport($famref, $insref, $licref, $checkdate);
 	}
 
 } # end while
@@ -198,6 +198,7 @@ sub expiredReport()
 	my $famref = shift;
 	my $insref = shift;
 	my $licref = shift;
+	my $checkdate = shift;
 	my $badness = "";
 
 	#printf("DEBUG lic %d ins %d\n", 
@@ -213,25 +214,29 @@ sub expiredReport()
 
 	#insurance
 	if($insref->{'exp'}){
-		$badness .= sprintf(
-				"\tins %s company %s policy %s \n",
-				strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
-				$insref->{'companyname'},
-				$insref->{'policynum'}
-			);
+		if($insref->{'exp'} < $checkdate){
+			$badness .= sprintf(
+					"\tins %s company %s policy %s \n",
+					strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
+					$insref->{'companyname'},
+					$insref->{'policynum'}
+				);
+		}
 	} else {
 		$badness .= "\tno insurance info\n";
 	}
 	
 	#license
 	if($licref->{'exp'}){
-		$badness .= sprintf(
-				"\tlic %s driver %s %s %s \n",
-				strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
-				$licref->{'first'},
-				$licref->{'middle'},
-				$licref->{'last'}
-		);
+		if($licref->{'exp'} < $checkdate){
+			$badness .= sprintf(
+					"\tlic %s driver %s %s %s \n",
+					strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
+					$licref->{'first'},
+					$licref->{'middle'},
+					$licref->{'last'}
+			);
+		}
 	} else {
 		$badness .= "\tno license info\n";
 	}
