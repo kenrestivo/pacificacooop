@@ -30,13 +30,23 @@ if(0){
 
 } else {
 	$cid = 114;
-	foreach(array("companies", 'companies_income_join', 
-				  'companies_auction_join', 'flyer_deliveries') as $table){
+	foreach(array("companies", 'flyer_deliveries') as $table){
 		$view = new CoopView(&$cp, $table);
 		$view->obj->company_id = $cid;
 		print $view->simpleTable();
 	}
 
+	$cij =& new CoopObject(&$page, 'companies_income_join');
+	$cij->obj->company_id = $cid;
+	$cij->obj->find();
+	while($cij->obj->fetch()){
+		$inc =& new CoopView(&$page, 'income');
+		$inc->obj->income_id = $cij->obj->income_id;
+		$inc->simpleTable();
+	}
+		
+	
+//'companies_income_join', 'companies_auction_join', 
 }
 
 done ();

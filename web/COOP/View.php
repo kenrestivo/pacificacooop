@@ -65,15 +65,23 @@ class coopView extends CoopObject
 	// formats object is current in this object, um, as a table
 	function simpleTable()
 		{
-			$this->obj->find();
+			$found = $this->obj->find();
 
-			//TODO return null or something, if nothing found
+			if($found < 1){
+				return false;
+			}
+
 			$tab =& new HTML_Table();
+			//$this->addTableTitle(&$tab); // XXX do i need this anymore?
+			$this->addHeader(&$tab);
+
 			while($this->obj->fetch()){
 				//$tab->addRow(array_values($this->obj->toArray()));
 				$tab->addRow($this->toArray());
 			
 			}
+			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
+						
 			return $tab->toHTML();
 		}
 
@@ -178,45 +186,6 @@ class coopView extends CoopObject
 		}
 
 
-	function recurseTable()
-		{
-			//confessObj($this->obj, "recurseTable(): obj $this->table");
-			$found = $this->obj->find();
-
-			if($found < 1){
-				return false;
-			}
-
-			//print "found $found for $this->table<br>";
-
-			$this->getLinks();	// MUST be after find!
-
-			$jointable = 0; ///preg_match('/_join/', $this->table);
-
-			// only indent the sub-level tables
-			$attr = $this->recurseLevel ? 'class=sub' : NULL;
-			$tab =& new HTML_Table($attr);
-
-			// TODO:  forbidden names
-			// XXX nasty hack
-			if(!$jointable){
-				//$this->addTableTitle(&$tab); // XXX do i need this anymore?
-				$this->addHeader(&$tab);
-			}
-			while($this->obj->fetch()){
-				// the main row.
-				if(!$jointable){
-					$tab->addRow($this->toArray());
-				}
-				//subrows
-				$this->addSubTables(&$tab, $this->backlinks);
-				//$this->addForwardTables(&$tab);
-
-			}
-
-			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
-			return $tab->toHTML();
-		}
 
 	
 
