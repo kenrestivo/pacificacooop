@@ -80,10 +80,13 @@ select max(ins.expiration_date) as exp, parents.family_id, families.name,
     order by exp desc;
     -- note: in an actualy scripted query, i'll add where parents.family_id =
 
---- show kids and enrollment
-select kids.*, enrollment.* 
+--- THIS IS THE ROSTER!
+ select kids.last_name, kids.first_name, enrollment.* 
     from kids 
-        left join enrollment using (kid_id);
+        left join enrollment using (kid_id) 
+	where enrollment.school_year = '2004-2005' 
+	order by enrollment.am_pm_session, kids.last_name, kids.first_name;
+
 
 -- show all springfest payments
 select families.name, sum(income.payment_amount) as total
@@ -533,7 +536,7 @@ select  auction_items_families_join.family_id  ,
         in_kind_donations desc, companies.company_name asc;
 
 
--- check thank-you's
+-- check solicitation thank-you's
  select company_name, 
     count(distinct(income.income_id)) as cash_donations,
     count(distinct(auction_donation_items.auction_donation_item_id)) 
@@ -547,6 +550,7 @@ select  auction_items_families_join.family_id  ,
               on companies_auction_join.auction_donation_item_id = 
                 auction_donation_items.auction_donation_item_id 
                     and auction_donation_items.school_year = '2004-2005'
+                    and auction_donation_items.date_received > '2000-01-01'
                     and auction_donation_items.thank_you_id is null
         left join companies_income_join 
               on companies_income_join.company_id = companies.company_id
