@@ -4,6 +4,9 @@
 require_once("CoopPage.php");
 require_once("CoopMenu.php");
 
+PEAR::setErrorHandling(PEAR_ERROR_PRINT);
+
+
 ///////////////////////
 $cp = new CoopPage;
 $cp->pageTop();

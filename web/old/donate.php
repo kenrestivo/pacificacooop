@@ -222,6 +222,7 @@ print "<hr>";
 
 
 print "<h3>Purchase tickets to Springfest</h3>";
+print "<p>Event tickets are $25 each</p>";
 print tickets();
 print "<hr>";
 

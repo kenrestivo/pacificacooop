@@ -3,7 +3,7 @@
 //$Id$
 
 /*
-	Copyright (C) 2003  ken restivo <ken@restivo.org>
+	Copyright (C) 2004  ken restivo <ken@restivo.org>
 	 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -313,23 +313,19 @@ class coopPage
 		{
 			
 			global $_DB_DATAOBJECT;
-		//confessObj($_DB_DATAOBJECT, "dataobject");
+			//confessObj($_DB_DATAOBJECT, "dataobject");
 			$tab =  $this->obj->tableName();
 			$links = $_DB_DATAOBJECT['LINKS']['coop']; // XXX hard code hack! 
-			$this->confessArray($links, "links");
+			//$this->confessArray($links, "links");
 			foreach($links as $maintable => $link){
 				foreach ($link as $nearcol => $farline){
 					// split up farline and chzech it
 					list($fartable, $farcol) = explode(':', $farline);
 					if($fartable == $tab){
 						$id = $this->obj->$farcol;
-						//$res[$maintable] = array($farcol, $nearcol);
-						if($id){
+							//$res[$maintable] = array($farcol, $nearcol);
 							$res[$maintable]['id'] = $id;
-							$res[$maintable]['action'] = 'detail';
-						} else {
 							$res[$maintable]['action'] = 'list';
-						}
 					}
 				}
 			}
@@ -337,20 +333,6 @@ class coopPage
 			return $res;
 		}
 	
-	//assumes obj is already set to the current id. valid assumption?
-	function addBackLinks($backlinks)
-		{
-			$overrides = array();
-			$table = $this->obj->tableName();
-			foreach($backlinks as $col => $struct){
-				list($our, $their) = $struct;
-				$overrides[$table]['action'] = 'list';
-				$overrides[$table]['id'] = $this->obj->$our;
-			}
-			return $overrides;
-		}
-
-
 
 	function listTable($table = false, $id = false)
 		{
@@ -366,19 +348,23 @@ class coopPage
 			$pagertext = $this->calcPager();
 			$this->obj->limit($this->pager_start - 1, 
 							  $this->pager_result_size);
+
 			// constrain for searches
+			// XXX move this outta here, to genericise the table display
+			// i should be able to use this in a lot of places
 			if($id){
 				$this->obj->get($id);
 			} else {
 				$this->obj->find();					// new find with limit.
 			}
 
-			$this->getBackLinks();
+
 
 				
 			// now the table
 			$hdr = 0;
 			while ($this->obj->fetch()){
+				$this->getBackLinks();
 				$ar = array_merge(
 					$this->selfURL("Edit", 
 							sprintf('tables[%s][action]=detail&tables[%s][id]=%s',

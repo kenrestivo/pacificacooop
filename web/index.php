@@ -37,11 +37,9 @@
 	';
 	warnDev();
 
-	$pv = $_POST ? $_POST : $_GET;
 
 
-	$auth = logIn($pv);
-
+	$auth = logIn($_REQUEST);
 	if($auth['state'] != 'loggedin'){
 		done();
 	}
