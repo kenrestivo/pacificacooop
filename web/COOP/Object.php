@@ -38,6 +38,8 @@ class coopObject
 	var $pk;					// the primary key. convenience, really.
 	var $recurseLevel;			// level, if i'm linked from somewhere
 	var $parentObj;				// reference to parent object
+	var $backlinks;				// list of links that are linked FROM here
+	var $forwardLinks;
 
 	function CoopObject (&$page, $table, $level = 0, $parent = NULL )
 		{
@@ -66,6 +68,31 @@ class coopObject
 			return $this->pk;
 	}
 
+	function getLinks()
+		{
+			
+//			confessObj($this, "view");
+			global $_DB_DATAOBJECT;
+			//confessObj($_DB_DATAOBJECT, "getLinks() dataobject");
+			$tab =  $this->obj->tableName(); // XXX dup with $this->table
+			$links =& $_DB_DATAOBJECT['LINKS'][$this->obj->database()];
+			$this->forwardLinks = $links[$tab];
+			$this->page->confessArray($links, 
+									  "getLinks: links for $this->table");
+			foreach($links as $maintable => $mainlinks){
+				foreach ($mainlinks as $nearcol => $farline){
+					// split up farline and chzech it
+					list($fartable, $farcol) = explode(':', $farline);
+					if($fartable == $tab){
+						$res[$maintable] = $nearcol;
+					}
+				}
+			}
+			$this->backlinks = $res;
+			$this->page->confessArray($res,
+									  "getLinks() backlinks for $this->table");
+			return $this->backlinks;
+		}
 
 	//  inspired by formbuilder's getdataobjctselectdisplayvalue (whew!)
 	function checkLinkField(&$obj, $key, $val)

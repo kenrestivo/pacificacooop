@@ -43,12 +43,12 @@ class Income extends DB_DataObject
 	var $fb_fieldLabels = array( 
 		"family_id" => "Co-Op Family",
 		"check_number" => "Check or Credit Card Auth number" ,
-		"check_date" => "Date of Check (MM/DD/YYYY)" ,
+		"check_date" => "Date of Check" ,
 		"payer" => "Person issuing check" ,
 		'payment_amount' => 'Amount ($)' ,
 		"account_number" => "Account",
 		"note" => "Misc Notes" ,
-		"school_year" => "School Year (YYYY-YYYY)" 
+		"school_year" => "School Year" 
 		);
 //	var $fb_crossLinks = array(array('table' => 'families_income_join', 
 	//'fromFild' => 'income_id', 'toField' => 'family_id'));

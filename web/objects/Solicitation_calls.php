@@ -35,8 +35,8 @@ class Solicitation_calls extends DB_DataObject
 		"method_of_contact" => "Contact Method",
 		"call_note" => "Note" ,
 		"family_id" => "Soliciting Family",
-		"done" => "Date of Call (MM/DD/YYYY)" ,
-		"school_year" => "School Year (YYYY-YYYY)" 
+		"done" => "Date of Call" ,
+		"school_year" => "School Year" 
 		);
 	var $kr_longTitle = 'Springfest Solicitation Miscellaneous Notes';
 }

@@ -207,8 +207,10 @@ class coopView extends CoopObject
 	function tableTitle()
 		{
 			$res = sprintf("<hr><h2>%s %.50s</h2>", 
-						   $this->obj->kr_longTitle ? $this->obj->kr_longTitle : ucwords($this->table),
-						   $this->parentSummary ? "for " . $this->parentSummary : "");
+						   $this->obj->kr_longTitle ? 
+						   $this->obj->kr_longTitle : ucwords($this->table),
+						   $this->parentSummary ? 
+						   "for " . $this->parentSummary : "");
 														
 			return $res;
 		}

@@ -50,7 +50,7 @@ class Packages extends DB_DataObject
 		"package_value" => 'Estimated Value ($)' ,
 		"starting_bid" => 'Starting Bid ($)' ,
 		"bid_increment" => 'Bid Increment ($)', 
-		"school_year" => "School Year (YYYY-YYYY)" 
+		"school_year" => "School Year" 
 
 		);
 	var $kr_longTitle = "Springfest Packages";

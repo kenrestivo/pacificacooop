@@ -43,8 +43,8 @@ class Auction_donation_items extends DB_DataObject
 		"item_description" => "Description of item" ,
 		'item_value' => 'Estimated TOTAL Value ($)' ,
 		"item_type" => "Physical Product or Gift Certificate",
-		"date_received" => "Date Item received (MM/DD/YYYY)" ,
-		"school_year" => "School Year (YYYY-YYYY)" ,
+		"date_received" => "Date Item received" ,
+		"school_year" => "School Year" ,
 		"auction_donation_item_id" => "Unique ID" 
 		);
 	var $kr_longTitle =  'Springfest Auction Donation Items';
