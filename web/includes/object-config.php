@@ -24,21 +24,32 @@
 
 require_once("PEAR.php");
 
-$config = parse_ini_file('coop-dbobj.ini',TRUE);
-foreach($config as $class=>$values) {
-    $options = &PEAR::getStaticProperty($class,'options');
-    $options = $values;
+function parseIniFile($filename)
+{
+	$config = parse_ini_file($filename,TRUE);
+	foreach($config as $class=>$values) {
+		$options = &PEAR::getStaticProperty($class,'options');
+		$options = $values;
+	}
+	// to hack around dbobject trashing my settings
+	global $_DB_DATAOBJECT_FORMBUILDER;
+	$_DB_DATAOBJECT_FORMBUILDER['CONFIG'] = 
+		$config['DB_DataObject_FormBuilder'];
+
 }
 
-// to hack around dbobject trashing my settings
-$_DB_DATAOBJECT_FORMBUILDER['CONFIG'] = $config['DB_DataObject_FormBuilder'];
+function hackDBURL()
+{
+	// override database url with my crufty old caraap!
+	global $dburl;
+	$options = &PEAR::getStaticProperty('DB_DataObject','options');
+	$options['database'] = $dburl;
 
-// override database url with my crufty old caraap!
+}
+
+parseIniFile('coop-dbobj.ini');
 require_once("session-init.php");
 setupDB(1);
-global $dburl;
-$options = &PEAR::getStaticProperty('DB_DataObject','options');
-$options['database'] = $dburl;
-
+hackDBURL();
 
 ?>

@@ -50,9 +50,9 @@ class coopObject
 			$this->recurseLevel = $level;
 			$this->parentCO = $parentCO;
 			
-			$this->obj =& DB_DataObject::factory($this->table); // & instead?
-			if (PEAR::isError($obj)){
-				 user_error("coopObject::constructor: " . $obj->getMessage(),
+ 			$this->obj = DB_DataObject::factory($this->table); // & instead?
+			if (PEAR::isError($this->obj)){
+				 user_error("coopObject::constructor: " . $this->obj->getMessage(),
 							E_USER_ERROR);
 			}
 			//confessObj($this->obj, "CONSTRUCTOR object for $this->table");

@@ -163,7 +163,7 @@ print sponsors(&$cp);
 print '</div><!-- end leftcol div -->';
 
 print '<div id="rightCol">';
-print auctionItems(&$cp, $sy);
+//print auctionItems(&$cp, $sy);
 
 
 print "<p><a href='../index.html'>Home</a></p>
