@@ -1,15 +1,14 @@
 <?php 
 
 //$Id$
-require_once("first.inc");
-require_once("shared.inc");
-require_once("auth.inc");
+require_once("CoopPage.php");
 
 require_once 'HTML/Menu.php';
 require_once 'HTML/Menu/DirectTreeRenderer.php';
 
 
-function indexEverything($everything){
+function indexEverything($everything)
+{
 	foreach ($everything as $thang => $val){
 		$val['fields'] = $$val['fields'];
 		$indexed_everything[$val['page']] = $val;
@@ -19,7 +18,8 @@ function indexEverything($everything){
 	return $indexed_everything;
 } 
 
-function callbacksToMenu($everything){
+function callbacksToMenu($everything)
+{
 	foreach($everything as $key => $cbs){
 		$menustruct[] = array(
 			'title' => $cbs['description'],
@@ -29,7 +29,8 @@ function callbacksToMenu($everything){
 	return $menustruct; 
 }
 
-function getMoney($ie){
+function getMoney($ie)
+{
 	foreach($ie as $page => $cbs){
 		if($cbs['maintable'] == 'income'){
 			$moneymenu[] = array(
@@ -41,40 +42,43 @@ function getMoney($ie){
 	}
 }
 
-
-///////////////////////
-print '<HTML>
-				<HEAD>
-						<link rel=stylesheet href="main.css" title=main>
-							<TITLE>Data Entry</TITLE>
-				</HEAD>
-				<BODY>
-				<h2>Pacifica Co-Op Nursery School Data Entry</h2>
-				';
-
-			
-///
-warnDev();
-
-user_error("states.inc: ------- NEW PAGE --------", E_USER_NOTICE);
-
-
-$this->auth = logIn($_REQUEST);
-
-
-if($this->auth['state'] != 'loggedin'){
-	done();
+function getRealms($ie)
+{
+	foreach($ie as $key => $cbs){
+		$realms[] = $cbs['realm'];
+				
+	}
+	$realms = array_unique($realms);
+	asort($realms);
+confessArray($realms, "realmsort");
+	return $realms;
 }
 
+function nestByRealm($ie, $realms)
+{
+	foreach($realms as $k => $realm){
+		$res[$realm]['title'] = $realm;
+		foreach($ie as $key => $cbs){
+			if($cbs['realm'] == $realm){
+				$res[$realm]['sub'][$key] = array(
+					'title' => $cbs['description'],
+					'url' => $cbs['page']);
+				}
+		}
+	}
+	return $res;
+}
 
-topNavigation($this->auth,  getUser($this->auth['uid']));
-
-
+///////////////////////
+$cp = new CoopPage;
+$cp->pageTop();
 
 include('everything.inc');
 $sf = indexEverything($everything);
 include('members.inc');
 $members = indexEverything($everything);
+
+
 
 
 $heirmenu = array(
@@ -83,7 +87,7 @@ $heirmenu = array(
 		'sub' => callbacksToMenu($members)),
 	array(
 		'title' => 'Springfest',
-		'sub' => callbacksToMenu($sf)));
+		'sub' => nestByRealm($sf, getRealms($sf))));
 	
 //confessArray($sf, "sf");
 
@@ -92,7 +96,7 @@ $renderer =& new HTML_Menu_DirectTreeRenderer();
 $menu->render($renderer, $type);
 print $renderer->toHtml();
 
-
+confessArray(nestByRealm($sf, getRealms($sf)), "nestedbyrealm");
 	
 //$menu->setMenuType('urhere');
 //$menu->show();
