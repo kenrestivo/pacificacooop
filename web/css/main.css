@@ -79,10 +79,8 @@ h3 {
   width: 25ex;
 	background-color:  #ffcc99;
 	  float: left;
-	margin-right:  1em;
 	margin-left:  .5em;
 	padding-left:  .5em;
-	padding-right: 1em;
 }
 
 #header { 
@@ -90,9 +88,14 @@ h3 {
  }
 
 #rightCol {
-/* 	margin-left: 30ex; */
-   width: 85%; 
+ 	margin-left: 30ex; 
+   margin-right: 5%; 
 	/* margin: 0 0 0 40ex; */
+}
+
+#centerCol {
+ 	margin-left: 1ex; 
+   margin-right: 2ex; 
 }
 
 #footer {
@@ -140,6 +143,7 @@ p.letter{
 	font-family: "Times New Roman", serif; 
 	font-size: 12pt; 
  }
+
 
 #toplogo{  
 	display: none;
