@@ -51,20 +51,35 @@ sub fixem {
 
 		print "found id $lostid: $lostlast, $lostfirst $lostmiddle\n"; #DEBUG
 
-		$where = "where last like \"\%$lostlast\%\" and first like \"\%$lostfirst\%\" ";
 		
-		#ok, any matches?
+		#count how many last/first matches
+		$where = "where last like \"\%$lostlast\%\" and first like \"\%$lostfirst\%\" ";
+		#NOTE! $where is used often, DO NOT just stuff the string in the checkcount()!
 		$fcount = &checkcount($where);
+		if($fcount < 1){
+			#if 0; count last-only matches
+			print "NO match for $lostlast, $lostfirst $lostmiddle\n";
+			$where = "where last like \"\%$lostlast\%\"";
+			$fcount = &checkcount($where);
+		}
 
-		print "um, there are $fcount matches\n"; #debug
+		if($fcount == 1){
+			#if 1; just do it
+			&useonly($tab, $where, $lostid);
+			next;
+		}
+
+		if($fcount > 1){
+			#if > 1; multichoose
+			print "multiple choice for $lostlast, $lostfirst $lostmiddle:\n";
+			&choosemulti($tab, $where, $lostid);
+			next;
+		}
 
 		if($fcount < 1){
-			print "NO match for $lostlast, $lostfirst $lostmiddle\n";
-		} elsif($fcount == 1){
-			&useonly($tab, $where, $lostid);
-		} else {
-			&choosemulti($tab, $where, $lostid);
+			print "NO match for $lostlast AT ALL\n";
 		}
+
 	} # end while
 } #end sub
 
@@ -79,6 +94,7 @@ sub checkcount {
 	my %fitem = %$fitemref;
 	my $fcount = $fitem{'howmany'};
 	$fqueryobj->finish();
+	print "um, there are $fcount matches\n"; #debug
 	return $fcount;
 }
 
@@ -87,24 +103,28 @@ sub choosemulti {
 	my $where = shift;
 	my $lostid = shift;
 	my $id;
+	my @choices ;
+	my $reply = "";
+	my $nreply = 0;
 
 	#ok *sigh* let the user pick... pick pick....
-	print "ok, your choices are: ";
 	print "type id of the RIGHT replacement, or, return to give up\n";
-	my $mquery = "select parentsid as count from parents $where";
+	my $mquery = "select * from parents $where";
 	my $mqueryobj = $dbh->prepare($mquery) 
 		or die "can't prepare <$mquery>\n";
 	$mqueryobj->execute() or die "couldn't execute $!\n";
 
 	while (my $mitemref = $mqueryobj->fetchrow_hashref){
 		my %mitem = %$mitemref;
-		print " id: " , $mitem{'parentsid'}, " " , 
-			$mitem{'last'}, ", " , $mitem{'first'}, " " , 
-			$mitem{'middle'} , "\n";
+		push(@choices, $mitem{'parentsid'});
+		print "\tid: " , $mitem{'parentsid'}, " " , 
+			$mitem{'last'}, ", " , $mitem{'first'}, "\n";
 	}
-	my $reply = <STDIN>;
-	if($reply > 0){
-		&replace($tab, $id, $lostid);
+	$reply = <STDIN>;
+	chomp $reply;
+	$nreply = $reply =~ /^\d+$/ ? $reply : 0;
+	if($nreply > 0){ #XXX check that the reply is valid, it was in @choices!
+		&replace($tab, $nreply, $lostid);
 	}
 }
 
