@@ -53,46 +53,6 @@ $accessnames = array(
 );
 
 
-$states = array(
-	loggedout => array (
-				func => "loggedOutState",
-				description => "Logged out"
-				),
-	nullpass => array (
-				func => "nullPassState",
-				description => "User has password in database"
-				),
-	wrongpass => array (
-				func => "wrongPassState",
-				description => "Wrong password"
-				),
-	nouser => array (
-				func => "noUserState",
-				description => "No such user"
-				),
-	confirmwrong => array (
-				func => "confirmWrongState",
-				description => "Confirmation password doesn't match"
-				),
-	insecurepass => array (
-				func => "insecurePassState",
-				description => "New password doesn't meet minimum requirements"
-				),
-	passsaved => array (
-				func => "passSavedState",
-				description => "New password saved to db"
-				),
-	passcorrect => array (
-				func => "passCorrectState",
-				description => "User typed in correct password!"
-				),
-	loggedin => array (
-				func => "loggedInState",
-				description => "User is logged in"
-				)
-);
-
-
 
 /******************
 	SAVEPASS
@@ -356,21 +316,60 @@ function loginPopup($uid)
 
 /******************
 	LOGIN
-	logs a user in. abstracted here to be used in several places
-		functions like a main() for common auth functions
+	the state machine
 	inputs: an auth struct
-	outputs: error messages as needed
-	returns: a token if the user is now successfully logged in, otherwise 0.
+	outputs: status/error messages as needed
+	returns: the auth struct with necessary changes
 ******************/
 function
 logIn($auth)
 {
-	global $states;
-
 	confessArray($auth, "logIn()");
+
+	$states = array(
+		loggedout => array (
+					func => "loggedOutState",
+					description => "Logged out"
+					),
+		nullpass => array (
+					func => "nullPassState",
+					description => "User has password in database"
+					),
+		wrongpass => array (
+					func => "wrongPassState",
+					description => "Wrong password"
+					),
+		nouser => array (
+					func => "noUserState",
+					description => "No such user"
+					),
+		confirmwrong => array (
+					func => "confirmWrongState",
+					description => "Confirmation password doesn't match"
+					),
+		insecurepass => array (
+					func => "insecurePassState",
+					description => "New password doesn't meet minimums"
+					),
+		passsaved => array (
+					func => "passSavedState",
+					description => "New password saved to db"
+					),
+		passcorrect => array (
+					func => "passCorrectState",
+					description => "User typed in correct password!"
+					),
+		loggedin => array (
+					func => "loggedInState",
+					description => "User is logged in"
+					)
+	);
+
+
 
 	printf("logIn(): entering %s\n",
 		$states[$auth['state']]['description']);
+
 	return $states[$auth['state']]['func']($auth);
 
 
@@ -404,6 +403,9 @@ nullPassState($auth)
 function
 wrongPassState($auth)
 {
+	$newauth['state'] = "loggedout";
+
+	return $newauth;
 }/* END  */
 
 
@@ -444,6 +446,10 @@ insecurePassState($auth)
 function
 passSavedState($auth)
 {
+
+	$newauth['state'] = "loggedin";
+
+	return $newauth;
 }/* END  */
 
 
@@ -454,6 +460,10 @@ passSavedState($auth)
 function
 passCorrectState($auth)
 {
+
+	$newauth['state'] = "loggedin";
+
+	return $newauth;
 }/* END  */
 
 
