@@ -40,7 +40,7 @@ insert into coa set
 insert into coa set
 			acctnum = 4,
 			join_to_table = "families",
-			description = "SpringFest Misc Cash donation";
+			description = "SpringFest Misc Family Cash donation";
 
 insert into coa set
 			acctnum = 5,
@@ -61,6 +61,12 @@ insert into coa set
 			acctnum = 8,
 			join_to_table = "raffle_locations",
 			description = "SpringFest Raffle Ticket Sales";
+
+insert into coa set
+			acctnum = 9,
+			join_to_table = "companies",
+			description = "SpringFest Misc Solicitation Cash Donation";
+
 
 
 -- groups

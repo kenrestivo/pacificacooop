@@ -31,6 +31,7 @@
 	require_once("pkg_checkin_funcs.inc");
 	require_once("solicit_company.inc");
 	require_once("solicit_auction.inc");
+	require_once("solicit_cash.inc");
 	require_once("raffle_finance.inc");
 	require_once("raffle_locations.inc");
 
@@ -70,6 +71,7 @@
 	$menu = array( $auctioncallbacks, $invitationcallbacks, 
 					$incomecallbacks, $pkgcheckincallbacks,  
 					$solicit_company_callbacks, $solicit_auction_callbacks,
+					$solicit_cash_callbacks, 
 					$raffle_income_callbacks, $raffle_location_callbacks
 		);
 
