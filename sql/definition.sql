@@ -67,8 +67,10 @@ create table coop.keglue (
 -- parents who have insurance and/or licenses. (many-to-many to kids)
 create table coop.parents(
     parentsid int(32) not null auto_increment,
-    parentslast varchar(255),
-    parentsfirst varchar(255),
+    last varchar(255),
+    first varchar(255),
+	ptype enum ('Mom', 'Dad', 'Partner'),
+	worker enum ('Yes', 'No'),
 	familyid int(32),
     primary key (parentsid)
 );
