@@ -346,4 +346,15 @@ insert into ticket_type set
             description = "Other",
             paid_flag = 'No';
 
+-----counter table
+insert into counters set
+            column_name = 'paddle_number',
+            school_year = '2003-2004',
+            counter = 907;
+
+insert into counters set
+            column_name = 'paddle_number',
+            school_year = '2004-2005',
+			counter = 1;
+
 -- EOF

@@ -315,6 +315,18 @@ class coopObject
 			$this->obj->school_year = findSchoolYear();
 		}
 
+	function getCounter($column, $schoolyear = false)
+		{
+			if(!$schoolyear){
+				$schoolyear  = findSchoolYear();
+			}
+			$this->obj->query("update counters set 
+						counter = last_insert_id(counter+1) 
+				where column_name='$column' and school_year = $schoolyear");
+			return $this->lastInsertID();
+		}
+
+
 } // END COOP OBJECT CLASS
 
 

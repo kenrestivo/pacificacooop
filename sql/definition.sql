@@ -506,7 +506,6 @@ CREATE TABLE springfest_attendees (
   parent_id int(32) default NULL,
 	temp_name varchar(255) default NULL,
   school_year varchar(50) default NULL,  
-  income_id int(32) default NULL,
   PRIMARY KEY  (springfest_attendee_id)
 ) ;
 
@@ -875,6 +874,14 @@ CREATE TABLE sponsorships (
     school_year varchar(50) default NULL,
     PRIMARY KEY (sponsorship_id)
 ) ;
+
+
+CREATE TABLE counters (
+    counter_id int(32) primary key not null unique auto_increment,
+    column_name varchar(255),
+    counter INT UNSIGNED,
+    school_year varchar(50) default NULL
+  );
 
 
 -- EOF
