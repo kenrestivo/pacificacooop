@@ -35,18 +35,16 @@ for(my $sh=0; $sh < $bk->{SheetCount} ; $sh++) {
 																					$wk = $bk->{Worksheet}[$sh];
 	print "--------- SHEET:", $wk->{Name}, "\n";
 
-	for(my $row = $wk->{MinRow} ;
-		defined $wk->{MaxRow} && $row <= $wk->{MaxRow} ; 
-		$row++) 
-	{
+	my $row = $wk->{MinRow} ;
+	while(defined $wk->{MaxRow} && $row <= $wk->{MaxRow}){
 		print "ROW $row -------\n";
-		for(my $col = $wk->{MinCol} ;
-			defined $wk->{MaxCol} && $col <= $wk->{MaxCol} 
-			; $col++) 
-		{
+		my $col = $wk->{MinCol} ;
+		while(defined $wk->{MaxCol} && $col <= $wk->{MaxCol}){
 			$cell = $wk->{Cells}[$row][$col];
 			print "( $row , $col ) =>", $cell->Value, "\n" if($cell);
+			$col++;
 		}
+		$row++;
 	}
 }
 
