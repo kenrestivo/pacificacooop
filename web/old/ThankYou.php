@@ -284,11 +284,11 @@ http://www.pacificacoop.org/
 	function findThanksNeeded(&$cp, $pk, $id)
 		{
 
-
 			// if i'm going to save objects, don't createlegacy them.
 			// save MY view objects, not the DBDO objects,
 			// so that i can createlegacy them later if needed.
-			
+
+			$sy = findSchoolYear();
 
 			// COMPANY
 			$co = new CoopView(&$cp, 'companies', &$top);
@@ -311,6 +311,7 @@ http://www.pacificacoop.org/
 			$co = new CoopObject(&$cp, 'companies_income_join', &$top);
 			$co->obj->$pk = $id;
 			$real = new CoopView(&$cp, 'income', &$co);
+			$real->obj->school_year = $sy;
 			$real->obj->orderBy('school_year desc');
 			$real->obj->joinadd($co->obj);
 			// TODO: add "and cleared_date is not null" cleared checks!
@@ -318,11 +319,11 @@ http://www.pacificacoop.org/
 			$real->obj->find();
 			while($real->obj->fetch()){
 				$cashtotal += $real->obj->payment_amount;
-				// TODO: grab the parentid of familyid... for from. bah.
-				//$from .=  
+				$soliciting_families[]= $real->obj->family_id;
 			}
 			$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
 				
+
 			//AUCTION
 			$co = new CoopObject(&$cp, 'companies_auction_join', 
 								 &$top);
@@ -331,6 +332,7 @@ http://www.pacificacoop.org/
 								 &$co);
 			$real->obj->orderBy('school_year desc');
 			//TODO: add "and date_received is not null"! only received!
+			$real->obj->school_year = $sy;
 			$real->obj->whereAdd('thank_you_id is null');
 			$real->obj->joinadd($co->obj);
 			$real->obj->find();
@@ -339,8 +341,8 @@ http://www.pacificacoop.org/
 											   $real->obj->quantity,
 											   $real->obj->item_description,
 											   $real->obj->item_value);
-				// TODO: grab the parentid of familyid... for from. bah.
-				//$from .=  
+				$soliciting_families[]= $real->obj->family_id;
+				
 			}
 
 			//IN-KIND
@@ -351,6 +353,7 @@ http://www.pacificacoop.org/
 								 &$co);
 			$real->obj->orderBy('school_year desc');
 			//TODO: add "and date_received is not null"! only received!
+			$real->obj->school_year = $sy;
 			$real->obj->whereAdd('thank_you_id is null');
 			$real->obj->joinadd($co->obj);
 			$real->obj->find();
@@ -359,11 +362,22 @@ http://www.pacificacoop.org/
 											   $real->obj->quantity,
 											   $real->obj->item_description,
 											   $real->obj->item_value);
-				// TODO: grab the parentid of familyid... for from. bah.
-				//$from .=  
+				$soliciting_families[]= $real->obj->family_id;
 			}
 	
-
+			// ugh. go get the soliciting parent
+			foreach(array_unique($soliciting_families) as $fam){
+				$par =& new CoopObject(&$cp, 'parents', 
+								 &$top);
+				$par->obj->family_id = $fam;
+				$par->obj->type = 'Mom';
+				$par->obj->find(true);
+				$solicit_parents[] = sprintf("%s %s", 
+											 $par->obj->first_name, 
+											 $par->obj->last_name);
+				
+			}
+			$this->from = implode(", ", $solicit_parents);
 		}
 
 } // END THANK YOU CLASS
