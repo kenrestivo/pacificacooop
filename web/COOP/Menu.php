@@ -204,34 +204,6 @@ class CoopMenu extends HTML_Menu
 			return $res;
 		}
 	
-    // just for testing. not actually used in real code
-	function create(&$page)
-		{		
-			$this->page =& $page;
- 
-		//	print "HEY" .  $page->selfURL(false, 'companies[action]=list');
-			$heirmenu = array(
-				array(
-					'title' => 'Solicitation Test',
-					'url' => $page->selfURL(
-						false, 'tables[companies][action]=list')),
-				array(
-					'title' => 'New Invitations Test',
-					'url' => $page->selfURL(
-						false, 'tables[invitations][action]=list')),
-				array(
-					'title' => 'Files Test',
-					'url' => $page->selfURL(
-						false, 'tables[files][action]=list')),
-				array(
-					'title' => 'Leads Test',
-					'url' => $page->selfURL(
-						false, 'tables[leads][action]=list')));
-	
-
-			$this->setMenu($heirmenu);
-
-		}
 
 
 } // END COOPMENU CLASS
