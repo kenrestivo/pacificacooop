@@ -58,7 +58,7 @@ class CoopMenu extends HTML_Menu
 			$this->setURLPrefix($prefix);
 
 			// grab the legacy stuff
-		
+			// NOTE! you must manually include the things. i don't do it here
 			global $sf_everything;
 			global $members_everything;
 			$sf = $this->page->indexEverything($sf_everything);

@@ -18,15 +18,17 @@ $cp = new coopPage( $debug);
 $cp->pageTop();
 
 
-foreach(array("families") as $table){
-	$view = new CoopView(&$cp, $table);
-		// XXX hack! use the get() form instead if you know index
-		//$pk = $view->getPK(); 
-	$u = getUser($cp->auth['uid']);
-	$view->obj->family_id = $u['family_id'];
-	print $view->recurseTable();
-}
-
+// foreach(array("families") as $table){
+// 	$view = new CoopView(&$cp, $table);
+// 		// XXX hack! use the get() form instead if you know index
+// 		//$pk = $view->getPK(); 
+// 	$u = getUser($cp->auth['uid']);
+// 	$view->obj->family_id = $u['family_id'];
+// 	print $view->recurseTable();
+// }
+$view = new CoopView(&$cp, 'companies');
+//$view->obj->company_id = 8;
+print $view->recurseTable();
 
 done ();
 

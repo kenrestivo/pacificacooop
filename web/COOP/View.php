@@ -38,21 +38,21 @@ class coopView
 	var $pk;					// the primary key
 	var $backlinks;				// list of links that are linked FROM here
 	var $recurseLevel;			// level, if i'm linked from somewhere
-	var $linkFrom;				// where this was linked from
+	var $parent;				// reference to parent object
 
-	function CoopView (&$page, $table, $level = 0, $linkfrom = false )
+	function CoopView (&$page, $table, $level = 0, $parent = NULL )
 		{
 
 			$this->page = $page;
 			$this->table = $table ;
 			$this->recurseLevel = $level;
-			$this->linkFrom = $linkfrom;
+			$this->parent = $parent;
 			
 			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
 			if (PEAR::isError($obj)){
 				die ($obj->getMessage ());
 			}
-			//confessObj($this->obj, "object for $this->table");
+			//confessObj($this->obj, "CONSTRUCTOR object for $this->table");
 				
 		}
  
@@ -64,12 +64,13 @@ class coopView
 			
 //			confessObj($this, "view");
 			global $_DB_DATAOBJECT;
-			//confessObj($_DB_DATAOBJECT, "dataobject");
+			//confessObj($_DB_DATAOBJECT, "getBackLinks() dataobject");
 			$tab =  $this->obj->tableName();
-			$links = $_DB_DATAOBJECT['LINKS']['coop']; // XXX hard code hack! 
-			//$this->page->confessArray($links, "links");
-			foreach($links as $maintable => $link){
-				foreach ($link as $nearcol => $farline){
+			$links =& $_DB_DATAOBJECT['LINKS']['coop']; // XXX hard code hack! 
+			$this->page->confessArray($links, 
+									  "getBackLinks: links for $this->table");
+			foreach($links as $maintable => $mainlinks){
+				foreach ($mainlinks as $nearcol => $farline){
 					// split up farline and chzech it
 					list($fartable, $farcol) = explode(':', $farline);
 					if($fartable == $tab){
@@ -78,7 +79,8 @@ class coopView
 				}
 			}
 			$this->backlinks = $res;
-			$this->page->confessArray($res,"backlinks");
+			$this->page->confessArray($res,
+									  "getBackLinks() backlinks for $this->table");
 			return $this->backlinks;
 		}
 	
@@ -123,12 +125,15 @@ class coopView
 			foreach($this->backlinks as $backtable => $farkey){
 				//TODO i have to check forbidden tables here too!
 				$subview =& new CoopView(&$this->page, $backtable, 
-										 $this->recurseLevel + 1);
+										 $this->recurseLevel + 1,
+										 &$this);
 				$subview->obj->$farkey = $this->obj->$nearkey;
 // 				printf("linking %s.%s to %s.%s<br>", 
 // 					   $this->table, $this->pk, 
 // 					   $backtable, $farkey);
+				//confessObj($subview, "addSubTables(): $backtable obj");
 				$recursed = $subview->recurseTable();
+		
 				if($recursed){
 					$this->addSubTable(&$tab, sprintf('%s<br>%s', 
 													  $backtable, 
@@ -156,7 +161,8 @@ class coopView
 			if(!$links){
 				return $val;
 			}
-			$this->page->confessArray($links, "links for $this->table");
+			$this->page->confessArray($links, 
+									  "checkLInkField(): links for $this->table");
 
 			if(!$links[$key]){
 				return $val;
@@ -164,9 +170,9 @@ class coopView
 
 			//ok, we have run the fucking gauntlet here.
 			//confessObj($obj, 
-//					   "from $this->table: obj with links for $key of $val");
+//					   "checkLinkField() from $this->table: obj with links for $key of $val");
 			$subobj = $obj->getLink($key); 
-	//confessObj($subobj, "subobj $subobj->__table for $key of $val");
+	//confessObj($subobj, "checkLInkFild() subobj $subobj->__table for $key of $val");
 
 				// only if i have linkfields in the dataobj
 			$ldfs = $subobj->fb_linkDisplayFields;
@@ -195,7 +201,7 @@ class coopView
 			// the Simple Version. useful for debuggin'
 			//return array_values($this->obj->toArray());
 
-			//$this->page->confessArray($res, "resR array");
+			//$this->page->confessArray($res, "toArray() array");
 			return $res;
 		}
 
@@ -213,24 +219,23 @@ class coopView
 			$tab->addRow($res, 'bgcolor=#9999cc', 'TH'); 
 		}
 
-	function addTableTitle(&$tab)
-		{
-		
-		}
 
 	function recurseTable()
 		{
+			//confessObj($this->obj, "recurseTable(): obj $this->table");
 			$found = $this->obj->find();
-			
+
 			if($found < 1){
 				return false;
 			}
+
+			//print "found $found for $this->table<br>";
 
 			$this->getBackLinks();	// MUST be after find!
 
 			$this->getPK(); // must this be after find? rather constructor.
 
-			$jointable = preg_match('/_join/', $this->table);
+			$jointable = 0; //preg_match('/_join/', $this->table);
 
 			// only indent the sub-level tables
 			$attr = $this->recurseLevel ? 'class=sub' : NULL;
