@@ -1,10 +1,17 @@
+/* $Id$ */
 p,table,li,h1,h2,h3
 {
-font-family: verdana, arial, 'sans serif'; 
+	font-family: verdana, arial, 'sans serif'; 
 }
 
 
 p,li,th,td
 {
-font-size: 75%;
+	font-size: 75%;
 }
+
+.foobar {
+	background: grey;
+}
+
+div.box { border: solid; border-width: thin; width: 100% }
