@@ -171,5 +171,11 @@ select inc.*, families.name
 	where figlue.familyid is null 
 	order by incid
 
+-- show the total auction amount (for a family)
+select families.name, sum(auction.amount) as amount
+	from families
+		left join faglue on families.familyid = faglue.familyid
+		left join auction on faglue.auctionid = auction.auctionid
+	group by families.familyid
 
 --- EOF
