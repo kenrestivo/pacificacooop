@@ -64,7 +64,7 @@
 
 
 ;;;;; the various committee defaults here
-(define (springfest-gods dbh list-of-names)
+(define (springfest-goddesses dbh list-of-names)
   (for-each (lambda (user-name)
 			  (for-each (lambda (realm)
 						  (change-privs dbh user-name realm 800 800))
@@ -99,14 +99,14 @@
 
 (define (update-2004-2005)
   (let ((dbh (apply simplesql-open "mysql"
-					(read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf"))))
+					(read-conf "/mnt/kens/ki/proj/coop/sql/db-kens.conf"))))
 	;; now the solicitation
 	 (solicits dbh
 			   '("depriest" "refino" "kaitz" "solano" "mrad" "gaffney" "bauer"))
      ;; packaging committee
      (change-privs-list dbh '("white-roger+michelle" "walker" "pacheco")
                         "packaging" 700 500)
-     ;; program committee
+     ;; program committee: packages
      (change-privs-list dbh '("treckeme" "stewart")
                         "packaging" 200 200 )
      ;; program: so they can see the ads too
@@ -125,11 +125,16 @@
      ;; invitations committee
      (change-privs-list dbh '("david" "devry") "invitations" 700 600)
      
+     ;; nag committee
+     (change-privs-list dbh '("julian" "blackman") "nag" 200 200)
+
      ;; the chairs, overriding defaults
 	 (do-chairs dbh chairs)
+     
 	 ;; finally the admins, overriding al;
-	 (springfest-gods dbh '("vreeland" "cooke"))
-	 (simplesql-close dbh)))
+	 (springfest-goddesses dbh '("vreeland" "cooke"))
+
+     (simplesql-close dbh)))
 
 
 
