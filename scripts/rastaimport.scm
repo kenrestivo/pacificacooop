@@ -31,6 +31,13 @@
 
 ;;;;;;;;;;;;;;; functions for updating the database
 
+(define (check-session-changes line header)
+  #t)
+
+(define (db-updates line header)
+  (check-for-new-kid line header)
+  (check-session-changes line header))
+
 ;; TODO: prompt user instead! pick amongst them
 (define (choose-duplicates db-res)
   (if (> 2 (false-if-exception
@@ -63,7 +70,7 @@
 						(sprintf #f "
 				select kidsid, last, first, familyid from kids
 					where soundex(first) = soundex('%s')
-						and last like \"%%%s%%\" "
+						and soundex(last) = soundex('%s') "
 								 (rasta-find "Child" line header)
 								 (rasta-find "Last Name" line header)
 								 ))))
@@ -86,11 +93,12 @@
 ;;;;;;;;;;; functions for importing and cleaning csv's from spreadsheet
 
 ;; each session gets dumped in separately, but then gets fixed here.
-(define (merge-am-pm rasta)
+(define (merge-am-pm rasta header)
   (hash-set! rasta "BOTH"
 			 (append 					; when i get elite, use macro here
 			  (map  (lambda (x) (append x '("AM"))) (hash-ref *rasta* "AM"))
-			  (map  (lambda (x) (append x '("PM"))) (hash-ref *rasta* "PM")))))
+			  (map  (lambda (x) (append x '("PM"))) (hash-ref *rasta* "PM"))))
+  (append header (list "session")))
 
 ;; wrapper around between: remove the header and footer crap
 (define (clean-up-rasta rasta header session)
@@ -129,10 +137,10 @@
 
 (grab-csv-rasta "AM" "/mnt/kens/ki/proj/coop/imports/AM.csv")
 (grab-csv-rasta "PM" "/mnt/kens/ki/proj/coop/imports/PM.csv")
-(merge-am-pm *rasta*)
+(set! *header* (merge-am-pm *rasta* *header*))
 
 ;; ok, start the pachinko machine!
-(for-each (lambda(line) (check-for-new-kid line *header*))
+(for-each (lambda(line) (db-updates line *header*))
 		  (hash-ref *rasta* "BOTH"))
 
 (simplesql-close *dbh*)
