@@ -22,153 +22,153 @@ use coop;
 
 -- accounts
 insert into coa set
-			acctnum = 1,
-			join_to_table = "families",
-			description = "SpringFest 10-names forfeit fee";
+            acctnum = 1,
+            join_to_table = "families",
+            description = "SpringFest 10-names forfeit fee";
 
 
 insert into coa set
-			acctnum = 2,
-			join_to_table = "families",
-			description = "SpringFest food/quilt fee";
+            acctnum = 2,
+            join_to_table = "families",
+            description = "SpringFest food/quilt fee";
 
 insert into coa set
-			acctnum = 3,
-			join_to_table = "families",
-			description = "SpringFest auction item forfeit fee";
+            acctnum = 3,
+            join_to_table = "families",
+            description = "SpringFest auction item forfeit fee";
 
 insert into coa set
-			acctnum = 4,
-			join_to_table = "families",
-			description = "SpringFest Misc Family Cash donation";
+            acctnum = 4,
+            join_to_table = "families",
+            description = "SpringFest Misc Family Cash donation";
 
 insert into coa set
-			acctnum = 5,
-			join_to_table = "companies",
-			description = "SpringFest Program Ad Insertion";
+            acctnum = 5,
+            join_to_table = "companies",
+            description = "SpringFest Program Ad Insertion";
 
 insert into coa set
-			acctnum = 6,
-			join_to_table = "leads,companies",
-			description = "SpringFest Ticket Purchase";
+            acctnum = 6,
+            join_to_table = "leads,companies",
+            description = "SpringFest Ticket Purchase";
 
 insert into coa set
-			acctnum = 7,
-			join_to_table = "companies,leads",
-			description = "SpringFest Sponsorship Package";
+            acctnum = 7,
+            join_to_table = "companies,leads",
+            description = "SpringFest Sponsorship Package";
 
 insert into coa set
-			acctnum = 8,
-			join_to_table = "raffle_locations",
-			description = "SpringFest Raffle Ticket Sales";
+            acctnum = 8,
+            join_to_table = "raffle_locations",
+            description = "SpringFest Raffle Ticket Sales";
 
 insert into coa set
-			acctnum = 9,
-			join_to_table = "companies",
-			description = "SpringFest Misc Solicitation Cash Donation";
+            acctnum = 9,
+            join_to_table = "companies",
+            description = "SpringFest Misc Solicitation Cash Donation";
 
 
 insert into coa set
-			acctnum = 10,
-			join_to_table = "leads",
-			description = "SpringFest Misc Invitations Cash Donation";
+            acctnum = 10,
+            join_to_table = "leads",
+            description = "SpringFest Misc Invitations Cash Donation";
 
 
 -- groups
 insert into groups set
-			groupid = 1,
-			name = "Parents";
+            groupid = 1,
+            name = "Parents";
 
 insert into groups set
-			groupid = 2,
-			name = "Teachers";
+            groupid = 2,
+            name = "Teachers";
 
 -- events
 insert into events set
-			event_id = 1,
-			description = "Christmas Tree Field Trip",
-			notes = "Christmas tree farm. All insurance and drivers licenses must be up-to-date.",
-			url = 'insurance.php'
+            event_id = 1,
+            description = "Christmas Tree Field Trip",
+            notes = "Christmas tree farm. All insurance and drivers licenses must be up-to-date.",
+            url = 'insurance.php'
 ;
 
 insert into events set
-			event_id = 2,
-			description = "Parent Education Meeting",
-			notes = "Mandatory meeting for all parents"
+            event_id = 2,
+            description = "Parent Education Meeting",
+            notes = "Mandatory meeting for all parents"
 ;
 
 insert into events set
-			event_id = 3,
-			realm = 'nag',
-			description = "Springfest Invitation Names Due";
-			notes = "Each family must enter a list of 10 people to be invited to Springfest ",
-			url = '10names.php'
+            event_id = 3,
+            realm = 'nag',
+            description = "Springfest Invitation Names Due";
+            notes = "Each family must enter a list of 10 people to be invited to Springfest ",
+            url = '10names.php'
 ;
 
 insert into events set
-			event_id = 4,
-			realm = 'nag',
-			description = "Springfest Auction Donation Items Due",
-			url = 'auction.php',
-			notes = "Each family must enter at least 1 auction donation online"
+            event_id = 4,
+            realm = 'nag',
+            description = "Springfest Auction Donation Items Due",
+            url = 'auction.php',
+            notes = "Each family must enter at least 1 auction donation online"
 ;
 
 insert into events set
-			event_id = 5,
-			realm = 'enhancement',
-			description = "Fall Enhancement Cutoff Date",
-			url = 'enhancement.php',
-			notes = "Each family must complete their fall enhancement hours before this date"
+            event_id = 5,
+            realm = 'enhancement',
+            description = "Fall Enhancement Cutoff Date",
+            url = 'enhancement.php',
+            notes = "Each family must complete their fall enhancement hours before this date"
 ;
 
 
 insert into events set
-			event_id = 6,
-			realm = 'enhancement',
-			description = "Spring Enhancement Cutoff Date",
-			url = 'enhancement.php',
-			notes = "Each family must complete their spring enhancement hours before this date"
+            event_id = 6,
+            realm = 'enhancement',
+            description = "Spring Enhancement Cutoff Date",
+            url = 'enhancement.php',
+            notes = "Each family must complete their spring enhancement hours before this date"
 ;
 
 
 -- calendar items for this first online year. TEMP!
 insert into calendar_events set
-			event_id = 4,
-			school_year = '2003-2004',
-			event_date = "2003-12-18",
+            event_id = 4,
+            school_year = '2003-2004',
+            event_date = "2003-12-18",
 ;
 
 insert into calendar_events set
-			event_id = 3,
-			school_year = '2003-2004',
-			event_date = "2003-11-04"
+            event_id = 3,
+            school_year = '2003-2004',
+            event_date = "2003-11-04"
 ;
 
 insert into calendar_events set
-			event_id = 1,
-			school_year = '2003-2004',
-			event_date = "2003-12-12"
+            event_id = 1,
+            school_year = '2003-2004',
+            event_date = "2003-12-12"
 ;
 
 -- the territories
 insert into territories set
-			territory_id = 1,
-			description = "Linda Mar"
+            territory_id = 1,
+            description = "Linda Mar"
 ;
 
 insert into territories set
-			territory_id = 2,
-			description = "Manor"
+            territory_id = 2,
+            description = "Manor"
 ;
 
 insert into territories set
-			territory_id = 3,
-			description = "Eureka Square"
+            territory_id = 3,
+            description = "Eureka Square"
 ;
 
 insert into territories set
-			territory_id = 4,
-			description = "Rockaway/Vallemar"
+            territory_id = 4,
+            description = "Rockaway/Vallemar"
 ;
 
 insert into territories set
