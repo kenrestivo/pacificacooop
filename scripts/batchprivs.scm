@@ -32,8 +32,9 @@
 		select realm from user_privileges group by realm order by realm")))
 
 
-(define (change-privs dbh user-id realm group-level user-level)
-  (let* ((lov (simplesql-query dbh (sprintf #f "
+(define (change-privs dbh user-name realm group-level user-level)
+  (let* ((user-id (get-user-id dbh user-name))
+		 (lov (simplesql-query dbh (sprintf #f "
 				select * from user_privileges where user_id = %d 
 						and realm = '%s'" user-id realm)))
 		 (id (db-ref-last lov "privilege_id")))
@@ -56,29 +57,40 @@
 				select user_id from users where name like \"%%%s%%\" "
 								name))))
 
-;;; sets springfest perms on all committees for the admins
+
+;;;;; the various committee defaults here
 (define (springfest-gods dbh list-of-names)
-  	(for-each (lambda (user-id)
-				(for-each (lambda (realm)
-							(change-privs dbh user-id realm 800 800))
-						  springfest-realms))
-			  (map (lambda (x) (get-user-id dbh x))
-				   list-of-names)))
+  (for-each (lambda (user-name)
+			  (for-each (lambda (realm)
+						  (change-privs dbh user-name realm 800 800))
+						springfest-realms))
+			list-of-names))
+
+(define (solicits dbh list-of-names)
+  (for-each (lambda (user-name)
+			  (begin
+				(change-privs dbh user-name "solicitation" 200 700)
+				(change-privs dbh user-name "solicit_money" 100 200)))
+			list-of-names))
 
 
 ;;;;;;;;;;;
 ;; now do stuff
+(define chairs
+  '(("solicitation" . "bauer")
+	))
 
-(for-each
- (lambda (name)
-   (change-privs dbh (get-user-id dbh name) "solicitation" 200 700))
- '("depriest" "refino" "kaitz" "solano" "mrad" "gaffney" "bauer"))
+
 
 (define (update-2004-2005)
   (let ((dbh (apply simplesql-open "mysql"
 					(read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf"))))
+	;; first the admins
 	(springfest-gods dbh '("vreeland" "cooke"))
-	
+	;; now the solicitation
+	 (solicits dbh
+			   '("depriest" "refino" "kaitz" "solano" "mrad" "gaffney" "bauer"))
+	;; finally the chairs, overriding all
 	(simplesql-close dbh)))
 
 
