@@ -10,7 +10,7 @@ all::
 	@echo "not so fast... get specific"
 	@egrep "^[a-z]*:" Makefile | awk '{print $$1}' 
 
-status::
+create::
 	mysql -u ken -p -h $(DBHOST) mysql < definition.sql
 
 dummy::

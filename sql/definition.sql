@@ -35,6 +35,11 @@ create table coop.kids(
     kidsid int(32) not null auto_increment,
     last varchar(255),
     first varchar(255),
+    address varchar(255),
+    city varchar(255),
+    zip varchar(20),
+    phone varchar(20),
+	sess enum ('AM', 'PM'),
     primary key (kidsid)
 );
 
