@@ -146,7 +146,7 @@ class coopView
 			}
 			
 			$links = $obj->links();
-			$this->confessArray($links, "links for  $this->table");
+			$this->page->confessArray($links, "links for  $this->table");
 			return $val;
 		}
 
@@ -155,7 +155,7 @@ class coopView
 			
 			foreach($this->obj->toArray() as $key => $val){
 				// this is where the fun begins.
-				$val = $this->checkLinks(&this->obj, $val);
+				$val = $this->checkLinks(&$this->obj, $val);
 				$res[] = $val;
 			}
 
