@@ -446,7 +446,8 @@ create table enhancement_projects (
 -- enhancement hours
 create table enhancement_hours (
     enhancement_hour_id int(32) not null unique auto_increment,
-    parentid int(32),
+    parentsid int(32),
+    enhancement_project_id int(32) not null,  -- join
     work_date date,
     hours int(5),
     primary key (enhancement_hour_id)
