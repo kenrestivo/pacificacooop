@@ -64,8 +64,9 @@ class coopForm extends CoopObject
 				$this->form->addElement('hidden', 'coop', $sid); 
 			}
 			
-			// XX is this necessary?
-			$this->form->addElement('hidden', 'table', $this->table);
+			// XXX is this necessary? i.e. for new dispatcher
+			// if so, bust it out somewhere.
+			//$this->form->addElement('hidden', 'table', $this->table);
 
 			//set defaults for new
 			if($this->id < 1){
@@ -440,6 +441,15 @@ class coopForm extends CoopObject
 	function is_submitted()
 		{
 			return isset($_REQUEST['_qf__' . $this->form->_attributes['name']]);
+		}
+
+	function legacyPassThru()
+		{
+			// ugly assthrus for my old-style dispatcher
+			// XXX these conflict with the new dispatcher!
+			$this->form->addElement('hidden', $this->pk, 
+									$this->obj->{$this->pk}); 
+
 		}
 
 } // END COOP FORM CLASS
