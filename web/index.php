@@ -25,7 +25,7 @@
 	require_once("insurancefuncs.inc");
 	require_once("calendarfuncs.inc");
 	require_once("adminfuncs.inc");
-	require_once("pkg_checkin_funcs.inc");
+	require_once("pkg/pkg_checkin_funcs.inc");
 	//require_once("solicitfuncs.inc");
 
 	print "<HTML>
@@ -58,10 +58,6 @@
 
 	print "<table border=1>";
 	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
-	/* hmm. i see a repetitive pattern here. and... wherever i see a pattern, 
-		i can't resist abstracting it out into a libraray function. 
-		so... guess what's gonna be next here 
-	*/
 
 	//auction items
 	showMenuRow($auth, $u, 'Springfest Auction Donation Items', 
@@ -75,9 +71,16 @@
 	showMenuRow($auth, $u, 'Springfest Fees and Cash Donations', 
 		'incomeSummary', 'money', 'money.php');
 
-	//packaging
-	showMenuRow($auth, $u, 'Springfest Packaging Committee', 
-		'pkgCheckinSummary', 'packaging', 'packaging_menu.php');
+	//packaging check in
+	showMenuRow($auth, $u, 'Springfest Packaging Inventory', 
+		'pkgCheckinSummary', 'packaging', 'pkg/packaging_checkin.php' );
+
+	/* package management
+	showMenuRow($auth, $u, 'Springfest Package Management', 
+		'pkgManageSummary', 'packaging', 'pkg/package_management.php');
+	*/
+
+	print "</table>";
 
 	/* solicitation items
 	showMenuRow($auth, $u, 'Springfest Solicitation', 
