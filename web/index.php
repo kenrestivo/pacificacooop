@@ -28,7 +28,7 @@
 	//require_once("calendarfuncs.inc");
 	//require_once("adminfuncs.inc");
 	require_once("pkg_checkin_funcs.inc");
-	//require_once("solicitfuncs.inc");
+	require_once("solicit_company.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -61,21 +61,23 @@
 	print "<table border=1>";
 	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
 
-	//auction items
-	showMenuRow($auth, $u, $auctioncallbacks);
+	//and heeere they are!
+	$menu = array( $auctioncallbacks, $invitationcallbacks, 
+					$incomecallbacks, $pkgcheckincallbacks,  
+					$solicit_company_callbacks
+		);
+
 	
-	//invitations
-	showMenuRow($auth, $u, $invitationcallbacks);
-
-	//money items
-	showMenuRow($auth, $u, $incomecallbacks);
-
-	//packaging check in
-	showMenuRow($auth, $u, $pkgcheckincallbacks);
-
+    while ( list( $key, $val ) = each($menu)) {
+		user_error(sprintf("main(): showing row for %s", $val['description']),
+			E_USER_NOTICE);
+		showMenuRow($auth, $u, $val);
+	}
+	
 	/* package management
-	showMenuRow($auth, $u, $pkg_mgmt_callbacks);
+	 $pkg_mgmt_callbacks);
 	*/
+
 
 	print "</table>";
 
