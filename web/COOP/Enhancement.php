@@ -33,25 +33,27 @@ class Enhancement
     var $cp; // cache reference to page object
 	var $schoolYear; // cache of this year's, um, year.
     var $cutoffDatesArray; // cache fall, spring
+    var $familyID; // cache of familyID
 
 	// month number, array of fall hours and spring hours
 	var $startDates = array(
-		9 => array(4,4),
-		10 => array(3,4),
-		11 => array(2,4),
-		12 => array(1,4),
-        1 => array(0,4), 
-		2 => array(0,4), // yes, feb is same as jan
-		3 => array(0,3),
-		4 => array(0,2),
-		5 => array(0,1)
+		9 => array('fall' => 4, 'spring' => 4),
+		10 => array('fall' =>3, 'spring' => 4),
+		11 => array('fall' =>2, 'spring' => 4),
+		12 => array('fall' =>1, 'spring' => 4),
+        1 => array('fall' =>0, 'spring' => 4), 
+		2 => array('fall' =>0, 'spring' => 4), // yes, feb is same as jan
+		3 => array('fall' =>0, 'spring' => 3),
+		4 => array('fall' =>0, 'spring' => 2),
+		5 => array('fall' =>0, 'spring' => 1)
 		);
 
 
 
-	function Enhancement (&$cp, $schoolYear = false)
+	function Enhancement (&$cp, $familyID, $schoolYear = false)
 		{
             $this->cp =& $cp;
+            $this->familyID = $familyID;
 			// guess it and cache it
 			$this->schoolYear = findSchoolYear($schoolYear);
             $this->loadCutoffs(); // do i really want this here?
@@ -59,7 +61,7 @@ class Enhancement
 
 
     // TODO: a much more complex function that gets the enrollment
-    // for a familyid and gets the start date and then calcs this
+    // for a familyID and gets the start date and then calcs this
     // TODO: i will also have to deal with DROP DATE!
     /// BAH!! i also have to calculate these for each semester!
     /// because of the carryovers!
@@ -85,7 +87,7 @@ class Enhancement
 
     
     // returns array of start/drop dates
-    function getStartDropDate($familyID)
+    function getStartDropDate()
         {
             /// let's start by finding out start/drop date
 
@@ -97,7 +99,7 @@ class Enhancement
                                 left join kids using (kid_id)
                         where enrollment.school_year = "%s" 
                                 and kids.family_id = %d ',
-                $this->schoolYear, $familyID));
+                $this->schoolYear, $this->familyID));
             $enrol->obj->fetch();
             
             $res = array('start' => $enrol->obj->startdate, 
@@ -127,7 +129,7 @@ class Enhancement
 
 
     // returns array(fall, spring) hours completed
-    function getHoursCompleted($familyID)
+    function getHoursCompleted()
         {
    
             $co = new CoopObject(&$this->cp, 'enhancement_hours', &$top);
@@ -137,7 +139,7 @@ class Enhancement
                                 left join parents using (parent_id)
                         where school_year = "%s" and family_id = %d 
                                 and work_date <= "%s" ',
-                                $this->schoolYear, $familyID,
+                                $this->schoolYear, $this->familyID,
                                 $this->cutoffDatesArray['fall']));
             $co->obj->fetch();
             $res['fall'] = $co->obj->total;
@@ -151,7 +153,7 @@ class Enhancement
                         where school_year = "%s" and family_id = %d 
                                 and work_date <= "%s" 
                                 and work_date > "%s"',
-                                $this->schoolYear, $familyID,
+                                $this->schoolYear, $this->familyID,
                                 $this->cutoffDatesArray['spring'],
                                 $this->cutoffDatesArray['fall']));
             $co->obj->fetch();
@@ -189,6 +191,38 @@ class Enhancement
                 }
             }
             user_error("Enhancement::guessSemester($date): couldn't guess!",
+                       E_USER_ERROR);
+        }
+
+    // a very common funtion. summarises the REAL hours for this family
+    // including carryovers from the previous semester
+    function realHoursDone($semester = false)
+        {
+            if(!$semester){
+                $semester = $this->guessSemester();
+            }
+            ///print "sem= $semester<br>";
+            //confessObj($this);
+            
+            $startdrop = $this->getStartDropDate();
+            //confessArray($startdrop, 'stardrop');
+            
+            $owed = $this->getHoursOwed($startdrop['start']);
+            //print "owed $owed<br>";
+            //confessArray($owed, 'owed');
+            
+            $completed = $this->getHoursCompleted($this->familyID);
+            //confessArray($completed, 'completed');
+            
+            if($semester == 'fall'){
+                return $completed[$semester];
+            }
+            if($semester == 'spring'){
+                return $completed['fall'] - $owed['fall'] 
+                    + $completed[$semester];
+            }
+            
+            user_error("Enhancement::realHoursDone($semester): bad semester",
                        E_USER_ERROR);
         }
 
