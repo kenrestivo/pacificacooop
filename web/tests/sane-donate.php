@@ -13,6 +13,7 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
 $debug = 1;
 
+
 function showUser(&$cp, $leadid)
 {
 		$top = new CoopView(&$cp, 'leads', &$nothing);
@@ -111,9 +112,10 @@ function donateDispatcher(&$cp, $action = false)
 	case 'newrsvp':
 		print showUser(&$cp, $_REQUEST['response_code']);
 		$ppf =& new PayPalForm();
-		$form =& $ppf->buildRSVP(&$cp, $_REQUEST['response_code']);
+		$form = $ppf->buildRSVP(&$cp, $_REQUEST['response_code']);
 		// make sure dispatcher brings me back here for validation. duh.
 		$form->addElement('hidden', 'action', 'newrsvp');
+		//confessObj($form, 'form');
 		if($form->validate()){
 			//$form->freeze();
 			// change action here to confirmrsvp? or process?
@@ -125,20 +127,24 @@ function donateDispatcher(&$cp, $action = false)
 		break;
 		
 	case 'confirmrsvp':
-		printf("<p>You be donating $%.02f", 
-			   $_REQUEST['other_amount']);
-		if($_REQUEST['ticket_quantity']){
+		$tq = $_REQUEST['ticket_quantity'];
+		$amt = $_REQUEST['other_amount'];
+		$ticket_price = 25;
+		
+		// force the ticket price in there. hack hack hack!
+		$total = $amt < $tq * $ticket_price ? $amt + ($ticket_price * $tq) : $amt;
+
+		printf("<p>Click 'Next' to donate $%.02f", $total);
+		if($tq){
 			printf(" which includes reservations for %d persons for the event", 
 				   $_REQUEST['ticket_quantity']);
 		}
-		print ". Is this correct?</p?>";
+		print ". Or click 'Previous' to edit your order.</p>";
 		// the setup to call the proper paypal form
 		// something must set SOURCE
 		// the edit will be a FORM with all hidden except EDIT button
 		//it'll bounce back to newrsvp!
 
-		
-		print "confirm";
 		break;
 		
 	default:

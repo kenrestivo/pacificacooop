@@ -94,7 +94,7 @@ class paypalForm
     
 
 	// the new improved form
-	function buildRSVP(&$cp, $responsecode)
+	function &buildRSVP(&$cp, $responsecode)
 		{
 			
 			$form =& new HTML_QuickForm( 'Springfest RSVP', 'rsvpform');
@@ -131,10 +131,21 @@ class paypalForm
 							  $_REQUEST['response_code']); 
 
 			$form->applyFilter('__ALL__', 'trim');
+			foreach(array('response_code', 'other_amount', 'ticket_quantity') as $col){
+				$form->applyFilter($col, array(&$this, 'numericOnly'));
+			}
 			
 			return $form;
 			
 		} // END BUILDRSVP
+
+	function numericOnly($val)
+		{
+			print "HEY [$val]";
+			$res = preg_replace('/\D/', '', $val);
+			print "HO [$res]";
+			return $res;
+		}
 	
 } // end paypalform class
 
