@@ -30,6 +30,9 @@ $pv = $_POST ? $_POST : $_GET;
 
 //DB_DataObject::debugLevel(5);
 
+confessArray($_REQUEST, "test REQUEST");
+confessArray($pv, "test gv");
+
 if (!isset ($pv['table'])){
 	$form = new HTML_QuickForm('gettable', 'get');
 	$grp[] =& HTML_QuickForm::createElement(
@@ -60,17 +63,19 @@ if($pv['action'] == 'detail'){
 
 //now the good stuff
 	$build =& DB_DataObject_FormBuilder::create ($obj);
-	$form = $build->getForm ($_SERVER['PHP_SELF']);
+	$form = new HTML_QuickForm($_SERVER['PHP_SELF']);
 	$form->addElement('hidden', 'action', 'detail');
 	$form->addElement('hidden', 'table', $table);
-//	$form->addElement('hidden', 'id');
+	$form->addElement('hidden', 'id');
+	$build->useForm($form);
+	$form =& $build->getForm();
 	if($form->validate ()){
 		$res = $form->process (array (&$build, 'processForm'), false);
 		if ($res){
 			$obj->debug('processed successfully', 'detailform', 0);
-		 	$action = $form->getElement('action');
-			$action->setValue('list');
 			//try refresh method??
+			header(sprintf('Location: %s?action=list&table=%s', 
+						   $_SERVER['PHP_SELF'], $table));
 		}
 		echo "aaauugh!<br>";
 	}
@@ -103,11 +108,11 @@ $tab =& new HTML_Table();
 
 $hdr = 0;
 while ($obj->fetch()){
-	$ar = array_values($obj->toArray());
-	array_push($ar, 
-			   sprintf('<a href="%s?action=detail&id=%s&table=%s">
+	$ar = array_merge(array_values($obj->toArray()), 
+					  sprintf('<a href="%s?action=detail&id=%s&table=%s">
 						Edit</a><br>',
-   		  $_SERVER['PHP_SELF'], $obj->$primaryKey, $table));
+							  $_SERVER['PHP_SELF'], 
+							  $obj->$primaryKey, $table));
 	//yay! i updated my config.php, and now $obj->$titlefield works!
 
 	if($hdr++ < 1){
