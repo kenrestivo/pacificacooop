@@ -193,33 +193,6 @@ class coopPage
 	
 	// fishes the tables out of a request or session
 
-	// HANDL EOBJ STUFF
-	function tablePopup()
-		{
-			//XXX broken. use menu instead anyway? i'd rather.
-			$obj =& new DB_DataObject();	// use the $this->obj?
-			$obj->databaseStructure();
-		
-			//confessArray($_DB_DATAOBJECT, "dataobject");
-
-			foreach($_DB_DATAOBJECT['INI']['coop'] 
-					as $table => $cols) {
-				if(strpos($table, '__keys') == 0)
-					$vals[$table] = $table;
-			}
-
-			$form =& new HTML_QuickForm('gettable', 'get');
-			// $grp[] =& HTML_QuickForm::createElement(
-			// 	'text', 'table', 'Browse table:');
-			$grp[] =& HTML_QuickForm::createElement(
-				'select', 'table', null, $vals);
-			$grp[] =& HTML_QuickForm::createElement(
-				'submit', null, 'Change');
-			$form->addGroup($grp, NULL, 'Browse table:');
-			
-			return $form->toHTML();
-			//print "<hr>";
-		}
 
 	function selfURL($value = false, $inside = false)
 		{
@@ -263,8 +236,16 @@ class coopPage
 			$this->obj->get($id);
             $this->build =& DB_DataObject_FormBuilder::create (&$this->obj);
             //confessObj($this->build, "build");
+			$this->obj->fb_createSubmit = false;
             $form =& new HTML_QuickForm(); 
 			$form->addElement('html', thruAuth($this->auth, 1));
+			$buttons[] = &HTML_QuickForm::createElement(
+					'submit', 'cancel', 'Cancel');
+			$buttons[] = &HTML_QuickForm::createElement(
+				'submit', '__submit__', 'Save');
+			$form->addGroup($buttons, null, null, '&nbsp;');
+
+
             $this->build->useForm($form);
 			$form =& $this->build->getForm();
             //confessObj($form, "form");
