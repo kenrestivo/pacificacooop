@@ -39,12 +39,18 @@ class coopView extends CoopObject
 	var $legacyPerms; 			// cache of permissions for this page ($p)
 	//var $legacyFields;  //YAGNI. i hope
 
-	function createLegacy($callbacks, $perms)
+	function createLegacy($callbacks, $perms = false)
 		{
-			// TODO calculate if not provided
-			$this->legacyPerms = $perms;
-				// TODO guess if not provided?
+				// TODO guess if not provided? look thru indexedeverything
 			$this->legacyCallbacks = $callbacks; 
+
+			//  calculate if not provided
+			if(!$perms){
+				$perms = getAuthLevel($this->page->auth, 
+									  $this->legacyCallbacks['realm']);
+			}
+			$this->legacyPerms = $perms;
+	
 		}
 
 	function getLinks()
@@ -248,7 +254,9 @@ class coopView extends CoopObject
 			$tab =& new HTML_Table();
 		
 			
-			$tab->addRow(array($this->title()), 'bgcolor=#9999cc', 'TH'); 
+			$tab->addRow(array($this->title(),
+							   "ACTION BUTTONS HERE"), 
+						 'bgcolor=#9999cc', 'TH'); 
 
 			while($this->obj->fetch()){
 				//confessObj($this, 'onelinetable');
@@ -259,7 +267,8 @@ class coopView extends CoopObject
 															   'details'),
 											 $this->legacyCallbacks['page']);
 
-				$tab->addRow(array($meat));
+				$tab->addRow(array($meat,
+								  $this->recordButtons($this->obj->toArray())));
 			
 			}
 			//	$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
@@ -268,12 +277,23 @@ class coopView extends CoopObject
 
 		}
 	
+	function recordButtons(&$row)
+		{
+			return recordButtons($row, $this->legacyCallbacks, 
+								 $this->legacyPerms, $this->page->user_id, "");
+		}
+
+	// note, this is not very well-used, but it will be.
+	// i'll replace legacy recordbuttons with stuff using this
 	function nastyInner(&$obj, $action)
 		{
-			return sprintf("entry0[%s]=%d&action=%s", 
-						   $this->pk, $obj->{$this->pk},
-						   $action);
-			
+			$res .= sprintf("action=%s", $action);
+
+			if($obj->{$this->pk}){
+				$res .= sprintf("&entry0[%s]=%d", 
+								$this->pk, $obj->{$this->pk});
+			}
+			return $res;
 		}
 
 } // END COOP VIEW CLASS
