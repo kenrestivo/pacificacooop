@@ -21,12 +21,12 @@
 
 	print "<HTML>
 		<HEAD>
-			<TITLE>Springfest Fundraising</TITLE>
+			<TITLE>Data Entry</TITLE>
 		</HEAD>
 
 		<BODY>
 
-		<h2>Pacifica Co-Op Nursery School</h2>
+		<h2>Pacifica Co-Op Nursery School Data Entry</h2>
 	";
 
 	//confessArray($HTTP_POST_VARS, "vars");

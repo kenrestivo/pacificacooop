@@ -85,7 +85,7 @@ savePass($uid, $clearpass)
 	print "Your new password is saved! <br>
 			You'll need to use this new password from now on 
 			whenever you access this site. <br>
-			Please remember it\n";
+			Please make sure to remember it.\n";
 	
 	return generateToken($uid, $hash);
 
@@ -377,7 +377,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	print "<tr>";
 	if($type == 'password' || $type == 'both'){
 		if($type == 'both'){ //XXX hack. i can't pass the REAL state thru.
-			print "<td>Please choose a new password and type it here: </td>\n";
+			print "<td>Please type in your new password here: </td>\n";
 		} else {
 			print "<td>Enter password 
 				(or leave blank if you don't have one yet): </td>\n";
@@ -750,11 +750,11 @@ nullPassState($auth, $states)
 	if(!$auth['pwd']){
 		$uinfo = getUser($auth['uid']);
 		loginForm($newauth, 'both', 'hide', 
-			sprintf("Welcome %s! 
-				This must be your first time using the new 
-				secure login version of the site. 
+			sprintf("<h3>Welcome %s!</h3>
+				<p>This must be your first time using the new 
+				secure login version of the site. <br>
 				Please choose a new password that you will 
-				use for this site from now on, and type it in here.", 
+				use for this site from now on, and type it in here.</p>", 
 				$uinfo['username']));
 		return changeState($auth, $states, 'needinput', 1);
 	}
