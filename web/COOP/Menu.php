@@ -106,7 +106,7 @@ class CoopMenu extends HTML_Menu
 				return "BROKEN TYPE $type";
 				break;
 			}
-			confessObj($this , "menures");
+			//confessObj($this , "menures");
 			return $res;
 		}
 
