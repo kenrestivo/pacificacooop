@@ -1,7 +1,7 @@
 notes on cvs
 
 
-syncing dev-online with my dev site (HEAD of cvs!)
+syncing dev-online with my dev site (HEAD of cvs!). HEAD is more recent.
 	cd web
 	cvd and commit as needed
 	cd ../web-online
@@ -14,7 +14,7 @@ syncing dev-online with my dev site (HEAD of cvs!)
 	commit it, probbly
 	then upload-dev AGAIN, so the $id's are in sync
 	
-syncing web-online with livesite
+syncing web-online with livesite: dev_online is MORE recent than livesite
 	cd web-online
 	commit as needed
 	cd ../livesite
@@ -37,3 +37,6 @@ syncing dev (MINE!) directly withe livesite
 	upload-live the thing
 	check on real site	
 	commit
+
+backwards-syncing HEAD with livesite
+	cvs update -kk -j HEAD -j livesite filename.php (assuming only ONE file!)
