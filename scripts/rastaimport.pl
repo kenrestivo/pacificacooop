@@ -46,7 +46,7 @@ use Getopt::Std;
 #};
 
 my $dbh;
-my $headerrowcnt = 10;
+my $validrowmin = 8;
 
 
 our($opt_t, $opt_v); #loathe perl
@@ -124,7 +124,7 @@ sub checkHeaders(){
 sub unBaby()
 {
 	my $annoying = shift;
-	$annoying =~ s/(.+?)\s*\(baby\)\s*/$1/;
+	$annoying =~ s/(.+?)\s*\(.*\)\s*/$1/;
 	return($annoying);
 }
 
@@ -280,7 +280,7 @@ sub checkNewParents(){
 	$famname = &unBaby($$rowref[0]);
 
 	#check the mom's name
-	$nameref = &fixLastNames($famname, $$rowref[1]);
+	$nameref = &fixLastNames($famname, &unBaby($$rowref[1]));
 	$something = &checkOneParent($rowref, $famid,  
 		$$nameref{'last'}, $$nameref{'first'}, 'Mom');
 
@@ -288,7 +288,7 @@ sub checkNewParents(){
 	#i have to namecheck the mom AND the dad's name. 
 	#	seriously, it's the 21st centry
 	#	TODO somehow guess dad or partner? um, how?
-	$nameref = &fixLastNames($famname, $$rowref[2]);
+	$nameref = &fixLastNames($famname, &unBaby($$rowref[2]));
 	$something = &checkOneParent($rowref, $famid,  
 		$$nameref{'last'}, $$nameref{'first'}, 'Dad');
 
@@ -433,7 +433,7 @@ sub deleteReverse(){
 			#determine if we have a header row
 			$vr = &validRow($ws, $row, $col, $maxcol);
 
-			if ($vr > $headerrowcnt){
+			if ($vr > $validrowmin){
 				#this is my header row!
 				$start++;
 				if($start == 1){
@@ -581,6 +581,10 @@ sub extractRow()
 		$cell = $ws->{'Cells'}[$rownum][$i];
 		if($cell) {
 			$row[$i] = $cell->Value;
+			#*sigh* clean up data entry screwups
+			$row[$i] =~ s/^\s*(.+?)\s*$/$1/;
+			#TODO eliminate doublespaces within! i.e. "  " to " "
+			#	look up nifty perl tricks for this
 			printf("extractRow ( $rownum , $i ) => %s\n", $cell->Value) ;
 		}
 	}
@@ -622,7 +626,7 @@ sub iterateRows()
 		printf("iterateRows $row ------- from %d to %d cols, %d with data\n", 
 			$col, $maxcol, $vr);
 
-		if ($vr > $headerrowcnt){
+		if ($vr > $validrowmin){
 			#this is my header row!
 			$start++;
 			if($start == 1){
@@ -668,8 +672,8 @@ sub main()
 	$wb = $xls->Parse('../imports/PM.xls');
 	&iterateSheets($wb, 'PM');
 
-	#$wb = $xls->Parse('../imports/AM.xls');
-	#&iterateSheets($wb, 'AM');
+	$wb = $xls->Parse('../imports/AM.xls');
+	&iterateSheets($wb, 'AM');
 
 	$dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
