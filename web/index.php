@@ -96,6 +96,8 @@
 		print "<p>Enter a name here.
 					Remember to click 'Save' 
 					at the bottom of this screen when you are done!</p>";
+		print"<p>NOTE: 'First Name(s)' can include spouse/partner names, as in:
+				 'Bob and Mary', or 'Mary Doe and Bob'";
 		#finally, give them a form to enter data!
 		oneNameForm($id);
 
