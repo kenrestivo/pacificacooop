@@ -82,7 +82,9 @@ switch($_REQUEST['action']){
 			 $sav->ticket_quantity = 2;
 			 $sav->ticket_type_id = 3; // member ticket
 			 $sav->school_year = $sy;
-			 printf("Inserting 2 tickets for %s family...", $fam->obj->name);
+			 //XXX if i move this to the object, yank the printf!
+			 printf("Inserting 2 tickets for %s family...", 
+					$fam->obj->name);
 			 $sav->insert();
 		 }
 	 }
