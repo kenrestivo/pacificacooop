@@ -35,6 +35,7 @@ CREATE TABLE auction_donation_items (
   location_in_garage varchar(255) default NULL,
   item_type enum('Unknown','Actual Item','Gift Certificate') default NULL,
   package_id int(32) default NULL,
+  school_year varchar(50) default NULL,
   PRIMARY KEY  (auction_donation_item_id),
 ) ;
 
@@ -287,6 +288,7 @@ CREATE TABLE income (
   cleared_date date default NULL,
   payment_amount decimal(9,2) default NULL,
   note varchar(255) default NULL,
+  school_year varchar(50) default NULL,
   PRIMARY KEY  (income_id),
 ) ;
 
@@ -401,6 +403,7 @@ CREATE TABLE packages (
   bid_increment decimal(9,2) default NULL,
   package_value decimal(9,2) default NULL,
   item_type enum('Unknown','Actual Item','Gift Certificate') default NULL,
+  school_year varchar(50) default NULL,
   PRIMARY KEY  (package_id),
 ) ;
 
@@ -476,6 +479,7 @@ CREATE TABLE springfest_attendees (
   springfest_attendee_id int(32) NOT NULL unique auto_increment,
   lead_id int(32) default NULL,
   company_id int(32) default NULL,
+  school_year varchar(50) default NULL,
   PRIMARY KEY  (springfest_attendee_id),
 ) ;
 
@@ -486,6 +490,7 @@ CREATE TABLE springfest_attendees (
 CREATE TABLE territories (
   territory_id int(32) NOT NULL unique auto_increment,
   description varchar(255) default NULL,
+  school_year varchar(50) default NULL,
   PRIMARY KEY  (territory_id),
 ) ;
 
@@ -497,7 +502,7 @@ CREATE TABLE territories_families_join (
   territories_families_id int(32) NOT NULL unique auto_increment,
   territory_id int(32) default NULL,
   family_id int(32) default NULL,
-  semester varchar(50) default NULL,
+  school_year varchar(50) default NULL,
   PRIMARY KEY  (territories_families_id),
 ) ;
 
