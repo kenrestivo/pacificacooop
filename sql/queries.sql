@@ -141,4 +141,12 @@ select * from attendance
 	left join families on kids.familyid = families.familyid 
 	where families.name like "%hearne%";
 
+-- show the kids that need to be add/dropped
+select attendance.*, kids.first, kids.last, families.name
+	from attendance
+	left join kids on kids.kidsid = attendance.kidsid
+	left join families on kids.familyid = families.familyid
+	order by families.name
+
+
 --- EOF

@@ -90,7 +90,7 @@ create table coop.attendance (
     attendanceid int(32) not null auto_increment,
 	kidsid int(32),
 	enrolid int(32),
-	dropout enum ('No', 'Yes'),
+	dropout date,
     primary key (attendanceid)
 );
 
