@@ -121,7 +121,7 @@ class coopView
 			//confessObj($_DB_DATAOBJECT, "dataobject");
 			$tab =  $this->obj->tableName();
 			$links = $_DB_DATAOBJECT['LINKS']['coop']; // XXX hard code hack! 
-			//$this->confessArray($links, "links");
+			//$this->page->confessArray($links, "links");
 			foreach($links as $maintable => $link){
 				foreach ($link as $nearcol => $farline){
 					// split up farline and chzech it
@@ -134,7 +134,7 @@ class coopView
 					}
 				}
 			}
-			$this->confessArray($res,"backlinks");
+			$this->page->confessArray($res,"backlinks");
 			return $res;
 		}
 	
