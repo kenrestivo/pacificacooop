@@ -1,4 +1,5 @@
 TESTID,METHOD,URL,POST,USERAGENT,RESULT,INFO,TIME,DATE,COMMENT,FUNCTION,
-1,GET,http://www/coop-dev/index.php,,"Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.2) Gecko/20021205 Debian/1.2.1-0",,,,,"very simple login",FuncExistsString,"</html>"
-2,POST,http://www/coop-dev/index.php,auth%5Buid%5D=9&auth%5Bpwd%5D=,"Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.2) Gecko/20021205 Debian/1.2.1-0",,,,,"assumes the javascript",FuncExistsString,"</html>"
-3,POST,http://www/coop-dev/index.php,auth%5Bpwd%5D=tester&login=Log+In,"Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.2) Gecko/20021205 Debian/1.2.1-0",,,,,,FuncExistsString,"Welcome",FuncExistsString,"</html>"
+1,,,,,,,,,"setup",FuncRemoveCookie,FuncRemoveGlobalVariable
+1,,,,,,,,,"my vars",FuncSetGlobalVariable,uid,9,FuncSetGlobalVariable,pwd,"tester"
+2,POST,http://www/coop-dev/index.php,auth%5Buid%5D=${uid}&auth%5Bpwd%5D=,"Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.2) Gecko/20021205 Debian/1.2.1-0",,,,,"assumes the javascript",FuncExistsString,"</html>",FuncExistsString,"Logging in"
+3,POST,http://www/coop-dev/index.php,auth%5Bpwd%5D=${pwd}&login=Log+In,"Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.2) Gecko/20021205 Debian/1.2.1-0",,,,,,FuncExistsString,"Welcome",FuncExistsString,"</html>"
