@@ -7,14 +7,33 @@ p,table,li,h1,h2,h3
 
 p,li,th,td
 {
-	font-size: 75%;
+	font-size: 11px;
 
 }
+/*/*/a{}
+body,
+body td,
+body th,
+body p {
+  font-size: x-small;
+  voice-family: "\"}\"";
+  voice-family: inherit;
+  font-size: small;
+}
+html>body,
+html>body td,
+html>body th
+html>body p {
+  font-size: small;
+}
+/* */
 
 .menutext
 {
 
-	font-size: 1em;
+	font-size: 11px;
+
+
 }
 
 .foobar {
