@@ -6,24 +6,10 @@
 			 (database simplesql))
 (require 'printf)
 
-(define dbh (apply simplesql-open "mysql"
-				   (read-conf "/mnt/kens/ki/proj/coop/sql/db.conf")))
-
 (define *main-schema* '()) ;; well, here it is.
 (define *current-table* "") ;; there has to be a more schemey way 
 (define *tables* '()) ;; hack. need to handle tables last.
-
-(define debug-flag #t)
-
-;; silly little diagnostic
-(define (doit query)
-  (if debug-flag
-	  (pp query)
-	  (catch #t
-			 (lambda ()
-			   (simplesql-query dbh query) )
-			 (lambda x (printf "caught error on [%s]\n" query) (pp x)))))
-
+(define *change-list* '())  ;; loaded from file
 
 ;;;;;;;; definition-processing stuff
 (define (add-primary-key table line)
@@ -73,7 +59,7 @@
 	   (not (equal? (car l) "--"))) #t #f))
 
 ;; for loading the proper schema file
-(define (load-definition! deffile)
+(define (load-old-definition! deffile)
   (set! *main-schema* '())
 kl  (let ((p (open-input-file deffile) ) )
 	
@@ -101,9 +87,20 @@ kl  (let ((p (open-input-file deffile) ) )
 	 schema))
 
 
-(define (rename-column items schema)
+(define (save-column! items schema)
   (let* ((sp (string-split (car items) #\.))
 		 (new (string-split (cadr items) #\.))
+		 (table (car sp))
+		 (old-col (cadr sp))
+		 (new-col (cadr new)))
+	(set! *change-list*
+		  (add-sub-alist *change-list* table
+						 (list table old-col new-col)))
+		)))
+
+(define (rename-column col-with-alist schema)
+  (let* (
+		 (new )
 		 (table (car sp))
 		 (old-col (cadr sp))
 		 (new-col (cadr new))
@@ -111,7 +108,7 @@ kl  (let ((p (open-input-file deffile) ) )
 		 )
 	(if long-def
 		(begin 
-		  (doit (sprintf #f "alter table %s change column %s %s %s"
+		  (safe-sql *dbh* (sprintf #f "alter table %s change column %s %s %s"
 						 table old-col new-col long-def))
 		  (fix-primary-key table old-col new-col schema) )
 		(printf "ignoring %s:%s\n" table old-col ) ;; it's a bogus line? huh?
@@ -120,42 +117,52 @@ kl  (let ((p (open-input-file deffile) ) )
 
 ;;; the easy one: tables.
 (define (rename-table items)
-  (doit (sprintf #f "rename table %s to %s"
+  (safe-sql *dbh* (sprintf #f "rename table %s to %s"
 				 (car items) (cadr items))))
 
-;;i have to save these up, because i have to handle join keys first 
+
+;;i have to save these up, because i have to handle join keys first
+;;cool, this is a setter, basically
 (define (save-table! items)
   (set! *tables* (append *tables* (list items))))
 
 ;; simple dispatcher, using cute scheme-ism
 ;; in the file, tables don't have .'s in them, columns do.
-(define (process-change items)
+(define (add-change-entry! items)
   (if (string-index (car items) #\.)
-	  (rename-column items *main-schema*)
+	  (save-column! items *main-schema*)
 	  (save-table! items)))
 
 
 ;;; this is basically MAIN, though the load-definition must occur first
-(define (fix-schema fixfile)
+(define (load-changefile! fixfile)
   (let ((p (open-input-file fixfile) ) )
 	(begin 
 	  (do ((line (read-line p) (read-line p)))
 		  ((or (eof-object? line) ))
 		((lambda (x) (if (and (= 2 (length x))
 							  (not (eq? (string-index (car x) #\#) 0) ))
-						 (process-change x))
+						 (add-change-entry! x))
 				 )
 		 (string-split line #\space)))
 	  (close p) )))
 
+(define (fix-schema)
+  (for-each process-change *change-list*) ; remember, this defers the tables
+  (for-each rename-table *tables*))			; finally, follow up with tables
 
 ;;;;;;;;;;;;;;;
 ;; main
 
-(load-definition! "/mnt/kens/ki/proj/coop/sql/olddefinition.sql")
-(fix-schema "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
-(for-each rename-table *tables*)			; finally, follow up with tables
 
-(simplesql-close dbh)
+(define *dbh* (apply simplesql-open "mysql"
+				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-ken.conf")))
+
+(load-old-definition! "/mnt/kens/ki/proj/coop/sql/olddefinition.sql")
+(load-changefile! "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
+
+(fix-schema)							; well, do it!
+
+(simplesql-close *dbh*)
 
 ;; EOF
