@@ -31,7 +31,7 @@ class Session_info extends DB_DataObject
 	var $fb_fieldLabels = array (
 		'session_id' => 'PHP SessionID',
 		'ip_addr' => 'IP Address',
-		'updated' => 'Last Activity',
+		'updated' => 'Last Page View',
 		'user_id' => 'User ID',
 		'vars' => 'Serialised PHP vars saved'
 		);

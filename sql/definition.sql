@@ -618,6 +618,7 @@ CREATE TABLE organisations (
 ) ;
 
 -- invitations table
+--- IMPORTANT! this shows who was sent what!
 
 CREATE TABLE invitations (
   invitation_id int(32) NOT NULL unique auto_increment,
@@ -626,6 +627,7 @@ CREATE TABLE invitations (
   family_id int(32) default NULL,
   relation enum('Relative','Friend','Coworker','Alumni','Other') 
         default NULL,
+	label_printed datetime default NULL,
     PRIMARY KEY (invitation_id)
 ) ;
 

@@ -115,6 +115,7 @@ select families.name, enrol.sess
     order by entered;
 
 -- the invitations excel export report
+--- NOTE! you MUST then do the following query, to keep a record of their invite date!
 select distinct(leads.lead_id)  as responsecode
         ,leads.salutation 
         ,leads.first_name  
@@ -138,6 +139,26 @@ select distinct(leads.lead_id)  as responsecode
              (enrollment.school_year = '2004-2005' 
                  and enrollment.dropout_date is NULL)
        order by leads.last_name, leads.first_name
+
+-- keep record of who was sent what!
+insert into invitations (lead_id, school_year, family_id, relation, label_printed)
+select distinct(leads.lead_id)  as lead_id,
+    '2004-2005',
+    leads.family_id,
+    leads.relation,
+	now()
+    from leads
+        left join families on families.family_id = leads.family_id
+        left join kids on kids.family_id = leads.family_id
+        left join enrollment on enrollment.kid_id = kids.kid_id 
+     where  
+            (leads.family_id is null or leads.family_id < 1) 
+             or relation = 'Alumni' or
+             (enrollment.school_year = '2004-2005' 
+                 and enrollment.dropout_date is NULL)
+       order by leads.last_name, leads.first_name
+
+
 
 -- detailed list of payments
 select  income.income_id, income.check_number, income.payer, 
@@ -552,16 +573,16 @@ from tickets
 	left join leads using (lead_id) 
 order by last_name, first_name;
 
--- the. massive. query.
-select left(company_name, 20) as company,
-        left(concat_ws(' ', first_name, last_name), 20) as name,
+-- the. massive. company. query.
+select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
+    as Company,
         sum(inc.payment_amount) as cash_donations,
         sum(pur.payment_amount) as auction_purchases,
         sum(auct.item_value) as auction_donations,
         sum(iks.item_value) as in_kind_donations
 from companies
 left join 
-    (select  item_value, company_id
+    (select  sum(item_value) as item_value, company_id
      from companies_auction_join  as caj
      left join auction_donation_items  as adi
               on caj.auction_donation_item_id = 
@@ -571,7 +592,7 @@ left join
     as auct
         on auct.company_id = companies.company_id
 left join 
-    (select  item_value, company_id
+    (select  sum(item_value) as item_value, company_id
      from companies_in_kind_join as cikj
      left join in_kind_donations as ikd
               on cikj.in_kind_donation_id = 
@@ -581,7 +602,7 @@ left join
     as iks
         on iks.company_id = companies.company_id
 left join 
-    (select  payment_amount, company_id
+    (select  sum(payment_amount) as payment_amount, company_id
      from companies_income_join as cinj
      left join income 
               on cinj.income_id = 
@@ -640,6 +661,54 @@ group by coa.account_number
 having Before_Event >0 or At_Event > 0
 order by Before_Event desc, At_Event desc;
 
+
+--- orphans
+select * from springfest_attendees 
+where (lead_id < 1  or lead_id is null) 
+	and (ticket_id < 1 or ticket_id is null) 
+	and (company_id < 1 or company_id is null) 
+	and (parent_id < 1 or parent_id is null);
+
+-- who sold what
+select families.name as Soliciting_family,
+        sum(inc.payment_amount) as cash_donations,
+        sum(auct.item_value) as auction_donations,
+        sum(iks.item_value) as in_kind_donations
+from families
+left join 
+    (select  caj.family_id, sum(item_value) as item_value
+     from companies_auction_join  as caj
+     left join auction_donation_items  as adi
+              on caj.auction_donation_item_id = 
+                adi.auction_donation_item_id
+        where school_year = '2004-2005'
+        group by caj.family_id) 
+    as auct
+        on auct.family_id = families.family_id
+left join 
+    (select  cikj.family_id, sum(item_value) as item_value
+     from companies_in_kind_join as cikj
+     left join in_kind_donations as ikd
+              on cikj.in_kind_donation_id = 
+                ikd.in_kind_donation_id
+        where school_year = '2004-2005'
+        group by cikj.family_id) 
+    as iks
+        on iks.family_id = families.family_id
+left join 
+    (select  cinj.family_id, sum(payment_amount) as payment_amount
+     from companies_income_join as cinj
+     left join income 
+              on cinj.income_id = 
+                income.income_id
+        where school_year = '2004-2005'
+        group by cinj.family_id) 
+    as inc
+        on inc.family_id = families.family_id
+group by families.family_id
+having cash_donations > 0 or auction_donations > 0 or in_kind_donations > 0
+order by cash_donations desc, 
+    auction_donations desc, in_kind_donations desc;
 
 
 --- EOF
