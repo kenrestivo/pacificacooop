@@ -313,7 +313,7 @@ select chart_of_accounts.item_description,
 
 --- nasty package-find join
 select auction_donation_items.*,
-    concat(families.name, ' Family')
+    coalesce(concat(families.name, ' Family'), companies.company_name) as donor
 from auction_packages_join 
 left join auction_donation_items 
     on auction_donation_items.auction_donation_item_id = 
@@ -323,17 +323,14 @@ left join auction_items_families_join
         auction_donation_items.auction_donation_item_id 
     left join families 
            on families.family_id = auction_items_families_join.family_id 
+left join companies_auction_join
+    on companies_auction_join.auction_donation_item_id = 
+        auction_donation_items.auction_donation_item_id
+    left join companies 
+        on companies_auction_join.company_id = companies.company_id
 where package_id = 193;
 
 
-            coalesce(families.name, companies.company_name) as donor
-
-            left join companies_auction_join
-                 on companies_auction_join.auction_donation_item_id = 
-                        auction_donation_items.auction_donation_item_id
-                left join companies 
-                    on companies_auction_join.company_id = 
-                        companies.company_id
 
 -- the package summary
 select package_type, package_number, package_title, 
