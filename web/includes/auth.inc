@@ -363,6 +363,7 @@ logIn($auth)
 					)
 	);
 	
+	// start the pachinko machine. no way out unless user input needed, or success
 	do {
 
 		fwrite(STDERR, "logIn(): entering %s\n",
@@ -414,6 +415,7 @@ loggedOutState($auth)
 		if token/uid and they check out
 			DONE state loggedin!
 		if no pass (and no uid)
+			state loggedout
 			show an entry form (prepop with uid if given)
 			DONE state needinput
 		if uid isn't real
@@ -445,7 +447,7 @@ nullPassState($auth)
 			DONE state loggedin!
 	*/
 
-}/* END  */
+}/* END NULLPASSSTATE */
 
 
 
@@ -455,6 +457,12 @@ nullPassState($auth)
 function
 wrongPassState($auth)
 {
+	// do this before form, to hide data
+	$newauth = array(
+			uid => $auth['uid'],
+			state => "loggedout" // explicitly set it
+	);
+
 	/*
 		complain.
 		show the password form again, prepopulated with uid
@@ -472,6 +480,9 @@ wrongPassState($auth)
 function
 noUserState($auth)
 {
+	$newauth = array(
+			state => "loggedout" // explicitly set it
+	);
 	/*
 		complain.
 		show the main entry form, no prepopulation
@@ -490,6 +501,10 @@ noUserState($auth)
 function
 confirmWrongState($auth)
 {
+	$newauth = array(
+			uid => $auth['uid'],
+			state => "loggedout" // explicitly set it
+	);
 	/*
 		complain
 		i know the uid, so show a form with both confirmation AND entry
@@ -505,25 +520,33 @@ confirmWrongState($auth)
 function
 insecurePassState($auth)
 {
+	$newauth = array(
+			uid => $auth['uid'],
+			state => "loggedout" // explicitly set it
+	);
 	/*
 		inputs: password
 		password sucks. complain. offer suggestions
-		pass uid through
 	*/
 
-	$newauth['state'] = "loggedout";
+	$newauth['state'] = "needinput";
 }/* END INSECUREPASSSTATE */
 
 
 
 
 /******************
-
+	LOGGEDINSTATE
 ******************/
 function
 loggedInState($auth)
 {
-}/* END  */
+	$newauth = array(
+			uid => $auth['uid'],
+			token => $auth['token']
+	);
+	return $newauth;
+}/* END LOGGEDINSTATE */
 
 
 
