@@ -245,6 +245,24 @@ create table faglue (
 	familyid int(32),
     primary key (faglueid)
 );
+	
+-- events
+create table events (
+    eventid int(32) not null unique,
+	description varchar(255),
+	primary key (eventid)
+);
+	
+-- calendar
+create table cal (
+    calid int(32) not null unique,
+	eventid int(32),
+	notes longtext,
+	status enum ('Active', 'tentative', 'cancelled') default 'Active',
+	hideuntil datetime,
+	eventdate datetime,
+	primary key (calid)
+);
 
 -- the user/passwords used by the web view page AND my update tool..
 -- these MUST be done manually for db's not named coop!!

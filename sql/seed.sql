@@ -48,5 +48,22 @@ insert into groups set
 			groupid = 2,
 			name = "Teachers";
 
+-- events
+insert into events set
+			eventid = 1,
+			description = "Field Trip";
+
+insert into events set
+			eventid = 2,
+			description = "Parent Ed Meeting";
+
+insert into events set
+			eventid = 3,
+			description = "Springfest Invitation Names Due";
+
+insert into events set
+			eventid = 4,
+			description = "Springfest Auction Donation Items Due";
+
 
 -- EOF
