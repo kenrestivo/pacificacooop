@@ -40,14 +40,14 @@ class Files extends DB_DataObject
 			$fileValues =& $this->kenFile->getValue();
 		
 			print_r_html($this->kenFile);
-		  
 			print_r_html($fileValues);
 		
 			
-			$unique_filename = sprintf("%d-%s", rand(1,200), 
-									   $fileValues['name']);
+			$unique_filename = sprintf("%d-%s", rand(1,200), $fileValues['name']);
 			if ($this->kenFile->isUploadedFile()) {
 				$this->kenFile->moveUploadedFile($path, $unique_filename);
+				$this->mime_type = $fileValues['type'];
+				print_r_html($this);
 				print "file uploaded!";
 				// TODO: add the original_filename['name'] unique_file and to the db's field
 			}
