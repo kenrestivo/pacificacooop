@@ -31,6 +31,9 @@ class Files extends DB_DataObject
 
 	var	$kenPath = "../../files/"; // NOTE! for the tests folder
 
+    var $fb_timeFields = array ('upload_date');
+    var $fb_fieldsToRender = array ('file_description', 'original_filename');
+
 	function preGenerateForm()
 		{
 
