@@ -24,24 +24,37 @@ use strict;
 use Spreadsheet::ParseExcel;
 my $xls = new Spreadsheet::ParseExcel;
 
-#1.1 Normal Excel97
 my $wb = $xls->Parse('../imports/PM.xls');
 
-my($row, $col, $ws, $cell, $sh);
+my($row, $maxrow, $col, $maxcol, $ws, $cell, $sh);
 print "FILE  :", $wb->{File} , "\n";
 print "COUNT :", $wb->{SheetCount} , "\n";
 print "AUTHOR:", $wb->{Author} , "\n";
 
 for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
-																					$ws = $wb->{Worksheet}[$sh];
-	print "--------- SHEET:", $ws->{Name}, "\n";
+	$ws = $wb->{Worksheet}[$sh];
+	
+	#i only care about the schedule
+	if($ws->{'Name'} !~ /Schedule/){
+		next;
+	}
 
-	$row = $ws->{MinRow} ;
-	while(defined $ws->{MaxRow} && $row <= $ws->{MaxRow}){
-		print "ROW $row -------\n";
-		$col = $ws->{MinCol} ;
-		while(defined $ws->{MaxCol} && $col <= $ws->{MaxCol}){
-			$cell = $ws->{Cells}[$row][$col];
+
+	$row = $ws->{'MinRow'} ;
+	$maxrow = $ws->{'MaxRow'} ;
+	printf("--------- SHEET:%s : from %d to %d rows\n", 
+		$ws->{Name}, $row, $maxrow
+	);
+
+	while(defined $maxrow && $row <= $maxrow){
+		$col = $ws->{'MinCol'} ;
+		$maxcol = $ws->{'MaxCol'} ;
+		printf("ROW $row ------- from %d to %d cols\n", $col, $maxcol);
+		
+		#printf("DEBUG %d cols have data\n", &validRow($ws, $row, $col, 10));	
+
+		while(defined $maxcol && $col <= $maxcol){
+			$cell = $ws->{'Cells'}[$row][$col];
 			if($cell){
 				printf("( $row , $col ) => %s\n", $cell->Value) ;
 			}
@@ -51,5 +64,25 @@ for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
 	}
 }
 
+#################
+#	VALIDROW
+#	count that the first x of these have data in them
+#################
+sub validRow()
+{
+	my $ws = shift;
+	my $row = shift;
+	my $col = shift;
+	my $check = shift;
+	my $cnt;
+
+	while($check--){
+		if($ws->{'Cells'}[$row][$col++]->Value){
+			$cnt++;
+		}
+	}
+
+	return $cnt;
+} #END VALIDROW
 
 #EOF
