@@ -74,7 +74,6 @@
 	print "<tr>\n";
 	sortColumns('Family Name', 'families.name', 'asc', $nagonlychecked);
 	sortColumns('Leads Submitted', 'cntlead', 'desc', $nagonlychecked);
-	print "\t<td align='center'><em><u>Forfeit Paid</u></em></td>\n";
 	print "\t<td align='center'><em><u>Quilt Fee Paid</u></em></td>\n";
 	print "\t<td align='center'><em><u>Auction Donated</u></em></td>\n";
 	print "\t<td align='center'><em><u>Session</u></em></td>\n";
@@ -101,10 +100,10 @@
 		print "<tr><td>\n";
 		print $row[name];
 		print "</td><td align='center'>";
-		print $row[cntlead];
-		print "</td><td align='center'>";
-		if ($tennamespaid['amount'] > 0)
+		print $row[cntlead] ? $row['cntlead'] : "";
+		if ($tennamespaid['amount'] > 0){
 			printf("$%01.2f", $tennamespaid['amount']);
+		}
 		if($tennamespaid['notes'])
 			printf("<br>%s",$tennamespaid['notes']);
 		print "</td><td align='center'>";
@@ -126,7 +125,6 @@
 		tdArray(array (
 				"TOTAL",
 				$total['leads'],
-				sprintf("$%01.2f", $total['tennames']),
 				sprintf("$%01.2f", $total['quilt']),
 				sprintf("$%01.2f", $total['auction']),
 				"",
