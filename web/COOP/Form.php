@@ -38,17 +38,23 @@ class coopForm extends CoopObject
 			$id = (int)$id;
 
 			if(!$id){
-				user_error("$id is not an integer homey", E_USER_ERROR);
+				user_error("$id is not an integer", E_USER_ERROR);
 			}
 
 			$form =& new HTML_QuickForm('editform');
 			
+			$form->addElement('header', 'editform', 
+							  $this->obj->formHeaderText ?
+							  $this->obj->formHeaderText : 
+							  ucwords($this->table));
 
 			$this->obj->get($id);
 
 			//confessObj($this, 'atd');
 			foreach($this->obj->toArray() as $key => $val){
-				if($this->isLinkField(&$this->obj, $key)){
+				if(in_array($key, array_keys($this->obj->fb_preDefElements))){
+					$el = $this->obj->fb_preDefElements[$key];
+				} else if($this->isLinkField(&$this->obj, $key)){
 					$el =& $form->addElement('select', $key, false, 
 											 $this->selectOptions($key));
 				} else {
@@ -59,8 +65,8 @@ class coopForm extends CoopObject
 				//print $key . "->" .$this->obj->fb_fieldLabels[$key] . "<br>";
 				$el->setLabel($this->obj->fb_fieldLabels[$key] ? 
 							  $this->obj->fb_fieldLabels[$key] : $key);
-
-
+				
+				
 				$el->setValue($val);
 			}
 
