@@ -178,9 +178,9 @@ passing variables around
 		at the LAST possible minute
 	the exception is for id's. i don't bother escaping id's
 		they should all be numeric anyway... *should*.... 
-	customEscape(): converts HTML-formatted stuff to conform to MYSQL rules
+	formatForSQL(): converts plain or HTML-format to conform to MYSQL rules
 		called JUST before saving or querying.
-	customUEscape(): converts SQL-formatted stuff to display in proper HTML
+	formatForHTML(): converts plain or SQL-format to display in proper HTML
 		called JUST before displaying. checkLinks() calls it for you too.
 
 
