@@ -41,7 +41,7 @@ use DBI;
 @defaults =  (
 	[ $access{'ACCESS_DELETE'}, "invitations" ],
 	[ $access{'ACCESS_DELETE'}, "donations" ],
-	[ $access{'ACCESS_ADD'}, "donations" ]
+	[ $access{'ACCESS_EDIT'}, "roster" ]
 );
 
 #basic login and housekeeping stuff
@@ -69,12 +69,23 @@ while ($ritemref = $rqueryobj->fetchrow_hashref){
 
 	print "adding <$name> into users\n";
 
-	#ok, fix em!
-	$query = "insert into users 
-			set familyid = $familyid, name = \'$name Family\' 
-		";
+	#ok, add the users
+	$query = sprintf("insert into users 
+			set familyid = %d, name = \'%s Family\' ", 
+			$familyid, $name);
 	print "doing <$query>\n";
-#	print STDERR $dbh->do($query) . "\n"; #THIS DOES IT!
+	#print STDERR $dbh->do($query) . "\n"; #THIS DOES IT!
+	
+	$uid = 	$dbh->{'mysql_insertid'};
+	
+	#NOW, add the privs
+	foreach $arref (@defaults){
+		$query = sprintf("insert into privs 
+				set userid = %d, level = %d, realm = '%s' ", 
+			$uid, $$arref[0], $$arref[1]);
+		print "doing <$query>\n";
+		#print STDERR $dbh->do($query) . "\n"; #THIS DOES IT!
+	}
 
 } # end while
 
