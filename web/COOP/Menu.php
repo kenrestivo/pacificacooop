@@ -10,6 +10,7 @@ require_once('shared.inc');
 class CoopMenu extends HTML_Menu
 {
 	var $realms;
+	var $page;
 	var $renderer;
 	var $realm_map = array( 
 		'auction' => 'Auctions',
@@ -23,9 +24,10 @@ class CoopMenu extends HTML_Menu
 		'tickets' => 'Tickets'
 		);
 
-	function createLegacy( )
+	function createLegacy($page )
 		{
 		
+			$this->page =& $page;
 
 			// grab the legacy stuff
 			include('everything.inc');
@@ -40,7 +42,7 @@ class CoopMenu extends HTML_Menu
 					'sub' => $this->callbacksToMenu($members)),
 				array(
 					'title' => 'Springfest',
-					'sub' => $this->nestByRealm($sf, $this->realm_map)));
+					'sub' => $this->nestByRealm($sf, $this->$coop_page)));
 
 
 			$this->setMenu($heirmenu);
@@ -102,7 +104,7 @@ class CoopMenu extends HTML_Menu
 			return $realms;
 		}
 
-	function nestByRealm($ie, $page)
+	function nestByRealm($ie)
 		{
 			foreach($this->realm_map as $realm => $description){
 				$res[$realm]['title'] = $description;
@@ -111,9 +113,11 @@ class CoopMenu extends HTML_Menu
 						$res[$realm]['sub'][$key]['title'] = 
 							$cbs['description'];
 						// TODO: put the menu stuff in here
-						//checkMenuLevel($page->auth, 
-						//getUser($page->auth['uid']), $cbs, $cbs['fields'])
-						$res[$realm]['sub'][$key]['url'] = $cbs['page'];
+						if(checkMenuLevel($this->page->auth, 
+										  getUser($this->page->auth['uid']), 
+										  $cbs, $cbs['fields'])== 0){
+							$res[$realm]['sub'][$key]['url'] = $cbs['page'];
+						}
 					}
 				}
 			}
