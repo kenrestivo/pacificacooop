@@ -73,6 +73,9 @@ callbacks struct
 	mainindex: 
 	maintable: 
 	realm:
+	countindex: the field in $fields which should be where'd for counting
+	countmode: the mode of the count. default 'count', but could be 'sum'
+	fields: the NAME of the fieldspec array. eventually will be REFERENCE here
 	joins: an array of arrays of join info, in order of joining (important!)
 		each containing :
 			the index that is common to the joins
