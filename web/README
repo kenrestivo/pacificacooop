@@ -88,9 +88,9 @@ callbacks struct
 				indexes MUST have the same name! no fancy index naming!
 			optional recursive set of (table, index) arrays to join to THIS one
 		 	so, to join maintable->atable, just:
-				('atable', 'aindex')
+				array ('atable', 'aindex')
 			or, to join maintable->atable->btable->ctable,
-				('atable, 'aindex',
+				array ('atable, 'aindex',
 					array('btable', 'bindex',
 						array('ctable', 'cindex)))
 				and, yes, i am becoming a LISP programmer. ;-)
@@ -100,6 +100,12 @@ callbacks struct
 	plus, all the state callbacks (see below)
 
 auth
+	why are users not families??? why create a shadow abstraction?!
+		well, because users are NOT families! 
+			there can be non-family users: i.e. teacher sandy/catherine/pat
+			i want to grant privs to the Roster person to add/change families
+				but NOT to administer user privileges!
+				that task will go to the webmiester/administrator/board
 	realms: areas of privilege
 		these are mostly arbitrary, but do center around various "views"
 		realms are neither tables nor views nor committees. 
