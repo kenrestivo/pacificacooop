@@ -89,11 +89,11 @@ class coopPage
 				<h2>Pacifica Co-Op Nursery School Data Entry</h2>
 				';
 
-			if($this->debug){
-				confessArray($_REQUEST, "test REQUEST");
-				confessArray($_SESSION, "test SESSION");
-				confessArray($_SERVER, "test SERVER");
-			}
+
+				$this->confessArray($_REQUEST, "test REQUEST");
+				$this->confessArray($_SESSION, "test SESSION");
+				$this->confessArray($_SERVER, "test SERVER");
+
 
 			warnDev();
 
@@ -125,9 +125,18 @@ class coopPage
 			return $indexed_everything;
 		} 
 
+	function confessArray($array, $message)
+		{
+			if($this->debug < 1){
+				return;
+			}
+			confessArray($array, $message);
+		}
+
+
  
 	function engine(){
-		$tabarr = $this->mergeTables($_SESSION, $_REQUEST);
+		$_SESSION = $this->mergeTables($_SESSION, $_REQUEST);
 		//confessArray($tabarr, "tables");
 		foreach($tabarr as $table => $vals){
 			$this->setup($table);
@@ -152,7 +161,7 @@ class coopPage
 	
 	function mergeTables($array, $overrides, $level = 0)
 		{
-			confessArray($array, "BEFORE merge: level $level");
+			$this->confessArray($array, "BEFORE merge: level $level");
 
 			foreach($overrides as $key => $val){
 				if(array_key_exists($key, $array)){
@@ -163,11 +172,13 @@ class coopPage
 						$array[$key] = $val;
 					}
 					
+				} else {
+					$array[$key] = $val;
 				}
 			}
 						
 
-			confessArray($array, "AFTER  merge, level $level");
+			$this->confessArray($array, "AFTER  merge, level $level");
 		   			return $array;
 		}
 
