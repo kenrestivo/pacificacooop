@@ -55,7 +55,7 @@ class Income extends DB_DataObject
 		"account_number" => "Account",
 		"note" => "Misc Notes" ,
 		'bookkeeper_date' => 'Date Given to Bookkeeper',
-		'cleared_date' => 'Date Check Cleared the Bank',
+		'cleared_date' => 'Date Transaction Cleared the Bank',
 		"school_year" => "School Year" ,
 		'txn_id' => 'PayPal Credit Card Transaction ID',
 		"thank_you_id" => "Thank-You Sent" 

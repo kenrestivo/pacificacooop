@@ -32,6 +32,7 @@ class coopForm extends CoopObject
 {
 	var $form;  // cache of generated form
 	var $id; // cache of last inserted id
+	var $_tableDef; //  cached table stuff
 
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function build($id = false)
@@ -41,16 +42,21 @@ class coopForm extends CoopObject
 				$this->obj->get($id);
 			}
 			$formname = sprintf('edit_%s', $this->table);
-			$form =& new HTML_QuickForm($formname, 'post', false, false, false, true);
+			$form =& new HTML_QuickForm($formname, false, false, false, 
+										false, true);
 			
 			$form->addElement('header', $formname, 
 							  $this->obj->fb_formHeaderText ?
 							  $this->obj->fb_formHeaderText : 
 							  ucwords($this->table));
 
+			// will need to guess field types
+			$this->tableDef = $this->obj->table();
+
 			//confessObj($this, 'atd');
 			foreach($this->obj->toArray() as $key => $val){
 				if(!$this->isPermittedField($key)){
+					// NOTE the hidden thing. i think  i need to do hidden here
 					continue;
 				}
 				if(is_array($this->obj->fb_preDefElements) && 
@@ -79,7 +85,10 @@ class coopForm extends CoopObject
 				$el->setLabel($this->obj->fb_fieldLabels[$key] ? 
 							  $this->obj->fb_fieldLabels[$key] : $key);
 				
-				
+
+				if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
+					$val = sql_to_human_date($val);
+				}
 				$el->setValue($val);
 			}
 
@@ -151,12 +160,20 @@ class coopForm extends CoopObject
 
 	function scrubForSave($vars)
 		{
+			$this->_tableDef = $this->obj->table();
 			// hack around nulls
 			foreach($vars as $key => $val){
 				
 				// i will be duplicating saveok here, basically
 								
-				$cleanvars[$key] = $val == ''? DB_DataObject_Cast::sql('NULL') : $val;
+
+				if($val == ''){ 
+					$cleanvars[$key] = DB_DataObject_Cast::sql('NULL') ;
+				} else if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
+					$cleanvars[$key] = human_to_sql_date($val);
+				} else {
+					$cleanvars[$key] = $val;
+				}
 
 			}
 			return $cleanvars;
