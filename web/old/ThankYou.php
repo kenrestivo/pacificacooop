@@ -454,8 +454,8 @@ http://www.pacificacoop.org/
 								 &$co);
 			$real->obj->orderBy('school_year desc');
 			$real->obj->school_year = $sy;
-			$real->obj->whereAdd('(thank_you_id is null or thank_you_id < 1) 
-						and date_received > "2000-01-01" ');
+			$real->obj->whereAdd('(thank_you_id is null or thank_you_id < 1) ');
+			// TODO add date received back in later
 			$real->obj->joinadd($co->obj);
 			$real->obj->find();
 

@@ -37,6 +37,7 @@ class In_kind_donations extends DB_DataObject
 		"in_kind_donation_id" => "Unique ID" ,
 		"thank_you_id" => "Thank-You Sent" 
 		);
+	var $fb_fieldsToRender = array('item_description', 'item_value',  'quantity', 'school_year', 'thank_you_id');
 	var $fb_linkDisplayFields = array('item_description');
 
 }

@@ -29,7 +29,7 @@ require_once("DB/DataObject.php");
 class PostPaypal
 {
 	var $family_id;
-	var $leads_id;
+	var $lead_id;
 	var $account_number;
 	var $company_id;
     var $income_id;
@@ -154,6 +154,27 @@ class PostPaypal
             }
 
             $obj->family_id = $this->family_id;
+            $obj->insert(); // save the giblets
+	}
+
+	function postLead()
+		{
+		
+			$obj =& $this->factoryWrapper('invitation_rsvps');
+
+            //don't dupe. XXX this is dumb. what do i do about refunds?
+            $obj->income_id = $this->income_id;
+            if($obj->find()){
+                return;   
+            }
+
+			//TODO: ticket quantity here
+			//if($obj->account_number = SOMETHING){
+			//$obj->ticket_quantity =??
+			//$obj->ticket_type = 'Paid for';
+			//}
+
+            $obj->lead_id = $this->lead_id;
             $obj->insert(); // save the giblets
 	}
 
