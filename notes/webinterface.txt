@@ -82,15 +82,15 @@ admin code
 file layout DONE
 	like 5mins
 	common folder
-		.dbfuncs.inc/php
+		dbfuncs.php
 		shared.php
 			most everything!
 				assume it goes here
 				popup, parentinfo
-		.globals.inc
+		globals.inc
 			the HTTPVARS globals etc
 			include the dbname
-		.dbname (for testing)
+		dbname (for testing)
 	index.php
 		the basic page display
 			if no familyid, 
@@ -109,6 +109,8 @@ file layout DONE
 		the submission handling
 	admin.php
 		the reports!
+	money.php
+		the input for money stuff
 
 texts
 	spring fest 10-names donations
@@ -124,6 +126,18 @@ misc
 	array for fields
 		including which are required, what defaults, etc
 	
-		
 
+money
+	an input screen, to enter 
+		payer, 
+		check num, 
+		date (on check?), 
+		category  (popup)
+			10-names forfeit charge
+			food/quilt
+			3x5 card forfeit charge
+		family popup (if 3x5 or quilt) 
+		or, if an RSVP, response code, which is the leadid 
+			(future, for RSVP cards: not right now)
+		
 
