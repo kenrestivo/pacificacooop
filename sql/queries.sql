@@ -335,14 +335,21 @@ select coalesce(companies.company_name,
 
 -- nasty sponsorship join to check AUCTION levels
 select companies.company_name,
-        sum(auction.item_value)  as auction_item_total 
-    from auction
-        left join companies_auction_join
-               on auction.auction_donation_item_id =
-                    companies_auction_join.auction_donation_item_id
-            left join companies 
+        sum(auction.item_value)  as auction_item_total
+		sum(in_kind_donations.item_value) as in_kind_donation_total 
+    from companies
+       left join companies_auction_join 
                 on companies.company_id = 
                     companies_auction_join.company_id
+     	   left join auction_donation_items
+        	       on auction.auction_donation_item_id =
+            	        companies_auction_join.auction_donation_item_id
+		left join companies_in_kind_join
+				on companies_in_kind_join.company_id =
+					companies.company-id
+			left join in_kind_donations
+				on companies_in_kind_join.in_kind_donation_id =
+					in_kind_donations.in_kind_donation_id
     where companies.company_id is not null
     group by  companies.company_id having auction_item_total >= 150
     order by auction_item_total desc, companies.company_name asc
@@ -364,10 +371,12 @@ select families.name, sum(auction.item_value) as item_value
                     companies_auction_join.family_id)
     order by families.name
 
---massive solicit nag stuff
+--Massive solicit nag stuff
  select company_name, sum(income.amount) as cash_donations,
-      sum(auction.item_value) as non_cash_donations,
-      sum(income.amount) + sum(auction.item_value) as total
+      sum(auction.item_value) +  sum (in_kind_donations.item_value) 
+            as non_cash_donations,
+      sum(income.amount) + sum(auction.item_value) + 
+        sum(in_kind_donations.item_value) as total
     from companies
           left join companies_auction_join 
               on companies_auction_join.company_id = companies.company_id
@@ -378,6 +387,11 @@ select families.name, sum(auction.item_value) as item_value
               on companies_income_join.company_id = companies.company_id
           left join income 
             on companies_income_join.income_id = income.income_id    
+          left join companies_in_kind_join
+                on companies_in_kind_join.company_id = companies.company_id
+         left join in_kind_donations
+                on in_kind_donations.in_kind_donation_id =
+                    companies_in_kind_join.in_kind_donation_id
     group by companies.company_id 
     order by total desc, cash_donations desc, companies.company_name asc;
 
@@ -474,4 +488,24 @@ select  auction_items_families_join.family_id  ,
             on companies_auction_join.company_id = companies.company_id 
     order by families.name asc, companies.company_name 
 
---- EOF
+---- The people who need thankyous
+select companies.company_name,
+        sum(auction_donation_items.item_value) as auction_total,
+        sum(income.payment_amount) as cash_total
+    from companies         
+        left join companies_income_join 
+               on companies.company_id = 
+                   companies_income_join.company_id
+            left join income
+                    on income.income_id = companies_income_join.income_id
+        left join companies_auction_join
+                on companies_auction_join.company_id = companies.company_id
+            left join auction_donation_items
+                    on auction_donation_items.auction_donation_item_id =
+                            auction_donation_items.auction_donation_item_id
+    where income.school_year = '$sy'
+            or auction_donation_items.school_year = '$sy'
+    group by companies.company_id
+    order by company_name
+
+--- Eof
