@@ -242,9 +242,9 @@ class coopView extends CoopObject
 				//confessObj($this, 'onelinetable');
 				$mainlink = $this->concatLinkFields(&$this->obj);
 
-				$idx = $this->obj->{$this->pk};
 				$meat = $this->page->selfURL($mainlink, 
-											 "entry0[$this->pk]=$idx&action=details",
+											 $this->nastyInner(&$this->obj, 
+															   'details'),
 											 $this->legacyPage);
 
 				$tab->addRow(array($meat));
@@ -256,6 +256,13 @@ class coopView extends CoopObject
 
 		}
 	
+	function nastyInner(&$obj, $action)
+		{
+			return sprintf("entry0[%s]=%d&action=%s", 
+						   $this->pk, $obj->{$this->pk},
+						   $action);
+			
+		}
 
 } // END COOP VIEW CLASS
 
