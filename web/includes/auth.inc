@@ -560,7 +560,8 @@ logIn($vars)
 					),
 		checklogin => array (
 					func => "checkLoginState",
-					required => array ("uid", "pwd"),
+					required => array ("uid"),
+					wanted => array ("pwd"),
 					description => "Checking password"
 					),
 		verifytoken => array (
@@ -830,6 +831,15 @@ function
 checkLoginState($auth, $states)
 {
 
+	//with new javascript thing, they may put in a BLANK password.
+	if(!$auth['pwd']){
+		user_error(
+			sprintf("checkLoginState(): uid %d  but null password", 
+				$auth['uid']) , 
+			E_USER_NOTICE);
+		//just loop around!
+		return changeState($auth, $states, 'needlogin', 1);
+	}
 
 	// it is possible for a user to enter a password but have none in db!
 	if(!getPass($auth['uid'])){
