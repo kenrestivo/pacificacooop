@@ -28,23 +28,24 @@ print "<HTML><HEAD><TITLE>Springfest Fundraising</TITLE></HEAD><BODY>";
 print "<h2>Pacifica Co-Op Nursery School Springfest Invitation Entry</h2>";
 print "<p>&nbsp;</p>";
 
-/*		if no familyid, 
-				draw the chooser,
-				done
-			else if there is form stuff (how to tell?)
-				do the datachecking	
-			else draw 
-				the basic parentid,kids, names
-				and the form!
-*/
+
+#fish it out of the globals and keep it here nice and close. 
+#because, if i have to type that monster one more time...
 $id = $HTTP_POST_VARS['familyid'];
 	
+#useful for form debugging. 
+#some host's security policies tend to break globals. use this to check.
+#confessVars();
+
 if(!$id){
 	#there is no familyid, let the user select one
 	familyPopup(0);  #0 means, don't pre-select any family. just CHOOSE ONE
-} elseif($HTTP_POST_VARS['Save']){
+
+} elseif($HTTP_POST_VARS['savenames']){
 	#we are trying to save form data. this is what life is all about.
-	#TODO: good stuff here!
+
+	processNames($HTTP_POST_VARS);
+
 } else {
 	#printf ("<p>DEBUG: the id you chose was %d</p>\n", $id);
 

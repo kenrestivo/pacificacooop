@@ -65,8 +65,7 @@ OK, CODE!
 		display the main page again, for this familyid.
 
 admin code
-	drawing the chooser
-		all or 10 names
+	drawing the chooser (as above and in reprots.txt)
 	draw the report
 
 arch
