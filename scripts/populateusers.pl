@@ -58,7 +58,7 @@ use constant _ACCESS_ADMIN => 800;
 @familydefaults =  (
 	[ _ACCESS_SUMMARY, _ACCESS_ADD, "invitations" ],
 	[ _ACCESS_SUMMARY, _ACCESS_VIEW, "invitations_cash" ],
-	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "auction" ],
+	[ _ACCESS_VIEW, _ACCESS_DELETE, "auction" ],
 	[ _ACCESS_VIEW, _ACCESS_VIEW, "calendar" ],
 	[ _ACCESS_NONE, _ACCESS_VIEW, "money" ],
 	[ _ACCESS_NONE, _ACCESS_VIEW, "insurance" ],
