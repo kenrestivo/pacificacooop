@@ -311,24 +311,29 @@ select chart_of_accounts.item_description,
     group by income.account_number order by total desc
 
 
---- nasty package join. the 'users' hack is to get "xxx family" w/o coding
-select auction_donation_items.* , 
-            coalesce(users.name, companies.company_name) as donor
-        from auction 
-            left join packages on auction.package_id = packages.package_id 
-            left join auction_items_families_join 
-        on auction_items_families_join.auction_donation_item_id = 
-                auction_donation_items.auction_donation_item_id 
-            left join users on users.family_id = 
-                auction_items_families_join.family_id 
+--- nasty package-find join
+select auction_donation_items.*,
+    concat(families.name, ' Family')
+from auction_packages_join 
+left join auction_donation_items 
+    on auction_donation_items.auction_donation_item_id = 
+         auction_packages_join.auction_donation_item_id 
+left join auction_items_families_join 
+   on auction_items_families_join.auction_donation_item_id = 
+        auction_donation_items.auction_donation_item_id 
+    left join families 
+           on families.family_id = auction_items_families_join.family_id 
+where package_id = 193;
+
+
+            coalesce(families.name, companies.company_name) as donor
+
             left join companies_auction_join
                  on companies_auction_join.auction_donation_item_id = 
                         auction_donation_items.auction_donation_item_id
                 left join companies 
                     on companies_auction_join.company_id = 
                         companies.company_id
-        where auction_donation_items.package_id < 1 and date_received is not null 
-            and date_received > '0000-00-00'
 
 -- the package summary
 select package_type, package_number, package_title, 
@@ -682,7 +687,7 @@ order by cash_donations desc,
 
 --- invites by acctnum
 select coa.description as Description,
-        sum(coalesce(tic.total,0) + coalesce(inc.total,0)) as Total
+        coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0) as Total
 from chart_of_accounts as coa
 left join 
     (select account_number, sum(payment_amount) as total
