@@ -72,7 +72,7 @@ savePass($uid, $clearpass)
 	$hash = strtolower(md5($clearpass));
 
 	$query = sprintf("update users set password = '%s' where userid = %d ",
-				$uid, $hash);
+				$hash, $uid);
 	mysql_query($query);
 	$err = mysql_error();
 	if($err){
@@ -80,6 +80,9 @@ savePass($uid, $clearpass)
 		print "savePass(): [SECRET]: $err\n";
 		return 0;
 	}
+
+	print "DEBUG saving $uid, $hash, [$query]\n";
+	print "Your new password is saved! Please remember it\n";
 	
 	return generateToken($uid, $hash);
 
@@ -103,8 +106,7 @@ getPass($uid)
 	}
 
 	// the query
-	$query = sprintf("SELECT * FROM users WHERE userid = %d ",
-				$uid );
+	$query = sprintf("SELECT * FROM users WHERE userid = %d ", $uid);
 	#print "getPass(): [$query]\n";
 	$listq = mysql_query($query);
 	$err = mysql_error();
@@ -120,7 +122,7 @@ getPass($uid)
 
 	if (mysql_num_rows($result) > 0) {
 		if($row['password']){
-			#print "got one\n";
+			print "DEBUG got one for $uid\n";
 			return($row['password']); //success!
 		} else {
 			#print "no password\n";
@@ -128,7 +130,7 @@ getPass($uid)
 		}
 	}                  
 
-	#print "no password\n";
+	print "DEBUG no password for $uid\n";
 	return 0;
 } /* END GETPASS */
 
@@ -187,6 +189,8 @@ checkAuthLevel($auth)
 	$realm = $auth['realm'];
 	$level = $auth['level'];
 
+	confessArray($auth, "authlevel");
+
 	if(!($uid && $realm && $token && $level)){
 		print "checkAuthLevel(): ERROR not enough info\n";
 		return 1;
@@ -236,6 +240,7 @@ displayLogin($auth)
 	$confirm = $auth['confirm'];
 	$token = $auth['token'];
 
+	confessArray($auth, "displaylogin");
 	
 	// well, they're not.
 	if(!($uid && $token)){
@@ -329,114 +334,114 @@ logIn($auth)
 	$pwd = $auth['pwd'];
 	$confirm = $auth['confirm'];
 	$token = $auth['token'];
+	$action = $auth['action'];
 
-	//hmm. they are supplying a password! must be a new/change request
-	if($pwd){
-		return newPass($uid, $pwd, $confirm, $token);
-	}
+	confessArray($auth, "login");
 
-	// these aren't the 'droids you're looking for. move along, move along.
-	if($token){
-		if(checkToken($uid, $token)){
-			print "logIn(): ERROR unauthorized\n";
-			return 0;
-		}
-		return $token; //cool, they're already logged in
-	}
-
-	//ok! no password or token passed in, so throw up a login screen
-
-	if($uid){
-		$oldpwhash = getPass($uid);		
-	}
-
-	print "<p>Please log in:</p>";
-	print "<table border='0'>";
-	#print "DEBUG: $id";
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 			$_SERVER['PHP_SELF']);
-	print "<tr><td>Your child's last name:</td><td>";
-	loginPopup($uid); 
-	print "</td></tr>";
-	if($oldpwhash){
-		// if there already IS a password for this family
-		print "<tr><td>Your password:</td>";
-	} else {
-		print "<tr><td>Please make up a NEW password for yourself 
-					and type it here:</td>";
-	}
-	print "<td><INPUT TYPE=password NAME='auth[pwd]'></td>";
-	print "</tr>"; // html sucks
 
-	if(!$oldpwhash){
-		// confirmation for new user
-		print "<tr><td>Type your new password again to confirm:</td>";
-		print "<td><INPUT TYPE=password NAME='auth[confirm]'></td></tr>";
+	switch($action){
+		case 'new':
+			// TODO: inputs: clearpass, uid, action
+			print "Confirm password: \n";
+			print "<INPUT TYPE=password NAME='auth[confirm]'>";
+			thruAuth( array(
+						'token' => generateToken($uid, $pwd) ,
+						'uid' => $uid ,
+						'action' => 'confirm'
+					)
+			);
+			break;
+		case 'confirm':
+			//TODO: inputs: uid, action, token(hashed), confirmpass
+			if($token == generateToken($uid, $confirm)){
+				if(getPass($uid) == 0){
+					return savePass($uid, $pwd);
+				}
+			}
+			break;
+		default:
+			//first login, no password entered
+			loginPopup($uid); 
+			print "Enter password: \n";
+			print "<INPUT TYPE=password NAME='auth[pwd]'>";
+			//	TODO: if uid, include confirmation box too!
+			break;
 	}
-	print "<tr><td><INPUT TYPE=submit NAME='login' VALUE='LogIn'></td></tr>";
+
+	print "<INPUT TYPE=submit NAME='login' VALUE='LogIn'>";
     print "</FORM>";
-	print "</table>";
 
-	return 0;
 
 }/* END LOGIN  */
 
 
 
 /******************
-	NEWPASS
-	ui for user to choose a new password
-	inputs: uid, new password (cleartext), confirmation password (cleartext),
-		and a token (if changing existing pw)
-	outputs: error messages as needed
-	returns: a token if success, otherwise 0.
+	UIJUNK
 ******************/
 function
-newPass($uid, $newclearpass, $newconfirm, $oldtoken)
+uiJunk()
 {
 
-	// they must enter a confirmation when entering a NEW password
-	if(!($newconfirm && $newclearpass) || ($newconfirm != $newclearpass)){
-		print "Passwords do not match! Try again\n";
-		/* TODO complaint is a form with "try again" button
-			and a uid as an invisiblefield */
-		return 0;
-	}
+	print "<p>Please log in:</p>";
+	print "<table border='0'>";
+	printf("<FORM METHOD=POST ACTION='%s'>", 
+			$_SERVER['PHP_SELF']);
+	print "<tr><td>Your child's last name:</td><td>";
+	loginPopup($uid); 
+	print "</td></tr>";
 
-	// check for existing password, tokens
-	$oldpwhash = getPass($uid);		
-	if($oldpwhash){
-		if($oldpwhash < 0){
-			// intruder alert! 
-			print "newPass(): ERROR! no such user\n";
-			exit(1);
-		}
-		//there's already a password in there! they must authorized to change
-		if(checkToken($uid, $oldtoken)){
-			print "Unauthorized to change password. Log in first\n";
-			return 0;
-		}
-	} 
+		print "<tr><td>Your password:</td>";
+		print "<tr><td>Please make up a NEW password for yourself 
+					and type it here:</td>";
 
-	if(passStandard($newclearpass)){
-		// sucky password, dude. try again.
-		return 0;
-	}
+	print "<td><INPUT TYPE=password NAME='auth[pwd]'></td>";
+	print "</tr>"; // html sucks
 
-	// they made it through the gauntlet!
-	return(savePass($uid, $newclearpass));
+		print "<tr><td>Type your new password again to confirm:</td>";
+		print "<td><INPUT TYPE=password NAME='auth[confirm]'></td></tr>";
+		print "<INPUT TYPE=hidden NAME='auth[action]' VALUE='confirm'>";
 
-}/* END NEWPASS */
+	print "<tr><td><INPUT TYPE=submit NAME='login' VALUE='LogIn'></td></tr>";
+    print "</FORM>";
+	print "</table>";
+
+	return 0;
+}/* END UIJUNK */
+
+
 
 
 
 /******************
 	PASSSTANDARD
+	returns: 0 if ok, 1 if bad
 ******************/
 function
 passStandard()
 {
+	return 0;
 }/* END PASSTANDARD */
+
+
+
+/******************
+	THRUAUTH
+	passes the auth structure right through. this is VITAL for forms!
+	inputs: auth, name of struct (default 'auth')
+	outputs: auth as invisible fields!
+******************/
+function
+thruAuth($auth, $struct = 'auth')
+{
+	while (list($key, $val) = each($auth)){
+		printf("<INPUT TYPE=hidden NAME='%s[%s]' VALUE='%s'>\n",
+			$struct, $key, $val
+		);
+	}
+}/* END THRUAUTH  */
 
 
 

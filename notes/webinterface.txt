@@ -235,51 +235,42 @@ auth.inc: the library functions
 		inputs: uid, token 
 		outputs: shows who they are logged in as, and a "logout" button
 	logIn(): logs a user in. abstracted here to be used in several places
-		inputs: HTTP_POST/GET_VARS
-		outputs: error messages as needed
-		returns: a token if success, otherwise 0.
-		pseudocode:
-			if passing in a password via HTTP_VARS
-				call auth.inc:newPass()
-			if there is a token passed in via HTTP_VARS,
-				check token (auth.inc)
-					if bad, complain about no auth, and return 0
-					if good, return the token!
-			else (no password or token passed in)
-				show the choose family name popup, 
-					if familyid passed in, pre-select it
-				and password entry field
-				text: if you haven't entered a password before, 
-					please CHOOSE a new one now and type it in here
-	newPass():  ui for user to choose a new password
-		inputs: HTTP_VARS
-		outputs: error messages as needed
-		returns: a token if success, otherwise 0.
-		pseudocode:
-			if there is a confirm password also, check that they are the same
-				i.e. they have entered the exact same password twice
-				if it doesn't, complain passwords don't match,
-					complaint is a form with "try again" button
-						and a familyid as an invisiblefield
-					return 0
-			if they do NOT have a password in db (i.e. first time), 
-				check that it's an acceptable new password 
-					(minimum length)
-					if OK, 
-						show a confirm "choosing new password, 
-							please retype to make sure"
-						generateToken on this, 
-							and stuff token into an invisible field
-						link back to $SELF
-						return 0
-					else 
-						complain about bad length, 
-							show "try again" form with familyid
-						and return 0
-			else
-				if there is a password in the db, check it, 
-					generate token, and show menu
-					passing token thru invisibly
+		inputs: authstruct
+		state machine:
+			default:
+				inputs: nothing, optional uid or action
+				outputs: entry box form!
+						userpopup (uid selected?)
+						password field
+					next action(invis): new
+			new: 
+				inputs: clearpass, uid, action
+				outputs: confirmation entry box
+						clearpass/uid hash! (invis)
+						uid(invis)
+					next action(invis): confirm
+			confirm: 
+				inputs: uid, action, pass(hashed), confirmpass, opt token
+				actions:
+					if check pass does NOT meet criteria
+						message: complain 
+						next action(invis): none/default!
+					if no pass in db
+						save pass!
+						return token
+					else
+						check OLD password first?
+				outputs: 
+					message: your new password has been entered. remember it
+	future:
+		changePass()?
+			if suid isn't same, force the user to log back in
+		state machine
+			change:
+				inputs: uid, action, pass, user token, suid, suid token
+				actions: 
+					if suid is authorised to change this user
+
 
 
 menu.php: a nice launching point for things!
