@@ -24,7 +24,7 @@
 use DBI;
 use Getopt::Std;
 
-getopts('vth:p:d:u:s:') or &usage();
+getopts('vrth:p:d:u:s:') or &usage();
 
 
 $host = $opt_h ? $opt_h : "bc";
@@ -36,7 +36,7 @@ $dbname = $opt_d ? $opt_d : "coop_dev";
 $dbh = DBI->connect("DBI:mysql:$dbname:$host$port", $user, $pw )
     or die "can't connect to database $!\n";
 
-@adds = ("audituserid int(32)", "entered datetime", "updated timestamp");
+@adds = ("audit_user_id int(32)", "entered datetime", "updated timestamp");
 
 &addall(\@adds);
 
@@ -72,10 +72,16 @@ sub addall {
 	} # end while
 } #END ADDALL
 
-sub addthem {
+sub addthem 
+{
 	my $tablename = shift;
 	my $addref = shift;
 	my $query;
+	
+	if($opt_r){
+		&renameaudit($tablename, $addref);
+	}
+	
 	#ok, fix em!
 	foreach $blah (@$addref){
 		$query = "alter table $tablename add column $blah";
@@ -88,6 +94,22 @@ sub addthem {
 	}
 } #END ADDTHEM
 
+sub renameaudit 
+{
+	my $tablename = shift;
+	my $addref = shift;
+	my $query;
+	
+	#ok, fix em!
+	$query = "alter table $tablename change column audituserid $$addref[0]";
+	if($opt_v){
+		print "doing <$query>\n";
+	}
+	unless($opt_t){
+		print STDERR $dbh->do($query) . "\n";
+	}
+} #END RENAMEAUDIT
+
 
 sub usage()
 {
@@ -96,6 +118,7 @@ sub usage()
     print STDERR "this is a ONE SHOT that shouldn't be needed anymore.\n";
     print STDERR "\t-v verbose \n";
     print STDERR "\t-t test (don't actually update db) \n";
+    print STDERR "\t-r rename the old 'audituserid' field (a one-off)\n";
     print STDERR "\t-h hostname of db\n";
     print STDERR "\t-p port db is running on\n";
     print STDERR "\t-u username on db (must have ALTER table privs)\n";
