@@ -8,8 +8,10 @@ three database projects
 			possible next web-form project, after 10-names is done
 	donation items
 		3x5 cards, describe the items
+		would be useful to have this in centralised db too. 
+		unique id for families is essential
 	tracking
-		checks, donations, 10 names
+		checks, donations, 10 names status (# tickets, $ donated, etc.)
 
 
 10 names db
@@ -25,7 +27,7 @@ three database projects
 		fields:
 			last (required)
 			first (required)
-			business
+			business/company
 			addr1 (required)
 			addr2
 			state/province (required, "CA" default)
@@ -50,7 +52,7 @@ contacts: carolklyver@sbcglobal.org, matt@omidyar.org, ken@restivo.org
 		
 	
 dates:
-	cutoff for first mailing: 11/4
+	cutoff for 10-names for first mailing: 11/4
 	data processed for mailing:  1/21/04
 	mailing: 2/15/04
 
@@ -68,11 +70,13 @@ actions
 		make it work
 		get to matt today or tomorrow
 	matt: 
-		get nfsn online and going
+		get nfsn or some such thing online and going
 		make it pretty once ken is done
 		make a paper form for those who can't get online
-	carrie:
-		review it tuesday nite, call it "done" and let everyone know to use it
+	carol:
+		review it tuesday nite, decide if it is "done",
+			and let everyone know to use it (flyer in communications folders)
+				
 
 
 later:

@@ -1,1 +1,78 @@
 notes on web interface
+$Id$
+
+main page (with no POST/GET fields)
+	popup for choosing family (java auto-submit, and official SUBMIT button too)
+
+main page (with family POST/GET'ed)
+	show family information
+		parents, kids, session
+	show number of names, and how many to go until 10 (duh)
+	show the actual names entered so far
+	entry form
+		pick up the parentid from the top (the popup should be inside the form)
+		table of 10 entry fields
+			last (required)
+			first (required)
+			business/company
+			addr1 (required)
+			addr2
+			state/province (required, "CA" default)
+			zip/postalcode (required, "94044" default)
+			oountry (required, "USA" default)
+			relationship (required, popup)
+				relative, friend, co-worker, alumni, other
+		of course, the submit/save button!
+
+
+code
+	drawing the popup
+	drawing the basic parent info
+	drawing the names-to-date info
+	drawing the web form
+	handling the submission of the web form
+		checking data
+			everything into an array?
+			all required fields are there
+			name hasn't already been entered? (by whom?)
+		bitching people out if the data is mis-entered
+			re-display the popup/parentinfo/webform again!
+				pre-populated with whatever was entered
+				and red comments showing what is wrong/missing
+
+arch
+	like 5mins
+	common folder
+		.dbfuncs.inc/php
+		.common.php
+			most everything!
+				popup, parentinfo
+		.globals.inc
+			the HTTPVARS globals etc
+			include the dbname
+		.dbname (for testing)
+	index.php
+		the basic page display
+		header/footer stuff
+	10names.php
+		specifics to this thing
+		names-to-date
+		the web form	
+		the submission handling
+
+texts
+	spring fest 10-names donations
+		every family must provide the names of 10 people who should be invited to 
+			attend or donate to springfest. you must enter these names by 11/04/2003
+	choose the name of your family (child's last name)
+	you have entered x names so far. you have x days left to enter x more names!
+		or.. congratulations! you have already entered your 10 names!
+		
+
+misc
+	array for fields
+		including which are required, what defaults, etc
+	
+		
+
+
