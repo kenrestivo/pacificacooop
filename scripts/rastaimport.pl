@@ -46,6 +46,7 @@ use Getopt::Std;
 #};
 
 my $dbh;
+my $headerrowcnt = 10;
 
 
 our($opt_t, $opt_v); #loathe perl
@@ -416,7 +417,8 @@ sub deleteReverse(){
 		$row = $ws->{'MinRow'} ;
 		$maxrow = $ws->{'MaxRow'} ;
 		$cnt = 0; #none found so far!
-		$start = $end = 0; #none found so far!
+		$start = 0;
+		$end = 0; 
 
 		while(defined $maxrow && $row <= $maxrow){
 			$col = $ws->{'MinCol'} ;
@@ -425,10 +427,12 @@ sub deleteReverse(){
 			#determine if we have a header row
 			$vr = &validRow($ws, $row, $col, $maxcol);
 
-			if ($vr == $maxcol){
+			if ($vr > $headerrowcnt){
 				#this is my header row!
-				#print "DEBUG this is the start row!\n";
 				$start++;
+				if($start == 1){
+					print "DEBUG deleteRev() this is the start row!\n";
+				}
 			} else {
 				#a blank line means END of data
 				$end = $start && !$vr ? 1 : $end;
@@ -509,7 +513,7 @@ sub iterateSheets()
 			next;
 		}
 		&iterateRows($ws, $session, \&checkHeaders, 'header');
-		&deleteReverse($ws, $session); #go backwards and see waz up
+		#&deleteReverse($ws, $session); #go backwards and see waz up
 		&iterateRows($ws, $session, \&checkNewKids, 'row');
 		&iterateRows($ws, $session, \&checkNewParents, 'row');
 		&iterateRows($ws, $session, \&checkChanges, 'row');
@@ -566,7 +570,7 @@ sub extractRow()
 		$cell = $ws->{'Cells'}[$rownum][$i];
 		if($cell) {
 			$row[$i] = $cell->Value;
-			printf("( $rownum , $i ) => %s\n", $cell->Value) ;
+			printf("extractRow ( $rownum , $i ) => %s\n", $cell->Value) ;
 		}
 	}
 
@@ -604,21 +608,24 @@ sub iterateRows()
 		#determine if we have a header row
 		$vr = &validRow($ws, $row, $col, $maxcol);
 
-		if ($vr == $maxcol){
+		printf("iterateRows $row ------- from %d to %d cols, %d with data\n", 
+			$col, $maxcol, $vr);
+
+		if ($vr > $headerrowcnt){
 			#this is my header row!
-			#print "DEBUG this is the start row!\n";
-			if($checkCb && $type eq 'header'){
-				&$checkCb(&extractRow($ws, $row, $col, $maxcol), $session);
-			}
 			$start++;
+			if($start == 1){
+				print "DEBUG this is the start row!\n";
+				if($checkCb && $type eq 'header'){
+					&$checkCb(&extractRow($ws, $row, $col, $maxcol), $session);
+				}
+			}
 		} else {
 			#a blank line means END of data
 			$end = $start && !$vr ? 1 : $end;
 
 			#i only want to do stuff if i've already passed the start row
 			if($start && !$end){
-				printf("ROW $row ------- from %d to %d cols\n", 
-					$col, $maxcol);
 				if($checkCb && $type eq 'row'){
 					&$checkCb(&extractRow($ws, $row, $col, $maxcol), $session);
 				} elsif ($checkCb && $type eq 'rev' && $cbdata){
