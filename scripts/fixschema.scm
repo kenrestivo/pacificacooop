@@ -3,7 +3,8 @@
 ;; (load "/mnt/kens/ki/proj/coop/scripts/fixschema.scm")
 
 (use-modules (kenlib) (ice-9 slib)
-			 (database simplesql))
+			 (database simplesql)
+			 (srfi srfi-1))
 (require 'printf)
 
 
@@ -34,11 +35,12 @@
 						  (regexp-substitute/global #f  ",$"
 											(join-strings (cdr line))
 											'pre 'post)) ))
-;; utility: clean sql definition line
-(define (clean-line line)
+;; utility: clean sql definition line,
+;; which is a list of words in the line!
+(define (clean-line-list line-list)
   (map (lambda (y)
 		 (regexp-substitute/global #f  "[ \t]" y  'pre 'post)) 
-	   (delete "" line)))
+	   (delete "" line-list)))
 
 ;; utility
 (define (unparen string)
@@ -61,7 +63,7 @@
 (define (valid-def-line l)
   (if (and 
 	   (> (length l) 1)
-	   (not (equal? (car l) "--"))) #t #f))
+	   (not (equal? (car l) "--"))) #t #f))    
 
 ;; main, kind of: for loading the proper schema file
 (define (load-definition! deffile)
@@ -72,7 +74,7 @@
 		((or (eof-object? line) ))
 	  ((lambda (x) (if (valid-def-line x)
 					   (process-def! x)))
-	   (clean-line (string-split line #\space))))
+	   (clean-line-list (string-split line #\space))))
 	(close p) ))	
 
 ;;;;;;;;;;;;; pcns_schema-processing stuff
@@ -114,8 +116,8 @@
 (define (rename-column change-line schema)
   (let* (
 		 (old-table (car change-line))
-		 (old-col (second change-line))
-		 (new-col  (car (last change-line 1)))
+		 (old-col (cadr change-line))
+		 (new-col  (caddr change-line ))
 		 (long-def (assoc-ref (assoc-ref schema old-table) old-col))
 		 )
 	(if long-def
@@ -166,8 +168,8 @@
   (for-each (lambda (x)
 			  (rename-column x schema-alist))
 			(flatten-change-alist change-alist))
-  (for-each rename-table change-tables)		; finally, follow up with tables
-  )
+  (for-each rename-table change-tables))	; finally, follow up with tables
+  
 
 ;; changes a heirarchal alist into a flat (table old-col new-col) list
 ;; possibly the ugliest function i have ever written
