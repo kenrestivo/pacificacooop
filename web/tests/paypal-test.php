@@ -32,19 +32,32 @@ print "<HTML>
 
 confessArray($_REQUEST, "test REQUEST");
 
+///////// TABLE POPUP
+$obj = new DB_DataObject();
+$obj->databaseStructure();
+global $_DB_DATAOBJECT;
+//confessArray($_DB_DATAOBJECT, "dataobject");
 
-	$form = new HTML_QuickForm('gettable', 'get');
-	$grp[] =& HTML_QuickForm::createElement(
-		'text', 'table', 'Browse table:');
-	$grp[] =& HTML_QuickForm::createElement('submit', null, 'Send');
-	$form->addGroup($grp, NULL, 'Browse table:');
-	$form->display();
-	print "<hr>";
+foreach($_DB_DATAOBJECT['INI']['coop'] as $table => $cols) {
+	if(strpos($table, '__keys') == 0)
+		$vals[$table] = $table;
+}
 
+$form = new HTML_QuickForm('gettable', 'get');
+// $grp[] =& HTML_QuickForm::createElement(
+// 	'text', 'table', 'Browse table:');
+$grp[] =& HTML_QuickForm::createElement('select', 'table', null, $vals);
+$grp[] =& HTML_QuickForm::createElement('submit', null, 'Change');
+$form->addGroup($grp, NULL, 'Browse table:');
+$form->display();
+print "<hr>";
+
+
+
+//////////COMMON
 if (!isset ($_REQUEST['table'])){
 	done();
 }
-
 $table = $_REQUEST['table'];
 
 $obj = DB_DataObject::factory ($table);
@@ -52,16 +65,16 @@ if (PEAR::isError($obj)){
 	die ($obj->getMessage ());
 }
 
-
-////////////// the detail form
 if($_REQUEST['action'] == 'detail'){
 
 	if (isset ($_REQUEST['id'])){
 		$obj->get ($_REQUEST['id']);
 	}
 
+//////////////////
+/////////////DETAIL FORM
+//////////////////
 
-//print_r($obj);
 
 //now the good stuff
 	$build =& DB_DataObject_FormBuilder::create ($obj);
@@ -144,4 +157,3 @@ done();
 <!-- END TEST -->
 
 
- 
