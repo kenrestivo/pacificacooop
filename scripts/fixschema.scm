@@ -44,4 +44,19 @@
 	  (close p) )))
 
 
+(define (valid-def-line l)
+	  (if (and (not (equal? (car l) "--")) 
+		   (> (length l) 1))
+	  #t #f))
+
+;; for loading the proper schema file
+(define (load-definition deffile)
+  (let ((p (open-input-file deffile) ) )
+	
+	(do ((line (read-line p) (read-line p)))
+		((or (eof-object? line) ))
+	  ((lambda (x) (if (valid-def-line x) (pp x)))
+	   (string-split line #\space)))
+	 (close p) ))
+
 ;;; EOF
