@@ -51,19 +51,25 @@ OK, CODE!
 	drawing the web form
 		name the fields in a loop: name1, name2, addr1, addr2
 		invis field with parentid: because there'll be no popup on this page
-	handling the submission of the web form
-		checking data
-			everything into an array?
-			HTTPPOST them all, dump them in an array 
-				(even though arrays in php SUCK!)
-			all required fields are there, valid data, etc.
-			name hasn't already been entered? (by whom?)
-		complain if the data is mis-entered
-			re-display the webform again!
-				pre-populated with whatever was entered
-				and red comments showing what is wrong/missing
-			accept the GOOD ones, ONLY whine and redisplay the bad ones!
-		display the main page again, for this familyid.
+	czeching
+		go through all rows (entry1-x)
+			ok, check
+				compare with the $fields global
+				check that required's have data in 'em
+				check that they're less than len or 254 (maybe)
+				if not, return an array to display
+					copy an empty fields array
+					stuff the entered values into =>def
+						i'll need to htmlspecialchars() the data first!
+					stuff the error description into => error
+						and red comments showing what is wrong/missing
+			if they are ok, save them!
+				send the row array to a save function
+					i will need mysql_escape_string() for db insertion!
+						or addslashes()
+			report broken ones DONE
+				create an array of arrays
+				redisplay the form, but it will show up as an error form
 
 admin code
 	drawing the chooser (as above and in reprots.txt)
