@@ -45,24 +45,45 @@ $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
 sub addall {
 	$addref = shift;
-	my $rquery = "select * from $from where $col is not null";
-	#print "doing <$rquery>\n"; #XXX debug only
-	my $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+	my $rqueryobj ;
+	my %ritem ;
+	my $ritemref ;
+	my %key ;
+
+	$rqueryobj = $dbh->table_info('%', '%', '%');
+	#my $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 	$rqueryobj->execute() or die "couldn't execute $!\n";
 
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
 		%ritem = %$ritemref;
-		&addthem(\@adds);
+		if($opt_v){
+			foreach $key (keys %ritem) {
+				printf("%s -> %s\n", $key, $ritem{$key});
+			}
+			print("\n");
+		}
+		if($ritem{'TABLE_TYPE'} ne 'TABLE'){
+			next;
+		}
+		unless($opt_t){
+			&addthem($ritem{'TABLE_NAME'}, \@adds);
+		}
 	} # end while
 } #END ADDALL
 
 sub addthem {
-	$addref = shift;
+	my $tablename = shift;
+	my $addref = shift;
+	my $query;
 	#approximate list of families
 	#ok, fix em!
-	$query = "update $to set $col = \"$changer\" where familyid = $id";
-	print "doing <$query>\n";
-	#print STDERR $dbh->do($query) . "\n";
+	$query = "this is the $tablename query";
+	if($opt_v){
+		print "doing <$query>\n";
+	}
+	unless($opt_t){
+		print STDERR $dbh->do($query) . "\n";
+	}
 } #END ADDTHEM
 
 
