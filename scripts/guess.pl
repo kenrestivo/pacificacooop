@@ -149,7 +149,9 @@ sub choosemulti {
 	chomp $reply;
 	$nreply = $reply =~ /^\d+$/ ? $reply : 0;
 	if($nreply > 0){ #XXX check that the reply is valid, it was in @choices!
-		&replace($tab, $nreply, $lostid);
+		if(grep(/$nreply/, @choices)){
+			&replace($tab, $nreply, $lostid);
+		}
 	}
 }  #END CHOOSEMULTI
 
@@ -187,7 +189,7 @@ sub replace {
 	#ok, now replace the bitch
 	my $squery = "update $tab set parentsid = $id where " . $tab . "id = $lostid";
 	print "doing <$squery>\n";
-	#print STDERR $dbh->do($squery) . "\n";
+	print STDERR $dbh->do($squery) . "\n";
 } #END REPLACE
 
 #EOF
