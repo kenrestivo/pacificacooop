@@ -47,7 +47,7 @@ class Income extends DB_DataObject
 								  'thank_you_id');
 
 	var $fb_fieldLabels = array( 
-		"family_id" => "Co-Op Family",
+		"family_id" => "Co-Op Family", //  what the hell isthis used for??
 		"check_number" => "Check or Credit Card Auth number" ,
 		"check_date" => "Date of Check" ,
 		"payer" => "Person issuing check" ,
@@ -65,4 +65,7 @@ class Income extends DB_DataObject
 
 	var $fb_formHeaderText = "Cash Donations and Fees";
 
+	var $fb_requiredFields = array('check_number', 'check_date', 'payer', 
+								   'payment_amount', 'account_number', 
+								   'school_year' );
 }

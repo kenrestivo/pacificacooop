@@ -3,7 +3,7 @@
 //$Id$
 
 /*
-	Copyright (C) 2004  ken restivo <ken@restivo.org>
+	Copyright (C) 2004-2005  ken restivo <ken@restivo.org>
 	 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ class coopForm extends CoopObject
 			$formname = sprintf('edit_%s', $this->table);
 			$form =& new HTML_QuickForm($formname, false, false, false, 
 										false, true);
+			$this->form = &$form; //  save it so i can dick with it later
 			
 			$form->addElement('header', $formname, 
 							  $this->obj->fb_formHeaderText ?
@@ -77,6 +78,7 @@ class coopForm extends CoopObject
 					$el =& $form->addElement('select', $key, false, 
 											 $this->getEnumOptions($key));
 				} else {
+					print "i got here $key<br>";
 					$el =& $form->addElement(
 						$key == $this->pk ? 'hidden' : 'text', 
 						$key);
@@ -85,9 +87,9 @@ class coopForm extends CoopObject
 				$el->setLabel($this->obj->fb_fieldLabels[$key] ? 
 							  $this->obj->fb_fieldLabels[$key] : $key);
 				
-
 				if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
-					$form->addRule($key, 'Date must be in format MM/DD/YYYY', 
+					$form->addRule($key, 
+								   'Date must be in format MM/DD/YYYY', 
 								   'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
 					$val && $val = sql_to_human_date($val);
 				}
@@ -103,14 +105,14 @@ class coopForm extends CoopObject
 			
 			// XX is this necessary?
 			$form->addElement('hidden', 'table', $this->table);
-			
+
+			$this->addRequiredFields();
 
 			// finally, sumbit it!
 			$form->addElement('submit', null, 'Save');
 
 			$form->applyFilter('__ALL__', 'trim');
 
-			$this->form = &$form;
 			return $form;
 		}
 
@@ -249,6 +251,15 @@ class coopForm extends CoopObject
 				}
 			}
 
+		}
+
+	function addRequiredFields()
+		{
+			if(is_array($this->obj->fb_requiredFields)){
+				foreach($this->obj->fb_requiredFields as $fieldname){
+					$this->form->addRule($fieldname, "$key mustn't be empty.", 'required');
+				}
+			}
 		}
 
 } // END COOP FORM CLASS
