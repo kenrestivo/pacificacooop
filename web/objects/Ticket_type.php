@@ -12,7 +12,7 @@ class Ticket_type extends DB_DataObject
     var $__table = 'ticket_type';                     // table name
     var $ticket_type_id;                  // int(32)  not_null primary_key unique_key auto_increment
     var $description;                     // string(255)  
-    var $paid_flag;                       // int(1)  
+    var $paid_flag;                       // string(3)  enum
     var $jointable_hack;                  // string(255)  
 
     /* ZE2 compatibility trick*/
