@@ -29,11 +29,8 @@ require_once("CoopMenu.php");
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
-print '<HTML lang="en">
-		<HEAD>
-			<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-
-				<link rel=stylesheet href="main.css" title=main>
+printf('<HTML lang="en">
+		<HEAD> %s
 			<TITLE>Data Entry</TITLE>
 		</HEAD>
 
@@ -41,8 +38,8 @@ print '<HTML lang="en">
 
 		<div id="page">
 		<div id="header">
-				<h2>Pacifica Co-Op Nursery School Data Entry</h2>
-	';
+				<h2>Pacifica Co-Op Nursery School Data Entry</h2>',
+	   $metalinks);
 
 warnDev();
 

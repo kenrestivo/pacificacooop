@@ -40,10 +40,11 @@ h3 {
 	font-size: 110%;
  }
 
-div.box { 
-	border: solid;
- 	 border-width: thin; 
-  	width: 80% }
+#backbutton { 
+	background-color:  #ffcc99;
+	text-align: center;
+	border: none;
+}
 
 
 
@@ -77,8 +78,9 @@ div.box {
 	background-color:  #ffcc99;
 	  float: left;
 	margin-right:  1em;
+	margin-left:  .5em;
+	padding-left:  .5em;
 	padding-right: 1em;
-	padding-left: 1em;
 }
 
 #header { 

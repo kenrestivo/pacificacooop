@@ -193,11 +193,14 @@ class CoopMenu extends HTML_Menu
 
 			$tab =& new HTML_Table('width="100%"');
 
-			$tab->addRow(array(
-							 sprintf("<h3>Welcome %s!</h3>", $u['username']),
-							 mainMenuForm(),
-							 $this->page->selfURL("Log Out", 
-												  'action=logout')));
+			$tab->addCol(array(
+							 sprintf("<h3>Welcome %s!</h3>", $u['username'])));
+			$tab->addCol(array($this->page->selfURL(
+								   "Back to Main Menu", "action=menu", 
+								   "index.php"))
+						 ); // TODO: maybe make that backbutton hilighted?
+			$tab->addCol(array($this->page->selfURL("Log Out", 
+													'action=logout')));
 			
 			
 						 
