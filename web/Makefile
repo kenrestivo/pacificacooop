@@ -65,8 +65,8 @@ download-dev::
 commit-live:
 	(cd $(LIVEPATH); cvs commit -m "syncing")
 
-commit-dev:
-	(cd $(DEVPATH); cvs commit -m "syncing")
+update-dev:
+	(cd $(DEVPATH); cvs update )
 
 sync-live: commit-live download-live
 
