@@ -118,6 +118,7 @@ function confessArray($fields, $message)
 {
 	print "<pre>";
 	print "DEBUG $message\n";
+//print_r( debug_backtrace());
 	if(is_array($fields)){
 		print htmlentities(print_r($fields, true));
 		reset($fields);
@@ -127,6 +128,10 @@ function confessArray($fields, $message)
 	print "</pre>";
 } #END CONFESSARRAY
 
+function confessBacktrace()
+{
+	confessArray(debug_backtrace(), 'backtrace');
+}
 
 
 ######################

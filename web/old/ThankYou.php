@@ -564,6 +564,11 @@ http://www.pacificacoop.org/
 				$sf->obj->find(true);
 				$soliciting_families[]= $sf->obj->family_id;
 				$company_guess_hack[] =$sf->obj->company_id;
+
+				//TODO: check leads_income *and* tickets
+				// and a leads_guess_hack, i suppose
+
+
 			}
 			if($found){
 				$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);

@@ -74,7 +74,7 @@ switch($_REQUEST['action'])
  case 'list':
  default:
 	 print $cp->selfURL('test 16', 'action=test&uid=16');
-	 print $cp->selfURL('test 17', false, 'action=test&uid=17');
+	 print $cp->selfURL('test 17', 'action=test&uid=17');
 	 break;
 }
 
