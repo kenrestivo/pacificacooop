@@ -353,6 +353,33 @@ select families.name, sum(auction.amount) as amount
     where length(package_number) < 4 and package_number like "S%";
 
 -- tickets export
-select ticket_quantity , amount, last, first, addr , addrcont, city , state , zip , leads.leadsid as response_code from invitation_rsvps left join leads on invitation_rsvps.leadsid = leads.leadsid left join inc on invitation_rsvps.incid = inc.incid where ticket_quantity > 0 order by leads.last, leads.first;
+select ticket_quantity , amount, last, first, addr , addrcont, city , 
+        state , zip , leads.leadsid as response_code 
+    from invitation_rsvps 
+        left join leads on invitation_rsvps.leadsid = leads.leadsid 
+        left join inc on invitation_rsvps.incid = inc.incid 
+    where ticket_quantity > 0 
+	order by leads.last, leads.first;
+
+-- the enhancemethours
+-- XXX yank dropped families, dur.
+-- TODO the 'having' clauses, optionally for the showall, see solicitnag
+select families.name as Family_Name, 
+    sum(enhancement_hours.hours) as Total 
+        from families 
+           left join kids on kids.familyid = families.familyid
+           left join attendance on kids.kidsid = attendance.kidsid
+           left join enrol on attendance.enrolid = enrol.enrolid
+           left join parents 
+               on parents.familyid = families.familyid
+           left join enhancement_hours 
+               on parents.parentsid = enhancement_hours.parentsid
+        where enrol.semester = '2003-2004'
+            and attendance.dropout is null
+    group by families.familyid
+    order by families.name;
+
+-- having Drop_Date < '2000-01-01' 
+
 
 --- EOF
