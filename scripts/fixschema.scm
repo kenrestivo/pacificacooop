@@ -8,11 +8,10 @@
 
 (load "/mnt/kens/ki/is/scheme/lib/kenlib.scm")
 
-;; XXX note, this is fakery. you'll need to manually put in the root pw's
-;;(define dbh (simplesql-open 'mysql "coop" "127.0.0.1" "paccoop" "test" "2299"))
-(define dbh (simplesql-open 'mysql "coop_fake" "bc" "input" "test"))
+(define dbh (apply simplesql-open 'mysql
+				   (read-conf "/mnt/kens/ki/proj/coop/sql/db.conf")))
 
-(define new-schema '()) ;; well, here it is.
+(define old-schema '()) ;; well, here it is.
 (define current-table "") ;; there has to be a more schemey way 
 
 (define debug #t)
@@ -21,7 +20,11 @@
 (define (doit query)
   (if debug
 	  (pp query)
-	  (simplesql-query dbh query) ))
+	  (catch #t
+			 (lambda ()
+			   (simplesql-query dbh query) )
+			 (lambda x (printf "caught error on [%s]\n" query)))))
+	  
 
 ;;;;;;;; definition-processing stuff
 
@@ -32,7 +35,7 @@
 ;; if it is a COLUMN, i'll want to do:
 (define (add-column table line)
   ;; NOTE! must combine before yanking ,'s!
-  (set! new-schema (add-sub-alist new-schema table 
+  (set! old-schema (add-sub-alist old-schema table 
 								  (car line)
 								  (regexp-substitute/global #f  ",$"
 													(join-strings (cdr line))
@@ -66,7 +69,7 @@
 
 ;; for loading the proper schema file
 (define (load-definition deffile)
-  (set! new-schema '())
+  (set! old-schema '())
   (let ((p (open-input-file deffile) ) )
 	
 	(do ((line (read-line p) (read-line p)))
@@ -87,20 +90,23 @@
 				(not (equal? (car x) table)))
 		   (sprintf #f "duplication of rename-column %s" key)
 	   )
-	 new-schema))) )
+	 old-schema))) )
 
 
 (define (rename-column items)
   (let* ((sp (string-split (car items) #\.))
 		(new (string-split (cadr items) #\.))
-		(long-def (assoc-ref (assoc-ref new-schema (car sp)) (cadr sp)))
+		(table (car sp))
+		(old-col (cadr sp))
+		(new-col (cadr new))
+		(long-def (assoc-ref (assoc-ref old-schema (car sp)) (cadr sp)))
 		)
 	(if long-def
 		(doit (sprintf #f "alter table %s change column %s %s %s"
-					   (car sp) (cadr sp) (cadr new) long-def))
-		(printf "ignoring %s:%s\n" (car sp) (cadr sp))
+					   table old-col new-col long-def))
+		(printf "ignoring %s:%s\n" table old-col )
 		)
-	)) 
+	))
 
 ;;; the easy one: tables.
 (define (rename-table items)
