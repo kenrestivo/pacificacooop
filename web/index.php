@@ -74,6 +74,8 @@
 		showNames($id);
 
 		print "<br>Enter more names here. 
+					You may enter less than 10 if you wish, then 
+					come back later and enter more if you like.
 					Remember to click 'Save Names' 
 					at the bottom of this screen when you are done!\n";
 		#finally, give them a form to enter data!
