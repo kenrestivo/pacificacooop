@@ -25,7 +25,9 @@
  (cdr (simplesql-query *dbh*
 					   "select parents.email_address, parents.family_id
 				from parents
+						left join families using (family_id)
 				where parents.email_address is not null
+						and families.email is null
 				group by parents.family_id
 			order by parents.family_id")))
 
