@@ -65,13 +65,12 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 
 	if($$insref{'exp'} ){
 		if($$insref{'exp'} < $checkdate){
-			$badness .= "\tins ";
-			$badness .=	strftime('%m/%d/%Y', localtime($$insref{'exp'})) ;
-			$badness .=	" company ";
-			$badness .=  $$insref{'companyname'};
-			$badness .= " policy "; 
-			$badness .= $$insref{'policynum'}; 
-			$badness .= " \n";
+			$badness .= sprintf(
+					"\tins %s company %s policy %s \n",
+					strftime('%m/%d/%Y', localtime($$insref{'exp'})) ,
+					$$insref{'companyname'},
+					$$insref{'policynum'}
+				);
 		}
 	} else {
 		$badness .= "\tno insurance\n";
@@ -79,27 +78,25 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 
 	if($$licref{'exp'}) {
 		if($$licref{'exp'} < $checkdate){
-			$badness .= "\tlic ";
-			$badness .=   strftime('%m/%d/%Y', localtime($$licref{'exp'})) ;
-			$badness .= " driver ";
-			$badness .=  $$licref{'first'};
-			$badness .=  " ";
-			$badness .=  $$licref{'middle'};
-			$badness .=  " ";
-			$badness .=  $$licref{'last'};
-			$badness .=  " \n";
+			$badness .= sprintf(
+					"\tlic %s driver %s %s %s \n",
+					strftime('%m/%d/%Y', localtime($$licref{'exp'})) ,
+					$$licref{'first'},
+					$$licref{'middle'},
+					$$licref{'last'}
+			);
 		}
 	} else {
 		$badness .= "\tno drivers license\n";
 	}
 
 	if($badness){
-		$badness .= $$famref{'name'}; 
-		$badness .= " " ; 
-		$badness .= $$famref{'phone'};
-		$badness .= " "; 
-		$badness .= $$famref{'email'};  
-		$badness .= "\n---------\n";
+		$badness .= sprintf(
+					"%s %s %s \n---------\n",
+					$$famref{'name'},
+					$$famref{'phone'},
+					$$famref{'email'}
+				);
 	}
 
 	print $badness;
@@ -125,7 +122,7 @@ sub getlicenseinfo()
 			left join parents on lic.parentsid = parents.parentsid 
 		where parents.worker= 'Yes' and parents.familyid = $famid
 		group by parents.parentsid
-		order by exp desc";
+		order by exp asc";
 	#print "doing <$query>\n"; #XXX debug only
 	$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
 	$queryobj->execute() or die "couldn't execute $!\n";
@@ -135,8 +132,7 @@ sub getlicenseinfo()
 	} # end while
 
 	if($queryobj->rows() > 1){
-		print "ERROR! more than one row returned\n";
-		exit 1;
+		print "\tERROR! more than one row returned for lic on $famid\n";
 	}
 
 	return \%item;
@@ -155,7 +151,7 @@ sub getinsuranceinfo()
 				left join parents on ins.parentsid = parents.parentsid 
 			where parents.familyid = $famid
 			group by parents.parentsid
-			order by exp desc
+			order by exp asc
 		";
 
 	#print "doing <$query>\n"; #XXX debug only
@@ -167,8 +163,7 @@ sub getinsuranceinfo()
 	} # end while
 
 	if($queryobj->rows() > 1){
-		print "ERROR! more than one row returned\n";
-		exit 1;
+		print "\tERROR! more than one row returned for ins on <$famid>\n";
 	}
 
 	return \%item;
@@ -185,7 +180,7 @@ sub emailreminder()
 
 	print "Subject: Insurance Information for Co-Op\n\n";
 	print "Hello! My job this year is to keep track of the driver's license and auto insurance information for the school. This is actually an automated email that is being sent by a computer program. I know, it's impersonal, but, computers are good for automating repetitive tasks like this. My apologies.\n\n";
-	print "According my new program-- which may be completely wrong (I wrote itmyself) your auto insurance is with " . $ritem{'companyname'} . " and expired on " . $ritem{'expires'} . "\n\n";
+	print "According this new program-- which may be completely wrong (I wrote itmyself) your auto insurance is with " . $ritem{'companyname'} . " and expired on " . $ritem{'expires'} . "\n\n";
 	print "Regulations require us to have a copy of a valid driver's license and current auto insurance on file. It appears this has to be current in order for you to be allowed to drive your child on any field trips. The next field trip is scheduled for the end of October, so, now is a good time to get all this paperwork up-to-date.\n\n";
 	print "If you could please place a copy of your current insurance card (the one that you keep in your car) into my communications folder, that would be great.\n\n";
 	print "Again, sorry for the impersonal email. Please feel free to call me at 650-355-1317 with any questions.\n\nThanks!\n\n-ken";
