@@ -44,7 +44,7 @@ download::
 	rsync -e ssh \
 		--rsync-path=$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
-		$(NFSNUSR)@$(NFSNHOST):$(NFSNPATH) $(HERE)
+		$(NFSNUSR)@$(NFSNHOST):$(NFSNPATH)/ $(HERE)
 
 
 #EOF

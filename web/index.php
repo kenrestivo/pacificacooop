@@ -11,7 +11,7 @@
 <BODY>
 
 <h2>Pacifica Co-Op Nursery School Springfest Invitation Entry</h2>
-<p>&nbsp;</p>
+<!--<p>&nbsp;</p>-->
 
 <?php
 	# main sprintfest page
@@ -61,7 +61,7 @@
 
 			showNames($id);
 
-			print "<br>Feel free to enter more names if you like!<br>\n";
+			print "<br>Feel free to enter more names if you like!<br>";
 
 			#finally, give them a form to enter data!
 			tenNamesForm($id);
@@ -77,20 +77,20 @@
 
 		#TODO : get the cutoff date from the database, 
 		#so it someone can change it next year without having to edit this code
-		print "	Every family must provide the names of 10 people who 
+		print "<p>Every family must provide the names of 10 people who 
 				should be invited to attend or donate to Springfest. 
 				These can be family, friends, business associates, etc. 
 				They will be sent formal invitations on behalf of the School. 
-				You must enter at least 10 names by $cutoffdate<br>";
+				You must enter at least 10 names by $cutoffdate</p>";
 
 		#show them what they've already got, don pardo
 		showNames($id);
 
-		print "<br>Enter more names here. 
+		print "<P>Enter more names here.
 					You may enter less than 10 if you wish, then 
 					come back later and enter more if you like.
 					Remember to click 'Save Names' 
-					at the bottom of this screen when you are done!\n";
+					at the bottom of this screen when you are done!</p>";
 		#finally, give them a form to enter data!
 		tenNamesForm($id);
 
