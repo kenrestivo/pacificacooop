@@ -91,21 +91,29 @@ class coopObject
 			$subobj = $obj->getLink($key); 
 	//confessObj($subobj, "checkLInkFild() subobj $subobj->__table for $key of $val");
 
-				// only if i have linkfields in the dataobj
-			$ldfs = $subobj->fb_linkDisplayFields;
+
+			return $this->concatLinkFields(&$subobj);
+		}
+
+
+
+	function concatLinkFields(&$obj)
+		{
+			$ldfs = $obj->fb_linkDisplayFields;
 			if(!$ldfs){
 				return $val;
 			}
+			//confessObj($obj, "concatlinkfields(obj)");
+			// only if i have linkfields in the dataobj
 			$val = false; 		// gotta reset it here.
 			foreach($ldfs as $linkfield){
 				// trying to YAGNI here. i don't need 2-level links yet
 				// so, i'm not coding that recursion in here now. sorry charlie.
-				$val .= sprintf("%s%s", $val ? ' - ' : "", $subobj->$linkfield);
+				$val .= sprintf("%s%s", $val ? ' - ' : "", $obj->$linkfield);
 			}
 
 			return $val;
 		}
-
 	
 
 } // END COOP OBJECT CLASS

@@ -204,7 +204,7 @@ class coopView extends CoopObject
 			$tab->addRow($res, 'bgcolor=#9999cc', 'TH'); 
 		}
 
-	function tableTitle($linkfield)
+	function tableTitle()
 		{
 			$res = sprintf("<hr><h2>%s</h2>", 
 						   $this->obj->kr_longTitle ? $this->obj->kr_longTitle : $this->table);
