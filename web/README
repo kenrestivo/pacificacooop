@@ -91,6 +91,8 @@ callbacks struct
 	countindex: the field in $fields which should be where'd for counting
 		this can be a linkfield or not.
 	sumfield: sets the mode of the count to 'sum', using this field for totals
+	description: long description for top menu
+	shortdesc: short description for sidebar or popup treemenu
 	fields: the NAME of the fieldspec array. eventually will be REFERENCE here
 	joins: a recursive array of arrays of join info, 
 		in order of joining (important!)
