@@ -22,9 +22,9 @@
 	require_once("financefuncts.inc");
 	require_once("roster.inc");
 	require_once("10names.inc");
-	require_once("insurancefuncs.inc");
-	require_once("calendarfuncs.inc");
-	require_once("adminfuncs.inc");
+	//require_once("insurancefuncs.inc");
+	//require_once("calendarfuncs.inc");
+	//require_once("adminfuncs.inc");
 	require_once("pkg_checkin_funcs.inc");
 	//require_once("solicitfuncs.inc");
 
