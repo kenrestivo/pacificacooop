@@ -91,20 +91,21 @@ $dbh = DBI->connect("DBI:mysql:$dbname:$host$port", "input", "test" )
 
 
 #approximate list of families
-$rquery = "select families.name, families.family_id
+$rquery = sprintf("select families.name, families.family_id
 		from families 
 			left join leads on families.family_id = leads.family_id
 		left join kids on kids.family_id = families.family_id
 		left join enrollment on kids.kid_id = enrollment.kid_id
-		where enrollment.school_year = $schoolyear and
+		where enrollment.school_year = '%s' and
 				enrollment.dropout_date is NULL
-	group by families.family_id\n";
+	group by families.family_id\n", $schoolyear);
 if($opt_v){
 	print "doing <$rquery>\n"; 
 }
 $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 $rqueryobj->execute() or die "couldn't execute $!\n";
 
+# add regular family users
 while ($ritemref = $rqueryobj->fetchrow_hashref){
 	%ritem = %$ritemref;
 
