@@ -26,10 +26,10 @@
                if ($this->getComment() != '') {
                    $strHtml .= $tabs . '<!-- ' . $this->getComment() . "//-->\n";
                }
-               // The 'unselected' multi-select which appears on the left
+               // The 'unselected' multi-select which appears on the right
                $strHtmlUnselected = '<select name="__' . $this->getName()
 				   . "[]\" size=10 multiple>\n"; // PUT CONFIGURABLE SIZE HERE?
-               // The 'selected' multi-select which appears on the right
+               // The 'selected' multi-select which appears on the left
                $strHtmlSelected = '<select name="_' . $this->getName() .
 				   "[]\" size=10 multiple>\n"; // PUT CONFIGURABLE SIZE HERE?
                // The hiddent multi-select
@@ -66,23 +66,23 @@
                $strHtml .= $this->_getJs();
                // I'm using a table in order to lay this out properly on the page.
                // Any ideas on a better way to do this?
-               $strHtml .= $tabs . "<table border=1 cellpadding=10
+               $strHtml .= $tabs . "<table border=1 cellpadding=1
    cellspacing=0 align=center ><tr><td align=center>\n";
-               $strHtml .= $tabs . $strHtmlUnselected;
+               $strHtml .= $tabs . $strHtmlSelected;
                $strHtml .= $tabs . "</td><td align=center>\n";
-               $strHtml .= $tabs . "<input type=\"button\"
-   onClick=\"{$this->_jsPrefix}moveSelections(this.form.elements['__" .
-				   $this->getName() . "[]'], this.form.elements['_" . $this->getName() .
-				   "[]'], this.form.elements['" . $this->getName() . "[]'], 'remove')\"
-   value=\" << \">&nbsp;\n";
                $strHtml .= $tabs . "<input type=\"button\"
    onClick=\"{$this->_jsPrefix}moveSelections(this.form.elements['__" .
 				   $this->getName() . "[]'], this.form.elements['_" . $this->getName() .
 				   "[]'], this.form.elements['" . $this->getName() . "[]'], 'add')\"
-   value=\" >> \">\n";
+   value=\"<<Add \"><br>\n";
+               $strHtml .= $tabs . "<input type=\"button\"
+   onClick=\"{$this->_jsPrefix}moveSelections(this.form.elements['__" .
+				   $this->getName() . "[]'], this.form.elements['_" . $this->getName() .
+				   "[]'], this.form.elements['" . $this->getName() . "[]'], 'remove')\"
+   value=\" Remove>> \">\n";
                $strHtml .= $tabs . $strHtmlHidden;
                $strHtml .= $tabs . "</td><td align=center>\n";
-               $strHtml .= $tabs . $strHtmlSelected;
+               $strHtml .= $tabs . $strHtmlUnselected;
                $strHtml .= $tabs . "</td></tr></table>\n";
 			   
                return $strHtml;
@@ -99,14 +99,14 @@
 
                $js .= "
                    /* begin javascript for HTML_QuickForm_advmultselect */
-                   function {$this->_jsPrefix}moveSelections(menuLeft, menuRight, menuHidden, action) {
+                   function {$this->_jsPrefix}moveSelections(menuUnselected, menuSelected, menuHidden, action) {
                        if(action == 'add') {
-                           menuFrom = menuLeft;
-                           menuTo = menuRight;
+                           menuFrom = menuUnselected;
+                           menuTo = menuSelected;
                        }
                        else {
-                           menuFrom = menuRight;
-                           menuTo = menuLeft;
+                           menuFrom = menuSelected;
+                           menuTo = menuUnselected;
                        }
                        // Don't do anything if nothing selected. Otherwise we throw jscript errors.
                        if(menuFrom.selectedIndex == -1) {
@@ -134,8 +134,8 @@
 
                        // Set the appropriate items as 'selected in the hidden select.
                        // These are the values that will actually be posted with the form.
-                       for ( i=0; i < menuRight.length; i++) {
-                           menuHidden.options[menuHidden.length] = new Option(menuRight.options[i].text, menuRight.options[i].value);
+                       for ( i=0; i < menuSelected.length; i++) {
+                           menuHidden.options[menuHidden.length] = new Option(menuSelected.options[i].text, menuSelected.options[i].value);
                            menuHidden.options[menuHidden.length-1].selected = true;
                        }
                    }
