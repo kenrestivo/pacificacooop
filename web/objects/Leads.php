@@ -125,8 +125,8 @@ class Leads extends DB_DataObject
 			$this->whereAdd(sprintf('%s.school_year = "%s"',
 									$inv->__table, $schoolyear));
 			// TODO fix user func array here
-			call_user_method('orderBy', 
-							 implode(' ' , $this->fb_linkDisplayFields));
+			$this->orderBy(implode(', ' , $this->fb_linkDisplayFields));
+
 			$this->find();
 			$options[''] = '-- CHOOSE ONE --';
 			while($this->fetch()){

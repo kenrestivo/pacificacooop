@@ -100,7 +100,8 @@ class coopForm extends CoopObject
 
 				if(!$this->isPermittedField($key)){
 					// the hidden thing. i think  i need to do hidden here
-					if(in_array($key, $this->obj->fb_requiredFields)){
+					if(is_array($this->obj->fb_requiredFields) && 
+					   in_array($key, $this->obj->fb_requiredFields)){
 						$this->form->addElement('hidden', $key, $val);
 					}
 					continue;
