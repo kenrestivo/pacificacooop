@@ -3,7 +3,7 @@
 
 #	functions specific to auth
 
-#  Copyright (C) 2003  ken restivo <ken@restivo.org>
+#  Copyright (C) 2003,2004  ken restivo <ken@restivo.org>
 #
 #  some stuff lifted from
 #  POST-NUKE Content Management System
@@ -418,6 +418,7 @@ accessLevelString($privnum, $callbacks)
 /******************
 	LOGINPOPUP
 	drawing the popup
+	yes, this too is a duplicatoin of popuputil in shared.inc
 		query all users. doy.
 		if an id is passed in, use that one as default. 
 		otherwise, CHOOSE ONE
@@ -450,7 +451,7 @@ function loginPopup($uid)
 	}
 	while($row = mysql_fetch_array($listq)){
 		$sel = $row['userid'] == $uid ? " selected" : "";
-		printf("<option value='%d' %s>%s</option>\n", 
+		printf("<option value=\"%d\" %s>%s</option>\n", 
 			$row['userid'], $sel, $row['name']);
  
 	}
