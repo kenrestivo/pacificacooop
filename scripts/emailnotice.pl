@@ -181,6 +181,11 @@ sub getlicenseinfo()
 	return \@total; # massive.
 }# END GETLICENSEINFO
 
+###############################################################
+#	PARENTLICENSEHACK
+#	just the guyts from getlixenseinfo. i had to do this.
+#	otherwise, i was getting duplicates due to the @results being re-used!
+###############################################################
 sub parentlicensehack()
 {
 	my $pars = shift;
@@ -221,8 +226,14 @@ sub parentlicensehack()
 				scalar @results, $pid);
 	return \@results;
 
-}
+} #END PARENTLICENSEHACK
 
+#######################
+#	DEBUGSTRUCT
+#	nifty utility function, 
+#	to print the contents of ANY complex perl structure
+#	TODO move this to an external utility library
+#######################
 sub debugstruct()
 {
 	my $whatsit = shift;
@@ -252,7 +263,7 @@ sub debugstruct()
 		printf("value <%s>", $whatsit);
 	}
 
-}
+} #END DEBUGSTRUCT
 
 
 ######################
@@ -272,7 +283,7 @@ sub getinsuranceinfo()
 				left join parents on ins.parentsid = parents.parentsid 
 			where parents.familyid = $famid
 			group by parents.parentsid
-			order by exp asc
+			order by exp desc
 		";
 
 	$opt_v && print "getinsuranceinfo(): doing <$query>\n"; #debug only
@@ -480,21 +491,25 @@ sub fieldTripReport()
 			$badness .= "\t- No insurance information for this family\n";
 			$insexp++;
 		}
-	foreach $insref (@$insarref){
-		if($insref->{'exp'}){
-			if($onlyexpired ? $insref->{'exp'} < $checkdate : 1){
-				$badness .= sprintf(
-						"\t- Insurance %s %s Company: %s Policy#: %s \n",
-						$insref->{'exp'} < $checkdate  ? "EXPIRED" : "",
-						strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
-						$insref->{'companyname'},
-						$insref->{'policynum'}
-					);
-				$insexp++;
-			}
-		} 
-	}
-		
+
+	#XXX i only print the FIRST (latest) insurance ref, not all
+	# i could print all of them.
+	#if i want this as a -i switch, for example, 
+	#it's more work than it's worth
+	$insref  = $insarref->[0];
+	if($insref->{'exp'}){
+		if($onlyexpired ? $insref->{'exp'} < $checkdate : 1){
+			$badness .= sprintf(
+					"\t- Insurance %s %s Company: %s Policy#: %s \n",
+					$insref->{'exp'} < $checkdate  ? "EXPIRED" : "",
+					strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
+					$insref->{'companyname'},
+					$insref->{'policynum'}
+				);
+			$insexp++;
+		}
+	} 
+	
 	#license
 	foreach $mar ( @$marf){
 		$licarref = $mar->{'licarref'};
