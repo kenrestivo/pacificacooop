@@ -7,9 +7,8 @@ require_once('CoopPage.php');
 require_once('CoopView.php');
 require_once('CoopForm.php');
 require_once('CoopMenu.php');
-require_once('HTML/Table.php');
 require_once 'HTML/QuickForm.php';
-require_once('DB/DataObject/Cast.php');
+require_once('lib/advmultselect.php');
 
 
 //PEAR::setErrorHandling(PEAR_ERROR_PRINT);
@@ -60,40 +59,24 @@ if($admin + $user < 1){
 switch($_REQUEST['action']){
  case 'addremove':
 	 $atd = new CoopForm(&$cp, 'packages', $none); // NOT the coopView above!
-	 $atd->obj->get($_REQUEST[$atd->pk]);
-	 // print $atd->horizTable();
+	 $atd->build($_REQUEST);
 
-	 $form =& new HTML_QuickForm('auctionchooser');
 
 	 /////////// what's included
 	 $auc = new CoopObject(&$cp, 'auction_donation_items', $none);
-	 //$auc->obj->debugLevel(2);
+	 $auc->obj->debugLevel(2);
 	 $apj =& new CoopObject(&$cp, 'auction_packages_join', &$auc);
 	 $apj->obj->{$atd->pk} = $atd->obj->{$atd->pk};
 	 $auc->obj->joinAdd($apj->obj);
 	 $auc->obj->orderBy(sprintf("%s.%s", $auc->table, $auc->pk));
 	 $found = $auc->obj->find();
 	 while($auc->obj->fetch()){
-		 $included[$auc->obj->{$auc->pk}] =  
-			 sprintf('%.42s...', 
-					 implode(' - ', array($auc->obj->{$auc->pk},
-										  $auc->obj->item_description)));
-
+		 $included[] = $auc->obj->{$auc->pk};
 	 }
-	 if(!$found){
-		 $included[] = "No Auction items in this package!";
-	 }
-	 $sel =& $form->addElement('select', sprintf('remove-%s', $auc->pk), 
-					   'Included in this package:', 
-							   &$included, array('size' => 10,
-												 'width' => 42));
-	 $sel->setMultiple(true);
 
-	 ///////// the buttons
-	 $form->addElement('submit', 'multiadd-auction_donation_item_id', 
-					   '<<Add');
-	 $form->addElement('submit', 'multiremove-auction_donation_item_id', 
-'Remove>>');
+	 if(!count($included)){
+		 $included[]= '';
+	 }
 
 	 ///////////// the orphans to add
 	 $auc = new CoopObject(&$cp, 'auction_donation_items', $none);
@@ -107,35 +90,37 @@ switch($_REQUEST['action']){
 							  $atd->obj->{$atd->pk},
 							  findSchoolYear()));
 	 while($auc->obj->fetch()){
-		 $options[$auc->obj->{$auc->pk}] =  
+		 $allpossible[$auc->obj->{$auc->pk}] =  
 			 sprintf('%.42s...', 
 					 implode(' - ', array($auc->obj->{$auc->pk},
 										  $auc->obj->item_description)));
 
 	 }
 
-	 $sel =& $form->addElement('select', sprintf('add-%s', $auc->pk), 
-					   'Add to this package:', &$options, array('size' => 10));
-	 $sel->setMultiple(true);
+	 $atd->form->addElement('advmultselect', 'auction_donation_item_id', 
+					   'Auction Items:', $allpossible);
+
+	 confessArray($included,'included');
+	 $atd->form->setDefaults(array('auction_donation_item_id' => $included));
 
 	 // ugly assthrus
-	 $form->addElement('hidden', 'action', 'addremove'); 
-	 $form->addElement('hidden', $atd->pk, $atd->obj->{$atd->pk}); 
+	 $atd->form->addElement('hidden', 'action', 'addremove'); 
+	 $atd->form->addElement('hidden', $atd->pk, $atd->obj->{$atd->pk}); 
 
 	 if($sid = thruAuthCore($cp->auth)){
-		 $form->addElement('hidden', 'coop', $sid); 
+		 $atd->form->addElement('hidden', 'coop', $sid); 
 	 }
 	 
 
-	 if ($form->validate()) {
+	 if ($atd->form->validate()) {
 		 print "saving...";
-		 $form->process(array(&$atd, 'processCrossLinks'));
+		 // $atd->form->process(array(&$atd, 'processCrossLinks'));
 		 // gah, now display it again. they may want to make other changes!
 		 print $cp->selfURL('Look again', 
 							array('action' => 'addremove',
 								$atd->pk => $_REQUEST[$atd->pk]));
 	 } else {
-		 print $form->toHTML();
+		 print $atd->form->toHTML();
 	 }
 
 	 break;

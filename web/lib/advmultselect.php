@@ -136,7 +136,7 @@
                        // These are the values that will actually be posted with the form.
                        for ( i=0; i < menuRight.length; i++) {
                            menuHidden.options[menuHidden.length] = new Option(menuRight.options[i].text, menuRight.options[i].value);
-                           menuHidden.options[menuHidden.length-1].select ed = true;
+                           menuHidden.options[menuHidden.length-1].selected = true;
                        }
                    }
                    /* end javascript for HTML_QuickForm_advmultselect */
