@@ -76,6 +76,11 @@
 		$quiltpaid = checkPayments($row['familyid'], 2);
 		$tennamesdone = ($row[cntlead] >= 10);
 
+		#some nifty running totals
+		$total['leads'] += $row[cntlead];
+		$total['tennames'] += $tennamespaid;
+		$total['quilt'] += $quiltpaid;
+
 		#don't print this row if it's already complete
 		if ($nagonlychecked && (($tennamespaid >= 50) || $tennamesdone) && ($quiltpaid >=45))
 			continue;
@@ -95,6 +100,19 @@
 		print "</td><td align='center'>";
 		print $row[phone];
 		print "</td></tr>\n";
+	}
+
+	if(!$nagonlychecked){
+		tdArray(array (
+				"TOTAL",
+				$total['leads'],
+				sprintf("$%01.2f", $total['tennames']),
+				sprintf("$%01.2f", $total['quilt']),
+				"",
+				""
+			),
+			"align='center'"
+		);
 	}
 
 	print "</table>\n";
