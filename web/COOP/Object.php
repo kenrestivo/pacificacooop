@@ -216,18 +216,30 @@ class coopObject
 			return($this);
 		}
 
-	function saveAudit()
+	function saveAudit($insert = false)
 		{
 			// the audit trail dude
 			// TODO copy/paste this later into my framework
 			$aud =& new CoopObject(&$this->page, 'audit_trail', &$top);
 			$aud->obj->table_name = $this->table;
-			// NO CONFIDENcE  in DBDO. use lastinsert instead!
-// 			if($this->obj->{$this->pk} != $this->lastInsertID()){
-// 				user_error("last insert != object's PK! this shouldn't happen",
-// 						   E_USER_ERROR);
-// 			}
-			$aud->obj->index_id = $this->lastInsertID();
+
+			if($insert){
+				// NO CONFIDENcE  in DBDO. use lastinsert instead!
+// 				if($this->obj->{$this->pk} != $this->lastInsertID()){
+// 					user_error("last insert != object's PK! this shouldn't happen",
+// 							   E_USER_ERROR);
+// 				}
+				$aud->obj->index_id = $this->lastInsertID();
+			} else {
+				$aud->obj->index_id = $this->obj->{$this->pk};
+			}
+			
+			// one more sanity czech
+			if(!$aud->obj->index_id){
+				user_error("something very bad happened when saving audit trail. index id can't be null.",
+						   E_USER_ERROR);
+			}
+
 			$aud->obj->audit_user_id = $this->page->auth['uid'];
 			$aud->obj->insert();
 		}

@@ -347,7 +347,7 @@ http://www.pacificacoop.org/
 					$co->obj->insert();
 					$this->thank_you_id = $co->lastInsertID();
 					// do audit AFTER last insertid above!
-					$co->saveAudit();
+					$co->saveAudit(true);
 				}
 				
 				// COMPANY

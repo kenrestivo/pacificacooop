@@ -24,6 +24,7 @@ require_once('CoopObject.php');
 require_once('DB/DataObject.php');
 require_once 'HTML/QuickForm.php';
 require_once('object-config.php');
+require_once('DB/DataObject/Cast.php');
 
 //////////////////////////////////////////
 /////////////////////// COOP FORM CLASS
@@ -109,6 +110,7 @@ class coopForm extends CoopObject
 	function process($vars)
 		{
 			
+			//confessArray($vars, 'vars');
 			//$this->obj->debugLevel(2);
 
 			$old = $this->obj; // copy, not ref!
@@ -118,12 +120,11 @@ class coopForm extends CoopObject
 
 			// better way to guess?
 			if($vars[$this->pk]){		
-				$this->update(&$old);
+				$this->update($old);
 			} else {
 				$this->insert();
 			}
 
-			$this->saveAudit();
 					
 			return true;
 		}
@@ -134,11 +135,10 @@ class coopForm extends CoopObject
 			// hack around nulls
 			foreach($vars as $key => $val){
 				
-				// i'm duplicating saveok here, basically
-				
-				if($val){
-					$cleanvars[$key] = $val;
-				}
+				// i will be duplicating saveok here, basically
+								
+				$cleanvars[$key] = isset($val) ? $val : DB_DataObject_Cast::sql('NULL');
+
 			}
 			return $cleanvars;
 
@@ -152,8 +152,15 @@ class coopForm extends CoopObject
 			if(!$old->find(true)){
 				user_error("save couldn't get its pk", E_USER_ERROR);
 			}
-			
+
+			if($this->page->debug > 1){
+				confessObj($old, 'OLD data');
+				confessObj($this->obj, 'NEW data');
+				$this->obj->debugLevel(2);
+			}
 			$this->obj->update($old);
+		
+			$this->saveAudit();
 		
 			return $this->obj->{$this->pk};
 		}
@@ -161,7 +168,8 @@ class coopForm extends CoopObject
 
 	function insert()
 		{
-			user_error("new not implemented yet", E_USER_ERROR);
+			user_error("more new now! new not implemented yet", E_USER_ERROR);
+			$this->saveAudit();
 		}
 
 
