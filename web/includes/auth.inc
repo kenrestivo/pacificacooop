@@ -28,6 +28,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require_once("utils.inc");
 
 define('MIN_PASS', 5);
 
@@ -427,17 +428,7 @@ accessLevelString($privnum, $callbacks)
 ******************/
 function loginPopup($uid)
 {
-	/* the dreaded javascript in here!
-		YES i know this a duplication of what's in shared.inc	
-			but, i don't want to get into weird circular includes.
-		shared.inc isn't presently included here, but the converse *is* true
-	 */
-	print "<script language=javascript>
-			function submitForm() {
-				document.forms[0].submit(); 
-				return(true); 
-			} 
-			</script>";
+	javaSubmit();
 
 	print "<select name='auth[uid]' SINGLE 
 				onchange='javascript:submitForm()'>\n";
@@ -529,6 +520,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 
 /******************
 	LOGIN
+	this logs the user in. it is the main() entry point into auth stuff
 	the state machine
 		only returns if it either needs more user input or is finished!
 		if it returns without state == 'loggedin', caller wants to done()
