@@ -31,6 +31,7 @@ print "FILE  :", $wb->{File} , "\n";
 print "COUNT :", $wb->{SheetCount} , "\n";
 print "AUTHOR:", $wb->{Author} , "\n";
 
+
 for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
 	$ws = $wb->{Worksheet}[$sh];
 	
@@ -39,6 +40,9 @@ for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
 		next;
 	}
 
+	my $start = 0;
+	my $end = 0;
+	my $vr = 0;
 
 	$row = $ws->{'MinRow'} ;
 	$maxrow = $ws->{'MaxRow'} ;
@@ -49,20 +53,36 @@ for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
 	while(defined $maxrow && $row <= $maxrow){
 		$col = $ws->{'MinCol'} ;
 		$maxcol = $ws->{'MaxCol'} ;
-		printf("ROW $row ------- from %d to %d cols\n", $col, $maxcol);
 		
-		#printf("DEBUG %d cols have data\n", &validRow($ws, $row, $col, 10));	
+		$vr = &validRow($ws, $row, $col, $maxcol);
 
-		while(defined $maxcol && $col <= $maxcol){
-			$cell = $ws->{'Cells'}[$row][$col];
-			if($cell){
-				printf("( $row , $col ) => %s\n", $cell->Value) ;
+		if ($vr == $maxcol){
+			#this is my header row!
+			#print "DEBUG this is the start row!\n";
+			$start++;
+		}
+		#a blank line means END of data
+		$end = $start && !$vr ? 1 : $end;
+
+		#i only want to do stuff if i've already passed the start row
+		if($start && !$end){
+			printf("ROW $row ------- from %d to %d cols\n", $col, $maxcol);
+
+			while(defined $maxcol && $col <= $maxcol){
+				$cell = $ws->{'Cells'}[$row][$col];
+				if($cell){
+					printf("( $row , $col ) => %s\n", $cell->Value) ;
+				}
+				$col++;
 			}
-			$col++;
 		}
 		$row++;
 	}
-}
+} #END MAIN
+
+exit 0;
+###################################################
+
 
 #################
 #	VALIDROW
@@ -74,12 +94,14 @@ sub validRow()
 	my $row = shift;
 	my $col = shift;
 	my $check = shift;
-	my $cnt;
+	my $cnt = 0;
 
 	while($check--){
-		if($ws->{'Cells'}[$row][$col++]->Value){
+		#brutally ugly, but necessary. must exist, and must have data
+		if($ws->{'Cells'}[$row][$col] && $ws->{'Cells'}[$row][$col]->Value){
 			$cnt++;
 		}
+		$col++;
 	}
 
 	return $cnt;
