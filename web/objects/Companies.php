@@ -34,6 +34,7 @@ class Companies extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $fb_linkDisplayFields = array('company_name');
+	var $fb_linkDisplayFields = array('company_name', 'address1', 'phone');
 	var $fb_fieldLabels = array ('company_name' => 'Company Name');
+	var $fb_enumFields = array ('flyer_ok');
 }

@@ -24,4 +24,7 @@ class Kids extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_linkDisplayFields = array('last_name','first_name');
+	var $fb_fieldLabels = array ('last_name' => 'Last Name');
+	var $fb_linkOrderFields = array ('last_name', 'first_name');
 }

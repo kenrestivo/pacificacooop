@@ -31,6 +31,7 @@
 			 "income"
 			 "nags"
 			 "leads"
+			 "flyer_deliveries"
 			 "nag_indulgences"
 			 "springfest_attendees"
 			 "territories"))

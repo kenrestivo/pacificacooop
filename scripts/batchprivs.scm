@@ -1,6 +1,6 @@
 ;;; $Id$
 ;; add schoolyear to columns
-;; (load "/mnt/kens/ki/proj/coop/scripts/yearify.scm")
+;; (load "/mnt/kens/ki/proj/coop/scripts/batchprivs.scm")
 
 (use-modules (kenlib) (ice-9 slib)
 			 (database simplesql))

@@ -26,8 +26,22 @@ class Users extends DB_DataObject
 
 	var $fb_fieldLabels = array ('name' => 'User Name', 
 							'family_id' => 'Co-Op Family');
-	var $fb_fieldsToRender = array('name', 'family_id');
+	//var $fb_fieldsToRender = array('name', 'family_id');
 	var $fb_linkDisplayFields = array('name');
 
-}
+	// from docs. very kewl
+	function preGenerateForm() {
+		$this->fb_preDefElements['password'] = 
+			HTML_QuickForm::createElement('password', 'password', 
+										  'Password');
+	}
+	
+	function preProcessForm(&$data) {
+		if(isset($data['password'])) {
+			if($data['password'] != $this->password) {
+				$data['password'] = md5($data['password']);
+			}
+		}
+	}
 
+}

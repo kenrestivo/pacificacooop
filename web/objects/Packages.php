@@ -33,5 +33,8 @@ class Packages extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_textFields = array ('package_description');
-
+	var $fb_linkDisplayFields = array ('package_number', 
+									   'package_description');
+	var $fb_enumFields = array ('item_type', 'package_type');
 }
+

@@ -116,17 +116,19 @@ if (isset ($obj->select_display_field)){
 	$titlefield = $obj->select_display_field;
 }
 
-$obj->find();
+$count = $obj->find();
+
+print "$count records found<br>";
 
 $tab =& new HTML_Table();
 
 $hdr = 0;
 while ($obj->fetch()){
-	$ar = array_merge(array_values($obj->toArray()), 
-					  sprintf('<a href="%s?action=detail&id=%s&table=%s">
+	$ar = array_merge(sprintf('<a href="%s?action=detail&id=%s&table=%s">
 						Edit</a><br>',
 							  $_SERVER['PHP_SELF'], 
-							  $obj->$primaryKey, $table));
+							  $obj->$primaryKey, $table),
+					  array_values($obj->toArray()));
 	//yay! i updated my config.php, and now $obj->$titlefield works!
 
 	if($hdr++ < 1){

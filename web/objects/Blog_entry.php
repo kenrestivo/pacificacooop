@@ -25,4 +25,6 @@ class Blog_entry extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_enumFields = array ('show_on_members_page', 
+								'show_on_public_page');
 }

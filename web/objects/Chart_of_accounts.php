@@ -24,5 +24,6 @@ class Chart_of_accounts extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_linkDisplayFields = array('description');
+	var $fb_enumFields = array ('account_type');
 
 }

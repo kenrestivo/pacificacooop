@@ -25,4 +25,6 @@ class Nags extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_enumFields = array ('which_event', 'method_of_contact');
+
 }

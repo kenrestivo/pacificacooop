@@ -424,4 +424,16 @@ insert into enrollment
     where last_name like "%Family%" 
         and invitation_rsvps.income_id is not null;
 
+select  auction_items_families_join.family_id  ,  companies_auction_join.company_id ,  companies_auction_join.family_id as family_id_company  , 
+ auction_donation_items.quantity  ,  auction_donation_items.description  , 
+ auction_donation_items.item_value  ,  auction_donation_items.item_type  ,  
+auction_donation_items.date_received  ,  
+auction_donation_items.location_in_garage  , auction_donation_items.auction_donation_item_id  ,  auction_donation_items.school_year  ,  
+auction_donation_items.package_id from auction_donation_items 
+left join auction_items_families_join on auction_donation_items.auction_donation_item_id = auction_items_families_join.auction_donation_item_id 
+left join families on auction_items_families_join.family_id = families.family_id 
+left join companies_auction_join on auction_donation_items.auction_donation_item_id = companies_auction_join.auction_donation_item_id 
+left join companies on companies_auction_join.company_id = companies.company_id 
+order by families.name asc, companies.company_name 
+
 --- EOF
