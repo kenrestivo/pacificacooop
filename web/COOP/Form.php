@@ -23,7 +23,6 @@
 require_once('CoopObject.php');
 require_once('DB/DataObject.php');
 require_once 'HTML/QuickForm.php';
-require_once('DB/DataObject/FormBuilder.php');
 require_once('object-config.php');
 
 //////////////////////////////////////////
