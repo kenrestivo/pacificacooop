@@ -4,8 +4,9 @@
 
 (use-modules (ice-9 slib))
 (require 'printf)
-(require 'pretty-print)
 
+;; XXX note, this is fakery. you'll need to manually put in the root pw's
+;;(sql-create "coop" "127.0.0.1" "input" "test" "2299")
 (sql-create "coop" "bc" "input" "test")
 
 (define fixems '(
@@ -42,9 +43,21 @@
 					  (car tabinfo) col)))
 			  '("entered" "updated")))
 	
+(define (toast-columns tabinfo)
+	(for-each (lambda (col)
+				(sql-query 0  (sprintf #f 
+									   "alter table %s drop column %s"
+									   (car tabinfo) col ))) 
+			  '("entered" "updated" "audit_user_id")))
+
+;; main
 (for-each (lambda (x) 
 			(if (sql-length x) 
-				(move-audits x))) 
-		  fixems)
+				(begin 
+				  (move-audits x) 
+				  (toast-columns x)))
+		  fixems))
+
+(sql-destroy 0)
 
 ;;; EOF
