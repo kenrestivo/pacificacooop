@@ -47,7 +47,7 @@ $accessnames = array(
 		100 => array('Summarize', 'summary'),
 		200 => array('View', 'view'),
 		500 => array('Edit', 'edit'),
-		600 => array('Enter New', 'add'),
+		600 => array('Create', 'add'),
 		700 => array('Delete', 'confirmdelete'),
 		800 => array('Administer permissions for', NULL)
 );
@@ -1109,14 +1109,15 @@ displayAuth($p, $u, $callbacks)
 	print "<h3>$pretty \n";
 	if($p['grouplevel'] < ACCESS_VIEW){
 		printf("for the %s Family. </h3>
-				(You are authorized to %s the %s Family's %s).\n", 
+				(You are authorized to %s %s for the %s).\n", 
 			$u['familyname'], 
 			accessLevelString($p['userlevel'], $callbacks),
-			$u['familyname'],
-			$pretty);
+			$pretty,
+			$u['username']
+		);
 	} else {
 		printf("for ALL users.</h3><h3>
-				(%s is authorized to %s the %s
+				(%s is authorized to %s %s
 				for ALL families).</h3>",
 			$u['username'],
 			accessLevelString($p['grouplevel'], $callbacks),
