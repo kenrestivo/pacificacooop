@@ -222,11 +222,17 @@ http://www.pacificacoop.org/
 			
 			//sanity czech
 			if(!$this->email){
-				user_error("thankyou::sendEmail(): no email address for $this->name!",
+				user_error(
+					"thankyou::sendEmail(): no email address for $this->name!",
 						   E_USER_ERROR);
 			}
-
-			// XXX CHECK DEV SITE AND DO NOT SEND IT IF I'M ON THE DEV SITE!
+			
+			// CHECK DEV SITE AND DO NOT SEND IT IF I'M ON THE DEV SITE!
+			if(devSite()){
+				printf("YOU ARE DEV. email is <pre>%s</pre>. goodbye now.",
+					   $this->toText());
+				return;
+			}
 
 			$from = $this->from ? $this->from :
 					    'Pacifica Co-Op Nursery School ';
