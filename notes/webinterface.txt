@@ -341,6 +341,7 @@ contact management
 		address, city, state,zip
 		phone, fax, email
 		territoryid (link)
+			or temporary familyid hack, or territory-family id.
 		dead contact flag/date: do not contact. essentially, obsolete date.
 		userid, entered, updated
 	contact table
@@ -349,7 +350,7 @@ contact management
 	territory table 
 		description (crespi, rockaway, etc)
 		hmm. alumnae/member familyid? or... track that elsewise?
-	territory-user (or family? persistence?) glue table
+	territory-family (persistence!) glue table
 		include sessionid! this'll change year-to-year!
 	contactnotes table
 		contactid
