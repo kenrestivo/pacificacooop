@@ -46,7 +46,8 @@
 	print "<font size=10>\n";
 	print "<table border='0'>";
 
-	$query = "select families.name, families.phone, count(leads.leadsid) as cntlead, enrol.sess
+	$query = "select families.name, families.familyid, families.phone, 
+				count(leads.leadsid) as cntlead, enrol.sess
 	       	from families 
        			left join leads on families.familyid = leads.familyid
 			left join kids on kids.familyid = families.familyid
@@ -73,12 +74,16 @@
 	
 	while($row = mysql_fetch_array($list))
 	{
+		$paid = checkPayments($row['familyid']);
+
 		print "<tr><td>\n";
 		print $row[name];
 		print "</td><td align='center'>";
 		print $row[cntlead];
 		print "</td><td align='center'>";
-		print "TBD";
+		if($paid){
+			printf("$%01.2f", checkPayments($row['familyid']));
+		}
 		print "</td><td align='center'>";
 		print $row[sess];
 		print "</td><td align='center'>";
@@ -89,10 +94,44 @@
 	print "</table>\n";
 	print "</font>\n";
 	# end of inner php code
+
+
+#############################
+#	CHECKPAYMENTS
+#	checks how much this family has paid up.
+#	inputs: familyid
+#	returns: total amount
+#############################
+function checkPayments($familyid)
+{
+
+	$query = "
+		select families.familyid, sum(inc.amount) as total
+			from families
+				left join figlue on families.familyid = figlue.familyid
+				left join inc on figlue.incid = inc.incid
+			where (inc.acctnum = 1 or inc.acctnum = 2)
+				and families.familyid = $familyid
+			group by families.familyid
+		";
+		#print "DEBUG <$query>";
+		$list = mysql_query($query);
+		
+		echo mysql_error();
+
+		while($row = mysql_fetch_array($list))
+		{
+			$total += $row['total'];
+		}
+
+		return $total;
+
+} #END CHECKPAYMENTS
+
 ?>
 
 </BODY>
 </HTML>
 
 <!-- END INDEX -->
- 
+
