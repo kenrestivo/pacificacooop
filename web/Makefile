@@ -46,6 +46,12 @@ download::
 		--exclude $(XCLUDE) \
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNPATH)/ $(HERE)
 
+commit:
+	cvs commit
+
+sync: commit download
+	
+
 
 #EOF
 

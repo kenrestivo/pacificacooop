@@ -62,7 +62,9 @@
 			nameSummary($id);
 
 			#for debugging, to show all records
-			nameTable($id);
+			#MH: REMOVE THIS FOR THE RELEASE, 
+			# BECAUSE ANYONE CAN VIEW ANYONE'S NAMES - SECURITY ISSUE
+			#nameTable($id);
 
 			print "<br>Feel free to enter more names if you like!<br>";
 
