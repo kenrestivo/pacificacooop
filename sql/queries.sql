@@ -1051,4 +1051,48 @@ where tickets.school_year = '2004-2005'
 order by ticket_purchaser;
 
 
+-- super fucking nasty paddle report
+select springfest_attendees.paddle_number, ticket_summary.vip_flag,
+coalesce(leads.first_name, companies.first_name, parents.first_name) 
+        as first_name,
+coalesce(leads.last_name, companies.last_name, parents.last_name) as last_name,
+coalesce(leads.company, companies.company_name) as company_name,
+coalesce(leads.address1, companies.address1, families.address1) as address1,
+coalesce(leads.address2, companies.address2) as address2,
+coalesce(leads.city, companies.city) as city,
+coalesce(leads.state, companies.state) as state,
+coalesce(leads.zip, companies.zip) as zip,
+coalesce(leads.phone, companies.phone, families.phone) as phone,
+coalesce(leads.email_address, companies.email_address, families.email) as email_address,
+ticket_summary.ticket_purchaser,
+income.payment_amount
+from springfest_attendees
+left join leads on springfest_attendees.lead_id = leads.lead_id
+left join companies on springfest_attendees.company_id = companies.company_id
+left join parents on springfest_attendees.parent_id = parents.parent_id
+left join families on parents.family_id = families.family_id
+left join
+(select tickets.ticket_id, tickets.vip_flag, tickets.income_id, 
+    tickets.school_year,
+    concat_ws(' ', coalesce(leads.first_name, companies.first_name) ,
+    coalesce(leads.last_name, companies.last_name, 
+        concat(families.name, ' Family')),
+    coalesce(leads.company, companies.company_name),
+    coalesce(leads.address1, companies.address1, families.address1),
+    coalesce(leads.address2, companies.address2),
+    coalesce(leads.city, companies.city),
+    coalesce(leads.state, companies.state),
+    coalesce(leads.zip, companies.zip),
+    coalesce(leads.phone, companies.phone, families.phone),
+    coalesce(leads.email_address, companies.email_address, families.email)) 
+        as ticket_purchaser
+    from tickets
+    left join leads on tickets.lead_id = leads.lead_id
+    left join companies on tickets.company_id = companies.company_id
+    left join families on tickets.family_id = families.family_id
+) as ticket_summary 
+    on ticket_summary.ticket_id = springfest_attendees.ticket_id
+left join income on ticket_summary.income_id = income.income_id
+order by last_name, first_name;
+
 --- EOF
