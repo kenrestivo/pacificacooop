@@ -126,9 +126,8 @@ class coopForm extends CoopObject
 	function process($vars)
 		{
 			
-			//confessArray($vars, 'vars');
-			//$this->obj->debugLevel(2);
-
+			$this->page->confessArray($vars, 'vars', 2);
+	
 			$old = $this->obj; // copy, not ref!
 			
 		
@@ -153,7 +152,7 @@ class coopForm extends CoopObject
 				
 				// i will be duplicating saveok here, basically
 								
-				$cleanvars[$key] = isset($val) ? $val : DB_DataObject_Cast::sql('NULL');
+				$cleanvars[$key] = $val == ''? DB_DataObject_Cast::sql('NULL') : $val;
 
 			}
 			return $cleanvars;
