@@ -40,16 +40,16 @@
 
 ;; find family
 (define (check-for-new-family line header)
-  (let ((families (safe-sql *dbh*
+  (let ((families (simplesql-query *dbh*
 						   (sprintf #f "
 				select familyid, name, phone from families
 						where name like \"%%%s%%\" and phone like \"%%%s%%\""
 									(rasta-find "Last Name" line header)
 									(rasta-find "Phone" line header)))))
-	(if (list? families)
+	(if (> (length families) 1)
 		(db-ref-last (choose-duplicates families) "familyid") ;gotcha!
 		(safe-sql *dbh* (sprintf #f "
-						insert into families set
+						insert into families set 
 								name = '%s',
 								phone = '%s'"
 								 (rasta-find "Last Name" line header)
@@ -58,7 +58,7 @@
 
 ;; find kid
 (define (check-for-new-kid line header)
-  (let ((kids (safe-sql *dbh*
+  (let ((kids (simplesql-query *dbh*
 						(sprintf #f "
 				select kidsid, last, first, familyid from kids
 					where first like \"%%%s%%\" and last like \"%%%s%%\" "
@@ -66,7 +66,7 @@
 								 (rasta-find "Last Name" line header)
 								 ))))
 
-		  (if (list? kids)
+		  (if (>  (length kids) 1)
 			  (db-ref-last (choose-duplicates kids) "kidsid") ; got it!
 			  (safe-sql *dbh* (sprintf #f "
 				insert into kids set 
