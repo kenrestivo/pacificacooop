@@ -43,7 +43,7 @@
   (let ((families (simplesql-query *dbh*
 						   (sprintf #f "
 				select familyid, name, phone from families
-						where name like \"%%%s%%\" and phone like \"%%%s%%\""
+						where name like \"%%%s%%\" or phone like \"%%%s%%\""
 									(rasta-find "Last Name" line header)
 									(rasta-find "Phone" line header)))))
 	(if (> (length families) 1)
@@ -61,7 +61,8 @@
   (let ((kids (simplesql-query *dbh*
 						(sprintf #f "
 				select kidsid, last, first, familyid from kids
-					where first like \"%%%s%%\" and last like \"%%%s%%\" "
+					where soundex(first) = soundex('%s')
+						and last like \"%%%s%%\" "
 								 (rasta-find "Child" line header)
 								 (rasta-find "Last Name" line header)
 								 ))))
@@ -129,6 +130,9 @@
 (grab-csv-rasta "PM" "/mnt/kens/ki/proj/coop/imports/PM.csv")
 (merge-am-pm *rasta*)
 
+;; ok, start the pachinko machine!
+(for-each (lambda(line) (check-for-new-kid line *header*))
+		  (hash-ref *rasta* "BOTH"))
 
 (simplesql-close *dbh*)
 
