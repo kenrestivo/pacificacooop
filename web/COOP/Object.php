@@ -148,6 +148,7 @@ class coopObject
 	function getSummary()
 		{
 			
+			// XXX hack to skip over jointables. ugly, but it works.
 			if(preg_match('/_join/', $this->table, $matches)){
 				return $this->parentCO->getSummary();
 			}

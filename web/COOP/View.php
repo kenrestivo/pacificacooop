@@ -268,7 +268,8 @@ class coopView extends CoopObject
 											 $this->legacyCallbacks['page']);
 
 				$tab->addRow(array($meat,
-								  $this->recordButtons($this->obj->toArray())));
+								  $this->recordButtons(
+									  $this->obj->toArray())));
 			
 			}
 			//	$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
@@ -280,7 +281,8 @@ class coopView extends CoopObject
 	function recordButtons(&$row)
 		{
 			return recordButtons($row, $this->legacyCallbacks, 
-								 $this->legacyPerms, $this->page->userStruct, "");
+								 $this->legacyPerms, 
+								 $this->page->userStruct, "");
 		}
 	function actionButtons($showview = 0)
 		{
@@ -290,8 +292,11 @@ class coopView extends CoopObject
 // 				$admin = $this->legacyPerms['group_level'] >= ACCESS_ADD ? 1 : 0;
 // 				$showview = $this->legacyCallbacks['count']($u['family_id'], $callbacks, $fields) + $admin;
 // 			}
-			return actionButtonsCore($this->page->auth, $this->legacyPerms, $this->page->userStruct, 
-									 $this->page->userStruct['family_id'], $this->legacyCallbacks, 
+			return actionButtonsCore($this->page->auth, 
+									 $this->legacyPerms, 
+									 $this->page->userStruct, 
+									 $this->page->userStruct['family_id'], 
+									 $this->legacyCallbacks, 
 									 $showview,  1);
 		}
 
