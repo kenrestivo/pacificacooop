@@ -1,0 +1,83 @@
+notes on my new ticket thingus
+
+	ask for a response code
+
+	verify the response code
+
+	rsvp page (done)
+		popup/other self-populating or hiding via javascript?
+
+	validate the rsvp form
+		anything? calculate ticket quantity?
+		understand client validation too
+		
+	process the rsvp form
+		guess what is going on
+		display a confirm page 
+
+	finally SEND the data
+		lots of guessing what's going on!
+		target is: to paypal
+
+	and deal with what gets passed back thru paypal
+		tickets and cash... maybe simple?
+
+	use my little hacky switch/dispatcher!
+		ask for  a response code
+		verify the response code (is this you?)
+			optional: GUESS name? (bad idea? security?)
+		simple donate page with:
+			DONATE group
+				popup for sponsor levels, incl Other...
+				box for "other" donation
+			ticket quantity box
+
+		how to decide?
+			popup with sponsor levels and "other amount"
+				obviously other amount means random donation
+			ticket number box
+				if filled in, i MUST save a ticket quantity
+				adjust donation amount if ticket quantity * price < amount
+					validate method
+				also if ticket quant * price == amount, save as ticket
+				hack. use invoice to store ticket quantities. i can't take it
+				then at postpaypal time, grab that value
+			the ultimate target IS PAYPAL.. 
+				this only comes back for validation
+				well, use invoice as # of tickets. if empty, no tickets.
+					maybe make the "description" the total order, 
+						incl num ticets
+					for humane consumption
+				but then i have to redirect it somehow, after validation
+				so i need a confirm page: frozen, basically
+					two sumbit buttons: change, or sumbit
+					sumbit goes to paypal, change goes back here
+				ok, so it is basically a second non-form form, 
+					that goes back with all hidden vals
+	
+	modify PostPaypal to handle new lead stuff!
+		s/b simple. similar to family join.
+			but populate the user this time
+		hmm. maybe enter the join FIRST, on my screen
+			then pass the join number into paypal?
+			this way i can capture the ticket quantity
+				remember: payment is optional for tickets.
+		this is the invoice problem.
+		the sponsor level will have to be an awful hack
+			i'll have to guess based on the amount! duh.
+				actually that makes sense. people may donate odd amounts
+		hey wait. i thought you can pass these through!
+			multiple lineitems in paypal... i'm SURE of it!
+		can use invoice or item_number as hacks: they are passthroughs
+			or, shopping cart and xxx_1
+			aha! pp57
+		bah. maybe it's time to just create an invoice interface
+			invoice, line item?
+
+note pp147: the names of vars to pass TO paypal are different
+
+what is txn_type
+note parent_txn_id for refunds, if  any happen
+
+ticket entry interface: incl vip's!
+	have another look at that ticket GRAPHIC!

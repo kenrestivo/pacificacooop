@@ -127,11 +127,17 @@ select leads.lead_id  as responsecode
         ,leads.state 
         ,leads.zip  
         ,leads.country
-        ,date_format(leads.entered, '%m/%d/%Y %T') as entered
         ,families.name as familyname
     from leads
-        left join families on leads.family_id = families.family_id
-    order by leads.last_name, leads.first_name
+        left join families on families.family_id = leads.family_id
+        left join kids on kids.family_id = leads.family_id
+        left join enrollment on enrollment.kid_id = kids.kid_id 
+     where  
+            (leads.family_id is null or leads.family_id < 1) 
+             or relation = 'Alumni' or
+             (enrollment.school_year = '2004-2005' 
+                 and enrollment.dropout_date is NULL)
+       order by leads.last_name, leads.first_name
 
 -- detailed list of payments
 select  income.income_id, income.check_number, income.payer, 
