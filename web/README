@@ -1,0 +1,178 @@
+README the pacifica co-op nursery school database web interface
+$Id$
+
+instead of using some off-the-shelf open-source php web application framework (which i SHOULD have done!) i wrote my own set of gui widgets and database abstractions. in retrospect this was an error but i'm stuck with it now. so, i'm documenting it so that anyone maintaining this (including myself) can figure out what's what.
+
+general philosophy
+	i'm a gtk/gnome xwindows guy. i hate html. so, i abstracted out all the html, and wrote a set of "widgets" to do things: draw popups, display fields, etc. this isn't new: phpnuke and other such systems take a similar approach.
+
+
+the fieldstruct
+	this is the fundamental structure of the whole interface
+	a fieldstruct is a VIEW of data.
+		not analogous to a table, or even necessarily a privilge realm
+	all its possible members and all possible values of each of its members!
+$invitationfields = array(
+	"familyid" => array (
+				required => 1,
+				dupeignore => 1,
+				table => "leads" ,
+				linkfield => "name" ,
+				linktable => "families" ,
+				adminonly => 1,
+				display => "Co-Op Family",
+				callback =>	"popupUtil"
+				),
+	"salut" => array (
+				len => 25,
+				size => 20,
+				table => "leads" ,
+				dupeignore => 1,
+				display => "Ms. Mr. Dr." 
+				),
+	"first" => array (
+				size => 50,
+				table => "leads" ,
+				display => "First Name(s)" 
+				),
+ 	"last" => array (
+				required => 1,
+				table => "leads" ,
+				display => "Last Name" 
+				),
+ 	"title" => array(
+				table => "leads" ,
+				dupeignore => 1,
+				display => "Title" 
+				),
+ 	"company" => array(
+				table => "leads" ,
+				dupeignore => 1,
+				display => "Company" 
+				),
+ 	"addr" =>array (
+				required => 1,
+				table => "leads" ,
+				size => 50,
+				display => "Address" 
+				),
+ 	"addrcont" => array(
+				table => "leads" ,
+				dupeignore => 1,
+				display => "Address2" 
+				),
+ 	"city" =>array (
+				required => 1,
+				table => "leads" ,
+				display => "City" ,
+				size => 15 ,
+				def => "Pacifica"
+				),
+ 	"state" =>array (
+				required => 1,
+				table => "leads" ,
+				display => "State" ,
+				size => 5 ,
+				def => "CA"
+				),
+ 	"zip" =>array (
+				required => 1,
+				table => "leads" ,
+				display => "Zip/PC" ,
+				size => 8,
+				def => "94044"
+				),
+ 	"country" =>array (
+				required => 1,
+				table => "leads" ,
+				display => "Country" ,
+				size => 10,
+				def => "USA"
+				),
+ 	"relation" =>array (
+				required => 1,
+				dupeignore => 1,
+				table => "leads" ,
+				display => "Relation" ,
+				def => "CHOOSE ONE",
+				choices => array (
+						'Relative','Friend', 'Coworker', 'Alumni', 'Other'),
+				),
+ 	"source" => array(
+				required => 1,
+				table => "leads" ,
+				invisible => 1,
+				def => "Springfest" 
+				),
+	"leadsid" => array ( // MUST put the invisible index in here.
+				table => "leads" ,
+				invisible => 1
+				)
+ 	"userid" => array(
+				required => 1,
+				adminonly => 1,
+				table => "users" ,
+				linkfield => "name" ,
+				linktable => "users" ,
+				callback =>	"popupUtil",
+				display => "User Name",
+				),
+ 	"realm" => array(
+				table => "privs" ,
+				required => 1,
+				callback =>	"groupPopup",
+				display => "Area of the website"
+				),
+ 	"userlevel" => array(
+				table => "privs" ,
+				required => 1,
+				callback =>	"privPopup",
+				viewcallback =>	"privTranslation",
+				display => "Permissions level for user's OWN data"
+				),
+ 	"grouplevel" => array(
+				table => "privs" ,
+				required => 1,
+				callback =>	"privPopup",
+				viewcallback =>	"privTranslation",
+				display => "Permissions level for ALL user's data"
+				),
+ 	"privid" => array(
+				required => 1,
+				invisible => 1,
+				table => "privs" 
+				)
+);
+);
+
+
+auth
+	realms: areas of privilege
+	user and group levels, each has an access level
+	ACCESS LEVELS  are:
+		'ACCESS_INVALID', -1);
+			bad user name. soemthing wicked happened
+		'ACCESS_NONE', 0);
+			no access.	
+		'ACCESS_SUMMARY', 100);
+			can view the totals (summaries) for this realm
+		'ACCESS_VIEW', 200);
+			can view the details of data for this realm	
+		'ACCESS_VIEWALL', 300);
+			depreciated. not used
+		'ACCESS_EDIT', 500);
+			can edit existing records in this realm
+		'ACCESS_ADD', 600);
+			can add new records for this realm
+		'ACCESS_DELETE', 700);
+			can delete records for the realm
+		'ACCESS_ADMIN', 800);
+			can change privileges for users relating to this realm
+
+
+the main state machine
+	each web page is basically a state machine. html is stateless, and i hate that. so, i made it stateful by passing stuff through. it does NOT deal with cookies since many browsers have them turned off. and, since we avoid client-side javascript, it has to do lots of back-and-forth to get data validated, etc.
+	here are the possible states and what they mean:
+
+database things:
+	in general, i've been a relational database sql bigot. i am VERY much for segregation of data into separate tables, and ESPECIALLY where there's any duplication of data. any one-to-many's are done with links, and many-to-many's are done with glue tables. often the glue tables evolve into tables with useful data in their own right (example being the "attendance" table).

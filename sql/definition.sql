@@ -282,6 +282,7 @@ create table auction (
     auctionid int(32) not null unique auto_increment,
 	description longtext,
     amount decimal(9,2),
+	item_delivered datetime,
     audituserid int(32),
 	entered datetime,
 	updated timestamp,
