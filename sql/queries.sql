@@ -84,13 +84,13 @@ select kids.*, enrol.sess
 		left join enrol on enrol.enrolid = keglue.enrolid;
 
 -- show all springfest payments
-select   families.name, sum(inc.amount) as total
-	from inc 
-		left join figlue on figlue.incid = inc.incid
-		left join families on families.familyid = figlue.familyid
+select families.name, sum(inc.amount) as total
+	from families
+		left join figlue on families.familyid = figlue.familyid
+		left join inc on figlue.incid = inc.incid
 	where inc.acctnum = 1
-	group by figlue.familyid
-	order by figlue.familyid
+	group by families.familyid
+	order by families.familyid
 
 
 --- EOF
