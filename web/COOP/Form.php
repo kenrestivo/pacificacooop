@@ -86,14 +86,18 @@ class coopForm extends CoopObject
 		{
 			//confessObj($this, 'coopForm::build($id) found');
 			foreach($this->obj->toArray() as $key => $dbval){
-				if(!$this->isPermittedField($key)){
-					// NOTE the hidden thing. i think  i need to do hidden here
-					continue;
-				}
 				// if it's a new entry, fill from vars!
 				// this is a clusterfuck because i'm using setValue.
 				// otherwise, quickform would do this for me. *sigh*
 				$val = $this->obj->{$this->pk} > 0 ? $dbval : $vars[$key];
+
+				if(!$this->isPermittedField($key)){
+					// the hidden thing. i think  i need to do hidden here
+					if(in_array($key, $this->obj->fb_requiredFields)){
+						$this->form->addElement('hidden', $key, $val);
+					}
+					continue;
+				}
 
 				if(is_array($this->obj->fb_preDefElements) && 
 				   in_array($key, array_keys($this->obj->fb_preDefElements))){
@@ -272,6 +276,7 @@ class coopForm extends CoopObject
 			return $doubleopt;
 		}
 
+	/// XXX THIS SUCKS> it's only used in RSVP. remove later.
 	function passVarsThrough($varnames, $vars)
 		{
 			//XXX ack! this overrides what's there. should it?

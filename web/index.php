@@ -26,7 +26,7 @@ require_once("everything.inc");
 require_once("CoopPage.php");
 require_once("CoopMenu.php");
 
-PEAR::setErrorHandling(PEAR_ERROR_PRINT);
+PEAR::setErrorHandling(PEAR_ERROR_PRINT); //  before page exists.
 
 printf('<HTML lang="en">
 		<HEAD> %s
@@ -50,6 +50,8 @@ if($auth['state'] != 'loggedin'){
 
 //OK, i am logged in!
 $cp =& new CoopPage;
+PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array(&$cp, 
+												  'kensPEARErrorHandler'));
 $cp->createLegacy($auth);
 
 $menu =& new CoopMenu;
