@@ -79,7 +79,7 @@ order by company_name
 		}
 		if($co->obj->N){
 			$res .= sprintf(
-				'<ul><p><b>%s Contributors</b> ($%.0f and above)</p>%s</ul>', 
+				'<p><b>%s Contributors</b> ($%.0f and above)</p><ul>%s</ul>', 
 				$sp->obj->sponsorship_name,
 				$sp->obj->sponsorship_price,
 				$sponsors);
