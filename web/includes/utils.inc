@@ -530,8 +530,8 @@ dateJava()
 	if (!defined('HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS')) {
 		define('HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS', true);
 		// wrapped in comments to make old browsems ignore it
-               $js .= sprintf('
-function %stodaysDate(datefield) {
+               $js .= '
+function todaysDate(datefield) {
 		var mydate=new Date()
 		var theyear=mydate.getYear()
 		if (theyear < 1000)
@@ -550,7 +550,7 @@ function %stodaysDate(datefield) {
 
 		datefield.value=displayfirst+"/"+displaysecond+"/"+displaythird
 }
-               ', $this->_jsPrefix);
+               ';
                $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
 				   $js . "//]]>\n</script>";
            }
