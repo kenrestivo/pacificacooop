@@ -304,10 +304,10 @@ getAuthLevel($auth, $targetrealm)
 
 	// the query
 	$query = sprintf("
-			SELECT privs.*
-				FROM privs
-			WHERE privs.user_id = %d 
-				and (privs.realm = '%s' or privs.realm = 'all')
+			SELECT user_privileges.*
+				FROM user_privileges
+			WHERE user_privileges.user_id = %d 
+				and (user_privileges.realm = '%s' or user_privileges.realm = 'all')
 			",
 			$auth['uid'], $targetrealm
 		);
