@@ -111,9 +111,21 @@ print '<HTML>
 </HEAD> 
 <BODY> 
 
-		<h2>Pacifica Co-Op Nursery School Springfest Donations</h2> ';
+		<h2>Pacifica Co-Op Nursery School Springfest</h2> ';
 
+// TODO: put springfest date into the year settings, and fish it out of the database here!
 
+print "<p>On <em><b>Saturday, March 19th</b></em>, 6:30 to 10:00pm, you are invited to
+attend the Pacifica Co-op Nursery School&#39;s annual
+ Springfest at the Pacifica Community Center (540 Crespi Drive, Pacifica). This
+wonderful evening will include silent and live auctions, wine tasting, hearty
+appetizers, live music, and dancing. Proceeds benefit the Pacifica Co-op Nursery
+ School.</p><br>
+<p>The event is <em><b>fabulous</b></em> and definitely worth finding a babysitter!</p><br>
+<p>Tickets are available in advance for $25 or at the door for $30. Must be 21 or over to attend. For tickets and information,
+please call <strong>(650) 557-9257 or <a href=\"#tickets\">click here to order online with your credit card</a>.</strong> </p><br>";
+
+print "<p>We are looking for generous individuals and businesses who want to support the work of the coop. There are many benefits to becoming a sponsor:</p>";
 
 print	"<h3>Angel Contribution of $1,000.00 or more:</h3>
 <li>Site link on Pacifica Co-Op Nursery website 
@@ -155,7 +167,7 @@ print donation();
 print "<hr>";
 
 
-
+print '<a name="tickets">';
 print "<h3>Purchase tickets to Springfest</h3>";
 print "<p>Event tickets are $25 each</p>";
 print tickets();
