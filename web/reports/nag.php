@@ -34,8 +34,10 @@
 	#confessVars();
 
 	printf("<form method=POST ACTION='%s'>\n", $_SERVER['PHP_SELF']);
+
+	$gv = $HTTP_POST_VARS ? $HTTP_POST_VARS : $HTTP_GET_VARS;
 	
-	$nagonlychecked =  $HTTP_POST_VARS['nagonly'] ? "checked" : "";
+	$nagonlychecked =  $gv['nagonly'] ? "checked" : "";
 	printf("\t<input type='checkbox' name='nagonly' %s>", $nagonlychecked);
 	
 	print "Show only families that need nagging<br>\n";
@@ -44,6 +46,10 @@
 
 	print "<font size=10>\n";
 	print "<table border='0'>";
+
+	// let people sort as they wish
+	$sortby = $gv['sortby'] ? $gv['sortby'] : 'families.name';
+	$sortdir = $gv['sortdir'] ? $gv['sortdir'] : 'asc';
 
 	#TODO: semester is hard-coded for next year, let the user choose it
 	$query = "select families.name, families.familyid, families.phone, 
@@ -56,15 +62,18 @@
 		where enrol.semester like \"2003-2004\" 
 			and attendance.dropout is NULL
 		group by enrol.sess, families.name
-		order by enrol.sess, cntlead desc, families.name\n";
+		order by enrol.sess, $sortby $sortdir\n";
 
 	$list = mysql_query($query);
 	
-	echo mysql_error();
+	$err = mysql_error();
+	if($err){
+		user_error("[$query] errored with $err", E_USER_ERROR);
+	}
 
 	print "<tr>\n";
-	print "\t<td><em><u>Family Name</u></em></td>\n";
-	print "\t<td align='center'><em><u>Leads Submitted</u></em></td>\n";
+	sortColumns('Family Name', 'families.name', 'asc', $nagonlychecked);
+	sortColumns('Leads Submitted', 'cntlead', 'desc', $nagonlychecked);
 	print "\t<td align='center'><em><u>Forfeit Paid</u></em></td>\n";
 	print "\t<td align='center'><em><u>Quilt Fee Paid</u></em></td>\n";
 	print "\t<td align='center'><em><u>Auction Donated</u></em></td>\n";
@@ -211,6 +220,25 @@ checkAuction($familyid)
 
 		return $result;
 }/* END CHECKAUCTION */
+
+
+/******************
+	SORTCOLUMNS
+	show a clickable sort column
+	inputs: text to show, field to use as sortby, default direction
+		and also pass through nag status.
+	outputs: a sort column header
+******************/
+function
+sortColumns($text, $sortby, $sortdir, $nag)
+{
+	printf("\t<td align='center'><em><u>
+			<a href='%s?sortby=%s&sortdir=%s%s'>%s</a></u></em></td>\n",
+			 $_SERVER['PHP_SELF'], $sortby, $sortdir, 
+			$nag ? "&nagonly=checked" : "",
+			$text);
+}/* END SORTCOLUMNS */
+
 
 
 ?>
