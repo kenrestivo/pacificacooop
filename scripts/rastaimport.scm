@@ -27,13 +27,8 @@
 								   (list-head (parse-csv line)
 										 (length header))))))
 
-;;TODO include sanity czech that header *exists*, i.e. non #f
-;; and to shitcan everything after the blankline too
 (define (clean-up-rasta rasta header)
-  (let ((null-list (make-list (length header) #f)))
-	(find-head (lambda (x) (equal? x null-list))
-			   (cdr (member header rasta)))))
-
+  (between  header (make-list (length header) #f) rasta ))
   
 (define (grab-csv-rasta session fixfile)
   (let ((p (open-input-file fixfile) ) )
