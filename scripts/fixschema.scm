@@ -75,7 +75,7 @@
 ;; for loading the proper schema file
 (define (load-definition! deffile)
   (set! *main-schema* '())
-  (let ((p (open-input-file deffile) ) )
+kl  (let ((p (open-input-file deffile) ) )
 	
 	(do ((line (read-line p) (read-line p)))
 		((or (eof-object? line) ))
@@ -96,7 +96,7 @@
 		 (doit (sprintf #f "alter table %s change column %s %s %s"
 						(car linked-table) old-col new-col
 						; get the definition from the actual subtable
-						(get-definition old-col linked-table schema)))
+						(get-definition old-col (car linked-table) schema)))
 			   ))
 	 schema))
 
