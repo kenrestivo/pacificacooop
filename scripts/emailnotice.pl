@@ -706,7 +706,8 @@ sub emailReminder()
 		unless(scalar @$licarref){
 				#TODO put in the parent's name here, dude
 				$badness .= sprintf(
-						"I couldn't find any driver's license on file for the working parent on the roster, %s %s.\n\n",
+						"I%s couldn't find any driver's license on file for the working parent on the roster, %s %s.\n\n",
+						$insexp ? " also" : "",
 						$parref->{'first'},
 						$parref->{'last'}
 				);
@@ -735,11 +736,17 @@ sub emailReminder()
 			$licref->{'exp'}, $insexp->{'exp'});
 	}
 
+	#some explanation probably required for those who have both missing!
+	if($licexp && $insexp){
+		$badness .= sprintf("Regulations require the school to have a copy of a valid driver's license and current auto insurance on file. It appears this has to be current in order for you to be allowed to drive your child on any field trips. The next field trip is scheduled for %s, so now is the time to get all this paperwork up-to-date.\n\n", 
+
+			strftime('%A, %B %d', localtime($checkdate)) );
+	}
 	##finishing up
-	$badness .= sprintf("If you could, please place a copy of your current %s%s%s into my communications folder (Restivo, PM), before %s.\n\n",
-			,
-			,
-			,
+	$badness .= sprintf("If you could, please place a copy of your current %s%s%s into my communications folder (Restivo, PM), at least a day or two before %s.\n\n",
+			$insexp ? "insurance card": "",
+			$licexp && $insexp ? " and " : "",
+			$licexp ? "driver's license": "",
 			strftime('%A, %B %d', localtime($checkdate))
 		);
 
