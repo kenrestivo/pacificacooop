@@ -18,8 +18,13 @@
 
 // copied from ipn tutorial
 
-$paypal_hack = 1;
-require_once("first.inc");
+// I don't use first.inc, because i don't call session setup on this one
+
+require_once("session-init.php");
+
+setupDB();
+setupErrors(); //*sigh* have to do this SECOND since it looks at dbhost :-/
+
 
 
 ////////////////
@@ -148,6 +153,7 @@ class IPN
 				// get incomeid
 				// split out the accountnumber, 
 						//then the familyid/leadid/companyid
+				//date too... ugly regexps
 				//finally save to the appropriate tables
 	
 			} //fi     

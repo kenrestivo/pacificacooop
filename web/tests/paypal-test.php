@@ -1,7 +1,7 @@
 
 
 
-<form method="post" action="http://www.pacificacoop.org/sf/ipn.php">
+<form method="post" action="http://www.pacificacoop.org/sf-dev/ipn.php">
 <input type="hidden" name="mc_gross" value="0.01">
 <input type="hidden" name="address_status" value="unconfirmed">
 <input type="hidden" name="payer_id" value="QGVDAFGZ9XHLJ">
