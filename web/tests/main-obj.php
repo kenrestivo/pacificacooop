@@ -33,8 +33,18 @@ $top = new CoopView(&$cp, 'companies');
 
 //print "FOUND " . $top->obj->find();
 
-$aij = new CoopObject(&$cp, 'companies_income_join');
-$top->obj->joinAdd($aij->obj);
+$cij = new CoopObject(&$cp, 'companies_income_join');
+
+//$inc = new CoopObject(&$cp, 'income');
+//$cij->obj->joinAdd($inc->obj);
+
+$top->obj->joinAdd($cij->obj);
+
+//$top->obj->whereAdd('school_year = "2004-2005"');
+
+$acj = new CoopObject(&$cp, 'companies_auction_join');
+//$acj->obj->whereAdd('school_year = "2004-2005"');
+$top->obj->joinAdd($acj->obj);
 
 print $top->simpleTable($summary);
 	
