@@ -35,6 +35,7 @@ create table coop.lic(
     state varchar(40),
     licensenum varchar(100),
     expires date,
+	parentsid int(32),
     primary key (licid)
 );
 
