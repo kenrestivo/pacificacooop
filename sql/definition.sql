@@ -119,7 +119,7 @@ create table coop.families (
 -- 'source' field will only be "springfest" this time around
 -- you'll know WHICH springfest by comparing the 'entered' date
 create table coop.leads (
-    leadid int(32) not null auto_increment,
+    leadsid int(32) not null auto_increment,
 	last varchar(255),
 	first varchar(255),
 	company varchar(255),
@@ -127,14 +127,14 @@ create table coop.leads (
 	addrcont varchar(255),
 	state varchar(255),
 	zip varchar(255),
-	oountry varchar(255),
+	country varchar(255),
 	phone varchar(255),
 	relation enum ('Relative','Friend', 'Coworker', 'Alumnus', 'Other'),
 	source enum ('Springfest', 'Other'),
     familyid int(32),
 	entered datetime,
 	updated timestamp,
-	primary key (leadid)
+	primary key (leadsid)
 );
 	
 

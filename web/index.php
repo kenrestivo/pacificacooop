@@ -20,6 +20,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 require_once("shared.php");
+require_once("10names.php");
 
 print "<HTML><HEAD><TITLE>Springfest Fundraising</TITLE></HEAD><BODY>";
 
@@ -36,23 +37,32 @@ print "<p>&nbsp;</p>";
 				the basic parentid,kids, names
 				and the form!
 */
+$id = $HTTP_POST_VARS['familyid'];
 	
-if(!$HTTP_POST_VARS['familyid']){
+if(!$id){
 	#there is no familyid, let the user select one
 	familyPopup(0);  #0 means, don't pre-select any family. just CHOOSE ONE
 } elseif($HTTP_POST_VARS['Save']){
 	#we are trying to save form data. this is what life is all about.
 	#TODO: good stuff here!
 } else {
-	#show a family's info, and giving them a form to enter data
-	/* printf ("<p>DEBUG: the id you chose was %d</p>\n", 
-			$HTTP_POST_VARS['familyid']); */
-	familyDetail($HTTP_POST_VARS['familyid']);
+	#printf ("<p>DEBUG: the id you chose was %d</p>\n", $id);
 
+	#show a family's info
+	happyFriendlyHello($id);
+
+	#show them what they've already got, don pardo
+	nameSummary($id);
+
+	#don't show a table of names, unless, um, there are names there.
+	if(nameCount($id) > 0){
+		showNames($id);
+	}
+
+	#and give them a form to enter data
+	tenNamesForm($id);
 
 }
-
-
 
 
 
