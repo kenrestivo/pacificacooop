@@ -16,15 +16,16 @@ require_once('DB/DataObject/FormBuilder.php');
 require_once('object-config.php');
 
 
-print "<HTML>
+print '<HTML>
 		<HEAD>
+				<link rel=stylesheet href="main.css" title=main>
 			<TITLE>Data Entry</TITLE>
 		</HEAD>
 
 		<BODY>
 
 		<h2>Pacifica Co-Op Nursery School Data Entry</h2>
-	";
+	';
 
 
 
@@ -132,7 +133,9 @@ while ($obj->fetch()){
 	//yay! i updated my config.php, and now $obj->$titlefield works!
 
 	if($hdr++ < 1){
-		$tab->addRow(array_keys($obj->toArray()));
+		$tab->addRow(array_merge("Action", 
+								 array_keys($obj->toArray())), 
+					 "bgcolor=9999cc", "TH" );
 	}
 	$tab->addRow($ar);
 
@@ -146,6 +149,7 @@ while ($obj->fetch()){
 printf('<hr><a href="%s?action=detail&table=%s">Add new</a>', 
 	   $_SERVER['PHP_SELF'], $table) ;
 
+$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
 $tab->display();
 
 print "<hr><br>";
