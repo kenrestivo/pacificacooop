@@ -57,7 +57,7 @@ $menu =& new CoopMenu;
 $menu->createLegacy(&$cp);
 
 	
-$u = $cp->user_id; // cached by createlegacy
+$u = $cp->userStruct; // cached by createlegacy
 
 print $menu->topNavigation();
 print "\n<hr>\n";

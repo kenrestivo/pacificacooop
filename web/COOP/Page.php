@@ -41,7 +41,7 @@ class coopPage
 {
 	var $auth;
 	var $debug;
-	var $user_id;				// cache of legacy info ($u)
+	var $userStruct;				// cache of legacy info ($u)
 	
 	function coopPage($debug = false)
 		{
@@ -52,7 +52,7 @@ class coopPage
 	function createLegacy($auth)
 		{
 			$this->auth = $auth;
-			$this->user_id =  getUser($auth['uid']);
+			$this->userStruct =  getUser($auth['uid']);
 		}
  
 	function pageTop()

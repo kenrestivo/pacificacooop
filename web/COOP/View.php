@@ -255,7 +255,7 @@ class coopView extends CoopObject
 		
 			
 			$tab->addRow(array($this->title(),
-							   "ACTION BUTTONS HERE"), 
+							   $this->actionButtons()), 
 						 'bgcolor=#9999cc', 'TH'); 
 
 			while($this->obj->fetch()){
@@ -280,11 +280,23 @@ class coopView extends CoopObject
 	function recordButtons(&$row)
 		{
 			return recordButtons($row, $this->legacyCallbacks, 
-								 $this->legacyPerms, $this->page->user_id, "");
+								 $this->legacyPerms, $this->page->userStruct, "");
+		}
+	function actionButtons($showview = 0)
+		{
+			
+// XXX doesn't work because i don't have fields struct in here. yet. but i will.			
+// 		if($showview){
+// 				$admin = $this->legacyPerms['group_level'] >= ACCESS_ADD ? 1 : 0;
+// 				$showview = $this->legacyCallbacks['count']($u['family_id'], $callbacks, $fields) + $admin;
+// 			}
+			return actionButtonsCore($this->page->auth, $this->legacyPerms, $this->page->userStruct, 
+									 $this->page->userStruct['family_id'], $this->legacyCallbacks, 
+									 $showview,  1);
 		}
 
-	// note, this is not very well-used, but it will be.
-	// i'll replace legacy recordbuttons with stuff using this
+	// note, this is not very well-used, but it will be.  i'll replace
+	// legacy recordbuttons with stuff using this
 	function nastyInner(&$obj, $action)
 		{
 			$res .= sprintf("action=%s", $action);
