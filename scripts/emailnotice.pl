@@ -349,7 +349,7 @@ sub fieldTripReport()
 	#insurance
 	foreach $insref (@$insarref){
 		if($insref->{'exp'}){
-			if($onlyexpired ? 1 : $insref->{'exp'} < $checkdate ){
+			if($onlyexpired ? $insref->{'exp'} < $checkdate : 1){
 				$badness .= sprintf(
 						"\t- Insurance %s %s Company: %s Policy#: %s \n",
 						$insref->{'exp'} < $checkdate  ? "EXPIRED" : "",
@@ -368,9 +368,10 @@ sub fieldTripReport()
 	#license
 	foreach $licref (@$licarref){
 		if($licref->{'exp'}){
-			if($onlyexpired ? 1 : $licref->{'exp'} < $checkdate){
+			if($onlyexpired ? $licref->{'exp'} < $checkdate : 1){
 				$badness .= sprintf(
-						"\t- License expired: %s Driver's Name: %s %s %s \n",
+						"\t- License %s %s Driver's Name: %s %s %s \n",
+						$licref->{'exp'} < $checkdate  ? "EXPIRED" : "",
 						strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
 						$licref->{'first'},
 						$licref->{'middle'},
