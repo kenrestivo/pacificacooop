@@ -2,45 +2,47 @@
 ;; rename the fields to use their looong names
 ;; (load "/mnt/kens/ki/proj/coop/scripts/fixschema.scm")
 
-(use-modules (ice-9 slib)
+(use-modules (kenlib) (ice-9 slib)
 			 (database simplesql))
 (require 'printf)
 
-(load "/mnt/kens/ki/is/scheme/lib/kenlib.scm")
-
-(define dbh (apply simplesql-open 'mysql
+(define dbh (apply simplesql-open "mysql"
 				   (read-conf "/mnt/kens/ki/proj/coop/sql/db.conf")))
 
-(define old-schema '()) ;; well, here it is.
+(define schema '()) ;; well, here it is.
 (define current-table "") ;; there has to be a more schemey way 
 
-(define debug #t)
+(define debug-flag #t)
 
 ;; silly little diagnostic
 (define (doit query)
-  (if debug
+  (if debug-flag
 	  (pp query)
 	  (catch #t
 			 (lambda ()
 			   (simplesql-query dbh query) )
 			 (lambda x (printf "caught error on [%s]\n" query) (pp x)))))
-	  
+
 
 ;;;;;;;; definition-processing stuff
 
 (define (add-primary-key table line)
-  (add-sub-alist old-schema table "primary key"
+  (add-sub-alist schema table "primary key"
 				 (unparen (caddr line))) )
 
+;; utility
+(define (get-primary-key key schema)
+  (assoc-ref (assoc x schema) "primary key"))
+	  
 ;; if it is a COLUMN, i'll want to do:
 (define (add-column table line)
   ;; NOTE! must combine before yanking ,'s!
-  (set! old-schema (add-sub-alist old-schema table 
-								  (car line)
-								  (regexp-substitute/global #f  ",$"
-													(join-strings (cdr line))
-													'pre 'post)) ))
-;; clean sql definition line
+  (set! schema (add-sub-alist schema table 
+						  (car line)
+						  (regexp-substitute/global #f  ",$"
+											(join-strings (cdr line))
+											'pre 'post)) ))
+	;; clean sql definition line
 (define (clean-line line)
   (map (lambda (y)
 		 (regexp-substitute/global #f  "[ \t]" y  'pre 'post)) 
@@ -69,7 +71,7 @@
 
 ;; for loading the proper schema file
 (define (load-definition deffile)
-  (set! old-schema '())
+  (set! schema '())
   (let ((p (open-input-file deffile) ) )
 	
 	(do ((line (read-line p) (read-line p)))
@@ -81,30 +83,31 @@
 
 ;;;;;;;;;;;;; pcns_schema-processing stuff
 
-;;; unused: the pcns_schema file *should* handle all these keys
-(define (fix-keys table key)
+(define (fix-primary-key key-table old-col new-col long-def)
   (for-each
-   (lambda (x)
-	 (let ((found (assoc key (cdr x)))) ;; go get it first
-	   (if (and found
-				(not (equal? (car x) table)))
-		   (sprintf #f "duplication of rename-column %s" key)
-	   )
-	 old-schema))) )
+   (lambda (linked-table)
+	 (if (and (assoc-ref linked-table old-col)
+			  (not (equal? (car linked-table) key-table)))
+		 (doit (sprintf #f "alter table %s change column %s %s %s"
+						(car linked-table) old-col new-col long-def))
+		 ))
+   schema))
 
 
 (define (rename-column items)
   (let* ((sp (string-split (car items) #\.))
-		(new (string-split (cadr items) #\.))
-		(table (car sp))
-		(old-col (cadr sp))
-		(new-col (cadr new))
-		(long-def (assoc-ref (assoc-ref old-schema (car sp)) (cadr sp)))
-		)
+		 (new (string-split (cadr items) #\.))
+		 (table (car sp))
+		 (old-col (cadr sp))
+		 (new-col (cadr new))
+		 (long-def (assoc-ref (assoc-ref schema (car sp)) (cadr sp)))
+		 )
 	(if long-def
-		(doit (sprintf #f "alter table %s change column %s %s %s"
-					   table old-col new-col long-def))
-		(printf "ignoring %s:%s\n" table old-col )
+		(begin 
+		  (doit (sprintf #f "alter table %s change column %s %s %s"
+						 table old-col new-col long-def))
+		  (fix-primary-key table old-col new-col long-def) )
+		(printf "ignoring %s:%s\n" table old-col ) ;; it's a bogus line? huh?
 		)
 	))
 
