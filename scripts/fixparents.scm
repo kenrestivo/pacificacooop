@@ -1,6 +1,6 @@
 ;;; $Id$
 ;; put the parentid in for all the solicitation auction and money
-;; grab the family name from the income stuff.
+;; NOTE! this is NOT USED! this is a dead-end
 ;; (load "/mnt/kens/ki/proj/coop/scripts/fixparents.scm")
 
 (use-modules (ice-9 slib)
@@ -30,7 +30,7 @@
 				from %s
 					left join parents
  	  				on parents.family_id = %s.family_id
-				and parents.worker = 'Yes'
+				and parents.type = 'mom'
 			group by parents.family_id
 			order by parents.family_id"
 			table table)))))
