@@ -52,9 +52,15 @@ class coopPage
 	var $obj;
 	var $build;
 	var $auth;
+	var $debug;
 	var $pager_result_size;
 	var $pager_start;
 	var $table;
+
+	function coopPage($debug = false)
+		{
+			$this->debug = $debug;
+		}
 
 	// fafactory.
 	function setup($table = false )
@@ -83,11 +89,12 @@ class coopPage
 				<h2>Pacifica Co-Op Nursery School Data Entry</h2>
 				';
 
-// 			confessArray($_REQUEST, "test REQUEST");
-// 			confessArray($_SESSION, "test SESSION");
-// 			confessArray($_SERVER, "test SERVER");
-			
-///
+			if($this->debug){
+				confessArray($_REQUEST, "test REQUEST");
+				confessArray($_SESSION, "test SESSION");
+				confessArray($_SERVER, "test SERVER");
+			}
+
 			warnDev();
 
 			user_error("states.inc: ------- NEW PAGE --------", 
@@ -120,13 +127,13 @@ class coopPage
 
  
 	function engine(){
-		$tabarr = $this->findTables($_REQUEST);
+		$tabarr = $this->mergeTables($_SESSION, $_REQUEST);
 		//confessArray($tabarr, "tables");
 		foreach($tabarr as $table => $vals){
 			$this->setup($table);
 				//	print_r($cp);
 			// OK copy my dispatcher logic over now
-			switch($_SESSION[$table]['action']){
+			switch($tabarr[$table]['action']){
 			case 'list':
 				print $this->listTable();
 				break;
@@ -137,30 +144,34 @@ class coopPage
 		}
 
 	} /// end engine
+ 
 
-
-////utility, not inside of class
-// XXX thsi function, how do you say in your country? it SUCKS.
-	function findTables($haystack)
+	function findTables()
 		{
-			$needles = array();
-			foreach($haystack as $key => $val){
-				//print "table $key vars $val<br>";
-				if(is_array($val) && array_key_exists('action', $val)){
-					$needles[$key] = $val;
-					// override session1 now
-					$_SESSION[$key] = $val;
+		}
+	
+	function mergeTables($array, $overrides, $level = 0)
+		{
+			confessArray($array, "BEFORE merge: level $level");
+
+			foreach($overrides as $key => $val){
+				if(array_key_exists($key, $array)){
+					if(is_array($val)){
+						$array[$key] = 
+							$this->mergeTables($array[$key], $val, $level +1);
+					} else {
+						$array[$key] = $val;
+					}
+					
 				}
 			}
-			foreach($_SESSION as $key => $val){
-				if(is_array($val) && array_key_exists('action', $val) &&
-					!(is_array ($needles[$key]) && 
-					  array_key_exists($needles['action']))){
-					$needles[$key] = $val;
-				}
-			}	
-			return $needles;
+						
+
+			confessArray($array, "AFTER  merge, level $level");
+		   			return $array;
 		}
+
+
 	// TODO: some nifty way to get session vars outta there
 	function requestOrSession($itemName){
 	}
@@ -300,22 +311,6 @@ class coopPage
 			return $res;
 		}
 
-	function showCrosslink($id, $idx)
-		{
-			
-            $myobj = $this->obj;
-            $myobj->get($id);
-            $thisLink = explode(":", $allLinks[$idx]);
-            //confessArray ($thisLink, "thislink");
-            $damn = $myobj->getLink($thisLink[1]);
-            
-                //confessArray($damn, "linkobj");
-            // ack will need to use fbdisplay
-            $gah = "_" . $thislink[0];
-            return $damn;
-           
-        }
-
 
 	function listTable($table = false)
 		{
@@ -326,8 +321,6 @@ class coopPage
 				$primaryKey = $keys[0];
 			}
 			
-            print "HEY" . $this->showCrosslink(10, 'family_id' );
-			
 			$tab =& new HTML_Table();
 
 			$pagertext = $this->calcPager();	
@@ -335,6 +328,7 @@ class coopPage
 							  $this->pager_result_size);
 			$this->obj->find();					// new find with limit.
 
+				
 			// now the table
 			$hdr = 0;
 			while ($this->obj->fetch()){
