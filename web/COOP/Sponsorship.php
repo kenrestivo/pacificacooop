@@ -49,7 +49,8 @@ class Sponsorship
 
 
 		// updates or enters their sponsorships
-	// returns the type. WEIRD, shouldn't it return lastinsertid?
+	// returns the type. or false if no update was needed
+	// WEIRD, shouldn't it return lastinsertid?
 	function updateSponsorships($id, $idname)
 		{
 			$typeid= $this->calculateSponsorshipType($id, $idname);
@@ -65,6 +66,9 @@ class Sponsorship
 				// if there's no manual override there, change it to match calc
 				if($sp->obj->entry_type == 'Automatic'){
 					if($typeid > 0){
+						if($typeid == $sp->obj->sponsorship_type_id){
+							return false;
+						}
 						$sp->obj->sponsorship_type_id = $typeid;
 						$sp->obj->update();
 					} else {
@@ -75,7 +79,7 @@ class Sponsorship
 						$hack->obj->delete();
 					}
 				}
-				return $type;
+				return $typeid;
 			}
 							
 			if($typeid > 0){
@@ -85,7 +89,7 @@ class Sponsorship
 				$sp->obj->$idname = $id;
 				$sp->obj->sponsorship_type_id = $typeid;
 				$sp->obj->insert();
-				return $type;
+				return $typeid;
 			}
 		}
 	

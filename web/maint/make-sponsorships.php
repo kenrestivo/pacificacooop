@@ -61,6 +61,7 @@ if($admin + $user < 1){
 //confessArray($_REQUEST,'req');
 switch($_REQUEST['action']){
  case 'findneeded':
+	 print "<p>This could take a while. Calculating sponsors needed.</p>";
 	 $sp = new Sponsorship(&$cp);
 	 foreach(array('companies', 'leads') as $tab){
 		 //print $tab;
@@ -79,10 +80,11 @@ switch($_REQUEST['action']){
 			 }
 		 }
 	 }
+	 print "<p>The above need to have sponsorships added.</p>";
 	 break;
 
  case 'addneeded':
-	 print "<p><b>These have been added to the db, or updated!</b></p>";
+	 print "<p>This could take a very, very, very long time. Please be patient.</p>";
 	 $sp = new Sponsorship(&$cp);
 	 foreach(array('companies', 'leads') as $tab){
 		 //print $tab;
@@ -101,6 +103,7 @@ switch($_REQUEST['action']){
 			 }
 		 }
 	 }
+	 print "<p><b>These have been added to the db, or updated!</b></p>";
 	 break;
 	
 
