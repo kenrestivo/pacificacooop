@@ -272,6 +272,19 @@ class coopPage
 
 		}	
 
+	function fixURL($val)
+		{
+			// hack around fuckedup urls
+			// the RIGHT way to do this is to validate at input time
+			
+			if(!preg_match('/^http:\/\/.+/', $val, $matches)){
+				return sprintf("http://%s", $val);
+			} 
+
+			return $val;
+
+		}
+
 } // END COOP PAGE CLASS
 
 

@@ -210,15 +210,8 @@ class coopView extends CoopObject
 					} else if(is_array($this->obj->fb_URLFields) &&
 						in_array($key, $this->obj->fb_URLFields)) 
 					{
-						// hack around fuckedup urls
-						// the RIGHT way to do this is to validate at input time
-						if(!preg_match('/^http:\/\/.+/', $val, $matches)){
-							$inval = sprintf("http://%s", $val);
-						} else {
-							$inval = $val;
-						}
 						$res[] = sprintf('<a href="%s">%s</a>',
-										 $inval, $val);
+										 $this->page->fixURL($val), $val);
 					} else {
 						$res[] = $this->checkLinkField(&$this->obj, $key, $val);
 					}
@@ -235,7 +228,6 @@ class coopView extends CoopObject
 			
 			$res[] = $this->recordButtons($row);
 			
-
 			// the Simple Version. useful for debuggin'
 			//return array_values($this->obj->toArray());
 
