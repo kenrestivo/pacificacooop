@@ -24,6 +24,8 @@ NFSNHOST=c1.phx.nearlyfreespeech.net
 NFSNDOCROOT=/nfsn/content/paccoop/htdocs
 NFSNLIVEPATH=$(NFSNDOCROOT)/sf/
 LIVEHERE=../livesite/
+IMAGEHERE=../images/
+NFSNIMAGEPATH=$(NFSNDOCROOT)/images/
 NFSNDEVPATH=$(NFSNDOCROOT)/sf-dev/
 DEVHERE=../web-online/
 PLAYGROUND=../web/
@@ -85,6 +87,15 @@ download-head::
 		--exclude "*.#*" \
 		--exclude '*.sql' \
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)/ $(PLAYGROUND)
+
+upload-images::
+	-rm $(IMAGEHERE)/.\#*
+	rsync -e ssh \
+		$(NFSNRSYNC) \
+		-avxWcC  \
+		--exclude $(XCLUDE) \
+		--exclude "*.#*" \
+		$(IMAGEHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNIMAGEPATH)
 
 commit-live:
 	(cd $(LIVEHERE); cvs commit -m "syncing")
