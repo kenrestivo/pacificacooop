@@ -1090,6 +1090,35 @@ weakPass($clearpass)
 
 
 
+/******************
+	DISPLAYAUTH
+	useful in view reports
+	inputs: privs struct, user struct, realm, pretty nae
+******************/
+function
+displayAuth($p, $u, $realm, $pretty)
+{
+
+	print "<h3>$pretty \n";
+	$realm = 'auction';
+	if($p['grouplevel'] < ACCESS_VIEW){
+		printf("for the %s Family. </h3>
+				(You are authorized to %s the %s Family's %s).\n", 
+			$u['familyname'], 
+			accessLevelString($p, 'userlevel', $realm),
+			$u['familyname'],
+			$pretty);
+	} else {
+		printf("ALL users.</h3><h3>
+				(%s is authorized to %s the %s
+				for ALL families).</h3>",
+			$u['username'],
+			accessLevelString($p, 'grouplevel', $realm),
+			$pretty);
+	}
+
+}/* END DISPLAYAUTH */
+
 #note bin2hex... do i need it?
 
 ?>
