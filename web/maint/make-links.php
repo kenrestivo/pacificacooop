@@ -10,6 +10,7 @@ require_once('DB.php');
 
 setupDB();
 
+// I LOVE SCHEME. this was ported straight from a guile script.
 
 global $dburl;
 $db =& DB::connect($dburl);
@@ -39,13 +40,15 @@ foreach($tables as $table){
 
 // ok, now the actual links
 //reset($tables);
-foreach($tables as $table){
-	foreach($tableFields[$table] as $field){
+
+foreach($tableFields as $table => $fields){
+	foreach($fields as $field){
 		if($pkeys[$field]){
 			$links[$table][$field] = $pkeys[$field];
 		}
 	}
 }
+
 //reset($links);
 
 //print_r($pkeys, "keys");
@@ -53,11 +56,10 @@ foreach($tables as $table){
 //print_r($links, "links");
 
 
-
 // ok format it for printing now
 //reset($links);
-foreach($links as $table => $tablelinks){
-	$res .= sprintf("\n[%s]\n", $table);
+foreach($links as $from => $tablelinks){
+	$res .= sprintf("\n[%s]\n", $from);
 	foreach($tablelinks as $id => $totable){
 		$res .= sprintf("%s = %s:%s\n",
 						$id, $totable, $id);
