@@ -5,6 +5,7 @@ drop database if exists coop;
 create database coop;
 use coop;
 
+-- insurance information
 create table coop.ins(
     insid int(32) not null auto_increment,
     last varchar(255),
@@ -18,7 +19,15 @@ create table coop.ins(
     primary key (insid)
 );
 
+-- vehicle information (one-to-many to insurance)
+create table coop.veh(
+    vehid int(32) not null auto_increment,
+    insid int(32),
+    vidnum varchar(17),
+    primary key (vehid)
+);
 
+-- license information
 create table coop.lic(
     licid int(32) not null auto_increment,
     last varchar(255),
@@ -30,7 +39,7 @@ create table coop.lic(
     primary key (licid)
 );
 
-
+-- children
 create table coop.kids(
     kidsid int(32) not null auto_increment,
     last varchar(255),
@@ -44,13 +53,29 @@ create table coop.kids(
     primary key (kidsid)
 );
 
+-- enrollment info (one-to-many to kids)
+create table coop.enrol(
+    enrolid int(32) not null auto_increment,
+	semester varchar(50),
+	sess enum ('AM', 'PM'),
+	kidsid int(32),
+    primary key (enrolid)
+);
+
+-- parents who have insurance and/or licenses. (many-to-many to kids)
 create table coop.parents(
     parentsid int(32) not null auto_increment,
     parentslast varchar(255),
     parentsfirst varchar(255),
-    kidslast varchar(255),
-    kidsfirst varchar(255),
     primary key (parentsid)
+);
+
+-- glue table for many-to-many: kids and parents
+create table coop.kpglue (
+    kpglueid int(32) not null auto_increment,
+	kidsid int(32),
+	parensid int(32),
+    primary key (kpglueid)
 );
 
 -- the user/passwords used by the web view page AND my update tool..
