@@ -23,13 +23,13 @@
 	  (catch #t
 			 (lambda ()
 			   (simplesql-query dbh query) )
-			 (lambda x (printf "caught error on [%s]\n" query)))))
+			 (lambda x (printf "caught error on [%s]\n" query) (pp x)))))
 	  
 
 ;;;;;;;; definition-processing stuff
 
 (define (add-primary-key table line)
-  (add-sub-alist new-schema table "primary key"
+  (add-sub-alist old-schema table "primary key"
 				 (unparen (caddr line))) )
 
 ;; if it is a COLUMN, i'll want to do:
