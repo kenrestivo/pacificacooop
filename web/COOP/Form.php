@@ -248,6 +248,8 @@ class coopForm extends CoopObject
 
 	function passVarsThrough($varnames, $vars)
 		{
+			//XXX ack! this overrides what's there. should it?
+			// or should it only pass through unset/empty vars?
 			foreach($varnames as $varname){
 				if($this->form->elementExists($varname)){
 					$el =& $this->form->getElement($varname);
@@ -265,6 +267,8 @@ class coopForm extends CoopObject
 		{
 			if(is_array($this->obj->fb_requiredFields)){
 				foreach($this->obj->fb_requiredFields as $fieldname){
+// 					user_error("CoopForm::addRequiredFields($fieldname)", 
+// 							   E_USER_NOTICE);
 					$this->form->addRule($fieldname, 
 										 "$key mustn't be empty.", 'required');
 				}

@@ -62,6 +62,7 @@ class Leads extends DB_DataObject
 									'zip'=> "Zip Code", 
 								 'country' => "Country", 
 								 'phone' => "Phone Number", 
+								 'source_id' => "Source of Contact", 
 									'do_not_contact'=> "Do Not Contact After");
 	var  $fb_formHeaderText = "Springfest Invitation Contacts";
 
