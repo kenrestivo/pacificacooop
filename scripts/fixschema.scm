@@ -31,8 +31,8 @@
 				 (unparen (caddr line))) )
 
 ;; utility
-(define (get-primary-key key schema)
-  (assoc-ref (assoc x schema) "primary key"))
+(define (get-primary-key table schema)
+  (assoc-ref (assoc table schema) "primary key"))
 	  
 ;; if it is a COLUMN, i'll want to do:
 (define (add-column table line)
@@ -86,11 +86,12 @@
 (define (fix-primary-key key-table old-col new-col long-def)
   (for-each
    (lambda (linked-table)
-	 (if (and (assoc-ref linked-table old-col)
+	; only if this is a primary key!
+	 (if (and (equal? (get-primary-key key-table schema) old-col)
+			  (assoc-ref linked-table old-col)
 			  (not (equal? (car linked-table) key-table)))
 		 (doit (sprintf #f "alter table %s change column %s %s %s"
-						(car linked-table) old-col new-col long-def))
-		 ))
+						(car linked-table) old-col new-col long-def)) ))
    schema))
 
 
