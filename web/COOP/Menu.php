@@ -69,11 +69,10 @@ class CoopMenu extends HTML_Menu
 			$heirmenu = array(
 				array(
 					'title' => 'Enhancement',
-					'sub' => $this->callbacksToMenu($members, 
-													$this->coop_page)),
+					'sub' => $this->callbacksToMenu($members)),
 				array(
 					'title' => 'Springfest',
-					'sub' => $this->nestByRealm($sf, $this->coop_page)));
+					'sub' => $this->nestByRealm($sf)));
 
 
 			$this->setMenu($heirmenu);
