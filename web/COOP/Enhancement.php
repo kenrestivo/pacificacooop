@@ -31,18 +31,19 @@ require_once('utils.inc');
 class Enhancement
 {
 	var $schoolYear; // cache of this year's, um, year.
+    var $cutoffDatesArray; // cache fall, spring
 
-	// month number, hour number
-	var lateStarts = array(
-		9 => 4,
-		10 => 3,
-		11 => 2,
-		12 => 1,
-		// i don't separate out fall/spring here
-		1 => 4, 
-		3 => 3,
-		4 => 2
-		5 => 1
+	// month number, array of fall hours and spring hours
+	var startDates = array(
+		9 => array(4,4),
+		10 => array(3,4),
+		11 => array(2,4),
+		12 => array(1,4),
+        1 => array(0,4), 
+		2 => array(0,4), // yes, feb is same as jan
+		3 => array(0,3),
+		4 => array(0,2),
+		5 => array(0,1)
 		);
 
 
@@ -51,10 +52,122 @@ class Enhancement
 		{
 			// guess it and cache it
 			$this->schoolYear = findSchoolYear($schoolYear);
-
+            $this->loadCutoffs(); // do i really want this here?
 		}
-	
 
+
+    // TODO: a much more complex function that gets the enrollment
+    // for a familyid and gets the start date and then calcs this
+    // TODO: i will also have to deal with DROP DATE!
+    /// BAH!! i also have to calculate these for each semester!
+    /// because of the carryovers!
+
+
+
+    // date in sql fmt, pleeze YYYY-MM-DD
+    // returns array(fall, spring) hours owed based on this start date
+    function getHoursOwed($date)
+        {
+            // much simpler than perl regexps!
+            list($year, $month, $day) = explode('-', $date);
+
+            // condom
+            if(!($year && $month && $day)){
+                user_error("Enhancement::getHoursOwed($date) bad date",
+                           E_USER_ERROR);
+            }
+
+            return $this->startDates[$month];
+        }
+
+    
+    // returns array of start/drop dates
+    function getStartDropDate($familyID)
+        {
+            /// let's start by finding out start/drop date
+
+            $enrol = new CoopObject(&$cp, 'enrollment', &$view);
+            $enrol->obj->query(sprintf(
+                'select min(start_date) as start, max(dropout_date) as drop
+                        from enrollment
+                                left join kids using (kids_id)
+                        where enrollment.school_year = "%s" 
+                                and kids.family_id = %d ',
+                $this->schoolYear, $familyID));
+            $enrol->obj->fetch();
+            
+            $res = array($enrol->obj->start, $enrol->obj->drop);
+            return $res;
+
+        }
+
+	
+    // gets cutoff dates from db and caches them
+    function loadCutoffs()
+        {
+            //fall cutoff
+            $co = new CoopObject(&$cp, 'calendar_events', &$top);
+            $co->obj->school_year = $this->schoolYear;
+            $co->obj->event_id = 5; // hard coded fall cutoff
+            $co->obj->find(true);
+            $this->cutoffDatesArray['fall'] = $co->obj->event_date;
+            
+            //spring cutoff
+            $co = new CoopObject(&$cp, 'calendar_events', &$top);
+            $co->obj->school_year = $this->schoolYear;
+            $co->obj->event_id = 6; // hard coded fall cutoff
+            $co->obj->find(true);
+            $this->cutoffDatesArray['spring'] = $co->obj->event_date;
+        }
+
+
+    // returns array(fall, spring) hours completed
+    function getHoursCompleted()
+        {
+            foreach(array('fall', 'spring') as $semester){
+                $co = new CoopObject(&$cp, 'enhancement_hours', &$top);
+                $co->obj->query(sprintf(
+                                    'select sum(hours) as total 
+                        from enhancement_hours 
+                                left join parents using (parent_id)
+                        where school_year = "%s" and work_date <= "%s" ',
+                                    $this->schoolYear,
+                                    $this->cutoffDate[$semester]));
+                $co->obj->fetch();
+                $res[$semester] = $co->obj->total;
+            }
+            return $res;
+        }
+
+    function sqlToUnix($sqldate)
+        {
+            list($year, $month, $day) = explode('-', $sqldate);
+            // condom
+            if(!($year && $month && $day)){
+                user_error("Enhancement::sqlToUnix($date) bad date",
+                           E_USER_ERROR);
+            }
+            return mktime(0,0,0,$month, $day, $year);
+        }
+
+    // so. fucking. ugly.
+    function guessSemester($date = false)
+        {
+            if(!$date){
+                $date = date('Y-m-d');
+            }
+            
+            $datun = $this->sqlToUnix($date);
+            $cutoffsun = array_map('sqlToUnix', $this->cutoffDatesArray);
+            
+            foreach(array('fall', 'spring') as $semester){
+                if($datun < $cutoffsun[$semester]){
+                    return $semester;
+                }
+            }
+            user_error("Enhancement::guessSemester($date): couldn't guess!",
+                       E_USER_ERROR);
+        }
 
 } // END ENHANCEMENT CLASS
 
