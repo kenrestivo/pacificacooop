@@ -147,7 +147,13 @@ function done()
 
 	print "</div><!-- rightcol div end -->";	
 	print '<div id="footer"><hr>';
-	printf("<p>If anything on this site appears to be not working properly, 
+    print '<p>
+      <a href="http://validator.w3.org/check/referer"><img
+          src="http://www.w3.org/Icons/valid-xhtml10"
+          alt="Valid XHTML 1.0!" height="31" width="88" border="0" /></a>
+    ';
+    ///note teh tag closing. it's an html validator bug waiting to happen ;-)
+	printf("If anything on this site appears to be not working properly, 
 			email <a href='mailto:%s'>%s</a> or call %s at %s</p>",
 			$coop_sendto['email_address'], $coop_sendto['email_address'], 
 			$coop_sendto['name'], $coop_sendto['phone'] );
