@@ -102,7 +102,7 @@ callbacks struct
 					array('btable', 'bindex',
 						array('ctable', 'cindex)))
 				and, yes, i am becoming a LISP programmer. ;-)
-	input callback: used by processoneentry to redisplay user-error entries
+	input callback: is DEPRECIATED. edit callback is now used instead
 	dupecheck callback: used by processoneentry to dupecheck b4 saving
 	realsave callback: used by processoneentry to REALLY save the thing!
 	plus, all the state callbacks (see below)
