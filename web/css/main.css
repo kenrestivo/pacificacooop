@@ -127,6 +127,8 @@ table.sub {
 	background-color: red;
 	border: none;
 	width: 85%;
+	padding: 1px;
+	margin: 1px;
  }
 
 A:hover {
