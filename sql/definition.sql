@@ -503,7 +503,7 @@ CREATE TABLE springfest_attendees (
   parent_id int(32) default NULL,
 	temp_name varchar(255) default NULL,
   school_year varchar(50) default NULL,  -- XXX do i want this here?
-  PRIMARY KEY  (springfest_attendee_id),
+  PRIMARY KEY  (springfest_attendee_id)
 ) ;
 
 --

@@ -12,7 +12,6 @@ class Calendar_events extends DB_DataObject
     var $__table = 'calendar_events';                 // table name
     var $calendar_event_id;               // int(32)  not_null primary_key unique_key auto_increment
     var $event_id;                        // int(32)  
-    var $notes;                           // blob(16777215)  blob
     var $status;                          // string(9)  enum
     var $keep_event_hidden_until_date;    // datetime(19)  
     var $event_date;                      // datetime(19)  

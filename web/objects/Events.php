@@ -14,6 +14,7 @@ class Events extends DB_DataObject
     var $description;                     // string(255)  
     var $realm;                           // string(55)  
     var $notes;                           // blob(16777215)  blob
+    var $url;                             // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
