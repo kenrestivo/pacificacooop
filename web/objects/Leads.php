@@ -75,7 +75,7 @@ class Leads extends DB_DataObject
 							  'country' => 'USA'
 		);
 
-
+	var $fb_hidePrimaryKey = false; // i needs my lead_id!
 	// can be called with no leadid if it's already in the object itself
 	// and no find is needed
 	// this is used in RSVP and tickets

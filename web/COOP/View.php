@@ -192,7 +192,9 @@ class coopView extends CoopObject
 		{
 			/// XXX NASTY ASS HACK!!!! ispermittedfield is b0rken.
 			/// view and edit are different!
-			$this->obj->fb_hidePrimaryKey = true;
+			if(!isset($this->obj->fb_hidePrimaryKey)){
+				$this->obj->fb_hidePrimaryKey = true;
+			}
 
 			$table = $this->obj->table();
 			$row = $this->obj->toArray();
