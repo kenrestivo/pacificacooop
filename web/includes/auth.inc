@@ -355,10 +355,6 @@ logIn($auth)
 					func => "passSavedState",
 					description => "New password saved to db"
 					),
-		passcorrect => array (
-					func => "passCorrectState",
-					description => "User typed in correct password!"
-					),
 		loggedin => array (
 					func => "loggedInState",
 					description => "User is logged in"
@@ -367,10 +363,11 @@ logIn($auth)
 
 
 
-	printf("logIn(): entering %s\n",
+	fwrite(STDERR, "logIn(): entering %s\n",
 		$states[$auth['state']]['description']);
 
-	return $states[$auth['state']]['func']($auth);
+	// dispatch the appropriate action for this state, and collect result
+	return($states[$auth['state']]['func']($auth));
 
 
 }/* END LOGIN  */
@@ -380,9 +377,14 @@ logIn($auth)
 /******************
 
 ******************/
-function
-loggedOutState($auth)
+loginForm($auth, $guts)
 {
+	printf("<FORM METHOD=POST ACTION='%s'>", 
+					$_SERVER['PHP_SELF']);
+	print $guts;
+	thruAuth($newauth);
+	printf("<INPUT TYPE=submit NAME='login' VALUE='LogIn'>");
+    print "</FORM>";
 }/* END  */
 
 
@@ -391,14 +393,47 @@ loggedOutState($auth)
 
 ******************/
 function
-nullPassState($auth)
+loggedOutState($auth)
 {
+	/*
+		if no pass
+			show an entry form (prepop with uid if given)
+			DONE
+		if bad uid
+			DONE state nouser
+		if password is null
+			DONE state nullpass
+		if password is correct
+			gen token
+			DONE state loggedin!
+	*/
+	
 }/* END  */
 
 
 
 /******************
+	NULLPASSSTATE
+******************/
+function
+nullPassState($auth)
+{
+	 /* inputs password/uid
+		pseudo:
+			if passes don't match
+				DONE state confirmwrong
+			if pass is inecure
+				DONE state insecurepass
+			save pass, pass thru token
+			DONE state loggedin!
+	*/
 
+}/* END  */
+
+
+
+/******************
+	WRONGPASSSTATE
 ******************/
 function
 wrongPassState($auth)
@@ -416,6 +451,10 @@ wrongPassState($auth)
 function
 noUserState($auth)
 {
+
+	$newauth['state'] = "loggedout";
+
+	return $newauth;
 }/* END  */
 
 
