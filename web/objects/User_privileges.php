@@ -31,15 +31,24 @@ class User_privileges extends DB_DataObject
 
 	// from docs. very kewl
 	function preGenerateForm() {
-		require_once("auth.inc");
-		global $accessnames;
+
+// the numbers, their display names, and the callback 'action' asssociated with them DUPLICATE OF AUTH.INC!
+$accessnames = array(  
+		  0 => array('None', NULL),
+		100 => array('Summarize', 'summary'),
+		200 => array('View', 'view'),
+		500 => array('Edit', 'edit'),
+		600 => array('Create', 'add'),
+		700 => array('Delete', 'confirmdelete'),
+		800 => array('Administer permissions for', NULL)
+);
 		foreach ($accessnames as $details => $priv){
-			$privmap[$priv] = $descr[0];
+			$privmap[$priv] = $details[0];
 		}
 		$foo = HTML_QuickForm::createElement('select', 'user_level', 
-										  $this->getFieldLabel('user_level'),
+										  $this->fb_fieldLabels['user_level'],
 										  $privmap);
-		$this->preDefElements['user_level'] = array (&$foo);
+		$this->preDefElements = array (&$foo);
 			
 	}		
 	

@@ -21,21 +21,26 @@
 
 require_once("auth.inc");
 require_once("shared.inc");
-require_once("members.inc");
-require_once("everything.inc");
 require_once("CoopPage.php");
+require_once("CoopView.php");
+require_once("thank_you_notes.inc");
+
+//global hacks to save ken's wrists
+$callbacks = $thank_you_callbacks;
+$fields = $thank_you_fields;
+
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
+
+
 
 //header stuff
 printf('<HTML lang="en"> <HEAD> %s
 
 <TITLE>%s</TITLE> 
-</HEAD> <BODY> <div id="page">
-		<div id="header">
-		<h2>Pacifica Co-Op Nursery School %s</h2> ',
-	   $metalinks,
-		$callbacks['title'], $callbacks['description']);
+</HEAD> <BODY> <div id="page">',
+	   $metalinks);
+
 
 user_error("states.inc: ------- NEW PAGE --------", E_USER_NOTICE);
 
@@ -58,7 +63,6 @@ $realm = $callbacks['realm'];
 $p = getAuthLevel($auth, $realm);
 $u = $cp->userStruct; // createlegacy keeps this for me
 
-print "\n<hr><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 
 
 //now for the ui stuff!
@@ -87,7 +91,7 @@ switch($_REQUEST['subaction']){
 }
 
 
-done();
+print "</body></html>";
 
 ?>
 <!-- END PRINTPOPUP -->
