@@ -79,10 +79,11 @@ class CoopMenu extends HTML_Menu
 
 		}
 
+
 	function kenRender($type = 'sitemap')
 		{
 			$this->setMenuType($type);
-			
+			//print $this->getCurrentURL();
 			switch($type){
 			case 'sitemap':
 				$this->renderer =& new HTML_Menu_DirectTreeRenderer();
@@ -97,6 +98,10 @@ class CoopMenu extends HTML_Menu
  					'</span></table>');
 				 //print "HEYY HEEYY";
 				$this->render($this->renderer, $type);
+				//	confessArray($this->getPath(), "apath");
+				if(count($this->getPath()) < 2){
+					return "";
+				}
 				return($this->renderer->toHTML());
 			break;
 			}
