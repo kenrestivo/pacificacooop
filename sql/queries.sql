@@ -7,11 +7,11 @@ select last, first
 		left join enrol on enrol.enrolid = keglue.enrolid 
 	where enrol.sess = "PM";
 
--- contact info for all parents
-select parents.last, parents.first , families.phone, parents.email 
+-- contact info for all parents, showing who is and isn't a worker
+select families.name, parents.last, parents.first , parents.worker, families.phone, parents.email 
 	from parents 
-		left join families on parents.familyid = families.familyid ;
-
+		left join families on parents.familyid = families.familyid 
+	order by families.name, parents.last, parents.first;
 
 -- expired licenses
 select parents.last, parents.first, lic.expires 
@@ -21,21 +21,23 @@ select parents.last, parents.first, lic.expires
 	group by parents.last, parents.first;
 
 
--- give me ocntact info for all parents who have expired licenses
-select parents.last, parents.first, lic.expires,  families.phone, parents.email
-	from parents 
+-- contact info all families whose working parent doesn't have a vaild dl
+select families.name, parents.last, parents.first, lic.expires, families.phone, parents.email
+	from families 
+		left join parents on parents.familyid = families.familyid 
 		left join lic on parents.parentsid = lic.parentsid 
-		left join families on parents.familyid = families.familyid 
-		left join kids on kids.familyid = families.familyid 
 	where parents.worker = "Yes" and (expires is null or expires < now())
 	group by parents.last, parents.first;
 
--- give me ocntact info for all parents who have expired insurance
-select parents.last, parents.first, ins.expires,  
-	ins.companyname, ins.policynum, families.phone, parents.email
-	from parents 
+
+-- give me ocntact info for all families who have expired insurance
+-- XXX: this MAY be the worker, it may not, i don't know
+select families.name, parents.last, parents.first, ins.expires,
+		families.phone, parents.email
+	from families 
+		left join parents on parents.familyid = families.familyid 
 		left join ins on parents.parentsid = ins.parentsid 
-		left join families on parents.familyid = families.familyid 
-		left join kids on kids.familyid = families.familyid 
-	where parents.worker = "Yes" and (expires is null or expires < now())
-	group by parents.last, parents.first;
+	where expires is null or expires < now()
+	group by families.name;
+
+--- EOF
