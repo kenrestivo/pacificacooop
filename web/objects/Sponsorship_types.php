@@ -25,7 +25,7 @@ class Sponsorship_types extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_formHeaderText =  'Springfest Sponsorship Packages';
-	var $fb_linkDisplayFields = array('sponsorship_name');
+	var $fb_linkDisplayFields = array('sponsorship_name', 'sponsorship_price');
 									
 	var $fb_fieldLabels = array (
 		'sponsorship_name' => 'Title',

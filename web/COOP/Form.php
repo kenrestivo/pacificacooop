@@ -77,7 +77,7 @@ class coopForm extends CoopObject
 			$this->addCrossLinks($vars);
 
 			// finally, sumbit it!
-			$this->form->addElement('submit', null, 'Save');
+			$this->form->addElement('submit', 'savebutton', 'Save');
 
 			$this->form->applyFilter('__ALL__', 'trim');
 

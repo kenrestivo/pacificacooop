@@ -64,12 +64,8 @@ switch($_REQUEST['action']){
 
 	 // ugly assthrus
 	 $atd->form->addElement('hidden', 'action', 'edit'); 
-	 $atd->form->addElement('hidden', $atd->pk, $atd->obj->{$atd->pk}); 
 
-	 if($sid = thruAuthCore($cp->auth)){
-		 $atd->form->addElement('hidden', 'coop', $sid); 
-	 }
-	 
+	 $atd->legacyPassThru();
 
 	 $atd->addRequiredFields();
 

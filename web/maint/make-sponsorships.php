@@ -34,6 +34,8 @@ $cp->pageTop();
 //$cp->createLegacy($cp->auth);
 
 $atd = new CoopView(&$cp, 'sponsorships', $none);
+$atd->recordActions = array('edit' => "Edit",
+							'confirmdelete' => 'Delete');
 
 $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
@@ -57,9 +59,22 @@ $user = $p['user_level'] >= $level ? 1 : 0;
 // }
 
 
+function viewHack(&$cp, &$atd)
+{
+	 $co =& new CoopObject(&$cp, 'sponsorship_types', &$atd);
+	 $atd->obj->joinAdd($co->obj);
+	 $atd->school_year = findSchoolYear();
+	 $atd->obj->orderBy('sponsorship_price desc');
+	 return $atd->simpleTable();
+			
+}
+
+
 // cheap dispatcher
 //confessArray($_REQUEST,'req');
 switch($_REQUEST['action']){
+ 
+//// FIND NEEDED /////
  case 'findneeded':
 	 print "<p>This could take a while. Calculating sponsors needed.</p>";
 	 $sp = new Sponsorship(&$cp);
@@ -83,6 +98,7 @@ switch($_REQUEST['action']){
 	 print "<p>The above need to have sponsorships added.</p>";
 	 break;
 
+//// ADD NEEDED /////////
  case 'addneeded':
 	 print "<p>This could take a very, very, very long time. Please be patient.</p>";
 	 $sp = new Sponsorship(&$cp);
@@ -111,13 +127,80 @@ switch($_REQUEST['action']){
 	 
 	 break;
 	 
+//// EDIT //////
+ case 'edit':
+	 print "<p>Choose either a company name or invitee name, not both. If you picked the wrong one by mistake, change the other one to 'CHOOSE ONE'.</p>";
+
+	 $atdf = new CoopForm(&$cp, 'sponsorships', $none); // NOT the coopView above!
+
+	 $atdf->obj->fb_fieldsToRender = array('company_id', 'lead_id', 
+										   'sponsorship_type_id', 
+										   'entry_type');
+	 $atdf->build($_REQUEST);
+
+
+	 // ugly assthrus for my cheap dispatcher
+	 $atdf->form->addElement('hidden', 'action', 'edit'); 
+
+	 $atdf->legacyPassThru();
+
+	 $atdf->addRequiredFields();
+	 
+	 // tweak them all to be manual now!
+	 $el =& $atdf->form->getElement('entry_type');
+	 $el->setValue('Manual');
+
+	 if ($atdf->form->validate()) {
+		 print "saving...";
+		 print $atdf->form->process(array(&$atdf, 'process'));
+		 // gah, now display it again. they may want to make other changes!
+		 print viewHack(&$cp, &$atd);
+	 } else {
+		 print $atdf->form->toHTML();
+	 }
+	 break;
+
+ case 'confirmdelete':
+	 print "<p>Are you sure you wish to delete this? Click 'Delete' below to delete it, or the 'Back' button in your broswer to cancel.</p>";	 $atdf = new CoopForm(&$cp, 'sponsorships', $none); // NOT the coopView above!
+	 $atdf->build($_REQUEST);
+
+	 // ugly assthrus for my cheap dispatcher
+	 $atdf->form->addElement('hidden', 'action', 'edit'); 
+
+	 $atdf->legacyPassThru();
+
+	 $atdf->addRequiredFields();
+
+
+	 // change the save button and action to delete
+ 	 $el =& $atdf->form->getElement('savebutton');
+ 	 $el->setValue('Delete');
+ 	 $el =& $atdf->form->getElement('action');
+ 	 $el->setValue('delete');
+	 
+	 //TODO and add a cancel button
+	 //$atdf->form->addElement('button', 'cancelbutton', 'Cancel');
+
+	 $atdf->form->freeze();
+
+	 print $atdf->form->toHTML();
+
+	 break;
+
+//// DELETE ////
+ case 'delete':
+ // hack , but it works. why reinvent the wheel?
+	 $atdf = new CoopForm(&$cp, 'sponsorships', $none); // NOT the coopView above!
+	 $atdf->build($_REQUEST);
+	 $atdf->obj->delete();
+	 print viewHack(&$cp, &$atd);
+
+	 break;
+
+
+//// DEFAULT (VIEW) //////
  default:
-	 $co =& new CoopObject(&$cp, 'sponsorship_types', &$atd);
-	 $atd->obj->joinAdd($co->obj);
-	 $atd->school_year = findSchoolYear();
-	 $atd->obj->orderBy('sponsorship_price desc');
-	 print $atd->simpleTable();
-		 
+	 print viewHack(&$cp, &$atd);
 
 	 break;
 }
