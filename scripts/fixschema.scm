@@ -44,10 +44,16 @@
 	  (close p) )))
 
 ;; clean sql definition line
+;; TODO! must combine before yanking ,'s!
 (define (clean-line line)
-  (delete "" 
+		 (map (lambda (y)
+				 (regexp-substitute/global #f  "[ \t]" y  'pre 'post)) 
 		  (map (lambda (x)
-				 (regexp-substitute/global #f  ",$" x  'pre 'post)) line)))
+				 (regexp-substitute/global #f  ",$" x  'pre 'post)) 
+			   (delete "" line))))
+
+;; if it is a COLUMN, i'll want to do:
+;;(cons (car tl) (string-join (cdr tl)))
 
 ;; make sure it is a valid line
 (define (valid-def-line l)
@@ -61,7 +67,8 @@
 	
 	(do ((line (read-line p) (read-line p)))
 		((or (eof-object? line) ))
-	  ((lambda (x) (if (valid-def-line x) (pp x)))
+	  ((lambda (x) (if (valid-def-line x)
+					   (pp x)))
 	   (clean-line (string-split line #\space))))
 	 (close p) ))	
 
