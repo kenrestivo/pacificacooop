@@ -62,12 +62,15 @@ if($pv['action'] == 'detail'){
 	$build =& DB_DataObject_FormBuilder::create ($obj);
 	$form = $build->getForm ($_SERVER['PHP_SELF']);
 	$form->addElement('hidden', 'action', 'detail');
+	$form->addElement('hidden', 'table', $table);
+//	$form->addElement('hidden', 'id');
 	if($form->validate ()){
 		$res = $form->process (array (&$build, 'processForm'), false);
 		if ($res){
 			$obj->debug('processed successfully', 'detailform', 0);
 		 	$action = $form->getElement('action');
 			$action->setValue('list');
+			//try refresh method??
 		}
 		echo "aaauugh!<br>";
 	}

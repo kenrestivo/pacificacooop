@@ -86,11 +86,11 @@ select kids.*, enrollment.*
         left join enrollment using (kid_id);
 
 -- show all springfest payments
-select families.name, sum(inc.amount) as total
+select families.name, sum(income.amount) as total
     from families
-        left join figlue on families.family_id = figlue.family_id
-        left join inc on figlue.income_id = inc.income_id
-    where inc.account_number = 1
+        left join families_income_join on families.family_id = families_income_join.family_id
+        left join income on families_income_join.income_id = income.income_id
+    where income.account_number = 1
     group by families.family_id
     order by families.family_id
 
@@ -129,13 +129,13 @@ select leads.lead_id  as responsecode
     order by leads.last_name, leads.first_name
 
 -- detailed list of payments
-select  inc.income_id, inc.check_number, inc.payer, coa.item_description,
-    inc.amount, families.name
-    from inc
-        left join coa on coa.account_number = inc.account_number
-        left join figlue on figlue.income_id = inc.income_id
-        left join families on families.family_id = figlue.family_id
-    order by inc.check_date desc
+select  income.income_id, income.check_number, income.payer, chart_of_accounts.item_description,
+    income.amount, families.name
+    from income
+        left join chart_of_accounts on chart_of_accounts.account_number = income.account_number
+        left join families_income_join on families_income_join.income_id = income.income_id
+        left join families on families.family_id = families_income_join.family_id
+    order by income.check_date desc
 
 -- query for deleting/updating session stuff
 select * from attendance 
@@ -160,42 +160,42 @@ select kids.first_name, kids.last_name, enrol.school_year, enrol.sess
 -- find orphaned auctionss XXX BROKEN! i have new linkfields!
 select auction.*, families.name 
     from auction 
-        left join faglue
-        on faglue.auction_donation_item_id = auction.auction_donation_item_id 
-        left join families on families.family_id = faglue.family_id 
-    where faglue.family_id is null 
+        left join auction_items_families_join
+        on auction_items_families_join.auction_donation_item_id = auction.auction_donation_item_id 
+        left join families on families.family_id = auction_items_families_join.family_id 
+    where auction_items_families_join.family_id is null 
     order by auction_donation_item_id
 
 -- find orphaned checks (serious) XXX BROKEN! i have new linkfields!
-select inc.*, families.name 
-    from inc 
-        left join figlue on figlue.income_id = inc.income_id 
-        left join families on families.family_id = figlue.family_id 
-    where figlue.family_id is null 
+select income.*, families.name 
+    from income 
+        left join families_income_join on families_income_join.income_id = income.income_id 
+        left join families on families.family_id = families_income_join.family_id 
+    where families_income_join.family_id is null 
     order by income_id
 
 -- show the total auction item_value (for a family)
 select families.name, sum(auction.item_value) as item_value
     from families
-        left join faglue on families.family_id = faglue.family_id
+        left join auction_items_families_join on families.family_id = auction_items_families_join.family_id
         left join auction 
-        on faglue.auction_donation_item_id = auction.auction_donation_item_id
+        on auction_items_families_join.auction_donation_item_id = auction.auction_donation_item_id
     group by families.family_id
 
 -- money totals
-select coa.item_description, sum(item_value)  as total 
-    from inc 
-        left join coa on inc.account_number = coa.account_number 
-    group by inc.account_number order by total desc;
+select chart_of_accounts.item_description, sum(item_value)  as total 
+    from income 
+        left join chart_of_accounts on income.account_number = chart_of_accounts.account_number 
+    group by income.account_number order by total desc;
 
 -- income specific to invites
-select coa.item_description, sum(item_value)  as total 
-    from inc 
+select chart_of_accounts.item_description, sum(item_value)  as total 
+    from income 
         left join invitation_rsvps 
-            on invitation_rsvps.income_id = inc.income_id 
-        left join coa on inc.account_number = coa.account_number 
+            on invitation_rsvps.income_id = income.income_id 
+        left join chart_of_accounts on income.account_number = chart_of_accounts.account_number 
     where invitation_rsvps.lead_id is not null 
-    group by inc.account_number order by total desc;
+    group by income.account_number order by total desc;
 
 
 --- audit trails
@@ -248,23 +248,23 @@ select relation,
     order by total desc;
 
 -- ALL the money!
-select coa.item_description, 
-   sum(if(figlue.family_id>0 || companies.family_id>0,inc.amount,0)) 
+select chart_of_accounts.item_description, 
+   sum(if(families_income_join.family_id>0 || companies.family_id>0,income.amount,0)) 
         as family_paid ,
    sum(amount)  as total 
-    from inc 
-           left join coa on inc.account_number = coa.account_number 
-           left join figlue on inc.income_id = figlue.income_id
+    from income 
+           left join chart_of_accounts on income.account_number = chart_of_accounts.account_number 
+           left join families_income_join on income.income_id = families_income_join.income_id
            left join raffle_income_join 
-                   on inc.income_id = raffle_income_join.income_id
+                   on income.income_id = raffle_income_join.income_id
            left join invitation_rsvps 
-                   on inc.income_id = invitation_rsvps.income_id
+                   on income.income_id = invitation_rsvps.income_id
            left join companies_income_join
-                   on inc.income_id = companies_income_join.income_id
+                   on income.income_id = companies_income_join.income_id
                 left join companies 
                     on companies.company_id = 
                         companies_income_join.company_id
-    group by inc.account_number order by total desc
+    group by income.account_number order by total desc
 
 
 --- nasty package join. the 'users' hack is to get "xxx family" w/o coding
@@ -272,9 +272,9 @@ select auction.* ,
             coalesce(users.name, companies.company_name) as donor
         from auction 
             left join packages on auction.package_id = packages.package_id 
-            left join faglue 
-        on faglue.auction_donation_item_id = auction.auction_donation_item_id 
-                left join users on users.family_id = faglue.family_id 
+            left join auction_items_families_join 
+        on auction_items_families_join.auction_donation_item_id = auction.auction_donation_item_id 
+                left join users on users.family_id = auction_items_families_join.family_id 
             left join companies_auction_join
                  on companies_auction_join.auction_donation_item_id = 
                         auction.auction_donation_item_id
@@ -297,15 +297,15 @@ select auction.* ,
 select coalesce(companies.company_name, 
         concat_ws(' ', leads.first_name, leads.last_name, leads.company))
             as company,
-        sum(inc.amount)  as cash_total 
-    from inc 
+        sum(income.amount)  as cash_total 
+    from income 
         left join companies_income_join
-               on inc.income_id = companies_income_join.income_id
+               on income.income_id = companies_income_join.income_id
             left join companies 
                 on companies.company_id = 
                     companies_income_join.company_id
         left join invitation_rsvps 
-            on invitation_rsvps.income_id = inc.income_id 
+            on invitation_rsvps.income_id = income.income_id 
             left join leads on invitation_rsvps.lead_id = leads.lead_id
     where leads.lead_id is not null or companies.company_id is not null
     group by leads.lead_id, companies.company_id  having cash_total >= 150
@@ -330,21 +330,21 @@ select companies.company_name,
 -- show auction totals for SOLICIT AND for family auctions.
 select families.name, sum(auction.item_value) as item_value
     from auction
-        left join faglue on auction.auction_donation_item_id =
-            faglue.auction_donation_item_id
+        left join auction_items_families_join on auction.auction_donation_item_id =
+            auction_items_families_join.auction_donation_item_id
         left join companies_auction_join 
             on auction.auction_donation_item_id = 
                 companies_auction_join.auction_donation_item_id
         left join families 
-            on coalesce(faglue.family_id, companies_auction_join.family_id) =
+            on coalesce(auction_items_families_join.family_id, companies_auction_join.family_id) =
             families.family_id
-    group by coalesce(faglue.family_id, companies_auction_join.family_id)
+    group by coalesce(auction_items_families_join.family_id, companies_auction_join.family_id)
     order by families.name
 
 --massive solicit nag stuff
- select company_name, sum(inc.amount) as cash_donations,
+ select company_name, sum(income.amount) as cash_donations,
       sum(auction.item_value) as non_cash_donations,
-      sum(inc.amount) + sum(auction.item_value) as total
+      sum(income.amount) + sum(auction.item_value) as total
     from companies
           left join companies_auction_join 
               on companies_auction_join.company_id = companies.company_id
@@ -353,8 +353,8 @@ select families.name, sum(auction.item_value) as item_value
                 auction.auction_donation_item_id
           left join companies_income_join 
               on companies_income_join.company_id = companies.company_id
-          left join inc 
-            on companies_income_join.income_id = inc.income_id    
+          left join income 
+            on companies_income_join.income_id = income.income_id    
     group by companies.company_id 
     order by total desc, cash_donations desc, companies.company_name asc;
 
@@ -368,7 +368,7 @@ select ticket_quantity , item_value, last_name, first_name, address1 ,
         address2, city , state , zip , leads.lead_id as response_code 
     from invitation_rsvps 
         left join leads on invitation_rsvps.lead_id = leads.lead_id 
-        left join inc on invitation_rsvps.income_id = inc.income_id 
+        left join income on invitation_rsvps.income_id = income.income_id 
     where ticket_quantity > 0 
     order by leads.last_name, leads.first_name;
 
@@ -417,10 +417,10 @@ insert into enrollment
     from attendance left join enrol using (enrolid);
 
 -- the family names which should be updated
-    select leads.lead_id, leads.last_name, inc.payer 
+    select leads.lead_id, leads.last_name, income.payer 
         from leads left join invitation_rsvps 
             on leads.lead_id = invitation_rsvps.lead_id 
-        left join inc on invitation_rsvps.income_id = inc.income_id 
+        left join income on invitation_rsvps.income_id = income.income_id 
     where last_name like "%Family%" 
         and invitation_rsvps.income_id is not null;
 
