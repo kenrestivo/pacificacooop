@@ -196,6 +196,9 @@ class coopView extends CoopObject
 			   !in_array($key, $this->obj->fb_fieldsToRender)){
 				return 0;
 			}
+
+			// TODO: check user permissions!
+			
 //			confessArray($this->obj->fb_fieldsToRender, "$key is in:");
 			return 1;
 		}

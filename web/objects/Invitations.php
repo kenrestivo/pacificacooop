@@ -15,6 +15,7 @@ class Invitations extends DB_DataObject
     var $school_year;                     // string(50)  
     var $family_id;                       // int(32)  
     var $relation;                        // string(8)  enum
+    var $label_printed;                   // datetime(19)  binary
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -26,15 +27,27 @@ class Invitations extends DB_DataObject
     ###END_AUTOCODE
 	var $fb_enumFields = array ('relation');
 	
-	function preGenerateForm()
-		{
-	// 		$this->fb_preDefElements['school_year'] = 
-// 			HTML_QuickForm::createElement(
-// 				'select', 
-// 				'school_year', $this->getFieldLabel('school_year'), 
-// 				$this->getSelectOptions('school_year'), 
-// 				null);
-			
-		}
+	var $fb_selectAddEmpty = array ('family_id', 'lead_id');
 
-	var $fb_selectAddEmpty = array ('family_id', 'lead_id');}
+	var $fb_formHeaderText =  'Springfest Invitations';
+
+	var $fb_fieldsToRender = array (
+		'lead_id',
+		'school_year' ,
+		'family_id',
+		'relation',
+		'label_printed'
+		);
+
+	var $fb_linkDisplayFields = array('company_name', 'last_name',
+									  'first_name');
+	var $fb_fieldLabels = array (
+		'lead_id' => 'Contact',
+		'school_year' => 'School Year',
+		'family_id' => 'Invited by Family',
+		'relation' => 'Relation to Inviting Family',
+		'label_printed' => 'Mailing Label Printed On'
+		);
+
+
+}
