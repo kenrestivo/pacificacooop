@@ -10,8 +10,7 @@
 
 <BODY>
 
-<h2>Pacifica Co-Op Nursery School Springfest Invitation Entry</h2>
-<!--<p>&nbsp;</p>-->
+<h2>Pacifica Co-Op Nursery School Springfest Invitation Form</h2>
 
 <?php
 	# main sprintfest page
@@ -82,11 +81,11 @@
 
 		#TODO : get the cutoff date from the database, 
 		#so it someone can change it next year without having to edit this code
-		print "<p>Every family must provide the names of 10 people who 
+		print "<p>Every family must provide the names of ten people who 
 				should be invited to attend or donate to Springfest. 
 				These can be family, friends, business associates, etc. 
 				They will be sent formal invitations on behalf of the School. 
-				You must enter at least 10 names by $cutoffdate</p>";
+				You must enter at least ten names by $cutoffdate</p>";
 
 		#show them what they've already got, don pardo
 		nameSummary($id);
@@ -94,11 +93,13 @@
 		#uncomment for debugging, to show all records
 		#nameTable($id);
 
-		print "<P>Enter a name here.
+		print "<p>Enter a name here.
 					Remember to click 'Save' 
 					at the bottom of this screen when you are done!</p>";
 		#finally, give them a form to enter data!
 		oneNameForm($id);
+
+		print "<p>Items with an asterisk (<font color='#ff0000'>*</font>) are required.</p>";
 
 	}
 	# end of inner php code
