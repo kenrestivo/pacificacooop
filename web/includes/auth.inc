@@ -555,6 +555,17 @@ sanityCheck($auth, $states)
 		}
 		reset($auth);
 	}
+
+
+	//check that uid is valid, if supplied
+	if($auth['uid'] && !getUser($auth['uid'])){
+		user_error(
+			sprintf("unknownState(): uid %d present, but user not in db", 
+				$auth['uid'])
+		, E_USER_NOTICE);
+		$auth['state'] = 'nouser'; // force it outta here
+	}
+
 	return $auth;
 }/* END SANITYCHECK */
 
@@ -614,15 +625,6 @@ unknownState($auth, $states)
 	if($auth['uid'] && $auth['token']){
 		user_error("unknownState(): uid and token present", E_USER_NOTICE);
 		return changeState($auth, $states, 'verifytoken', 1);
-	}
-
-	//check that uid is valid
-	if($auth['uid'] && !getUser($auth['uid'])){
-		user_error(
-			sprintf("unknownState(): uid %d present, but user not in db", 
-				$auth['uid'])
-		, E_USER_NOTICE);
-		return changeState($auth, $states, 'nouser', 1);
 	}
 	
 	// if there's no password stored for this user
