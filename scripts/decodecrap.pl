@@ -1,5 +1,26 @@
 #!/usr/bin/perl
-#$Id$
+
+# $Id$
+
+# automatically repair fields with &amp;/&quot; and other escape codes
+#   or excessive \\\\'s
+
+# Copyright (C) 2003  ken restivo <ken@restivo.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
 
 use HTML::Entities;
 use DBI;
@@ -15,7 +36,11 @@ our($dbh);
 ##END OF MAIN CODE
 ###############
 
-
+#####################
+#	MAIN
+#	yes the functions are in reverse order. 
+#	perl doesn't require advance declaration.
+#####################
 sub
 main()
 {
@@ -193,6 +218,8 @@ repairUglies()
 		or die "HEY!! bad args to repairUglies()!\n";
 
 	$fixed = &fixit($text);
+	
+	print "\tchanging to <$fixed>\n";
 
 	#NOTE! i don't need to quote the $fixed: dbh->quote() does it 4 me
 	$rquery = "update $tablename set $fieldname = $fixed 
@@ -208,6 +235,9 @@ repairUglies()
 	}
 
 } #END REPAIRUGLIES
+
+
+
 ########################
 #	FIXIT
 #	ok, well, fix the damn thing and return the repaired string.
