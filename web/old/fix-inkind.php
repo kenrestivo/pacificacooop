@@ -52,10 +52,14 @@ while($top->obj->fetch()){
 		{
 			$inkind->obj->$col = $top->obj->$col;
 		}
-		confessObj($inkind->obj, 'newinkind');
+//		confessObj($inkind->obj, 'newinkind');
 		// insert it and grab the lastinsertid for it
 		$inkind->obj->insert();
 		$id = $inkind->lastInsertID();
+		
+		if(!$id){
+			user_error("id $id was null!", E_USER_ERROR);
+		}
 		// create a join for it
 		$join = new CoopObject(&$cp, 'companies_in_kind_join', &$top);
 		$join->obj->in_kind_donation_id = $id;
