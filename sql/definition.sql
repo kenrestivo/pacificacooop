@@ -443,6 +443,7 @@ create table enhancement_hours (
     enhancement_project_id int(32) not null,  -- join
     work_date date,
     hours decimal(4,2),
+	school_year varchar(50),
     primary key (enhancement_hour_id)
 );
 
