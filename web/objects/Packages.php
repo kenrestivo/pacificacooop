@@ -32,5 +32,6 @@ class Packages extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_textFields = array ('package_description');
 
 }

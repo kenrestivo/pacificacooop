@@ -63,7 +63,7 @@ if($pv['action'] == 'detail'){
 	$form = $build->getForm ($_SERVER['PHP_SELF']);
 	$form->addElement('hidden', 'action', 'detail');
 	if($form->validate ()){
-		$res = $form->process (array ($build, 'processForm'), false);
+		$res = $form->process (array (&$build, 'processForm'), false);
 		if ($res){
 			$obj->debug('processed successfully', 'detailform', 0);
 		 	$action = $form->getElement('action');

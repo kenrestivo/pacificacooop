@@ -31,5 +31,5 @@ class Income extends DB_DataObject
     ###END_AUTOCODE
 	
 	//should work, but is ignored?
-	var $dateFields = array ('bookkeeper_date', 'cleared_date');
+	var $fb_dateFields = array ('bookkeeper_date', 'cleared_date');
 }
