@@ -20,18 +20,36 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+
 use strict;
 use Spreadsheet::ParseExcel;
 my $xls = new Spreadsheet::ParseExcel;
 
 my $wb = $xls->Parse('../imports/PM.xls');
 
-my($row, $maxrow, $col, $maxcol, $ws, $cell, $sh);
+#my %fieldarray = {
+	#Last Name
+	#Mom Name*
+	#Dad/Partner*
+	#Child 
+	#Birthday
+	#Address
+	#Phone
+	#Email
+	#M
+	#Tu
+	#W
+	#Th
+	#F
+	#School Job
+	#Springfest Job
+#};
+
 print "FILE  :", $wb->{File} , "\n";
 print "COUNT :", $wb->{SheetCount} , "\n";
 print "AUTHOR:", $wb->{Author} , "\n";
 
-
+my($ws, $sh);
 for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
 	$ws = $wb->{Worksheet}[$sh];
 	
@@ -39,10 +57,54 @@ for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
 	if($ws->{'Name'} !~ /Schedule/){
 		next;
 	}
+	&iterateRows($ws);
 
+} #END MAIN
+
+exit 0;
+###################################################
+
+
+#################
+#	VALIDROW
+#	count that the first x of these have data in them
+#	TODO stupid. don't pass $ws and $row, just pass $ws->{'Cells'}[$row] !
+#		can i DO that? array/references?
+#################
+sub validRow()
+{
+	my $ws = shift;
+	my $row = shift;
+	my $col = shift;
+	my $check = shift;
+	my $cnt = 0;
+
+	while($check--){
+		#brutally ugly, but NECESSARY!. must exist, and must have data
+		if($ws->{'Cells'}[$row][$col] && 
+			$ws->{'Cells'}[$row][$col]->Value)
+		{
+			$cnt++;
+		}
+		$col++;
+	}
+
+	return $cnt;
+} #END VALIDROW
+
+
+#################
+#	ITERATEROWS
+#	iterate through a spreadsheet, separating out the good rows
+#	and applying callback functions to them
+###############
+sub iterateRows()
+{
+	my $ws = shift;
 	my $start = 0;
 	my $end = 0;
 	my $vr = 0;
+	my($row, $maxrow, $col, $maxcol, $cell);
 
 	$row = $ws->{'MinRow'} ;
 	$maxrow = $ws->{'MaxRow'} ;
@@ -54,6 +116,7 @@ for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
 		$col = $ws->{'MinCol'} ;
 		$maxcol = $ws->{'MaxCol'} ;
 		
+		#determine if we have a header row
 		$vr = &validRow($ws, $row, $col, $maxcol);
 
 		if ($vr == $maxcol){
@@ -78,33 +141,6 @@ for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
 		}
 		$row++;
 	}
-} #END MAIN
-
-exit 0;
-###################################################
-
-
-#################
-#	VALIDROW
-#	count that the first x of these have data in them
-#################
-sub validRow()
-{
-	my $ws = shift;
-	my $row = shift;
-	my $col = shift;
-	my $check = shift;
-	my $cnt = 0;
-
-	while($check--){
-		#brutally ugly, but necessary. must exist, and must have data
-		if($ws->{'Cells'}[$row][$col] && $ws->{'Cells'}[$row][$col]->Value){
-			$cnt++;
-		}
-		$col++;
-	}
-
-	return $cnt;
-} #END VALIDROW
+} #END ITERATEROWS
 
 #EOF
