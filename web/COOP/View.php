@@ -216,6 +216,9 @@ class coopView extends CoopObject
 				if($this->isPermittedField($key)){
 					// XXX better way to do all this dispatching
 					if($table[$key] & DB_DATAOBJECT_MYSQLTIMESTAMP){ 
+ 						$res[] = timestamp_db_php($val);
+					} else if ($table[$key] &  8) {
+						// XXXX awful hack! DB_DATAOBJEC_TIME is not yet defined!
 						$res[] = timestamp_db_php($val);
 					} else if ($table[$key] &  DB_DATAOBJECT_DATE){
 						$res[] = sql_to_human_date($val);
