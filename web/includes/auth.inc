@@ -263,7 +263,7 @@ aggregateLevel($auth, $targetfamilyid, $targetrealm)
 		return what's up for this uid, let caller decide if that's good or bad
 		checks token just so stuff doesn't sneak up on us
 	inputs: auth structure,realm, and eventually group
-	returns: array of userlevel, grouplevel, familyid, or null if checktoken fails
+	returns: array of userlevel and grouplevel, or null if checktoken fails
 ******************/
 function
 getAuthLevel($auth, $targetrealm)
@@ -276,12 +276,12 @@ getAuthLevel($auth, $targetrealm)
 		return 1;
 	}
 
-	if(!checkToken($auth['uid'], $auth['token'])){
+	if(checkToken($auth['uid'], $auth['token'])){
+		//user_error("getAuthLevel(): bad TOKEN", E_USER_WARNING);
 		return 0; // bad token, no BISCUIT!
 	}
 
 	// the query
-	//XXX aha! the familyid NEVER comes back, if there's no realm for this uid
 	$query = sprintf("
 			SELECT privs.*
 				FROM privs
@@ -290,6 +290,7 @@ getAuthLevel($auth, $targetrealm)
 			",
 			$auth['uid'], $targetrealm
 		);
+	//user_error("getAuthLevel(): [$query]: ", E_USER_NOTICE);
 	$listq = mysql_query($query);
 	$err = mysql_error();
 	if($err){
