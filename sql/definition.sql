@@ -282,7 +282,7 @@ create table auction (
     auctionid int(32) not null unique auto_increment,
 	description longtext,
     amount decimal(9,2),
-	received_on datetime,
+	date_received datetime,
     audit_user_id int(32),
 	entered datetime,
 	updated timestamp,
@@ -305,6 +305,8 @@ create table events (
     eventid int(32) not null unique auto_increment,
 	description varchar(255),
     audit_user_id int(32),
+	notes longtext,
+	url varchar(255),
 	entered datetime,
 	updated timestamp,
 	primary key (eventid)
@@ -314,11 +316,9 @@ create table events (
 create table cal (
     calid int(32) not null unique auto_increment,
 	eventid int(32),
-	notes longtext,
 	status enum ('Active', 'Tentative', 'Cancelled') default 'Active',
 	hideuntil datetime,
 	eventdate datetime,
-	url varchar(255),
     audit_user_id int(32),
 	entered datetime,
 	updated timestamp,
@@ -328,9 +328,9 @@ create table cal (
 -- company table
 create table companies (
     company_id int(32) not null unique auto_increment,
-	name varchar(255),
-	address varchar(255),
-	address_continued varchar(255),
+	company_name varchar(255),
+	address1 varchar(255),
+	address2 varchar(255),
 	city varchar(255),
 	state varchar(255),
 	zip varchar(255),
@@ -340,7 +340,7 @@ create table companies (
 	email varchar(255),
 	territory_id (link),
     familyid int(32), -- XXX temporary hack! remove later
-	dead datetime,
+	do_not_contact datetime,
     audit_user_id int(32),
 	entered datetime,
 	updated timestamp,

@@ -132,8 +132,8 @@ privs user_privileges
 
 # AUCTION DONTATIONS
 auction.auctionid auction.auction_donation_item_id
-auction.description aution.item_description
-auction.received_on aution.date_received
+auction.description auction.item_description
+auction.received_on auction.date_received
 auction.amount auction.item_value
 # Table rename:
 auction auction_donation_items
