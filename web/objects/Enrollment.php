@@ -33,6 +33,9 @@ class Enrollment extends DB_DataObject
 		'start_date' => 'Start Date',
 		'dropout_date' => "Drop Date"
 		);
-//	var $fb_fieldsToRender = array('school_year', 'am_pm_session', 'start_date', 'dropout_date');
+	var $fb_fieldsToRender = array('am_pm_session', 
+                                   'kid_id',
+                                   'start_date', 
+                                   'dropout_date');
 
 }
