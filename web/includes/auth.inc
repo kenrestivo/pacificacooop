@@ -534,7 +534,6 @@ logIn($vars)
 					),
 		loggedout => array (
 					func => "loggedOutState",
-					wanted => array ( "uid"),
 					description => "Forcibly and deliberately logged out"
 					),
 		nullpass => array (

@@ -27,7 +27,8 @@
 	#  along with this program; if not, write to the Free Software
 	#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-	require_once("shared.php");
+	require_once("first.inc");
+	require_once("shared.inc");
 
 	#useful for form debugging. 
 	#some host's security policies tend to break globals. use this to check.
@@ -76,6 +77,7 @@
 	sortColumns('Leads Submitted', 'cntlead', 'desc', $nagonlychecked);
 	print "\t<td align='center'><em><u>Quilt Fee Paid</u></em></td>\n";
 	print "\t<td align='center'><em><u>Auction Donated</u></em></td>\n";
+	print "\t<td align='center'><em><u>Auction Undelivered</u></em></td>\n";
 	print "\t<td align='center'><em><u>Session</u></em></td>\n";
 	print "\t<td align='center'><em><u>Phone</u></em></td>\n";
 	print "</tr>\n";
@@ -85,6 +87,7 @@
 		$tennamespaid = checkPayments($row['familyid'], 1);
 		$quiltpaid = checkPayments($row['familyid'], 2);
 		$auction = checkAuction($row['familyid']);
+		$undelivered = checkDelivery($row['familyid']);
 		$tennamesdone = ($row[cntlead] >= 10);
 
 		#some nifty running totals
@@ -92,10 +95,17 @@
 		$total['tennames'] += $tennamespaid['amount'];
 		$total['quilt'] += $quiltpaid['amount'];
 		$total['auction'] += $auction['total']; //symmetry!
+		$total['undelivered'] += $undelivered; 
 
 		#don't print this row if it's already complete
-		if ($nagonlychecked && (($tennamespaid['amount'] >= 50) || $tennamesdone) && ($quiltpaid['amount'] >=45) && ($auction['total'] >= 50))
+		if ($nagonlychecked && 
+				(($tennamespaid['amount'] >= 50) || $tennamesdone) && 
+				($quiltpaid['amount'] >=45) && 
+				($auction['total'] >= 50) && 
+				!$undelivered)
+		{
 			continue;
+		}
 	
 		print "<tr><td>\n";
 		print $row[name];
@@ -115,6 +125,9 @@
 		if ($auction['total'] > 0)
 			printf("$%01.2f", $auction['total']);
 		print "</td><td align='center'>";
+		if ($undelivered > 0)
+			printf("%d", $undelivered);
+		print "</td><td align='center'>";
 		print $row[sess];
 		print "</td><td align='center'>";
 		print $row[phone];
@@ -127,6 +140,7 @@
 				$total['leads'],
 				sprintf("$%01.2f", $total['quilt']),
 				sprintf("$%01.2f", $total['auction']),
+				sprintf("%d", $total['undelivered']),
 				"",
 				""
 			),
@@ -159,7 +173,10 @@ function checkPayments($familyid, $acctnum)
 		#print "DEBUG <$query>";
 		$list = mysql_query($query);
 		
-		echo mysql_error();
+		$err = mysql_error();
+		if($err){
+			user_error("[$query] errored with $err", E_USER_ERROR);
+		}
 
 		$i = 0;
 		while($row = mysql_fetch_array($list))
@@ -194,30 +211,68 @@ checkAuction($familyid)
 			where families.familyid = $familyid
 			group by families.familyid
 		";
-		#print "DEBUG <$query>";
-		$list = mysql_query($query);
-		
-		echo mysql_error();
+	#print "DEBUG <$query>";
+	$list = mysql_query($query);
+	
+	$err = mysql_error();
+	if($err){
+		user_error("[$query] errored with $err", E_USER_ERROR);
+	}
 
-		$i = 0;
-		while($row = mysql_fetch_array($list))
-		{
-			$result['total'] += $row['amount'];
-		}
+	$i = 0;
+	while($row = mysql_fetch_array($list))
+	{
+		$result['total'] += $row['amount'];
+	}
 
-		/* keep these separate, someone may want to know which was which
-		*/
-		$result['total'] += $result['donated'];
+	/* keep these separate, someone may want to know which was which
+	*/
+	$result['total'] += $result['donated'];
 
 
-		// check if they paid in any forfiet fees!
-		$tmp = checkPayments($familyid, 3); //returns array.
-		$result['forfeit'] = $tmp['amount'];
-		$result['total'] +=  $result['forfeit'];
-		
+	// check if they paid in any forfiet fees!
+	$tmp = checkPayments($familyid, 3); //returns array.
+	$result['forfeit'] = $tmp['amount'];
+	$result['total'] +=  $result['forfeit'];
+	
 
-		return $result;
+	return $result;
 }/* END CHECKAUCTION */
+
+
+/******************
+	CHECKDELIVERY
+	checks how many auction items they have outstanding,
+		yet to be delivered to the storage garage
+******************/
+function
+checkDelivery($familyid)
+{
+	$query = "
+		select count(auction.auctionid) as counter
+			from auction
+				left join faglue on faglue.auctionid = auction.auctionid
+			where faglue.familyid = $familyid
+				and (auction.date_received is null or auction.date_received < '2004-01-01')
+		";
+	#print "DEBUG <$query>";
+	$list = mysql_query($query);
+	
+	$err = mysql_error();
+	if($err){
+		user_error("[$query] errored with $err", E_USER_ERROR);
+	}
+
+	$i = 0;
+	while($row = mysql_fetch_array($list))
+	{
+		$result += $row['counter'];
+	}
+
+
+	return $result;
+}/* END CHECKDELIVERY */
+
 
 
 /******************
