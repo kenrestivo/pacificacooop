@@ -35,6 +35,7 @@ class coopView extends CoopObject
 	var $backlinks;				// list of links that are linked FROM here
 	var $forwardLinks;
 	var $parentSummary; 		// miserable hack. summary of top parent object
+	var $legacyPage;			// hack to let it know what old page 2 use
 
 	function getLinks()
 		{
@@ -238,7 +239,8 @@ class coopView extends CoopObject
 			$tab->addRow(array($this->title()), 'bgcolor=#9999cc', 'TH'); 
 
 			while($this->obj->fetch()){
-				$tab->addRow(array($this->concatLinkFields(&$this->obj)));
+				$mainlink = $this->concatLinkFields(&$this->obj);
+				$tab->addRow(array($mainlink));
 			
 			}
 			//	$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
