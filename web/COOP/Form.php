@@ -130,6 +130,7 @@ class coopForm extends CoopObject
 				} else {
 					//i ALWAYS hide primary key. it's hardcoded here.
 					// note this is different from FB behaviour.
+					// XXX this is broken. i need to deal with fb_hidePrimaryKey
 					$el =& $this->form->addElement(
 						$key == $this->pk ? 'hidden' : 'text', 
 						$key);
@@ -209,7 +210,7 @@ class coopForm extends CoopObject
 			
 			$this->enema($vars); // necessary. *sigh*
 					
-			return "<p>Entry was successful!</p>";
+			return "<h3>Entry was successful!</h3>";
 		}
 
 
@@ -540,7 +541,7 @@ class coopForm extends CoopObject
 				unset($_REQUEST[$la['toField']]);
 			}
 		}
-	
+
 
 } // END COOP FORM CLASS
 

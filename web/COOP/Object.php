@@ -59,13 +59,13 @@ class coopObject
 			}
 			//confessObj($this->obj, "CONSTRUCTOR object for $this->table");
 
-			$this->getPK(); // must this be after find? rather constructor.
+			$this->setPK(); // must this be after find? rather constructor.
 			$this->getLinks();
 		}
  
 
 
-	function getPK()
+	function setPK()
 		{
 			$keys = $this->obj->keys();
 			$this->pk = $keys[0];
