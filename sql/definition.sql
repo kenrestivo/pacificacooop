@@ -833,9 +833,27 @@ CREATE TABLE leads_income_join (
 CREATE TABLE ticket_type (
   ticket_type_id int(32) NOT NULL unique auto_increment,
   description varchar(255) default NULL,
-	paid_flag tinyint(1) default NULL,
-	jointable_hack varchar(255) default NULL,
+    paid_flag tinyint(1) default NULL,
+    jointable_hack varchar(255) default NULL,
    PRIMARY KEY  (ticket_type_id)
+) ;
+
+CREATE TABLE job_descriptions (
+  job_description_id int(32) NOT NULL unique auto_increment,
+  summary varchar(255) default NULL,
+  long_description longtext,
+    board_position tinyint(1),
+  tuition_type enum('Paid', 'Half', 'Free') default 'Paid',
+     PRIMARY KEY  (job_description_id)
+) ;
+
+
+CREATE TABLE job_descriptions_families_join (
+  job_descriptions_families_join_id int(32) NOT NULL unique auto_increment,
+  job_description_id int(32) default NULL,
+  school_year varchar(50) default NULL,
+  family_id int(32) default NULL,
+  PRIMARY KEY  (job_descriptions_families_join_id)
 ) ;
 
 
