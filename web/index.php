@@ -52,6 +52,7 @@
 	//names
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					"10names.php");
+	thruAuth($auth);	
 	tdArray(array (
 					"SpringFest Invitation Contacts",
 					"You have entered XXX names so far", 
@@ -65,6 +66,7 @@
 	// auction items
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					"auction.php");
+	thruAuth($auth);	
 	tdArray(array (
 					"SpringFest Auction Donation Items",
 					"You have donated XXX items so far", 
@@ -77,6 +79,7 @@
 	//payments, etc
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					"money.php");
+	thruAuth($auth);	
 	tdArray(array (
 					"Payments", 
 					"You have paid xxx dollars so far", 
@@ -90,6 +93,7 @@
 	//rasta
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					"roster.php");
+	thruAuth($auth);	
 	tdArray(array (
 					"Roster Information",
 					"You have paid xxx dollars so far", 
@@ -102,6 +106,7 @@
 	//insurance
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					"insurance.php");
+	thruAuth($auth);	
 	tdArray(array (
 					"Auto Insurance Information",
 					"Your insurance is current/expired", 

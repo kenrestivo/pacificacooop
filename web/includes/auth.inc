@@ -182,7 +182,7 @@ checkToken($uid, $token)
 
 /******************
 	CHECKPASS
-	check that the token is valid for this uid
+	check that the cleartext password matches the md5 hash in the db
 	inputs: uid, token
 	returns: token if ok, 0 if failure
 ******************/
@@ -210,52 +210,105 @@ checkPass($uid, $clearpass)
 }/* END CHECKPASS */
 
 
+
 /******************
-	CHECKAUTHLEVEL
-	check that this uid is authorised to do this action
-	inputs: auth structure
-	returns: 0 if ok, 1 if failure
+	CHEKAUTHLEVEL
+	the highest-level function for checking authorisation
+		yes/no = A(auth, family to compare to, realm, level i need, [group i need])
+			check the familyid match, the level in the db, and return whatever
+	inputs: auth, family to compare to, realm, level i need, [later, group ]
+	returns: 0 if ok, 1 if error
 ******************/
 function
-checkAuthLevel($auth)
+checkAuthLevel($auth, $targetfamilyid, $targetrealm, $targetlevel)
+{
+	$level = aggregateLevel($auth, $targetfamilyid, $targetrealm);
+
+	return $targetlevel >= $level ? 0 : 1;
+}/* END CHEKAUTHLEVEL */
+
+
+
+
+/******************
+	AGGREGATELEVEL
+	return the maximum level i can get with this combination of  args
+			check the familyid match, the level in the db, and return highest avail
+				i.e. if my families don't match, return group level, otherwise userlevel
+	inputs: auth, family to compare to, realm [later group], 
+	returns: max level for this action
+******************/
+function
+aggregateLevel($auth, $targetfamilyid, $targetrealm)
+{
+	$perms = getAuthLevel($auth, $targetrealm);
+	$u = getUser($auth['uid']);
+	if(!$perms || !$u){
+		return 0; //pass through the nothing.
+	}
+
+	//userlevel is only relevent if i'm that family. duh
+	if($targetfamilyid == $u['familyid'] ){
+		$userlevel = $perms['userlevel'] ;
+	}
+	
+	//i want to know the higher of the two.
+	return $userlevel > $perms['grouplevel'] ? $userlevel : $perms['grouplevel'];
+	
+}/* END AGGREGATELEVEL */
+
+
+/******************
+	GETAUTHLEVEL
+		return what's up for this uid, let caller decide if that's good or bad
+		checks token just so stuff doesn't sneak up on us
+	inputs: auth structure,realm, and eventually group
+	returns: array of userlevel, grouplevel, familyid, or null if checktoken fails
+******************/
+function
+getAuthLevel($auth, $targetrealm)
 {
 
-	confessArray($auth, "checkauthlevel");
+	//confessArray($auth, "getauthlevel");
 
-	if(!($auth['uid'] && $auth['realm'] && 
-			$auth['token'] && $auth['level']))
-	{
-		user_error("checkAuthLevel(): ERROR not enough info",E_USER_ERROR);
+	if(!($auth['uid'] && $targetrealm && $auth['token'] )) {
+		user_error("getAuthLevel(): ERROR not enough info",E_USER_ERROR);
 		return 1;
 	}
 
-	if(($err = checkToken($auth['uid'], $auth['token'])) > 0){
-		return $err;
+	if(!checkToken($auth['uid'], $auth['token'])){
+		return 0; // bad token, no BISCUIT!
 	}
 
 	// the query
+	//XXX aha! the familyid NEVER comes back, if there's no realm for this uid
 	$query = sprintf("
-			SELECT * FROM privs 
-				left join users on users.userid = privs.userid
+			SELECT privs.*
+				FROM privs
 			WHERE privs.userid = %d 
 				and (privs.realm = '%s' or privs.realm = 'all')
-				and privs.userlevel > %d
-			--",
-			$auth['uid'], $auth['realm'], $auth['level']
+			",
+			$auth['uid'], $targetrealm
 		);
 	$listq = mysql_query($query);
 	$err = mysql_error();
 	if($err){
-		#TODO: log this, don't display it
-		user_error("checkAuthLevel(): [SECRET]: $err",E_USER_ERROR);
+		user_error("getAuthLevel(): [$query]: $err", E_USER_ERROR);
 	}
 				
-	if (mysql_num_rows($listq) > 0) {
-		return 0;
+	if (mysql_num_rows($listq) != 1){
+		user_error(sprintf("getAuthLevel(): You may NOT have more than one entry for userid %d and realm %d (and later, group)! The database is corrupted!", $auth['uid'], $realm), 
+			E_USER_ERROR);
+		return 0; // there can beeee... only one!
 	}                  
 
-	return 1;
-}/* END CHECKAUTHLEVEL */
+	while($row = mysql_fetch_assoc($listq)){
+		$result['userlevel'] = $row['userlevel'];
+		$result['grouplevel'] = $row['grouplevel'];
+	}
+
+	return $result;
+}/* END GETAUTHLEVEL */
 
 
 

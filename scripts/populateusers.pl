@@ -43,15 +43,18 @@ getopts('vth:p:d:') or &usage();
 );
 
 #default privs for all families
-#  group, user, item
+#  				group, 					user, 				item
 @familydefaults =  (
 	[ $access{'ACCESS_SUMMARY'},$access{'ACCESS_DELETE'}, "invitations" ],
-	[ $access{'ACCESS_VIEW'},$access{'ACCESS_DELETE'}, "auction" ],
+	[ $access{'ACCESS_SUMMARY'},$access{'ACCESS_DELETE'}, "auction" ],
+	[ $access{'ACCESS_NONE'},$access{'ACCESS_VIEW'}, "money" ],
+	[ $access{'ACCESS_NONE'},$access{'ACCESS_VIEW'}, "insurance" ],
 	[ $access{'ACCESS_VIEW'},$access{'ACCESS_EDIT'}, "roster" ]
 );
 
 @teacherdefaults =  (
 	[ $access{'ACCESS_VIEW'}, $access{'ACCESS_EDIT'}, "roster" ],
+	[ $access{'ACCESS_SUMMARY'},$access{'ACCESS_DELETE'}, "auction" ],
 	[ $access{'ACCESS_DELETE'}, $access{'ACCESS_EDIT'}, "insurance" ]
 );
 
