@@ -43,6 +43,7 @@ print "<p>Springfest Sponsors Needed</p>";
 
 print $cp->selfURL('View Sponsorships');
 print $cp->selfURL('Find Needed', array('action' => 'findneeded'));
+print $cp->selfURL('Add Needed', array('action' => 'addneeded'));
 
 //confessObj($cp, 'cp');
 $level = ACCESS_EDIT;
@@ -66,10 +67,32 @@ switch($_REQUEST['action']){
 		 $co =& new CoopObject(&$cp, $tab, &$nothing);
 		 $co->obj->orderBy($tab == 'leads' ? 'company' : 'company_name', //HACK
 						   'last_name', 'first_name');
-		 $co->obj->debug(2);
+		 //$co->obj->debugLevel(2);
 		 $co->obj->find();
 		 while($co->obj->fetch()){
 			 if($type = $sp->calculateSponsorshipType($co->obj->{$co->pk}, 
+													  $co->pk)){
+				 printf("(%s)%s %s %s => %d<br>", $tab, $co->obj->company_name, 
+						$co->obj->first_name, 
+						$co->obj->last_name, 
+						$type);
+			 }
+		 }
+	 }
+	 break;
+
+ case 'addneeded':
+	 print "<p><b>These have been added to the db, or updated!</b></p>";
+	 $sp = new Sponsorship(&$cp);
+	 foreach(array('companies', 'leads') as $tab){
+		 //print $tab;
+		 $co =& new CoopObject(&$cp, $tab, &$nothing);
+		 $co->obj->orderBy($tab == 'leads' ? 'company' : 'company_name', //HACK
+						   'last_name', 'first_name');
+		 //$co->obj->debugLevel(2);
+		 $co->obj->find();
+		 while($co->obj->fetch()){
+			 if($type = $sp->updateSponsorships($co->obj->{$co->pk}, 
 													  $co->pk)){
 				 printf("(%s)%s %s %s => %d<br>", $tab, $co->obj->company_name, 
 						$co->obj->first_name, 

@@ -49,34 +49,44 @@ class Sponsorship
 
 
 		// updates or enters their sponsorships
+	// returns the type. WEIRD, shouldn't it return lastinsertid?
 	function updateSponsorships($id, $idname)
 		{
-			$typeid= $this->calculateSponsorship($id, $idname);
+			$typeid= $this->calculateSponsorshipType($id, $idname);
 
 			//anything already there?
 			$sp =& new CoopObject(&$this->cp, 'sponsorships', &$nothing);
+			//$sp->obj->debugLevel(2);
 			$sp->obj->school_year = $this->schoolYear;
 			$sp->obj->$idname = $id;
-			if($sp->obj->find(true)){
+			$found =$sp->obj->find(); 
+			if($found){
+				$sp->obj->fetch();
 				// if there's no manual override there, change it to match calc
 				if($sp->obj->entry_type == 'Automatic'){
-					if($typeid){
+					if($typeid > 0){
 						$sp->obj->sponsorship_type_id = $typeid;
 						$sp->obj->update();
 					} else {
 						// or delete it if they don't quailfy anymore
-						$sp->obj->delete();
+						$hack =& new CoopObject(&$this->cp, 'sponsorships', 
+												&$nothing);
+						$hack->obj->{$hack->pk} = $sp->obj->{$hack->pk};
+						$hack->obj->delete();
 					}
 				}
-				return;
+				return $type;
 			}
 							
-			// otherwise save a new one
-			$sp =& new CoopObject(&$this->cp, 'sponsorships', &$nothing);
-			$sp->obj->school_year = $this->schoolYear;
-			$sp->obj->$idname = $id;
-			$sp->obj->sponsorship_type_id = $typeid;
-			$sp->obj->insert();
+			if($typeid > 0){
+				// otherwise save a new one
+				$sp =& new CoopObject(&$this->cp, 'sponsorships', &$nothing);
+				$sp->obj->school_year = $this->schoolYear;
+				$sp->obj->$idname = $id;
+				$sp->obj->sponsorship_type_id = $typeid;
+				$sp->obj->insert();
+				return $type;
+			}
 		}
 	
 	// checks activity for this entity, and returns sponsorlevel
@@ -96,7 +106,7 @@ class Sponsorship
 			// i curse the very day that i agreed to do this goddamned project
 			$co =& new CoopObject(&$this->cp, $hack[$idname]['table'], 
 								  &$nothing);
-			$co->obj->debug(2);
+			//$co->obj->debugLevel(2);
 			$co->obj->query(sprintf("
     select  sum(payment_amount) as payment_amount
      from %s as cinj
