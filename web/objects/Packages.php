@@ -62,7 +62,7 @@ class Packages extends DB_DataObject
 	var $fb_requiredFields = array('package_description', 'donated_by_text', 
 								   'starting_bid', 'bid_increment', 
 								   'school_year',
-								   'package_type', 'package_value', 
+								   'package_type', 
 								   'item_type', 'package_number');
 
 
