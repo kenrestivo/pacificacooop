@@ -183,7 +183,7 @@ sub getlicenseinfo()
 		$opt_v && printf("getlicenseinfo(): returning %d licenses\n", 
 					scalar @total);
 		$everthang{'licarref'} = \@results;
-		$everthang{'pararref'} = $pararref;
+		$everthang{'parref'} = $pars;
 		push(@total, \%everthang); #yes, that's right, a referene
 	}
 
@@ -396,6 +396,7 @@ sub fieldTripReport()
 	my $onlyexpired = shift;
 	my $licref;
 	my $licarref;
+	my $pararref;
 	my $insref;
 	my $badness = "";
 	my $flag = 0;
@@ -411,7 +412,7 @@ sub fieldTripReport()
 	$badness .= sprintf(
 				" \tFamily Phone: %s\tEmail: %s\n",
 				$famref->{'phone'} ? $famref->{'phone'} : "",
-				"" #$marf->[0]->{'pararref'}->[0]->{'email'}
+				$marf->[0]->{'parref'}->{'email'}
 			);
 
 	#insurance
@@ -437,9 +438,13 @@ sub fieldTripReport()
 	#license
 	foreach $mar ( @$marf){
 		$licarref = $mar->{'licarref'};
+		$parref = $mar->{'parref'};
 		unless(scalar @$licarref){
 				#TODO put in the parent's name here, dude
-				$badness .= "\t- No license information for working parent\n";
+				$badness .= 
+					sprintf("\t- No license information for working parent %s\n",
+						$parref->{'first'}
+		);
 				$licexp++;
 		}
 		foreach $licref (@$licarref){
