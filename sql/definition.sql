@@ -78,6 +78,7 @@ create table coop.parents(
 -- glue table for many-to-many: kids and parents
 create table coop.families (
     familyid int(32) not null auto_increment,
+	name varchar(255),
     primary key (familyid)
 );
 
