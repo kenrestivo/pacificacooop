@@ -1033,8 +1033,7 @@ loggedInState($auth, $states)
 	printf("<td><h3>Welcome %s!</h3></td>\n", $uinfo['username']);
 	print "<td>";
 	logoutForm();
-	print "&nbsp;";
-	mainMenuForm($auth);
+	//mainMenuForm($auth);
 	print "</td></tr></table>";
 	return changeState($auth, $states, 'loggedin', 1);
 }/* END LOGGEDINSTATE */
