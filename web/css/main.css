@@ -136,3 +136,21 @@ A:hover {
 }
 
 
+p.letter{ 
+	font-family: "Times New Roman", serif; 
+	font-size: 12pt; 
+ }
+
+#toplogo{  
+	position: absolute; 
+	top: 0.00in; 
+	left: 3.51in;
+}
+
+#mainletter{ 
+	position: absolute; 
+	top: 2in; 
+	left: 1in;
+	width: 6in;
+
+ }

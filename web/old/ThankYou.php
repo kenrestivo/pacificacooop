@@ -36,6 +36,7 @@ class ThankYou
 	var $template = 
 "[:DATE:]
 
+[:NAME:]
 [:ADDRESS:]
 
 Dear [:NAME:],
@@ -94,13 +95,43 @@ http://www.pacificacoop.org/
 				$this->substitutions['DATE'] = date('l, F j, Y');
 			}
 			
+			// leave from blank if it's not there
+				if (!$this->substitutions['FROM']){
+					$this->substitutions['FROM'] = "";
+				}
+
 			
 		}
 
 	function toHTML()
 		{
-			confessObj($this, 'this');
 
+			$subst = $this->substitutions;
+
+			//un-arrayify the ones that are arrays
+			// and format them html-like
+			$subst['ADDRESS'] = implode('<br>', $subst['ADDRESS']);
+			$subst['ITEMS'] = implode(',', $subst['ITEMS']);
+			$subst['FROM'] = sprintf('<br><br><br>%s', $subst['FROM']);
+			$subst['ORDINAL'] = sprintf('<sup>%s</sup>', $subst['ORDINAL']);
+
+			
+	  			//confessObj($this, 'this');
+			foreach(array_keys($subst) as $key){
+				$from[] = sprintf('[:%s:]', $key);
+			}
+			$to = array_values($subst);
+
+			$text .= '<div id="toplogo"><img src="/round-small-logo.gif"></div>';
+	
+			$text .= '<div id="mainletter"><p class="letter">';
+			$text .= str_replace($from, $to, nl2br($this->template));
+			$text .= '</p></div>';
+
+			//TODO: hack for the "tagline" at the bottom. preg_match?
+			// if it starts with a " and ends with a ", curly and bolditalic
+		
+			return $text;
 		}
 
 	//returns just the ordinal part
