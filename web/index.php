@@ -38,14 +38,14 @@
 
 	$auth = logIn($pv);
 
-	$u = getUser($auth['uid']);
-
-
-
 	if($auth['state'] != 'loggedin'){
 		done();
 	}
+
+	//OK, i am logged in!
 	
+	$u = getUser($auth['uid']);
+
 	topNavigation($auth, $u);
 	print "<hr>\n";
 
