@@ -352,7 +352,9 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					$_SERVER['PHP_SELF']);
-	thruAuth($auth);
+	if($auth){ //hey, it could happen...
+		thruAuth($auth);
+	}
 	//user popup (or display) stuff
 	if($user == 'show'){
 		print "Select user name: \n";
@@ -404,16 +406,31 @@ logIn($auth)
 					func => "unknownState",
 					description => "Indeterminate state."
 					),
+		needlogin => array (
+					func => "needLoginState",
+					wanted => array ( "uid"),
+					description => "You must log in, but you haven't yet"
+					),
 		loggedout => array (
 					func => "loggedOutState",
 					wanted => array ( "uid"),
-					description => "Logged out"
+					description => "Forcibly and deliberately loogged out"
 					),
 		nullpass => array (
 					func => "nullPassState",
 					required => array ( "uid"),
 					wanted => array ( "pwd", "confirm"),
 					description => "User has no password in database"
+					),
+		checklogin => array (
+					func => "checkLoginState",
+					required => array ( "uid", "pwd"),
+					description => "Checking password"
+					),
+		verifytoken => array (
+					func => "verifyTokenState",
+					required => array ( "uid", "token"),
+					description => "Checking token"
 					),
 		wrongpass => array (
 					func => "wrongPassState",
@@ -496,7 +513,7 @@ sanityCheck($auth, $states)
 			error_log("sanityCheck(): $state is an illegal state logging out", 
 				0);
 			//TODO use changeState() now
-			$auth['state'] = 'loggedout'; // force it outta here
+			$auth['state'] = 'unknown'; // force it outta here
 	}
 	// TODO: turn this into a proper state!! maybe, "botched"?
 	if ($states[$state]['required']){
@@ -507,7 +524,7 @@ sanityCheck($auth, $states)
 				print "Security violation occurred. You've been logged out.";
 				*/
 				error_log("sanityCheck(): ERROR! $val required for state $state. logging out", 0);
-				$auth['state'] = 'loggedout'; // force it outta here
+				$auth['state'] = 'unknown'; // force it outta here
 			}
 		}
 		reset($auth);
@@ -530,13 +547,15 @@ changeState($auth, $states, $newstate, $wanted)
 {
 	$newauth = array( state => $newstate );
 
-	while (list($key, $val) = each($states[$newstate]['required'])){
-		if($auth[$val]){
-			$newauth[$val] = $auth[$val];
+	if($states[$newstate]['required']){
+		while (list($key, $val) = each($states[$newstate]['required'])){
+			if($auth[$val]){
+				$newauth[$val] = $auth[$val];
+			}
 		}
 	}
 
-	if($wanted){
+	if($wanted && $states[$newstate]['wanted']){
 		while (list($key, $val) = each($states[$newstate]['wanted'])){
 			if($auth[$val]){
 				$newauth[$val] = $auth[$val];
@@ -554,9 +573,9 @@ changeState($auth, $states, $newstate, $wanted)
 
 
 
-
 /******************
 	UNKNOWNSTATE
+	attempts to deduce what state we're in, if none is supplied!
 	the REAL main loop.
 	this is pretty much it's own, THIRD mini-state machine. 
 ******************/
@@ -568,12 +587,7 @@ unknownState($auth, $states)
 	// check for valid token
 	if($auth['uid'] && $auth['token']){
 		error_log("unknownState(): uid and token present", 0);
-		if(checkToken($auth['uid'], $auth['token'])){
-			error_log("unknownState(): bad token", 0);
-			return changeState($auth, $states, 'loggedout');
-		}
-		// wow! i'm logged in! pass token thru now that we know it's good.
-		return changeState($auth, $states, 'loggedin');
+		return changeState($auth, $states, 'verifytoken', 1);
 	}
 
 	//check that uid is valid
@@ -599,27 +613,54 @@ unknownState($auth, $states)
 		error_log(
 			sprintf("unknownState(): uid %d , and pwd provided", 
 				$auth['uid']) , 0 );
-		$token = checkPass($auth['uid'], $auth['pwd']);
-		if($token){
-			error_log("unknownState(): password matches!", 0);
-			//hooray!! the password is correct! pass it thru
-			return changeState($auth, $states, 'loggedin', 1);
-		} else {
-			error_log("unknownState(): password does not match", 0);
-			//incorrect password. let the pachinko machine handle it
-			return changeState($auth, $states, 'nullpass', 1);
-		}
+		return changeState($auth, $states, 'checklogin', 1);
 	} 
 
-	// no pass, no uid, no dice!
+	// no pass, no token, no uid, no dice!
 	if(!($auth['uid'] && $auth['pwd'])){
-		return changeState($auth, $states, 'loggedout', 1);
+		error_log("unknownState(): no uid, no nothing", 0);
+		//come back here after the user is done inputting data
+		return changeState($auth, $states, 'needlogin', 1);
 	}
 
 	error_log("unknownState(): unhandled state! an endless loop?", 0);
-	return changeState($auth, $states, 'loggedout', 1);
+	return changeState($auth, $states, 'needlogin', 1);
 	
 }/* END UNKNOWNSTATE */
+
+
+/******************
+	VERIFYTOKENSTATE
+******************/
+function
+verifyTokenState($auth, $states)
+{
+	if(checkToken($auth['uid'], $auth['token'])){
+		error_log("unknownState(): bad token", 0);
+		return changeState($auth, $states, 'needlogin', 1);
+	}
+	// wow! i'm logged in! pass token thru now that we know it's good.
+	return changeState($auth, $states, 'loggedin');
+}/* END VERIFYTOKENSTATE */
+
+
+/******************
+	CHECKLOGINSTATE
+******************/
+function
+checkLoginState($auth, $states)
+{
+	$token = checkPass($auth['uid'], $auth['pwd']);
+	if($token){
+		error_log("checkLoginState(): password matches!", 0);
+		//hooray!! the password is correct! pass it thru
+		return changeState($auth, $states, 'loggedin', 1);
+	} 
+
+	//incorrect password. let the pachinko machine handle it
+	error_log("checkLoginState(): password does not match", 0);
+	return changeState($auth, $states, 'wrongpass', 1);
+}/* END CHECKLOGINSTATE */
 
 
 /******************
@@ -634,12 +675,30 @@ loggedOutState($auth, $states)
 		$uinfo = getUser($auth['uid']);
 		$olduser = sprintf("User %s logged out.", $uinfo['username']);
 	}
-	loginForm($newauth, 'password', 'show', "$olduser Please log in");
 
-	return changeState($auth, $states, 'needinput', 1);
+	return changeState($auth, $states, 'needlogin', 1);
 	
 }/* END LOGGEDOUTSTATE */
 
+
+/******************
+	NEEDLOGINSTATE
+	we WANT someone to log in.
+******************/
+function
+needLoginState($auth, $states)
+{
+
+	if($auth['uid']){
+		$uinfo = getUser($auth['uid']);
+		$olduser = sprintf("User %s logged out.", $uinfo['username']);
+	}
+	loginForm(changeState($auth, $states, 'checklogin', 1),
+		'password', 'show', "$olduser Please log in");
+
+	return changeState($auth, $states, 'needinput', 1);
+	
+}/* END NEEDLOGINSTATE */
 
 
 /******************
@@ -708,7 +767,7 @@ function
 wrongPassState($auth, $states)
 {
 
-	loginForm(changeState($auth, $states, 'loggedout', 1),
+	loginForm(changeState($auth, $states, 'needlogin', 1),
 		'password', 'hide', 
 		"Incorrect password. Please try again." );
 
@@ -723,7 +782,7 @@ wrongPassState($auth, $states)
 function
 noUserState($auth, $states)
 {
-	loginForm(changeState($auth, $states, 'loggedout', 1),
+	loginForm(changeState($auth, $states, 'needlogin', 1),
 		'password', 'show', "No such user. Try again.");
 
 	return changeState($auth, $states, 'needinput', 1);
@@ -770,8 +829,9 @@ insecurePassState($auth, $states)
 function
 loggedInState($auth, $states)
 {
-	//TODO isn't this a good place to show the happy friendly hello!
-		// and perhaps a "logout" form too?
+	$uinfo = getUser($auth['uid']);
+	printf("<h3>Welcome %s!</h3>\n", $uinfo['username']);
+	// TODO logoutForm!()
 	return changeState($auth, $states, 'loggedin', 1);
 }/* END LOGGEDINSTATE */
 
@@ -785,12 +845,15 @@ loggedInState($auth, $states)
 	outputs: auth as invisible fields!
 ******************/
 function
-thruAuth($auth, $struct = 'auth')
+thruAuth($auth, $newname = 'auth')
 {
+	if(!$auth){
+		error_log("um, why was thruAuth() called with no auth!?");
+	}
 	while (list($key, $val) = each($auth)){
 		if($val){
 			printf("<INPUT TYPE=hidden NAME='%s[%s]' VALUE='%s'>\n",
-				$struct, $key, $val
+				$newname, $key, $val
 			);
 		}
 	}
