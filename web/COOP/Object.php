@@ -167,10 +167,13 @@ class coopObject
 				// trying to YAGNI here. i don't need 2-level links yet
 				// so, i'm not coding that recursion in here now. sorry charlie.
 				if($obj->$linkfield){
-					$val .= sprintf("%s%s", $val ? ' - ' : "", $obj->$linkfield);
+					// TODO: this is where i'd recursively czech these.
+					// also, building an array and then imploding it
+					// might be more readable
+					$val .= sprintf("%s%s", $val ? ' - ' : "", 
+									$obj->$linkfield);
 				}
 			}
-
 			return $val;
 		}
 
@@ -195,7 +198,7 @@ class coopObject
 			if(preg_match('/_join/', $this->table, $matches)){
 				return $this->parentCO->getSummary();
 			}
-			//confessObj($view, "companyDetails(view)");
+			//confessObj($this, 'getSummary');
 			return $this->concatLinkFields(&$this->obj);
 				
 		}
