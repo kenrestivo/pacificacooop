@@ -119,7 +119,7 @@ auction auction_donation_items
 
 # AUCTION ITEMS AND FAMILIES 
 faglue.faglueid faglue.auction_items_families_join_id
-faglue.auctionid faglue.aution_donation_item_id
+faglue.auctionid faglue.auction_donation_item_id
 faglue.familyid faglue.family_id
 # Table rename:
 faglue auction_items_families_join
