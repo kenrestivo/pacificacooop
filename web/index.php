@@ -56,27 +56,29 @@
 	print "<tr>";
 	$p = getAuthLevel($auth, 'auction');
 	print "<td>Springfest Auction Donation Items</td><td>";
-	auctionSummary($u['familyid']);
+	$s = auctionSummary($u['familyid']);
 	print "</td><td align=center>";
-	actionButtons($auth, $p, $u, $u['familyid'], 'auction', 'auction.php');
+	actionButtons($auth, $p, $u, $u['familyid'], 'auction', 
+			'auction.php', $s);
 	print "</td><tr>";
 	
 	//invitations
 	print "<tr>";
 	$p = getAuthLevel($auth, 'auction');
 	print "<td>Springfest Invitation Contacts</td><td>";
-	nameSummary($u['familyid']);
+	$s = nameSummary($u['familyid']);
 	print "</td><td align=center>";
-	actionButtons($auth, $p, $u, $u['familyid'], 'invitations', '10names.php');
+	actionButtons($auth, $p, $u, $u['familyid'], 'invitations', 
+			'10names.php', $s);
 	print "</td><tr>";
 
 	//money items
 	print "<tr>";
 	$p = getAuthLevel($auth, 'money');
 	print "<td>Springfest Fees and Cash Donations</td><td>";
-	incomeSummary($u['familyid']);
+	$s = incomeSummary($u['familyid']);
 	print "</td><td align=center>";
-	actionButtons($auth, $p, $u, $u['familyid'], 'money', 'money.php');
+	actionButtons($auth, $p, $u, $u['familyid'], 'money', 'money.php' , $s);
 	print "</td><tr>";
 
 	print "</table>";
