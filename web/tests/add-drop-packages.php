@@ -31,7 +31,7 @@ $cp->pageTop();
 //$cp->createLegacy($cp->auth);
 
 $atd = new CoopView(&$cp, 'packages', $none);
-$atd->recordActions = array('addremove' => "Add/Remove");
+$atd->recordActions = array('edit' => "Edit");
  
 
 $menu =& new CoopMenu();
@@ -57,13 +57,13 @@ if($admin + $user < 1){
 // cheap dispatcher
 //confessArray($_REQUEST,'req');
 switch($_REQUEST['action']){
- case 'addremove':
+ case 'edit':
 	 $atd = new CoopForm(&$cp, 'packages', $none); // NOT the coopView above!
 	 $atd->build($_REQUEST);
 
 
 	 // ugly assthrus
-	 $atd->form->addElement('hidden', 'action', 'addremove'); 
+	 $atd->form->addElement('hidden', 'action', 'edit'); 
 	 $atd->form->addElement('hidden', $atd->pk, $atd->obj->{$atd->pk}); 
 
 	 if($sid = thruAuthCore($cp->auth)){
@@ -78,7 +78,7 @@ switch($_REQUEST['action']){
 		 $atd->form->process(array(&$atd, 'process'));
 		 // gah, now display it again. they may want to make other changes!
 		 print $cp->selfURL('Look again', 
-							array('action' => 'addremove',
+							array('action' => 'edit',
 								$atd->pk => $_REQUEST[$atd->pk]));
 		 $atd->form->freeze();
 	 }
@@ -103,6 +103,6 @@ done ();
 ?>
 
 
-<!-- END MAKE PACKAGES -->
+<!-- END ADD DROP PACKAGE TEST -->
 
 
