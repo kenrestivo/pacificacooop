@@ -361,25 +361,35 @@ select ticket_quantity , amount, last, first, addr , addrcont, city ,
     where ticket_quantity > 0 
 	order by leads.last, leads.first;
 
--- the enhancemethours
--- XXX yank dropped families, dur.
--- TODO the 'having' clauses, optionally for the showall, see solicitnag
-select families.name as Family_Name, 
-    sum(enhancement_hours.hours) as Total 
+-- the family summary
+create temporary table enrolled (
+	name varchar(255),
+    sess enum ('AM', 'PM'),
+    familyid int(32) not null unique
+);
+insert into enrolled
+select families.name, enrol.sess, 
+    families.familyid 
         from families 
            left join kids on kids.familyid = families.familyid
            left join attendance on kids.kidsid = attendance.kidsid
            left join enrol on attendance.enrolid = enrol.enrolid
-           left join parents 
-               on parents.familyid = families.familyid
-           left join enhancement_hours 
-               on parents.parentsid = enhancement_hours.parentsid
         where enrol.semester = '2003-2004'
             and attendance.dropout is null
     group by families.familyid
-    order by families.name;
+    order by enrol.sess, families.name
 
--- having Drop_Date < '2000-01-01' 
-
+-- the enhancement hours, sold separately
+select enrolled.name as Family_Name,
+    sum(enhancement_hours.hours) as Total, 
+	enrolled.sess as Session
+	from enrolled
+           left join parents 
+               on parents.familyid = enrolled.familyid
+           left join enhancement_hours 
+               on parents.parentsid = enhancement_hours.parentsid
+	group by enrolled.familyid
+	having Total < 4
+	order by enrolled.sess, enrolled.name
 
 --- EOF
