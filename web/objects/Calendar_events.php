@@ -16,10 +16,7 @@ class Calendar_events extends DB_DataObject
     var $status;                          // string(9)  enum
     var $keep_event_hidden_until_date;    // datetime(19)  
     var $event_date;                      // datetime(19)  
-    var $url;                             // string(255)  
-    var $entered;                         // datetime(19)  
-    var $updated;                         // timestamp(14)  not_null unsigned zerofill timestamp
-    var $audit_user_id;                   // int(32)  
+    var $school_year;                     // string(50)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

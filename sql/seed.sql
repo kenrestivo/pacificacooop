@@ -100,7 +100,7 @@ insert into events set
 insert into events set
             event_id = 3,
             realm = 'nag',
-            description = "Springfest Invitation Names Due";
+            description = "Springfest Invitation Names Due",
             notes = "Each family must enter a list of 10 people to be invited to Springfest ",
             url = '10names.php'
 ;
@@ -135,7 +135,7 @@ insert into events set
 insert into calendar_events set
             event_id = 4,
             school_year = '2003-2004',
-            event_date = "2003-12-18",
+            event_date = "2003-12-18"
 ;
 
 insert into calendar_events set
@@ -148,6 +148,18 @@ insert into calendar_events set
             event_id = 1,
             school_year = '2003-2004',
             event_date = "2003-12-12"
+;
+
+insert into calendar_events set
+            event_id = 5,
+            school_year = '2004-2005',
+            event_date = "2004-12-31"
+;
+
+insert into calendar_events set
+            event_id = 6,
+            school_year = '2004-2005',
+            event_date = "2005-06-30"
 ;
 
 -- the territories
