@@ -751,6 +751,14 @@ nullPassState($auth, $states)
 {
 	$newauth = changeState($auth, $states, 'nullpass', 1);
 
+	/* plug up security hole. in future, send them to a "changepass" state
+			which will check that they know their *old* password first
+	*/
+	if(getPass($auth['uid'])){
+		print "You have already set your password.\n";
+		return changeState($auth, $states, 'needlogin', 1);
+	}
+
 	if(!$auth['pwd']){
 		$uinfo = getUser($auth['uid']);
 		loginForm($newauth, 'both', 'hide', 
