@@ -184,19 +184,17 @@ checkToken($uid, $token)
 function
 checkAuthLevel($auth)
 {
-	$uid = $auth['uid'];
-	$token = $auth['token']; 
-	$realm = $auth['realm'];
-	$level = $auth['level'];
 
 	confessArray($auth, "authlevel");
 
-	if(!($uid && $realm && $token && $level)){
+	if(!($auth['uid'] && $auth['realm'] && 
+			$auth['token'] && $auth['level']))
+	{
 		print "checkAuthLevel(): ERROR not enough info\n";
 		return 1;
 	}
 
-	if(($err = checkToken($uid, $token)) > 0){
+	if(($err = checkToken($auth['uid'], $auth['token'])) > 0){
 		return $err;
 	}
 
@@ -208,7 +206,7 @@ checkAuthLevel($auth)
 				and (privs.realm = '%s' or privs.realm = 'all')
 				and privs.authlevel > %d
 			--",
-			$uid, $realm, $level
+			$auth['uid'], $auth['realm'], $auth['level']
 		);
 	$listq = mysql_query($query);
 	$err = mysql_error();
@@ -534,9 +532,11 @@ function
 thruAuth($auth, $struct = 'auth')
 {
 	while (list($key, $val) = each($auth)){
-		printf("<INPUT TYPE=hidden NAME='%s[%s]' VALUE='%s'>\n",
-			$struct, $key, $val
-		);
+		if($val){
+			printf("<INPUT TYPE=hidden NAME='%s[%s]' VALUE='%s'>\n",
+				$struct, $key, $val
+			);
+		}
 	}
 }/* END THRUAUTH  */
 
