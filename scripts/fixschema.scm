@@ -152,7 +152,7 @@ kl  (let ((p (open-input-file deffile) ) )
 ;;;;;;;;;;;;;;;
 ;; main
 
-(load-definition! "/mnt/kens/ki/proj/coop/sql/definition.sql")
+(load-definition! "/mnt/kens/ki/proj/coop/sql/olddefinition.sql")
 (fix-schema "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
 (for-each rename-table *tables*)			; finally, follow up with tables
 
