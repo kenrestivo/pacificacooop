@@ -78,8 +78,12 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	# the report of people i need to call or write a note to!
 	if($opt_r){
 		#TODO maybe take a filename on command line, to output the report
-		print &fieldTripReport($famref, $insarref, $massivearref, 
-				$checkdate, $opt_a ? 0 : 1);
+		#XXX this feels really "hacky". but... i'm to tired to do it right.
+		# if it has an email, and option e is specified, then skip
+		unless($opt_e && $massivearref->[0]->{'parref'}->{'email'}){
+			print &fieldTripReport($famref, $insarref, $massivearref, 
+					$checkdate, $opt_a ? 0 : 1);
+		}
 	} else {
 		&emailReminder($famref, $insarref, $massivearref, 
 			$checkdate, $opt_a ? 0 : 1);
@@ -458,6 +462,7 @@ sub fieldTripReport()
 	my $mar;
 	my $insexp = 0; #flag
 	my $licexp = 0; #flag
+	my $skip = 0;
 
 	#families
 	$badness .= sprintf(
@@ -525,7 +530,7 @@ sub fieldTripReport()
 			$licexp, $insexp);
 	}
 
-	if($insexp || $licexp){
+	if(($insexp || $licexp) && !$skip){
 		return $badness;
 	} else {
 		return "";
