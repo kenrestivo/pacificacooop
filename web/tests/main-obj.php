@@ -19,9 +19,11 @@ $cp->pageTop();
 
 
 
-$view =& new CoopView(&$cp, 'companies');
+$view =& new CoopView(&$cp, 'families');
+$pk = $view->getPK();
+$view->obj->$pk = 22;
 print $view->recurseTable();
-//print "PK " . $view->getPK();
+
 
 done ();
 
