@@ -53,7 +53,20 @@
 	} elseif($HTTP_POST_VARS['savenames']){
 		#we are trying to save form data. this is what life is all about.
 
-		processNames($HTTP_POST_VARS);
+		if(processNames($HTTP_POST_VARS) == 0){
+			#*whew* ok, everything went well. confirm this, and let them do more
+
+			#show a family's info
+			happyFriendlyHello($id);
+
+			showNames($id);
+
+			print "<br>Feel free to enter more names if you like!<br>\n";
+
+			#finally, give them a form to enter data!
+			tenNamesForm($id);
+		}
+
 
 	} else {
 		#ok we know what family we are, so give 'em the main form entry screen
