@@ -59,6 +59,25 @@ class Companies extends DB_DataObject
 		"territory_id" => "Territory",
 		"flyer_ok" => "OK to place a flyer there?" 
 );
+	var $fb_fieldsToRender = array (
+		'company_name' ,
+		'last_name' ,
+		'first_name',
+		'salutation',
+		'title' ,
+		"address1", 
+		"address2" ,
+		"city" ,
+		"state" ,
+		"zip" ,
+		"country", 
+		"phone" ,
+		"fax" ,
+		"email_address" ,
+		'do_not_contact' ,
+		"territory_id" ,
+		"flyer_ok" 
+);
 	var $fb_enumFields = array ('flyer_ok');
 	var $fb_selectAddEmpty = array ('territory_id', 'family_id', 
 									'do_not_contact');
