@@ -104,7 +104,7 @@ sub checkformatches {
 
 	if($fcount > 1){
 		#if > 1; multichoose
-		print "multiple choice for $lostlast, $lostfirst $lostmiddle:\n";
+		print "several matches for $where\n";
 		# instead of calling this here, build an array of args
 		# and push it onto an array. then do these all in batch at end
 		push(@multis, [ ($tab, $where, $lostid) ]);
