@@ -842,7 +842,8 @@ CREATE TABLE job_descriptions (
   job_description_id int(32) NOT NULL unique auto_increment,
   summary varchar(255) default NULL,
   long_description longtext,
-    board_position tinyint(1),
+    family_type enum('New', 'Returning') default 'New',
+    board_position enum('No', 'Yes') default 'No',
   tuition_type enum('Family Pays', 'Half-Price', 'Free') default 'Family Pays',
      PRIMARY KEY  (job_description_id)
 ) ;
