@@ -88,8 +88,10 @@ select kids.*, enrollment.*
 -- show all springfest payments
 select families.name, sum(income.amount) as total
     from families
-        left join families_income_join on families.family_id = families_income_join.family_id
-        left join income on families_income_join.income_id = income.income_id
+        left join families_income_join 
+            on families.family_id = families_income_join.family_id
+        left join income 
+            on families_income_join.income_id = income.income_id
     where income.account_number = 1
     group by families.family_id
     order by families.family_id
@@ -129,12 +131,15 @@ select leads.lead_id  as responsecode
     order by leads.last_name, leads.first_name
 
 -- detailed list of payments
-select  income.income_id, income.check_number, income.payer, chart_of_accounts.item_description,
-    income.amount, families.name
+select  income.income_id, income.check_number, income.payer, 
+        chart_of_accounts.item_description, income.amount, families.name
     from income
-        left join chart_of_accounts on chart_of_accounts.account_number = income.account_number
-        left join families_income_join on families_income_join.income_id = income.income_id
-        left join families on families.family_id = families_income_join.family_id
+        left join chart_of_accounts 
+            on chart_of_accounts.account_number = income.account_number
+        left join families_income_join 
+            on families_income_join.income_id = income.income_id
+        left join families 
+            on families.family_id = families_income_join.family_id
     order by income.check_date desc
 
 -- query for deleting/updating session stuff
@@ -169,8 +174,10 @@ select auction.*, families.name
 -- find orphaned checks (serious) XXX BROKEN! i have new linkfields!
 select income.*, families.name 
     from income 
-        left join families_income_join on families_income_join.income_id = income.income_id 
-        left join families on families.family_id = families_income_join.family_id 
+        left join families_income_join 
+            on families_income_join.income_id = income.income_id 
+        left join families 
+            on families.family_id = families_income_join.family_id 
     where families_income_join.family_id is null 
     order by income_id
 
@@ -185,7 +192,8 @@ select families.name, sum(auction.item_value) as item_value
 -- money totals
 select chart_of_accounts.item_description, sum(item_value)  as total 
     from income 
-        left join chart_of_accounts on income.account_number = chart_of_accounts.account_number 
+        left join chart_of_accounts 
+            on income.account_number = chart_of_accounts.account_number 
     group by income.account_number order by total desc;
 
 -- income specific to invites
@@ -193,7 +201,8 @@ select chart_of_accounts.item_description, sum(item_value)  as total
     from income 
         left join invitation_rsvps 
             on invitation_rsvps.income_id = income.income_id 
-        left join chart_of_accounts on income.account_number = chart_of_accounts.account_number 
+        left join chart_of_accounts 
+            on income.account_number = chart_of_accounts.account_number 
     where invitation_rsvps.lead_id is not null 
     group by income.account_number order by total desc;
 
@@ -205,7 +214,7 @@ select date_format(updated, '%W, %M %D %Y %r') as updated,
         left join users on audit_trail.audit_user_id = users.user_id 
     where index_id < 1000 and table_name = 'leads' 
         and updated like "200411%" 
-	order by updated ;
+    order by updated ;
 
 
 -- logins
@@ -251,14 +260,17 @@ select relation,
     group by relation 
     order by total desc;
 
--- ALL the money!
+-- show me the money! all of it, in this case
 select chart_of_accounts.item_description, 
-   sum(if(families_income_join.family_id>0 || companies.family_id>0,income.amount,0)) 
+     sum(if(families_income_join.family_id>0 || 
+            companies.family_id>0,income.amount,0)) 
         as family_paid ,
-   sum(amount)  as total 
+        sum(amount)  as total 
     from income 
-           left join chart_of_accounts on income.account_number = chart_of_accounts.account_number 
-           left join families_income_join on income.income_id = families_income_join.income_id
+           left join chart_of_accounts on 
+                income.account_number = chart_of_accounts.account_number 
+           left join families_income_join 
+                on income.income_id = families_income_join.income_id
            left join raffle_income_join 
                    on income.income_id = raffle_income_join.income_id
            left join invitation_rsvps 
@@ -277,8 +289,10 @@ select auction.* ,
         from auction 
             left join packages on auction.package_id = packages.package_id 
             left join auction_items_families_join 
-        on auction_items_families_join.auction_donation_item_id = auction.auction_donation_item_id 
-                left join users on users.family_id = auction_items_families_join.family_id 
+        on auction_items_families_join.auction_donation_item_id = 
+                auction.auction_donation_item_id 
+            left join users on users.family_id = 
+                auction_items_families_join.family_id 
             left join companies_auction_join
                  on companies_auction_join.auction_donation_item_id = 
                         auction.auction_donation_item_id
@@ -289,12 +303,14 @@ select auction.* ,
             and date_received > '0000-00-00'
 
 -- the package summary
-    select package_type, package_number, package_title, package_item_description,
+select package_type, package_number, package_title, 
+        package_description,
         donated_by_text as generously_donated_by, package_value,
         starting_bid, bid_increment, item_type
-        from packages
-        order by package_type, package_number, package_title, 
-            package_item_description
+    from packages
+    where packages.school_year = '2004-2005'
+    order by package_type, package_number, package_title, 
+            package_description
         
 
 -- nasty sponsorship join to check levels IN REAL CASH
@@ -373,7 +389,7 @@ select ticket_quantity , item_value, last_name, first_name, address1 ,
     from invitation_rsvps 
         left join leads on invitation_rsvps.lead_id = leads.lead_id 
         left join income on invitation_rsvps.income_id = income.income_id 
-    where ticket_quantity > 0 
+    where ticket_quantity > 0  and school_year = '2004-2005'
     order by leads.last_name, leads.first_name;
 
 -- the family summary
@@ -408,9 +424,10 @@ select enrolled_temp.name as Family_Name,
     order by enrolled_temp.am_pm_session, enrolled_temp.name;
 
 -- so often used, it needs to be here
-select privs.*, users.name 
+select user_privileges.realm, user_privileges.group_level, 
+    user_privileges.user_level, users.name, user_privileges.privilege_id
     from users 
-        left join privs using (user_id) 
+        left join user_privileges using (user_id) 
     where users.name like "%whatever%";
 
 -- one-shot to convert the old-style to the new-style
@@ -420,7 +437,7 @@ insert into enrollment
         attendance.start_date, attendance.dropout 
     from attendance left join enrol using (enrolid);
 
--- the family names which should be updated
+-- one-shot, family names in the leads which should be updated
     select leads.lead_id, leads.last_name, income.payer 
         from leads left join invitation_rsvps 
             on leads.lead_id = invitation_rsvps.lead_id 
@@ -428,16 +445,30 @@ insert into enrollment
     where last_name like "%Family%" 
         and invitation_rsvps.income_id is not null;
 
-select  auction_items_families_join.family_id  ,  companies_auction_join.company_id ,  companies_auction_join.family_id as family_id_company  , 
- auction_donation_items.quantity  ,  auction_donation_items.description  , 
- auction_donation_items.item_value  ,  auction_donation_items.item_type  ,  
-auction_donation_items.date_received  ,  
-auction_donation_items.location_in_garage  , auction_donation_items.auction_donation_item_id  ,  auction_donation_items.school_year  ,  
-auction_donation_items.package_id from auction_donation_items 
-left join auction_items_families_join on auction_donation_items.auction_donation_item_id = auction_items_families_join.auction_donation_item_id 
-left join families on auction_items_families_join.family_id = families.family_id 
-left join companies_auction_join on auction_donation_items.auction_donation_item_id = companies_auction_join.auction_donation_item_id 
-left join companies on companies_auction_join.company_id = companies.company_id 
-order by families.name asc, companies.company_name 
+-- all the auction items
+select  auction_items_families_join.family_id  ,  
+        companies_auction_join.company_id ,  
+        companies_auction_join.family_id as family_id_company  , 
+        auction_donation_items.quantity  ,  
+        auction_donation_items.item_description  , 
+        auction_donation_items.item_value  ,  
+        auction_donation_items.item_type  ,  
+        auction_donation_items.date_received  ,  
+        auction_donation_items.location_in_garage  , 
+        auction_donation_items.auction_donation_item_id  ,  
+        auction_donation_items.school_year  ,  
+        auction_donation_items.package_id 
+    from auction_donation_items 
+        left join auction_items_families_join 
+            on auction_donation_items.auction_donation_item_id = 
+                auction_items_families_join.auction_donation_item_id 
+        left join families 
+            on auction_items_families_join.family_id = families.family_id 
+        left join companies_auction_join 
+            on auction_donation_items.auction_donation_item_id = 
+                companies_auction_join.auction_donation_item_id 
+        left join companies 
+            on companies_auction_join.company_id = companies.company_id 
+    order by families.name asc, companies.company_name 
 
 --- EOF
