@@ -52,29 +52,35 @@ sub fixem {
 		print "found id $lostid: $lostlast, $lostfirst $lostmiddle\n"; #DEBUG
 
 		$where = "where last like \"\%$lostlast\%\" and first like \"\%$lostfirst\%\" ";
+		
 		#ok, any matches?
-		$fquery = "select count(parentsid) as howmany from parents $where";
-		print "doing <$fquery>\n"; #debug
-		$fqueryobj = $dbh->prepare($fquery) or die "can't prepare <$fquery>\n";
-		$fqueryobj->execute() or die "couldn't execute $!\n";
-
-		$fitemref = $fqueryobj->fetchrow_hashref;
-		%fitem = %$fitemref;
-		$fcount = $fitem{'howmany'};
-		$fqueryobj->finish();
+		$fcount = &checkcount($where);
 
 		print "um, there are $fcount matches\n"; #debug
 
 		if($fcount < 1){
 			print "NO match for $lostlast, $lostfirst $lostmiddle\n";
 		} elsif($fcount == 1){
-			useonly($tab, $where, $lostid);
+			&useonly($tab, $where, $lostid);
 		} else {
-			choosemulti($tab, $where, $lostid);
+			&choosemulti($tab, $where, $lostid);
 		}
 	} # end while
 } #end sub
 
+sub checkcount {
+	my $where = shift;
+	my $fquery = "select count(parentsid) as howmany from parents $where";
+	print "doing <$fquery>\n"; #debug
+	my $fqueryobj = $dbh->prepare($fquery) or die "can't prepare <$fquery>\n";
+	$fqueryobj->execute() or die "couldn't execute $!\n";
+
+	my $fitemref = $fqueryobj->fetchrow_hashref;
+	my %fitem = %$fitemref;
+	my $fcount = $fitem{'howmany'};
+	$fqueryobj->finish();
+	return $fcount;
+}
 
 sub choosemulti {
 	my $tab = shift;
@@ -85,20 +91,20 @@ sub choosemulti {
 	#ok *sigh* let the user pick... pick pick....
 	print "ok, your choices are: ";
 	print "type id of the RIGHT replacement, or, return to give up\n";
-	$mquery = "select parentsid as count from parents $where";
-	$mqueryobj = $dbh->prepare($mquery) 
+	my $mquery = "select parentsid as count from parents $where";
+	my $mqueryobj = $dbh->prepare($mquery) 
 		or die "can't prepare <$mquery>\n";
 	$mqueryobj->execute() or die "couldn't execute $!\n";
 
-	while ($mitemref = $mqueryobj->fetchrow_hashref){
-		%mitem = %$mitemref;
+	while (my $mitemref = $mqueryobj->fetchrow_hashref){
+		my %mitem = %$mitemref;
 		print " id: " , $mitem{'parentsid'}, " " , 
 			$mitem{'last'}, ", " , $mitem{'first'}, " " , 
 			$mitem{'middle'} , "\n";
 	}
-	$reply = <STDIN>;
+	my $reply = <STDIN>;
 	if($reply > 0){
-		replace($tab, $id, $lostid);
+		&replace($tab, $id, $lostid);
 	}
 }
 
@@ -108,17 +114,17 @@ sub useonly {
 	my $lostid = shift;
 	my $id;
 	#do the query AGAIN, and use it!
-	$mquery = "select parentsid from parents $where";
-	$mqueryobj = $dbh->prepare($mquery) 
+	my $mquery = "select parentsid from parents $where";
+	my $mqueryobj = $dbh->prepare($mquery) 
 		or die "can't prepare <$mquery>\n";
 	$mqueryobj->execute() or die "couldn't execute $!\n";
 
-	while ($mitemref = $mqueryobj->fetchrow_hashref){
-		%mitem = %$mitemref;
+	while (my $mitemref = $mqueryobj->fetchrow_hashref){
+		my %mitem = %$mitemref;
 		$id = $mitem{'parentsid'};
 	}
 
-	replace($tab, $id, $lostid);
+	&replace($tab, $id, $lostid);
 }
 
 sub replace {
