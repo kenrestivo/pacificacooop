@@ -25,6 +25,7 @@
 
 require_once("object-config.php");
 require_once("utils.inc");
+require_once("DB/DataObject.php");
 
 class PostPaypal
 {
@@ -43,7 +44,7 @@ class PostPaypal
 	function factoryWrapper($tablename) 
 		{
 			
-			$obj =& DB_DataObject::factory ($tablename);
+			$obj = DB_DataObject::factory ($tablename);
 			if (PEAR::isError($obj)){
 				die ($obj->getMessage ());
 			}
@@ -52,17 +53,19 @@ class PostPaypal
 		}
 	
 	// parse out the custom field from paypal
-	function parseCustom($custom)
+	function parseCustom()
 		{
+            $custom =  $this->paypal_obj->custom;
 			// split out all :'s
 			$pairs = explode(":", $custom);
-			foreach ($pair as $nothing =>$pair){
-				preg_match('/(\w+)(\d+)/', $pair, $matches);
+			foreach ($pairs as $nothing => $pair){
+				preg_match('/(\w+?)(\d+)/', $pair, $matches);
 				$index = $matches[1];
 				$value = $matches[2];
 				$longname = $this->key_mapping[$index];
 				// save them into var's
 				$this->$longname = $value;
+				print "index $index longname $longname value $value\n";
 			}
 		}
 
@@ -71,43 +74,54 @@ class PostPaypal
 	function postTransaction($uid)
 		{
 			$this->uid = $uid;
+			$this->paypal_obj =& $this->factoryWrapper('accounting_paypal');
 			$this->paypal_obj->get($this->uid);
-			$this->parseCustom();
-			$this->postIncome();
-            $this->postFamily(); // TODO: handle leads/companies too
+            
+            $this->parseCustom();
+			if($this->postIncome()){
+                $this->postFamily(); // TODO: handle leads/companies too
+            }
+            print_r($this);
 		}
 
 	function postIncome()
 		{
-			$this->paypal_obj = $this->factoryWrapper('accounting_paypal');
-			$incobj = $this->factoryWrapper('income');
+			$obj =& $this->factoryWrapper('income');
 
+            $obj->txn_id = $this->paypal_obj->txn_id;
+
+            print_r($obj);
+            $obj->debugLevel(5);
             //don't dupe. XXX this is dumb. what do i do about refunds?
-            $incobj->txn_id = $this->paypal_obj->txn_id;
-            if($incobj->find()){
-                return;   
+            $obj->whereAdd(sprintf("txn_id = '%s'", $obj->txn_id));
+			$numrows = $obj->find() ; 
+            print "NUM $numrows";
+            if($numrows > 0){
+                return 0;   
             }
 
 			foreach (array('txn_id','check_number') as $key => $val){ 
-				$incobj->$val = $this->paypal_obj->txn_id;
+				$obj->$val = $this->paypal_obj->txn_id;
 			}
 			foreach (array('bookkeeper_date','cleared_date') as $key => $val){ 
-				$incobj->$val = $this->paypal_obj->confirm_date;
+				$obj->$val = $this->paypal_obj->confirm_date;
 			}
-			$incobj->payer = sprintf("%s %s", 
+			$obj->payer = sprintf("%s %s", 
                                      $this->paypal_obj->first_name, 
                                      $this->paypal_obj->last_name);
 
-            $incobj->amount = $this->paypal_obj->payment_gross;
-            $incobj->school_year = findSchoolYear();
-			$incobj->account_number = $this->account_number;
-			$this->income_id = $incobj->insert();
+            $obj->amount = $this->paypal_obj->payment_gross;
+            $obj->school_year = findSchoolYear();
+			$obj->account_number = $this->account_number;
+            print_r($this);
+            $this->income_id = $obj->insert();
+            return 1;
 	}
 
 	function postFamily()
 		{
 		
-			$obj = $this->factoryWrapper('families_income_join');
+			$obj =& $this->factoryWrapper('families_income_join');
 
             //don't dupe. XXX this is dumb. what do i do about refunds?
             $obj->income_id = $this->income_id;
