@@ -1,0 +1,82 @@
+from Sat Oct 11 11:20:41 PDT 2003
+
+three database projects
+	solicitation
+		10 names: family donations
+			NEED WEB FORM NOW
+		corporate donations, soliciting team volunteers
+			possible next web-form project, after 10-names is done
+	donation items
+		3x5 cards, describe the items
+	tracking
+		checks, donations, 10 names
+
+
+10 names db
+	"flawless"
+	"everyone can use"
+	offline entries possible, i.e. at parent ed meeting
+	entry:
+		parents (or data entry person, if parents submit info on paper)
+			go online, enter 10 names
+		can enter MORE than 10
+		MUST enter at least 10 by cutoff date
+		choose family name (popup or table of links)
+		fields:
+			last (required)
+			first (required)
+			business
+			addr1 (required)
+			addr2
+			state/province (required, "CA" default)
+			zip/postalcode (required, "94044" default)
+			oountry (required, "USA" default)
+			relationship (required, popup)
+				relative, friend, co-worker, alumni, other
+		display:
+			how many you've entered so far, and, who they are
+			
+	reports:
+		total dump of families and names
+			incl. family name (and id?) and am/pm
+			in excel format, for carol eggimann
+
+	nice to have: 
+		email response, confirming data entry
+		reminder: you've entered x names, you need x more names to get 10.
+		check that someone else didn't already enter the name? i.e. duplicates
+
+contacts: carolklyver@sbcglobal.org, matt@omidyar.org, ken@restivo.org
+		
+	
+dates:
+	cutoff for first mailing: 11/4
+	data processed for mailing:  1/21/04
+	mailing: 2/15/04
+
+
+web site stuff
+	old site:
+		pacificaco-opnurseryschool.com : at HE
+	new site:
+		paccoop.org -> yahoo (yecch)
+		pacificacoop.org -> NFSN?
+
+
+actions
+	ken:
+		make it work
+		get to matt today or tomorrow
+	matt: 
+		get nfsn online and going
+		make it pretty once ken is done
+		make a paper form for those who can't get online
+	carrie:
+		review it tuesday nite, call it "done" and let everyone know to use it
+
+
+later:
+	soliciting db
+		region? 
+	track # of tickets, $ donated
+	
