@@ -82,6 +82,8 @@ the fieldstruct
 					which table to pull the schoolyear out of!)
 		realname: if this $fieldname is a NASTY HACK AROUND MYSQL, then
 				'realname' is the REAL name of the field
+		constrainIndex: a nasty-ass hack. constrain the popup to match an index
+				in this fieldstruct. i.e. to match some value in the maintable
 
 callbacks struct
 	this is a proto-object. it contains miles and miles of crap
