@@ -4,6 +4,7 @@
 
 (use-modules (kenlib) (srfi srfi-1)
 			 (srfi srfi-13)
+			 (database simplesql)
 			 (ice-9 slib))
 (require 'printf)
 
@@ -16,7 +17,7 @@
 (define *header* '("Last Name"
 				 "Mom Name *"
 				 "Dad/Partner *"
-				 "Child "
+				 "Child"
 				 "DOB"
 				 "Address"
 				 "Phone"
@@ -32,22 +33,24 @@
 
 ;; find family
 (define (check-for-new-family line header)
-  (let (families (safe-sql *dbh*
+  (let ((families (safe-sql *dbh*
 						   (sprintf #f "
 				select familyid, name, phone from families
 						where name like \"%%%s%%\" and phone like \"%%%s%%\""
-									(rasta-find "Last Name")
-									(rasta-find "Phone"))))
-	(cond ((> 2 (false-if-exception (length families)))
+									(rasta-find "Last Name" line header)
+									(rasta-find "Phone" line header)))))
+	(cond ((> 2 (false-if-exception
+				 (length families)))
 		   (error "duplicate families" families))
-		  ((list? families) (db-ref-last families "familyid")) ;gotcha!
+		  ((list? families)
+		   (db-ref-last families "familyid")) ;gotcha!
 		  (else
-		   (safe-sql (sprintf #f "
+		   (safe-sql *dbh* (sprintf #f "
 						insert into families set
 								name = '%s',
 								phone = '%s'"
-							  (rasta-find "Last Name")
-							  (rasta-find "Phone")
+							  (rasta-find "Last Name" line header)
+							  (rasta-find "Phone" line header)
 							  ))))))
 
 ;; find kid
@@ -55,22 +58,24 @@
   (let ((kids (safe-sql *dbh*
 						(sprintf #f "
 				select kidsid, last, first, familyid from kids
-					where first like \"%%%s$$\" and last like \"%%%s%%\" "
+					where first like \"%%%s%%\" and last like \"%%%s%%\" "
 								 (rasta-find "Child" line header)
 								 (rasta-find "Last Name" line header)
 								 ))))
-	(cond ((> 2 (false-if-exception (length kids)))
+	(cond ((> 2 (false-if-exception
+				 (length kids)))
 		   (error "duplicate kids" kids))
-		  ((list? kids) (db-ref-last kids "kidsid")) ; got it!
+		  ((list? kids)
+		   (db-ref-last kids "kidsid")) ; got it!
 		  (else
-		   (safe-sql (sprintf #f ("
+		   (safe-sql *dbh* (sprintf #f ("
 				insert into kids set 
 							last = '%s' ,
 							first = '%s' ,
 							familyid = %d "
-							 (rasta-find "Last Name" line header)
-							 (rasta-find "Child" line header)
-							 (check-for-new-family line header))))))))
+								  (rasta-find "Last Name" line header)
+								  (rasta-find "Child" line header)
+								  (check-for-new-family line header))))))))
 
 ;;;;;;;;;; functions for navigating through the rasta structure (accessors?)
 (define (rasta-find key line header)
