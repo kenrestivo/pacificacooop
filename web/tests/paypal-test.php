@@ -17,7 +17,7 @@
 function foobar($thing, $another = NULL)
 {
 	print "\n<br>$thing: ";
-	if($another != NULL){
+	if(!is_null($another)){
 		print "YES [$another]";
 	}
 }
