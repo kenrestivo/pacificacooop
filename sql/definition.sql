@@ -162,7 +162,7 @@ create table coop.coa (
 	
 -- income tracking
 create table coop.inc (
-    incid int(32) not null unique,
+    incid int(32) not null auto_increment,
 	checknum varchar(255),
 	checkdate date,
 	payer varchar(255),
