@@ -20,8 +20,10 @@ $cp->pageTop();
 
 
 $view =& new CoopView(&$cp, 'families');
-$pk = $view->getPK(); // XXX hack! use the get() form instead if you know index
-$view->obj->$pk = 22;
+// XXX hack! use the get() form instead if you know index
+//$pk = $view->getPK(); 
+$u = getUser($cp->auth['uid']);
+$view->obj->family_id = $u['family_id'];
 print $view->recurseTable();
 
 
