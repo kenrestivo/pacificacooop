@@ -29,7 +29,9 @@ if($in){
 	$checkdate = &humantounix($in);
 } else {
 	#ok, now is the time to check.
-	$checkdate = time();
+	print STDERR "You may NOT send out emails without explicitly supplying a checkdate\n";
+	exit 1;
+	#$checkdate = time();
 }
 
 print "checking against $in date $checkdate which is ", 
@@ -62,8 +64,12 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	$insref = &getinsuranceinfo($id);
 	$licref = &getlicenseinfo($id);
 
+	# the report of people i need to call or write a note to!
+	#if(!$famref->{'email'}){
+	#	print &fieldTripReport($famref, $insref, $licref, $checkdate, 1);
+	#}
 	if($famref->{'email'}){
-		print &fieldTripReport($famref, $insref, $licref, $checkdate, 1);
+		print &emailReminder($famref, $insref, $licref, $checkdate, 1);
 	}
 
 } # end while
@@ -86,7 +92,7 @@ sub getlicenseinfo()
 	my %item;
 	my $query = "
 		select unix_timestamp(max(lic.expires)) as exp, 
-			lic.last, lic.first, lic.middle
+			lic.last, lic.first, lic.middle, lic.state
 		from lic 
 			left join parents on lic.parentsid = parents.parentsid 
 		where parents.worker= 'Yes' and parents.familyid = $famid
@@ -149,17 +155,97 @@ sub getinsuranceinfo()
 ######################
 #	EMAILREMINDER
 ######################
-sub emailreminder()
+sub emailReminder()
 {
-	my $ritemref = shift;
-	my %ritem = %$ritemref;
+	my $famref = shift;
+	my $insref = shift;
+	my $licref = shift;
+	my $checkdate = shift;
+	my $onlyexpired = shift;
+	my $m = "";
+	my $if = 0; # insurance flag
+	my $lf = 0; # license flag
+	my $newbie = 0;
 
-	print "Subject: Insurance Information for Co-Op\n\n";
-	print "Hello! My job this year is to keep track of the driver's license and auto insurance information for the school. This is actually an automated email that is being sent by a computer program. I know, it's impersonal, but, computers are good for automating repetitive tasks like this. My apologies.\n\n";
-	print "According this new program-- which may be completely wrong (I wrote itmyself) your auto insurance is with " . $ritem{'companyname'} . " and expired on " . $ritem{'expires'} . "\n\n";
-	print "Regulations require us to have a copy of a valid driver's license and current auto insurance on file. It appears this has to be current in order for you to be allowed to drive your child on any field trips. The next field trip is scheduled for the end of October, so, now is a good time to get all this paperwork up-to-date.\n\n";
-	print "If you could please place a copy of your current insurance card (the one that you keep in your car) into my communications folder, that would be great.\n\n";
-	print "Again, sorry for the impersonal email. Please feel free to call me at 650-355-1317 with any questions.\n\nThanks!\n\n-ken";
+	#printf("DEBUG lic %d ins %d\n", 
+	#	$licref->{'exp'}, $insref->{'exp'});
+	#
+
+	$m .= "Subject: Insurance Information for Co-Op\n\n";
+	$m .= "Hello! My job this year is to keep track of the automobile insurance and driver's license information for the school.\n\n";
+
+	#insurance
+	if($insref->{'exp'}){
+		if($insref->{'exp'} < $checkdate){
+			$m .= sprintf(
+					"The %s insurance card on file for the %s family expired on %s.\n\n",
+
+					$insref->{'companyname'},
+					$famref->{'name'},
+					strftime('%m/%d/%Y', localtime($insref->{'exp'})) 
+				);
+			$if++;
+		}
+	} else {
+		$m .= sprintf("The school doesn't have any insurance card on file for the %s family (or, at least, I couldn't find it).\n\n",
+					$famref->{'name'});
+		$if++;
+		$newbie++;
+	}
+	
+	#license
+	if($licref->{'exp'}){
+		if($licref->{'exp'} < $checkdate){
+			$m .= sprintf(
+					"The copy of the %s driver's license on file for %s %s %s expired on %s.\n\n",
+					$licref->{'state'},
+					$licref->{'first'},
+					$licref->{'middle'},
+					$licref->{'last'},
+					strftime('%m/%d/%Y', localtime($licref->{'exp'})) 
+			);
+			$lf++;
+		}
+	} else {
+			$m .= sprintf(
+					"%s couldn't find any driver's license on file for the working parent on the roster, %s %s.\n\n",
+					$if ? "I also" : "I",
+					$famref->{'first'},
+					$famref->{'last'}
+			);
+		$lf++;
+		$newbie++;
+	}
+
+	if($newbie > 1){
+		$m .= sprintf("Regulations require the school to have a copy of a valid driver's license and current auto insurance on file. It appears this has to be current in order for you to be allowed to drive your child on any field trips. The next field trip is scheduled for %s, so now is the time to get all this paperwork up-to-date.\n\n", 
+			strftime('%A, %B %d', localtime($checkdate))
+		);
+	}
+
+	$m .= "If you could, please place a copy of ";
+	if($if){
+		$m .= "your current insurance card (the one that you keep in your car)"
+	}
+	if($lf && $if){
+		$m .= " and ";
+	}
+	if($lf){
+		$m .= "a copy of your current driver's license"
+	}
+	$m .= sprintf(" into my communications folder (Restivo, PM), before %s.\n\n",
+			strftime('%A, %B %d', localtime($checkdate))
+		);
+
+	$m .= "My apologies for the impersonal, automatic computer-generated email. Please feel free to call me at 650-355-1317 with any questions.\n\nThanks!\n\n-ken\n";
+
+	#ok, finish up.
+	if($if || $lf){
+		return $m;
+	} else {
+		return "";
+	}
+
 } #END EMAILREMINDER
 
 
