@@ -22,31 +22,24 @@ $sy = findSchoolYear();
 $top = new CoopView(&$cp, 'companies');
 
 
-// $top->obj->query("select * from companies         
-//         left join companies_income_join 
-//                 on companies.company_id = 
-//                     companies_income_join.company_id
-// 		left join income
-//                on income.income_id = companies_income_join.income_id
-// 		where income.income_id is not null and income.school_year = '$sy'
-// ");
+$top->obj->query("
+select * from companies         
+       left join companies_income_join 
+               on companies.company_id = 
+                   companies_income_join.company_id
+			left join income
+					on income.income_id = companies_income_join.income_id
+	left join companies_auction_join
+			on companies_auction_join.company_id = companies.company_id
+			left join auction_donation_items
+					on auction_donation_items.auction_donation_item_id =
+							auction_donation_items.auction_donation_item_id
+	where (income.income_id is not null and income.school_year = '$sy')
+			or (auction_donation_items.auction_donation_item_id is not null  
+							and auction_donation_items.school_year = '$sy')
+");
 
-//print "FOUND " . $top->obj->find();
-
-$cij = new CoopObject(&$cp, 'companies_income_join');
-
-//$inc = new CoopObject(&$cp, 'income');
-//$cij->obj->joinAdd($inc->obj);
-
-$top->obj->joinAdd($cij->obj);
-
-//$top->obj->whereAdd('school_year = "2004-2005"');
-
-$acj = new CoopObject(&$cp, 'companies_auction_join');
-//$acj->obj->whereAdd('school_year = "2004-2005"');
-$top->obj->joinAdd($acj->obj);
-
-print $top->simpleTable($summary);
+print $top->simpleTable(false);
 	
 
 
