@@ -86,9 +86,11 @@
 						insert into families set 
 								name = '%s',
 								address = '%s',
+								email = '%s',
 								phone = '%s'"
 								 (rasta-find "Last Name" line header)
 								 (rasta-find "Address" line header)
+								 (rasta-find "Email" line header)
 								 (rasta-find "Phone" line header)
 								 )))))
 
