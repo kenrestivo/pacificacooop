@@ -18,7 +18,7 @@
 ;; you need a new-architecture  script to do it
 (for-each (lambda (args) (apply add-new-column *dbh* args))
 		  '(("kids" "date_of_birth" "date" #f)
-			("families" "address" "varchar(255)" #f)
+			("families" "address1" "varchar(255)" #f)
 			("families" "email" "varchar(255)" #f)))
 
 ;; NOTE! this is for NEW column names but OLD schema.
