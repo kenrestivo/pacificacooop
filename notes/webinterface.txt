@@ -24,8 +24,18 @@ main page (with family POST/GET'ed)
 				relative, friend, co-worker, alumni, other
 		of course, the submit/save button!
 
+admin page
+	choose 
+		(all families, families with less than 10 names)
+		by date
+			default next milestone from today
+	table of families, and how many names have been entered so far
+		um, by certain dates?
+		only the delinquent ones?
+		and, with email and phone and am/pm (heh) for the springfest cops to use
 
-code
+
+10names code
 	drawing the popup
 	drawing the basic parent info
 	drawing the names-to-date info
@@ -39,6 +49,12 @@ code
 			re-display the popup/parentinfo/webform again!
 				pre-populated with whatever was entered
 				and red comments showing what is wrong/missing
+			accept the GOOD ones, ONLY bitch out and redisplay the bad ones!
+
+admin code
+	drawing the chooser
+		all or 10 names
+	draw the report
 
 arch
 	like 5mins
@@ -59,6 +75,8 @@ arch
 		names-to-date
 		the web form	
 		the submission handling
+	admin.php
+		the reports!
 
 texts
 	spring fest 10-names donations

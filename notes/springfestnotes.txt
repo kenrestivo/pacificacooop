@@ -39,6 +39,7 @@ three database projects
 			how many you've entered so far, and, who they are
 			
 	reports:
+		list of parents, and how many names have been entered so far
 		total dump of families and names
 			incl. family name (and id?) and am/pm
 			in excel format, for carol eggimann

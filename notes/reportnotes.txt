@@ -1,0 +1,14 @@
+report notes
+$Id$
+
+list of families, and how many names have been entered so far
+	um, by certain dates?
+	only the delinquent ones?
+	and, with email and phone and am/pm (heh) for the springfest cops to use
+
+total dump of families and names
+	incl. family name (and id?) and am/pm
+	in excel format, for carol eggimann
+
+
+

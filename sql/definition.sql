@@ -113,6 +113,31 @@ create table coop.families (
     primary key (familyid)
 );
 
+
+-- main table for leads. this will groooowww over time, i'm sure.
+-- if there's a familyid, it came through a member, otherwise not.
+-- 'source' field will only be "springfest" this time around
+-- you'll know WHICH springfest by comparing the 'entered' date
+create table coop.leads (
+    leadid int(32) not null auto_increment,
+	last varchar(255),
+	first varchar(255),
+	company varchar(255),
+	addr1 varchar(255),
+	addr2 varchar(255),
+	state varchar(255),
+	zip varchar(255),
+	oountry varchar(255),
+	phone varchar(255),
+	relation enum ('Relative','Friend', 'Coworker', 'Alumnus', 'Other'),
+	source enum ('Springfest', 'Other'),
+    familyid int(32),
+	entered datetime,
+	updated timestamp,
+	primary key (leadid)
+);
+	
+
 -- the user/passwords used by the web view page AND my update tool..
 grant select, update, insert, delete on coop.* to input@'%' 
 	identified by 'test'; 
