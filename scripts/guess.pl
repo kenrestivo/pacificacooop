@@ -73,7 +73,7 @@ sub fixem {
 	my $tab = shift;
 	#ok, who needs help? let's fix 'em
 	#TODO subroutine this. we want not "ins" but $tab
-	$rquery = "select * from $tab where parentsid is null";
+	$rquery = "select * from $tab where parentsid  = 0 or parentsid is null";
 	print "doing <$rquery>\n"; #XXX debug only
 	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 	$rqueryobj->execute() or die "couldn't execute $!\n";

@@ -550,11 +550,16 @@ sub fieldTripReport()
 			$licexp, $insexp);
 	}
 
+	if(!$onlyexpired){
+		return $badness;
+	}
+
 	if(($insexp || $licexp) && !$skip){
 		return $badness;
-	} else {
-		return "";
 	}
+
+	return "";
+
 } # END FIELDTRIPREPORT
 
 ######################
