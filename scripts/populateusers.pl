@@ -23,10 +23,14 @@
 
 
 use DBI;
+use Getopt::Std;
+
+
+getopts('vt') or &usage();
 
 
 #the access hash
-# TODO learn how to do hashes properly in perl
+# in perl, the hash keys should NOT be quoted, or all hell will break loose!!
 %access = (
 	ACCESS_NONE => 0,
 	ACCESS_SUMMARY => 100,
@@ -37,7 +41,7 @@ use DBI;
 	ACCESS_ADMIN => 800
 );
 
-	#default privs
+#default privs for all families
 @defaults =  (
 	[ $access{'ACCESS_DELETE'}, "invitations" ],
 	[ $access{'ACCESS_DELETE'}, "donations" ],
@@ -58,14 +62,55 @@ $rquery = "select families.name, families.familyid
 		left join enrol on enrol.enrolid = attendance.enrolid
 		where attendance.dropout is NULL
 	group by families.familyid\n";
-#print "doing <$rquery>\n"; #XXX debug only
+if($opt_v){
+	print "doing <$rquery>\n"; 
+}
 $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 $rqueryobj->execute() or die "couldn't execute $!\n";
 
 while ($ritemref = $rqueryobj->fetchrow_hashref){
 	%ritem = %$ritemref;
-	$familyid = $ritem{'familyid'};
-	$name = $ritem{'name'};
+
+	$uid = &addUser($ritem{'name'}, $ritem{'familyid'});
+	&addDefaultPrivs($uid);
+
+} # end while
+
+$dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
+
+exit 0;
+#END MAIN
+########################
+
+
+sub
+addDefaultPrivs()
+{
+	my $uid = shift;
+	my $arref;
+	my $query;
+
+	#NOW, add the privs
+	foreach $arref (@defaults){
+		$query = sprintf("insert into privs 
+				set userid = %d, level = %d, realm = '%s' ", 
+			$uid, $$arref[0], $$arref[1]);
+		if($opt_v){
+			print "doing <$query>\n";
+		}
+		unless($opt_t){
+			print STDERR $dbh->do($query) . "\n"; #THIS DOES IT!
+		}
+	}
+
+}
+
+sub
+addUser()
+{
+	my $name = shift;
+	my $familyid = shift;
+	my $query;
 
 	print "adding <$name> into users\n";
 
@@ -73,23 +118,24 @@ while ($ritemref = $rqueryobj->fetchrow_hashref){
 	$query = sprintf("insert into users 
 			set familyid = %d, name = \'%s Family\' ", 
 			$familyid, $name);
-	print "doing <$query>\n";
-	#print STDERR $dbh->do($query) . "\n"; #THIS DOES IT!
-	
-	$uid = 	$dbh->{'mysql_insertid'};
-	
-	#NOW, add the privs
-	foreach $arref (@defaults){
-		$query = sprintf("insert into privs 
-				set userid = %d, level = %d, realm = '%s' ", 
-			$uid, $$arref[0], $$arref[1]);
+	if($opt_v){
 		print "doing <$query>\n";
-		#print STDERR $dbh->do($query) . "\n"; #THIS DOES IT!
 	}
+	unless($opt_t){
+		print STDERR $dbh->do($query) . "\n"; #THIS DOES IT!
+	}
+	
+	#find out what we got for a uid
+	return $dbh->{'mysql_insertid'};
 
-} # end while
+}
 
-
-$dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
+sub usage()
+{
+    print STDERR "usage: $0 -v -t\n";
+    print STDERR "\t-v verbose \n";
+    print STDERR "\t-t test (don't actually update db) \n";
+	exit 1;
+}
 
 #EOF
