@@ -20,7 +20,9 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-portions lifted from postnuke
+*/
+
+//portions lifted from postnuke
 // POST-NUKE Content Management System
 // Copyright (C) 2001 by the Post-Nuke Development Team.
 // http://www.postnuke.com/
@@ -42,8 +44,6 @@ portions lifted from postnuke
 // GNU General Public License for more details.
 //
 // To read the license please visit http://www.gnu.org/copyleft/gpl.html
-
-*/
 
 //THIS STUFF MUST EXECUTE BEFORE ANY HTML IS SENT!!!! BEFORE HEADERS, ANYTHING!
 

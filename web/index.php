@@ -25,15 +25,16 @@
 
 
 
-	print "<HTML>
+	print '<HTML>
 		<HEAD>
+				<link rel=stylesheet href="main.css" title=main>
 			<TITLE>Data Entry</TITLE>
 		</HEAD>
 
 		<BODY>
 
 		<h2>Pacifica Co-Op Nursery School Data Entry</h2>
-	";
+	';
 	warnDev();
 
 	$pv = $_POST ? $_POST : $_GET;
