@@ -66,6 +66,8 @@ the fieldstruct
 			the linktable is in the $callbacks['join'] somewhere
 			NOTE! for this to work, there must be a join_to_table column
 				in the sql table 'linktable', which the popuputll then checks
+		realname: if this $fieldname is a NASTY HACK AROUND MYSQL, then
+				'realname' is the REAL name of the field
 
 callbacks struct
 	this is a proto-object. it contains miles and miles of crap
