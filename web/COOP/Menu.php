@@ -86,7 +86,6 @@ class CoopMenu extends HTML_Menu
 			case 'sitemap':
 				$this->renderer =& new HTML_Menu_DirectTreeRenderer();
 				$this->render($this->renderer, $type);
-				$res = $this->renderer->toHTML();
 				break;
 			case 'urhere':
 				$this->renderer =& new HTML_Menu_DirectRenderer();
@@ -99,14 +98,15 @@ class CoopMenu extends HTML_Menu
  				if(count($this->getPath()) < 2){
  					return "";
  				}
-				$res = $this->renderer->toHTML();
+
 			break;
 			default:
 				return "BROKEN TYPE $type";
 				break;
 			}
 			//confessObj($this , "menures");
-			return $res;
+				$res = $this->renderer->toHTML();
+				return $res;
 		}
 
 	function callbacksToMenu($everything)
