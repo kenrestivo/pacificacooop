@@ -23,6 +23,7 @@
 
 use strict;
 use Spreadsheet::ParseExcel;
+use DBI;
 
 
 #my %fieldarray = {
@@ -42,6 +43,8 @@ use Spreadsheet::ParseExcel;
 	#School Job
 	#Springfest Job
 #};
+
+my $dbh;
 
 &main();
 
@@ -88,14 +91,6 @@ sub debugStruct()
 } #END DEBUGSTRUCT
 
 
-sub checkDeletes(){
-	#this one goes through the logic BACKWARDSS!
-	#it selects * from kids where they haven't dropped out,
-	# then iterates through the sheet looking for them
-	#if it doesn't find them, it drops them. (confirm first!!?)
-	
-}
-
 sub checkHeaders(){
 	my $rowref = shift;
 	my $col;
@@ -107,7 +102,16 @@ sub checkHeaders(){
 	#&debugStruct($rowref);
 }
 
+sub unBaby()
+{
+	my $annoying = shift;
+	$annoying =~ s/(.+?)\s*\(baby\)\s*/$1/;
+	return $annoying;
+}
+
 sub checkNewFamily(){
+	#look for a family. add a new one if it's not there, 
+	#	and return the insertid
 }
 
 sub checkNewParents(){
@@ -115,21 +119,82 @@ sub checkNewParents(){
 	#lose the (baby) flag
 	#search in db. if parent isn't there, 
 	#	look for family, it should add one if needed.
-	#	then add the parent
-	#	do for moms and dads
+	#	note: there are a few single moms here, so note that.
 }
 
 sub checkNewKids(){
+	my $rowref = shift;
+	my ($rquery , $rqueryobj , $ritemref) ;
+	my %ritem;
+	my $cnt;
+
 	#search in db. if kid isn't there, 
 	#	look for family, it should add one if needed.
 	#	then add the kid
+
+	$rquery = sprintf("select * from kids 
+			where first like \"%%%s%%\" and last like \"%%%s%%\"
+	",
+		$$rowref[3], &unBaby($$rowref[0])
+	);
+
+	print "DEBUG doing <$rquery>\n"; #debug only
+	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+	$rqueryobj->execute() or die "couldn't execute $!\n";
+
+	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		$cnt++;
+	}
+
+	if($cnt){
+		print "DEBUG: yes, this kid is in the db\n";
+		return $$ritemref['kidsid'];
+	} 
+	
+	#TODO otherwise, insert the new kid!
+	#	first, its family
+	#           $insertId = $dbh->{'mysql_insertid'}
+	
+	#TODO acc parent here too? why not, we know we need them/one
+	
 }
 
 sub checkChanges(){
 	#search in db. compare all relevant fields
 	#issue updates if needed
+	#XXX should i call the newkids, etc here?
 }
 
+
+sub checkDeletes(){
+	my $ws = shift;
+	my $session = shift;
+	my ($rquery , $rqueryobj , $ritemref) ;
+	my %ritem;
+	#this one goes through the logic BACKWARDSS!
+	#it selects * from kids where they haven't dropped out,
+	# then iterates through the sheet looking for them
+	#if it doesn't find them, it drops them. (confirm first!!?)
+
+	$rquery = "
+		select kids.first, kids.last, families.name
+			from attendance
+			left join enrol on attendance.enrolid = enrol.enrolid
+			left join kids on kids.kidsid = attendance.kidsid
+			left join families on kids.familyid = families.familyid
+	";
+
+	print "DEBUG doing <$rquery>\n"; #debug only
+	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+	$rqueryobj->execute() or die "couldn't execute $!\n";
+
+	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		%ritem = %$ritemref; #allocate this, so it persists
+		#TODO add callback opaque data for these: a ritemref!
+		&iterateRows($ws, $session, \&checkNewKids, 'row', \%ritem);
+	}
+	
+}
 
 
 #################
@@ -153,9 +218,10 @@ sub iterateSheets()
 		if($ws->{'Name'} !~ /Schedule/){
 			next;
 		}
-		&iterateRows($ws, $session, \&checkDeletes, \&checkHeaders);
-		&iterateRows($ws, $session, \&checkNewKids);
-		&iterateRows($ws, $session, \&checkChanges);
+		&iterateRows($ws, $session, \&checkHeaders, 'header');
+		#&checkDeletes($ws, $session); #TODO add the callback data!
+		&iterateRows($ws, $session, \&checkNewKids, 'row');
+		&iterateRows($ws, $session, \&checkChanges, 'row');
 
 	} 
 
@@ -227,7 +293,7 @@ sub iterateRows()
 	my $ws = shift;
 	my $session = shift;
 	my $checkCb = shift;
-	my $headerCb = shift;
+	my $type = shift;
 	my $start = 0;
 	my $end = 0;
 	my $vr = 0;
@@ -249,8 +315,8 @@ sub iterateRows()
 		if ($vr == $maxcol){
 			#this is my header row!
 			#print "DEBUG this is the start row!\n";
-			if($headerCb){
-				&$headerCb(&extractRow($ws, $row, $col, $maxcol));
+			if($checkCb && $type eq 'header'){
+				&$checkCb(&extractRow($ws, $row, $col, $maxcol));
 			}
 			$start++;
 		} else {
@@ -259,9 +325,9 @@ sub iterateRows()
 
 			#i only want to do stuff if i've already passed the start row
 			if($start && !$end){
-				printf("ROW $row ------- from %d to %d cols\n", $col, $maxcol);
-
-				if($checkCb){
+				if($checkCb && $type eq 'row'){
+					printf("ROW $row ------- from %d to %d cols\n", 
+						$col, $maxcol);
 					&$checkCb(&extractRow($ws, $row, $col, $maxcol), $session);
 				}
 			}
@@ -278,6 +344,9 @@ sub iterateRows()
 sub main()
 {
 
+	$dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
+		or die "can't connect to database $!\n";
+
 	my $xls = new Spreadsheet::ParseExcel;
 	my $wb ;
 
@@ -286,6 +355,8 @@ sub main()
 
 	#$wb = $xls->Parse('../imports/AM.xls');
 	#&iterateSheets($wb, 'AM');
+
+	$dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
 } #END MAIN
 
