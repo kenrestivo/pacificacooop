@@ -47,7 +47,6 @@ class Income extends DB_DataObject
 								  'thank_you_id');
 
 	var $fb_fieldLabels = array( 
-		"family_id" => "Co-Op Family", //  what the hell isthis used for??
 		"check_number" => "Check or Credit Card Auth number" ,
 		"check_date" => "Date of Check" ,
 		"payer" => "Person issuing check" ,
@@ -60,8 +59,6 @@ class Income extends DB_DataObject
 		'txn_id' => 'PayPal Credit Card Transaction ID',
 		"thank_you_id" => "Thank-You Sent" 
 		);
-//	var $fb_crossLinks = array(array('table' => 'families_income_join', 
-	//'fromFild' => 'income_id', 'toField' => 'family_id'));
 
 	var $fb_formHeaderText = "Cash Donations and Fees";
 
