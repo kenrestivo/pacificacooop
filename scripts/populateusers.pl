@@ -26,7 +26,7 @@ use DBI;
 use Getopt::Std;
 
 
-getopts('vth:p:d:') or &usage();
+getopts('rvth:p:d:') or &usage();
 
 
 #the access hash
@@ -126,6 +126,7 @@ addDefaultPrivs()
 {
 	my $uid = shift;
 	my $defref = shift;
+	my $reset = shift;
 	my $arref;
 	my $query;
 	my $count = 0;
@@ -161,6 +162,9 @@ addDefaultPrivs()
 			if($opt_v){
 				printf("matched %d rows already present for %d %s\n", 
 					$count, $uid, $$arref[2]);
+			}
+			if(!$reset){
+				next; #important! we don't wanto to whack the privs!!
 			}
 			$query = sprintf("
 				update privs set grouplevel = %d, userlevel = %d 
@@ -244,6 +248,7 @@ sub usage()
 {
     print STDERR "usage: $0 -v -t\n";
     print STDERR "\t-v verbose \n";
+    print STDERR "\t-r reset privs to defaults (dangerous!!) \n";
     print STDERR "\t-t test (don't actually update db) \n";
     print STDERR "\t-h hostname of db\n";
     print STDERR "\t-p port db is running on\n";
