@@ -158,6 +158,37 @@ http://www.pacificacoop.org/
 		}
 
 
+	function toText()
+		{
+
+			$subst = $this->substitutions;
+
+			//un-arrayify the ones that are arrays
+			// and format them html-like
+			$subst['ADDRESS'] = implode("\n", $subst['ADDRESS']);
+			$subst['ITEMS'] = implode(',', $subst['ITEMS']);
+			$subst['FROM'] = sprintf("\n\n\n%s", $subst['FROM']);
+			$subst['ORDINAL'] = sprintf('%s', $subst['ORDINAL']);
+
+			
+	  			//confessObj($this, 'this');
+			foreach(array_keys($subst) as $key){
+				$from[] = sprintf('[:%s:]', $key);
+			}
+			$to = array_values($subst);
+
+		
+			$text .= str_replace($from, $to, $this->template);
+		
+
+			//TODO: hack for the "tagline" at the bottom. preg_match?
+			// if it starts with a " and ends with a ", curly and bolditalic
+		
+			return $text;
+		}
+
+
+
 } // END THANK YOU CLASS
 
 
