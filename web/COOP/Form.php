@@ -180,7 +180,8 @@ class coopForm extends CoopObject
 			} else {
 				$this->insert();
 			}
-
+			
+			$this->processCrossLinks($vars);
 					
 			return true;
 		}
@@ -317,9 +318,9 @@ class coopForm extends CoopObject
 			// for everything in crosslinks, 
 			foreach($this->obj->fb_crossLinks as $la){
 				$tf = $la['toField'];
-				$tt = $la['table'];
+				$mt = $la['table'];
 				$ft = $la['toTable'];
-				$nk = $this->backlinks[$tt];
+				$nk = $this->backlinks[$mt];
  				if(!isset($vars[$tf])){
 					// XXX this scares me. if i forget to include these...
 					// then they get wiped out of the db? that seems wrong to me.
@@ -327,11 +328,11 @@ class coopForm extends CoopObject
  					//continue;
  				}
 
-				//print "tt $tt tf $tf ft $ft nk $nk";
+				//print "mt $mt tf $tf ft $ft nk $nk";
 				
 				// yeah, array_diff is the long way with db thrashing.
 				// but i want clear, easily-debugged code
-				$indb = $this->checkCrossLinks($tt,$ft);
+				$indb = $this->checkCrossLinks($mt,$ft);
 				$toSave = array_diff($vars[$tf], $indb);
 				$toDelete = array_diff($indb, $vars[$tf]);
 				$this->page->confessArray($toSave, 
@@ -345,7 +346,7 @@ class coopForm extends CoopObject
 				//$this->obj->debugLevel(2);
 				// save
 				foreach($toSave as $saveme){
-					$mid =& new CoopObject(&$this->page, $tt, &$this);
+					$mid =& new CoopObject(&$this->page, $mt, &$this);
 					$mid->obj->$tf = $saveme;
 					$mid->obj->$nk = $this->id;
 					$mid->obj->insert();
@@ -353,9 +354,10 @@ class coopForm extends CoopObject
 				
 				// delete
 				foreach($toDelete as $killme){
-					$mid =& new CoopObject(&$this->page, $tt, &$this);
+					$mid =& new CoopObject(&$this->page, $mt, &$this);
 					$mid->obj->$tf = $killme;
 					$mid->obj->$nk = $this->id;
+					$mid->obj->limit(1);
 					$mid->obj->delete();
 				}
 

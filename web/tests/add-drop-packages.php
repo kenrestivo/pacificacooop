@@ -61,6 +61,8 @@ switch($_REQUEST['action']){
 	 $atd = new CoopForm(&$cp, 'packages', $none); // NOT the coopView above!
 	 $atd->build($_REQUEST);
 
+
+
 	 //confessObj($atd, 'atd');
 	 /////////// what's included
 	 $included = $atd->checkCrossLinks('auction_packages_join',
@@ -86,14 +88,18 @@ switch($_REQUEST['action']){
 
 	 //confessArray($included,'included');
 
-	 $atd->form->setDefaults(array('auction_donation_item_id' =>
-								   isset(
-									   $_REQUEST['_qf__' . 
-												 $atd->form->_attributes['name']]) ?
-								   $_REQUEST['auction_donation_item_id'] :
-								   $included
-								 ));
-							 //confessObj($atd->form, 'form');
+	 $atd->form->setDefaults(
+		 array('auction_donation_item_id' =>
+			   isset(
+				   $_REQUEST['_qf__' . 
+							 $atd->form->_attributes['name']]) ?
+			   $_REQUEST['auction_donation_item_id'] :
+			   $included));
+	 //confessObj($atd->form, 'form');
+
+
+
+
 
 	 // ugly assthrus
 	 $atd->form->addElement('hidden', 'action', 'addremove'); 
@@ -106,7 +112,7 @@ switch($_REQUEST['action']){
 
 	 if ($atd->form->validate()) {
 		 print "saving...";
-		 $atd->form->process(array(&$atd, 'processCrossLinks'));
+		 $atd->form->process(array(&$atd, 'process'));
 		 // gah, now display it again. they may want to make other changes!
 		 print $cp->selfURL('Look again', 
 							array('action' => 'addremove',
