@@ -65,7 +65,7 @@ savePass($uid, $clearpass)
 {
 	// be paranoid
 	if(!($uid && $clearpass)){
-		user_error("savePass(): ERROR! need to pass in a uid AND a password\n", E_USER_WARNING);
+		user_error("savePass(): ERROR! need to pass in a uid AND a password\n", E_USER_ERROR);
 		exit(1);
 	}
 
@@ -77,7 +77,7 @@ savePass($uid, $clearpass)
 	$err = mysql_error();
 	if($err){
 		//TODO: log this, don't display it
-		user_error("savePass(): [SECRET]: $err", E_USER_WARNING);
+		user_error("savePass(): [SECRET]: $err", E_USER_ERROR);
 		return 0;
 	}
 
@@ -104,18 +104,18 @@ getPass($uid)
 {
 	// sanitny check
 	if($uid < 1){
-		user_error("getPass(): ERROR! $uid < 1",E_USER_WARNING);
+		user_error("getPass(): ERROR! $uid < 1",E_USER_ERROR);
 		exit(1);
 	}
 
 	// the query
 	$query = sprintf("SELECT * FROM users WHERE userid = %d ", $uid);
-	//user_error("getPass(): [$query]", E_USER_WARNING);
+	//user_error("getPass(): [$query]", E_USER_NOTICE);
 	$listq = mysql_query($query);
 	$err = mysql_error();
 	if($err){
 		#TODO: log this, don't display it
-		user_error("getPass(): [SECRET]: $err\n", E_USER_WARNING);
+		user_error("getPass(): [SECRET]: $err\n", E_USER_ERROR);
 	}
 				
 	if (mysql_num_rows($listq) > 0) {
@@ -123,18 +123,18 @@ getPass($uid)
 
 	while($row = mysql_fetch_assoc($listq)){
 		//grab 'em all XXX is this really necessary?
-		//user_error(sprintf("debug %s\n", $row['name']), E_USER_WARNING);
+		//user_error(sprintf("debug %s\n", $row['name']), E_USER_NOTICE);
 		if($row['password']){
-			user_error("getPass(): got one for $uid", E_USER_WARNING);
+			user_error("getPass(): got one for $uid", E_USER_NOTICE);
 			return($row['password']); //success!
 		} else {
-			user_error("getPass(): no password for uid $uid",E_USER_WARNING);
+			user_error("getPass(): no password for uid $uid",E_USER_NOTICE);
 			return 0; // no password entered yet for this uid
 		}
 	}
 
 
-	user_error("getPass(): no password for $uid", E_USER_WARNING);
+	user_error("getPass(): no password for $uid", E_USER_NOTICE);
 	return 0;
 } /* END GETPASS */
 
@@ -148,7 +148,7 @@ function
 generateToken($uid, $passhash)
 {	
 	if(!($uid && $passhash)){
-		user_error("generateToken(): ERROR! need to pass in a uid AND a hash\n", 			E_USER_WARNING);
+		user_error("generateToken(): ERROR! need to pass in a uid AND a hash\n", 			E_USER_ERROR);
 		exit(1);
 	}
 	//ok, the hash
@@ -204,7 +204,7 @@ checkPass($uid, $clearpass)
 
 	// passwords are stored as HASHES in database, remember?
 	$md5pass = strtolower(md5($clearpass));
-	//user_error("checkPass($uid, $clearpass) produces md5 of $md5pass", E_USER_WARNING);
+	//user_error("checkPass($uid, $clearpass) produces md5 of $md5pass", E_USER_NOTICE);
 
 	if($storedpass == $md5pass){
 		return generateToken($uid, $md5pass);
@@ -229,7 +229,7 @@ checkAuthLevel($auth)
 	if(!($auth['uid'] && $auth['realm'] && 
 			$auth['token'] && $auth['level']))
 	{
-		user_error("checkAuthLevel(): ERROR not enough info",E_USER_WARNING);
+		user_error("checkAuthLevel(): ERROR not enough info",E_USER_ERROR);
 		return 1;
 	}
 
@@ -251,7 +251,7 @@ checkAuthLevel($auth)
 	$err = mysql_error();
 	if($err){
 		#TODO: log this, don't display it
-		user_error("checkAuthLevel(): [SECRET]: $err",E_USER_WARNING);
+		user_error("checkAuthLevel(): [SECRET]: $err",E_USER_ERROR);
 	}
 				
 	if (mysql_num_rows($listq) > 0) {
@@ -275,7 +275,7 @@ getUser($uid)
 {
 
 	if($uid < 1){
-		user_error("ERROR! no uid", E_USER_WARNING);
+		user_error("ERROR! no uid", E_USER_ERROR);
 		exit(1);
 	}
 
@@ -290,7 +290,7 @@ getUser($uid)
 	$listq = mysql_query($query);
 	$err = mysql_error();
 	if($err){
-		user_error("getUser(): [$query]: $err", E_USER_WARNING);
+		user_error("getUser(): [$query]: $err", E_USER_ERROR);
 	}
 				
 	// sanity czech
@@ -329,7 +329,7 @@ function loginPopup($uid)
 	$listq = mysql_query(" select * from users order by name");
 	$err = mysql_error();
 	if($err){
-		user_error("loginPopup(): [$listq]: $err",E_USER_WARNING);
+		user_error("loginPopup(): [$listq]: $err",E_USER_ERROR);
 	}
 	while($row = mysql_fetch_array($listq)){
 		$sel = $row['userid'] == $uid ? " selected" : "";
@@ -505,7 +505,7 @@ logIn($auth)
 
 		$state = $auth['state']; // easier on the eyes!
 
-		user_error("logIn(): in $state", E_USER_WARNING);
+		user_error("logIn(): in $state", E_USER_NOTICE);
 
 		/* confessArray($auth, sprintf("login() calling %s() with", 
 				$states[$state]['func'] )); 
@@ -612,7 +612,7 @@ unknownState($auth, $states)
 
 	// check for valid token
 	if($auth['uid'] && $auth['token']){
-		user_error("unknownState(): uid and token present", E_USER_WARNING);
+		user_error("unknownState(): uid and token present", E_USER_NOTICE);
 		return changeState($auth, $states, 'verifytoken', 1);
 	}
 
@@ -621,7 +621,7 @@ unknownState($auth, $states)
 		user_error(
 			sprintf("unknownState(): uid %d present, but user not in db", 
 				$auth['uid'])
-		, E_USER_WARNING);
+		, E_USER_NOTICE);
 		return changeState($auth, $states, 'nouser', 1);
 	}
 	
@@ -630,7 +630,7 @@ unknownState($auth, $states)
 		user_error(
 			sprintf("unknownState(): uid %d in db, but null password", 
 				$auth['uid']) , 
-			E_USER_WARNING);
+			E_USER_NOTICE);
 		return changeState($auth, $states, 'nullpass', 1);
 	}
 
@@ -638,18 +638,19 @@ unknownState($auth, $states)
 	if($auth['pwd'] && $auth['uid'] ){
 		user_error(
 			sprintf("unknownState(): uid %d , and pwd provided", 
-				$auth['uid']) , E_USER_WARNING );
+				$auth['uid']) , E_USER_NOTICE );
 		return changeState($auth, $states, 'checklogin', 1);
 	} 
 
 	// no pass, no token, no uid, no dice!
 	if(!($auth['uid'] && $auth['pwd'])){
-		user_error("unknownState(): no uid, no nothing", E_USER_WARNING);
+		user_error("unknownState(): no uid, no nothing", E_USER_NOTICE);
 		//come back here after the user is done inputting data
 		return changeState($auth, $states, 'needlogin', 1);
 	}
 
-	user_error("unknownState(): unhandled state! an endless loop?", E_USER_WARNING);
+	user_error("unknownState(): unhandled state! an endless loop?", 
+			E_USER_ERROR);
 	return changeState($auth, $states, 'needlogin', 1);
 	
 }/* END UNKNOWNSTATE */
@@ -683,13 +684,13 @@ checkLoginState($auth, $states)
 		user_error(
 			sprintf("checkLoginState(): uid %d in db, but null password", 
 				$auth['uid']) , 
-			E_USER_WARNING);
+			E_USER_NOTICE);
 		return changeState($auth, $states, 'nullpass', 1);
 	}
 
 	$token = checkPass($auth['uid'], $auth['pwd']);
 	if($token){
-		user_error("checkLoginState(): password matches!", E_USER_WARNING);
+		user_error("checkLoginState(): password matches!", E_USER_NOTICE);
 		//hooray!! the password is correct! pass it thru
 		$newauth = changeState($auth, $states, 'loggedin', 1);
 		$newauth['token'] = $token; // have to inject this manually. grr.
@@ -697,7 +698,7 @@ checkLoginState($auth, $states)
 	}
 
 	//incorrect password. let the pachinko machine handle it
-	user_error("checkLoginState(): password does not match", E_USER_WARNING);
+	user_error("checkLoginState(): password does not match", E_USER_NOTICE);
 	return changeState($auth, $states, 'wrongpass', 1);
 }/* END CHECKLOGINSTATE */
 
@@ -898,7 +899,7 @@ function
 thruAuth($auth, $newname = 'auth')
 {
 	if(!$auth){
-		user_error("um, why was thruAuth() called with no auth!?", E_USER_WARNING);
+		user_error("um, why was thruAuth() called with no auth!?", E_USER_ERROR);
 	}
 	while (list($key, $val) = each($auth)){
 		if($val){
