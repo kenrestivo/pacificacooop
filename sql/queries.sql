@@ -371,7 +371,7 @@ select families.name, sum(auction_donation_items.item_value) as item_value
                     companies_auction_join.family_id)
     order by families.name
 
---Massive solicit nag stuff
+--Massive solicit performance summary stuff
  select company_name, sum(income.payment_amount) as cash_donations,
       sum(auction_donation_items.item_value) +  sum(in_kind_donations.item_value) 
             as non_cash_donations,
@@ -393,6 +393,7 @@ select families.name, sum(auction_donation_items.item_value) as item_value
                 on in_kind_donations.in_kind_donation_id =
                     companies_in_kind_join.in_kind_donation_id
     group by companies.company_id 
+    having total > 0
     order by total desc, cash_donations desc, companies.company_name asc;
 
 -- yay! fix packages
@@ -489,5 +490,31 @@ select  auction_items_families_join.family_id  ,
     order by families.name asc, companies.company_name 
 
 ---- The people who need thankyous
+ select company_name, sum(income.payment_amount) as cash_donations,
+      sum(auction_donation_items.item_value) +  sum(in_kind_donations.item_value) 
+            as non_cash_donations,
+      sum(income.payment_amount) + sum(auction_donation_items.item_value) + 
+        sum(in_kind_donations.item_value) as total
+    from companies
+          left join companies_auction_join 
+              on companies_auction_join.company_id = companies.company_id
+          left join auction_donation_items 
+              on companies_auction_join.auction_donation_item_id = 
+                auction_donation_items.auction_donation_item_id
+          left join companies_income_join 
+              on companies_income_join.company_id = companies.company_id
+          left join income 
+            on companies_income_join.income_id = income.income_id    
+          left join companies_in_kind_join
+                on companies_in_kind_join.company_id = companies.company_id
+         left join in_kind_donations
+                on in_kind_donations.in_kind_donation_id =
+                    companies_in_kind_join.in_kind_donation_id
+        where auction_donation_items.school_year = '2004-2005'
+            or income.school_year = '2004-2005'
+            or in_kind_donations.school_year = '2004-2005'
+    group by companies.company_id 
+    having total > 0
+    order by total desc, cash_donations desc, companies.company_name asc;
 
 --- Eof
