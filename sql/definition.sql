@@ -95,7 +95,7 @@ CREATE TABLE calendar_events (
 --
 
 CREATE TABLE chart_of_accounts (
-  acctnum int(32) NOT NULL unique default '0',
+  account_number int(32) NOT NULL unique default '0',
   description varchar(255) default NULL,
   account_type enum('Income','Expense','Equity') default NULL,
   join_to_table varchar(255) default NULL,
@@ -117,7 +117,7 @@ CREATE TABLE companies (
   country varchar(255) default NULL,
   phone varchar(255) default NULL,
   fax varchar(255) default NULL,
-  email varchar(255) default NULL,
+  email_address varchar(255) default NULL,
   territory_id int(32) default NULL,
   familyid int(32) default NULL,
   do_not_contact datetime default NULL,
@@ -305,7 +305,7 @@ CREATE TABLE insurance_information (
   middle_name varchar(255) default NULL,
   policy_number varchar(255) default NULL,
   policy_expiration_date date default NULL,
-  companyname varchar(255) default NULL,
+  company_name varchar(255) default NULL,
   naic int(5) default NULL,
   parent_id int(32) default NULL,
   PRIMARY KEY  (insurance_information_id),
@@ -358,9 +358,6 @@ CREATE TABLE leads (
   source_id int(32) default NULL,
   family_id int(32) default NULL,
   do_not_contact date default NULL,
-  audit_user_id int(32) default NULL,
-  entered datetime default NULL,
-  updated timestamp(14) NOT NULL,
   PRIMARY KEY  (lead_id),
 ) ;
 
@@ -556,3 +553,52 @@ CREATE TABLE vehicles (
   PRIMARY KEY  (vid_number)
 ) ;
 
+-- people table
+
+CREATE TABLE people (
+ 	 people_id int(32) NOT NULL unique auto_increment,
+ 	 first_name varchar(255) default NULL,
+ 	 last_name varchar(255) default NULL,
+ 	 title varchar(255) default NULL,  
+	salutation varchar(50) default NULL,  
+ 	 email_address varchar(255) default NULL,  
+	PRIMARY KEY  (people_id),
+) ;
+
+
+-- sites table
+
+CREATE TABLE sites (
+  site_id int(32) NOT NULL unique auto_increment,
+  address1 varchar(255) default NULL,
+  address2 varchar(255) default NULL,
+  city varchar(255) default NULL,
+  state varchar(255) default NULL,
+  zip varchar(255) default NULL,
+  country varchar(255) default NULL,
+  phone varchar(255) default NULL,
+ 	fax varchar(255) default NULL,
+   PRIMARY KEY  (site_id),
+) ;
+
+
+-- organisation table
+
+CREATE TABLE organisations (
+  organisation_id int(32) NOT NULL unique auto_increment,
+  company_name varchar(255) default NULL,
+  URL varchar(255) default NULL,
+  flyer_ok enum('Unknown','Yes','No') default NULL,
+	PRIMARY KEY (organisation_id)
+) ;
+
+-- invitations table
+
+CREATE TABLE invitations (
+  invitation_id int(32) NOT NULL unique auto_increment,
+  lead_id int(32) not NULL,
+  school_year varchar(50) default NULL,
+  family_id int(32) default NULL,
+  relation enum('Relative','Friend','Coworker','Alumni','Other') default NULL,
+    PRIMARY KEY (invitation_id)
+) ;

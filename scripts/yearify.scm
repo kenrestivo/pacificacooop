@@ -29,6 +29,9 @@
 		   '("auction_donation_items"
 			 "packages"
 			 "income"
+			 "nags"
+			 "leads"
+			 "nag_indulgences"
 			 "springfest_attendees"
 			 "territories"))
 

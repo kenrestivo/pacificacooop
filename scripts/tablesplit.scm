@@ -13,22 +13,22 @@
 (require 'printf)
 
 (define  people-tables
-  '("parents"
-	"invitations"
-	"company_contacts"
-	"insurance_information"
-	"drivers_licenses"))
+  '(("parents" . "parent_id")
+	("leads" . "leads_id")
+	("company_contacts" . "company_contact_id")
+	("insurance_information" . "insurance_information_id")
+	("drivers_licenses" . "drivers_license_id"))
 
 (define sites-tables
-  '("invitations"
-	"companies"
-	"families"))
+  '(("leads" . "lead_id")
+	("companies"  . "company_id")
+	("families" . "family_id"))
 
 (define org-tables
-  '("invitations"
-	"companies"
-	"flyer_locations"
-	"raffle_locations"))
+  '(("leads" . "lead_id")
+	("companies" . "company_id")
+	("flyer_locations" . "flyer_location_id")
+	("raffle_locations" . "raffle_location_id"))
 
 (define people-fields
   '("first_name"
@@ -36,6 +36,8 @@
 	"title" 
 	"salutation" 
 	"email_address"))
+(define people-keys
+  '("first_name" "last_name"))
 
 (define sites-fields
   '("address1"
@@ -46,6 +48,9 @@
   "country"
   "phone"
   "fax"))
+
+(define sites-keys
+  '("address1" "city"))
 
 (define org-fields
   '("company_name"
@@ -67,5 +72,45 @@
 							(string-join
 							 (get-fields dbh table-name field-list) ", ")
 							table-name)))
+
+(define (choose-duplicates db-res)
+  (if (> 2 (false-if-exception
+			(length db-res)))
+	  (error "duplicate " db-res)
+	  db-res))
+
+;; return a cons of the fieldname and its data
+(define (make-indexed-result index-col field-list result-vector)
+  (map (lambda (x y) (cons x y ))
+	   (append (list index-col) field-list)
+	   (un-null result-vector)))
+
+
+;; takes in a list of indexed fields
+(define (check-for-new-people dbh key-indexed-fields all-indexed-fields
+							  new-table )
+  (let* ((search-results
+		  (simplesql-query dbh
+						   (sprintf #f "select %s , %s from %s where %s "
+									to-index
+									(string-join
+									 (map (lambda (x)
+											(car x))
+										  key-indexed-fields)
+									 ", ")
+									new-table
+									(make-like-line  key-indexed-fields)
+									))))
+	(if (>  (length search-results) 1)
+		(db-ref-last (choose-duplicates search-results)
+					 (car (car all-indexed-fields))) ; got it!
+		(begin (safe-sql dbh (sprintf #f "
+				insert into %s set % "
+									  new-table
+									  (make-set-line (cdr))
+									  
+									  
+									  ))
+			   (last-insert-id dbh)))))
 
 ;; EOF
