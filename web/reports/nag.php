@@ -67,6 +67,7 @@
 	print "\t<td align='center'><em><u>Leads Submitted</u></em></td>\n";
 	print "\t<td align='center'><em><u>Forfeit Paid</u></em></td>\n";
 	print "\t<td align='center'><em><u>Quilt Fee Paid</u></em></td>\n";
+	print "\t<td align='center'><em><u>Auction Donated</u></em></td>\n";
 	print "\t<td align='center'><em><u>Session</u></em></td>\n";
 	print "\t<td align='center'><em><u>Phone</u></em></td>\n";
 	print "</tr>\n";
@@ -75,15 +76,17 @@
 	{
 		$tennamespaid = checkPayments($row['familyid'], 1);
 		$quiltpaid = checkPayments($row['familyid'], 2);
+		$auctiontotal = checkAuction($row['familyid']);
 		$tennamesdone = ($row[cntlead] >= 10);
 
 		#some nifty running totals
 		$total['leads'] += $row[cntlead];
 		$total['tennames'] += $tennamespaid['amount'];
 		$total['quilt'] += $quiltpaid['amount'];
+		$total['auction'] += $auctiontotal;
 
 		#don't print this row if it's already complete
-		if ($nagonlychecked && (($tennamespaid['amount'] >= 50) || $tennamesdone) && ($quiltpaid['amount'] >=45))
+		if ($nagonlychecked && (($tennamespaid['amount'] >= 50) || $tennamesdone) && ($quiltpaid['amount'] >=45) && ($auctiontotal >= 50))
 			continue;
 	
 		print "<tr><td>\n";
@@ -101,6 +104,9 @@
 		if($quiltpaid['notes'])
 			printf("<br>%s",$quiltpaid['notes']);
 		print "</td><td align='center'>";
+		if ($auctiontotal > 0)
+			printf("$%01.2f", $auctiontotal);
+		print "</td><td align='center'>";
 		print $row[sess];
 		print "</td><td align='center'>";
 		print $row[phone];
@@ -113,6 +119,7 @@
 				$total['leads'],
 				sprintf("$%01.2f", $total['tennames']),
 				sprintf("$%01.2f", $total['quilt']),
+				sprintf("$%01.2f", $total['auction']),
 				"",
 				""
 			),
@@ -161,6 +168,44 @@ function checkPayments($familyid, $acctnum)
 		return $total;
 
 } #END CHECKPAYMENTS
+
+
+/******************
+	CHECKAUCTION
+	totals up the auction amounts for this family, including forfiets
+	inputs: familyid
+	returns: the total amount of their auction donations. 
+******************/
+function
+checkAuction($familyid)
+{
+	$query = "
+		select families.name, sum(auction.amount) as amount
+			from families
+				left join faglue on families.familyid = faglue.familyid
+				left join auction on faglue.auctionid = auction.auctionid
+			where families.familyid = $familyid
+			group by families.familyid
+		";
+		#print "DEBUG <$query>";
+		$list = mysql_query($query);
+		
+		echo mysql_error();
+
+		$i = 0;
+		while($row = mysql_fetch_array($list))
+		{
+			$amount += $row['amount'];
+		}
+		//print "DEBUG [$amount]";
+
+		// check if they paid in any forfiet fees!
+		$tmp = checkPayments($familyid, 3);
+		$amount += $tmp['amount'];
+
+		return $amount;
+}/* END CHECKAUCTION */
+
 
 ?>
 
