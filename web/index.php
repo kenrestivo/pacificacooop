@@ -1,83 +1,93 @@
 <!-- $Id$ -->
+
+<!-- TODO this is most of the stuff that needs to be prettyfied -->
+<!-- i've built this page as an html shell, with php stuck in the middle. -->
+
+<HTML>
+<HEAD>
+	<TITLE>Springfest Fundraising</TITLE>
+</HEAD>
+
+<BODY>
+
+<h2>Pacifica Co-Op Nursery School Springfest Invitation Entry</h2>
+<p>&nbsp;</p>
+
 <?php
+	# main sprintfest page
+	# NOTE to matt: this is the page where most of the graphical stuff is designed to go
+	# all the grody inner workings are encapsulated in functions
+	# the outer HTML shell is pretty much fair game
 
-# main sprintfest page
+	#  Copyright (C) 2003  ken restivo <ken@restivo.org>
+	# 
+	#  This program is free software; you can redistribute it and/or modify
+	#  it under the terms of the GNU General Public License as published by
+	#  the Free Software Foundation; either version 2 of the License, or
+	#  (at your option) any later version.
+	# 
+	#  This program is distributed in the hope that it will be useful,
+	#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+	#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	#  GNU General Public License for more details. 
+	# 
+	#  You should have received a copy of the GNU General Public License
+	#  along with this program; if not, write to the Free Software
+	#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-#  Copyright (C) 2003  ken restivo <ken@restivo.org>
-# 
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-# 
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details. 
-# 
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+	require_once("shared.php");
+	require_once("10names.php");
 
-require_once("shared.php");
-require_once("10names.php");
+	#useful for form debugging. 
+	#some host's security policies tend to break globals. use this to check.
+	#confessVars();
 
-print "<HTML><HEAD><TITLE>Springfest Fundraising</TITLE></HEAD><BODY>";
+	#fish $id out of the globals and keep it here nice and close. 
+	#because, if i have to type that monster one more time...
+	$id = $HTTP_POST_VARS['familyid'];
+		
+	if(!$id){
+		#there is no familyid, let the user select one
+		familyPopup(0);  #0 means, don't pre-select any family. just CHOOSE ONE
 
-#TODO this is most of the stuff that needs to be prettyfied
-print "<h2>Pacifica Co-Op Nursery School Springfest Invitation Entry</h2>";
-print "<p>&nbsp;</p>";
+	} elseif($HTTP_POST_VARS['savenames']){
+		#we are trying to save form data. this is what life is all about.
 
+		processNames($HTTP_POST_VARS);
 
-#fish it out of the globals and keep it here nice and close. 
-#because, if i have to type that monster one more time...
-$id = $HTTP_POST_VARS['familyid'];
-	
-#useful for form debugging. 
-#some host's security policies tend to break globals. use this to check.
-#confessVars();
+	} else {
+		#ok we know what family we are, so give 'em the main form entry screen
+		#printf ("<p>DEBUG: the id you chose was %d</p>\n", $id);
 
-if(!$id){
-	#there is no familyid, let the user select one
-	familyPopup(0);  #0 means, don't pre-select any family. just CHOOSE ONE
+		#show a family's info
+		happyFriendlyHello($id);
 
-} elseif($HTTP_POST_VARS['savenames']){
-	#we are trying to save form data. this is what life is all about.
+		#TODO : get the cutoff date from the database, 
+		#so it someone can change it next year without having to edit this code
+		print "	Every family must provide the names of 10 people who 
+				should be invited to attend or donate to Springfest. 
+				These can be family, friends, business associates, etc. 
+				They will be sent formal invitations on behalf of the School. 
+				You must enter at least 10 names by 11/04/2003<br>";
+		#show them what they've already got, don pardo
+		nameSummary($id);
 
-	processNames($HTTP_POST_VARS);
+		#show a table of names, if, um, there are names there.
+		if(nameCount($id) > 0){
+			showNames($id);
+		}
 
-} else {
-	#printf ("<p>DEBUG: the id you chose was %d</p>\n", $id);
+		print "<br>Enter more names here. 
+					Remember to click 'Save Names' 
+					at the bottom of this screen when you are done!\n";
+		#finally, give them a form to enter data!
+		tenNamesForm($id);
 
-	#show a family's info
-	happyFriendlyHello($id);
-
-	#TODO : get the cutoff date from the database, 
-	#so it someone can change it next year without having to edit this code
-	print "	Every family must provide the names of 10 people who 
-			should be invited to attend or donate to Springfest. 
-			These can be family, friends, business associates, etc. 
-			They will be sent formal invitations on behalf of the School. 
-			You must enter at least 10 names by 11/04/2003<br>";
-	#show them what they've already got, don pardo
-	nameSummary($id);
-
-	#don't show a table of names, unless, um, there are names there.
-	if(nameCount($id) > 0){
-		showNames($id);
 	}
-
-	print "<br>Enter more names here. 
-				Remember to click 'Save Names' 
-				at the bottom of this screen when you are done!\n";
-	#and give them a form to enter data
-	tenNamesForm($id);
-
-}
-
-
-
-print "</BODY></HTML>";
-
+	# end of inner php code
 ?>
-<!-- END SHARED -->
+
+</BODY>
+</HTML>
+
+<!-- END INDEX -->
