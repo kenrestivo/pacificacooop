@@ -20,8 +20,7 @@ $cp->pageTop();
 
 
 $view =& new CoopView(&$cp, 'companies');
-$view->obj->find();
-print $view->simpleTable();
+print $view->recurseTable();
 
 done ();
 

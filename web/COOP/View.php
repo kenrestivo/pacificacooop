@@ -127,10 +127,7 @@ class coopView
 					// split up farline and chzech it
 					list($fartable, $farcol) = explode(':', $farline);
 					if($fartable == $tab){
-						$id = $this->obj->$farcol;
-							//$res[$maintable] = array($farcol, $nearcol);
-							$res[$maintable]['id'] = $id;
-							$res[$maintable]['action'] = 'list';
+						$res[] = $maintable;
 					}
 				}
 			}
@@ -138,12 +135,51 @@ class coopView
 			return $res;
 		}
 	
-	// takes whatever object is current in this object, and formats it, um, as a table
+	// formats object is current in this object, um, as a table
 	function simpleTable()
 		{
+			$this->obj->find();
+			//TODO return null or something, if nothing found
 			$tab =& new HTML_Table();
 			while($this->obj->fetch()){
 				$tab->addRow(array_values($this->obj->toArray()));
+			
+			}
+			return $tab->toHTML();
+		}
+
+	function addSubTables($backlinks)
+		{
+			
+			$subview =& new CoopView(&$page, 
+									 'companies_auction_join');
+			$subview->obj->company_id = $this->obj->company_id;
+			return  "SHIT"; //$subview->simpleTable();
+		}
+	
+	
+	function recurseTable()
+		{
+
+			$this->obj->find();
+
+			$backlinks = $this->getBackLinks();	// MUST be after find!
+
+			//TODO return null or something, if nothing found
+			$tab =& new HTML_Table();
+			while($this->obj->fetch()){
+				// the main row.
+				$tab->addRow(array_values($this->obj->toArray()));
+				
+				// sub rows
+				$tab->addRow(array($this->addSubTables($backlinks)));				
+				$colcount = $tab->getColCount();
+				$rowcount = $tab->getRowCount() - 1; // zero based
+				$tab->setCellContents($rowcount, 0, 
+									  "ROW $rowcount COl $colcount");
+				//might first need to getcellatrs, then add to array
+				$tab->setCellAttributes($rowcount,0,"colspan=$colcount");
+
 			}
 			return $tab->toHTML();
 		}
