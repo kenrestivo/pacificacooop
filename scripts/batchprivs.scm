@@ -49,25 +49,37 @@
 				insert into user_privileges set user_id = %d, 
 						realm = '%s', group_level = %d, user_level = %d"
 								   user-id realm group-level user-level))
-		  (last-insert-id *dbh*)))))
+		  (last-insert-id dbh)))))
 
 (define (get-user-id dbh name)
   (last-item (simplesql-query dbh (sprintf #f "
 				select user_id from users where name like \"%%%s%%\" "
 								name))))
 
-;;; ok, now do it!
-(define (springfest-gods)
-  (let ((dbh (apply simplesql-open "mysql"
-					(read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf"))))
-	(for-each (lambda (user-id)
+;;; sets springfest perms on all committees for the admins
+(define (springfest-gods dbh list-of-names)
+  	(for-each (lambda (user-id)
 				(for-each (lambda (realm)
 							(change-privs dbh user-id realm 800 800))
 						  springfest-realms))
 			  (map (lambda (x) (get-user-id dbh x))
-				   '("vreeland" "cooke")))
-	(simplesql-close dbh)))
+				   list-of-names)))
 
+
+;;;;;;;;;;;
+;; now do stuff
+
+(for-each
+ (lambda (name)
+   (change-privs dbh (get-user-id dbh name) "solicitation" 200 700))
+ '("depriest" "refino" "kaitz" "solano" "mrad" "gaffney" "bauer"))
+
+(define (update-2004-2005)
+  (let ((dbh (apply simplesql-open "mysql"
+					(read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf"))))
+	(springfest-gods dbh '("vreeland" "cooke"))
+	
+	(simplesql-close dbh)))
 
 
 
