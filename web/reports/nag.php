@@ -38,8 +38,17 @@
 
 	$gv = $HTTP_POST_VARS ? $HTTP_POST_VARS : $HTTP_GET_VARS;
 	
+	//i'm sorry. it was too convenient not to include here as well.
+	print "<script language=javascript>
+			function submitForm() {
+				document.forms[0].submit(); 
+				return(true); 
+			} 
+			</script>";
+
 	$nagonlychecked =  $gv['nagonly'] ? "checked" : "";
-	printf("\t<input type='checkbox' name='nagonly' %s>", $nagonlychecked);
+	printf("\t<input type='checkbox' onchange='javascript:submitForm()' 
+				name='nagonly' %s>", $nagonlychecked);
 	
 	print "Show only families that need nagging<br>\n";
 	print "\t<input type='submit' name='subbutton' value='refresh'>\n";
