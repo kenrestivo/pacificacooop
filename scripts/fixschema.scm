@@ -190,11 +190,15 @@
 ;;;;;;;;;;;;;;;
 ;; main
 
-(define *dbh* (apply simplesql-open "mysql"
-				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-fake.conf")))
 
 (load-definition! "/mnt/kens/ki/proj/coop/sql/olddefinition.sql")
 (load-changes "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
+
+
+
+;; comment out or module-out the below, so i can load file w/o them
+(define *dbh* (apply simplesql-open "mysql"
+				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-fake.conf")))
 
 (fix-schema *change-alist* *tables* *main-schema*)
 
