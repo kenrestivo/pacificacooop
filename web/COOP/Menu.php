@@ -31,9 +31,9 @@ class CoopMenu extends HTML_Menu
 
 			// grab the legacy stuff
 			include('everything.inc');
-			$sf = $this->indexEverything($everything);
+			$sf = $this->page->indexEverything($everything);
 			include('members.inc');
-			$members = $this->indexEverything($everything);
+			$members = $this->page->indexEverything($everything);
 
  
 			$heirmenu = array(
@@ -54,19 +54,11 @@ class CoopMenu extends HTML_Menu
 
 	function toHTML()
 		{
-			return $this->renderer->toHTML();
+			$res .= '<span class="menutext"';
+			$res .= $this->renderer->toHTML();
+			$res .= '</span>';
+			return $res;
 		}
-
-	function indexEverything($everything)
-		{
-			foreach ($everything as $thang => $val){
-				$val['fields'] = $$val['fields'];
-				$indexed_everything[$val['page']] = $val;
-	
-			}
-			//confessArray($indexed_everything, 'indexedeverythinag');
-			return $indexed_everything;
-		} 
 
 	function callbacksToMenu($everything)
 		{
@@ -123,8 +115,26 @@ class CoopMenu extends HTML_Menu
 			}
 			return $res;
 		}
+	function topNavigation()
+		{
 
-
+			$res  .= "\n\n<table  width='100%' border=0>";
+			/* trying to build a user interface out of html 
+		is like trying to build a bookshelf out of mashed potatoes. 
+		(apologies to jamie zawinski)
+			*/
+			$res.=  "\n<tr>\n"; 
+			$res .= sprintf("\t<td><h3>Welcome %s!</h3></td>\n", $this->page->auth['username']);
+			$res .=  "\t<td>";
+// XXX TODO			logoutForm();
+			
+			// UR here!
+			$menu->setMenuType('urhere');
+			$menu->show();		//  XXX this is fucked.
+ 			$res .= "</td>\n</tr>\n</table>\n\n";
+			return $res;
+		}
+	
 
 } // END COOPMENU CLASS
 

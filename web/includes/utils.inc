@@ -116,7 +116,7 @@ function confessArray($fields, $message)
 	print "<pre>";
 	print "DEBUG $message\n";
 	if(is_array($fields)){
-		print htmlentities(print_r($fields,true));
+		print htmlentities(print_r($fields));
 		reset($fields);
 	} else {
 		print "um... <$fields> is not an array\n";
@@ -151,6 +151,7 @@ function done()
 		lowers the case of my tags only when checkloing was used. weird.
 	*/
 	print"</body> </html> ";
+	session_write_close();		// redundant?
 	exit;
 } #END DONE
 

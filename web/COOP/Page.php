@@ -1,4 +1,4 @@
-<?php 
+j8<?php 
 
 //$Id$
 
@@ -56,7 +56,7 @@ class coopPage
 	var $pager_start;
 	var $table;
 
-	// constructor.
+	// fafactory.
 	function setup($table = false )
 		{
 			// set it here
@@ -90,7 +90,8 @@ class coopPage
 ///
 			warnDev();
 
-			user_error("states.inc: ------- NEW PAGE --------", E_USER_NOTICE);
+			user_error("states.inc: ------- NEW PAGE --------", 
+					   E_USER_NOTICE);
 
 
 			$this->auth = logIn($_REQUEST);
@@ -105,6 +106,18 @@ class coopPage
 
 		}
 
+
+	// grab the legacy includes and index them
+	function indexEverything($everything)
+		{
+			foreach ($everything as $thang => $val){
+				$val['fields'] = $$val['fields'];
+				$indexed_everything[$val['page']] = $val;
+	
+			}
+			//confessArray($indexed_everything, 'indexedeverythinag');
+			return $indexed_everything;
+		} 
 
  
 	function engine(){

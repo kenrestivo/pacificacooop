@@ -8,10 +8,19 @@ p,table,li,h1,h2,h3
 p,li,th,td
 {
 	font-size: 75%;
+
+}
+
+.menutext
+{
+
+	font-size: 1em;
 }
 
 .foobar {
 	background: grey;
 }
 
-div.box { border: solid; border-width: thin; width: 100% }
+div.box { border: solid;
+			 border-width: thin; 
+			width: 80% }

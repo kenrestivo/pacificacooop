@@ -9,7 +9,7 @@ $cp = new CoopPage;
 $cp->pageTop();
 
 $menu =& new CoopMenu;
-$menu->createLegacy();
+$menu->createLegacy(&$cp);
 confessObj($menu, "menuonb");
 print $menu->toHTML();
 
