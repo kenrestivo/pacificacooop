@@ -396,11 +396,12 @@ create table nag_indulgences(
 );
 
 -- glue table for many-to-many: leads to income
-create table invitations_income_join (
-    invitations_income_join_id int(32) not null unique auto_increment,
+create table invitation_rsvps (
+    invitation_rsvps_id int(32) not null unique auto_increment,
 	incid int(32),
+	ticket_quantity int(5), --XXX conditional hack! handle income right!
 	leadsid int(32),
-    primary key (invitations_income_join_id)
+    primary key (invitation_rsvps_id)
 );
 -- the user/passwords used by the web view page AND my update tool..
 -- these MUST be done manually for db's not named coop!!

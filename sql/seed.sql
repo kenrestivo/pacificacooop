@@ -54,7 +54,7 @@ insert into coa set
 
 insert into coa set
 			acctnum = 7,
-			join_to_table = "companies",
+			join_to_table = "companies,leads",
 			description = "SpringFest Sponsorship Package";
 
 insert into coa set

@@ -309,6 +309,7 @@ menu.php: a nice launching point for things!
 			money includes summary/aciton functions for it
 		need to have a "main menu" form-ish button on all subsequent pages too
 			and, it needs to pass vars grr.
+	DONE!
 			
 
 admin.php: administrative tasks
@@ -593,6 +594,7 @@ open questions:
 
 a meta-check-entering screen! context-sensitive
 	show ALL coa's
+		well... not ALL! it'll have to use realms, like it does now.
 	onChange() them (and put REFRESH button in too)
 	maybe quick hackie... for dealing with immediate need for ads!?
 	the save target for that form, will DISPATCH to the proper callback
@@ -752,3 +754,17 @@ but... SOMEONE is going to have to be the main link!
 		checks->company, checks->ads->company
 			UGH! dual-link!
 	or, do you pick company, then it pops up ONLY those ads relevant?
+
+-------
+add, new, etc
+	in details screen, for each sub-view, a new ADD form!
+		a violently curtailed version of new.
+		with just a pop-up 
+		picks based on a unique index of some kind.
+			i.e. company_id uniqueness() in the case of companies
+	this is what's needed for packaging, really. or insurance, or roster.
+	so in each sub view:
+		view the list of what's there, showreportform(), with edit/deletes
+		watch out for user confusion! you don't want them deleting to remove!
+			maybe a remove button instead? i dunno. think about this.
+		
