@@ -65,17 +65,17 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 
 	#only send 'em if they're null or too late
 	if(!$insref->{'exp'} || $insref->{'exp'} < $checkdate){
-		printf("DEBUG %d ins %s\n", $id, $insref->{'exp'});
+		#printf("DEBUG %d ins %s\n", $id, $insref->{'exp'});
 		$flag++;
 	}
 
 	if(!$licref->{'exp'} || $licref->{'exp'} < $checkdate){
-		printf("DEBUG %d lic %s\n", $id, $licref->{'exp'});
+		#printf("DEBUG %d lic %s\n", $id, $licref->{'exp'});
 		$flag++;
 	}
 
 	if($flag){
-		&expiredReport($famref, $insref, $licref);
+		print &expiredReport($famref, $insref, $licref);
 	}
 
 } # end while
@@ -83,8 +83,11 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 
 $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
-#EOF
+########### END OF MAIN CODE
 
+######################
+#	GETLICENSEINFO
+######################
 sub getlicenseinfo()
 {
 	my $famid = shift;
@@ -112,8 +115,11 @@ sub getlicenseinfo()
 	}
 
 	return \%item;
-}
+}# END GETLICENSEINFO
 
+######################
+#	GETINSURANCEINFO
+######################
 sub getinsuranceinfo()
 {
 	my $famid = shift;
@@ -144,7 +150,8 @@ sub getinsuranceinfo()
 
 	return \%item;
 
-}
+} #END GETINSURANCEINFO
+
 
 ######################
 #	EMAILREMINDER
@@ -193,28 +200,31 @@ sub expiredReport()
 	my $licref = shift;
 	my $badness = "";
 
+	#printf("DEBUG lic %d ins %d\n", 
+	#	$licref->{'exp'}, $insref->{'exp'});
+
 	#families
 	$badness .= sprintf(
-				"%s %s %s \n-------------\n",
+				"\n-------------\n%s %s %s\n",
 				$famref->{'name'} ? $famref->{'name'} : "",
 				$famref->{'phone'} ? $famref->{'phone'} : "",
 				$famref->{'email'} ? $famref->{'email'} : ""
 			);
 
 	#insurance
-	if($insref->{'exp'} < $checkdate){
-			$badness .= sprintf(
-					"\tins %s company %s policy %s \n",
-					strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
-					$insref->{'companyname'},
-					$insref->{'policynum'}
-				);
+	if($insref->{'exp'}){
+		$badness .= sprintf(
+				"\tins %s company %s policy %s \n",
+				strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
+				$insref->{'companyname'},
+				$insref->{'policynum'}
+			);
 	} else {
-			$badness .= "\tno insururance info\n";
+		$badness .= "\tno insurance info\n";
 	}
 	
 	#license
-	if($licref->{'exp'} < $checkdate){
+	if($licref->{'exp'}){
 		$badness .= sprintf(
 				"\tlic %s driver %s %s %s \n",
 				strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
@@ -223,8 +233,10 @@ sub expiredReport()
 				$licref->{'last'}
 		);
 	} else {
-			$badness .= "\tno license info\n";
+		$badness .= "\tno license info\n";
 	}
+
+	return $badness;
 } # END EXPIREDREPORT
 
 #EOF
