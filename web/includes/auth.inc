@@ -1100,8 +1100,14 @@ fieldPerms($perms, $targetfamilyid, $p, $u, $targetlevel)
 
 	// no perms? no problem! default is i don't care.
 	if(!is_array($perms)){
+		user_error("fieldPerms(): no perms, using default", E_USER_NOTICE);
 		return 0;
 	}
+
+	user_error(sprintf("fieldPerms(): targetfamily %d, actualfamilyid %d, targetlevel %d, fieldgroup %d, actualgroup %d, fielduser %d, actualuser %d", $targetfamilyid, $u['familyid'], $targetlevel,
+		$perms[0], $p['grouplevel'], $perms[1], $p['userlevel'] ), 
+		E_USER_NOTICE);
+
 	//the LESSER of two evils
 	$user =  $p['userlevel'] > $perms[1] ? $perms[1] : $p['userlevel'];
 	$group = $p['grouplevel'] > $perms[0] ? $perms[0] : $p['grouplevel'];
@@ -1110,9 +1116,11 @@ fieldPerms($perms, $targetfamilyid, $p, $u, $targetlevel)
 	if(($targetfamilyid == $u['familyid'] && $user >= $targetlevel ) || 
 		$group >= $targetlevel) 
 	{
+		user_error("fieldPerms(): ACCEPTING", E_USER_NOTICE);
 		return 0;
 	}
 
+	user_error("fieldPerms(): REJECTING", E_USER_NOTICE);
 	return 1;
 	
 }/* END FIELDPERMS */
