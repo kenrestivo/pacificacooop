@@ -366,7 +366,7 @@ checkIndulgences($familyid, $uglytype)
 			'general' => 'Everything', 
 			'10names' => 'Invitations', 
 			'auction' => 'Family Auctions', 
-			'quilt' => 'Raffle Fee', 
+			'quilt' => 'Quilt Fee', 
 			'solicitauction' => 'Solicitation Auctions'
 		);
 

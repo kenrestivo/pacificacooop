@@ -361,14 +361,14 @@ contact management
 	contact-to-income join table
 		to handle any stray non-categorized donations. ugly but will need this.
 
-raffle tickets: this is join to income, basically
-	income_raffle_join
+raffle tickets: this is join to income, basically DONE!
+	income_raffle_join DONE
 		incid(join)
 		raffle_location_id(join)
-	raffle_locations
+	raffle_locations DONE
 		location_name
 		description?
-	location_semester_join!!
+	location_semester_join!! DONE
 		raffle_location_id(join)
 		semester (they will change next year)
 
@@ -385,7 +385,7 @@ ad insertion
 		artwork_provided flag?
 		fileid(join) -- for artwork submitted
 		weblinkid (link to weblink join table. heh. link.)
-		incomeid(link) -- to handle payment... or join if many payments!
+		incomeid(join) -- to handle payment... or join if many payments!
 		userid, enteredupdated?
 
 
@@ -430,9 +430,8 @@ banners
 	type?
 	price?
 
-
-flyers! (publicity)
-	need to add an "need flyer" date? join to contactid
+flyers! (publicity) DONE!!
+	need to add an "need flyer" date join to contactid
 	and.. a "flyer put up" date, and user who did it
 
 money:
