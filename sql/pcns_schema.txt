@@ -81,13 +81,6 @@ figlue.familyid figlue.family_id
 figlue families_income_join
 
 
-# LEADS AND INCOME
-liglue.liglueid liglue.leads_income_join_id
-liglue.incid liglue.income_id
-liglue.leadsid liglue.lead_id
-# Table rename:
-liglue leads_income_join
-
 
 # USERS
 users.userid users.user_id
@@ -108,7 +101,7 @@ groupmembers users_groups_join
 # PRIVILEGES
 privs.privid privs.privilege_id
 privs.userid privs.user_id
-privs.groupid privs_group_id
+privs.groupid privs.group_id
 privs.userlevel privs.user_level
 privs.grouplevel privs.group_level
 # Table rename:
@@ -158,3 +151,10 @@ saglue.saglueid saglue.companies_auction_items_join_id
 saglue.auctionid saglue.auction_donation_item_id
 # Table rename:
 saglue companies_auction_items_join
+
+# VEHICLES
+veh.vidnum veh.vid_number
+veh vehicles
+
+# TERRITORIES
+territories_families_join.semester territories_families_join.school_year
