@@ -51,7 +51,7 @@ class coopObject
 			$this->parentCO = $parentCO;
 			
  			$this->obj = DB_DataObject::factory($this->table); // & instead?
-			if (PEAR::isError($this->obj)){
+  			if (PEAR::isError($this->obj)){
 				$this->page->kensPEARErrorHandler(&$this->obj);
 				 user_error("coopObject::constructor: " . 
 							$this->obj->getMessage(),
@@ -248,10 +248,7 @@ class coopObject
 			
 			// one more sanity czech
 			if(!$aud->obj->index_id){
-				$this->page->mailError('NULL audit trail attempt', 
-									   print_r($this, true));
-				user_error("something very bad happened when saving audit trail. index id can't be null.",
-						   E_USER_ERROR);
+				PEAR::raiseError('NULL audit trail attempt', 666);
 			}
 
 			$aud->obj->audit_user_id = $this->page->auth['uid'];

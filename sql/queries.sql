@@ -799,11 +799,12 @@ left join income on income.income.id = leads_income_join.income_id;
 -- massive company query as needed by thankyou hackreport
 select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
     as Company, 
-		companies.company_id,
-        sum(inc.payment_amount) as cash_donations,
-        sum(pur.payment_amount) as auction_purchases,
-        sum(auct.item_value) as auction_donations,
-        sum(iks.item_value) as in_kind_donations
+        companies.company_id,
+        coalesce(sum(inc.payment_amount),0) +
+        coalesce(sum(pur.payment_amount),0) + 
+        coalesce(sum(auct.item_value),0) + 
+        coalesce(sum(iks.item_value),0) 
+        as Total
 from companies
 left join 
     (select  sum(item_value) as item_value, company_id
@@ -811,9 +812,9 @@ left join
      left join auction_donation_items  as adi
               on caj.auction_donation_item_id = 
                 adi.auction_donation_item_id
-        where school_year = '$sy' 
-		and adi.date_received > '2000-01-01'
-		and adi.thank_you_id is null
+        where school_year = '2004-2005' 
+        and adi.date_received > '2000-01-01'
+        and adi.thank_you_id is null
         group by caj.company_id) 
     as auct
         on auct.company_id = companies.company_id
@@ -823,9 +824,9 @@ left join
      left join in_kind_donations as ikd
               on cikj.in_kind_donation_id = 
                 ikd.in_kind_donation_id
-        where school_year = '$sy'
-		and ikd.date_received > '2000-01-01'
-		and ikd.thank_you_id is null
+        where school_year = '2004-2005'
+        and ikd.date_received > '2000-01-01'
+        and ikd.thank_you_id is null
         group by cikj.company_id) 
     as iks
         on iks.company_id = companies.company_id
@@ -835,8 +836,8 @@ left join
      left join income 
               on cinj.income_id = 
                 income.income_id
-        where school_year = '$sy' $cr
-		and income.thank_you_id is null
+        where school_year = '2004-2005' 
+        and income.thank_you_id is null
         group by cinj.company_id) 
     as inc
         on inc.company_id = companies.company_id
@@ -849,46 +850,139 @@ left join
      left join income 
               on ap.income_id = 
                 income.income_id
-        where income.school_year = '$sy' $cr
-		and income.thank_you_id is null
+        where income.school_year = '2004-2005' 
+        and income.thank_you_id is null
         group by atd.company_id) 
     as pur
         on pur.company_id = companies.company_id
 group by companies.company_id
-having cash_donations > 0 
-    or auction_purchases > 0 
-    or auction_donations > 0 
-    or in_kind_donations > 0
-order by cash_donations desc, auction_purchases desc, 
-    auction_donations desc, in_kind_donations desc
+having Total > 0 
+order by Company;
 
 
 --- lead totals for thankyou hackreport
-select coa.description as Description,
+select concat_ws(' - ', concat_ws(' ', first_name, last_name), company ) 
+    as Company, 
+        leads.lead_id,
         coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0) as Total
-from chart_of_accounts as coa
+from leads
 left join 
-    (select account_number, sum(payment_amount) as total
+    (select lead_id, sum(payment_amount) as total
      from leads_income_join as linj
      left join income 
               on linj.income_id = 
                 income.income_id
-        where income.school_year = '2003-2004'
-        group by income.account_number) 
+        where income.school_year = '2004-2005'
+        and income.thank_you_id is null
+        group by linj.lead_id) 
     as inc
-        on inc.account_number = coa.account_number
+        on leads.lead_id = inc.lead_id
 left join 
-    (select account_number, sum(payment_amount) as total
+    (select lead_id, sum(payment_amount) as total
      from tickets
      left join income 
               on tickets.income_id = 
                 income.income_id
-        where income.school_year = '2003-2004'
-        group by income.account_number) 
-    as tic
-        on tic.account_number = coa.account_number
-group by coa.account_number
+        where income.school_year = '2004-2005'
+        and income.thank_you_id is null
+        group by tickets.lead_id) 
+    as tic 
+        on tic.lead_id = leads.lead_id
+group by leads.lead_id
 having Total > 0
-order by Total desc;
+order by Company;
+
+-- attemted massive thankyouhackreport
+select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
+    as Company, 
+        companies.company_id as id, 'company_id' as id_name,
+        coalesce(sum(inc.payment_amount),0) +
+        coalesce(sum(pur.payment_amount),0) + 
+        coalesce(sum(auct.item_value),0) + 
+        coalesce(sum(iks.item_value),0) 
+        as Total
+from companies
+left join 
+    (select  sum(item_value) as item_value, company_id
+     from companies_auction_join  as caj
+     left join auction_donation_items  as adi
+              on caj.auction_donation_item_id = 
+                adi.auction_donation_item_id
+        where school_year = '2004-2005' 
+        and adi.date_received > '2000-01-01'
+        and adi.thank_you_id is null
+        group by caj.company_id) 
+    as auct
+        on auct.company_id = companies.company_id
+left join 
+    (select  sum(item_value) as item_value, company_id
+     from companies_in_kind_join as cikj
+     left join in_kind_donations as ikd
+              on cikj.in_kind_donation_id = 
+                ikd.in_kind_donation_id
+        where school_year = '2004-2005'
+        and ikd.date_received > '2000-01-01'
+        and ikd.thank_you_id is null
+        group by cikj.company_id) 
+    as iks
+        on iks.company_id = companies.company_id
+left join 
+    (select  sum(payment_amount) as payment_amount, company_id
+     from companies_income_join as cinj
+     left join income 
+              on cinj.income_id = 
+                income.income_id
+        where school_year = '2004-2005' 
+        and income.thank_you_id is null
+        group by cinj.company_id) 
+    as inc
+        on inc.company_id = companies.company_id
+left join 
+    (select  payment_amount, company_id
+     from springfest_attendees as atd
+    left join auction_purchases  as ap
+            on ap.springfest_attendee_id = 
+                atd.springfest_attendee_id
+     left join income 
+              on ap.income_id = 
+                income.income_id
+        where income.school_year = '2004-2005' 
+        and income.thank_you_id is null
+        group by atd.company_id) 
+    as pur
+        on pur.company_id = companies.company_id
+group by companies.company_id
+having Total > 0
+UNION DISTINCT
+select concat_ws(' - ', concat_ws(' ', first_name, last_name), company ) 
+    as Company, 
+        leads.lead_id as id, 'lead_id' as id_name,
+        coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0) as Total
+from leads
+left join 
+    (select lead_id, sum(payment_amount) as total
+     from leads_income_join as linj
+     left join income 
+              on linj.income_id = 
+                income.income_id
+        where income.school_year = '2004-2005'
+        and income.thank_you_id is null
+        group by linj.lead_id) 
+    as inc
+        on leads.lead_id = inc.lead_id
+left join 
+    (select lead_id, sum(payment_amount) as total
+     from tickets
+     left join income 
+              on tickets.income_id = 
+                income.income_id
+        where income.school_year = '2004-2005'
+        and income.thank_you_id is null
+        group by tickets.lead_id) 
+    as tic 
+        on tic.lead_id = leads.lead_id
+group by leads.lead_id
+having Total > 0
+order by Company;
 
 --- EOF

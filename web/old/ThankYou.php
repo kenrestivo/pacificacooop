@@ -334,12 +334,13 @@ http://www.pacificacoop.org/
 		{
 			switch($pk){
 			case 'lead_id':
-				PEAR::raiseError('not implemented yet', 999);
+				return $this->_findLeadThanksNeeded($pk, $id, $save);
 				break;
 			case 'company_id':
 				return $this->_findSolicitThanksNeeded($pk, $id, $save);
 				break;
 			default:
+				PEAR::raiseError('no pk provided!', 999);
 				break;
 			}
 
@@ -502,6 +503,128 @@ http://www.pacificacoop.org/
 			return true;
 		}
 	
+	  function _findLeadThanksNeeded($pk, $id, $save)
+		{
+
+			// clear out some items in case i re-use objects
+			$this->address_array = array(); 
+			$this->items_array = array(); 
+
+			// if i'm going to save objects, don't createlegacy them.
+			// save MY view objects, not the DBDO objects,
+			// so that i can createlegacy them later if needed.
+			
+			$sy = findSchoolYear();
+			
+			// XXX BUG! save assumes there really *are* thankyous needed
+			// do NOT use this anywhere that you're not sure of that.
+				/// the trick is to call findThanksNeeded *twice*
+				/// once with $save = false, and again to actually save.
+
+				if($save){
+					
+					// first make sure i actually have stuff to save first!
+					$safety = new ThankYou(&$this->cp);
+					$safety->findThanksNeeded($pk, $id, false);
+					if(count($safety->items_array) < 1){
+						PEAR::raiseError('Asked to save thankyous for this lead, but none actually exist!', 666); 
+						//this find is out of sync with the one in show
+						return false;
+					}
+
+					// save a new thankyou, and cache ists insertid	
+					$co = new CoopObject(&$this->cp, 
+										 'thank_you', &$nothing);
+					$co->obj->date_sent = date('Y-m-d');
+					$co->obj->family_id = $this->cp->userStruct['family_id'];
+					$co->obj->method = $save; /// HACK!
+					$co->obj->insert();
+					$this->thank_you_id = $co->lastInsertID();
+					// do audit AFTER last insertid above!
+					$co->saveAudit(true);
+				}
+				
+				// LEAD
+				// find lead
+			$co = new CoopView(&$this->cp, 'leads', &$top);
+			$co->obj->$pk = $id;
+			$co->obj->find(true);
+
+			// format lead
+			if($co->obj->first_name || $co->obj->last_name){
+				$this->name = sprintf('%s %s', $co->obj->first_name, 
+									  $co->obj->last_name);
+			}
+
+			foreach(array('company', 'address1', 'address2') as $var){
+				if($co->obj->$var){
+					$this->address_array[] = $co->obj->$var;
+				}
+			}
+			$this->address_array[] = sprintf("%s %s, %s", 
+											 $co->obj->city,
+											 $co->obj->state,
+											 $co->obj->zip);		
+			$this->email = $co->obj->email_address;
+
+			//INCOME, from donations
+			//find income
+			$co = new CoopObject(&$this->cp, 'leads_income_join', &$top);
+			$co->obj->$pk = $id;
+			$real = new CoopView(&$this->cp, 'income', &$co);
+			$real->obj->school_year = $sy;
+			$real->obj->orderBy('school_year desc');
+			$real->obj->joinadd($co->obj);
+			$real->obj->whereAdd(sprintf('(thank_you_id is null or thank_you_id < 1) %s',
+										 $this->check_reconcile ?  ' and cleared_date > "2000-01-01" ' : ' ' ));
+			$found += $real->obj->find();
+			
+			//format income
+			while($real->obj->fetch()){
+				$cashtotal += $real->obj->payment_amount;
+				$soliciting_families[]= $real->obj->family_id;
+				if($save){
+					$tmp = $real->obj;
+					$real->obj->thank_you_id = $this->thank_you_id;
+					$real->obj->update($tmp);
+				}
+			}
+
+			//INCOME, from tickets
+			//find income
+			$co = new CoopObject(&$this->cp, 'tickets', &$top);
+			$co->obj->$pk = $id;
+			$real = new CoopView(&$this->cp, 'income', &$co);
+			$real->obj->school_year = $sy;
+			$real->obj->orderBy('income.school_year desc');
+			$real->obj->joinadd($co->obj);
+			$real->obj->whereAdd(sprintf('(thank_you_id is null or thank_you_id < 1) %s',
+										 $this->check_reconcile ?  ' and cleared_date > "2000-01-01" ' : ' ' ));
+			$found += $real->obj->find();
+			
+			//format income
+			while($real->obj->fetch()){
+				$cashtotal += $real->obj->payment_amount;
+				$soliciting_families[]= $real->obj->family_id;
+				if($save){
+					$tmp = $real->obj;
+					$real->obj->thank_you_id = $this->thank_you_id;
+					$real->obj->update($tmp);
+				}
+			}
+
+
+			if($found){
+				$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
+			}
+					
+
+			if(!count($this->items_array)){
+				return false;
+			}
+			
+			return true;
+		}
 	
 	// takes array of familyid's, and fills in thisfrom with the parents
 	function guessParents($family_id_array)
