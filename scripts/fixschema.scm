@@ -10,14 +10,24 @@
 
 ;; XXX note, this is fakery. you'll need to manually put in the root pw's
 ;;(define dbh (simplesql-open 'mysql "coop" "127.0.0.1" "paccoop" "test" "2299"))
+(define dbh (simplesql-open 'mysql "coop_fake" "bc" "input" "test"))
 
 (define new-schema '()) ;; well, here it is.
 (define current-table "") ;; there has to be a more schemey way 
 
+(define debug #t)
+
+;; silly little diagnostic
+(define (doit query)
+  (if debug
+	  (pp query)
+	  (simplesql-query dbh query) ))
+
+;;;;;;;; definition-processing stuff
+
 (define (add-primary-key table line)
   (add-sub-alist new-schema table "primary key"
-				 (unparen (caddr line)))
-  )
+				 (unparen (caddr line))) )
 
 ;; if it is a COLUMN, i'll want to do:
 (define (add-column table line)
@@ -66,7 +76,7 @@
 	   (clean-line (string-split line #\space))))
 	(close p) ))	
 
-;;;;;;;;;;;;;
+;;;;;;;;;;;;; pcns_schema-processing stuff
 
 ;;; unused: the pcns_schema file *should* handle all these keys
 (define (fix-keys table key)
@@ -80,27 +90,31 @@
 	 new-schema))) )
 
 
-(define (rename-column-query items)
+(define (rename-column items)
   (let* ((sp (string-split (car items) #\.))
 		(new (string-split (cadr items) #\.))
 		(long-def (assoc-ref (assoc-ref new-schema (car sp)) (cadr sp)))
 		)
 	(if long-def
-		(sprintf #f "alter table %s change column %s %s %s"
-				 (car sp) (cadr sp) (cadr new) long-def)
-		"select null") )) ;; no-op
+		(doit (sprintf #f "alter table %s change column %s %s %s"
+					   (car sp) (cadr sp) (cadr new) long-def))
+		(printf "ignoring %s:%s\n" (car sp) (cadr sp))
+		)
+	)) 
 
 ;;; the easy one: tables.
-(define (rename-table-query items)
-   (sprintf #f "rename table %s to %s"
-		   (car items) (cadr items))) 
+(define (rename-table items)
+   (doit (sprintf #f "rename table %s to %s"
+		   (car items) (cadr items))))
 
 ;; simple dispatcher, using cute scheme-ism
-(define (rename-query items)
+;; in the file, tables don't have .'s in them, columns do.
+(define (process-change items)
   ((if (string-index (car items) #\.)
-	  rename-column-query 
-	  rename-table-query )
+	  rename-column
+	  rename-table )
    items))
+
 
 ;;; this is basically MAIN, though the load-definition must occur first
 (define (fix-schema fixfile)
@@ -110,13 +124,17 @@
 		  ((or (eof-object? line) ))
 		((lambda (x) (if (and (= 2 (length x))
 							  (not (eq? (string-index (car x) #\#) 0) ))
-						 (pp (rename-query x))
-						 ))
+						 (process-change x))
+				 )
 		 (string-split line #\space)))
 	  (close p) )))
 
+;;;;;;;;;;;;;;;
+;; main
 
-(define dbh (simplesql-open 'mysql "coop_fake" "bc" "input" "test"))
+(load-definition "/mnt/kens/ki/proj/coop/sql/definition.sql")
+(fix-schema "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
 
+(simplesql-close dbh)
 
 ;; EOF
