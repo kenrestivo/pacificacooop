@@ -87,7 +87,7 @@ class CoopMenu extends HTML_Menu
 		{
 			foreach($everything as $key => $cbs){
 				$res[$key]['title'] = 
-					$cbs['description'];						
+					$cbs['shortdesc'];						
 				if(checkMenuLevel($this->page->auth, 
 								  getUser($this->page->auth['uid']), 
 								  $cbs, $cbs['fields'])== 0){
@@ -103,7 +103,7 @@ class CoopMenu extends HTML_Menu
 			foreach($ie as $page => $cbs){
 				if($cbs['maintable'] == 'income'){
 					$moneymenu[] = array(
-						'title' => $cbs['description'],
+						'title' => $cbs['shortdesc'],
 						'url' => $cbs['page']);
 				}
 				confessArray($moneymenu, 'moneymenu');
@@ -130,7 +130,7 @@ class CoopMenu extends HTML_Menu
 				foreach($ie as $key => $cbs){
 					if(strncmp($cbs['realm'], $realm, 7) == 0){
 						$res[$realm]['sub'][$key]['title'] = 
-							$cbs['description'];
+							$cbs['shortdesc'];
 						// TODO: put the menu stuff in here
 						if(checkMenuLevel($this->page->auth, 
 										  getUser($this->page->auth['uid']), 
