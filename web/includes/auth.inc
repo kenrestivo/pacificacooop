@@ -1108,7 +1108,7 @@ displayAuth($p, $u, $realm, $pretty)
 			$u['familyname'],
 			$pretty);
 	} else {
-		printf("ALL users.</h3><h3>
+		printf("for ALL users.</h3><h3>
 				(%s is authorized to %s the %s
 				for ALL families).</h3>",
 			$u['username'],
