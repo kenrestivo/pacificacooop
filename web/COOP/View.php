@@ -204,6 +204,7 @@ class coopView extends CoopObject
 			}
 
 			//XXX hack! i'm only gonna bother with record buttons if familyid
+			// the right thing to do is to fish familyid out of backlinks!
 			if(!in_array('family_id', 
 						array_keys(get_object_vars($this->obj))))
 			{

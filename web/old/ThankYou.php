@@ -32,6 +32,18 @@ define('FIRST_SPRINGFEST', 1972);
 /////////////////////// THANKYOU CLASS
 class ThankYou
 {
+	/// list of fields:
+	var $date ; // DATE: date of letter
+	var $name; // NAME: address of who it gets sent to
+	var $address_array; // ADDRESS: multiple line array, the address
+	var $items_array; // ITEMS: multiple line array, list of things they donated
+	var $iteration; // ITERATION: the number of springfests so far. system calculates this for you.
+	var $ordinal; // ORDINAL: st/nd/rd, etc. system calculates this.
+	var $year; // YEAR: the year of this springfest. system calclates this
+	var $years; // YEARS: how many springfests so far
+	var $from; // FROM: who sent the letter. will get filled in with name of solicitor
+	var $email; // EMAIL: email address
+
 	//TODO: put this in a file, and fopen it, or in a DB blob!
 	// if i put in in a db, schoolyearify them, and grab this years or latest
 	// so they can override it in the future
@@ -67,55 +79,52 @@ Pacifica, Ca 94044
 http://www.pacificacoop.org/
 ";
 
-	function ThankYou($substitutions)
+	// a factory method
+	function substitute()
 		{
-			$this->substitutions = $substitutions;
+		
 			
 			$sy = findSchoolYear();
 
 			// set defaults if empty: date, schoolyear, etc
-			if(!$this->substitutions['YEAR']){
+			if(!$this->year){
 				$tmp = explode('-', $sy);
-				$this->substitutions['YEAR'] = $tmp[1];
+				$this->year = $tmp[1];
 			}
 
-			if(!$this->substitutions['YEARS']){
-				$this->substitutions['YEARS'] = 
-				$this->substitutions['YEAR'] - COOP_FOUNDED;
+			if(!$this->years){
+				$this->years = $this->year - COOP_FOUNDED;
 			}
 
-			if(!$this->substitutions['ITERATION']){
-				$this->substitutions['ITERATION'] =
-				$this->substitutions['YEAR'] - FIRST_SPRINGFEST;
+			if(!$this->iteration){
+				$this->iteration = $this->year - FIRST_SPRINGFEST;
 			}
-			if(!$this->substitutions['ORDINAL']){
-				$this->substitutions['ORDINAL'] =
-				$this->ordinal($this->substitutions['ITERATION']);
+			if(!$this->ordinal){
+				$this->ordinal = $this->makeOrdinal($this->iteration);
 			}
 			
-			if(!$this->substitutions['DATE']){
-				$this->substitutions['DATE'] = date('l, F j, Y');
+			if(!$this->date){
+				$this->date = date('l, F j, Y');
 			}
 			
 			// leave from blank if it's not there
-				if (!$this->substitutions['FROM']){
-					$this->substitutions['FROM'] = "";
+				if (!$this->from){
+					$this->from = "";
 				}
 
-			
 		}
 
 	function toHTML()
 		{
 
-			$subst = $this->substitutions;
-		
+			$subst = $this->varsToArray();
+
 			//un-arrayify the ones that are arrays
 			// and format them html-like
-			$subst['ADDRESS'] = implode('<br>', $subst['ADDRESS']);
-			$subst['ITEMS'] = implode(',', $subst['ITEMS']);
-			$subst['FROM'] = sprintf('<br><br><br>%s', $subst['FROM']);
-			$subst['ORDINAL'] = sprintf('<sup>%s</sup>', $subst['ORDINAL']);
+			$subst['ADDRESS'] = implode('<br>', $this->address_array);
+			$subst['ITEMS'] = implode(',', $this->items_array);
+			$subst['FROM'] = sprintf('<br><br><br>%s', $this->from);
+			$subst['ORDINAL'] = sprintf('<sup>%s</sup>', $this->ordinal);
 
 			
 	  			//confessObj($this, 'this');
@@ -141,7 +150,7 @@ http://www.pacificacoop.org/
 		}
 
 	//returns just the ordinal part
-	function ordinal($number)
+	function makeOrdinal($number)
 		{
 			$lastdigit = substr($number, -1);
 			switch ($lastdigit){
@@ -167,14 +176,14 @@ http://www.pacificacoop.org/
 	function toText()
 		{
 
-			$subst = $this->substitutions;
+			$subst = $this->varsToArray();
 
 			//un-arrayify the ones that are arrays
 			// and format them html-like
-			$subst['ADDRESS'] = implode("\n", $subst['ADDRESS']);
-			$subst['ITEMS'] = implode(',', $subst['ITEMS']);
-			$subst['FROM'] = sprintf("\n\n\n%s", $subst['FROM']);
-			$subst['ORDINAL'] = sprintf('%s', $subst['ORDINAL']);
+			$subst['ADDRESS'] = implode("\n", $this->address_array);
+			$subst['ITEMS'] = implode(',', $this->items_array);
+			$subst['FROM'] = sprintf("\n\n\n%s", $this->from);
+			$subst['ORDINAL'] = sprintf('%s', $this->ordinal);
 
 			
 	  			//confessObj($this, 'this');
@@ -193,6 +202,22 @@ http://www.pacificacoop.org/
 			return $text;
 		}
 
+	function varsToArray()
+		{
+			$subst['DATE']  = $this->date ; 
+			$subst['NAME'] =  $this->name; 
+			$subst['ITERATION'] = $this->iteration; 
+			$subst['ORDINAL'] = $this->ordinal; 
+			$subst['YEAR'] =  $this->year; 
+			$subst['YEARS'] = $this->years; 
+			$subst['FROM'] = $this->from;
+			$subct['EMAIL'] = $this->email; 
+			// i use the text default for these, html will override them anyway
+			$subst['ADDRESS'] = implode("\n", $this->address_array);
+			$subst['ITEMS'] = implode(',', $this->items_array);
+
+			return $subst;
+		}
 
 
 } // END THANK YOU CLASS

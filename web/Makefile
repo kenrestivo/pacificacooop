@@ -28,7 +28,7 @@ NFSNDEVPATH=$(NFSNDOCROOT)/sf-dev/
 DEVHERE=../web-online/
 PLAYGROUND=../web/
 XCLUDE='*dbhost*' 
-
+LINKSFILE=schema/coop.links.ini
 
 
 all: help
@@ -114,8 +114,11 @@ guarantee-pear::
 
 update-links::
 	guile  -l ~/.guile -l /mnt/kens/ki/is/scheme/lib/build-links.scm \
-		-c '(do-links-list)' > schema/coop.links.ini
-	@echo "remember to manually fix the ones the script doesn't catch"
+		-c '(do-links-list)' > $(LINKSFILE)
+	@echo "[audit_trail]">> $(LINKSFILE)
+	@echo "audit_user_id = users:user_id" >> $(LINKSFILE)
+
+	@echo "remember to manually check for ones the script doesn't catch"
 
 #EOF
 
