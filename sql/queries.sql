@@ -18,103 +18,106 @@
 -- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 -- just a test query. all kids.
-select last, first 
+select last_name, first_name 
     from kids 
-        left join attendance on kids.kidsid = attendance.kidsid 
+        left join attendance on kids.kid_id = attendance.kid_id 
         left join enrol on enrol.enrolid = attendance.enrolid 
     where enrol.sess = "PM";
 
 -- contact info for all parents, showing who is and isn't a worker
-select families.name, parents.last, parents.first , parents.worker, families.phone, parents.email 
+select families.name, parents.last_name, parents.first_name , 
+    parents.worker, families.phone, parents.email_address 
     from parents 
-        left join families on parents.familyid = families.familyid 
-    order by families.name, parents.last, parents.first;
+        left join families on parents.family_id = families.family_id 
+    order by families.name, parents.last_name, parents.first_name;
 
 -- expired licenses
-select parents.last, parents.first, lic.expires 
+select parents.last_name, parents.first_name, lic.expiration_date 
     from parents 
-        left join lic on parents.parentsid = lic.parentsid 
-    where parents.worker = "Yes" and (expires is null or expires < now())
-    group by parents.last, parents.first;
+        left join lic on parents.parent_id = lic.parent_id 
+    where parents.worker = "Yes" and (expiration_date is null
+        or expiration_date < now())
+    group by parents.last_name, parents.first_name;
 
 
 -- give me ocntact info for all families who have expired insurance
 -- XXX: this MAY be the worker, it may not, i don't know
 -- XXX this is THROUHOGHLY FUX0RED! it ignores matches on the nonworker
-select families.name, parents.last, parents.first, ins.expires,
-        families.phone, parents.email
+select families.name, parents.last_name, parents.first_name, 
+        ins.expiration_date, families.phone, parents.email_address
     from families 
-        left join parents on parents.familyid = families.familyid 
-        left join ins on parents.parentsid = ins.parentsid 
-    where expires is null or expires < now()
+        left join parents on parents.family_id = families.family_id 
+        left join ins on parents.parent_id = ins.parent_id 
+    where expiration_date is null or expiration_date < now()
     group by families.name;
 
 -- all families and working parent info
-select families.name, families.familyid, families.phone,
-        parents.email
+select families.name, families.family_id, families.phone,
+        parents.email_address
     from families 
-        left join parents on parents.familyid = families.familyid
+        left join parents on parents.family_id = families.family_id
     where parents.worker = 'Yes'
     group by families.name;
 
 
 -- all the working drivers' license expirations, WIHTOUT the family stuff
-select max(lic.expires) as exp, parents.last, parents.first, parents.parentsid, parents.familyid
+select max(lic.expiration_date) as exp, parents.last_name, parents.first_name, parents.parent_id, parents.family_id
     from lic 
-        left join parents on lic.parentsid = parents.parentsid 
+        left join parents on lic.parent_id = parents.parent_id 
     where parents.worker= "Yes" 
-    group by parents.parentsid
+    group by parents.parent_id
     order by exp desc;
-    -- note: in an actualy scripted query, i'll add where parents.familyid =
+    -- note: in an actualy scripted query, i'll add where parents.family_id =
 
 
--- all the insurance expirations, by parentsid, WIHTOUT the family stuff
-select max(ins.expires) as exp, parents.familyid, families.name, ins.policynum, ins.companyname
+-- all the insurance expirations, by parent_id, WIHTOUT the family stuff
+select max(ins.expiration_date) as exp, parents.family_id, families.name,
+        ins.policy_number, ins.companycompany_name
     from ins 
-        left join parents on ins.parentsid = parents.parentsid 
-        left join families on parents.familyid = families.familyid 
-    group by parents.familyid
+        left join parents on ins.parent_id = parents.parent_id 
+        left join families on parents.family_id = families.family_id 
+    group by parents.family_id
     order by exp desc;
-    -- note: in an actualy scripted query, i'll add where parents.familyid =
+    -- note: in an actualy scripted query, i'll add where parents.family_id =
 
 --- show kids and enrollment
 select kids.*, enrollment.* 
     from kids 
-        left join enrollment using (kidsid);
+        left join enrollment using (kid_id);
 
 -- show all springfest payments
 select families.name, sum(inc.amount) as total
     from families
-        left join figlue on families.familyid = figlue.familyid
-        left join inc on figlue.incid = inc.incid
-    where inc.acctnum = 1
-    group by families.familyid
-    order by families.familyid
+        left join figlue on families.family_id = figlue.family_id
+        left join inc on figlue.income_id = inc.income_id
+    where inc.account_number = 1
+    group by families.family_id
+    order by families.family_id
 
 --- show session families
 select families.name, enrol.sess 
     from families
-        left join kids on kids.familyid = families.familyid
-        left join attendance on attendance.kidsid = kids.kidsid 
+        left join kids on kids.family_id = families.family_id
+        left join attendance on attendance.kid_id = kids.kid_id 
         left join enrol on enrol.enrolid = attendance.enrolid
-    group by families.familyid
+    group by families.family_id
     order by enrol.sess, families.name
 
 -- how bad do people do at leaving things to the last damn minute
- select date_format(entered, "%W, %b %d %Y") as dt, count(leadsid) as cnt 
+ select date_format(entered, "%W, %b %d %Y") as dt, count(lead_id) as cnt 
         from leads 
     group by dt 
     order by entered;
 
 -- the excel export report
-select leads.leadsid  as responsecode
-        ,leads.salut 
-        ,leads.first  
-        ,leads.last    
+select leads.lead_id  as responsecode
+        ,leads.salutation 
+        ,leads.first_name  
+        ,leads.last_name    
         ,leads.title
         ,leads.company 
-        ,leads.addr   
-        ,leads.addrcont
+        ,leads.address1   
+        ,leads.address2
         ,leads.city   
         ,leads.state 
         ,leads.zip  
@@ -122,87 +125,89 @@ select leads.leadsid  as responsecode
         ,date_format(leads.entered, '%m/%d/%Y %T') as entered
         ,families.name as familyname
     from leads
-        left join families on leads.familyid = families.familyid
-    order by leads.last, leads.first
+        left join families on leads.family_id = families.family_id
+    order by leads.last_name, leads.first_name
 
 -- detailed list of payments
-select  inc.incid, inc.checknum, inc.payer, coa.description, inc.amount,  
-        families.name
+select  inc.income_id, inc.check_number, inc.payer, coa.item_description,
+    inc.amount, families.name
     from inc
-        left join coa on coa.acctnum = inc.acctnum
-        left join figlue on figlue.incid = inc.incid
-        left join families on families.familyid = figlue.familyid
-    order by inc.checkdate desc
+        left join coa on coa.account_number = inc.account_number
+        left join figlue on figlue.income_id = inc.income_id
+        left join families on families.family_id = figlue.family_id
+    order by inc.check_date desc
 
 -- query for deleting/updating session stuff
 select * from attendance 
-        left join kids on attendance.kidsid = kids.kidsid 
-        left join families on kids.familyid = families.familyid 
+        left join kids on attendance.kid_id = kids.kid_id 
+        left join families on kids.family_id = families.family_id 
     where families.name like "%hearne%";
 
 -- show the kids that need to be add/dropped
-select attendance.*, kids.first, kids.last, families.name
+select attendance.*, kids.first_name, kids.last_name, families.name
     from attendance
-        left join kids on kids.kidsid = attendance.kidsid
-        left join families on kids.familyid = families.familyid
+        left join kids on kids.kid_id = attendance.kid_id
+        left join families on kids.family_id = families.family_id
     order by families.name
 
 -- for the delete checking
-select kids.first, kids.last, enrol.semester, enrol.sess
+select kids.first_name, kids.last_name, enrol.school_year, enrol.sess
     from attendance
         left join enrol on attendance.enrolid = enrol.enrolid
-        left join kids on kids.kidsid = attendance.kidsid
-    where enrol.semester = '2003-2004'  and attendance.dropout is null
+        left join kids on kids.kid_id = attendance.kid_id
+    where enrol.school_year = '2003-2004'  and attendance.dropout is null
 
 -- find orphaned auctionss XXX BROKEN! i have new linkfields!
 select auction.*, families.name 
     from auction 
-        left join faglue on faglue.auctionid = auction.auctionid 
-        left join families on families.familyid = faglue.familyid 
-    where faglue.familyid is null 
-    order by auctionid
+        left join faglue
+        on faglue.auction_donation_item_id = auction.auction_donation_item_id 
+        left join families on families.family_id = faglue.family_id 
+    where faglue.family_id is null 
+    order by auction_donation_item_id
 
 -- find orphaned checks (serious) XXX BROKEN! i have new linkfields!
 select inc.*, families.name 
     from inc 
-        left join figlue on figlue.incid = inc.incid 
-        left join families on families.familyid = figlue.familyid 
-    where figlue.familyid is null 
-    order by incid
+        left join figlue on figlue.income_id = inc.income_id 
+        left join families on families.family_id = figlue.family_id 
+    where figlue.family_id is null 
+    order by income_id
 
--- show the total auction amount (for a family)
-select families.name, sum(auction.amount) as amount
+-- show the total auction item_value (for a family)
+select families.name, sum(auction.item_value) as item_value
     from families
-        left join faglue on families.familyid = faglue.familyid
-        left join auction on faglue.auctionid = auction.auctionid
-    group by families.familyid
+        left join faglue on families.family_id = faglue.family_id
+        left join auction 
+        on faglue.auction_donation_item_id = auction.auction_donation_item_id
+    group by families.family_id
 
 -- money totals
-select coa.description, sum(amount)  as total 
+select coa.item_description, sum(item_value)  as total 
     from inc 
-        left join coa on inc.acctnum = coa.acctnum 
-    group by inc.acctnum order by total desc;
+        left join coa on inc.account_number = coa.account_number 
+    group by inc.account_number order by total desc;
 
 -- income specific to invites
-select coa.description, sum(amount)  as total 
+select coa.item_description, sum(item_value)  as total 
     from inc 
         left join invitation_rsvps 
-            on invitation_rsvps.incid = inc.incid 
-        left join coa on inc.acctnum = coa.acctnum 
-    where invitation_rsvps.leadsid is not null 
-    group by inc.acctnum order by total desc;
+            on invitation_rsvps.income_id = inc.income_id 
+        left join coa on inc.account_number = coa.account_number 
+    where invitation_rsvps.lead_id is not null 
+    group by inc.account_number order by total desc;
 
 
 --- audit trails
 select audit_trail.*, users.name 
     from audit_trail
-        left join users on users.userid = audit_trail.audit_user_id
+        left join users on users.user_id = audit_trail.audit_user_id
     order by updated desc;
 
 -- logins
 select session_info.ip_addr, session_info.updated, users.name 
     from session_info
-        left join users on users.userid = session_info.user_id
+        left join users on users.user_id = session_info.user_id
     where session_info.user_id > 0
     order by updated desc;
 
@@ -210,56 +215,56 @@ select session_info.ip_addr, session_info.updated, users.name
 --- privilege information
 select privs.* ,users.name 
     from privs 
-    left join users using (userid) 
+    left join users using (user_id) 
     where realm = 'packaging';
 
 -- tickets by family
 select  families.name, sum(ticket_quantity)  as total 
     from invitation_rsvps
-        left join leads on leads.leadsid = invitation_rsvps.leadsid
-        left join families on families.familyid = leads.familyid
-    where invitation_rsvps.leadsid is not null 
+        left join leads on leads.lead_id = invitation_rsvps.lead_id
+        left join families on families.family_id = leads.family_id
+    where invitation_rsvps.lead_id is not null 
     group by families.name
     order by total desc;
 
 -- tickets, summary
 select  leads.relation, sum(ticket_quantity)  as total 
     from invitation_rsvps
-        left join leads on leads.leadsid = invitation_rsvps.leadsid
-    where invitation_rsvps.leadsid is not null 
+        left join leads on leads.lead_id = invitation_rsvps.lead_id
+    where invitation_rsvps.lead_id is not null 
     group by leads.relation
     order by total desc;
 
 -- bad address
 select relation, 
-    sum(if(leads.familyid>1,1,0)) as family_supplied ,
-    sum(if(leads.familyid>1,0,1)) as alumni_list ,
-    count(leads.leadsid) as total
+    sum(if(leads.family_id>1,1,0)) as family_supplied ,
+    sum(if(leads.family_id>1,0,1)) as alumni_list ,
+    count(leads.lead_id) as total
     from leads 
-        left join families using (familyid) 
+        left join families using (family_id) 
     where do_not_contact is not null 
             and do_not_contact > '0000-00-00' 
     group by relation 
     order by total desc;
 
 -- ALL the money!
-select coa.description, 
-   sum(if(figlue.familyid>0 || companies.familyid>0,inc.amount,0)) 
+select coa.item_description, 
+   sum(if(figlue.family_id>0 || companies.family_id>0,inc.amount,0)) 
         as family_paid ,
    sum(amount)  as total 
     from inc 
-           left join coa on inc.acctnum = coa.acctnum 
-           left join figlue on inc.incid = figlue.incid
+           left join coa on inc.account_number = coa.account_number 
+           left join figlue on inc.income_id = figlue.income_id
            left join raffle_income_join 
-                   on inc.incid = raffle_income_join.incid
+                   on inc.income_id = raffle_income_join.income_id
            left join invitation_rsvps 
-                   on inc.incid = invitation_rsvps.incid
+                   on inc.income_id = invitation_rsvps.income_id
            left join companies_income_join
-                   on inc.incid = companies_income_join.incid
+                   on inc.income_id = companies_income_join.income_id
                 left join companies 
                     on companies.company_id = 
                         companies_income_join.company_id
-    group by inc.acctnum order by total desc
+    group by inc.account_number order by total desc
 
 
 --- nasty package join. the 'users' hack is to get "xxx family" w/o coding
@@ -267,10 +272,12 @@ select auction.* ,
             coalesce(users.name, companies.company_name) as donor
         from auction 
             left join packages on auction.package_id = packages.package_id 
-            left join faglue on faglue.auctionid = auction.auctionid 
-                left join users on users.familyid = faglue.familyid 
-            left join companies_auction_join 
-                on companies_auction_join.auctionid = auction.auctionid
+            left join faglue 
+        on faglue.auction_donation_item_id = auction.auction_donation_item_id 
+                left join users on users.family_id = faglue.family_id 
+            left join companies_auction_join
+                 on companies_auction_join.auction_donation_item_id = 
+                        auction.auction_donation_item_id
                 left join companies 
                     on companies_auction_join.company_id = 
                         companies.company_id
@@ -278,38 +285,40 @@ select auction.* ,
             and date_received > '0000-00-00'
 
 -- the package summary
-    select package_type, package_number, package_title, package_description,
+    select package_type, package_number, package_title, package_item_description,
         donated_by_text as generously_donated_by, package_value,
         starting_bid, bid_increment, item_type
         from packages
         order by package_type, package_number, package_title, 
-			package_description
+            package_item_description
         
 
 -- nasty sponsorship join to check levels IN REAL CASH
 select coalesce(companies.company_name, 
-        concat_ws(' ', leads.first, leads.last, leads.company)) as company,
+        concat_ws(' ', leads.first_name, leads.last_name, leads.company))
+            as company,
         sum(inc.amount)  as cash_total 
     from inc 
         left join companies_income_join
-               on inc.incid = companies_income_join.incid
+               on inc.income_id = companies_income_join.income_id
             left join companies 
                 on companies.company_id = 
                     companies_income_join.company_id
         left join invitation_rsvps 
-            on invitation_rsvps.incid = inc.incid 
-            left join leads on invitation_rsvps.leadsid = leads.leadsid
-    where leads.leadsid is not null or companies.company_id is not null
-    group by leads.leadsid, companies.company_id  having cash_total >= 150
+            on invitation_rsvps.income_id = inc.income_id 
+            left join leads on invitation_rsvps.lead_id = leads.lead_id
+    where leads.lead_id is not null or companies.company_id is not null
+    group by leads.lead_id, companies.company_id  having cash_total >= 150
     order by cash_total desc, 
-        leads.last asc, leads.first asc, companies.company_name asc;
+        leads.last_name asc, leads.first_name asc, companies.company_name asc;
 
 -- nasty sponsorship join to check AUCTION levels
 select companies.company_name,
-        sum(auction.amount)  as auction_item_total 
+        sum(auction.item_value)  as auction_item_total 
     from auction
         left join companies_auction_join
-               on auction.auctionid = companies_auction_join.auctionid
+               on auction.auction_donation_item_id =
+                    companies_auction_join.auction_donation_item_id
             left join companies 
                 on companies.company_id = 
                     companies_auction_join.company_id
@@ -319,30 +328,33 @@ select companies.company_name,
 
 
 -- show auction totals for SOLICIT AND for family auctions.
-select families.name, sum(auction.amount) as amount
+select families.name, sum(auction.item_value) as item_value
     from auction
-        left join faglue on auction.auctionid = faglue.auctionid
+        left join faglue on auction.auction_donation_item_id =
+            faglue.auction_donation_item_id
         left join companies_auction_join 
-            on auction.auctionid = companies_auction_join.auctionid
+            on auction.auction_donation_item_id = 
+                companies_auction_join.auction_donation_item_id
         left join families 
-            on coalesce(faglue.familyid, companies_auction_join.familyid) =
-            families.familyid
-    group by coalesce(faglue.familyid, companies_auction_join.familyid)
-	order by families.name
+            on coalesce(faglue.family_id, companies_auction_join.family_id) =
+            families.family_id
+    group by coalesce(faglue.family_id, companies_auction_join.family_id)
+    order by families.name
 
 --massive solicit nag stuff
  select company_name, sum(inc.amount) as cash_donations,
-      sum(auction.amount) as non_cash_donations,
-	  sum(inc.amount) + sum(auction.amount) as total
+      sum(auction.item_value) as non_cash_donations,
+      sum(inc.amount) + sum(auction.item_value) as total
     from companies
           left join companies_auction_join 
               on companies_auction_join.company_id = companies.company_id
           left join auction 
-              on companies_auction_join.auctionid = auction.auctionid
+              on companies_auction_join.auction_donation_item_id = 
+                auction.auction_donation_item_id
           left join companies_income_join 
               on companies_income_join.company_id = companies.company_id
           left join inc 
-            on companies_income_join.incid = inc.incid    
+            on companies_income_join.income_id = inc.income_id    
     group by companies.company_id 
     order by total desc, cash_donations desc, companies.company_name asc;
 
@@ -352,64 +364,64 @@ select families.name, sum(auction.amount) as amount
     where length(package_number) < 4 and package_number like "S%";
 
 -- tickets export
-select ticket_quantity , amount, last, first, addr , addrcont, city , 
-        state , zip , leads.leadsid as response_code 
+select ticket_quantity , item_value, last_name, first_name, address1 ,
+        address2, city , state , zip , leads.lead_id as response_code 
     from invitation_rsvps 
-        left join leads on invitation_rsvps.leadsid = leads.leadsid 
-        left join inc on invitation_rsvps.incid = inc.incid 
+        left join leads on invitation_rsvps.lead_id = leads.lead_id 
+        left join inc on invitation_rsvps.income_id = inc.income_id 
     where ticket_quantity > 0 
-	order by leads.last, leads.first;
+    order by leads.last_name, leads.first_name;
 
 -- the family summary
 create temporary table enrolled_temp (
-	name varchar(255),
+    name varchar(255),
     am_pm_session enum ('AM', 'PM'),
-    familyid int(32) not null unique,
+    family_id int(32) not null unique,
     phone varchar(20)
 );
 insert into enrolled_temp
 select families.name, enrollment.am_pm_session,
-    families.familyid , families.phone
+    families.family_id , families.phone
         from families 
-           left join kids on kids.familyid = families.familyid
-           left join enrollment on kids.kidsid = enrollment.kidsid
+           left join kids on kids.family_id = families.family_id
+           left join enrollment on kids.kid_id = enrollment.kid_id
         where enrollment.school_year = '2003-2004'
             and enrollment.dropout_date is null
-    group by families.familyid
+    group by families.family_id
     order by enrollment.am_pm_session, families.name;
 
 -- the enhancement hours, sold separately
 select enrolled_temp.name as Family_Name,
     sum(if(enhancement_hours.hours, enhancement_hours.hours,0)) as Total, 
-	enrolled_temp.am_pm_session as Session, enrolled_temp.phone as Phone
-	from enrolled_temp
+    enrolled_temp.am_pm_session as Session, enrolled_temp.phone as Phone
+    from enrolled_temp
            left join parents 
-               on parents.familyid = enrolled_temp.familyid
+               on parents.family_id = enrolled_temp.family_id
            left join enhancement_hours 
-               on parents.parentsid = enhancement_hours.parentsid
-	group by enrolled_temp.familyid
-	having Total < 4
-	order by enrolled_temp.am_pm_session, enrolled_temp.name;
+               on parents.parent_id = enhancement_hours.parent_id
+    group by enrolled_temp.family_id
+    having Total < 4
+    order by enrolled_temp.am_pm_session, enrolled_temp.name;
 
 -- so often used, it needs to be here
 select privs.*, users.name 
-	from users 
-        left join privs using (userid) 
-	where users.name like "%whatever%";
+    from users 
+        left join privs using (user_id) 
+    where users.name like "%whatever%";
 
 -- one-shot to convert the old-style to the new-style
 insert into enrollment 
-	(kidsid, school_year, am_pm_session, start_date, dropout_date) 
-	select attendance.kidsid, enrol.semester, enrol.sess, 
-		attendance.start_date, attendance.dropout 
-	from attendance left join enrol using (enrolid);
+    (kid_id, school_year, am_pm_session, start_date, dropout_date) 
+    select attendance.kid_id, enrol.school_year, enrol.sess, 
+        attendance.start_date, attendance.dropout 
+    from attendance left join enrol using (enrolid);
 
 -- the family names which should be updated
-    select leads.leadsid, leads.last, inc.payer 
+    select leads.lead_id, leads.last_name, inc.payer 
         from leads left join invitation_rsvps 
-            on leads.leadsid = invitation_rsvps.leadsid 
-        left join inc on invitation_rsvps.incid = inc.incid 
-    where last like "%Family%" 
-        and invitation_rsvps.incid is not null;
+            on leads.lead_id = invitation_rsvps.lead_id 
+        left join inc on invitation_rsvps.income_id = inc.income_id 
+    where last_name like "%Family%" 
+        and invitation_rsvps.income_id is not null;
 
 --- EOF
