@@ -45,9 +45,9 @@ function sponsors(&$cp)
 		$lasttype = $sp->obj->sponsorship_type_id;
 		
 		while($sp->obj->fetch()){
-
+			//confessObj($sp->obj, 'sponb');
 			/// XXX i hate hate hate this database layout.
-			/// renormalise and group sponsors and leads into one!
+			/// renormalise and group companies and leads into one!
 			
 			$table = $sp->obj->lead_id> 0 ? 'leads' : 'companies';
 			$co =& new CoopObject(&$cp, $table, &$nothing);
@@ -78,6 +78,7 @@ function sponsors(&$cp)
 	// gah. whew. all done
 	//confessArray($spons, 'spns');
 	foreach($spons as $level => $data){
+		sort($data['names']);
 		//confessArray($data, 'data');
 		foreach($data['names'] as $name){
 			$sponsors .= sprintf("<li>%s</li>", $name);

@@ -44,4 +44,10 @@ class Sponsorships extends DB_DataObject
 		'entry_type',
 		'school_year' 
 		);
+	var $fb_requiredFields = array (
+		'sponsorship_type_id', 
+		'entry_type',
+		'school_year' 
+		);
+
 }
