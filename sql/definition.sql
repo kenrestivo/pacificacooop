@@ -111,6 +111,7 @@ CREATE TABLE chart_of_accounts (
 CREATE TABLE companies (
   company_id int(32) NOT NULL unique auto_increment,
   company_name varchar(255) default NULL,
+  salutation varchar(50) default NULL,
   first_name varchar(255) default NULL,
   last_name varchar(255) default NULL,
   title varchar(255) default NULL,
@@ -140,6 +141,7 @@ CREATE TABLE companies_auction_join (
   auction_donation_item_id int(32) default NULL,
   company_id int(32) default NULL,
   family_id int(32) default NULL,
+  parent_id int(32) default NULL,
   PRIMARY KEY  (companies_auction_join_id),
 ) ;
 
@@ -152,6 +154,7 @@ CREATE TABLE companies_income_join (
   income_id int(32) default NULL,
   company_id int(32) default NULL,
   family_id int(32) default NULL,
+  parent_id int(32) default NULL,
   PRIMARY KEY  (companies_income_join_id),
 ) ;
 
@@ -783,7 +786,8 @@ CREATE TABLE companies_in_kind_join (
   in_kind_donation_id int(32) default NULL,
   company_id int(32) default NULL,
   family_id int(32) default NULL,
-  PRIMARY KEY  (companies_in_kind_join_id)
+ parent_id int(32) default NULL,
+   PRIMARY KEY  (companies_in_kind_join_id)
 ) ;
 
 
