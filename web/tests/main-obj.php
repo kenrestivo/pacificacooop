@@ -19,13 +19,13 @@ $cp->pageTop();
 
 
 if(0){
- foreach(array("families") as $table){
+ foreach(array("families", "leads") as $table){
  	$view = new CoopView(&$cp, $table);
  		// XXX hack! use the get() form instead if you know index
  		//$pk = $view->getPK(); 
  	$u = getUser($cp->auth['uid']);
  	$view->obj->family_id = $u['family_id'];
- 	print $view->recurseTable();
+ 	print $view->simpleTable();
  }
 
 } else {
@@ -34,15 +34,6 @@ if(0){
 		$view = new CoopView(&$cp, $table);
 		$view->obj->company_id = $cid;
 		print $view->simpleTable();
-	}
-
-	$cij =& new CoopObject(&$page, 'companies_income_join');
-	$cij->obj->company_id = $cid;
-	$cij->obj->find();
-	while($cij->obj->fetch()){
-		$inc =& new CoopView(&$page, 'income');
-		$inc->obj->income_id = $cij->obj->income_id;
-		$inc->simpleTable();
 	}
 		
 	

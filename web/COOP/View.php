@@ -153,6 +153,20 @@ class coopView extends CoopObject
 			return $this->parentObj->isRepeatedTable($tablename);
 		}
 
+	function isPermittedField($key)
+		{
+			// if it's a key, and we don't show them, then no
+			if($key == $this->pk && !$this->obj->fb_hidePrimaryKey){
+				return 0;
+			}
+			//we don't show if not in fieldstorender
+			if($this->obj->fb_fieldsToRender && 
+			   !in_array($key, $this->obj->fb_fieldsToRender)){
+				return 0;
+			}
+
+			return 1;
+		}
 
 
 	function toArray()
@@ -160,8 +174,9 @@ class coopView extends CoopObject
 			
 			foreach($this->obj->toArray() as $key => $val){
 				// this is where the fun begins.
-				$res[] = $this->checkLinkField(&$this->obj, $key, $val);
-
+				if($this->isPermittedField($key)){
+					$res[] = $this->checkLinkField(&$this->obj, $key, $val);
+				}
 			}
 
 			// the Simple Version. useful for debuggin'
@@ -175,10 +190,12 @@ class coopView extends CoopObject
 		{
 			// get the fieldnames out the dataobject
 			foreach($this->obj->toArray() as $key => $trash){
-				if($this->obj->fb_fieldLabels[$key]){
-					$res[] = $this->obj->fb_fieldLabels[$key];
-				} else {
-					$res[] = $key;
+				if($this->isPermittedField($key)){
+					if($this->obj->fb_fieldLabels[$key]){
+						$res[] = $this->obj->fb_fieldLabels[$key];
+					} else {
+						$res[] = $key;
+					}
 				}
 			}
 			
