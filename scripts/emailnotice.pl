@@ -424,16 +424,16 @@ sub
 mailIt()
 {
 	my $m = shift;
-	my $famref = shift;
+	my $parref = shift;
 	printf("\n--------------\n<%s>\nemail the above message to %s %s (%s)?\n",
 		$m,
-		$famref->{'first'},
-		$famref->{'last'},
-		$famref->{'email'},
+		$parref->{'first'},
+		$parref->{'last'},
+		$parref->{'email'},
 		);
 	$res = <STDIN>;
 	if($res =~ /^[yY]/){
-			%mail = (       To => $famref->{'email'},
+			%mail = (       To => $parref->{'email'},
 					From => 'ken@restivo.org',
 					Subject=> "Insurance Information for Co-Op",
 					Message => $m,
@@ -441,7 +441,7 @@ mailIt()
 		#SEND!
 		if($opt_s){
 			&sendmail(%mail) or die $Mail::Sendmail::error;
-			&updateNags($famref->{'parentsid'});
+			&updateNags($parref->{'parentsid'});
 			printf("result: <%s>\n", $Mail::Sendmail::log);
 		} else {
 			print "-----\nNOTE!!! this is a dry run, no email will actually be sent\n";
@@ -566,7 +566,8 @@ sub emailReminder()
 
 
 	if(($insexp || $licexp) && !$skip){
-		&mailIt($badness, $famref);
+
+		&mailIt($badness, $marf->[0]->{'parref'});
 		return $badness;
 	}
 
