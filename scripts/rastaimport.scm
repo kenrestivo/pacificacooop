@@ -31,6 +31,13 @@
 
 ;;;;;;;;;;;;;;; functions for updating the database
 
+;; TODO: prompt user instead! pick amongst them
+(define (choose-duplicates db-res)
+  (if (> 2 (false-if-exception
+			(length db-res)))
+	  (error "duplicate " db-res)
+	  db-res))
+
 ;; find family
 (define (check-for-new-family line header)
   (let ((families (safe-sql *dbh*
@@ -39,19 +46,15 @@
 						where name like \"%%%s%%\" and phone like \"%%%s%%\""
 									(rasta-find "Last Name" line header)
 									(rasta-find "Phone" line header)))))
-	(cond ((> 2 (false-if-exception
-				 (length families)))
-		   (error "duplicate families" families))
-		  ((list? families)
-		   (db-ref-last families "familyid")) ;gotcha!
-		  (else
-		   (safe-sql *dbh* (sprintf #f "
+	(if (list? families)
+		(db-ref-last (choose-duplicates families) "familyid") ;gotcha!
+		(safe-sql *dbh* (sprintf #f "
 						insert into families set
 								name = '%s',
 								phone = '%s'"
-							  (rasta-find "Last Name" line header)
-							  (rasta-find "Phone" line header)
-							  ))))))
+								 (rasta-find "Last Name" line header)
+								 (rasta-find "Phone" line header)
+								 )))))
 
 ;; find kid
 (define (check-for-new-kid line header)
@@ -62,20 +65,17 @@
 								 (rasta-find "Child" line header)
 								 (rasta-find "Last Name" line header)
 								 ))))
-	(cond ((> 2 (false-if-exception
-				 (length kids)))
-		   (error "duplicate kids" kids))
-		  ((list? kids)
-		   (db-ref-last kids "kidsid")) ; got it!
-		  (else
-		   (safe-sql *dbh* (sprintf #f ("
+
+		  (if (list? kids)
+			  (db-ref-last (choose-duplicates kids) "kidsid") ; got it!
+			  (safe-sql *dbh* (sprintf #f "
 				insert into kids set 
 							last = '%s' ,
 							first = '%s' ,
 							familyid = %d "
-								  (rasta-find "Last Name" line header)
-								  (rasta-find "Child" line header)
-								  (check-for-new-family line header))))))))
+									   (rasta-find "Last Name" line header)
+									   (rasta-find "Child" line header)
+									   (check-for-new-family line header))))))
 
 ;;;;;;;;;; functions for navigating through the rasta structure (accessors?)
 (define (rasta-find key line header)
