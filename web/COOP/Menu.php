@@ -117,7 +117,7 @@ class CoopMenu extends HTML_Menu
 				$res[$key]['title'] = 
 					$cbs['shortdesc'];						
 				if(checkMenuLevel($this->page->auth, 
-								  getUser($this->page->auth['uid']), 
+								  $this->page->userStruct, 
 								  $cbs, $cbs['fields'])== 0){
 					$res[$key]['url'] = sprintf('%s%s', $cbs['page'], 
 												SID ? "?" .SID :"");
