@@ -190,6 +190,7 @@ class coopView extends CoopObject
 	/// and record buttons, ready for passing to html::table::addRow()
 	function toArray()
 		{
+
 			/// XXX NASTY ASS HACK!!!! ispermittedfield is b0rken.
 			/// view and edit are different!
 			if(!isset($this->obj->fb_hidePrimaryKey)){
@@ -338,7 +339,8 @@ class coopView extends CoopObject
 												array( 
 													'action' => $action,
 													'table' => $this->table,
-													$this->pk => $this->obj->{$this->pk}
+													$this->pk => 
+													$this->obj->{$this->pk}
 													));
 				}
 			}

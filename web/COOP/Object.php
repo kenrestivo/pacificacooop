@@ -274,12 +274,18 @@ class coopObject
 		}
 
 	// so commonly used, i need it here
+	// gets the crosslinks FOR THIS OBJECT
+	// the index MUST NOT be null.
 	function checkCrossLinks($midTable, $farTable)
 		{
+ 			if($this->obj->{$this->pk} < 1){
+ 				return array();
+ 			}
+
 			$included = array(); // must return array even if empty!
 			// TODO: maybe try to calculate mid or fartable? dangerous?
 			$far = new CoopObject(&$this->page, $farTable, $this);
-			//confessObj($this, 'this');
+			//confessObj($this, 'CoopObject::checkCrossLinks(this)');
 			$this->page->debug > 2 && $far->obj->debugLevel(2);
 			$mid =& new CoopObject(&$this->page, $midTable, &$far);
 			$mid->obj->{$this->pk} = $this->obj->{$this->pk};

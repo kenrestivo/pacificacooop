@@ -291,7 +291,8 @@ class coopPage
 				confessObj($obj, 'pear error. bummer.');
 				exit(1);
 			}
-			$this->mailError('PEAR error on live site!', print_r($this));
+			$this->mailError('PEAR error on live site!',
+							 print_r($this));
 			exit(1);
 		}
 
