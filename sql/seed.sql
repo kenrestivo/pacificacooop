@@ -38,6 +38,18 @@ insert into coa set
 			acctnum = 4,
 			description = "SpringFest Misc Cash donation";
 
+insert into coa set
+			acctnum = 5,
+			description = "SpringFest Program Ad Insertion";
+
+insert into coa set
+			acctnum = 6,
+			description = "SpringFest Ticket Purchase";
+
+insert into coa set
+			acctnum = 7,
+			description = "SpringFest Sponsorship Package";
+
 
 -- groups
 insert into groups set

@@ -417,6 +417,9 @@ banners
 tickets!!!
 	what to do here?
 
+flyers! (publicity)
+	need to add an "need flyer" date? link to contactid
+	and.. a "flyer put up" date, and user who did it
 
 sub-view gui handling
 	will probably need to have multiple structs, and a field to choose them

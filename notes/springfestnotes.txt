@@ -139,3 +139,25 @@ solicitation notes
 		what about due date for the donations? do they have one?
 			by febrary 1st-- for business
 		10TH for solicitation meeting: MUST HAVE UI UP!
+
+--------------
+01/13/2004
+
+auction permissions
+    ferris need to add/enter/delete auctions
+    treckeme needs to view them
+
+packaging stuff
+    add "auction item delivered" field to auctions table
+    only packaging team should be able to CHANGE "auction item delivered" date
+    sue langlands, marlita, and refino have packaging group permissions
+        they also need to see the item's SERIAL NUMBER so they can tag them.
+
+solicitation screen, first cut
+    auction donations ONLY (i'm not ready for ads and sponsorships, yet).
+    business names (JUST name! all other contact info may not be forthcoming)
+    otherwise this screen will look almost identical to auction donations
+        for now... in the future it will be a whole system in and of itself.
+    kirsten will need to be able to VIEW these entries,
+        separate from regular auctions.
+
