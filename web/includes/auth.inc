@@ -538,17 +538,13 @@ sanityCheck($auth, $states)
 	if(!$states[$state]){
 			user_error("sanityCheck(): $state is an illegal state. Forcing unknown state", 
 				E_USER_WARNING);
-			//TODO use changeState() now
+			// NOTE! i do NOT use changeState() here
 			$auth['state'] = 'unknown'; // force it outta here
 	}
-	// TODO: turn this into a proper state!! maybe, "botched"?
 	if ($states[$state]['required']){
 		while (list($key, $val) = each($states[$state]['required'])){
 			if(!$auth[$val]){
-				/* TODO maybe report this to the user? 
-						or, if i'm being hacked, not?
-				print "Security violation occurred. You've been logged out.";
-				*/
+				//serious. potential security violation.
 				user_error("sanityCheck(): $val required for state $state. Forcing 'unknown' state.", E_USER_WARNING);
 				$auth['state'] = 'unknown'; // force it outta here
 			}
