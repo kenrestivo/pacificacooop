@@ -3,7 +3,7 @@
 //$Id$
 
 /*
-	Copyright (C) 2004  ken restivo <ken@restivo.org>
+	Copyright (C) 2004-2005  ken restivo <ken@restivo.org>
 	 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -71,15 +71,18 @@ class CoopMenu extends HTML_Menu
 
 			$this->page->indexed_all = array_merge($members, $sf);
 
-			$heirmenu = array(
-				array_pop($this->nestByRealm($members, 
-													$this->other_realms)),
-				array(
-					'title' => 'Springfest',
-					'sub' => $this->nestByRealm($sf, 
-												$this->springfest_realms)));
+			$allelse_nested = $this->nestByRealm($members, 
+										  $this->other_realms);
+			$sf_nested =array(
+								'title' => 'Springfest',
+								'sub' => $this->nestByRealm($sf, 
+															$this->springfest_realms));
+//  			confessArray($allelse_nested, 'allelse');
+//  			confessArray($sf_nested, 'sf');
 
-//			confessArray($heirmenu, "menuarray");
+			$heirmenu = array_merge($allelse_nested, array($sf_nested));
+							
+//			confessArray($heirmenu, "menuarray"); 
 			$this->setMenu($heirmenu);
 
 		}
