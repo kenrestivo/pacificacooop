@@ -15,7 +15,7 @@ class Solicitation_calls extends DB_DataObject
     var $company_id;                      // int(32)  
     var $call_note;                       // blob(16777215)  blob
     var $family_id;                       // int(32)  
-    var $done;                            // datetime(19)  
+    var $done;                            // date(10)  
     var $school_year;                     // string(50)  
 
     /* ZE2 compatibility trick*/

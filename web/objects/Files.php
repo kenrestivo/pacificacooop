@@ -6,7 +6,7 @@ require_once 'DB/DataObject.php';
 
 class Files extends DB_DataObject 
 {
-###START_AUTOCODE
+    ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'files';                           // table name
@@ -18,6 +18,7 @@ class Files extends DB_DataObject
     var $file_date;                       // date(10)  
     var $upload_date;                     // datetime(19)  
     var $mime_type;                       // string(255)  
+    var $file_size;                       // int(20)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -26,7 +27,7 @@ class Files extends DB_DataObject
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Files',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-###END_AUTOCODE
+    ###END_AUTOCODE
 
 
 	var	$kenPath = "../files/"; // NOTE! for the tests folder

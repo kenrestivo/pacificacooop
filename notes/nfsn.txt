@@ -4,7 +4,7 @@ http://paccoop.nfshost.com/
 FTP Username: paccoop_paccoop
 FTP Password: nofifgyq
 FTP Hostname: ftp.phx.nearlyfreespeech.net
- 
+
 Browser FTP: Click Here
 
         Server Aliases:

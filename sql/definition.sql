@@ -147,7 +147,7 @@ CREATE TABLE companies_income_join (
   companies_income_join_id int(32) NOT NULL unique auto_increment,
   income_id int(32) default NULL,
   company_id int(32) default NULL,
-  familyid int(32) default NULL,
+  family_id int(32) default NULL,
   PRIMARY KEY  (companies_income_join_id),
 ) ;
 
@@ -263,7 +263,7 @@ CREATE TABLE flyer_deliveries (
   flyer_delivery_id int(32) NOT NULL unique auto_increment,
   flyer_type varchar(255) default NULL,
   delivered_date date default NULL,
-  familyid int(32) default NULL,
+  family_id int(32) default NULL,
   company_id int(32) default NULL,
   school_year varchar(50) default NULL,
   PRIMARY KEY  (flyer_delivery_id),
@@ -438,7 +438,7 @@ CREATE TABLE parents (
 CREATE TABLE raffle_income_join (
   raffle_income_join_id int(32) NOT NULL unique auto_increment,
   raffle_location_id int(32) default NULL,
-  familyid int(32) default NULL,
+  family_id int(32) default NULL,
   income_id int(32) default NULL,
   PRIMARY KEY  (raffle_income_join_id)
 ) ;
@@ -758,6 +758,26 @@ CREATE TABLE files (
     mime_type varchar(255) default NULL,
 	file_size int(20) default NULL,
     PRIMARY KEY (file_id)
+) ;
+
+
+CREATE TABLE in_kind_donations (
+  in_kind_donation_id int(32) NOT NULL unique auto_increment,
+  item_description longtext,
+  quantity int(5) default NULL,
+  item_value decimal(9,2) default NULL,
+  date_received date default NULL,
+  school_year varchar(50) default NULL,
+  PRIMARY KEY  (in_kind_donation_id)
+) ;
+
+
+CREATE TABLE companies_in_kind_join (
+  companies_in_kind_join_id int(32) NOT NULL unique auto_increment,
+  in_kind_donation_id int(32) default NULL,
+  company_id int(32) default NULL,
+  family_id int(32) default NULL,
+  PRIMARY KEY  (companies_in_kind_join_id)
 ) ;
 
 
