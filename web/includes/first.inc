@@ -23,6 +23,9 @@
 */
 
 //THIS STUFF MUST EXECUTE BEFORE ANY HTML IS SENT!!!! BEFORE HEADERS, ANYTHING!
+
+define('DB_DATAOBJECT_NO_OVERLOAD', true);
+
 require_once("session-init.php");
 
 setupDB();
