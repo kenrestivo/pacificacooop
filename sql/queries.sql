@@ -571,4 +571,11 @@ select count(distinct(parents.parent_id)) as count,
 	group by parents.last_name, parents.first_name 
 	order by parents.last_name, parents.first_name
 
+-- find the duplicate or non-existent workers!!
+select name, sum(if(parents.worker = 'yes',1,0)) as worker_count 
+    from families 
+        left join parents on families.family_id = parents.parent_id 
+    group by parents.family_id 
+    order by worker_count desc, families.name;
+
 --- EOF
