@@ -169,8 +169,8 @@ warnDev()
 	if(preg_match("/dev/", $_SERVER['PHP_SELF'])){
 		print "<p><font color='#ff0000'>NOTE! THIS IS THE DEV SITE! 
 				THIS IS NOT LIVE DATA, THIS IS ONLY FOR TESTING.</font>
-				<br>If you want the live site, use the 'sf' link, 
-				NOT 'sf-dev'. Thanks.";
+				<br>If you want the live site, use the 'members' link, 
+				NOT 'members-dev'. Thanks.";
 	}
 	
 }/* END WARNDEV */
