@@ -67,6 +67,14 @@ input[type="submit"] {
 footer {  }
 
 TABLE { 
+	margin-top: .5em;
+	margin-bottom: .5em;
+	background: white;
+	width: 75%;
 	border-collapse: collapse;
 	border: 1px solid brown; 
+}
+
+table.sub {
+	margin-left: 2%;
 }

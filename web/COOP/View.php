@@ -32,22 +32,21 @@ require_once('object-config.php');
 /////////////////////// COOP VIEW CLASS
 class coopView
 {
-	var $obj;
-	var $build;
-	var $page;
-	var $pager_result_size;
-	var $pager_start;
-	var $table;
-	var $pk;
-	var $backlinks;
-	var $recurseLevel;
+	var $obj;					// ref to db dataobject for this view
+	var $page;					// reference to the cooppage
+	var $table;					// convenience: the table the $this->obj is
+	var $pk;					// the primary key
+	var $backlinks;				// list of links that are linked FROM here
+	var $recurseLevel;			// level, if i'm linked from somewhere
+	var $linkFrom;				// where this was linked from
 
-	function CoopView (&$page, $table, $level = 0 )
+	function CoopView (&$page, $table, $level = 0, $linkfrom = false )
 		{
 
 			$this->page = $page;
 			$this->table = $table ;
 			$this->recurseLevel = $level;
+			$this->linkFrom = $linkfrom;
 			
 			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
 			if (PEAR::isError($obj)){
@@ -123,12 +122,18 @@ class coopView
 			$nearkey = $this->pk;	
 			foreach($this->backlinks as $backtable => $farkey){
 				//TODO i have to check forbidden tables here too!
-				$subview =& new CoopView($this->page, $backtable, $this->recurseLevel + 1);
+				$subview =& new CoopView(&$this->page, $backtable, 
+										 $this->recurseLevel + 1);
 				$subview->obj->$farkey = $this->obj->$nearkey;
 // 				printf("linking %s.%s to %s.%s<br>", 
 // 					   $this->table, $this->pk, 
 // 					   $backtable, $farkey);
-				$this->addSubTable(&$tab, $subview->recurseTable());
+				$recursed = $subview->recurseTable();
+				if($recursed){
+					$this->addSubTable(&$tab, sprintf('%s<br>%s', 
+													  $backtable, 
+													  $recursed));
+				}
 			}
 		}
 
@@ -210,12 +215,7 @@ class coopView
 
 	function addTableTitle(&$tab)
 		{
-			$index = 
-			$this->addSubTable(&$tab, 
-								   sprintf("%s: for %s", 
-										   $this->table, 
-										   $this->obj->family_id));
-	
+		
 		}
 
 	function recurseTable()
@@ -232,11 +232,13 @@ class coopView
 
 			$jointable = preg_match('/_join/', $this->table);
 
-			$tab =& new HTML_Table();
+			// only indent the sub-level tables
+			$attr = $this->recurseLevel ? 'class=sub' : NULL;
+			$tab =& new HTML_Table($attr);
 
 			// TODO:  forbidden names XXX nasty hack
 			if(!$jointable){
-				$this->addTableTitle(&$tab);
+				//$this->addTableTitle(&$tab);
 				$this->addHeader(&$tab);
 			}
 			while($this->obj->fetch()){
