@@ -38,6 +38,7 @@ class coopView
 	var $pager_result_size;
 	var $pager_start;
 	var $table;
+	var $pk;
 
 	function CoopView (&$page, $table )
 		{
@@ -50,7 +51,7 @@ class coopView
 				die ($obj->getMessage ());
 			}
 			//confessObj($this->obj, "object for $this->table");
-		
+				
 		}
  
 
@@ -127,7 +128,7 @@ class coopView
 					// split up farline and chzech it
 					list($fartable, $farcol) = explode(':', $farline);
 					if($fartable == $tab){
-						$res[] = $maintable;
+						$res[$maintable] = $nearcol;
 					}
 				}
 			}
@@ -150,7 +151,6 @@ class coopView
 
 	function addSubTable(&$tab, $text)
 		{
-			// what goes here?
 			$tab->addRow(array($text));				
 
 			$colcount = $tab->getColCount();
@@ -164,22 +164,30 @@ class coopView
 		}
 
 	
-	function addSubTables(&$tab, $backlinks)
+	function addSubTables(&$tab, $nearkey, $backlinks)
 		{
-			foreach($backlinks as $backlink){
-
-				$subview =& new CoopView(&$page, $backlink);
-				$subview->obj->company_id = $this->obj->company_id;
+			foreach($backlinks as $backtable => $farkey){
+				$subview =& new CoopView(&$page, $backtable);
+				$subview->obj->$nearkey = $this->obj->$farkey;
 				$this->addSubTable(&$tab, $subview->simpleTable());
 			}
 		}
+
+
+	function getPK()
+		{
+			$keys = $this->obj->keys();
+			return $keys[0];
+	}
 
 	function recurseTable()
 		{
 			$this->obj->find();
 
+
 			$backlinks = $this->getBackLinks();	// MUST be after find!
 
+			$pk = $this->getPK();
 
 			//TODO return null or something, if nothing found
 			$tab =& new HTML_Table();
@@ -188,11 +196,12 @@ class coopView
 				$tab->addRow(array_values($this->obj->toArray()));
 				
 				//subrows
-			$this->addSubTables(&$tab, $backlinks);
+			$this->addSubTables(&$tab, $pk, $backlinks);
 
 			}
 			return $tab->toHTML();
 		}
+
 	
 
 } // END COOP VIEW CLASS

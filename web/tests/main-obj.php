@@ -21,6 +21,7 @@ $cp->pageTop();
 
 $view =& new CoopView(&$cp, 'companies');
 print $view->recurseTable();
+//print "PK " . $view->getPK();
 
 done ();
 
