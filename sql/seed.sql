@@ -315,4 +315,36 @@ insert into sponsorship_types set
 	sponsorship_price = 150,
     school_year = '2004-2005';
 
+
+-- tickets
+insert into ticket_type set
+            ticket_type_id = 1,
+            description = "Paid for",
+            paid_flag = 1;
+
+insert into ticket_type set
+            ticket_type_id = 2,
+            description = "Included with package",
+            paid_flag = 1;
+
+insert into ticket_type set
+            ticket_type_id = 3,
+            description = "Member",
+            paid_flag = 0;
+
+insert into ticket_type set
+            ticket_type_id = 4,
+            description = "VIP",
+            paid_flag = 0;
+
+insert into ticket_type set
+            ticket_type_id = 5,
+            description = "Freebie",
+            paid_flag = 0;
+
+insert into ticket_type set
+            ticket_type_id = 6,
+            description = "Other",
+            paid_flag = 0;
+
 -- EOF

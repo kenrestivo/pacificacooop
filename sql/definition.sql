@@ -829,5 +829,12 @@ CREATE TABLE leads_income_join (
     
 
 
+CREATE TABLE ticket_type (
+  ticket_type_id int(32) NOT NULL unique auto_increment,
+  description varchar(255) default NULL,
+	paid_flag tinyint(1) default NULL,
+   PRIMARY KEY  (ticket_type_id)
+) ;
+
 
 -- EOF

@@ -107,7 +107,8 @@ tags:
 	etags *
 
 update-dbobject::
-	 php /usr/share/php/DB/DataObject/createTables.php coop-dbobj.ini
+	(cd $(PLAYGROUND); php /usr/share/php/DB/DataObject/createTables.php coop-dbobj.ini)
+	(cd $(PLAYGROUND)/objects; cvs add *php)
 
 guarantee-pear::
 	@for i in Archive_Tar Console_Getopt DB DB_DataObject  DB_DataObject_FormBuilder-beta Date HTML_Common HTML_Menu HTML_QuickForm HTML_Table HTML_Template_Sigma HTTP Mail Net_SMTP Net_Socket PEAR Pager Validate-alpha XML_Parser XML_RPC  ; do sudo pear install $i ; done
