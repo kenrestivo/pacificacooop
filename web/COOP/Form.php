@@ -394,6 +394,7 @@ class coopForm extends CoopObject
 				//duplication of selectoptions
 				$this->page->debug > 3 && $this->obj->debugLevel(2);
 				$far = new CoopObject(&$this->page, $ft, $this);
+
 				// IIRC this has a different name in FB. use theirs!
  				if(is_callable(array($far->obj, 'fb_linkConstraints'))){
 					$far->obj->fb_linkConstraints();
@@ -407,18 +408,31 @@ class coopForm extends CoopObject
 									 $this->concatLinkFields(&$far->obj));
 				}
 				
-				$this->form->addElement('advmultselect', 
+	
+				$this->obj->{$this->pk} = $this->id; // for checkcrosslinks
+				$incl = $this->checkCrossLinks($mt, $ft);
+				$this->page->confessArray($incl, 
+										  'CoopForm::addCrossLinks(incl)', 2);
+
+				// HACK! MUST sanity czech that indb is in options, and push
+				$optkeys = array_keys($options);
+				foreach($incl as $key ){
+					if(!in_array($key, $optkeys)){
+						$far = new CoopObject(&$this->page, $ft, $this);
+						$far->obj->$tf = $key;
+						$far->obj->find(true);
+						$options[$key] = 
+							 sprintf('%.42s...', 
+									 $this->concatLinkFields(&$far->obj));
+					}
+				}
+				
+				// jeebus. all this, just to get to here.
+				$el =& $this->form->addElement('advmultselect', 
 										$tf,
 										$far->title(),
 										$options);
-
-
-				$this->obj->{$this->pk} = $this->id; // for checkcrosslinks
-				$incl = $this->checkCrossLinks($mt, $ft);
-				confessArray($incl, 'incl');
-				$this->form->setDefaults(
-					array($tf =>
-						  $this->is_submitted ? $_REQUEST[$tf] : $incl));
+ 				$el->setValue($this->is_submitted ? $_REQUEST[$tf] : $incl);
 				
 			}
 		}

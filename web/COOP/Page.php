@@ -74,17 +74,22 @@ class coopPage
 				   $metalinks, $title, $heading);
 			
 			
-			$this->confessArray($_REQUEST, "test REQUEST");
-			$this->confessArray($_SESSION, "test SESSION (prior to request being processed)");
-			$this->confessArray($_SERVER, "test SERVER", 4);
-			
-			
+			$this->debugCrap();
 			warnDev();
 			
 			user_error("CoopPage.php: ------- NEW PAGE --------", 
 					   E_USER_NOTICE);
 
 		}
+
+	function debugCrap()
+	{
+		$this->confessArray($_REQUEST, "test REQUEST");
+		$this->confessArray($_SESSION, "test SESSION (prior to request being processed)");
+		$this->confessArray($_SERVER, "test SERVER", 4);
+				
+	}
+
  
 	function pageTop()
 		{
