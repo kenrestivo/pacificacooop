@@ -720,7 +720,6 @@ CREATE TABLE ads (
 
 
 
-
 CREATE TABLE sponsorship_types (
     sponsorship_type_id int(32) NOT NULL unique auto_increment,
     sponsorship_name varchar(50) not NULL,

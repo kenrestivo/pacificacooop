@@ -126,3 +126,17 @@ left join
             and incs.payment_amount is not null
 where companies.company_id = 114;
  
+
+-- union square
+select  company_id, item_value as auction_value
+     from companies_auction_join  as caj
+     left join auction_donation_items  as adi
+              on caj.auction_donation_item_id = 
+                adi.auction_donation_item_id
+union all
+    select  company_id, item_value as in_kind_value
+     from companies_in_kind_join as cikj
+     left join in_kind_donations as ikd
+              on cikj.in_kind_donation_id = 
+                ikd.in_kind_donation_id
+ 

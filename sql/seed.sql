@@ -285,4 +285,31 @@ insert into ad_sizes set
 
 
 
+--- sponsorship types
+insert into sponsorship_types set
+	sponsorship_type_id = 1,
+	sponsorship_name = 'Angel',
+	sponsorship_price = 1000,
+    school_year = '2004-2005';
+
+insert into sponsorship_types set
+	sponsorship_type_id = 2,
+	sponsorship_name = 'Champion',
+	sponsorship_price = 500,
+    school_year = '2004-2005';
+
+
+insert into sponsorship_types set
+	sponsorship_type_id = 3,
+	sponsorship_name = 'Patron',
+	sponsorship_price = 250,
+    school_year = '2004-2005';
+
+
+insert into sponsorship_types set
+	sponsorship_type_id = 4,
+	sponsorship_name = 'Friend',
+	sponsorship_price = 150,
+    school_year = '2004-2005';
+
 -- EOF
