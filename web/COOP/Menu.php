@@ -11,14 +11,49 @@ class CoopMenu extends HTML_Menu
 {
 	var $realms;
 	var $renderer;
+	var $realm_map = array( 
+		'auction' => 'Auctions',
+		'flyers' => 'Flyers',
+		'invitations' => 'Invitations',
+		'money' => 'Family Fees',
+		'nag' => 'Reminders',
+		'packaging' => 'Packaging',
+		'raffle' => 'Raffles',
+		'solicit' => 'Solicitation',
+		'tickets' => 'Tickets'
+		);
 
-	function create($heirmenu )
+	function createLegacy( )
 		{
-			
+		
+
+			// grab the legacy stuff
+			include('everything.inc');
+			$sf = $this->indexEverything($everything);
+			include('members.inc');
+			$members = $this->indexEverything($everything);
+
+ 
+			$heirmenu = array(
+				array(
+					'title' => 'Enhancement',
+					'sub' => $this->callbacksToMenu($members)),
+				array(
+					'title' => 'Springfest',
+					'sub' => $this->nestByRealm($sf, $this->realm_map)));
+
+
+			$this->setMenu($heirmenu);
+
 			$this->renderer =& new HTML_Menu_DirectTreeRenderer();
-			$this->render($this->renderer);
+			$this->render($this->renderer, 'sitemap');
+
 		}
 
+	function toHTML()
+		{
+			return $this->renderer->toHTML();
+		}
 
 	function indexEverything($everything)
 		{
@@ -69,7 +104,7 @@ class CoopMenu extends HTML_Menu
 
 	function nestByRealm($ie, $page)
 		{
-			foreach($this->realms as $realm => $description){
+			foreach($this->realm_map as $realm => $description){
 				$res[$realm]['title'] = $description;
 				foreach($ie as $key => $cbs){
 					if(strncmp($cbs['realm'], $realm, 7) == 0){
