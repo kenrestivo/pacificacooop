@@ -55,7 +55,7 @@
 		 (worker (if (string-index long-parent (char-set #\*)) "Yes" "No"))
 		 (parents (simplesql-query *dbh*
 								   (sprintf #f "
-				select parentsid, last, first, worker, ptype familyid
+				select parentsid, last, first, worker, ptype, familyid
 						from parents
 					where (soundex(first) = soundex('%s')
 									or first like \"%%%s%%\"
@@ -136,11 +136,15 @@
 (define (check-for-new-family line header)
   (let ((families (simplesql-query *dbh*
 								   (sprintf #f "
-				select familyid, name, phone from families
+				select families.familyid, families.name,
+								families.phone parents.first as mom
+						from families left join parents using (familyid)
 						where  phone like \"%%%s%%\"
-							or soundex(name) = soundex('%s')"
+							or (soundex(name) = soundex('%s')
+								and soundex(mom) = soundex('%s'))"
 											(rasta-find "Phone" line header)
-											(rasta-find "Last Name" line header)))))
+											(rasta-find "Last Name" line header)
+											(rasta-find "Mom Name *")))))
 	(if (> (length families) 1)
 		(db-ref-last (choose-duplicates families) "familyid") ;gotcha!
 		(begin (safe-sql *dbh* (sprintf #f "
