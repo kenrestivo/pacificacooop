@@ -55,6 +55,24 @@ the fieldstruct
 			the levels are array (group, user). 
 		realval: with fieldstructs used for display, has the REAL value
 			i.e. the value of the 'linkfield', not of the field itself
+		savealways: a hack. if this flag exists, ignore the perms system :-/
+			this is for index fields and such
+
+callbacks struct
+	this is a proto-object. it contains miles and miles of crap
+		it'll eventually be an object, but i'm not ready to take that leap yet
+	mainindex: 
+	maintable: 
+	realm:
+	joins: an array of arrays of join info, in order of joining (important!)
+		each containing :
+			the index that is common to the joins
+			the left table
+			the right table
+	input callback: used by processoneentry to redisplay user-error entries
+	dupecheck callback: used by processoneentry to dupecheck b4 saving
+	realsave callback: used by processoneentry to REALLY save the thing!
+	plus, all the state callbacks (see below)
 
 auth
 	realms: areas of privilege
@@ -100,8 +118,6 @@ auth
 			whether the desired action is on the user's own family or another
 			the user's USERLEVEL privileges
 			the user's GROUPLEVEL privileges
-	savealways: a hack. if this flag exists, ignore the perms system :-/
-		this is for index fields and such
 		
 
 
