@@ -295,6 +295,7 @@ menu.php: a nice launching point for things!
 		- enter 10names 
 		- enter 3x5 cards 
 		- edit roster information (phone, email, name spelling, etc)
+		- show insurance information
 		- enter checks (if authorised for "money" realm)
 
 admin.php: administrative tasks

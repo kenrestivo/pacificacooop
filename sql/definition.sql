@@ -190,6 +190,25 @@ create table coop.liglue (
     primary key (liglueid)
 );
 
+-- users
+create table coop.users (
+    userid int(32) not null auto_increment,
+	password varchar(255),
+	familyid int(32),
+	realm varchar(55),
+	authlevel int(5),
+    primary key (userid)
+);
+
+-- privs
+create table coop.privs (
+    privid int(32) not null auto_increment,
+    userid int(32),
+	realm varchar(55),
+	authlevel int(5),
+    primary key (privid)
+);
+
 -- the user/passwords used by the web view page AND my update tool..
 grant select, update, insert, delete on coop.* to input@'%' 
 	identified by 'test'; 
