@@ -333,41 +333,51 @@ logIn($auth)
 					),
 		nullpass => array (
 					func => "nullPassState",
-					description => "User has password in database"
+					required => array ( "uid", "pwd"),
+					description => "User has no password in database"
 					),
 		wrongpass => array (
 					func => "wrongPassState",
+					required => array ( "uid", "pwd"),
 					description => "Wrong password"
 					),
 		nouser => array (
 					func => "noUserState",
+					required => array ( "uid"),
 					description => "No such user"
 					),
 		confirmwrong => array (
 					func => "confirmWrongState",
+					required => array ( "uid", "pwd", "confirm"),
 					description => "Confirmation password doesn't match"
 					),
 		insecurepass => array (
 					func => "insecurePassState",
+					required => array ( "pwd"),
 					description => "New password doesn't meet minimums"
-					),
-		passsaved => array (
-					func => "passSavedState",
-					description => "New password saved to db"
 					),
 		loggedin => array (
 					func => "loggedInState",
+					required => array ( "uid", "token"),
 					description => "User is logged in"
 					)
 	);
 
-
-
 	fwrite(STDERR, "logIn(): entering %s\n",
 		$states[$auth['state']]['description']);
 
+	
+	// sanity check the struct passed in
+	while (list($key, $val) = each($states[$auth['state']['required'])){
+		if(!$auth[$val]){
+			fwrite(STDERR, "ERROR! $val required for state. logging out\n");
+			$auth['state'] = 'loggedout'; // force it outta here
+		}
+	}
+
 	// dispatch the appropriate action for this state, and collect result
 	return($states[$auth['state']]['func']($auth));
+	// TODO: or, do i do() while; looking for some flag in the auth?
 
 
 }/* END LOGIN  */
@@ -381,8 +391,8 @@ loginForm($auth, $guts)
 {
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					$_SERVER['PHP_SELF']);
-	print $guts;
 	thruAuth($newauth);
+	print $guts;
 	printf("<INPUT TYPE=submit NAME='login' VALUE='LogIn'>");
     print "</FORM>";
 }/* END  */
@@ -390,20 +400,23 @@ loginForm($auth, $guts)
 
 
 /******************
-
+	LOGGEDOUTSTATE
+	the REAL main loop.
 ******************/
 function
 loggedOutState($auth)
 {
 	/*
-		if no pass
+		if token/uid and they check out
+			DONE state loggedin!
+		if no pass (and no uid)
 			show an entry form (prepop with uid if given)
 			DONE
-		if bad uid
+		if uid isn't real
 			DONE state nouser
 		if password is null
 			DONE state nullpass
-		if password is correct
+		if md5 of password is same as getpass()
 			gen token
 			DONE state loggedin!
 	*/
@@ -438,6 +451,10 @@ nullPassState($auth)
 function
 wrongPassState($auth)
 {
+	/*
+		complain.
+		show the password form again, prepopulated with uid
+	*/
 	$newauth['state'] = "loggedout";
 
 	return $newauth;
@@ -446,11 +463,15 @@ wrongPassState($auth)
 
 
 /******************
-
+	NOUSERSTATE
 ******************/
 function
 noUserState($auth)
 {
+	/*
+		complain.
+		show the main entry form, no prepopulation
+	*/
 
 	$newauth['state'] = "loggedout";
 
@@ -460,50 +481,35 @@ noUserState($auth)
 
 
 /******************
-
+	CONFIRMWRONGSTATE
 ******************/
 function
 confirmWrongState($auth)
 {
+	/*
+		complain
+		i know the uid, so show a form with both confirmation AND entry
+	*/
+	$newauth['state'] = "loggedout";
 }/* END  */
 
 
 
 /******************
-
+	INSECUREPASSSTATE
 ******************/
 function
 insecurePassState($auth)
 {
+	/*
+		inputs: password
+		password sucks. complain. offer suggestions
+		pass uid through
+	*/
+
+	$newauth['state'] = "loggedout";
 }/* END  */
 
-
-
-/******************
-
-******************/
-function
-passSavedState($auth)
-{
-
-	$newauth['state'] = "loggedin";
-
-	return $newauth;
-}/* END  */
-
-
-
-/******************
-
-******************/
-function
-passCorrectState($auth)
-{
-
-	$newauth['state'] = "loggedin";
-
-	return $newauth;
-}/* END  */
 
 
 
