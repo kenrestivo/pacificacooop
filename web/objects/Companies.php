@@ -25,6 +25,10 @@ class Companies extends DB_DataObject
     var $do_not_contact;                  // datetime(19)  
     var $flyer_ok;                        // string(7)  enum
     var $family_id;                       // int(32)  
+    var $first_name;                      // string(255)  
+    var $last_name;                       // string(255)  
+    var $title;                           // string(255)  
+    var $salutation;                      // string(50)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -34,10 +38,14 @@ class Companies extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $fb_linkDisplayFields = array('company_name', 'address1', 'phone');
+	var $fb_linkDisplayFields = array('company_name', 'last_name','first_name');
 	var $fb_fieldLabels = array (
 		'company_name' => 'Company Name',
 		"family_id" => 'Is this company owned by a Co-Op Family?',
+		'last_name' => "Last Name", 
+		'first_name' => "First Name",
+		'salutation' => "Mr. Ms. Dr.", 
+		'title' => "Title", 
 		"address1" => "Address" ,
 		"address2" => "Address2" ,
 		"city" => "City" ,

@@ -16,6 +16,7 @@ class In_kind_donations extends DB_DataObject
     var $item_value;                      // real(11)  
     var $date_received;                   // date(10)  
     var $school_year;                     // string(50)  
+    var $thank_you_id;                    // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

@@ -21,6 +21,7 @@ class Income extends DB_DataObject
     var $cleared_date;                    // date(10)  
     var $school_year;                     // string(50)  
     var $txn_id;                          // string(20)  not_null
+    var $thank_you_id;                    // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
