@@ -28,11 +28,27 @@ print '<HTML>
 		<h2>Pacifica Co-Op Nursery School Data Entry</h2>
 	';
 
-
-
 //DB_DataObject::debugLevel(5);
 
 confessArray($_REQUEST, "test REQUEST");
+
+///
+warnDev();
+
+user_error("states.inc: ------- NEW PAGE --------", E_USER_NOTICE);
+
+
+$auth = logIn($_REQUEST);
+
+
+if($auth['state'] != 'loggedin'){
+	done();
+}
+
+
+topNavigation($auth,  getUser($auth['uid']));
+
+///////////////////////
 
 ///////// TABLE POPUP
 $obj = new DB_DataObject();
@@ -82,6 +98,7 @@ if($_REQUEST['action'] == 'detail'){
 	$build =& DB_DataObject_FormBuilder::create ($obj);
 	$form = new HTML_QuickForm($_SERVER['PHP_SELF']);
 	$form->addElement('hidden', 'action', 'detail');
+	$form->addElement('html', thruAuth($auth, 1)); // MUST be global!
 	$form->addElement('hidden', 'table', $table);
 	$form->addElement('hidden', 'id');
 	$build->useForm($form);
@@ -90,8 +107,10 @@ if($_REQUEST['action'] == 'detail'){
 		$res = $form->process (array (&$build, 'processForm'), false);
 		if ($res){
 			$obj->debug('processed successfully', 'detailform', 0);
-			header(sprintf('Location: %s?action=list&table=%s', 
-						   $_SERVER['PHP_SELF'], $table));
+			header(sprintf('Location: %s?%saction=list&table=%s', 
+						   $_SERVER['PHP_SELF'], 
+						   SID ? SID . "&" : "", 
+						   $table));
 		}
 		echo "aaauugh!<br>";
 	}

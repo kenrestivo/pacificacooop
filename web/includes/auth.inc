@@ -1091,13 +1091,17 @@ loggedInState($auth, $states)
 	outputs: session id as invisible fields!
 ******************/
 function
-thruAuth($auth)
+thruAuth($auth, $return = 0)
 {
 	$_SESSION['auth'] = $auth;
 	if(SID){
-		printf("<INPUT TYPE=hidden NAME='%s' VALUE='%s'>\n",
+		$ret = sprintf("<INPUT TYPE=hidden NAME='%s' VALUE='%s'>\n",
 			'coop',  session_id());
 	}
+	if($return){
+		return $ret;
+	}
+	print $ret;
 }/* END THRUAUTH  */
 
 
