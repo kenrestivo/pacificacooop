@@ -1,7 +1,7 @@
 
 
 
-<form method="post" action="http://www.pacificacoop.org/sf-dev/ipn.php">
+<form method="post" action="http://www.pacificacoop.org/sf/ipn.php">
 <input type="hidden" name="mc_gross" value="0.01">
 <input type="hidden" name="address_status" value="unconfirmed">
 <input type="hidden" name="payer_id" value="QGVDAFGZ9XHLJ">
@@ -19,7 +19,8 @@
 <input type="hidden" name="address_country" value="United States">
 <input type="hidden" name="address_city" value="Palo Alto">
 <input type="hidden" name="quantity" value="1">
-<input type="hidden" name="verify_sign" value= "AkU-lzGsIkV0gazwa9nDVpmsx9X0AMF3KqbmhBuM8UTVNO5CFNAptk78">
+<input type="hidden" name="verify_sign" 
+        value= "AkU-lzGsIkV0gazwa9nDVpmsx9X0AMF3KqbmhBuM8UTVNO5CFNAptk78">
 <input type="hidden" name="payer_email" value=" pb-test@paypal.com">
 <input type="hidden" name="txn_id" value="4MX09190KB7728256">
 <input type="hidden" name="payment_type" value="instant">

@@ -100,7 +100,7 @@ class IPN
 					  "recurring", "reattempt", "retry_at", "recur_times", 
 					  "username", "password", "subscr_id", "option_name1", 
 					  "option_selection1", "option_name2",
-					  "option_selection2", "num_cart_items"
+					  "option_selection2", "num_cart_items", "verify_sign"
 					);
 
 // build insert statement
