@@ -69,16 +69,19 @@ insert into events set
 insert into cal set
 			eventid = 4,
 			eventdate = "2003-12-18",
+			url = 'auction.php',
 			notes = "Everyone must enter at least 1 auction donation online";
 
 insert into cal set
 			eventid = 3,
 			eventdate = "2003-11-04",
+			url = '10names.php',
 			notes = "Everyone must enter a list of 10 people to be invited to Springfest ";
 
 insert into cal set
 			eventid = 1,
 			eventdate = "2003-12-12",
+			url = 'insurance.php',
 			notes = "Christmas tree farm. All insurance and drivers licenses must be up-to-date.";
 
 

@@ -261,6 +261,7 @@ create table cal (
 	status enum ('Active', 'Tentative', 'Cancelled') default 'Active',
 	hideuntil datetime,
 	eventdate datetime,
+	url varchar(255),
 	primary key (calid)
 );
 
