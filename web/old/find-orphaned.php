@@ -38,9 +38,10 @@ $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
 print $menu->topNavigation();
 
-print "<p>Springfest Orphaned Income</p>";
+print "<p>Springfest Orphaned $targetTable</p>";
 
 print $cp->selfURL('View');
+print $cp->selfURL('Fix Zero Primary Keys', array('action' => 'unzero'));
 
 
 function viewHack(&$cp, &$atd)
@@ -57,15 +58,16 @@ function viewHack(&$cp, &$atd)
 							  $table,
 							  $sub->pk);
 	 }
-	 $query = sprintf("select * from %s %s where %s",
+	 $query = sprintf("select %s.* from %s %s where %s",
+					  $atd->table,
 					  $atd->table,
 					  implode(' ', $joins),
 					  implode(' and ', $whereadd));
 	 //print $query;
 	 $atd->obj->query($query);
-// 	 while($atd->obj->fetch()){
-// 		 confessObj($atd->obj, 'atdobj');
-// 	 }
+//  	 while($atd->obj->fetch()){
+//  		 confessObj($atd->obj, 'atdobj');
+//  	 }
 	 return $atd->simpleTable(false);
 
 }
@@ -74,6 +76,29 @@ function viewHack(&$cp, &$atd)
 // cheap dispatcher
 //confessArray($_REQUEST,'req');
 switch($_REQUEST['action']){
+
+
+//////// UNZERO //////////
+ case 'unzero':
+	 $top = new CoopObject(&$cp, $targetTable, &$nothing);
+	 $top->obj->debugLevel(2);
+	 $top->obj->whereAdd(sprintf("%s is null or %s < 1", 
+								 $top->pk, $top->pk));
+	 while($top->obj->fetch()){
+		 $sub = new CoopObject(&$cp, $targetTable, &$nothing);
+		 $sub->query(sprintf("select max %s from %s as maxid"),
+					 $top->pk, $top->table);
+		 $sub->obj->fetch(); // only one
+		 $max = $sub->obj->maxid;
+		 $old = $top->obj;
+		 $new = $top->obj;
+		 $new->obj->{$top->pk} = $max + 1;
+		 $new->obj->update($old);
+		 printf("<p>Updated %s...</p>",
+				$top->concatLinkFields(&$new));
+	 }
+
+	 break;
 
 //////// EDIT //////////
  case 'edit':
