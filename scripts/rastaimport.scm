@@ -52,7 +52,9 @@
 							 (rasta-find "Child" line header)
 							 (check-family line header)))))))
 
-							 
+;;;;;;;;;; functions for navigating through the rasta structure (accessors?)
+(define (rasta-find key line header)
+  (list-ref  line (list-position key header)))
 
 ;;;;;;;;;;; functions for importing and cleaning csv's from spreadsheet
 
