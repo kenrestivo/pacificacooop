@@ -1,6 +1,6 @@
 ;; $Id$
 
-;; experimental scripts to control jwebunit and httpunit via jscheme
+;; experimental scripts to control jwebunit and httpunit via skij
 ;; (load "/mnt/kens/ki/proj/coop/qa/httpunit-jscheme.scm")
 
 
@@ -54,12 +54,12 @@
 	  (invoke dl 'getResponseText)
 	  ))))
 
-(define get-tables
+(define get-response
   (lambda(wtc)
 	(begin
-	  (describe (invoke (invoke (peek (invoke
-									   wtc 'getDialog)
-									  'wc) 'getCurrentPage)
-						'getTables)))))
+	  (invoke (invoke wtc 'getDialog)
+					  'getResponse))))
+
+;;(define tab ((invoke (get-response wtc) 'getTableStartingWith "Description")) 'asText)
 
 ;;EOF
