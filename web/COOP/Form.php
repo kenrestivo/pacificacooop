@@ -40,6 +40,9 @@ class coopForm extends CoopObject
 			$id = (int)$id;
 			if($id){
 				$this->obj->get($id);
+			} else {
+				user_error("coopForm::build($id) called with no id, assuming NEW", 
+						   E_USER_NOTICE);
 			}
 			$formname = sprintf('edit_%s', $this->table);
 			$form =& new HTML_QuickForm($formname, false, false, false, 
@@ -54,7 +57,7 @@ class coopForm extends CoopObject
 			// will need to guess field types
 			$this->_tableDef = $this->obj->table();
 
-			//confessObj($this, 'atd');
+			//confessObj($this, 'coopForm::build($id) found');
 			foreach($this->obj->toArray() as $key => $val){
 				if(!$this->isPermittedField($key)){
 					// NOTE the hidden thing. i think  i need to do hidden here
