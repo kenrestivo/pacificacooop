@@ -36,7 +36,7 @@ BKUSER=input
 
 all::
 	@echo "not so fast... get specific"
-	@egrep "^[a-z]*:" Makefile | awk '{print $$1}' 
+	@egrep "^[a-z\-]*:" Makefile | awk '{print $$1}' 
 
 create::
 	mysql -u $(DBUSER) -p -h $(DBHOST) -P $(DBPORT) mysql < definition.sql
