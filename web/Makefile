@@ -49,7 +49,7 @@ download-live::
 		--exclude '*.sql' \
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNLIVEPATH)/ $(LIVEHERE)
 
-upload-dev::
+upload-dev:: 
 	rsync -e ssh \
 		--rsync-path=$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
