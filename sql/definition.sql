@@ -228,6 +228,24 @@ create table privs (
     primary key (privid)
 );
 
+-- auction donation item
+create table auction (
+    auctionid int(32) not null auto_increment,
+	description varchar(55),
+    amount decimal(9,2),
+	entered datetime,
+	updated timestamp,
+    primary key (auctionid)
+);
+
+-- glue table for many-to-many: families to auction items
+create table faglue (
+    faglueid int(32) not null auto_increment,
+	auctionid int(32),
+	familyid int(32),
+    primary key (faglueid)
+);
+
 -- the user/passwords used by the web view page AND my update tool..
 -- these MUST be done manually for db's not named coop!!
 --TODO: i have to grant all to myself on this db! duh.
