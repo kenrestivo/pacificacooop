@@ -64,7 +64,7 @@ $form->setDefaults(array('fruit' => $_REQUEST['fruit']));
 
 $form->addElement('advmultselect', 'cars', 'Cars:', $car_array);
 $form->setDefaults(array('cars' => $_REQUEST['cars']));
-print serialize($_REQUEST['cars']);
+//print serialize($_REQUEST['cars']);
 $form->addElement('submit', null, 'Send');
 
 // Output the form

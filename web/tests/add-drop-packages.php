@@ -62,45 +62,6 @@ switch($_REQUEST['action']){
 	 $atd->build($_REQUEST);
 
 
-
-	 //confessObj($atd, 'atd');
-	 /////////// what's included
-	 $included = $atd->checkCrossLinks('auction_packages_join',
-									   'auction_donation_items');
-
-	 ///////////// the orphans to add
-	 $auc = new CoopObject(&$cp, 'auction_donation_items', $none);
-	 //$auc->obj->debugLevel(2);
-	 $auc->obj->school_year = findSchoolYear();
-	 $auc->obj->find();
-	 while($auc->obj->fetch()){
-		 $allpossible[$auc->obj->{$auc->pk}] =  
-			 sprintf('%.42s...', 
-					 implode(' - ', array($auc->obj->{$auc->pk},
-										  $auc->obj->item_description)));
-
-	 }
-
-
-	 /// HEY ASSHOLE!!! THIS IS IT HIDING IN HERE!!
-	 $el =& $atd->form->addElement('advmultselect', 'auction_donation_item_id', 
-					   'Auction Items:', $allpossible);
-
-	 //confessArray($included,'included');
-
-	 $atd->form->setDefaults(
-		 array('auction_donation_item_id' =>
-			   isset(
-				   $_REQUEST['_qf__' . 
-							 $atd->form->_attributes['name']]) ?
-			   $_REQUEST['auction_donation_item_id'] :
-			   $included));
-	 //confessObj($atd->form, 'form');
-
-
-
-
-
 	 // ugly assthrus
 	 $atd->form->addElement('hidden', 'action', 'addremove'); 
 	 $atd->form->addElement('hidden', $atd->pk, $atd->obj->{$atd->pk}); 
@@ -109,6 +70,8 @@ switch($_REQUEST['action']){
 		 $atd->form->addElement('hidden', 'coop', $sid); 
 	 }
 	 
+
+	 $atd->addRequiredFields();
 
 	 if ($atd->form->validate()) {
 		 print "saving...";

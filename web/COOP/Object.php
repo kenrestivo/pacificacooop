@@ -277,7 +277,7 @@ class coopObject
 			// TODO: maybe try to calculate mid or fartable? dangerous?
 			$far = new CoopObject(&$this->page, $farTable, $this);
 			//confessObj($this, 'this');
-			//$far->obj->debugLevel(2);
+			$this->page->debug > 3 && $far->obj->debugLevel(2);
 			$mid =& new CoopObject(&$this->page, $midTable, &$far);
 			$mid->obj->{$this->pk} = $this->obj->{$this->pk};
 			$far->obj->joinAdd($mid->obj);
@@ -289,6 +289,14 @@ class coopObject
 				}
 			}
 			return $included;
+		}
+
+	function title()
+		{
+			if($this->obj->fb_formHeaderText){ 
+				return $this->obj->fb_formHeaderText;
+			}
+			return ucwords($this->table);
 		}
 	
 } // END COOP OBJECT CLASS

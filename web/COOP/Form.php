@@ -25,6 +25,7 @@ require_once('DB/DataObject.php');
 require_once 'HTML/QuickForm.php';
 require_once('object-config.php');
 require_once('DB/DataObject/Cast.php');
+require_once('lib/advmultselect.php');
 
 //////////////////////////////////////////
 /////////////////////// COOP FORM CLASS
@@ -70,6 +71,8 @@ class coopForm extends CoopObject
 			if($this->id < 1){
 				$this->setDefaults();
 			}
+
+			$this->addCrossLinks();
 
 			// finally, sumbit it!
 			$this->form->addElement('submit', null, 'Save');
@@ -360,6 +363,48 @@ class coopForm extends CoopObject
 					$mid->obj->limit(1);
 					$mid->obj->delete();
 				}
+
+			}
+		}
+
+	function addCrossLinks()
+		{
+			
+			foreach($this->obj->fb_crossLinks as $la){
+				$tf = $la['toField'];
+				$mt = $la['table'];
+				$ft = $la['toTable'];
+				$nk = $this->backlinks[$mt];
+
+				$incl = $this->checkCrossLinks($mt, $ft);
+				
+				//duplication of selectoptions
+				$this->page->debug > 3 && $this->obj->debugLevel(2);
+				$far = new CoopObject(&$this->page, $ft, $this);
+				$far->obj->school_year = findSchoolYear(); // XXX AUUGH!
+				$far->obj->orderBy(implode(', ', 
+										   $far->obj->fb_linkDisplayFields));
+				$far->obj->find();
+				while($far->obj->fetch()){
+					$options[(string)$far->obj->$tf] = 
+							 sprintf('%.42s...', 
+									 $this->concatLinkFields(&$far->obj));
+				}
+				
+				$this->form->addElement('advmultselect', 
+										$tf,
+										$far->title(),
+										$options);
+
+			//confessArray($incl,'included');
+
+			$this->form->setDefaults(
+				array($tf =>
+					  isset(
+						  $_REQUEST['_qf__' . 
+									$this->form->_attributes['name']]) ?
+					  $_REQUEST[$tf] :
+					  $incl));
 
 			}
 		}

@@ -255,13 +255,6 @@ class coopView extends CoopObject
 
 		}
 
-	function title()
-		{
-			if($this->obj->fb_formHeaderText){ 
-				return $this->obj->fb_formHeaderText;
-			}
-			return ucwords($this->table);
-		}
 
 	function tableTitle($contents)
 		{
