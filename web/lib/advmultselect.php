@@ -74,12 +74,12 @@
    onClick=\"{$this->_jsPrefix}moveSelections(this.form.elements['__" .
 				   $this->getName() . "[]'], this.form.elements['_" . $this->getName() .
 				   "[]'], this.form.elements['" . $this->getName() . "[]'], 'add')\"
-   value=\"<<Add \"><br>\n";
+   value=\"". htmlentities("<<Add") . "\"><br>\n";
                $strHtml .= $tabs . "<input type=\"button\"
    onClick=\"{$this->_jsPrefix}moveSelections(this.form.elements['__" .
 				   $this->getName() . "[]'], this.form.elements['_" . $this->getName() .
 				   "[]'], this.form.elements['" . $this->getName() . "[]'], 'remove')\"
-   value=\" Remove>> \">\n";
+   value=\"" . htmlentities("Remove>>") . "\">\n";
                $strHtml .= $tabs . $strHtmlHidden;
                $strHtml .= $tabs . "</td><td align=center>\n";
                $strHtml .= $tabs . $strHtmlUnselected;
