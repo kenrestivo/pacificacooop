@@ -30,7 +30,8 @@ main()
 	$dbh = DBI->connect("DBI:mysql:$dbname:$host$port", $user, $pw )
 		or die "can't connect to database $!\n";
 
-	&tester();
+	#&tester();
+	&eachTable();
 
 	$dbh->disconnect or die "couldnt' disconnect from database $!\n";
 
@@ -43,7 +44,6 @@ main()
 sub 
 eachTable()
 {
-	my $addref = shift;
 	my $rqueryobj ;
 	my %ritem ;
 	my $ritemref ;
@@ -65,10 +65,44 @@ eachTable()
 			printf("%s is not a table\n", $ritem{'TABLE_NAME'});
 			next;
 		}
-		&eachField($ritem{'TABLE_NAME'});
+		printf("checking table <%s>\n",  $ritem{'TABLE_NAME'} );
+		&eachField($ritem{'TABLE_NAME'}, &findKey($ritem{'TABLE_NAME'}));
 	} # end while
 } #END EACHTABLE
 
+
+########################
+#	FINDKEY
+#	find the primary key field
+########################
+sub
+findKey()
+{
+	my $tablename = shift;
+	my $keyname ;
+	my $rquery;
+	my %ritem;
+	my $ritemref;
+	my $rqueryobj;
+
+	$rquery = "explain $tablename";
+	if($opt_v){
+		print "findKey(): doing <$rquery>\n"; 
+	}
+	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+	$rqueryobj->execute() or die "couldn't execute $!\n";
+
+	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		%ritem = %$ritemref;
+		if($ritem{'Key'} eq "PRI"){
+			$keyname = $ritem{'Field'};
+			printf ("\tgot key <%s> for %s\n", $keyname, $tablename);
+		}
+	} # end while
+
+	return $keyname
+
+} #END FINDKEY
 
 ########################
 #	EACHFIELD
@@ -78,6 +112,7 @@ sub
 eachField()
 {
 	my $tablename = shift;
+	my $keyname = shift;
 	my $rquery;
 	my %ritem;
 	my $ritemref;
@@ -85,17 +120,114 @@ eachField()
 
 	$rquery = "explain $tablename";
 	if($opt_v){
-		print "doing <$rquery>\n"; #XXX debug only
+		print "eachField(): doing <$rquery>\n"; 
 	}
 	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 	$rqueryobj->execute() or die "couldn't execute $!\n";
 
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
 		%ritem = %$ritemref;
-		printf ("checking <%s>\n", $ritem{'Field'});
+		printf ("\tchecking field <%s>\n", $ritem{'Field'});
+		&findUglies($tablename, $ritem{'Field'}, $keyname);
 	} # end while
 
 } #END EACHFIELD
+
+
+########################
+#	FINDUGLIES
+#	seatch each field lookign for uglies
+########################
+sub
+findUglies()
+{
+	my $tablename = shift;
+	my $fieldname = shift;
+	my $keyname = shift;
+	my $rquery;
+	my %ritem;
+	my $ritemref;
+	my $rqueryobj;
+
+	$rquery = "select * from $tablename
+				where $fieldname like \"%&%;%\" or
+					$fieldname like \"%\\\\\\\\%\"
+		";
+	if($opt_v){
+		print "findUglies(): doing <$rquery>\n"; 
+	}
+	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+	$rqueryobj->execute() or die "couldn't execute $!\n";
+
+	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		%ritem = %$ritemref;
+		printf ("found problem with <%s> %s %d: <%s>\n", 
+			$fieldname, $keyname, $ritem{$keyname}, $ritem{$fieldname});
+		&repairUglies($tablename, $fieldname, $keyname, 
+				$ritem{$keyname}, $ritem{$fieldname});
+	} # end while
+
+} #END FINDUGLIES
+
+
+########################
+#	REPAIRUGLIES
+#	go ahead and replace the field with a now-workign one
+########################
+sub
+repairUglies()
+{
+	my $tablename = shift;
+	my $fieldname = shift;
+	my $keyname = shift;
+	my $id = shift;
+	my $text = shift;
+	my $fixed ;
+	my $rquery;
+	my %ritem;
+	my $ritemref;
+	my $rqueryobj;
+
+	#put on the condom! a missing indiex could screw me up, bad!
+	$tablename && $fieldname && $text && $keyname && $id 
+		or die "HEY!! bad args to repairUglies()!\n";
+
+	$fixed = &fixit($text);
+
+	#NOTE! i don't need to quote the $fixed: dbh->quote() does it 4 me
+	$rquery = "update $tablename set $fieldname = $fixed 
+				where $keyname = $id LIMIT 1
+		";
+	if($opt_v){
+		print "repairUglies(): doing <$rquery>\n"; 
+	}
+	#FINALLY! this actually DOES something, and fixes the thing
+	unless ($opt_t){
+		$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+		$rqueryobj->execute() or die "couldn't execute $!\n";
+	}
+
+} #END REPAIRUGLIES
+########################
+#	FIXIT
+#	ok, well, fix the damn thing and return the repaired string.
+########################
+sub
+fixit()
+{
+	my $a = shift;
+
+	$a =~ s/\\//g; # get rid of the OLD, ugly, unneeded ones
+	$a = decode_entities($a);
+	$a = $dbh->quote($a);	# and now PUT IT BACK! you'll need this b4 saving
+
+	if($opt_v){
+		printf ("\nfixit(): now <%s>\n", $a );
+	}
+
+	return $a;
+
+} #END FIXIT
 
 
 ########################
@@ -115,10 +247,7 @@ tester()
 	my $a;
 
 	foreach $a (@af){
-		$a =~ s/\\//g; # get rid of the OLD, ugly, unneeded ones
-		$a = decode_entities($a);
-		$a = $dbh->quote($a);	# and now PUT IT BACK! you'll need this b4 saving
-		printf ("\nnow <%s>\n", $a );
+		printf ("\nnow <%s>\n", &fixit($a) );
 	}
 } #END TESTER
 
