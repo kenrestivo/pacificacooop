@@ -45,8 +45,8 @@ define('ACCESS_ADMIN', 800);
 
 $accessnames = array(  
 		  0 => 'None',
-		100 => 'See totals',
-		200 => 'View details',
+		100 => 'Summarize',
+		200 => 'View',
 		500 => 'Edit',
 		600 => 'Add',
 		700 => 'Delete',
