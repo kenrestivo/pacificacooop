@@ -1085,11 +1085,16 @@ weakPass($clearpass)
 /******************
 	DISPLAYAUTH
 	useful in view reports
+	TODO may need to move this to the shared.inc, 
+		because it needs to know about callbacks
+		not a problem now, but when we go object-oriented, it will be
 	inputs: privs struct, user struct, realm, pretty nae
 ******************/
 function
-displayAuth($p, $u, $realm, $pretty)
+displayAuth($p, $u, $callbacks)
 {
+	$realm = $callbacks['realm'];
+	$pretty = $callbacks['description'];
 
 	print "<h3>$pretty \n";
 	if($p['grouplevel'] < ACCESS_VIEW){

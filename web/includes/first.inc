@@ -67,7 +67,8 @@ setupErrors()
 function
 errorHandler($errno, $msg, $filename, $linenum, $vars)
 {
-	$mailto = "ken@restivo.org";
+	global $coop_sendto;
+	$mailto = $coop_sendto['email'];
 
     // timestamp for the error entry  
     $dt = date("Y-m-d H:i:s (T)");
@@ -318,7 +319,13 @@ setupDB()
 
 
 	$dbhost = $dbhost ? $dbhost : "bc";
-	$coop_sendto = $coop_sendto ? $coop_sendto : 'ken@restivo.org';
+	if(!$coop_sendto){
+		$coop_sendto = array(
+						'name' => 'ken',
+						'email' => 'ken@restivo.org',
+						'phone' => '650-355-1317'
+				);
+	}
 
 
 	if(!($dbuser && $dbpwd && $dbhost)){

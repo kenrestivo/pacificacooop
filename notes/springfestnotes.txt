@@ -185,3 +185,25 @@ bug fixen! family name not number in display in packaging thing
 
 password: check with husband/wife... or check CAPS LOCK key too
 
+
+-----------------
+2004-02-01
+
+ticket stuff!
+
+ticket committee. will place the surfboard at 5 locations
+
+will grab money periodically, and enter it
+	it's MONEY, but it's not the MONEY realm, it's the QUILT realm.
+
+date, amount, location
+	GET the 5 locations!
+
+when leads come in, they'll need to be entered, associated to a particular lead
+	or, if no lead, then must ENTER a new one!
+	here is the situation where i'll need to enter AND/OR choose
+
+carrie will try to get the labels printed with the unique id
+	treckeme perhaps? carol eggimann?
+
+notes re lead distribution
