@@ -92,13 +92,14 @@ select families.name, sum(inc.amount) as total
 	group by families.familyid
 	order by families.familyid
 
---- show session for a family
-select  enrol.sess 
-	from kids 
+--- show session families
+select families.name, enrol.sess 
+	from families
+		left join kids on kids.familyid = families.familyid
 		left join keglue on keglue.kidsid = kids.kidsid 
 		left join enrol on enrol.enrolid = keglue.enrolid
-	where kids.familyid = 48
-	group by enrol.sess
+	group by families.familyid
+	order by enrol.sess, families.name
 
 
 --- EOF

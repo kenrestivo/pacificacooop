@@ -5,10 +5,10 @@
 # in the live version of the app
 
 
-DATE=`/bin/date +%Y.%m.%d.%H.%M.%S`
-BASEURL="http://www.pacificacoop.org/sf/export.php?command=backup&db="
-SAVE=/mnt/kens/ki/is/c/coopinsurance/sql/backups
 DBS="leads figlue inc"
+SAVE=/mnt/kens/ki/is/c/coopinsurance/sql/backups
+BASEURL="http://www.pacificacoop.org/sf/export.php?command=backup&db="
+DATE=`/bin/date +%Y.%m.%d.%H.%M.%S`
 
 /home/ken/bin/online on 
 
@@ -19,3 +19,4 @@ done
 
 /home/ken/bin/online off
 
+#EOF
