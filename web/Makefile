@@ -22,8 +22,14 @@ NFSNUSR=ken
 NFSNHOST=phx3.nearlyfreespeech.net
 NFSNPATH=/nfsn/content/paccoop/htdocs/sf
 HERE=./
-XCLUDE='/.dbhost.inc' 
+XCLUDE='.dbhost.inc' 
 
+
+
+#XXX this is so borken
+# the excludes do NOT work
+# it utterly fucks up the permissions
+# don't use it.
 
 all::
 
