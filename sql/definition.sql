@@ -335,7 +335,7 @@ CREATE TABLE tickets (
   lead_id int(32) default NULL,
   company_id int(32) default NULL,
   ticket_type_id int(32) NOT NULL,
-	vip_flag tinyint(1) default NULL,
+	vip_flag enum ('No', 'Yes') default 'No',
   school_year varchar(50) default NULL,
   PRIMARY KEY  (ticket_id),
 ) ;
@@ -833,7 +833,7 @@ CREATE TABLE leads_income_join (
 CREATE TABLE ticket_type (
   ticket_type_id int(32) NOT NULL unique auto_increment,
   description varchar(255) default NULL,
-    paid_flag tinyint(1) default NULL,
+    paid_flag enum ('No', 'Yes') default 'Yes',
     jointable_hack varchar(255) default NULL,
    PRIMARY KEY  (ticket_type_id)
 ) ;
@@ -843,7 +843,7 @@ CREATE TABLE job_descriptions (
   summary varchar(255) default NULL,
   long_description longtext,
     board_position tinyint(1),
-  tuition_type enum('Paid', 'Half', 'Free') default 'Paid',
+  tuition_type enum('Family Pays', 'Half-Price', 'Free') default 'Family Pays',
      PRIMARY KEY  (job_description_id)
 ) ;
 

@@ -321,29 +321,29 @@ insert into ticket_type set
             ticket_type_id = 1,
             description = "Paid for",
             jointable_hack = 'leads,companies', 
-            paid_flag = 1;
+            paid_flag = 'Yes';
 
 insert into ticket_type set
             ticket_type_id = 2,
             description = "Included with Donation",
             jointable_hack = 'leads,companies', 
-            paid_flag = 1;
+            paid_flag = 'Yes';
 
 insert into ticket_type set
             ticket_type_id = 3,
             description = "Member",
             jointable_hack = 'families',    
-            paid_flag = 0;
+            paid_flag = 'No';
 
 insert into ticket_type set
             ticket_type_id = 4,
             description = "Comp/Freebie/VIP",
             jointable_hack = 'leads,companies', 
-            paid_flag = 0;
+            paid_flag = 'No';
 
 insert into ticket_type set
             ticket_type_id = 5,
             description = "Other",
-            paid_flag = 0;
+            paid_flag = 'No;
 
 -- EOF
