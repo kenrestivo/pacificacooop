@@ -83,7 +83,18 @@ auth
 
 the main state machine
 	each web page is basically a state machine. html is stateless, and i hate that. so, i made it stateful by passing stuff through. it does NOT deal with cookies since many browsers have them turned off. and, since we avoid client-side javascript, it has to do lots of back-and-forth to get data validated, etc.
-	here are the possible states and what they mean:
+	here are the possible states,
+		and the actions and TODO the args that their callbacks take:
+			'confirmdelete': display the fields, read-only, with confirm box
+			'delete': delete the fields.
+			'edit' : prepopulate with data, and show it to the user for editing
+			'save': check its validity, and dump it to database!
+			'add': show the fields, populated with 'def' default values
+			'view' : show a report, with the view data
+			'summary': show just a top-level count/summary
+			'replace': same as save, but with "replace into" not "insert into"
+			'done' : no action, displaying is done.
+	and the possibel field members too: TODO
 
 database things:
 	in general, i've been a relational database sql bigot. i am VERY much for segregation of data into separate tables, and ESPECIALLY where there's any duplication of data. any one-to-many's are done with links, and many-to-many's are done with glue tables. often the glue tables evolve into tables with useful data in their own right (example being the "attendance" table).
