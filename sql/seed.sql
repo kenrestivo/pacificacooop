@@ -151,5 +151,30 @@ insert into territories set
 			description = "Corporate/Financial/Government"
 ;
 
+----- sources
+insert into sources set
+            source_id = 0,
+            description = "Unknown";
+
+insert into sources set
+            source_id = 1,
+            description = "Entered by Member";
+
+insert into sources set
+            source_id = 2,
+            description = "Previous Alumni List";
+
+insert into sources set
+            source_id = 3,
+            description = "Springfest Flyer";
+
+insert into sources set
+            source_id = 4,
+            description = "Tribune Ad";
+
+insert into sources set
+            source_id = 5,
+            description = "Tribune Article";
+
 
 -- EOF

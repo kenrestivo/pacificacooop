@@ -135,7 +135,7 @@ create table leads (
 	country varchar(255),
 	phone varchar(255),
 	relation enum ('Relative','Friend', 'Coworker', 'Alumni', 'Other'),
-	source enum ('Springfest', 'Other'),
+    source_id int(32),
     familyid int(32),
 	do_not_contact date,
 	audit_user_id int(32), -- XXX remove after first mailing!
@@ -425,6 +425,12 @@ create table packages (
     primary key (package_id)
 );
 
+-- sources
+create table sources (
+    source_id int(32) not null unique,
+	description varchar(255),
+	primary key (source_id)
+);
 
 
 -- the user/passwords used by the web view page AND my update tool..
