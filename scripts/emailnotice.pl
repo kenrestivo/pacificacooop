@@ -58,7 +58,7 @@ $rquery = "
 ";
 
 
-$opt_v && print "doing <$rquery>\n"; #debug only
+$opt_v && print "main(): doing <$rquery>\n"; #debug only
 
 $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 $rqueryobj->execute() or die "couldn't execute $!\n";
@@ -76,15 +76,12 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 
 	# the report of people i need to call or write a note to!
 	if($opt_r){
-		if($opt_e ? 1 : !$famref->{'email'}){
-			print &fieldTripReport($famref, $insarref, $licarref, 
-					$checkdate, $opt_a ? 0 : 1);
-		}
-	} else {
-		if($famref->{'email'}){
-			&emailReminder($famref, $insarref, $licarref, 
+		#TODO maybe take a filename on command line, to output the report
+		print &fieldTripReport($famref, $insarref, $licarref, 
 				$checkdate, $opt_a ? 0 : 1);
-		}
+	} else {
+		&emailReminder($famref, $insarref, $licarref, 
+			$checkdate, $opt_a ? 0 : 1);
 	}
 
 } # end while
@@ -108,14 +105,15 @@ sub getworkers()
 
 	#get array of working parent(s)
 	$query = "
-		select parents.email, parents.last, parents.first, parents.parentsid
+		select parents.email, parents.last, parents.first, 
+				parents.parentsid
 			from parents
 			where parents.worker = 'Yes'
 			and familyid = $famid
 	";
 
 
-	$opt_v && print "doing <$query>\n"; #debug only
+	$opt_v && print "getworkers(): doing <$query>\n"; #debug only
 	$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
 	$queryobj->execute() or die "couldn't execute $!\n";
 
@@ -124,13 +122,14 @@ sub getworkers()
 		%item = %$itemref; #store a local copy, because mysql will blow it away!
 		push(@results, \%item); #yes, that's right, a referene
 		if($opt_v){
-			printf("DEBUG famid %d parent %s %s pid %d\n",
+			printf("getworkers(): famid %d parent %s %s pid %d\n",
 				$famid,
 				$item{'last'}, $item{'first'},
 				$item{'parentsid'});
 		}
 	} # end while
 
+	$opt_v && printf("getworkers(): returning %d items\n", scalar @results);
 
 	return \@results; # ref to the results which is an array of refs!
 
@@ -160,7 +159,7 @@ sub getlicenseinfo()
 				where lic.parentsid = $pid
 			group by lic.parentsid
 			order by exp asc";
-		$opt_v && print "doing <$query>\n"; #debug only
+		$opt_v && print "getlicenseinfo(): doing <$query>\n"; #debug only
 		$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
 		$queryobj->execute() or die "couldn't execute $!\n";
 
@@ -170,6 +169,7 @@ sub getlicenseinfo()
 		} # end while
 	}
 
+	$opt_v && printf("getlicenseinfo(): returning %d items\n", scalar @results);
 
 	return \@results; # ref to the results which is an array of refs!
 }# END GETLICENSEINFO
@@ -196,14 +196,14 @@ sub getinsuranceinfo()
 			order by exp asc
 		";
 
-	$opt_v && print "doing <$query>\n"; #debug only
+	$opt_v && print "getinsuranceinfo(): doing <$query>\n"; #debug only
 	$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
 	$queryobj->execute() or die "couldn't execute $!\n";
 
 	while ($itemref = $queryobj->fetchrow_hashref){
 		%item = %$itemref; #store a local copy, because mysql will blow it away!
 		if($opt_v){
-			printf("DEBUG famid: %s %s %s exp %s %s\n", 
+			printf("getinsuranceinfo(): famid: %s %s %s exp %s %s\n", 
 				$famid, $item{'last'}, $item{'first'}, 
 				strftime('%m/%d/%Y', localtime($item{'exp'})),
 				$item{'policynum'});
@@ -211,6 +211,7 @@ sub getinsuranceinfo()
 		push(@results, \%item); #yes, that's right, a referene
 	} # end while
 
+	$opt_v && printf("getinsuranceinfo(): returning %d items\n", scalar @results);
 	return \@results; # yes, a ref to the results
 
 } #END GETINSURANCEINFO
@@ -234,12 +235,18 @@ sub emailReminder()
 	my $lf = 0; # license flag
 	my $newbie = 0;
 
-	$opt_v && printf("DEBUG lic %d ins %d\n", $licref->{'exp'}, $insref->{'exp'});
+	$opt_v && printf("emailreminder(): lic %d ins %d\n", $licref->{'exp'}, $insref->{'exp'});
 	
 
 	$m .= "Hello! My job this year is to keep track of the automobile insurance and driver's license information for the school.\n\n";
 
 	#insurance
+	unless(scalar @$insarref){
+			$m .= sprintf("The school doesn't have any insurance card on file for the %s family (or, at least, I couldn't find it).\n\n",
+						$famref->{'name'});
+			$if++;
+			$newbie++;
+	}
 	foreach $insref (@$insarref){
 		if($insref->{'exp'}){
 			if($insref->{'exp'} < $checkdate){
@@ -252,15 +259,20 @@ sub emailReminder()
 					);
 				$if++;
 			}
-		} else {
-			$m .= sprintf("The school doesn't have any insurance card on file for the %s family (or, at least, I couldn't find it).\n\n",
-						$famref->{'name'});
-			$if++;
-			$newbie++;
 		}
 	}
 	
 	#license
+	unless(scalar @$licarref){
+				$m .= sprintf(
+						"%s couldn't find any driver's license on file for the working parent on the roster, %s %s.\n\n",
+						$if ? "I also" : "I",
+						$famref->{'first'},
+						$famref->{'last'}
+				);
+			$lf++;
+			$newbie++;
+	}
 	foreach $licref (@$licarref){
 		if($licref->{'exp'}){
 			if($licref->{'exp'} < $checkdate){
@@ -274,16 +286,7 @@ sub emailReminder()
 				);
 				$lf++;
 			}
-		} else {
-				$m .= sprintf(
-						"%s couldn't find any driver's license on file for the working parent on the roster, %s %s.\n\n",
-						$if ? "I also" : "I",
-						$famref->{'first'},
-						$famref->{'last'}
-				);
-			$lf++;
-			$newbie++;
-		}
+		} 
 	}
 
 	if($newbie > 1){
@@ -378,11 +381,6 @@ sub fieldTripReport()
 	my $insexp = 0; #flag
 	my $licexp = 0; #flag
 
-	if($opt_v){
-		printf("DEBUG lic %d ins %d\n", 
-			$licref->{'exp'}, $insref->{'exp'});
-	}
-
 	#families
 	$badness .= sprintf(
 				"\n-------------\n%s family Insurance and License\n",
@@ -395,6 +393,10 @@ sub fieldTripReport()
 			);
 
 	#insurance
+	unless(scalar @$insarref){
+			$badness .= "\t- No insurance information for this family\n";
+			$insexp++;
+		}
 	foreach $insref (@$insarref){
 		if($insref->{'exp'}){
 			if($onlyexpired ? $insref->{'exp'} < $checkdate : 1){
@@ -407,13 +409,15 @@ sub fieldTripReport()
 					);
 				$insexp++;
 			}
-		} else {
-			$badness .= "\t- No insurance information for this family\n";
-			$insexp++;
-		}
+		} 
 	}
 		
 	#license
+	unless(scalar @$licarref){
+			#TODO put in the parent's name here, dude
+			$badness .= "\t- No license information for working parent\n";
+			$licexp++;
+	}
 	foreach $licref (@$licarref){
 		if($licref->{'exp'}){
 			if($onlyexpired ? $licref->{'exp'} < $checkdate : 1){
@@ -427,10 +431,12 @@ sub fieldTripReport()
 				);
 				$licexp++;
 			}
-		} else {
-			$badness .= "\t- No license information for working parent\n";
-			$licexp++;
-		}
+		} 
+	}
+
+	if($opt_v){
+		printf("fieldtripreport(): exp lic %d exp ins %d\n", 
+			$licexp, $insexp);
 	}
 
 	if($insexp || $licexp){
@@ -460,7 +466,7 @@ sub updateNags()
 				parentsid = '%s', why = 'Insurance', how = 'Email',
 				done = now() ", $pid
 			);
-	$opt_v && print "DEBUG doing <$query>\n";
+	$opt_v && print "updateNags(): doing <$query>\n";
 	print STDERR $dbh->do($query) . "\n";
 
 } #END UPDATENAGS
