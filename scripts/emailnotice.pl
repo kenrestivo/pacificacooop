@@ -58,25 +58,11 @@ $rqueryobj->execute() or die "couldn't execute $!\n";
 
 while ($famref = $rqueryobj->fetchrow_hashref){
 	$id = $famref->{'familyid'};
-	$flag  = 0;
 
 	$insref = &getinsuranceinfo($id);
 	$licref = &getlicenseinfo($id);
 
-	#only send 'em if they're null or too late
-	if(!$insref->{'exp'} || $insref->{'exp'} < $checkdate){
-		#printf("DEBUG %d ins %s\n", $id, $insref->{'exp'});
-		$flag++;
-	}
-
-	if(!$licref->{'exp'} || $licref->{'exp'} < $checkdate){
-		#printf("DEBUG %d lic %s\n", $id, $licref->{'exp'});
-		$flag++;
-	}
-
-	if($flag){
-		print &expiredReport($famref, $insref, $licref, $checkdate);
-	}
+	print &fieldTripReport($famref, $insref, $licref, $checkdate, 1);
 
 } # end while
 
@@ -111,7 +97,7 @@ sub getlicenseinfo()
 	} # end while
 
 	if($queryobj->rows() > 1){
-		print "\tERROR! more than one row returned for lic on $famid\n";
+		print STDERR "\tERROR! more than one row returned for lic on $famid\n";
 	}
 
 	return \%item;
@@ -145,7 +131,7 @@ sub getinsuranceinfo()
 	} # end while
 
 	if($queryobj->rows() > 1){
-		print "\tERROR! more than one row returned for ins on <$famid>\n";
+		print STDERR "\tERROR! more than one row returned for ins on <$famid>\n";
 	}
 
 	return \%item;
@@ -189,25 +175,30 @@ sub humantounix()
 
 
 ######################
-#	EXPIREDREPORT
+#	FIELDTRIPREPORT
 #	inputs:
 #	outputs: a tabular style report
 ######################
-sub expiredReport()
+sub fieldTripReport()
 {
 	my $famref = shift;
 	my $insref = shift;
 	my $licref = shift;
 	my $checkdate = shift;
+	my $onlyexpired = shift;
 	my $badness = "";
+	my $flag = 0;
 
 	#printf("DEBUG lic %d ins %d\n", 
 	#	$licref->{'exp'}, $insref->{'exp'});
 
 	#families
 	$badness .= sprintf(
-				"\n-------------\n%s %s %s\n",
-				$famref->{'name'} ? $famref->{'name'} : "",
+				"\n-------------\n%s family Insurance and License\n",
+				$famref->{'name'} ? $famref->{'name'} : ""
+			);
+	$badness .= sprintf(
+				" \tFamily Phone: %s\tEmail: %s\n",
 				$famref->{'phone'} ? $famref->{'phone'} : "",
 				$famref->{'email'} ? $famref->{'email'} : ""
 			);
@@ -216,32 +207,40 @@ sub expiredReport()
 	if($insref->{'exp'}){
 		if($insref->{'exp'} < $checkdate){
 			$badness .= sprintf(
-					"\tins %s company %s policy %s \n",
+					"\t- Insurance expired: %s Company: %s Policy#: %s \n",
 					strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
 					$insref->{'companyname'},
 					$insref->{'policynum'}
 				);
+			$flag++;
 		}
 	} else {
-		$badness .= "\tno insurance info\n";
+		$badness .= "\t- No insurance information for this family\n";
+		$flag++;
 	}
 	
 	#license
 	if($licref->{'exp'}){
 		if($licref->{'exp'} < $checkdate){
 			$badness .= sprintf(
-					"\tlic %s driver %s %s %s \n",
+					"\t- License expired: %s Driver's Name: %s %s %s \n",
 					strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
 					$licref->{'first'},
 					$licref->{'middle'},
 					$licref->{'last'}
 			);
+			$flag++;
 		}
 	} else {
-		$badness .= "\tno license info\n";
+		$badness .= "\t- No license information for working parent\n";
+		$flag++;
 	}
 
-	return $badness;
-} # END EXPIREDREPORT
+	if($flag){
+		return $badness;
+	} else {
+		return "";
+	}
+} # END FIELDTRIPREPORT
 
 #EOF
