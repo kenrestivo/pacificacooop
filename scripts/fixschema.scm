@@ -79,7 +79,7 @@ kl  (let ((p (open-input-file deffile) ) )
 	 (if (and (equal? (get-primary-key key-table schema) old-col)
 			  (assoc-ref linked-table old-col) ; it exists in this table
 			  (not (equal? (car linked-table) key-table))) ; i'm not primary
-		 (safe-sql (sprintf #f "alter table %s change column %s %s %s"
+		 (safe-sql *dbh* (sprintf #f "alter table %s change column %s %s %s"
 						(car linked-table) old-col new-col
 						; get the definition from the actual subtable
 						(get-definition old-col (car linked-table) schema)))
@@ -97,7 +97,7 @@ kl  (let ((p (open-input-file deffile) ) )
 		 )
 	(if long-def
 		(begin 
-		  (safe-sql (sprintf #f "alter table %s change column %s %s %s"
+		  (safe-sql *dbh* (sprintf #f "alter table %s change column %s %s %s"
 						 table old-col new-col long-def))
 		  (fix-primary-key table old-col new-col schema) )
 		(printf "ignoring %s:%s\n" table old-col ) ;; it's a bogus line? huh?
@@ -106,7 +106,7 @@ kl  (let ((p (open-input-file deffile) ) )
 
 ;;; the easy one: tables.
 (define (rename-table items)
-  (safe-sql (sprintf #f "rename table %s to %s"
+  (safe-sql *dbh* (sprintf #f "rename table %s to %s"
 				 (car items) (cadr items))))
 
 ;;i have to save these up, because i have to handle join keys first 
@@ -138,7 +138,7 @@ kl  (let ((p (open-input-file deffile) ) )
 ;;;;;;;;;;;;;;;
 ;; main
 
-(define dbh (apply simplesql-open "mysql"
+(define *dbh* (apply simplesql-open "mysql"
 				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-fake.conf")))
 
 (load-definition! "/mnt/kens/ki/proj/coop/sql/olddefinition.sql")
