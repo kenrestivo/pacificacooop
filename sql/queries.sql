@@ -1033,23 +1033,22 @@ order by last_name, first_name
 
 --- nasty ticket summary
 select tickets.ticket_id, 
-coalesce(leads.first_name, companies.first_name) 
-        as first_name,
-coalesce(leads.last_name, companies.last_name, concat(families.name, ' Family')) as last_name,
-coalesce(leads.company, companies.company_name) as company_name,
-coalesce(leads.address1, companies.address1, families.address1) as address1,
-coalesce(leads.address2, companies.address2) as address2,
-coalesce(leads.city, companies.city) as city,
-coalesce(leads.state, companies.state) as state,
-coalesce(leads.zip, companies.zip) as zip,
-coalesce(leads.phone, companies.phone, families.phone) as phone,
-coalesce(leads.email_address, companies.email_address, families.email) as email_address
+concat_ws(' ', coalesce(leads.first_name, companies.first_name) ,
+coalesce(leads.last_name, companies.last_name, concat(families.name, ' Family')),
+coalesce(leads.company, companies.company_name),
+coalesce(leads.address1, companies.address1, families.address1),
+coalesce(leads.address2, companies.address2),
+coalesce(leads.city, companies.city),
+coalesce(leads.state, companies.state),
+coalesce(leads.zip, companies.zip),
+coalesce(leads.phone, companies.phone, families.phone),
+coalesce(leads.email_address, companies.email_address, families.email)) as ticket_purchaser
 from tickets
 left join leads on tickets.lead_id = leads.lead_id
 left join companies on tickets.company_id = companies.company_id
 left join families on tickets.family_id = families.family_id
 where tickets.school_year = '2004-2005'
-order by last_name, first_name;
+order by ticket_purchaser;
 
 
 --- EOF
