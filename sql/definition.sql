@@ -90,7 +90,7 @@ CREATE TABLE calendar_events (
   keep_event_hidden_until_date datetime default NULL,
   event_date datetime default NULL,
   school_year varchar(50) default NULL,
-  PRIMARY KEY  (calendar_event_id),
+  PRIMARY KEY  (calendar_event_id)
 ) ;
 
 --
@@ -235,7 +235,7 @@ CREATE TABLE events (
   realm varchar(55) default NULL,
   notes longtext,
   url varchar(255) default NULL,
-  PRIMARY KEY  (event_id),
+  PRIMARY KEY  (event_id)
 ) ;
 
 --
