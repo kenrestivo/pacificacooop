@@ -24,11 +24,15 @@ use Time::Local;
 use POSIX;
 use DBI;
 use Mail::Sendmail;
+use Getopt::Std;
+
+
+#opt processing
+getopts('vaesrd:') or &usage();
 
 #arggh
-$in = shift;
-if($in){
-	$checkdate = &humantounix($in);
+if($opt_d){
+	$checkdate = &humantounix($opt_d);
 } else {
 	#ok, now is the time to check.
 	print STDERR "You may NOT send out emails without explicitly supplying a checkdate\n";
@@ -36,8 +40,9 @@ if($in){
 	#$checkdate = time();
 }
 
-print "checking against $in date $checkdate which is ", 
+print "checking against $opt_d date $checkdate which is ", 
 		strftime('%m/%d/%Y', localtime($checkdate)), "\n";
+
 
 
 #basic login and housekeeping stuff
@@ -71,11 +76,16 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	#	i.e. BOTH their drivers licenses must be up to date.
 
 	# the report of people i need to call or write a note to!
-	#if(!$famref->{'email'}){
-	#	print &fieldTripReport($famref, $insarref, $licarref, $checkdate, 1);
-	#}
-	if($famref->{'email'}){
-		&emailReminder($famref, $insarref, $licarref, $checkdate, 1);
+	if($opt_r){
+		if($opt_e ? 1 : !$famref->{'email'}){
+			print &fieldTripReport($famref, $insarref, $licarref, 
+					$checkdate, $opt_a ? 0 : 1);
+		}
+	} else {
+		if($famref->{'email'}){
+			&emailReminder($famref, $insarref, $licarref, 
+				$checkdate, $opt_a ? 0 : 1);
+		}
 	}
 
 } # end while
@@ -269,10 +279,13 @@ sub emailReminder()
 						Message => $m,
 					);
 			#SEND!
-			#XXX aaack! BOTH of these want getopts (or gtk) for safety
-			#sendmail(%mail) or die $Mail::Sendmail::error;
-			#&updateNags($famref->{'parentsid'});
-			printf("result: <%s>\n", $Mail::Sendmail::log);
+			if($opt_s){
+				&sendmail(%mail) or die $Mail::Sendmail::error;
+				&updateNags($famref->{'parentsid'});
+				printf("result: <%s>\n", $Mail::Sendmail::log);
+			} else {
+				print "-----\nNOTE!!! this is a dry run, no email will actually be sent\n";
+			}
 		}
 		return 1;
 	} else {
@@ -310,12 +323,14 @@ sub fieldTripReport()
 	my $famref = shift;
 	my $insarref = shift;
 	my $licarref = shift;
-	my $licref;
-	my $insref;
 	my $checkdate = shift;
 	my $onlyexpired = shift;
+	my $licref;
+	my $insref;
 	my $badness = "";
 	my $flag = 0;
+	my $insexp = 0; #flag
+	my $licexp = 0; #flag
 
 	#printf("DEBUG lic %d ins %d\n", 
 	#	$licref->{'exp'}, $insref->{'exp'});
@@ -334,25 +349,26 @@ sub fieldTripReport()
 	#insurance
 	foreach $insref (@$insarref){
 		if($insref->{'exp'}){
-			if($insref->{'exp'} < $checkdate){
+			if($onlyexpired ? 1 : $insref->{'exp'} < $checkdate ){
 				$badness .= sprintf(
-						"\t- Insurance expired: %s Company: %s Policy#: %s \n",
+						"\t- Insurance %s %s Company: %s Policy#: %s \n",
+						$insref->{'exp'} < $checkdate  ? "EXPIRED" : "",
 						strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
 						$insref->{'companyname'},
 						$insref->{'policynum'}
 					);
-				$flag++;
+				$insexp++;
 			}
 		} else {
 			$badness .= "\t- No insurance information for this family\n";
-			$flag++;
+			$insexp++;
 		}
 	}
 		
 	#license
 	foreach $licref (@$licarref){
 		if($licref->{'exp'}){
-			if($licref->{'exp'} < $checkdate){
+			if($onlyexpired ? 1 : $licref->{'exp'} < $checkdate){
 				$badness .= sprintf(
 						"\t- License expired: %s Driver's Name: %s %s %s \n",
 						strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
@@ -360,15 +376,15 @@ sub fieldTripReport()
 						$licref->{'middle'},
 						$licref->{'last'}
 				);
-				$flag++;
+				$licexp++;
 			}
 		} else {
 			$badness .= "\t- No license information for working parent\n";
-			$flag++;
+			$licexp++;
 		}
 	}
 
-	if($flag){
+	if($insexp || $licexp){
 		return $badness;
 	} else {
 		return "";
@@ -399,5 +415,17 @@ sub updateNags()
 	print STDERR $dbh->do($query) . "\n";
 
 } #END UPDATENAGS
+
+sub usage()
+{
+    print STDERR "usage: $0 -d date [-s -a -v -e -a -r]\n";
+    print STDERR "\t-d date (in USA format mm/dd/yyyy)\n";
+    print STDERR "\t-s send the actual email, not just show what would happen! \n";
+    print STDERR "\t-v verbose \n";
+    print STDERR "\t-e include email parents in report\n";
+    print STDERR "\t-e include ALL parents, not just expireds!\n";
+    print STDERR "\t-r report mode \n";
+	exit 1;
+}
 
 #EOF
