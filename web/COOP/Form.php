@@ -183,7 +183,20 @@ class coopForm extends CoopObject
 
 	function getEnumOptions($key)
 		{
-			return array();
+			$db =& $this->obj->getDatabaseConnection();
+			$data =& $db->getRow("show columns from blog_entry like '$key'",
+								 DB_FETCHMODE_ASSOC);
+			if (DB::isError($data)) {
+                die($data->getMessage());
+            }
+			preg_match('/enum\((.+?)\)/', $data['Type'], $matches);
+			$options = explode(',', ereg_replace("'", "", $matches[1]));
+
+			// selects must stutter: key => val. bah, give me LISP!
+			foreach($options as $opt){
+				$doubleopt[$opt]  = $opt;
+			}
+			return $doubleopt;
 		}
 
 } // END COOP FORM CLASS
