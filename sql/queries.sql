@@ -264,16 +264,18 @@ select coa.description,
 
 
 --- nasty package join. the 'users' hack is to get "xxx family" w/o coding
- select auction.* , coalesce(users.name, companies.company_name) as donor
-    from auction 
-        left join packages on auction.package_id = packages.package_id 
-        left join faglue on faglue.auctionid = auction.auctionid 
-            left join users on users.familyid = faglue.familyid 
-        left join companies_auction_join 
-            on companies_auction_join.auctionid = auction.auctionid
-            left join companies 
-                on companies_auction_join.company_id = companies.company_id
-    where auction.package_id is null;
-
-
+select auction.* , 
+            coalesce(users.name, companies.company_name) as donor
+        from auction 
+            left join packages on auction.package_id = packages.package_id 
+            left join faglue on faglue.auctionid = auction.auctionid 
+                left join users on users.familyid = faglue.familyid 
+            left join companies_auction_join 
+                on companies_auction_join.auctionid = auction.auctionid
+                left join companies 
+                    on companies_auction_join.company_id = 
+                        companies.company_id
+        where auction.package_id < 1 and date_received is not null 
+            and date_received > '0000-00-00'
+        
 --- EOF

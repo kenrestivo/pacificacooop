@@ -804,7 +804,7 @@ pdf stuff
 fix REPORTS
 	an everything.inc file
 		all the requires, 
-		and an array with all the callbacks
+		and an array with all the callbacks DONE!
 	move the report stuff to a callback in each individual .inc file
 		check $admin in that callback!
 	create a new "management summary" report that grabs all that.
@@ -833,4 +833,20 @@ how to handle sources?
 	attached to PEOPLE or to EVENTS!??
 	i.e. event is "showed up". source is... nothing
 	event is "responded to ad". source is... where?
-	each THING will have a source. it is the only way.
+	each EVENT will have a source. it is the only way.
+
+--------------
+ok, ticket jump hack.
+	dump in the rest of the income stuff too (optionally)
+	hack the save function to call saveutil twice:
+		stuffing the right id's into the right place.
+		NARSTY hacks to callbacks may be necessary too.
+		FIRST save the leads stuff
+	will need a sources table
+		sourceid 0 (unknown) 
+		add souceid 1 for family-entered
+		add sourceid 2 for alumni too.
+		sourceid xxx for trib, etc.
+	leave familyid in there... may happen.
+		of course, it should ONLY light up if family-supplied. oh well.
+	allow amount 0! perhaps they will pay at the door!
