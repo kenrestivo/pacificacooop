@@ -30,6 +30,7 @@
 	";
 
 	logIn($HTTP_POST_VARS['auth']);
+	displayLogin($HTTP_POST_VARS['auth']);
 
 
 	print "</BODY> </HTML>"

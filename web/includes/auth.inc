@@ -71,7 +71,7 @@ savePass($uid, $clearpass)
 
 	$hash = strtolower(md5($clearpass));
 
-	$query  = sprintf("update users set password = '%s' where userid = %d --",
+	$query = sprintf("update users set password = '%s' where userid = %d ",
 				$uid, $hash);
 	mysql_query($query);
 	$err = mysql_error();
@@ -105,6 +105,7 @@ getPass($uid)
 	// the query
 	$query = sprintf("SELECT * FROM users WHERE userid = %d ",
 				$uid );
+	#print "getPass(): [$query]\n";
 	$listq = mysql_query($query);
 	$err = mysql_error();
 	if($err){
@@ -114,17 +115,21 @@ getPass($uid)
 				
 	while($row = mysql_fetch_assoc($listq)){
 		//grab 'em all XXX is this really necessary?
+		//printf("debug %s\n", $row['name']);
 	}
 
 	if (mysql_num_rows($result) > 0) {
 		if($row['password']){
+			#print "got one\n";
 			return($row['password']); //success!
 		} else {
+			#print "no password\n";
 			return 0; // no password entered yet for this uid
 		}
 	}                  
 
-	return -1;
+	#print "no password\n";
+	return 0;
 } /* END GETPASS */
 
 
@@ -219,13 +224,17 @@ checkAuthLevel($auth)
 
 /******************
 	DISPLAYLOGIN
-	inputs: uid, token 
+	inputs: auth
 	outputs: shows who they are logged in as, and a "logout" button
 			or, a "login here" link
 ******************/
 function
-displayLogin($uid, $token)
+displayLogin($auth)
 {
+	$uid = $auth['uid'];
+	$pwd = $auth['pwd'];
+	$confirm = $auth['confirm'];
+	$token = $auth['token'];
 
 	
 	// well, they're not.
@@ -418,6 +427,16 @@ newPass($uid, $newclearpass, $newconfirm, $oldtoken)
 	return(savePass($uid, $newclearpass));
 
 }/* END NEWPASS */
+
+
+
+/******************
+	PASSSTANDARD
+******************/
+function
+passStandard()
+{
+}/* END PASSTANDARD */
 
 
 
