@@ -82,7 +82,10 @@ savePass($uid, $clearpass)
 	}
 
 	//error_log("saving $uid, $hash, [$query]", o);
-	print "Your new password is saved! Please remember it\n";
+	print "Your new password is saved! 
+			You'll need to use this new password from now on 
+			whenever you access this site. 
+			Please remember it\n";
 	
 	return generateToken($uid, $hash);
 
@@ -424,7 +427,7 @@ logIn($auth)
 					),
 		checklogin => array (
 					func => "checkLoginState",
-					required => array ( "uid", "pwd"),
+					required => array ("uid", "pwd"),
 					description => "Checking password"
 					),
 		verifytoken => array (
@@ -475,8 +478,8 @@ logIn($auth)
 	
 	/* start the pachinko machine. 
 		no way out unless user input needed, or success */
-	do {
 
+	while ($auth['state'] != "needinput" && $auth['state'] != 'loggedin'){
 
 		// are all our required inputs present?
 		$auth = sanityCheck($auth, $states);
@@ -491,8 +494,8 @@ logIn($auth)
 
 		// dispatch the appropriate action for this state, and collect result
 		$auth = $states[$state]['func']($auth, $states);
+	}
 
-	} while ($auth['state'] != "needinput" && $auth['state'] != 'loggedin');
 
 	return($auth);
 
@@ -510,7 +513,7 @@ sanityCheck($auth, $states)
 {
 	$state = $auth['state'];
 	if(!$states[$state]){
-			error_log("sanityCheck(): $state is an illegal state logging out", 
+			error_log("sanityCheck(): $state is an illegal state. Forcing unknown state", 
 				0);
 			//TODO use changeState() now
 			$auth['state'] = 'unknown'; // force it outta here
@@ -523,7 +526,7 @@ sanityCheck($auth, $states)
 						or, if i'm being hacked, not?
 				print "Security violation occurred. You've been logged out.";
 				*/
-				error_log("sanityCheck(): ERROR! $val required for state $state. logging out", 0);
+				error_log("sanityCheck(): $val required for state $state. Forcing 'unknown' state.", 0);
 				$auth['state'] = 'unknown'; // force it outta here
 			}
 		}
@@ -650,6 +653,16 @@ verifyTokenState($auth, $states)
 function
 checkLoginState($auth, $states)
 {
+
+	// it is possible for a user to enter a password but have none in db!
+	if(!getPass($auth['uid'])){
+		error_log(
+			sprintf("checkLoginState(): uid %d in db, but null password", 
+				$auth['uid']) , 
+			0);
+		return changeState($auth, $states, 'nullpass', 1);
+	}
+
 	$token = checkPass($auth['uid'], $auth['pwd']);
 	if($token){
 		error_log("checkLoginState(): password matches!", 0);
@@ -754,7 +767,9 @@ needConfirmState($auth, $states)
 	loginForm(changeState($auth, $states, 'nullpass', 1),
 			$auth['pwd'] ? 'confirm': 'both', 
 			'hide', 
-			"Please type in the SAME password again, just to make sure.");
+			"Thanks for entering your new password.
+			Please type in the SAME password again one more time, 
+			just to make sure.");
 	return changeState($auth, $states, 'needinput', 1);
 }/* END NEEDCONFIRMSTATE */
 
