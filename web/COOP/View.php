@@ -96,6 +96,9 @@ class coopView
 
 	function addSubTable(&$tab, $text)
 		{
+			if(!$text){
+				return NULL;
+			}
 			$tab->addRow(array($text));				
 
 			$colcount = $tab->getColCount();
@@ -111,6 +114,9 @@ class coopView
 	
 	function addSubTables(&$tab)
 		{
+			if(!$this->backlinks){
+				return false;
+			}
 			$nearkey = $this->pk;	
 			foreach($this->backlinks as $backtable => $farkey){
 				$subview =& new CoopView($this->page, $backtable);
@@ -132,8 +138,11 @@ class coopView
 
 	function recurseTable()
 		{
-			$this->obj->find();
-
+			$found = $this->obj->find();
+			
+			if($found < 1){
+				return false;
+			}
 
 			$this->getBackLinks();	// MUST be after find!
 
