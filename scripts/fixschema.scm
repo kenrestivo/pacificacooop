@@ -38,7 +38,7 @@
   (assoc-ref (assoc table schema) col))
 
 ;; if it is a COLUMN, i'll want to do:
-(define (add-column table line)
+(define (add-column! table line)
   ;; NOTE! must combine before yanking ,'s!
   (set! *main-schema* (add-sub-alist *main-schema* table 
 						  (car line)
@@ -55,7 +55,7 @@
   (regexp-substitute/global #f  "[\\(\\)]" string 'pre 'post))
   
 
-(define (process-def line)
+(define (process-def! line)
   (cond ((and (equal? (car line) "create")
 			 (equal? (cadr line) "table"))
 		 (set! *current-table*
@@ -63,7 +63,7 @@
 		((and (equal? (car line) "primary")
 			  (equal? (cadr line) "key"))
 		 (add-primary-key *current-table* line))
-		(else (add-column *current-table* line))))
+		(else (add-column! *current-table* line))))
 
 
 ;; make sure it is a valid line
@@ -73,14 +73,14 @@
 	   (not (equal? (car l) "--"))) #t #f))
 
 ;; for loading the proper schema file
-(define (load-definition deffile)
+(define (load-definition! deffile)
   (set! *main-schema* '())
   (let ((p (open-input-file deffile) ) )
 	
 	(do ((line (read-line p) (read-line p)))
 		((or (eof-object? line) ))
 	  ((lambda (x) (if (valid-def-line x)
-					   (process-def x)))
+					   (process-def! x)))
 	   (clean-line (string-split line #\space))))
 	(close p) ))	
 
@@ -124,7 +124,7 @@
 				 (car items) (cadr items))))
 
 ;;i have to save these up, because i have to handle join keys first 
-(define (save-table items)
+(define (save-table! items)
   (set! *tables* (append *tables* (list items))))
 
 ;; simple dispatcher, using cute scheme-ism
@@ -132,7 +132,7 @@
 (define (process-change items)
   ((if (string-index (car items) #\.)
 	   rename-column
-	   save-table )
+	   save-table! )
    items))
 
 
@@ -153,7 +153,7 @@
 ;;;;;;;;;;;;;;;
 ;; main
 
-(load-definition "/mnt/kens/ki/proj/coop/sql/definition.sql")
+(load-definition! "/mnt/kens/ki/proj/coop/sql/definition.sql")
 (fix-schema "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
 (for-each rename-table *tables*)			; finally, follow up with tables
 
