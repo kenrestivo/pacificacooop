@@ -78,6 +78,14 @@ upload-head::
 		--exclude "*.#*" \
 		$(PLAYGROUND) $(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)
 
+download-head::
+	rsync -e ssh \
+		$(NFSNRSYNC) -avxWcC  \
+		--exclude $(XCLUDE) \
+		--exclude "*.#*" \
+		--exclude '*.sql' \
+		$(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)/ $(PLAYGROUND)
+
 commit-live:
 	(cd $(LIVEHERE); cvs commit -m "syncing")
 

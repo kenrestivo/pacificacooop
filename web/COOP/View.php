@@ -39,6 +39,7 @@ class coopView
 	var $pager_start;
 	var $table;
 	var $pk;
+	var $backlinks;
 
 	function CoopView (&$page, $table )
 		{
@@ -54,64 +55,6 @@ class coopView
 				
 		}
  
-
-	// global defaults, common through *all* forms, so not in objs
-	function setFormDefaults(&$form)
-		{
-			// start with schoolyear
-			//confessObj($sy, "element");
-			$sy =& $form->getElement('school_year');
-			if($sy->getValue() == ""){
-				$sy->setValue(findSchoolYear());
-			}
-		}
-
-
-	function detailForm($id = false )
-		{
-	
-			//print_r($this);
-			$id = $id ? $id : $_SESSION[$this->table]['id'];
-			$this->obj->get($id);
-            $this->build =& DB_DataObject_FormBuilder::create (&$this->obj);
-            //confessObj($this->build, "build");
-			$this->obj->fb_createSubmit = false;
-            $form =& new HTML_QuickForm(); 
-			$form->addElement('html', thruAuth($page->auth, 1));
-			$buttons[] = &HTML_QuickForm::createElement(
-					'submit', 'cancel', 'Cancel');
-			$buttons[] = &HTML_QuickForm::createElement(
-				'submit', '__submit__', 'Save');
-			$form->addGroup($buttons, null, null, '&nbsp;');
-
-
-            $this->build->useForm($form);
-			$form =& $this->build->getForm();
-			$form->applyFilter('__ALL__', 'trim');
-            //confessObj($form, "form");
-  			//$form->freeze();
-			// XXX BROKEN FUCK FUCK FUCK FUCK $this->setFormDefaults(&$form);
-			$this->getBackLinks();
-			if($form->validate ()){
-				$res = $form->process (array 
-									   (&$this->build, 'processForm'), 
-									   false);
-				if ($res){
-					$this->obj->debug('processed successfully', 
-								'detailform', 0);
-					saveAudit($this->table, $id, $page->auth['uid']);
-					// XXX make sure i don't have to unset id's first!
-					///  next action
-					print "PRICESSING SEUCCSSCUL";
-					$_SESSION['tables'][$this->table]['action'] = 'list'; 
- 			 		header('Location: ' . $this->selfURL());
-				}
-				echo "AAAAUUUUUUUUUUUGGH!<br>";
-			}
-
-			return $form->toHTML();
-	
-		}
 
 
 	// returns an action structure: tables[tablename][action], etc
@@ -132,8 +75,9 @@ class coopView
 					}
 				}
 			}
-			$this->page->confessArray($res,"backlinks");
-			return $res;
+			$this->backlinks = $res;
+			$this->page->confessArray($this->backlinks,"backlinks");
+			return $this->backlinks;
 		}
 	
 	// formats object is current in this object, um, as a table
@@ -164,12 +108,13 @@ class coopView
 		}
 
 	
-	function addSubTables(&$tab, $nearkey, $backlinks)
+	function addSubTables(&$tab)
 		{
-			foreach($backlinks as $backtable => $farkey){
+			$nearkey = $this->pk;	
+			foreach($this->backlinks as $backtable => $farkey){
 				$subview =& new CoopView(&$page, $backtable);
 				$subview->obj->$nearkey = $this->obj->$farkey;
-				$this->addSubTable(&$tab, $subview->simpleTable());
+				$this->addSubTable(&$tab, $subview->recurseTable());
 			}
 		}
 
@@ -177,7 +122,8 @@ class coopView
 	function getPK()
 		{
 			$keys = $this->obj->keys();
-			return $keys[0];
+			$this->pk = $keys[0];
+			return $this->pk;
 	}
 
 	function recurseTable()
@@ -185,9 +131,9 @@ class coopView
 			$this->obj->find();
 
 
-			$backlinks = $this->getBackLinks();	// MUST be after find!
+			$this->getBackLinks();	// MUST be after find!
 
-			$pk = $this->getPK();
+			$this->getPK();
 
 			//TODO return null or something, if nothing found
 			$tab =& new HTML_Table();
