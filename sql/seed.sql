@@ -176,5 +176,21 @@ insert into sources set
             source_id = 5,
             description = "Tribune Article";
 
+-- projects
+insert into enhancement_projects set
+            enhancement_project_id = 1,
+            project_name = "Special Indulgence Granted by Board";
+
+insert into enhancement_projects set
+            enhancement_project_id = 2,
+            project_name = "Work Party";
+
+insert into enhancement_projects set
+            enhancement_project_id = 3,
+            project_name = "Tour Guide";
+
+insert into enhancement_projects set
+            enhancement_project_id = 4,
+            project_name = "Teacher Substitute";
 
 -- EOF
