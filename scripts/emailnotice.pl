@@ -87,8 +87,7 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 			}
 		}
 	} else {
-		&emailReminder($famref, $insarref, $massivearref, 
-			$checkdate, $opt_a ? 0 : 1);
+		&emailReminder($famref, $insarref, $massivearref, $checkdate );
 	}
 
 } # end while
@@ -311,7 +310,7 @@ sub getinsuranceinfo()
 
 
 ######################
-#	EMAILREMINDER
+#	OLEEMAILREMINDER
 #	XXX totally broken. needs to be rewritten based on new structs!
 ######################
 sub oldEmailReminder()
@@ -415,7 +414,7 @@ sub oldEmailReminder()
 		return 0;
 	}
 
-} #END EMAILREMINDER
+} #END OLDEMAILREMINDER
 
 ######################
 #	MAILIT
@@ -469,6 +468,111 @@ sub humantounix()
 	return timelocal(0,0,0, $day, $mon - 1, $yr);
 }
 
+
+######################
+#	EMAILREMINDER
+#	inputs:
+#	outputs: a tabular style report
+######################
+sub emailReminder()
+{
+	my $famref = shift;
+	my $insarref = shift;
+	my $marf = shift;
+	my $checkdate = shift;
+	my $licref;
+	my $licarref;
+	my $pararref;
+	my $insref;
+	my $badness = "";
+	my $flag = 0;
+	my $mar;
+	my $insexp = 0; #flag
+	my $licexp = 0; #flag
+	my $skip = 0;
+
+	#families
+	$badness .= sprintf(
+				"\n-------------\n%s family Insurance and License\n",
+				$famref->{'name'} ? $famref->{'name'} : ""
+			);
+	$badness .= sprintf(
+				" \tFamily Phone: %s\tEmail: %s\n",
+				$famref->{'phone'} ? $famref->{'phone'} : "",
+				$marf->[0]->{'parref'}->{'email'} ?
+					$marf->[0]->{'parref'}->{'email'} : ""
+			);
+
+	#insurance
+	unless(scalar @$insarref){
+			$badness .= "\t- No insurance information for this family\n";
+			$insexp++;
+		}
+
+	#XXX i only print the FIRST (latest) insurance ref, not all
+	# i could print all of them.
+	#if i want this as a -i switch, for example, 
+	#it's more work than it's worth
+	$insref  = $insarref->[0];
+	if($insref->{'exp'}){
+		if($insref->{'exp'} < $checkdate){
+			$badness .= sprintf(
+					"\t- Insurance %s %s Company: %.10s #: %s \n",
+					$insref->{'exp'} < $checkdate  ? "EXPIRED" : "expires",
+					strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
+					$insref->{'companyname'},
+					$insref->{'policynum'}
+				);
+			$insexp++;
+		}
+	} 
+	
+	#license
+	foreach $mar ( @$marf){
+		$licarref = $mar->{'licarref'};
+		$parref = $mar->{'parref'};
+		unless(scalar @$licarref){
+				#TODO put in the parent's name here, dude
+				$badness .= 
+					sprintf("\t- No license information for working parent %s %s\n",
+						$parref->{'first'},
+						$parref->{'last'}
+		);
+				$licexp++;
+		}
+		foreach $licref (@$licarref){
+			if($licref->{'exp'}){
+				if($licref->{'exp'} < $checkdate){
+					$badness .= sprintf(
+							"\t- License %s %s (%s)%s Driver: %s %s %s \n",
+							$licref->{'exp'} < $checkdate  ? "EXPIRED" : "expires",
+							strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
+							$licref->{'state'},
+							$licref->{'licensenum'},
+							$licref->{'first'},
+							$licref->{'middle'},
+							$licref->{'last'}
+					);
+					$licexp++;
+				}
+			} 
+		}
+	}
+
+	if($opt_v){
+		printf("fieldtripreport(): exp lic %d exp ins %d\n", 
+			$licexp, $insexp);
+	}
+
+
+	if(($insexp || $licexp) && !$skip){
+		&mailIt($badness, $famref);
+		return $badness;
+	}
+
+	return "";
+
+} # END EMAILREMINDER
 
 ######################
 #	FIELDTRIPREPORT
