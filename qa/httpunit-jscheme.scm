@@ -75,16 +75,27 @@
   (let ((gtc (invoke wtc 'getTestContext))) ;; the junit object
 	(invoke gtc 'setBaseUrl url))
   (get-to-main-page wtc family)
-  (let ((links (vector->list (invoke (get-response wtc) 'getLinks)) ))
+  (let ((links (vector->list (invoke (get-response wtc) 'getLinks)) )
+		(run-number (random 1000)))
 	(for-each
 	 (lambda (link)
-	   (let ((url (invoke link 'getURLString)))
+	   (let* ((url (invoke link 'getURLString))
+			  (link-text (invoke link 'asText))
+			 (save-port (open-output-file
+						 (string-append "/mnt/kens/ki/proj/coop/qa/reports/"
+						  (number->string run-number)
+						  family
+						  (string-replace url  #\/ #\-)
+						  ))))
 		 ;; test here for email
-		 (write-line (string-append
-					  (invoke link 'asText) " > "
+		 (write-line (string-append 
+					  link-text " > "
 					  url))
 		 (invoke link 'click)
 		 (invoke wtc 'assertTextPresent "</html>")
+		 ;; save the raw html i got
+		 (display (dump-page wtc) save-port)
+		 (close-output-port save-port)
 		 ;;(validate-html wtc)
 		 ))
 		 ;; skip main menu (first two) and email (last)
