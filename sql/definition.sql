@@ -44,8 +44,6 @@ create table coop.kids(
     kidsid int(32) not null auto_increment,
     last varchar(255),
     first varchar(255),
-    phone varchar(20),
-	email varchar(255),
 	familyid int(32),
     primary key (kidsid)
 );
@@ -73,6 +71,7 @@ create table coop.parents(
     first varchar(255),
 	ptype enum ('Mom', 'Dad', 'Partner'),
 	worker enum ('Yes', 'No'),
+	email varchar(255),
 	familyid int(32),
     primary key (parentsid)
 );
@@ -81,6 +80,7 @@ create table coop.parents(
 create table coop.families (
     familyid int(32) not null auto_increment,
 	name varchar(255),
+    phone varchar(20),
     primary key (familyid)
 );
 
