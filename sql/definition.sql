@@ -18,12 +18,13 @@
 -- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
+-- set this to something else if i'm changing it's name!
 drop database if exists coop;
 create database coop;
 use coop;
 
 -- insurance information
-create table coop.ins(
+create table ins(
     insid int(32) not null auto_increment,
     last varchar(255),
     first varchar(255),
@@ -38,7 +39,7 @@ create table coop.ins(
 
 -- TODO: this is future. 
 -- insureds information, (many-to-many parents to insurance)
--- create table coop.insureds(
+-- create table insureds(
 --     insureds int(32) not null auto_increment,
     -- last varchar(255),
     -- first varchar(255),
@@ -49,14 +50,14 @@ create table coop.ins(
 -- );
 
 -- vehicle information (one-to-many to insurance)
-create table coop.veh(
+create table veh(
     vidnum varchar(17) not null,
     insid int(32),
     primary key (vidnum)
 );
 
 -- license information
-create table coop.lic(
+create table lic(
     licid int(32) not null auto_increment,
     last varchar(255),
     first varchar(255),
@@ -69,7 +70,7 @@ create table coop.lic(
 );
 
 -- children
-create table coop.kids(
+create table kids(
     kidsid int(32) not null auto_increment,
     last varchar(255),
     first varchar(255),
@@ -78,7 +79,7 @@ create table coop.kids(
 );
 
 -- enrollment info (many-to-many to kids)
-create table coop.enrol(
+create table enrol(
     enrolid int(32) not null auto_increment,
 	semester varchar(50),
 	sess enum ('AM', 'PM'),
@@ -86,7 +87,7 @@ create table coop.enrol(
 );
 
 -- glue table for many-to-many: kids to enrolmment sessions
-create table coop.attendance (
+create table attendance (
     attendanceid int(32) not null auto_increment,
 	kidsid int(32),
 	enrolid int(32),
@@ -95,7 +96,7 @@ create table coop.attendance (
 );
 
 -- parents who have insurance and/or licenses. (many-to-many to kids)
-create table coop.parents(
+create table parents(
     parentsid int(32) not null auto_increment,
     last varchar(255),
     first varchar(255),
@@ -107,7 +108,7 @@ create table coop.parents(
 );
 
 -- main table for many-to-many: kids and parents
-create table coop.families (
+create table families (
     familyid int(32) not null auto_increment,
 	name varchar(255),
     phone varchar(20),
@@ -119,7 +120,7 @@ create table coop.families (
 -- if there's a familyid, it came through a member, otherwise not.
 -- 'source' field will only be "springfest" this time around
 -- you'll know WHICH springfest by comparing the 'entered' date
-create table coop.leads (
+create table leads (
     leadsid int(32) not null auto_increment,
 	last varchar(255),
 	first varchar(255),
@@ -142,19 +143,19 @@ create table coop.leads (
 );
 	
 -- table to keep record of who, why, how, when i have nagged
-create table coop.nags (
+create table nags (
     nagsid int(32) not null auto_increment,
 	why enum ('Insurance', 'Springfest', 'Other'),
 	how enum ('Email', 'Phone', 'CommsFolder', 'InPerson'),
     familyid int(32),
-    naguid int(32,
+    naguid int(32),
 	done datetime,
 	primary key (nagsid)
 );
 
 	
 -- chart of accounts
-create table coop.coa (
+create table coa (
     acctnum int(32) not null unique,
 	description varchar(255),
 	acctype enum ('Income', 'Expense', 'Equity'),
@@ -163,7 +164,7 @@ create table coop.coa (
 
 	
 -- income tracking
-create table coop.inc (
+create table inc (
     incid int(32) not null auto_increment,
 	checknum varchar(255),
 	checkdate date,
@@ -176,7 +177,7 @@ create table coop.inc (
 
 
 -- glue table for many-to-many: families to income
-create table coop.figlue (
+create table figlue (
     figlueid int(32) not null auto_increment,
 	incid int(32),
 	familyid int(32),
@@ -185,7 +186,7 @@ create table coop.figlue (
 
 -- glue table for many-to-many: leads to income
 --- TODO: need separate one for businesses? or same one?
-create table coop.liglue (
+create table liglue (
     liglueid int(32) not null auto_increment,
 	incid int(32),
 	leadsid int(32),
@@ -193,7 +194,7 @@ create table coop.liglue (
 );
 
 -- users
-create table coop.users (
+create table users (
     userid int(32) not null auto_increment,
 	password varchar(255),
 	name varchar(255),
@@ -202,7 +203,7 @@ create table coop.users (
 );
 
 -- privs
-create table coop.privs (
+create table privs (
     privid int(32) not null auto_increment,
     userid int(32),
 	realm varchar(55),
@@ -211,6 +212,8 @@ create table coop.privs (
 );
 
 -- the user/passwords used by the web view page AND my update tool..
+-- these MUST be done manually for db's not named coop!!
+--TODO: i have to grant all to myself on this db! duh.
 grant select, update, insert, delete on coop.* to input@'%' 
 	identified by 'test'; 
 grant select, update, insert, delete on coop.* to input@localhost 

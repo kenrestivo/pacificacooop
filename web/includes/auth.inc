@@ -83,11 +83,6 @@ savePass($uid, $clearpass)
 	}
 
 	//user_error("saving $uid, $hash, [$query]", o);
-	print "Your new password has been saved! <br>
-			You'll need to use your new password from now on 
-			whenever you access this site. <br>
-			Please make sure to remember it.\n";
-	
 	return generateToken($uid, $hash);
 
 } /* END SAVEPASS */
@@ -787,6 +782,10 @@ nullPassState($auth, $states)
 	// wow! we made it! a good password! let's save it, shall we?
 	$token = savePass($auth['uid'], $auth['pwd']);
 	if($token){
+		print "Your new password has been saved! <br>
+				You'll need to use your password from now on 
+				whenever you access this site. <br>
+				Please be sure to remember it.\n";
 		$newauth =  changeState($auth, $states, 'loggedin', 1);
 		$newauth['token'] = $token;
 	} else {
