@@ -70,6 +70,7 @@ the fieldstruct
 callbacks struct
 	this is a proto-object. it contains miles and miles of crap
 		it'll eventually be an object, but i'm not ready to take that leap yet
+		these are tied DIRECTLY to field structs, and will subsume them
 	maintable: the, um, main table. the table that this view is mostly "about"
 	mainindex: the unique id (index) field in the maintable
 	realm: privilege realm for this view. 
@@ -100,6 +101,7 @@ auth
 		packaging: stuff related to packaging up auctions. mostly pkg committee
 		raffle: stuff related to the raffle. mostly raffle and quilt committees
 		roster: the roster. mostly the roster coordinator
+		nag: the nag people.
 		solicitation: related to solicitation. mostly "solicitation committee"
 		user: user administration. mostly the membership, board, and web
 	user and group levels, each has an access level

@@ -36,6 +36,7 @@
 	require_once("raffle_locations.inc");
 	require_once("flyer_company.inc");
 	require_once("flyer_delivery.inc");
+	require_once("indulgences.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -70,12 +71,12 @@
 	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
 
 	//and heeere they are!
-	$menu = array( $auctioncallbacks, $invitationcallbacks, 
-					$incomecallbacks, $pkgcheckincallbacks,  
-					$solicit_company_callbacks, $solicit_auction_callbacks,
-					$solicit_cash_callbacks, 
-					$raffle_location_callbacks, $raffle_income_callbacks, 
-					$flyer_company_callbacks,  $flyer_delivery_callbacks 
+	$menu = array( $indulgence_callbacks, $auctioncallbacks, 
+				$invitationcallbacks, $incomecallbacks, $pkgcheckincallbacks,  
+				$solicit_company_callbacks, $solicit_auction_callbacks,
+				$solicit_cash_callbacks, 
+				$raffle_location_callbacks, $raffle_income_callbacks, 
+				$flyer_company_callbacks,  $flyer_delivery_callbacks 
 		);
 
 	
