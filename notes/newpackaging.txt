@@ -1,0 +1,25 @@
+OK well I felt so guilty about not finishing the online Package-making stuff, that I chose to redeem myself by finishing it!
+
+It's here at http://www.pacificacoop.org/sf (I pushed it live, to save time).
+
+Your call if you want to use it or not. It may be easier than doing it in Excel, it may be harder, I dunno.
+
+Basically, from the main menu, there is a new menu item called "Springfest Packages". Sue can go in to CREATE/EDIT/DELETE packages; everyone else in the Packaging Committee can VIEW them. I put in a sample one for testing, please feel free to delete or modify it.
+
+Then, in the "Springfest Packaging Inventory" report, everyone in packaging can see what package each auction item is part of. Sue can ASSIGN it to a package by clicking "Edit" and then choosing the package number from the pop-up.
+
+I will (probably tomorrow) have the "package number" field (and pop-up) show the description as well, in case you won't have the package numbers memorised. ;-)
+
+It took literally 1 hour of work to do this, after weeks of trying to figure out how to do it!
+
+Again, it's there, and it's yours to use if you so choose. If you want any changes or additions, please let me know. 
+
+If you have already gotten pretty far along with Excel, then I can probably import it back in, if need be, just email it to me.
+
+Cheers!
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

@@ -1,0 +1,21 @@
+I am happy to report that the new form-free navigation looks pretty good and is *finally* suitable for nested displays needed for Solicitation and Packaging and everything else. Thank you both for your tremendous patience. Navigation should be a bit faster, and, most importantly, more flexible.
+
+http://www.pacificacoop.org/sf-dev/ <= dev site only
+
+I am starting to feel good about cookie and session stuff too. I've tested it quite a bit here. But I'm a little nervous about parents getting strange messages from their (perhaps very old) browsers. I suppose the only way to find out is to try it.
+
+Would it make sense to push this live? If you could take a *brief* look and report anything that looks obvious, then maybe we can let the users find the more subtle bugs ;-).
+
+Matt, I ended up not going whole-hog into OOP, but instead am sneaking up on it incrementally so as to avoid breaking things. The 'callbacks' struct is gradually "evolving" into an object, and after Springfest is safely over, I'll go back and restructure the whole thing using PHP objects. Realistically, the column-renaming will probably have to wait until then too.
+
+Again, if you could take a look and let me know if anything's amiss, I'd like push it live and find bugs NOW rather than later after I've added all the other stuff.
+
+I am committing to a deadline to finish the Solicitation and Raffle Ticket stuff before this weekend. This could be a productive "work-week" for me, but next week I turn into a computer pumpkin as Ana is out of town and I'm on my own with Gina. So now's the time.
+
+Again, thanks.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

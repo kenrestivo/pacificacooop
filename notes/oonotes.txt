@@ -1,0 +1,15 @@
+OK I have realised that I can't hold out against the object-orientation trend any longer.
+
+After months of thinking about it, and finding no other way, I am going to wrap much of the GUI code in PHP objects. Code that passes 8 args three functions deep is just screaming for objects. ;-)
+
+Then I'll be able to remove some more redundancy: the <realm>.php files are all nearly identical, and can be combined. Plus, I'll soon need to nest various displays and reports and states in order to handle the solicitation stuff (and the split-auctions, no I haven't forgotten about that either).
+
+I'll do this as minimally as possible: the object will include the fieldstruct (which will stay a struct-- at least for now), the callbacks struct, the states struct, any state it needs to keep, and all the methods it needs. If there is a way to base64 PHP objects and pass them around as a single hidden field in HTML, I can eliminate lots of the ugly code I've had to put in to pass hidden variables around. That alone will be worth the effort.
+
+Anyway, I'm also going to read the source for a few other large PHP-based apps to look for ideas, as well as re-read the PHP object model docs too.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

@@ -1,0 +1,39 @@
+Lisa-
+
+I wrote this last night but didn't send it. It summarises what we talked about today anyway, so, here it is.
+
+-ken
+-------
+
+When you log in at http://www.pacificacoop.org/sf, you'll see a "Springfest Invitation RSVP's" item. Click on "Enter New". 
+
+The most important field in there is the "Response Code". That is the little number on the BACK of the envelope, on the return address label, next to the invitee's last name. That number is how we track the money back to who was invited. Important that those match up-- that's how the Ticket people will print out name tags, how they'll know who has paid, and how many people have RSVP'ed, etc.
+
+There's a link over to the right that says "For more actions on Response Codes". That'll let you look up ALL of the invitations and their response codes, in case you get one that is missing its number, or if the number is unreadable, etc. You probably won't need to do that, but it's there in case you need to.
+
+I'm assuming you're going to get checks. If you get cash, you can put "CASH" in the "Check Number" field.
+
+The "Check Date" is the date of the check. If it's cash, you can make it the date you received the cash.
+
+If they are RSVP'ing, you are going to want to choose "Springfest Ticket Purchase" for the "Account" field. If they are NOT coming to the event, and just sending a donation instead, it'll be "Springfest Misc Invitations Cash Donations".
+
+If they donate $150 or more, they get a Sponsorship package, so choose "Springfest Sponsorship Package" for the "Account" field.
+
+In the notes, you can note what KIND of sponsorship.
+	Angel Contributor ($1000 or more)
+	Champion Contributor ($500 to $999)
+	Patron Contributor ($250 to $499)
+	Friend Contributor ($150 to $249)
+
+There may be other information that people write on the RSVP cards. Putting it in the "notes" field is OK, but let me know if you get a lot of them. It's possible I'll need to add other fields to handle those things.
+
+If you find bugs or have problems, please let me know immediately and I'll fix them.
+
+Carrie knows what to do with the actual checks once you've entered them, so it's best to ask her about that.
+
+Have fun!
+
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

@@ -1,0 +1,15 @@
+I was feeling frisky and had a few hours this morning, so I added rudimentary screens for the Publicity people to keep track of where and when Flyers were placed. They can also see, edit, and add the contacts that the Solicitation people are (theoretically) entering, so that they can see who does and does not want a flyer placed there.
+
+Not perfect, but it's at least a start. I was hoping that perhaps the Publicity people will be more likely than the Solicitation people to enter their Contacts online, thus perhaps taking some data entry burden off of others.
+
+I also fixed a long-standing bug, and now the Edit/Delete buttons are set properly, based on privileges. This is a good thing, because...
+
+Carrie, a policy question: should I now set it so EVERY family can see ALL the auctions that other families have entered in the system? Not edit or change, just view. It's an incredibly easy thing to do, if you think it'd be worthwhile and won't freak people out. It may make the Packaging people's job easier: families can see for themselves what others have donated, and perhaps come up with things to donate that "go with" what others have donated. It may inspire ideas (especially for those who are lagging now), and it'll let them see if their item is a duplicate of what someone else has donated.
+
+Matt, I will be experimenting with a rudimentary subclassing system that uses the existing hash/array structs. It's not on the live site yet, but the flyer company screen will be the first that I try it on. I may have to finish the regression-testing harness first thoguh. We are rapidly approaching robust, maintainable code ;-).
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

@@ -1,0 +1,32 @@
+We're not done with this one, alas, we're only getting started.
+
+This "greeter's list" is essentially a paper version of a user-interface, so it needs some thought, so the greeter's don't flip.  If there is is one line per PADDLE, then the people who have tickets but no paddle don't get in. How will the greeters know if they bought tickets?
+
+I can't just sloppily slap "number of tickets" into the paddles, because if someone buys 4 tickets and 2 paddles, then those 2 paddles will each have "4" in them, and confuse the greeters.
+
+If people show up, but decline their paddle (or have their paddle declined for them by their spouse ;-), then did they show up? They did ATTEND, but they didn't take their paddle... so it gets crossed off, which means they didn't attend. And you DO care how many people attended and who they were ;-). There is no escape.
+
+I'm thinking there should be one line per TICKET, with perhaps SUB-LINES underneath for paddles. This wouldn't work too well in Excel, but it is possible in PDF, for example, or HTML.
+
+i.e.
+
+[# attended] [# tickets] [name] [address] [city] [state] [zip] [paid] [mail ok]
+	[paddlenumber]  [checkbox]
+	[paddlenumber]  [checkbox]
+	[paddlenumber]  [checkbox] 
+[# attended] [# tickets] [name] [address] [city] [state] [zip] [paid] [mail ok]
+	[paddlenumber]  [checkbox]
+[# attended] [# tickets] [name] [address] [city] [state] [zip] [paid] [mail ok]
+[# attended] [# tickets] [name] [address] [city] [state] [zip] [paid] [mail ok]
+	[paddlenumber]  [checkbox]
+	[paddlenumber]  [checkbox]
+
+... etc...
+
+I know you said that it's OK that the purchases are handled via slips of paper, but I am also aware that that decision will get reversed at the last minute ;-).
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

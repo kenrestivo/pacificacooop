@@ -1,0 +1,19 @@
+Matt-
+
+I have been giving your "who will maintain this after we're gone?" statement a lot of thought.
+
+Gina has a December birthday, so she won't get into kindergarden until she's almost 6. This means I'll most likely be around for the next two years. At which point, you may be back again yourself-- your little one may be getting pretty close to preschool by that time. So we could tag-team this one ;-).
+
+Also, as you know, two years is an eternity in software-development time. By the time Gina graduates, this thing almost CERTAINLY will be polished-up with GUI administration stuff, so that any mom or dad can adminster it. 
+
+And as for code-level or DB-level tweaking, I've been told by some parents who have teenagers that went here, that the school's procedures haven't changed significantly in nearly 20 years. If that's the case, and if we continue to keep some flexibility in mind, then nobody should need to do anything to radical to the code after it all gets polished.
+
+Finally, I see the trend being people getting more and more savvy about this stuff over time. We may be pretty much alone right now, but I expect that within a few years we'll have some more company.
+
+Anyway, just some thoughts.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

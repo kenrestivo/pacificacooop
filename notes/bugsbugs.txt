@@ -1,0 +1,17 @@
+Found two significant bugs that I have to fix, hopefully tomorrow.
+
+First of all, the duplicate-entry checking is botched. Must have broke it while I was adding the other stuff. Gotta fix that now.
+
+Secondly, I think I have found the source of the "I can't get on the web site" problems: poor user-interface design. 
+
+All of the users who complain about this, have not yet put a password in the system for the first time. When they try, the login screen asks them to retype their password. Nobody reads this, it seems. I watched even a very savvy web user get totally baffled by this, and decide that the thing is "broken" or "won't let me in". My bad.
+
+So, I'm going to add a simple JavaScript (which I hate, but it could help here) that'll figure if they're new users and display the right thing. The alternative (no JavaScript) will be to display a password *and* confirmation box at all times, just to be sure.
+
+Once all that's done, I'll throw it-- and perhaps an early take at the Solicitation stuff-- onto the dev site for further testing.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

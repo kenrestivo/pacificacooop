@@ -1,0 +1,39 @@
+notes on cvs
+
+
+syncing dev-online with my dev site (HEAD of cvs!)
+	cd web
+	cvd and commit as needed
+	cd ../web-online
+	make sync!!! important step! capture whatever matt may have done
+	cvd and manually review and commit any changes to sf-dev site online
+	cvs update -kk -j dev_online -j HEAD
+	test it here?
+	upload-dev the thing
+	check it out on real site
+	commit it, probbly
+	then upload-dev AGAIN, so the $id's are in sync
+	
+syncing web-online with livesite
+	cd web-online
+	commit as needed
+	cd ../livesite
+	make sync!!! important step! capture whatever matt may have done
+	cvd and manually review and commit any changes to livesite
+	cvs update -kk -j livesite -j dev_online filename.php (assuming only ONE file!)
+	test here!
+	upload-live the thing
+	check on real site	
+	commit
+	
+syncing dev (MINE!) directly withe livesite
+	cd web
+	commit as needed
+	cd ../livesite
+	make sync!!! important step! capture whatever matt may have done
+	cvd and manually review and commit any changes to livesite
+	cvs update -kk -j livesite -j HEAD filename.php (assuming only ONE file!)
+	test here!
+	upload-live the thing
+	check on real site	
+	commit

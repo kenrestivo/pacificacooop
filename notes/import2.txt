@@ -1,0 +1,15 @@
+I may have forgotten to mention: you can also make Silent packages which combine various auction items together. The only difference the system sees between silent and live items is the number you give them. That's it. They behave exactly the same way and you can do the same things with both.
+
+You can change packages back and forth between being live and silent, just by changing that pop-up button and the number. You may want to do that if you end up with too many live auctions, and it's no problem.
+
+And, in fact, you may want to enter a few of the combined silent (or balloon) packages, and assign the auction items that comprise them, before doing the import of the remaining one-off auction items. Or you can import them first, and save some typing. Your call on that.
+
+I'm working on the export spreadsheet for the program and the bid sheets today.
+
+If I get time, I'll add an "are you sure?" confirmation to the import script, just to make sure it only happens when you WANT it to.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

@@ -1,0 +1,41 @@
+Bob-
+
+OK here are the specs of what I'll need. My apologies if this is a pain in the ass. Basically, I will need to build the page frame by frame (like in Quark), using code that I write in PHP. Populating this thing with text will be easy, but positioning everything correctly could be tricky.
+
+I'll need:
+
+1) A comp or example, in EPS or some such format, one each for the "Bid Sheet" and the "Gift Certificate". I'll want something to compare to, to see if what comes out is what you wanted ;-)
+
+2) A list of the POSITIONS of each of the elements. This is the annoying part. I'll need the x-y coordinates of the upper-left corner of each thing on the page, in either points, mm, cm, or inches, whichever you prefer. Coordinates start from upper-left of page, or from the margin if that's easier. Please let me know what margins you are using. If there are boxes or frames, I'll also need to know the (width x height) dimensions of them, in the same units. Default borders are 1cm, but can be set to whatever you want. Unfortunately, that's the only way I'll be able to get the output to look like your design. Sorry, that's just what I'm dealing with here.
+
+3) A list of the fonts and font sizes and attributes of each element. Again, I'm sorry about this. It's just the way it is.
+
+4) Any font files, preferably Type1 fonts, with their .afm files, and ideally with any unnecessary characters removed (to make it download faster). If you must use TTF fonts, I'll need .afm's for them. I can generate them here, but it may be better if you do it and supply them, to make sure they look as you intend.
+
+5) Any PNG or JPEGS (no GIF's) that are to be shown, ideally already scaled to the correct size. The code can scale them but it might not look right if you let it. If you're using a screened-back image, you'll have to do the screening-back yourself. These are going to be 100+ page files, and I have an effective size limit of 8MB for the finished files. So, it'd be nice if these were relatively small graphics.
+
+The documentation says this about what's supported by way of graphics:
+	Remove transparency or save your image in 16 colors (4 bits per pixel) or greater.
+	For JPEG, all flavors are allowed:
+		* gray scales
+		* true colors (24 bits)
+		* CMYK (32 bits) 
+
+	For PNG, are allowed:
+		* gray scales on at most 8 bits (256 levels)
+		* indexed colors
+		* true colors (24 bits) 
+
+	They must be flattened. Do NOT use Interlacing or Alpha channel!
+
+As far as I can tell, screened background images *should* work, but I haven't tested it. For time purposes, it may be best if the screened image is optional and the design can work without it. Size may be an issue there too.
+
+Well that should do it. When I've got it working, I'll give you a link to see what comes out, so you can inspect the results, and have me adjust accordingly.
+
+Thanks for helping with this!!
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

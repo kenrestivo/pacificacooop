@@ -1,0 +1,55 @@
+On Sat, Feb 07, 2004 at 09:43:49PM -0800, Carol Klyver wrote:
+> Ken,
+> 
+> Did we cover all of this on the phone?
+
+Yep! Thanks. I documented my understanding of your answers below.
+
+-ken
+---------
+> 
+> 
+> On Friday, February 6, 2004, at 01:04 AM, Ken Restivo wrote:
+> 
+> >-----BEGIN PGP SIGNED MESSAGE-----
+> >Hash: SHA1
+> >
+> >Sorry for being such a question-factory. But unfortunately these things 
+> >crop up.
+> >
+> >- - Who can add/delete/change Raffle locations? Just the chairperson or 
+> >the whole committee? Who can add/delete/change Raffle income?
+
+Stangeland and the rest of the Ticket Committee can enter CASH, and also LOCATIONS. The Surfboard people can enter LOCATIONS, but not cash. This is all very easy to change if need be.
+
+> >
+> >- - Who can enter Solicitation checks (as opposed to FAMILY checks: they'
+> >re now split up into two places and can be entered by people with 
+> >different privileges)? All the Solicitation committee members, just the 
+> >chairperson, or just you and perhaps a data entry person?
+
+Ferris and Klyver can enter SOLICITATION checks. Only Klyver can enter FAMILY checkes. If you want to delegate to others too, it's very easy to do.
+
+> >
+> >- - I'm starting on the ads stuff too. There is a difference between 
+> >entering an ad INSERTION order and entering the RECEIPT of a payment for 
+> >an ad. Obviously the whole committee can enter ad insertions. Can they 
+> >also enter the checks (see above)?
+
+The system will allow anyone with solicitation privileges to place an ad insertion order. But only Ferris and Klyver can enter checks to pay them off, and make them "valid". Since probably only Ferris will be entering ANYTHING anyway, this is OK. Checks can be assigned to pay off ads. I'll create a screen for the program people that only shows PAID ads, so the program people will only know about the ones that are "real".
+
+> >
+> >- - Finally, who exactly should be able to enter/view Solicitation data 
+> >such as ad insertions, sponsorships, etc? I was told that Kirsten gave out 
+> >Ad Insertion orders to the whole membership Tuesday night, thus deputizing 
+> >everyone to go sell ads. I assume that's OK with you (hmm... maybe I 
+> >shouldn't ;-), but do you want the whole membership to have privs to enter 
+> >ads too? Or must they filter them through Solicitation committee members?
+> >
+
+I'll assume from our conversation that the Solicitation people won't be doing much entering anyway, it'll probably all fall on Danielle to deal with this. If at any time you want to open up Solicitation entries to the whole membership, just say so, it's easy to do.
+
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

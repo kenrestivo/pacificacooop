@@ -1,0 +1,27 @@
+OK here's how I can handle tickets quickly, on a deadline:
+
+1) I hack up a quick screen for Erin to enter tickets and contacts without having to enter addresses. I can probably graft a "source" tracking on there too.
+
+2) I also provide an Excel export which prints out all the PAID tickets: those from Invitations and from Erin's call-in sales. These will have a ticket number which can be used for tracking.
+
+3) You handle solicitation freebie tickets manually in Excel, by entering off of Danielle's Xerox copies of the Solicitation stuff.
+
+4) You also handle VIP's separately, via Barb's spreadsheet. 
+
+5) The "greeters" printout becomes a cut-and-paste of the above 3 sets of data.
+
+6) Paddle numbers are assigned by the greeters. Someone keeps a list of which paddle numbers go with which ticket numbers, IF you want to track purchases back.
+
+7) Thank you's are handled manually based on the hard-copy RSVP cards. With my personal apologies to whomever has to sit there and do it, but, we can only tackle so much in one year.
+
+8) I'll attempt to untangle all this later, probably after the event.
+
+Standard disclaimer: the right way is to rearchitect the handling of 'contacts' so that families, solicitation companies, leads, vip's, alumni, are all in a unified 'contacts' table with many links to their respective different functions, and to 'events' which can happen to the contacts. 
+
+Thank you for being kind enough to let me defer that work until after I'm recharged and ready. Gotta have something to look forward to next year!
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

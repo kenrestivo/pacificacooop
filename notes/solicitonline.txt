@@ -1,0 +1,27 @@
+Fixed a few bugs that showed themselves today. Also made the login a little cleaner for "new users" with no password (yet).
+
+And.... added a first cut at Solicitation!
+
+http://www.pacficacoop.org/sf-dev/  <= DEV site
+
+The solicitation stuff I have so far is just a very simple entry of company contact information and solicitation auction donations: which I'm told are the most urgently pressing matters right now anyway. The company contact information has NO required fields: so that if the 3x5 cards aren't filled out consistently, or if all Danielle has to go on is whatever is printed on a Gift Certificate or check, the system won't stop her from entering them anyway.
+
+The solicit stuff has been weaved through to the packaging inventory status report too. All the donations (both family and solicitation) will show up in ONE screen for the packaging people: they won't need to flip back and forth.
+
+Raffle stuff is comparatively much simpler and should be there tomorrow or day after (depending on whether there are any bugs or issues with the solicitation stuff).
+
+I have the database schema in place too for ads, too, and all the GUI stuff to do ad insertions online too. Again, if raffles go well, and no major bugs found, I'll put in ads too.
+
+Keep in mind that you are superusers who can see ALL of this, so your main menu will get long: most users won't see any of it, or just a small part: packaging people will just see the packaging, solicitation people will just see the solicitation, etc. So "real" users won't get barraged with so many main-menu things.
+
+I will get some user feedback on the flow. When adding a a solicitation auction entry, there is a pop-up to choose "company name". If the company isn't yet entered, there's a "Enter New" link from which the user can enter a new company, then go back and enter the auction donation. This is a quick hack to get this out the door, it's not how I want it to be long-term.
+
+I have bigger plans for solicitation: I want the user to see ALL the status of a solictation company's activity from one screen-- it'll eventually show all ads, all donations, all sponsorships, all notes, EVERYTHING for a company. And, the user will be able to add new ads, sponsorships, donations, notes, from there too. 
+
+Also on the TO-DO list: an "audit trail" link. I'm now saving a record of everyone who changes every record, and on what date they did it. Should make it easy to display an audit trail, which I think will be important as a larger number of people find themselves groping around in this stuff, doing data entry, etc.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

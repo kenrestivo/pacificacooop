@@ -1,0 +1,52 @@
+testcase tool
+		FuncExistsString is gonna be key
+			SHIT! it's fucking case sensitive. that BLOZE!
+			but, it's also OR not AND.... so i could have HTML,html
+			to and them, use separate call-- DOCS ARE WRONG
+		FuncExistsTag for the /html!
+		FuncExistsTableTag blows. it just shows that the table EXISTS!
+			it does NOT go fishign around in there looking at values. grr.
+		FuncExistsSelectTag for contents of a selectbox
+			optionally !{content} isntead of value
+		runner can use ${vars} for url, for example
+			GOOD! i can use it on coop-dev too!
+			but... this doesn't actually seem to WORK.. why?
+
+nice:
+	the record or "watch me" mode-- VERY helpful
+
+complaints:
+	this excel thing is brain dead. it doesn't let you DIFF in cvs!!
+		it also requires some kind of gui editor, which i hate
+	ack. it executes the files in no particular order!
+		which means you have to RENAME them to get them in teh right order!!?
+		RIDICULOUS! how can i do cvs with that? with ln -s? it's absurd.
+	no way to set continuations/cleanups/exceptions!
+		i.e. after i'm done, i want to DELETE all the entries i made!
+
+things to fix:
+	hmm. how to handle EDITING? which one to click on?
+		it's not like httpunit: it doesn't understand CLICKS.
+		i may have to write JAVA to get it to do that!??!
+			look at its examples. ouch.
+				OH SHIT that would suck. cvs import time...!
+	gonna have to write some scripts to mangle this stuff
+		parse out the flat text, into my preferred format!
+		turn it into flat text, tab or whitespace nested
+		make it MODULAR!
+			so i can build test cases dynamically, turn it into a spreadsheet
+			MODULE
+				thing value
+				thing value
+				thing value
+				function
+					op arg
+					op arg
+					op arg
+		let the script do the auto-numbering.
+			and the include'ing
+
+you know what? this thing is ONLY useful for its watch mode.
+	write something to parse out its excel file into a file for a DIFFERENT tool
+		i.e. httpunit, itp, etc.
+	

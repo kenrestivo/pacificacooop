@@ -1,0 +1,15 @@
+I fixed the nag report so that it totals up ALL the auction donations for a family: not just what they "donated" but also what they "solicited". It's all one number, and they shouldn't show up on the nag report if they solicited OR donated >$50 of stuff. Next I'll combine the "missing" columns too.
+
+If you show all families, it totals each family so you can see their relative "performance". I notice that Alarid entered garbage data for the amount on one of their auctions, so the totals are all screwed up. I'll leave that for you and/or Danielle to fix if you want to.
+
+On a separate front, the "Springfest Event Ticket Summary" report is available too. It shows lots of detail for whatever tickets are known-about.
+
+I'm focussing on fixing broken things right now, and it seems even with that I'll be busy up until the event.
+
+As for sponsorships, I'm thinking an approach like the packages or the nag indulgences might be necessary: have the system GUESS who gets sponsorships, but require a human to add/change/delete/confirm manually. Sponsorships are such a big grey area, that I think trying to automate them may fall into the category of "too much automation". There may be too many factors for a computer to do, it may be a human-touch thing.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

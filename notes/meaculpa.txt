@@ -1,0 +1,17 @@
+Folks, I have run out of time and I'm told you are building packages tomorrow. I really wanted to finish a web-based interface so you can group auctions together online to make packages, but it looks like I won't make it in time. Sorry about that.
+
+Instead, it looks like you're going to be using Excel and/or Word. I've been told that it may work out better that way anyway, due to the dynamic nature of how packages are made.
+
+I created a link from which you can export into M$ Excel or Word, the list of RECEIVED packages. I'm assuming you will only be building packages out of items that have been received.
+
+It's available from the "Springfest Packaging Inventory" report in the main menu. There's a link that says: "Click here to export RECEIVED items into a spreadsheet". If you want to cut to the chase, you can also get it from http://www.pacificacoop.org/sf/exportpkg.pl
+
+I'm a bit nervous how this will work if you keep receiving packages up till the last minute. I hope that doesn't happen, and everything works out well. Please accept my apologies-- I hate it when I don't deliver what I said I'd deliver-- but hopefully "there's always next year".
+
+Let me know if you run into any trouble and I'll certainly be glad to fix it immediately.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

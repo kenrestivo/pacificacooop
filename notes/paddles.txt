@@ -1,0 +1,115 @@
+I'm confused. The greeters are going to be sitting there with highlighters?
+
+But you could conceivably have one line per TICKET (i.e. if you buy 4 tickets you get 4 lines), with a paddle number, or NO paddle number if they weren't supposed to get one. So that may solve that problem.
+
+A separate but related problem is that then each line will be populated with the ticket PURCHASER's name/address/phone. There'll be no space to write down new addresses. Whereas, if only the top-level ticket-purchaser has address info, there will be lines for each attendee. If the data is heirarchal, I think you're going to end up with a heirarchal report eventually.
+
+As for packages: alas, the prices in the packages are numeric fields. Important so that you can do math on them, like total them up. I probably should have caught "priceless" on last year's program, but, unfortunately, I missed that one. Sorry about that.
+
+As a workaround, I'd suggest putting zero dollars in for packages with "priceless" value. I can have the Excel export change zero values to "Priceless" when it goes to the Program people.
+
+-ken
+--------
+On Sat, Mar 06, 2004 at 09:50:42PM -0800, Carol Klyver wrote:
+> Ken --
+> other items first -- we need to be able to enter the word "priceless" in 
+> the value field
+> for an item.
+> 
+> We understand why we can't do this in the normal entry mode, but we need to 
+> be able
+> to do it in the Excel spreadsheet -- the Golden Gate tour is considered 
+> priceless as
+> is anything the teachers donate and the art projects that the kids 
+> personalize (e.g.
+> handprinted toy boxes).
+> 
+> What shall we do?
+> 
+> Regarding this, the procedure is th highlight the excel row (entry of name)
+>  when a
+> person shows up. At the end of the night, anything not highlighted means a 
+> no show.
+> 
+> Therefore, one line per ticket:
+> 
+> Klyver 1
+> Klyver 2
+> Klyver 3
+> Klyver 4
+> is fine.
+> 
+> You just write declined paddle and don't gie out that number.
+> 
+> will that work?
+> 
+> C.
+> 
+> On Saturday, March 6, 2004, at 10:23 AM, Ken Restivo wrote:
+> 
+> >-----BEGIN PGP SIGNED MESSAGE-----
+> >Hash: SHA1
+> >
+> >We're not done with this one, alas, we're only getting started.
+> >
+> >This "greeter's list" is essentially a paper version of a user-interface,
+> > so it needs some thought, so the greeter's don't have trouble.  If there 
+> >is is one line per PADDLE, then the people who have tickets but no paddle 
+> >don't get in. How will the greeters know if they bought tickets?
+> >
+> >I can't just sloppily slap "number of tickets" into the paddles, because 
+> >if someone buys 4 tickets and 2 paddles, then those 2 paddles will each 
+> >have "4" in them, and confuse the greeters.
+> >
+> >If people show up, but decline their paddle (or have their paddle declined 
+> >for them by their spouse ;-), then did they show up? They did ATTEND, but 
+> >they didn't take their paddle... so it gets crossed off, which means they 
+> >didn't attend. And you DO care how many people attended and who they were 
+> >;-). There is no escape.
+> >
+> >I'm thinking there should be one line per TICKET, with perhaps SUB-LINES 
+> >underneath for paddles. This wouldn't work too well in Excel, but it is 
+> >possible in PDF, for example, or HTML.
+> >
+> >i.e.
+> >
+> >[# attended] [# tickets] [name] [address] [city] [state] [zip] [paid] 
+> >[mail ok]
+> >	[paddlenumber]  [checkbox]
+> >	[paddlenumber]  [checkbox]
+> >	[paddlenumber]  [checkbox]
+> >[# attended] [# tickets] [name] [address] [city] [state] [zip] [paid] 
+> >[mail ok]
+> >	[paddlenumber]  [checkbox]
+> >[# attended] [# tickets] [name] [address] [city] [state] [zip] [paid] 
+> >[mail ok]
+> >[# attended] [# tickets] [name] [address] [city] [state] [zip] [paid] 
+> >[mail ok]
+> >	[paddlenumber]  [checkbox]
+> >	[paddlenumber]  [checkbox]
+> >
+> >... etc...
+> >
+> >I know you said that it's OK that the purchases are handled via slips of 
+> >paper, but I am also aware that that decision will get reversed at the 
+> >last minute ;-).
+> >
+> >- -ken
+> >- --
+> >- ---------------
+> >The world's most affordable web hosting.
+> >http://www.nearlyfreespeech.net
+> >-----BEGIN PGP SIGNATURE-----
+> >Version: GnuPG v1.0.6 (GNU/Linux)
+> >Comment: For info see http://www.gnupg.org
+> >
+> >iD8DBQFAShcQe8HF+6xeOIcRAoFBAJ4uWcmhZ1/Vcua7gCxj+dhon2j04QCgvhlj
+> >xEFm5OFBgaIy9f7b8QOGllg=
+> >=Bt4q
+> >-----END PGP SIGNATURE-----
+> >
+
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

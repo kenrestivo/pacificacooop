@@ -1,0 +1,25 @@
+There is now a link in the Packages screen which will automatically import all the unassigned auction items into their own Silent auction packages. Basically it cuts and pastes, automatically, and massively, so you don't have to do it manually. Use it as you see fit.
+
+I would suggest first grouping as many as you can into live items. This way, you'll have less cleaning up to do, or possibly none at all. But you can always delete packages once they've been imported, so any mistakes are recoverable, and you can change things around fairly freely.
+
+By default it will calculate starting bids equal to half the package's Estimated Value, and bid increments equal to 1/10 of the Estimated Value. You can change these however you wish.
+
+Once the auctions have been imported, you'll be able to edit the new packages without damaging the auction item descriptions that the families entered. In the Packages screen, you can edit their descriptions, change their numbers, and even delete them WITHOUT affecting the auction items to which they are linked. 
+
+(This may help explain why I am fearful of handing out edit/delete permissions on auction items-- forgetting where you are and hitting "delete" in the wrong place would be a problem, as would editing in the wrong place, so we avoid the problem ;-)
+
+I'm not sure that makes sense.  Basically the packages are LINKED to the auction items, but they are NOT the auction items. Once you import them, they are packages now, and they're yours. They have been copied and pasted, and the copy in the Packages screen is what'll show up in the program.
+
+You can hit this link whenever you like and as often as you like. For example, if you get a bunch of new auction items in, hit the "IMPORT" link again, and they'll get copied over into the Packages screen for you automatically.
+
+I tested it as best I could here, but not on the live site (for obvious reasons). If you run into any trouble, please let me know immediately.
+
+By the way, the "Estimated Value" on packages is now optional. So, for "priceless" items, put in, um, no price. When the Program people get it, it'll say "PRICELESS" instead of "0".
+
+Thanks for waiting!
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

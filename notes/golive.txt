@@ -1,0 +1,41 @@
+I haven't heard back with any bug reports on what's been up there since yesterday. I'm going to consider this complete and ready to go live... although I would REALLY like for it to have had more testing. Unfortunately, I was right up to the wire on this one. My apologies.
+
+Note the temporary URL: http://www.pacificacoop.org/sf-dev/
+	this is just sf-dev/ with NO "php" extensions. Try it.
+
+Present and working (as far as I can tell):
+	- Auth, login, password entry, and user/group privilege checking
+	- Auction donation items
+	- Cash fees and donations
+	- 10names -- now using the completely re-written set of library calls
+	- The beginnings of some roster information
+	- Show the user what their privileges are as they navigate around
+	- A little menu for navigating around this stuff
+
+Stuff that'll have to wait 'till later this week:
+	- Editing/deleting 10names
+	- Solicitation entry stuff
+	- Tweaks that users won't see but that will bother me until they're done
+
+Stuff that'll have to get added soon afterwards:
+	- Privilege editing screen so you and a few others can "delegate"
+	- Insurance display (field trip coming up in 2 weeks!)
+
+Overall, I'm really happy with this so far. It's getting reasonably close to what I expected to deliver.
+
+Right now, all users have the minimum set of permissions needed to get things done.  Carrie, please let me know *which* users will need privileges for things like:
+	- entering, viewing and/or editing checks
+	- entering, viewing and/or editing other people's 10names entries
+	- entering, viewing and/or editing other people's auction donation items
+
+The nag.php report is totally outside this auth system (for now ;-) so if that's the only thing anyone needs to see, that's fine. Matt, I'll assume you'll do the honors of adding the auction items (left join faglue) to nag.php.
+
+Cutting this over from the fake to the live database may take an hour or two, since I have to copy over the users/privs and be super-careful that everything matches up properly. If there are any problems, please let me know before tomorrow night. 
+
+Ana will be going to the Parent Ed meeting, and, after Gina goes to sleep is when I am planning to put aside time to push it live.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

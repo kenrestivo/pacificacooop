@@ -1,0 +1,29 @@
+So the thing I've been thinking about a lot lately is how to deal with heirarchal screens.
+
+Those "fieldspec" structs actually represent entry/edit screens: they define a group of fields that get added/saved/edited/deleted as a unit. What I've run into now with the user-admin, insurance, and split-auctions is a situation where screens have SUB-screens, which are tied to them. The solicitation leads-tracking will *definitely* need to deal with this.
+
+Right now I'm leaning toward having multiple fieldspec structs, one for each sub-screen. In the add/edit form, the user will see any lines of sub-screen data as read-only, and have buttons to edit/delete them or add new ones. Thus it re-uses a lot of the code that's already there, without having to do too much major surgery. 
+
+So the user behaviour would be: 
+	- add/edit screen: contains editable entry fields for the top-level data
+		- if sub-level data is optional,
+			read-only display of any sub-level data lines, 
+				and edit/delete buttons
+		else 
+			show entry fields for x required lines of sub-level data right there
+		- an "add" button to add a new line of sub-level data
+			brings up an edit screen that has entry fields for sub-level data
+			and if the top-level data wasn't saved yet, checks/saves it first!
+	- confirm-delete: read-only for top-level AND all related sub-level data,
+		if it's one-to-many. 
+		if it's many-to-many, delete only top
+	- view: show the top level and all sub-level as read-only, with edit/delete
+		for simplicity, only show edit/delete's for the TOP level.
+
+I'll of course want to allow these to recurse to whatever levels are needed, each using the same code. From a usability standpoint, they'll probably never go more than 1 or 2 deep, but I'd hate to hard-code in a limitation. 
+
+I don't think this'll be difficult, but HTML's (weird, IMHO) statelessness always seems to throw me a curveball. Maybe the current state machine and the current field structs themselves are flexible enough to handle much of what'll be needed.
+
+I'm currently thinking it'll be safest to save at each level, instead of trying to pass all that stuff around as hidden vars, as long as there aren't any gotchas in that approach.  Also leaning towards representing the heirarchal relationship by nesting the structs, again if there aren't any gotchas there.
+
+Anyway, I'm gonna spend another day thinking before I actually try coding this up. Let me know if you think I'm missing anything obvious.

@@ -1,0 +1,27 @@
+Carrie-
+
+Next phase is going to be a lot of work but 1) it's necessary in order to do it right, and 2) I'm excited about the possiblity of doing it right.
+
+I'm confident now that I'm not making this stuff any more complicated than it has to be; I'm convinced it's complicated because the way the school runs is COMPLICATED! That's all there is to it. And computerizing it will make it easier for this and future generations. Please be patient, this next batch of work is gonna be a biggie. I've made it as simple as possible, but no simpler.
+
+The next batch of database tables and GUI stuff will necessarily involve the entering and online management of:
+	- business contacts and territories
+	- ad insertions 
+	- ticket sales (this may be simple, I need some more info from you)
+	- flyers (also may be simple, want to check a few things with you)
+	- sponsorship packages (incl. letting SF coordinator change/add them later)
+	- web links (various kinds: with/without logo. Any other kinds?)
+	- banners (I first need to understand what/who/when/how/why of these)
+	- revamped check-entry (to categorize payments for all of the above!)
+
+Each of these is pretty simple in and of itself but they're all interdependent on one other and so have to thought through so as not to mess each other up.
+
+The good news is: I've thought through most of this already A LOT, and am ready to start coding it. I need a few minutes of your time to answer a few questions and sanity-check a few things. Call me whenever you can, and hopefully in the next day or so.
+
+Thanks!
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

@@ -1,0 +1,31 @@
+OK I've pushed the packaging "garage check-in" stuff onto the live site.
+
+It is at http://www.pacificacoop.org/sf .
+
+Here's a recap of the instructions (maybe print out and place next to the laptop?) are:
+
+- The laptop is old and cranky. Please leave it ON at all times, leave it where it is (moving it could yank out its wireless connection), leave the browser window open, and be gentle with it ;-). If the screen is dark, then just wiggle the mouse or hit the spacebar to wake it up.
+
+- Its screen doesn't have the greatest contrast, so sometimes it's hard to see the arrow if you move the mouse quickly. Move the mouse SLOWLY and it should be visible.
+
+- There should already be a web browser open and set to http://www.pacificacoop.org/sf . If not, enter it manually, or call me.
+
+- Log in as yourself. The whole packaging team has permissions to change check-in dates and locations, and view unique ID's.
+
+- The packaging menu is at the bottom. From there you can View/Edit and see the auction items, their unique ID, and their checkin dates (if any). They are sorted by family name (for now). This could also be printed out as a hard-copy report.
+
+- Enter check-in date and location as needed. Dates use the YYYY-MM-DD format.
+
+- When done, click the "Back to Main Menu" button and then the "Log Out" button.
+
+- Please leave the machine on, and leave the browser window open. Just leave the browser open and you'll be fine.
+
+Everyone on the packaging team can also go to this site from anywhere (home, office, whatever) to see the current inventory of what's in the garage at any time.
+
+If there are questions/problems, please call me or email me.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

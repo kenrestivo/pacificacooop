@@ -1,0 +1,28 @@
+notes on httpunit
+	
+ah cool. jwebunit seems a LOT more robust and straightforward.
+
+i LIKE this.
+
+(define wr (invoke wc 'getResponse "http://www/coop-dev/"))
+
+
+wr WebResponse is the KEY class!
+	getFormXXX
+	isTextParameter
+	getOptionValue
+	getSubmitButton(s)
+	getParameterValue
+
+WebForm
+
+WebTable
+
+can CONSTRUCT a form, to send!
+	setParameter
+	then submit it .getRequest
+
+i really want WebClient!! it manages cookies.
+	hmmm. WebResponse is simple
+	read javadocs?
+

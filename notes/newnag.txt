@@ -1,0 +1,22 @@
+OK the DEV site (http://www.pacificacoop.org/sf-dev/) has an updated nag report that (finally!) uses the auth system.
+
+Changes include:
+	- A column for "Solicit Auction Delivery", which I expect the "nag people" are going to want pretty soon. 
+	- Replaced the checkbox/refresh combination with a simple link
+	- A quick-and-dirty link for you to flip back and forth between the indulgence screens and the nag report.
+	- Made the Nag Report available from the main menu (only to those that have privileges of course).
+	- Maintained the old "nag.php" method for historical purposes.
+
+I'll need a list of the 'nag people' so that I can make sure they have permissions.
+
+I can try to reach you via phone tomorrow. There's a 90% chance that I'll be working at the school in the morning, for Betsy.
+
+This may be one of those things where you want to sit down at the screen and look at it along with me in "real time".
+
+Nite!
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

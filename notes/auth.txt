@@ -1,0 +1,22 @@
+Well I have completed the refactor and cleanup that desperately needed to happen before anything else could move forward. *phew*
+
+Carrie, I'm *really* sorry for the long delay. But, I'm almost ready to focus on 3x5 cards, and all this up-front work should make that go very quickly.
+
+Matt, you may notice I moved a bunch of stuff into movetoshared.php, thus making it available for 3x5's. The only things left in financefuncs.inc are things *specific* to the money stuff, i.e. things that reference specific tables in the database. I also exposed a bit more out into money.php. It'll need to be there for auth.
+
+I'm ready to do auth and have a plan. Couple policy questions:
+
+I'm assuming auth will be by family, not by parent. Is there a situation where one parent might be authorised to do something but their spouse wouldn't be? Please let me know if that's going to be controversial.
+
+Each family will be able to view/edit its own 3x5 entries. Certain privileged families (Carrie to provide a list?) will also be able to view and edit *all* entries. These users will also be able to enter 3x5's as other families (i.e. when doing data entry for non-computer-enabled families).
+
+Now for passwords. 
+	1) I could quickly generate random passwords for each family, and save them into a text file. But then someone would have to mailmerge them, print them out, and distribute them into people's communications folders. 
+	or 2) I could add code to let families pick their own passwords, when they log in for the first time. 
+Roughly the same amount of work: but it's a policy decision. (1) is arguably more secure, and (2) is arguably more user-friendly.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

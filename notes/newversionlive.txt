@@ -1,0 +1,22 @@
+I am happy to report that the all-new-and-(hopefully)improved data-entry web site is live at:
+	http://www.pacificacoop.org/sf/
+
+It now handles:
+	- Solicitation donations, solicitation contacts, and solicitation income
+	- Raffle income and raffle locations
+	- Some ability to click around between screens without using the main menu
+	- Simpler, slightly more user-friendly log-in screen for new users.
+	- Audit trail (not yet visible) for all transactions.
+	- Fixes for lots of little bugs you may or may not have seen.
+
+Feel free to start entering stuff. Sooner would be great if possible... I'm setting aside time this weekend to answer questions and fix any bugs.
+
+There is still much yet to be done, but Ana will be on vacation this week, and I will be taking care of Gina all by myself. New features or major changes may have to wait a week, but if you run up against anything that looks obviously broken, please do not hesitate to call or email and I'll be glad to fix it ASAP.
+
+Thank you so much for all your help with testing, and for your patience.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

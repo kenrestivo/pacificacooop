@@ -1,0 +1,23 @@
+Carol-
+
+I've been told that the time for printing out labels for Springfest invitations is fast approaching.
+
+You should have access to *all* of the names right now, and some of them probably need editing. There are some in all lowercase letters, weird addresses, etc. Not too bad because the system enforced some basic sanity, but there are still cosmetic things you'll want to fix. 
+
+I suggest fixing them online, at http://www.pacificacoop.org/sf/ This way, you can fix them a little at a time and not worry about it at the last minute.
+
+I also wrote a script to dump out the entire contents of the invitations database into an Excel spreadsheet for you.  I want to test it *now* so that if there are any problems I can fix them now and not at the last minute. It works for me, but I want to make sure it works for you.
+
+Please go to this link: http://www.pacificacoop.org/sf/exportxl.pl 
+
+You should get an Excel spreadsheet with all the names in it. It should be readable and behave just like a normal Excel spreadsheet, which is in fact what it is. You can either save it to your disk or not. If you want to experiment with mail-merging or printing labels, you can save this data and use it for testing, again, so it's not a panic at the last minute. You then probably want to delete it or name it "fake", so it doens't get confusing later on when you export the real one right before the actual mailing.
+
+Please do so and verify that "it works for me". If you run into any trouble, please don't hesitate to call 650-355-1317 or email.
+
+Thanks!
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

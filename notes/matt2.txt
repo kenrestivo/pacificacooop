@@ -1,0 +1,21 @@
+Matt-
+
+At Carrie's behest, I cut over the live site to the new stuff (including the Auction Donations, auth system, and menu) last nite.  So http://www.pacificacoop.org/sf/ is the new code. I hope that's OK with you.
+
+In the development branch (sf-dev), I'm continuing to plow away on an Admin screen, so that you, me, and Carrie can manage user privileges in a graphical-friendly way. I do *not* want to be in the business of "could you please give so-and-so privileges to edit other people's Donation items?"-- I'll create an auth screen, give admin privileges to the people who need them, and say "have at it". 
+
+Once that's done, I'll start on the Solicitation entry stuff.
+
+If you have a look at the code, you'll notice that almost *everything* is in library functions now! I want to get this to the point where adding a GUI for a new set of database tables is down to 20 minutes of cut-and-paste. At that point in time, the careful work could be in considering the relational database architecture for the new tables, and the easy stuff is wrapping a GUI around it. Almost there ;-).
+
+You'll notice that the <realm>funcs.inc (i.e. auctionfuncs.inc, financefuncts.inc) are basically a struct with the fields and callbacks, and a few callback functions specific to that realm. Everything else is handled by the library, which is now (blessedly!) moved to shared.inc (shared.php, movetoshared.inc, etc) are dprecated.
+
+The only significant code in <realm>.php (i.e. 10names.php, auction.php) is a kind of a main loop that uses the hacky kind of state machine based on the value of the "submit" button to decide what to do. Eventually, I'm planning to replace this with a new state-machine structure much like the one in auth.inc... at which point the <realm>.php will simply be a struct, a call to logIn(), and a call to the stateMachine() library function. That's my goal, anyway.
+
+My personal apologies for "hogging the toy"! I feel like I've kind of run away wit this and I'm sorry. I'm sure you'd love to be hacking on it, but while I've still got the time to do it, I'd like to get as far along with this as possible, at least so that all the grody, time-consuming stuff is done. When it's at the point where adding significant new functionality can be done by you or anyone else in a spare hour in the evening, I'll consider the whole thing a success.
+
+-ken
+-- 
+---------------
+The world's most affordable web hosting.
+http://www.nearlyfreespeech.net

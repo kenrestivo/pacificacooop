@@ -1,0 +1,22 @@
+URL: http://paccoop.cust.nearlyfreespeech.net/ or           
+http://paccoop.nfshost.com/
+
+FTP Username: paccoop_paccoop
+FTP Password: nofifgyq
+FTP Hostname: ftp.phx.nearlyfreespeech.net
+ 
+Browser FTP: Click Here
+
+        Server Aliases:
+      * www.pacificacoop.org (DNS)
+        Web Site IP Addresses:
+      * 208.48.143.58
+      * 208.48.143.77
+      * 208.48.143.27
+
+
+Hostname: pacsql.db
+Username: paccoop
+Password: <Your member password>
+ 
+
