@@ -141,7 +141,6 @@ CREATE TABLE companies_auction_join (
   auction_donation_item_id int(32) default NULL,
   company_id int(32) default NULL,
   family_id int(32) default NULL,
-  parent_id int(32) default NULL,
   PRIMARY KEY  (companies_auction_join_id),
 ) ;
 
@@ -154,7 +153,6 @@ CREATE TABLE companies_income_join (
   income_id int(32) default NULL,
   company_id int(32) default NULL,
   family_id int(32) default NULL,
-  parent_id int(32) default NULL,
   PRIMARY KEY  (companies_income_join_id),
 ) ;
 
@@ -786,8 +784,7 @@ CREATE TABLE companies_in_kind_join (
   in_kind_donation_id int(32) default NULL,
   company_id int(32) default NULL,
   family_id int(32) default NULL,
- parent_id int(32) default NULL,
-   PRIMARY KEY  (companies_in_kind_join_id)
+    PRIMARY KEY  (companies_in_kind_join_id)
 ) ;
 
 
