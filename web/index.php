@@ -24,6 +24,10 @@
 	require_once("roster.inc");
 require_once("members.inc");
 require_once("everything.inc");
+require_once("CoopPage.php");
+require_once("CoopMenu.php");
+
+PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
 	print '<HTML>
 		<HEAD>
@@ -45,11 +49,23 @@ require_once("everything.inc");
 	}
 
 	//OK, i am logged in!
+$cp = new CoopPage;
+$menu =& new CoopMenu;
+$cp->auth = $auth;
+$menu->createLegacy(&$cp);
+
 	
 	$u = getUser($auth['uid']);
 
 	topNavigation($auth, $u);
+//confessObj($menu, 'menu');
+//$menu->forceCurrentURL('/coop-dev/10names.php');
+//print $menu->get('urhere');
+
 	print "\n<hr>\n";
+
+//confessObj($menu, "menuonb");
+print $menu->toHTML();
 
 	print "<p>Please choose an action:</p>";
 
@@ -78,26 +94,14 @@ $everything = array_merge($members_everything,  $sf_everything);
 	print "\n</table>\n\n";
 
 	familyDetail($u['family_id']);
-require_once("CoopPage.php");
-require_once("CoopMenu.php");
-
-PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
 
 ///////////////////////
-$cp = new CoopPage;
-$menu =& new CoopMenu;
-$cp->auth = $auth;
-$menu->createLegacy(&$cp);
-
-
-//confessObj($menu, "menuonb");
-print $menu->toHTML();
 
 
 	
-$menu->forceCurrentURL('10names.php');
-print $menu->get('urhere');
+
+
 
 	done();
 ?>

@@ -192,6 +192,14 @@ class CoopMenu extends HTML_Menu
 			$this->render($this->renderer, 'sitemap');
 		}
 
+	//useless wrapper around get urhere
+	function urhere()
+		{
+			if(in_array($this->getCurrentURL(), array_keys($this->_urlMap))){
+				return $this->get('urhere');
+			}
+		}
+
 } // END COOPMENU CLASS
 
 
