@@ -542,3 +542,20 @@ report notes: these are getting hairy
 
 year-to-year things
 	populate the sponsorship packages? or... do it automatically?
+
+
+-------------------
+ok, rearchitecture!
+
+features:
+	nestable navigation: keep track of the path in to things, and back out
+	modular display: can display "views" from anywhere
+	keep track of the STATE of each view: add/edit/delete/confirm
+	keep track of auth stuff.
+
+open questions:
+	handling nested forms? just nest the tables, but not the forms?
+	re-associating the form fields with their relevant objects
+	
+
+

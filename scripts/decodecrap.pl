@@ -4,6 +4,7 @@
 
 # automatically repair fields with &amp;/&quot; and other escape codes
 #   or excessive \\\\'s
+#   this is a ONE-OFF script, shouln't ever be needed again.
 
 # Copyright (C) 2003  ken restivo <ken@restivo.org>
 #
