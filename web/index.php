@@ -65,8 +65,11 @@ $menu->createLegacy(&$cp);
 	print "\n<hr>\n";
 
 //confessObj($menu, "menuonb");
+print '<div id="leftcol">';
 print $menu->toHTML();
+print '</div>';
 
+print '<div id="rightCol">';
 	print "<p>Please choose an action:</p>";
 
 	print "\n\n<table border=1>\n";
@@ -94,7 +97,7 @@ $everything = array_merge($members_everything,  $sf_everything);
 	print "\n</table>\n\n";
 
 	familyDetail($u['family_id']);
-
+print "</div>";
 
 ///////////////////////
 
