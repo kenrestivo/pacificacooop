@@ -361,6 +361,15 @@ contact management
 	contact-to-auction join table (like fajoin) DONE
 		to handle any donations of hard goods
 
+raffle tickets: this is join to income, basically
+	raffle_tickets
+		date given to shirley
+		amount
+		locationid (join)
+	raffle_locations
+		description
+		semester (they will change next year)
+
 ad insertion 
 	ad table
 		contactid (join)
@@ -376,15 +385,6 @@ ad insertion
 		description (varchar)
 		size? or use above?
 		price
-
-raffle tickets: this is join to income, basically
-	raffle_tickets
-		date given to shirley
-		amount
-		locationid (join)
-	raffle_locations
-		description
-		semester (they will change next year)
 
 
 web links stuff

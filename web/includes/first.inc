@@ -1,6 +1,7 @@
 <?php
 
-#	<!-- $Id$ -->
+/*
+	<!-- $Id$ -->
 #	the vital setup stuff that ALL files MUST have
 
 #  Copyright (C) 2003  ken restivo <ken@restivo.org>
@@ -19,6 +20,30 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+portions lifted from postnuke
+// POST-NUKE Content Management System
+// Copyright (C) 2001 by the Post-Nuke Development Team.
+// http://www.postnuke.com/
+// ----------------------------------------------------------------------
+// Based on:
+// PHP-NUKE Web Portal System - http://phpnuke.org/
+// Thatware - http://thatware.org/
+// ----------------------------------------------------------------------
+// LICENSE
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License (GPL)
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// To read the license please visit http://www.gnu.org/copyleft/gpl.html
+
+*/
 
 //THIS STUFF MUST EXECUTE BEFORE ANY HTML IS SENT!!!! BEFORE HEADERS, ANYTHING!
 
@@ -230,12 +255,17 @@ writeSess($sessid, $vars)
 			E_USER_WARNING);
 		return(false);
 	}
+	
+	$auth = $_SESSION['auth']; //temp
+	$ip = getIpAddr();
 
-	user_error("writeSess: writing session [$sessid] vars [$vars]", 
-		E_USER_NOTICE);
+	user_error(sprintf("writeSess: writing session [%s] vars [%s] uid %d ip [%s]",
+		$sessid, $vars, $auth['uid'], $ip), E_USER_NOTICE);
+
+	//TODO replace is WRONG. use update... and handle INSERT if new.
 	$query = sprintf("replace into session_info 
-			set vars = '%s' , session_id = '%s'",
-			 mysql_escape_string($vars), $sessid);
+			set vars = '%s' , session_id = '%s', user_id = %d, ip_addr = %s",
+			 mysql_escape_string($vars), $sessid, $auth['uid'], $ip);
 	if(mysql_query($query)){
 		$rows = mysql_affected_rows();
 	}
@@ -360,6 +390,44 @@ setupDB()
 
 	mysql_select_db($dbname) or die ("can't use $dbname! ack!\n");
 }/* END  SETUPDB */
+
+
+
+/******************
+	GETIPADDDR
+	lifted verbatim from PostNuke
+******************/
+function
+getIpAddr()
+{
+    $ipaddr = $HTTP_SERVER_VARS['REMOTE_ADDR'];
+
+    if(empty($ipaddr)) {
+        $ipaddr = getenv('REMOTE_ADDR');
+    }
+
+    if(!empty($HTTP_SERVER_VARS['HTTP_CLIENT_IP'])) {
+        $ipaddr = $HTTP_SERVER_VARS['HTTP_CLIENT_IP'];
+    }
+
+    $tmpipaddr = getenv('HTTP_CLIENT_IP');
+    if(!empty($tmpipaddr)) {
+        $ipaddr = $tmpipaddr;
+    }
+
+    if(!empty($HTTP_SERVER_VARS['HTTP_X_FORWARDED_FOR'])) {
+        $ipaddr = preg_replace('/,.*/', '', 
+			$HTTP_SERVER_VARS['HTTP_X_FORWARDED_FOR']);
+    }
+
+    $tmpipaddr = getenv('HTTP_X_FORWARDED_FOR');
+    if(!empty($tmpipaddr)) {
+        $ipaddr = preg_replace('/,.*/', '', $tmpipaddr);
+    }
+
+	return $ipaddr;
+
+}/* END GETIPADDDR */
 
 
 
