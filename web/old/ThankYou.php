@@ -127,6 +127,10 @@ http://www.pacificacoop.org/
 	function toHTML()
 		{
 
+			if(!count($this->items_array)){
+				return "<p>Letter has already been saved. Click on View/Edit to reprint it.</p>";
+			}
+
 			$subst = $this->varsToArray();
 
 			//un-arrayify the ones that are arrays
@@ -308,7 +312,16 @@ http://www.pacificacoop.org/
 			// do NOT use this anywhere that you're not sure of that.
 	
 				if($save){
-					//TODO: save a new thankyou, and cache ists insertid	
+
+					// first make sure i actually have stuff to save first!
+					$safety = new ThankYou(&$this->cp);
+					$safety->findThanksNeeded($pk, $id, false);
+					if(count($safety->items_array) < 1){
+						//it's been done before....
+						return;
+					}
+
+					// save a new thankyou, and cache ists insertid	
 					$co = new CoopObject(&$this->cp, 
 										 'thank_you', &$nothing);
 					$co->obj->date_sent = date('Y-m-d');

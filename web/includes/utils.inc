@@ -185,11 +185,14 @@ warnDev()
 function
 javaSubmit()
 {
+	// wrapped in comments to make old browsems ignore it
 	print '<script type="text/javascript" language="javascript">
+			<!-- Begin 
 			function submitForm() {
 				document.forms[0].submit(); 
 				return(true); 
 			} 
+			// End -->
 			</script>';
 } /* END JAVASUBMIT */
 
@@ -461,6 +464,21 @@ function devSite()
 		return 1;
 	}
 	return 0;
+}
+
+// EEEEEEEVIL! but,needed.
+function javaPopup()
+{
+	return '<SCRIPT LANGUAGE="JavaScript">
+<!-- Begin
+function popUp(URL) {
+day = new Date();
+id = day.getTime();
+eval("page" + id + " = window.open(URL, \'" + id + "\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=1,resizable=0,width=480,height=640,left = 272,top = 64\');");
+}
+// End -->
+</script>';
+
 }
 
 

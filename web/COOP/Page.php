@@ -177,7 +177,7 @@ class coopPage
 	//					"page.php")
 	// all of which are optional
 	// without any args, returns just coop session var for use in Header()
-	function selfURL($value = false, $inside = false, $base = false)
+	function selfURL($value = false, $inside = false, $base = false, $popup = false)
 		{
 			if(!$base){
 				$base = $_SERVER['PHP_SELF'];
@@ -187,7 +187,9 @@ class coopPage
             }
 			 if($value){
 				 $res .= '<p><a href="';
-
+				 if($popup){
+					 $res .= "javascript:popUp('";
+				 }
 			 }
 			 if($inside){
  				 $res .= sprintf("%s?%s%s",
@@ -197,6 +199,9 @@ class coopPage
 				 $res .= $base .  SID ? "?" . SID  : "";
 			 }
 			 if($value){
+				 if($popup){
+					 $res .= "')";
+				 }
 				 $res .= sprintf('">%s</a></p>', $value);
 			 }
 			 return $res;

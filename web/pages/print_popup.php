@@ -32,6 +32,10 @@ $fields = $thank_you_fields;
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
+//override
+ $metalinks = '<meta http-equiv="content-type" 
+ 				content="text/html; charset=iso-8859-1">
+				<link rel="stylesheet" href="print.css" title="main" >';
 
 
 //header stuff
@@ -39,7 +43,7 @@ printf('<HTML lang="en"> <HEAD> %s
 
 <TITLE>%s</TITLE> 
 </HEAD> <BODY> <div id="page">',
-	   $metalinks);
+	   $metalinks, "Thank You Note"); // TODO put name of solicit contact?
 
 
 user_error("states.inc: ------- NEW PAGE --------", E_USER_NOTICE);

@@ -46,6 +46,7 @@ class CoopMenu extends HTML_Menu
 		'tickets' => 'Tickets'
 		);
 	var $other_realms = array(
+		'roster' => 'Roster',
 		'enhancement' => 'Enhancement'
 		);
 
@@ -78,7 +79,7 @@ class CoopMenu extends HTML_Menu
 					'sub' => $this->nestByRealm($sf, 
 												$this->springfest_realms)));
 
-			confessArray($heirmenu, "menuarray");
+//			confessArray($heirmenu, "menuarray");
 			$this->setMenu($heirmenu);
 
 		}
@@ -163,6 +164,10 @@ class CoopMenu extends HTML_Menu
 // 			return $realms;
 // 		}
 
+
+	// XXX this creates bugs. the array indices are supposed to be NUMBERS
+	// but, i use the realm as a key, and that fucks it up
+	// basically, the whole function needs to be rewritten
 	function nestByRealm($ie, $realm_map)
 		{
 			foreach($realm_map as $realm => $description){
