@@ -464,6 +464,15 @@ logIn($auth)
 					func => "loggedInState",
 					required => array ( "uid", "token"),
 					description => "User is logged in"
+					),
+		needinput => array (
+					terminus => "yes",
+					description => "UI needs input. Exit state machine."
+					),
+		done => array (
+					terminus => "yes",
+					required => array ( "uid", "token"),
+					description => "UI finished. Exit state machine."
 					)
 	);
 
@@ -479,7 +488,7 @@ logIn($auth)
 	/* start the pachinko machine. 
 		no way out unless user input needed, or success */
 
-	while ($auth['state'] != "needinput" && $auth['state'] != 'loggedin'){
+	do{
 
 		// are all our required inputs present?
 		$auth = sanityCheck($auth, $states);
@@ -493,8 +502,11 @@ logIn($auth)
 		*/
 
 		// dispatch the appropriate action for this state, and collect result
-		$auth = $states[$state]['func']($auth, $states);
-	}
+		$func = $states[$state]['func'];
+		if($func){
+			$auth = $func($auth, $states);
+		}
+	} while(!$states[$state]['terminus']);
 
 
 	return($auth);
@@ -667,7 +679,9 @@ checkLoginState($auth, $states)
 	if($token){
 		error_log("checkLoginState(): password matches!", 0);
 		//hooray!! the password is correct! pass it thru
-		return changeState($auth, $states, 'loggedin', 1);
+		$newauth = changeState($auth, $states, 'loggedin', 1);
+		$newauth['token'] = $token; // have to inject this manually. grr.
+		return $newauth;
 	} 
 
 	//incorrect password. let the pachinko machine handle it
@@ -686,7 +700,7 @@ loggedOutState($auth, $states)
 
 	if($auth['uid']){
 		$uinfo = getUser($auth['uid']);
-		$olduser = sprintf("User %s logged out.", $uinfo['username']);
+		$olduser = sprintf("User '%s' logged out.", $uinfo['username']);
 	}
 
 	return changeState($auth, $states, 'needlogin', 1);
@@ -702,12 +716,10 @@ function
 needLoginState($auth, $states)
 {
 
-	if($auth['uid']){
-		$uinfo = getUser($auth['uid']);
-		$olduser = sprintf("User %s logged out.", $uinfo['username']);
-	}
 	loginForm(changeState($auth, $states, 'checklogin', 1),
-		'password', 'show', "$olduser Please log in");
+		'password', 
+		$auth['uid'] ? 'hide' : 'show', 
+		"$olduser Please log in");
 
 	return changeState($auth, $states, 'needinput', 1);
 	
@@ -847,7 +859,7 @@ loggedInState($auth, $states)
 	$uinfo = getUser($auth['uid']);
 	printf("<h3>Welcome %s!</h3>\n", $uinfo['username']);
 	// TODO logoutForm!()
-	return changeState($auth, $states, 'loggedin', 1);
+	return changeState($auth, $states, 'done', 1);
 }/* END LOGGEDINSTATE */
 
 
