@@ -22,7 +22,7 @@ NFSNUSR=ken
 NFSNHOST=phx3.nearlyfreespeech.net
 NFSNPATH=/nfsn/content/paccoop/htdocs/sf
 HERE=./
-XCLUDE='.dbhost.inc' 
+XCLUDE='*dbhost*' 
 
 
 
@@ -40,6 +40,11 @@ upload::
 		--exclude $(XCLUDE) \
 		$(HERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNPATH)
 
+download::
+	rsync -e ssh \
+		--rsync-path=$(NFSNRSYNC) -avxWcC  \
+		--exclude $(XCLUDE) \
+		$(NFSNUSR)@$(NFSNHOST):$(NFSNPATH) $(HERE)
 
 
 #EOF
