@@ -95,13 +95,13 @@ class coopView extends CoopObject
 		}
 
 	
-	function addSubTables(&$tab)
+	function addSubTables(&$tab, $links)
 		{
-			if(!$this->backlinks){
+			if(!$links){
 				return false;
 			}
 			$nearkey = $this->pk;	
-			foreach($this->backlinks as $backtable => $farkey){
+			foreach($links as $backtable => $farkey){
 				//TODO i have to check forbidden tables here too!
 				$subview =& new CoopView(&$this->page, $backtable, 
 										 $this->recurseLevel + 1,
@@ -209,7 +209,7 @@ class coopView extends CoopObject
 
 			// TODO:  forbidden names XXX nasty hack
 			if(!$jointable){
-				//$this->addTableTitle(&$tab);
+				//$this->addTableTitle(&$tab); // XXX do i need this anymore?
 				$this->addHeader(&$tab);
 			}
 			while($this->obj->fetch()){
@@ -218,7 +218,7 @@ class coopView extends CoopObject
 					$tab->addRow($this->toArray());
 				}
 				//subrows
-				$this->addSubTables(&$tab);
+				$this->addSubTables(&$tab, $this->backlinks);
 				$this->addForwardTables(&$tab);
 
 			}
