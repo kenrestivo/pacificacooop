@@ -68,8 +68,18 @@
 
 ;;;;;;;;;;;;;
 
-;; TODO i have to fish the definition out of the definition.sql,
-;; or out of a mysqldump somewhere
+;;; unused: the pcns_schema file *should* handle all these keys
+(define (fix-keys table key)
+  (for-each
+   (lambda (x)
+	 (let ((found (assoc key (cdr x)))) ;; go get it first
+	   (if (and found
+				(not (equal? (car x) table)))
+		   (sprintf #f "duplication of rename-column %s" key)
+	   )
+	 new-schema))) )
+
+
 (define (rename-column-query items)
   (let* ((sp (string-split (car items) #\.))
 		(new (string-split (cadr items) #\.))
@@ -78,7 +88,7 @@
 	(if long-def
 		(sprintf #f "alter table %s change column %s %s %s"
 				 (car sp) (cadr sp) (cadr new) long-def)
-		(sprintf #f "ignoring %s:%s" (car sp) (cadr sp)) ) ))
+		"select null") )) ;; no-op
 
 ;;; the easy one: tables.
 (define (rename-table-query items)
@@ -92,7 +102,7 @@
 	  rename-table-query )
    items))
 
-;;; this is basically MAIN
+;;; this is basically MAIN, though the load-definition must occur first
 (define (fix-schema fixfile)
   (let ((p (open-input-file fixfile) ) )
 	(begin 
@@ -106,6 +116,7 @@
 	  (close p) )))
 
 
+(define dbh (simplesql-open 'mysql "coop_fake" "bc" "input" "test"))
 
 
 ;; EOF
