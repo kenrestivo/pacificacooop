@@ -4,6 +4,8 @@
 #$Id$
 #move the email addresses from kids db to parents db
 #move the phone from the kids to the family db
+#shouldn't need this anymore, but it may come in handy later if i ever
+#have to split up tables again
 
 # Copyright (C) 2003  ken restivo <ken@restivo.org>
 #

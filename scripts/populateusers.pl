@@ -3,7 +3,8 @@
 
 #$Id$
 # deduces the user names from the family names
-# another one-shot i shouldn't need again, now that the rastafarai is in there
+# i shouldn't need again, after i put user-adding into the rastaimport script
+# until then, if i manually add families, i DEFINITELY neeed this!
 
 # Copyright (C) 2003  ken restivo <ken@restivo.org>
 #
@@ -166,11 +167,15 @@ addDefaultPrivs()
 			if(!$reset){
 				next; #important! we don't wanto to whack the privs!!
 			}
+			print "resetting privs for uid <$uid>\n";
 			$query = sprintf("
 				update privs set grouplevel = %d, userlevel = %d 
 				where userid = %d and realm = '%s' ", 
 				 $$arref[0], $$arref[1], $uid, $$arref[2]);
 		} else {
+			printf("adding privs for realm <%s> uid <%d>\n",
+					$$arref[2], $uid
+				);
 			$query = sprintf("insert into privs set 
 					userid = %d, grouplevel = %d, 
 					userlevel = %d, realm = '%s' ", 
@@ -198,7 +203,6 @@ addUser()
 	my $rqueryobj;
 
 
-	print "adding <$name> into users\n";
 	if($opt_v){
 		if(!$name || !$familyid){
 			print "addUser() missing data: famid <$familyid> name <$name>. must be teachers?\n";
@@ -232,6 +236,7 @@ addUser()
 					",
 					$name, $familyid);
 
+	print "adding <$name> into users\n";
 	if($opt_v){
 		print "doing <$query>\n";
 	}
@@ -247,8 +252,11 @@ addUser()
 sub usage()
 {
     print STDERR "usage: $0 -v -t\n";
+    print STDERR "makes sure there are users for each family/teacher\n";
+    print STDERR "and that they have privs for all default realms\n";
+    print STDERR "sets privs for new realms/users to defaults\n";
     print STDERR "\t-v verbose \n";
-    print STDERR "\t-r reset privs to defaults (dangerous!!) \n";
+    print STDERR "\t-r reset ALL privs to defaults (dangerous!!) \n";
     print STDERR "\t-t test (don't actually update db) \n";
     print STDERR "\t-h hostname of db\n";
     print STDERR "\t-p port db is running on\n";

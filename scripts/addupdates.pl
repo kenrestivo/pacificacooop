@@ -92,6 +92,8 @@ sub addthem {
 sub usage()
 {
     print STDERR "usage: $0 -v -t\n";
+    print STDERR "adds the audituserid stuff to tables that don't have it. \n";
+    print STDERR "this is a ONE SHOT that shouldn't be needed anymore.\n";
     print STDERR "\t-v verbose \n";
     print STDERR "\t-t test (don't actually update db) \n";
     print STDERR "\t-h hostname of db\n";
