@@ -424,6 +424,7 @@ CREATE TABLE packages (
   bid_increment decimal(9,2) default NULL,
   package_value decimal(9,2) default NULL,
    item_type enum('Unknown','Actual Item','Gift Certificate') default NULL,
+   display_publicly enum('No','Yes') default 'No',
   school_year varchar(50) default NULL,
   PRIMARY KEY  (package_id),
 ) ;

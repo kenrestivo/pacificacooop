@@ -682,8 +682,7 @@ order by cash_donations desc,
 
 --- invites by acctnum
 select coa.description as Description,
-        sum(inc.total) as Donations,	
-        sum(tic.total) as Ticket_Purchases
+        sum(coalesce(tic.total,0) + coalesce(inc.total,0)) as Total
 from chart_of_accounts as coa
 left join 
     (select account_number, sum(payment_amount) as total
@@ -706,8 +705,8 @@ left join
     as tic
         on tic.account_number = coa.account_number
 group by coa.account_number
-having Donations >0 or Ticket_Purchases > 0
-order by Donations desc, Ticket_purchases desc;
+having Total > 0
+order by Total desc;
 
 
 -- income summary by family
@@ -738,6 +737,5 @@ left join auction_packages_join using (auction_donation_item_id)
 where (package_id != 202 
 or auction_packages_join.auction_donation_item_id is null) and 
 auction_donation_items.school_year = "2004-2005";
-
 
 --- EOF
