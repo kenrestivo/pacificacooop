@@ -78,11 +78,11 @@
 
 		#some nifty running totals
 		$total['leads'] += $row[cntlead];
-		$total['tennames'] += $tennamespaid;
-		$total['quilt'] += $quiltpaid;
+		$total['tennames'] += $tennamespaid['amount'];
+		$total['quilt'] += $quiltpaid['amount'];
 
 		#don't print this row if it's already complete
-		if ($nagonlychecked && (($tennamespaid >= 50) || $tennamesdone) && ($quiltpaid >=45))
+		if ($nagonlychecked && (($tennamespaid['amount'] >= 50) || $tennamesdone) && ($quiltpaid['amount'] >=45))
 			continue;
 	
 		print "<tr><td>\n";
@@ -90,11 +90,15 @@
 		print "</td><td align='center'>";
 		print $row[cntlead];
 		print "</td><td align='center'>";
-		if ($tennamespaid > 0)
-			printf("$%01.2f", $tennamespaid);
+		if ($tennamespaid['amount'] > 0)
+			printf("$%01.2f", $tennamespaid['amount']);
+		if($tennamespaid['notes'])
+			printf("<br>%s",$tennamespaid['notes']);
 		print "</td><td align='center'>";
-		if ($quiltpaid > 0)
-			printf("$%01.2f", $quiltpaid);
+		if ($quiltpaid['amount'] > 0)
+			printf("$%01.2f", $quiltpaid['amount']);
+		if($quiltpaid['notes'])
+			printf("<br>%s",$quiltpaid['notes']);
 		print "</td><td align='center'>";
 		print $row[sess];
 		print "</td><td align='center'>";
@@ -124,30 +128,33 @@
 #	CHECKPAYMENTS
 #	checks how much this family has paid up.
 #	inputs: familyid
-#	returns: total amount
+#	returns: array with amount (numbers) and notes (text)
 #############################
 function checkPayments($familyid, $acctnum)
 {
 
-	#TODO: how to get ALL the notes, for ALL the incomes?
-	#		is there a way to sum strings?
 	$query = "
-		select families.familyid, sum(inc.amount) as total
+		select families.familyid, inc.amount, inc.note
 			from families
 				left join figlue on families.familyid = figlue.familyid
 				left join inc on figlue.incid = inc.incid
 			where inc.acctnum = $acctnum
 				and families.familyid = $familyid
-			group by families.familyid
 		";
 		#print "DEBUG <$query>";
 		$list = mysql_query($query);
 		
 		echo mysql_error();
 
+		$i = 0;
 		while($row = mysql_fetch_array($list))
 		{
-			$total += $row['total'];
+			$total['amount'] += $row['amount'];
+			$total['notes'] .= sprintf("%s%s",
+					$i ? "<br>" : "",
+					$row['note']
+					);
+			$row['note'] && $i++;
 		}
 
 		return $total;
