@@ -34,6 +34,8 @@ class coopView extends CoopObject
 {
 	var $backlinks;				// list of links that are linked FROM here
 	var $forwardLinks;
+	
+	var $schoolYearify = 1; 	// edit only this years' records
 
 	var $legacyCallbacks;			// hack for old callbacks
 	var $legacyPerms; 			// cache of permissions for this page ($p)
@@ -92,18 +94,46 @@ class coopView extends CoopObject
 			}
 			$tab =& new HTML_Table();
 		
-			$this->addHeader(&$tab);
-
+			$tab->addRow($this->makeHeader(), 
+						 'bgcolor=#aabbff align=left', 'TH'); 
+			
 			while($this->obj->fetch()){
 				//$tab->addRow(array_values($this->obj->toArray()));
 				$tab->addRow($this->toArray());
 			
 			}
-			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
+			
+			$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
+								   'bgcolor="#ccccff"');
 			$res .= $this->tableTitle();
 			$res .= $tab->toHTML();
 			return $res;
 
+		}
+
+	function horizTable($find = 1)
+		{
+			if($find){
+				$found = $this->obj->find();
+				
+				if($found < 1){
+					return false;
+				}
+			}
+						$tab =& new HTML_Table();
+			$tab->addCol($this->makeHeader(), 
+						 'align=right', 'TH');
+
+			while($this->obj->fetch()){
+				$tab->addCol($this->toArray(),'bgcolor=#cccccc' );
+			
+			}
+
+			$res .= $this->tableTitle();
+			$res .= $tab->toHTML();
+			
+			return $res;
+	
 		}
 
 	function insertIntoRow(&$tab, $text)
@@ -213,7 +243,7 @@ class coopView extends CoopObject
 			return $res;
 		}
 
-	function addHeader(&$tab)
+	function makeHeader()
 		{
 			// get the fieldnames out the dataobject
 			foreach($this->obj->toArray() as $key => $trash){
@@ -227,7 +257,8 @@ class coopView extends CoopObject
 			}
 			
 			$res[] = 'Actions';
-			$tab->addRow($res, 'bgcolor=#9999cc align=left', 'TH'); 
+			return $res;
+
 		}
 
 	function title()
@@ -262,7 +293,7 @@ class coopView extends CoopObject
 			
 			$tab->addRow(array($this->title(),
 							   $this->actionButtons()), 
-						 'bgcolor=#9999cc', 'TH'); 
+						 'bgcolor="#aabbff" align="left"', 'TH'); 
 
 			while($this->obj->fetch()){
 				//confessObj($this, 'onelinetable');
@@ -278,7 +309,9 @@ class coopView extends CoopObject
 									  $this->obj->toArray())));
 			
 			}
-			//	$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
+			$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
+								   'bgcolor="#ccccff"');
+
 			$res .= $tab->toHTML();
 			return $res;
 
@@ -289,7 +322,7 @@ class coopView extends CoopObject
  		 	return recordButtons($row, $this->legacyCallbacks, 
  								 $this->legacyPerms, 
  								 $this->page->userStruct, "",
-								 1);
+								 $this->schoolYearify);
 			
 		}
 

@@ -55,6 +55,7 @@ class Companies extends DB_DataObject
 		"phone" => "Phone Number" ,
 		"fax" => "FAX Number" ,
 		"email_address" => "Email Address" ,
+		'do_not_contact' => "Don't contact after this date",
 		"territory_id" => "Territory",
 		"flyer_ok" => "OK to place a flyer there?" 
 );
