@@ -150,6 +150,15 @@ insert into territories set
 			territory_id = 5,
 			description = "Corporate/Financial/Government"
 ;
+insert into territories set
+			territory_id = 6,
+			description = "Pedro Point"
+;
+insert into territories set
+			territory_id = 7,
+			description = "Palmetto"
+;
+
 
 ----- sources
 insert into sources set
