@@ -518,13 +518,15 @@ logIn($vars)
 	global $_SESSION;
 	//confessArray($vars, 'logIn($vars) called with');
 
-	//force us to drop all previous state if 'cancel' button pressed!
-	$auth = $vars['logout'] ? "" : $vars['auth'];
-	
 	if($_SESSION['auth']){
 		user_error("logIn: grabbing previous auth from session!", 
 			E_USER_NOTICE);
 		$auth =  $_SESSION['auth'];
+	}
+
+	//force us to drop all previous state if 'cancel' button pressed!
+	if($vars['logout']){
+		$auth['state'] = 'loggedout';
 	}
 
 	/* vital information for each state.
@@ -603,11 +605,11 @@ logIn($vars)
 	);
 
 	// deal with nothing passed in
-	if(!$auth['state']){
-		$auth['state'] == 'unknown';
-	}
 	if(!$auth){
 		$auth = array( state => 'unknown' );
+	}
+	if(!$auth['state']){
+		$auth['state'] == 'unknown';
 	}
 
 	
