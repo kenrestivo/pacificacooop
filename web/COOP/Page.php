@@ -53,6 +53,7 @@ class coopPage
 	var $build;
 	var $auth;
 	var $debug;
+	var $dbname;
 	var $pager_result_size;
 	var $pager_start;
 	var $table;
@@ -73,7 +74,7 @@ class coopPage
 				die ($obj->getMessage ());
 			}
 //			print_r($this->obj);
-
+		
 		}
 
  
@@ -198,7 +199,7 @@ class coopPage
 			//XXX broken. use menu instead anyway? i'd rather.
 			$obj =& new DB_DataObject();	// use the $this->obj?
 			$obj->databaseStructure();
-			global $_DB_DATAOBJECT;
+		
 			//confessArray($_DB_DATAOBJECT, "dataobject");
 
 			foreach($_DB_DATAOBJECT['INI']['coop'] 
@@ -326,6 +327,31 @@ class coopPage
 			return $res;
 		}
 
+	// returns a nested structure with tables that link to this one
+	// in format tableThatLinksToUs => (columnOnOurSide, columnOnTheirSide)
+	function getBackLinks()
+		{
+			
+			global $_DB_DATAOBJECT;
+		//confessObj($_DB_DATAOBJECT, "dataobject");
+			$tab =  $this->obj->tableName();
+			$links = $_DB_DATAOBJECT['LINKS']['coop']; // XXX hard code hack! 
+			$this->confessArray($links, "links");
+			foreach($links as $maintable => $link){
+				foreach ($link as $nearcol => $farline){
+					// split up farline and chzech it
+					list($fartable, $farcol) = explode(':', $farline);
+					if($fartable == $tab){
+						$res[$maintable] = array($farcol, $nearcol);
+					}
+				}
+			}
+			$this->confessArray($res,"res");
+			return $res;
+		}
+	
+
+
 
 	function listTable($table = false)
 		{
@@ -338,10 +364,12 @@ class coopPage
 			
 			$tab =& new HTML_Table();
 
-			$pagertext = $this->calcPager();	
+			$pagertext = $this->calcPager();
 			$this->obj->limit($this->pager_start - 1, 
 							  $this->pager_result_size);
 			$this->obj->find();					// new find with limit.
+			
+			$this->getBackLinks();
 
 				
 			// now the table
