@@ -253,6 +253,9 @@ insert into sources set
             source_id = 7,
             description = "Ken Temporary Alumni Hack";
  
+insert into sources set
+            source_id = 8,
+            description = "VIP List";
 
 --- ad sizes
 insert into ad_sizes set
