@@ -59,12 +59,12 @@
 			#show a family's info
 			happyFriendlyHello($id);
 
-			showNames($id);
+			nameSummary($id);
 
 			print "<br>Feel free to enter more names if you like!<br>";
 
 			#finally, give them a form to enter data!
-			tenNamesForm($id);
+			oneNameForm($id);
 		}
 
 
@@ -84,7 +84,7 @@
 				You must enter at least 10 names by $cutoffdate</p>";
 
 		#show them what they've already got, don pardo
-		showNames($id);
+		nameSummary($id);
 
 		print "<P>Enter more names here.
 					You may enter less than 10 if you wish, then 
@@ -92,7 +92,7 @@
 					Remember to click 'Save Names' 
 					at the bottom of this screen when you are done!</p>";
 		#finally, give them a form to enter data!
-		tenNamesForm($id);
+		oneNameForm($id);
 
 	}
 	# end of inner php code
