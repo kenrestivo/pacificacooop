@@ -36,18 +36,17 @@ class coopView extends CoopObject
 	var $forwardLinks;
 
 
-	// returns an action structure: tables[tablename][action], etc
-	function getBackLinks()
+	function getLinks()
 		{
 			
 //			confessObj($this, "view");
 			global $_DB_DATAOBJECT;
-			//confessObj($_DB_DATAOBJECT, "getBackLinks() dataobject");
+			//confessObj($_DB_DATAOBJECT, "getLinks() dataobject");
 			$tab =  $this->obj->tableName(); // XXX dup with $this->table
 			$links =& $_DB_DATAOBJECT['LINKS'][$this->obj->database()];
 			$this->forwardLinks = $links[$tab];
 			$this->page->confessArray($links, 
-									  "getBackLinks: links for $this->table");
+									  "getLinks: links for $this->table");
 			foreach($links as $maintable => $mainlinks){
 				foreach ($mainlinks as $nearcol => $farline){
 					// split up farline and chzech it
@@ -59,7 +58,7 @@ class coopView extends CoopObject
 			}
 			$this->backlinks = $res;
 			$this->page->confessArray($res,
-									  "getBackLinks() backlinks for $this->table");
+									  "getLinks() backlinks for $this->table");
 			return $this->backlinks;
 		}
 	
@@ -67,7 +66,7 @@ class coopView extends CoopObject
 	function simpleTable()
 		{
 			$this->obj->find();
-			$this->getPK(); // must this be after find? rather constructor.
+
 			//TODO return null or something, if nothing found
 			$tab =& new HTML_Table();
 			while($this->obj->fetch()){
@@ -78,7 +77,7 @@ class coopView extends CoopObject
 			return $tab->toHTML();
 		}
 
-	function addSubTable(&$tab, $text)
+	function insertIntoRow(&$tab, $text)
 		{
 			if(!$text){
 				return NULL;
@@ -94,10 +93,11 @@ class coopView extends CoopObject
 	
 		}
 
-	
 	function addSubTables(&$tab, $links)
 		{
+			$debug = 1;
 			if(!$links){
+				//print "NO LINKS!";
 				return false;
 			}
 			$nearkey = $this->pk;	
@@ -107,11 +107,14 @@ class coopView extends CoopObject
 										 $this->recurseLevel + 1,
 										 &$this);
 				$subview->obj->$farkey = $this->obj->$nearkey;
-// 				printf("linking %s.%s to %s.%s<br>", 
-// 					   $this->table, $this->pk, 
-// 					   $backtable, $farkey);
-				//confessObj($subview, "addSubTables(): $backtable obj");
+				if($debug){
+					printf("linking %s.%s to %s.%s<br>", 
+						   $this->table, $this->pk, 
+						   $backtable, $farkey);
+				}
+
 				$recursed = $subview->recurseTable();
+				//confessObj($subview, "addSubTables(): $backtable obj");
 		
 				if($recursed){
 					$this->addSubTable(&$tab, sprintf('%s<br>%s', 
@@ -121,40 +124,27 @@ class coopView extends CoopObject
 			}
 		}
 	
+	
 	//  checks if this table is repeated up the parent heirarchy
 	function isRepeatedTable($tablename)
 		{
+			$debug  = 1;
 			if(!$this->parentObj){
+				$debug && printf("%s is end of the line", $this->table);
 				return 0;
 			}
 			if($this->parentObj->table == $tablename){
-			
+				$debug && printf("%s: %s is repeated", 
+								 $this->table, $tablename);
 				return 1;
 			}
-//			print "$this->parentObj->table != $tablename<br>";
+			$debug && printf("%s: %s  != %s, , checking up the line<br>", 
+							 $this->table, $this->parentObj->table, 
+							 $tablename);
+			
 			return $this->parentObj->isRepeatedTable($tablename);
 		}
 
-	function addForwardTables(&$tab)
-		{
-	
-			//confessObj(&$this, "addForwardTables() ");	
-			$this->page->confessArray($this->links, 
-									  "addForwardTables() links");		
-			if(!$this->forwardLinks){
-				return false;
-			}
-			
-
-			foreach($this->forwardLinks as $nearkey => $farline){
-				list($fartable, $farcol) = explode(':', $farline);
-				if(!$this->isRepeatedTable($fartable)){
-					$this->addSubTable(&$tab, "FORWARDtable $fartable <br>");		
-				}
-			}
-
-
-		}
 
 
 	function toArray()
@@ -199,15 +189,16 @@ class coopView extends CoopObject
 
 			//print "found $found for $this->table<br>";
 
-			$this->getBackLinks();	// MUST be after find!
+			$this->getLinks();	// MUST be after find!
 
-			$jointable = 0; //preg_match('/_join/', $this->table);
+			$jointable = 0; ///preg_match('/_join/', $this->table);
 
 			// only indent the sub-level tables
 			$attr = $this->recurseLevel ? 'class=sub' : NULL;
 			$tab =& new HTML_Table($attr);
 
-			// TODO:  forbidden names XXX nasty hack
+			// TODO:  forbidden names
+			// XXX nasty hack
 			if(!$jointable){
 				//$this->addTableTitle(&$tab); // XXX do i need this anymore?
 				$this->addHeader(&$tab);
@@ -219,7 +210,7 @@ class coopView extends CoopObject
 				}
 				//subrows
 				$this->addSubTables(&$tab, $this->backlinks);
-				$this->addForwardTables(&$tab);
+				//$this->addForwardTables(&$tab);
 
 			}
 

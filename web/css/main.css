@@ -71,8 +71,6 @@ TABLE {
 	margin-bottom: .5em;
 	background: white;
 	width: 75%;
-	border-collapse: collapse;
-	border: 1px solid brown; 
 }
 
 table.sub {
