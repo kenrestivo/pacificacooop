@@ -25,5 +25,24 @@ class Chart_of_accounts extends DB_DataObject
     ###END_AUTOCODE
 	var $fb_linkDisplayFields = array('description');
 	var $fb_enumFields = array ('account_type');
+	var $fb_fieldLabels = array('account_number' => "Account Number",
+								'description' => "Description",
+								'account_type' => "unknown field",
+								'join_to_table' => "Joins to these entities");
 
+	// returns a popup constrained by its jointotables
+	function constrainedAccountPopup($linktable)
+		{
+			$this->orderBy('description');
+			$this->whereAdd("join_to_table like '%$linktable%'");
+			$this->find();
+			while($this->fetch()){
+				$options[$this->account_number] = $this->description;
+			}
+			$el =& HTML_QuickForm::createElement('select', 'account_number', 
+												 $this->fb_fieldLabels['account_number'], 
+												 &$options);
+
+			return $el;
+		}
 }
