@@ -6,7 +6,7 @@ require_once 'DB/DataObject.php';
 
 class Files extends DB_DataObject 
 {
-    ###START_AUTOCODE
+###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'files';                           // table name
@@ -26,7 +26,7 @@ class Files extends DB_DataObject
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Files',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-    ###END_AUTOCODE
+###END_AUTOCODE
 
 
 	var	$kenPath = "../../files/"; // NOTE! for the tests folder
@@ -36,10 +36,10 @@ class Files extends DB_DataObject
 
 			$this->fb_preDefElements['original_filename'] =& 
 				HTML_QuickForm::createElement('file', 
-											   'original_filename', 
-											   'File to upload:',
+                                              'original_filename', 
+                                              'File to upload:',
 											  'maxfilesize=8388608');
-                                        // 8MB s/b as big as i need
+            // 8MB s/b as big as i need
 			// $uploadForm->addRule('original_filename', 
 //                                  'You must select a file', 'uploadedfile');
 		}
@@ -48,30 +48,36 @@ class Files extends DB_DataObject
 		{
 
 			$actual =& $_FILES['original_filename'];			
-			confessObject($actual, "actual_file");
+			//confessObject($actual, "actual_file");
 			$unique_filename = sprintf("%d-%s", rand(1,200), 
                                        $actual['name']);
             // TODO also check for a size < 1... zero-byte file. or, js?
-            if (is_uploaded_file($actual['tmp_name'])) {
-				if(move_uploaded_file($actual['tmp_name'],
-                                      $this->kenPath . $unique_filename)){
-					//TODO add mimetype
-					print "file uploaded!";
-					// TODO: add the original_filename['name']
-					// unique_file and to the db's field
-					return parent::insert();
-				}
-			}
-			
-			return false;  // uh oh. boo boo.
+            if (is_uploaded_file($actual['tmp_name']) &&
+				move_uploaded_file($actual['tmp_name'],
+                                   $this->kenPath . $unique_filename) &&
+                chmod($this->kenPath . $unique_filename, 0644) )
+            {
+                
+                //OK dump all the data about the file into the db
+                $this->disk_filename = $unique_filename;
+                $this->original_filename = $actual['name'];
+                //$this->school_year = findSchoolYear(); // generify?
+                $this->mime_type = $actual['type'];
+                $this->upload_date = date("Y-m-d H:m:s");
+                $this->file_size = $actual['size'];
+                return parent::insert();
+            }
+            
+            return false;  // uh oh. boo boo.
 		} // end insert
 
-		function delete()
+    function delete()
 		{
 			$result = parent::delete();
-                               
-			if ($result == false) {
-				unlink($this->kenPath . $this->unique_filename);
+                  
+            //print "RESULT[$result]";
+			if ($result) {
+				unlink($this->kenPath . $this->disk_filename);
 			}
                                
 			return $result;
