@@ -40,7 +40,7 @@ class coopObject
 
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
 		{
-			if(!$page || !$table){
+			if(!is_object($page) || !$table){
 				user_error("coopObject: blank page or table object passed", 
 						   E_USER_ERROR);
 			}
@@ -52,7 +52,9 @@ class coopObject
 			
  			$this->obj = DB_DataObject::factory($this->table); // & instead?
 			if (PEAR::isError($this->obj)){
-				 user_error("coopObject::constructor: " . $this->obj->getMessage(),
+				$this->page->kensPEARErrorHandler(&$this->obj);
+				 user_error("coopObject::constructor: " . 
+							$this->obj->getMessage(),
 							E_USER_ERROR);
 			}
 			//confessObj($this->obj, "CONSTRUCTOR object for $this->table");
