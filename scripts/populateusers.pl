@@ -94,9 +94,8 @@ $rquery = "select families.name, families.familyid
 		from families 
 			left join leads on families.familyid = leads.familyid
 		left join kids on kids.familyid = families.familyid
-		left join attendance on attendance.kidsid = kids.kidsid
-		left join enrol on enrol.enrolid = attendance.enrolid
-		where attendance.dropout is NULL
+		left join enrollment on kids.kidsid = enrollment.kidsid
+		where enrollment.dropout_date is NULL
 	group by families.familyid\n";
 if($opt_v){
 	print "doing <$rquery>\n"; 
