@@ -64,6 +64,12 @@ class Leads extends DB_DataObject
 								 'phone' => "Phone Number", 
 									'do_not_contact'=> "Do Not Contact After");
 	var  $fb_formHeaderText = "Springfest Invitation Contacts";
+
+	var $fb_requiredFields = array('lead_id', 'last_name', 'address1', 
+								   'city', 'state', 'zip', 'country', 
+								   'source_id');
+
+
 //	var $fb_preGenerateForm
 
 	// can be called with no leadid if it's already in the object itself
