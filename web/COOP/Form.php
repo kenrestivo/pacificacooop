@@ -78,7 +78,6 @@ class coopForm extends CoopObject
 					$el =& $form->addElement('select', $key, false, 
 											 $this->getEnumOptions($key));
 				} else {
-					print "i got here $key<br>";
 					$el =& $form->addElement(
 						$key == $this->pk ? 'hidden' : 'text', 
 						$key);
@@ -105,8 +104,6 @@ class coopForm extends CoopObject
 			
 			// XX is this necessary?
 			$form->addElement('hidden', 'table', $this->table);
-
-			$this->addRequiredFields();
 
 			// finally, sumbit it!
 			$form->addElement('submit', null, 'Save');
@@ -253,11 +250,14 @@ class coopForm extends CoopObject
 
 		}
 
+	// i don't do this in build, i do it later. because for now,
+	// the passthrus aren't in here. they should be, arguably tho
 	function addRequiredFields()
 		{
 			if(is_array($this->obj->fb_requiredFields)){
 				foreach($this->obj->fb_requiredFields as $fieldname){
-					$this->form->addRule($fieldname, "$key mustn't be empty.", 'required');
+					$this->form->addRule($fieldname, 
+										 "$key mustn't be empty.", 'required');
 				}
 			}
 		}
