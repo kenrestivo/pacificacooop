@@ -37,6 +37,7 @@ CREATE TABLE auction_donation_items (
   committed enum('No','Yes') default 'No',
   package_id int(32) default NULL,
   school_year varchar(50) default NULL,
+	thank_you_id int(32),
   PRIMARY KEY  (auction_donation_item_id),
 ) ;
 
@@ -110,6 +111,9 @@ CREATE TABLE chart_of_accounts (
 CREATE TABLE companies (
   company_id int(32) NOT NULL unique auto_increment,
   company_name varchar(255) default NULL,
+  first_name varchar(255) default NULL,
+  last_name varchar(255) default NULL,
+  title varchar(255) default NULL,
   address1 varchar(255) default NULL,
   address2 varchar(255) default NULL,
   city varchar(255) default NULL,
@@ -135,7 +139,7 @@ CREATE TABLE companies_auction_join (
   companies_auction_join_id int(32) NOT NULL unique auto_increment,
   auction_donation_item_id int(32) default NULL,
   company_id int(32) default NULL,
-  familyid int(32) default NULL,
+  family_id int(32) default NULL,
   PRIMARY KEY  (companies_auction_join_id),
 ) ;
 
@@ -295,6 +299,7 @@ CREATE TABLE income (
   note varchar(255) default NULL,
     txn_id varchar(20) NOT NULL default '0',
   school_year varchar(50) default NULL,
+	thank_you_id int(32),
   PRIMARY KEY  (income_id),
 ) ;
 
@@ -768,7 +773,8 @@ CREATE TABLE in_kind_donations (
   item_value decimal(9,2) default NULL,
   date_received date default NULL,
   school_year varchar(50) default NULL,
-  PRIMARY KEY  (in_kind_donation_id)
+  thank_you_id int(32),
+	PRIMARY KEY  (in_kind_donation_id)
 ) ;
 
 
@@ -780,5 +786,14 @@ CREATE TABLE companies_in_kind_join (
   PRIMARY KEY  (companies_in_kind_join_id)
 ) ;
 
+
+CREATE TABLE thank_you (
+  thank_you_id int(32) NOT NULL unique auto_increment,
+  date_sent date default NULL,
+  family_id int(32) default NULL,
+   method  enum('Other', 'Letter', 'WebPage', 'Email') default NULL,
+  school_year varchar(50) default NULL,
+  PRIMARY KEY  (thank_you_id)
+) ;
 
 -- EOF
