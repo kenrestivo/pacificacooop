@@ -140,7 +140,7 @@ order by families.name;
 	 break;
 
  case 'makeblanklines':
-	 $blanks = 20;
+	 $blanks = 50;
  	 $pad = new CoopObject(&$cp, 'springfest_attendees', &$nothing);
 	 //$pad->obj->debugLevel(2);
 	 $pad->obj->whereAdd('(ticket_id is null or ticket_id < 1)');
