@@ -22,21 +22,18 @@
 
 require_once "HTML/QuickForm.php";
 require_once "HTML/QuickForm/group.php";
-require_once('CoopObject.php');
-require_once('HTML/QuickForm.php');
-require_once('HTML/QuickForm/static.php');
 
 
-class paypalForm
+
+class paypalForm extends HTML_QuickForm
 {
 	var $title;
 	var $account = 'beecooke@yahoo.com';
 	var $server = 'https://www.paypal.com/cgi-bin/webscr';
     var $notify_url ="http://www.pacificacoop.org/sf/ipn.php";
 
-
-	// THIS IS BORKEN
-	function buildOldPayPalForm($title,  $formname,  $headerflag = 1)
+	function paypalForm($title,  $formname,  $source = 'EmailBlast', 
+						$headerflag = 1)
 		{
 			$this->title = $title;
 
@@ -49,16 +46,14 @@ class paypalForm
                 $urlsuffix = "-dev";
             }
 			
-			$form =& HTML_QuickForm($formname, 'get', 
-									$this->server, false, 1);
+			$this->HTML_QuickForm($formname, 'get', $this->server, false, 1);
 			if($headerflag){
 				$this->addElement('header', 'tickets', $title);
 			}	
 			$this->addElement('hidden', 'cmd', '_xclick');
 			$this->addElement('hidden', 'business', $this->account);
 			$this->addElement('hidden', 'item_name', $title);
-			$this->addElement("hidden", "item_number", 
-							  $_REQUEST['source'] ? $_REQUEST['source'] : "EmailBlast");
+			$this->addElement("hidden", "item_number", $source);
 			$this->addElement("hidden", "quantity", "1");
 			$this->addElement("hidden", "page_style", "Primary");
 			$this->addElement("hidden", "notify_url", 
@@ -72,7 +67,7 @@ class paypalForm
 		}
 
 
-	// THIS IS OLDE AND SHITTY
+
 	function buildSelect($fieldname, $prices_raw, $select_first = 1,
 						 $choose_one = 0)
 		{
@@ -92,9 +87,8 @@ class paypalForm
 			return $sel;
 		}
     
-
-	
 } // end paypalform class
+
 
 // keep below
 ?>

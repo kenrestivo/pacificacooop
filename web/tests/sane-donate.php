@@ -9,7 +9,7 @@ require_once('RSVPWizard.php');
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
-$debug = 1;
+$debug = 0;
 
 
 $cp = new coopPage( $debug);
