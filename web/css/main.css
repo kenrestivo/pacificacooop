@@ -1,20 +1,20 @@
 /* $Id$ */
 p,table,li,h1,h2,h3
 {
-	font-family: verdana, arial, 'sans serif'; 
+  font-family: verdana, arial, 'sans serif'; 
 }
 
 
 .menutext
 {
 
-	font-size: 8px;
+  font-size: 8px;
 
 }
 
 p,li,th,td
 {
-	font-size: 8px;
+  font-size: 8px;
 
 }
 /*/*/a{}
@@ -24,8 +24,8 @@ body th,
 body p {
   font-size: x-small;
   voice-family: "\"}\"";
-  voice-family: inherit;
-  font-size: small;
+voice-family: inherit;
+font-size: small;
 }
 html>body,
 html>body td,
@@ -36,15 +36,15 @@ html>body p {
 /* */
 
 .foobar {
-	background: grey;
+  background: grey;
 }
 
 div.box { border: solid;
-			 border-width: thin; 
-			width: 80% }
+  border-width: thin; 
+  width: 80% }
 
- 	ul {margin-left: 0; padding-left: 1.5em;}
-	
+ul {margin-left: 0; padding-left: 1.5em;}
+
 
 #leftCol {
   width: 15%;
@@ -67,10 +67,12 @@ input[type="submit"] {
 footer {  }
 
 TABLE { 
-	margin-top: .5em;
-	margin-bottom: .5em;
+  margin-top: .5em;
+  margin-bottom: .5em;
 }
 
 table.sub {
-	margin-left: 2%;
+  margin-left: 2%;
 }
+
+

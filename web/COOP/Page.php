@@ -41,12 +41,19 @@ class coopPage
 {
 	var $auth;
 	var $debug;
-
+	var $user_id;				// cache of legacy info ($u)
+	
 	function coopPage($debug = false)
 		{
 			$this->debug = $debug;
 		}
 
+	// for use with the old, non-object-oriented, homegrown auth/dispatcher
+	function createLegacy($auth)
+		{
+			$this->auth = $auth;
+			$this->user_id =  getUser($auth['uid']);
+		}
  
 	function pageTop()
 		{

@@ -51,12 +51,13 @@ if($auth['state'] != 'loggedin'){
 
 //OK, i am logged in!
 $cp =& new CoopPage;
+$cp->createLegacy($auth);
+
 $menu =& new CoopMenu;
-$cp->auth = $auth;
 $menu->createLegacy(&$cp);
 
 	
-$u = getUser($auth['uid']);
+$u = $cp->user_id; // cached by createlegacy
 
 print $menu->topNavigation();
 print "\n<hr>\n";
