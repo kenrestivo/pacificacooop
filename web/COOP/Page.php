@@ -239,10 +239,10 @@ class coopPage
 							   $base, $inside,
 							   SID ? "&" . SID  : "");
 			} else {
-				$res .= htmlentities($base .  SID ? "?" . SID  : "");
+				$res .= $base .  SID ? "?" . SID  : "";
 			}
 	
-			return $res;
+			return htmlentities($res);
 		}
 
 
