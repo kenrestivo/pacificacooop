@@ -21,6 +21,7 @@
 	require_once("auctionfuncs.inc");
 	require_once("financefuncts.inc");
 	require_once("roster.inc");
+	require_once("10names.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -61,6 +62,14 @@
 	actionButtons($auth, $p, $u, $u['familyid'], 'auction', 'auction.php');
 	print "</td><tr>";
 	
+	//invitations
+	print "<tr>";
+	$p = getAuthLevel($auth, 'auction');
+	print "<td>Springfest Invitation Contacts</td><td>";
+	nameSummary($u['familyid']);
+	print "</td><td align=center>";
+	actionButtons($auth, $p, $u, $u['familyid'], 'invitations', '10names.php');
+	print "</td><tr>";
 
 	//money items
 	print "<tr>";
