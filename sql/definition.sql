@@ -235,9 +235,9 @@ CREATE TABLE events (
 
 CREATE TABLE families (
   family_id int(32) NOT NULL unique auto_increment,
-  name varchar(255) default NULL,
+  name varchar(255) default NULL,  -- XXX dumb! make this family_name!
   phone varchar(20) default NULL,
-	address varchar(255) default NULL,
+	address1 varchar(255) default NULL,
 	email varchar (255) default NULL,
   PRIMARY KEY  (family_id),
 ) ;
