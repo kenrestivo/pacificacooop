@@ -163,7 +163,7 @@ class PostPaypal
 	function postLead()
 		{
 			
-			$table = $this->paypal_obj->invoice > 0) ? 'tickets' : 'leads_income_join';
+			$table = $this->paypal_obj->invoice > 0 ? 'tickets' : 'leads_income_join';
 				
 			$obj =& $this->factoryWrapper($table);
 

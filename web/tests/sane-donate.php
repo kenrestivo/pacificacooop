@@ -3,6 +3,7 @@
 //$Id$
 
 chdir("../");                   // XXX only for "test" dir hack!
+require_once('first.inc');
 require_once('CoopPage.php');
 require_once('RSVPWizard.php');
 
