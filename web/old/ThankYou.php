@@ -314,8 +314,8 @@ http://www.pacificacoop.org/
 			$real->obj->school_year = $sy;
 			$real->obj->orderBy('school_year desc');
 			$real->obj->joinadd($co->obj);
-			// TODO: add "and cleared_date is not null" cleared checks!
-			$real->obj->whereAdd('thank_you_id is null');
+			$real->obj->whereAdd('thank_you_id is null
+								and cleared_date > "2000-01-01" ');
 			$real->obj->find();
 			while($real->obj->fetch()){
 				$cashtotal += $real->obj->payment_amount;
@@ -331,9 +331,9 @@ http://www.pacificacoop.org/
 			$real = new CoopView(&$cp, 'auction_donation_items', 
 								 &$co);
 			$real->obj->orderBy('school_year desc');
-			//TODO: add "and date_received is not null"! only received!
 			$real->obj->school_year = $sy;
-			$real->obj->whereAdd('thank_you_id is null');
+			$real->obj->whereAdd('thank_you_id is null 
+						and date_received > "2000-01-01" ');
 			$real->obj->joinadd($co->obj);
 			$real->obj->find();
 			while($real->obj->fetch()){
@@ -352,9 +352,9 @@ http://www.pacificacoop.org/
 			$real = new CoopView(&$cp, 'in_kind_donations', 
 								 &$co);
 			$real->obj->orderBy('school_year desc');
-			//TODO: add "and date_received is not null"! only received!
 			$real->obj->school_year = $sy;
-			$real->obj->whereAdd('thank_you_id is null');
+			$real->obj->whereAdd('thank_you_id is null
+						and date_received > "2000-01-01" ');
 			$real->obj->joinadd($co->obj);
 			$real->obj->find();
 			while($real->obj->fetch()){
