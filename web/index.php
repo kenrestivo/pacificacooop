@@ -18,6 +18,7 @@
 	#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 	require_once("auth.inc");
+	require_once("auctionfuncs.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -34,6 +35,8 @@
 
 	$auth = logIn($pv);
 
+	$u = getUser($auth['uid']);
+
 	print "<hr>\n";
 
 
@@ -44,8 +47,17 @@
 	print "<p>Please choose an action</p>";
 
 	print "<table border=1>";
+	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
 
-	print "</FORM>";
+	//auction items
+	print "<tr>";
+	$p = getAuthLevel($auth, 'auction');
+	print "<td>Sprintfest Auction Donation Items</td><td>";
+	auctionSummary($u['familyid']);
+	print "</td><td align=center>";
+	auctionAction($auth, $p, $u, $u['familyid']);
+	print "</td><tr>";
+	
 
 	print "</table>";
 

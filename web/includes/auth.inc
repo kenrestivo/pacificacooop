@@ -346,7 +346,7 @@ getUser($uid)
 {
 
 	if($uid < 1){
-		user_error("ERROR! no uid", E_USER_ERROR);
+		user_error("getUser(): ERROR! no uid", E_USER_ERROR);
 		exit(1);
 	}
 
