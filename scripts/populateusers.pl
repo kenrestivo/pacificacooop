@@ -26,7 +26,7 @@ use DBI;
 use Getopt::Std;
 
 
-getopts('vt') or &usage();
+getopts('vth:p:') or &usage();
 
 
 #the access hash
@@ -56,8 +56,10 @@ getopts('vt') or &usage();
 
 ### main code starts here
 
+$host = $opt_h ? $opt_h : "bc";
+$port = $opt_p ? ":$opt_p" : "";
 #basic login and housekeeping stuff
-$dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
+$dbh = DBI->connect("DBI:mysql:coop:$host$port", "input", "test" )
     or die "can't connect to database $!\n";
 
 
@@ -153,6 +155,8 @@ sub usage()
     print STDERR "usage: $0 -v -t\n";
     print STDERR "\t-v verbose \n";
     print STDERR "\t-t test (don't actually update db) \n";
+    print STDERR "\t-h hostname of db\n";
+    print STDERR "\t-p port db is running on\n";
 	exit 1;
 }
 

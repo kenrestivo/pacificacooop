@@ -424,8 +424,8 @@ logIn($vars)
 
 	/* vital information for each state.
 		func = callback function for this state
-		required = mandatory arguments
-		wanted = optional arguments
+		required = mandatory elements of the auth structure for this state
+		wanted = optional elements of the auth structure for this state
 		terminus = if we reach this state, exit the state machine
 		description = some debug/explanatory text. not used right now
 	*/

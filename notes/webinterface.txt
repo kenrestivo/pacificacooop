@@ -290,6 +290,17 @@ menu.php: a nice launching point for things!
 		- edit roster information (phone, email, name spelling, etc)
 		- show insurance information
 		- enter checks (if authorised for "money" realm)
+	show SUMMARY for each choice too
+		a form? a table?
+			form MAY be ok, if you are only going to pages that'll cycle
+		ITEM  SUMMARY  ACTION
+			action will need to be intelligent based on privs!
+		something tells me this should come from EACH individual .inc
+			i.e. 10names.inc includes the summary and action function for it
+			money includes summary/aciton functions for it
+		need to have a "main menu" form-ish button on all subsequent pages too
+			and, it needs to pass vars grr.
+			
 
 admin.php: administrative tasks
 	forcibly re-log them in with auth.inc:logIn() 
