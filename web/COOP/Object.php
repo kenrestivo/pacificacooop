@@ -216,7 +216,7 @@ class coopObject
 			return($this);
 		}
 
-	function saveAudit($insert = false)
+	function saveAudit($insert = true)
 		{
 			// the audit trail dude
 			// TODO copy/paste this later into my framework

@@ -160,7 +160,7 @@ class coopForm extends CoopObject
 			}
 			$this->obj->update($old);
 		
-			$this->saveAudit();
+			$this->saveAudit(false);
 		
 			return $this->obj->{$this->pk};
 		}
@@ -169,7 +169,7 @@ class coopForm extends CoopObject
 	function insert()
 		{
 			user_error("more new now! new not implemented yet", E_USER_ERROR);
-			$this->saveAudit();
+			$this->saveAudit(true);
 		}
 
 
