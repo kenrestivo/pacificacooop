@@ -98,30 +98,26 @@
 	 schema))
 
 ;; setter: the change-alist
-(define (save-rename-column items schema)
+(define (save-rename-column items)
   (let* ((sp (string-split (car items) #\.))
 		 (new (string-split (cadr items) #\.))
 		 (table (car sp))
 		 (old-col (cadr sp))
-		 (new-col (cadr new))
-		 (long-def (assoc-ref (assoc-ref schema (car sp)) (cadr sp)))
-		 )
-	(if long-def
-		(set! *change-alist*
-			  (add-sub-alist *change-alist* table old-col new-col))	
-		;; TODO: be smart and check first if it is already changed
-		(printf "IGNORING: rename spec  %s:%s is NOT in schema, can't change to %s\n" table old-col new-col) ;; it's a bogus line? huh?
-		)
-	))
+		 (new-col (cadr new)))
+	;; TODO: be smart and check first if it is already changed
+	(set! *change-alist*
+		  (add-sub-alist *change-alist* table old-col new-col))	
+  ))
 
 ;; make this the func for actually MAKING changes
-(define (do-something-with-this items schema)
-  (let* ((sp (string-split (car items) #\.))
-		 (new (string-split (cadr items) #\.))
-		 (table (car sp))
-		 (old-col (cadr sp))
-		 (new-col (cadr new))
-		 (long-def (assoc-ref (assoc-ref schema (car sp)) (cadr sp)))
+;; change-line should be (table old-col new-col)
+(define (rename-column change-line schema)
+  (let* (
+		 
+		 (old-table (car change-line))
+		 (old-col )
+		 (new-col )
+		 (long-def (assoc-ref (assoc-ref schema old-col) old-table))
 		 )
 	(if long-def
 		(begin 
@@ -129,7 +125,8 @@
 						 table old-col new-col long-def))
 		  (fix-primary-key table old-col new-col schema) )
 		;; TODO: be smart and check first if it is already changed
-		(printf "IGNORING: rename spec  %s:%s is NOT in schema, can't change to %s\n" table old-col new-col) ;; it's a bogus line? huh?
+		(printf "IGNORING: rename %s:%s is NOT in schema, can't change to %s\n"
+				table old-col new-col) ;; it's a bogus line? huh?
 		)
 	))
 
@@ -146,9 +143,10 @@
 ;; in the file, tables don't have .'s in them, columns do.
 ;; item is (oldtable.oldcol oldtable.newcol) ... thanks matt :-/
 (define (process-change items)
-  (if (string-index (car items) #\.)
-	  (save-rename-column items *main-schema*)
-	  (save-table! items)))
+  ((if (string-index (car items) #\.)
+	   save-rename-column 
+	   save-table!)
+   items))								; tricky scheme-ism
 
 
 ;;; this is basically MAIN, though the load-definition must occur first
@@ -166,9 +164,25 @@
 
 ;; this is the engine which actually does the work
 (define (fix-schema change-alist change-tables schema-alist)
-  (for-each rename-column change-alist)
+  (for-each rename-column (fold-change-alist change-alist) schema-alist)
   (for-each rename-table change-tables)		; finally, follow up with tables
   )
+
+;; changes a heirarchal alist into a flat (table old-col new-col) list
+;; possibly the ugliest function i have ever written
+(define (flatten-change-alist change-alist)
+  (let ((flat-list '()))
+	(for-each (lambda (y)
+				(for-each (lambda (x)
+							(if (pair? x)
+								(let ((temp (list (car y) (car x) (cdr x)))) 
+								  (set! flat-list
+										;; list, so it doesn't get folded
+										(append flat-list (list temp))))))
+						  y))
+			  change-alist)
+	flat-list
+	))
 
 ;;;;;;;;;;;;;;;
 ;; main
