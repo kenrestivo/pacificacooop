@@ -46,6 +46,7 @@ class Auction_donation_items extends DB_DataObject
 		'item_value' => 'Estimated TOTAL Value ($)' ,
 		"item_type" => "Physical Product or Gift Certificate",
 		"date_received" => "Date Item received" ,
+		"location_in_garage" => "Where It's Located" ,
 		"school_year" => "School Year" ,
 		"auction_donation_item_id" => "Unique ID" ,
 		"thank_you_id" => "Thank-You Sent" 
