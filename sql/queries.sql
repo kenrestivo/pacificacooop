@@ -608,5 +608,38 @@ having cash_donations > 0 or auction_purchases > 0 or auction_donations > 0 or i
 order by cash_donations desc, auction_purchases desc, 
     auction_donations desc, in_kind_donations desc;
 
+--- by acctnum
+select coa.description as Description,
+        sum(inc.total) as Before_Event, 
+        sum(pur.total) as At_Event
+from chart_of_accounts as coa
+left join 
+    (select account_number, sum(payment_amount) as total
+     from companies_income_join as cinj
+     left join income 
+              on cinj.income_id = 
+                income.income_id
+        where school_year = '2004-2005'
+        group by cinj.company_id) 
+    as inc
+        on inc.account_number = coa.account_number
+left join 
+    (select  account_number, payment_amount as total
+     from springfest_attendees as atd
+    left join auction_purchases  as ap
+            on ap.springfest_attendee_id = 
+                atd.springfest_attendee_id
+     left join income 
+              on ap.income_id = 
+                income.income_id
+        where income.school_year = '2004-2005'
+        group by atd.company_id) 
+    as pur
+        on pur.account_number = coa.account_number
+group by coa.account_number
+having Before_Event >0 or At_Event > 0
+order by Before_Event desc, At_Event desc;
+
+
 
 --- EOF
