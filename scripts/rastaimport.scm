@@ -9,6 +9,9 @@
 
 (define *rasta* (make-hash-table 3))
 
+(define *debug-flag* #t)
+
+
 ;; be sure to modify this if the damn thing ever changes
 (define *header* '("Last Name"
 				 "Mom Name *"
@@ -24,6 +27,34 @@
 				 "Th"
 				 "F"
 				 "School Job"))
+
+;;;;;;;;;;;;;;; functions for updating the database
+
+;; find kid
+(define (check-for-new-kid line header)
+  (let ((kids (safe-sql *dbh*
+						(sprintf #f "
+				select kidsid, last, first, familyid from kids
+					where first like \"%%%s$$\" and last like \"%%%s%%\" "
+								 (rasta-find "Child" line header)
+								 (rasta-find "Last Name" line header)
+								 ))))
+	(cond ((> 2 (false-if-exception (length kids)))
+		   (error "duplicate kids" kids))
+		  ((list? kids) (db-ref-last kids "kidsid")) ; got it!
+		  (else
+		   (safe-sql sprintf("
+				insert into kids set 
+							last = '%s' ,
+							first = '%s' ,
+							familyid = %d "
+							 (rasta-find "Last Name" line header)
+							 (rasta-find "Child" line header)
+							 (check-family line header)))))))
+
+							 
+
+;;;;;;;;;;; functions for importing and cleaning csv's from spreadsheet
 
 ;; each session gets dumped in separately, but then gets fixed here.
 (define (merge-am-pm rasta)
@@ -50,7 +81,6 @@
 				(list
 				 (safe-list-head parsed-line (length header)))))))
 
-;;(map (lambda (x) (string-trim x)) (parse-csv line))
 
 ;; iterate through file, happily singing along the way
 (define (grab-csv-rasta session fixfile)
@@ -63,8 +93,16 @@
 	  (clean-up-rasta *rasta* *header* session)
 	  (close p) )))
 
+;;;;;;;;;;;; main
+
+(define *dbh* (apply simplesql-open "mysql"
+				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf")))
+
 (grab-csv-rasta "AM" "/mnt/kens/ki/proj/coop/imports/AM.csv")
 (grab-csv-rasta "PM" "/mnt/kens/ki/proj/coop/imports/PM.csv")
 (merge-am-pm *rasta*)
+
+
+(simplesql-close *dbh*)
 
 ;; EOF
