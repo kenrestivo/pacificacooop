@@ -60,8 +60,6 @@ class coopForm extends CoopObject
 			//confessObj($this, 'coopForm::build($id) found');
 			foreach($this->obj->toArray() as $key => $val){
 				if(!$this->isPermittedField($key)){
-					user_error("coopForm::build($key) not permitted", 
-							   E_USER_NOTICE);
 					// NOTE the hidden thing. i think  i need to do hidden here
 					continue;
 				}
@@ -205,7 +203,7 @@ class coopForm extends CoopObject
 				confessObj($this->obj, 'NEW data');
 			}
 			$this->obj->update($old);
-			$this->id = $this->lastInsertID();
+			$this->id = $this->obj->{$this->pk};
 		
 			$this->saveAudit(false);
 		
@@ -233,7 +231,8 @@ class coopForm extends CoopObject
 			if (DB::isError($data)) {
                 die($data->getMessage());
             }
-			$this->page->confessArray($data, "coopForm::getEnumOptions($key)");
+			$this->page->confessArray($data, "coopForm::getEnumOptions($key)", 
+									  4);
 			preg_match('/enum\((.+?)\)/', $data['Type'], $matches);
 			$options = explode(',', ereg_replace("'", "", $matches[1]));
 			//array_unshift($options, '-- CHOOSE ONE --');
