@@ -106,11 +106,20 @@ class Auction_donation_items extends DB_DataObject
 						'package_value' => $this->item_value,
 						'bid_increment' => ceil($this->item_value / 10),
 						'starting_bid' => ceil($this->item_value /2),
-						'school_year' => $this->school_year
+						'school_year' => $this->school_year,
+						'auction_donation_item_id[]' => 
+						$this->auction_donation_item_id,
+						'action' => 'add' // need this for legacy form
 						) as $key => $val)
 			{
 				$form->addElement('hidden', $key, $val);
 			}
+
+			// legacy
+			if($sid = thruAuthCore($cp->auth)){
+				$form->addElement('hidden', 'coop', $sid); 
+			}
+
 			$form->addElement('submit', null, 'Make New Package');
 
 			return $form;

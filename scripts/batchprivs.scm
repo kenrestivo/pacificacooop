@@ -115,7 +115,7 @@
                         "solicitation" 200 200 )
      ;; publicity committee
      (change-privs-list dbh '("manning-villlar" "cunniffe" "glasman"
-                              "klieder" "simonson")
+                              "kleider" "simonson")
                         "flyers" 200 700)
      ;; raffle committee
      (change-privs-list dbh '("ambrose" "cresci-torres" )

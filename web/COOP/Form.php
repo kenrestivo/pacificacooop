@@ -73,12 +73,14 @@ class coopForm extends CoopObject
 				$this->setDefaults();
 			}
 
-			$this->addCrossLinks();
+			$this->addCrossLinks($vars);
 
 			// finally, sumbit it!
 			$this->form->addElement('submit', null, 'Save');
 
 			$this->form->applyFilter('__ALL__', 'trim');
+
+			$this->form->addFormRule(array(&$this,'dupeCheck'));
 
 			return $this->form;	// XXX not really necessary?
 		}
@@ -154,7 +156,9 @@ class coopForm extends CoopObject
 				}
 
 			}
-			confessArray($frozen, 'fruzen gladje');			
+			$this->page->confessArray($frozen, 
+									  'CoopForm::addAndFillVars(fruzen gladje)',
+									  3);			
 			$this->form->freeze($frozen);
 		}
 
@@ -202,8 +206,10 @@ class coopForm extends CoopObject
 			}
 			
 			$this->processCrossLinks($vars);
+			
+			$this->enema($vars); // necessary. *sigh*
 					
-			return print "<p>Entry was successful!</p>";
+			return "<p>Entry was successful!</p>";
 		}
 
 
@@ -398,7 +404,7 @@ class coopForm extends CoopObject
 			}
 		}
 
-	function addCrossLinks()
+	function addCrossLinks($vars)
 		{
 			
 			if(!is_array($this->obj->fb_crossLinks)){
@@ -433,7 +439,11 @@ class coopForm extends CoopObject
 				
 	
 				$this->obj->{$this->pk} = $this->id; // for checkcrosslinks
-				$incl = $this->checkCrossLinks($mt, $ft);
+				if(isset($vars[$tf])){
+					$incl = $vars[$tf];
+				} else {
+					$incl = $this->checkCrossLinks($mt, $ft);
+				}
 				$this->page->confessArray($incl, 
 										  'CoopForm::addCrossLinks(incl)', 2);
 
@@ -473,6 +483,64 @@ class coopForm extends CoopObject
 									$this->obj->{$this->pk}); 
 
 		}
+	
+	function dupeCheck($vars)
+		{
+			if($vars[$this->pk] > 0){
+				return true;	// i'm editing. no dupecheck on edit.
+			}
+
+			//TODO check for a dupecheck function in the object, and use that
+			// then revert to this as a default
+			// also check for a list of dupeignore fields. hmm. which easier?
+			$temp =& new CoopObject(&$this->page, $this->table, &$this);
+			$foo = $temp->obj;
+			$foo->whereAdd();
+			$this->page->debug > 2 && $foo->debugLevel(2);
+			$ov = array_keys(get_object_vars($foo));
+			foreach($vars as $key => $var){
+				// XXX hack, cough, gaaack.
+				if(in_array($key, $ov) && $key != $this->pk && $var){
+					if(!is_numeric($var)){
+						$var = sprintf("'%s'", $foo->escape($var));
+					}
+					$foo->whereAdd(sprintf("%s = %s", 
+										   $key, $var));
+				}
+			}
+			//confessObj($foo, 'foo');
+			if($foo->find(true)){
+				foreach($vars as $key => $val){
+					if($val == $foo->$key){
+						$duples[$key] = 'Duplicate entry.';
+					}
+				}
+				return $duples ;
+			}
+			return true;
+		}
+			
+
+	// cleans out REQUEST after a save! vital for re-displaying new.
+	function enema($vars)
+		{
+			$ov = array_keys(get_object_vars($this->obj));
+ 			foreach($ov as $key){
+ 				unset($_REQUEST[$key]);
+ 			}
+			// i have to hack qf tracksumbit here.
+			// otherwise it puts old data back!
+			unset($_REQUEST['_qf__' . $this->form->_attributes['name']]);
+			
+			// now the xlinks too
+			if(!is_array($this->obj->fb_crossLinks)){
+				return;
+			}
+			foreach($this->obj->fb_crossLinks as $la){
+				unset($_REQUEST[$la['toField']]);
+			}
+		}
+	
 
 } // END COOP FORM CLASS
 

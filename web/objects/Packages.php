@@ -51,6 +51,7 @@ class Packages extends DB_DataObject
 		"package_description" => "Package Description (long)" ,
 		"donated_by_text" => "Generously Donated By" ,
 		"item_type" => "Physical Product or Gift Certificate",
+		'school_year' => 'School Year',
 		"package_value" => 'Estimated Value ($)' ,
 		"starting_bid" => 'Starting Bid ($)' ,
 		'display_publicly' => 'Display on public home page?',
@@ -60,6 +61,7 @@ class Packages extends DB_DataObject
 
 	var $fb_requiredFields = array('package_description', 'donated_by_text', 
 								   'starting_bid', 'bid_increment', 
+								   'school_year',
 								   'package_type', 'package_value', 
 								   'item_type', 'package_number');
 
