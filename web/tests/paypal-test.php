@@ -4,6 +4,9 @@
 require_once("CoopPage.php");
 require_once("CoopMenu.php");
 
+require_once("everything.inc");
+require_once("members.inc");
+
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
 

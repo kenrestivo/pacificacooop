@@ -22,8 +22,8 @@
 	require_once("auth.inc");
 
 	require_once("roster.inc");
-
-
+require_once("members.inc");
+require_once("everything.inc");
 
 	print '<HTML>
 		<HEAD>
@@ -57,14 +57,8 @@
 	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
 
 	//narsty-ass ugly hack
-	$parth = pathinfo($_SERVER['SCRIPT_FILENAME']);
-	$dir = $parth['dirname'] ;
-	if(preg_match('/member/', $dir) > 0  ){
-		require_once("members.inc");
-		$everything = $members_everything;
-	} else {
-		require_once("everything.inc");
-		$everything = $sf_everything;	}
+
+$everything = array_merge($members_everything,  $sf_everything);
 	
     while ( list( $key, $val ) = each($everything)) {
 		user_error(sprintf("main(): showing row for %s", $val['description']),
@@ -84,6 +78,26 @@
 	print "\n</table>\n\n";
 
 	familyDetail($u['family_id']);
+require_once("CoopPage.php");
+require_once("CoopMenu.php");
+
+PEAR::setErrorHandling(PEAR_ERROR_PRINT);
+
+
+///////////////////////
+$cp = new CoopPage;
+$menu =& new CoopMenu;
+$cp->auth = $auth;
+$menu->createLegacy(&$cp);
+
+
+//confessObj($menu, "menuonb");
+print $menu->toHTML();
+
+
+	
+$menu->forceCurrentURL('10names.php');
+print $menu->get('urhere');
 
 	done();
 ?>

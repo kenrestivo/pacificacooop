@@ -51,8 +51,8 @@ class CoopMenu extends HTML_Menu
 
 			// grab the legacy stuff
 		
-			include('everything.inc');	
-			include('members.inc');
+			global $sf_everything;
+			global $members_everything;
 			$sf = $this->page->indexEverything($sf_everything);
 			$members = $this->page->indexEverything($members_everything);
 
