@@ -914,8 +914,15 @@ function
 loggedInState($auth, $states)
 {
 	$uinfo = getUser($auth['uid']);
-	printf("<h3>Welcome %s!</h3>\n", $uinfo['username']);
+	print "<table  width='100%' border=0>";
+	/* trying to build a user interface out of html 
+		is like trying to build a bookshelf out of mashed potatoes. 
+	*/
+	print "<tr>"; 
+	printf("<td><h3>Welcome %s!</h3></td>\n", $uinfo['username']);
+	print "<td>";
 	logoutForm();
+	print "</td></tr></table>";
 	return changeState($auth, $states, 'loggedin', 1);
 }/* END LOGGEDINSTATE */
 
