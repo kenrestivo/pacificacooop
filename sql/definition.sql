@@ -258,7 +258,7 @@ create table cal (
     calid int(32) not null unique auto_increment,
 	eventid int(32),
 	notes longtext,
-	status enum ('Active', 'tentative', 'cancelled') default 'Active',
+	status enum ('Active', 'Tentative', 'Cancelled') default 'Active',
 	hideuntil datetime,
 	eventdate datetime,
 	primary key (calid)
