@@ -85,6 +85,7 @@
 	print "\t<td align='center'><em><u>Auction Inventory</u></em></td>\n";
 	print "\t<td align='center'><em><u>Session</u></em></td>\n";
 	print "\t<td align='center'><em><u>Phone</u></em></td>\n";
+	print "\t<td></td>\n"; // a place for the indulgences
 	print "</tr>\n";
 	
 	while($row = mysql_fetch_array($list))
@@ -102,14 +103,16 @@
 		$total['auction'] += $auction['total']; //symmetry!
 		$total['undelivered'] += $delivery['undelivered']; 
 		$total['delivered'] += $delivery['delivered']; 
+		$generalindulgence = checkIndulgences($row['familyid'], 'general');
 
 		#don't print this row if it's already complete, or indulgence granted
 		if ($nagonlychecked && 
-				(($tennamespaid['amount'] >= 50) || $tennamesdone || 
+			$generalindulgence || 
+			((($tennamespaid['amount'] >= 50) || $tennamesdone || 
 					$tennamespaid['indulgences']) && 
 				($quiltpaid['amount'] >=45 || $quiltpaid['indulgences']) && 
 				($auction['total'] >= 50 || $auction['indulgences']) && 
-				!$delivery['undelivered'] || $delivery['indulgences'])
+				!$delivery['undelivered'] || $delivery['indulgences']))
 		{
 			continue;
 		}
@@ -146,6 +149,8 @@
 		print $row[sess];
 		print "</td><td align='center'>";
 		print $row[phone];
+		print "</td><td align='center'>";
+		print $generalindulgence;
 		print "</td></tr>\n";
 	}
 
