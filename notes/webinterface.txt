@@ -336,20 +336,20 @@ for future reference: a php/sql forum/groupware package
 next phase gui/schema
 
 contact management
-	company table (for solicitation)
+	company table (for solicitation) DONE
 		company
 		address, city, state,zip
 		phone, fax, email
 		territoryid (join)
 			or temporary familyid hack, or territory-family id.
-		dead contact flag/date: do not contact. essentially, an obsolete-after date.
+		dead contact flag/date: do not contact. 
+			essentially, an obsolete-after date.
 		userid, entered, updated
-	contact table
+	contact table DONE
 		first,last
 		companyid (join)
-	territory table 
+	territory table  DONE
 		description (crespi, rockaway, etc)
-		hmm. alumnae/member familyid? or... track that elsewise?
 	territory-family (persistence!) join table
 		include sessionid! this'll change year-to-year!
 	contactnotes table
@@ -358,7 +358,7 @@ contact management
 		note (longtext)
 	contact-to-income join table
 		to handle any stray non-categorized donations. ugly but will need this.
-	contact-to-auction join table (like fajoin)
+	contact-to-auction join table (like fajoin) DONE
 		to handle any donations of hard goods
 
 ad insertion 

@@ -34,9 +34,6 @@ create table ins(
     companyname varchar(255),
     naic int(5),
 	parentsid int(32),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (insid)
 );
 
@@ -69,9 +66,6 @@ create table lic(
     licensenum varchar(100),
     expires date,
 	parentsid int(32),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (licid)
 );
 
@@ -81,9 +75,6 @@ create table kids(
     last varchar(255),
     first varchar(255),
 	familyid int(32),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (kidsid)
 );
 
@@ -92,9 +83,6 @@ create table enrol(
     enrolid int(32) not null unique auto_increment,
 	semester varchar(50),
 	sess enum ('AM', 'PM'),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (enrolid)
 );
 
@@ -104,9 +92,6 @@ create table attendance (
 	kidsid int(32),
 	enrolid int(32),
 	dropout date,
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (attendanceid)
 );
 
@@ -119,9 +104,6 @@ create table parents(
 	worker enum ('Yes', 'No'),
 	familyid int(32),
 	email varchar(255),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (parentsid)
 );
 
@@ -130,9 +112,6 @@ create table families (
     familyid int(32) not null unique auto_increment,
 	name varchar(255),
     phone varchar(20),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (familyid)
 );
 
@@ -158,9 +137,9 @@ create table leads (
 	relation enum ('Relative','Friend', 'Coworker', 'Alumni', 'Other'),
 	source enum ('Springfest', 'Other'),
     familyid int(32),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
+	audit_user_id int(32), -- XXX remove after first mailing!
+	entered datetime, -- XXX remove after first mailing!
+	updated timestamp, -- XXX remove after first mailing!
 	primary key (leadsid)
 );
 	
@@ -172,9 +151,6 @@ create table nags (
     familyid int(32),
     naguid int(32),
 	done datetime, -- XXX reduntant! remove!
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
 	primary key (nagsid)
 );
 
@@ -184,9 +160,6 @@ create table coa (
     acctnum int(32) not null unique,
 	description varchar(255),
 	acctype enum ('Income', 'Expense', 'Equity'),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
 	primary key (acctnum)
 );
 
@@ -200,9 +173,6 @@ create table inc (
     acctnum int(32),
     amount decimal(9,2),
 	note varchar(255),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
 	primary key (incid)
 );
 
@@ -212,9 +182,6 @@ create table figlue (
     figlueid int(32) not null unique auto_increment,
 	incid int(32),
 	familyid int(32),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (figlueid)
 );
 
@@ -224,9 +191,6 @@ create table liglue (
     liglueid int(32) not null unique auto_increment,
 	incid int(32),
 	leadsid int(32),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (liglueid)
 );
 
@@ -236,9 +200,6 @@ create table users (
 	password varchar(255),
 	name varchar(255),
 	familyid int(32),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (userid)
 );
 
@@ -246,9 +207,6 @@ create table users (
 create table groups (
     groupid int(32) not null unique auto_increment,
 	name varchar(55),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (groupid)
 );
 
@@ -257,9 +215,6 @@ create table groupmembers (
     memberid int(32) not null unique auto_increment,
     userid int(32),
     groupid int(32),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (memberid)
 );
 
@@ -271,9 +226,6 @@ create table privs (
 	realm varchar(55),
 	userlevel int(5),
 	grouplevel int(5),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (privid)
 );
 
@@ -284,9 +236,6 @@ create table auction (
     amount decimal(9,2),
 	date_received date,
 	location_in_garage varchar(255),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (auctionid)
 );
 
@@ -295,9 +244,6 @@ create table faglue (
     faglueid int(32) not null unique auto_increment,
 	auctionid int(32),
 	familyid int(32),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (faglueid)
 );
 	
@@ -305,11 +251,8 @@ create table faglue (
 create table events (
     eventid int(32) not null unique auto_increment,
 	description varchar(255),
-    audit_user_id int(32),
-	notes longtext,
-	url varchar(255),
-	entered datetime,
-	updated timestamp,
+    notes longtext,
+    url varchar(255),
 	primary key (eventid)
 );
 	
@@ -320,9 +263,6 @@ create table cal (
 	status enum ('Active', 'Tentative', 'Cancelled') default 'Active',
 	hideuntil datetime,
 	eventdate datetime,
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
 	primary key (calid)
 );
 
@@ -339,24 +279,17 @@ create table companies (
 	phone varchar(255),
 	fax varchar(255),
 	email varchar(255),
-	territory_id (link),
-    familyid int(32), -- XXX temporary hack! remove later
+	territory_id int(32),
 	do_not_contact datetime,
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
 	primary key (company_id)
 );
 
 -- glue table for many-to-many: companies to auction items
 -- TODO: use NEW table and fieldnames!
-create table saglue (
+create table companies_auction_join (
     saglueid int(32) not null unique auto_increment,
 	auctionid int(32),
 	company_id int(32),
-    audit_user_id int(32),
-	entered datetime,
-	updated timestamp,
     primary key (saglueid)
 );
 
@@ -370,6 +303,34 @@ create table session_info (
 	user_id int(32),
 	vars blob,
 	primary key (session_id)
+);
+
+
+-- company detail
+create table company_contacts(
+    company_contact_id int(32) not null unique auto_increment,
+	first_name varchar(255),
+	last_name varchar(255),
+	company_id int(32),
+    primary key (company_contact_id)
+);
+
+
+-- territories
+create table territories(
+    territory_id int(32) not null unique auto_increment,
+	description varchar(255),
+    primary key (territory_id)
+);
+
+-- audit trail
+create table audit_trail(
+    audit_trail_id int(32) not null unique auto_increment,
+	table_name varchar(255),
+	index_id int(32),
+    audit_user_id int(32),
+	updated timestamp,
+    primary key (audit_trail_id)
 );
 
 
