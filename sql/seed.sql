@@ -320,30 +320,29 @@ insert into sponsorship_types set
 insert into ticket_type set
             ticket_type_id = 1,
             description = "Paid for",
+            jointable_hack = 'leads,companies', 
             paid_flag = 1;
 
 insert into ticket_type set
             ticket_type_id = 2,
             description = "Included with Donation",
+            jointable_hack = 'leads,companies', 
             paid_flag = 1;
 
 insert into ticket_type set
             ticket_type_id = 3,
             description = "Member",
+            jointable_hack = 'families',    
             paid_flag = 0;
 
 insert into ticket_type set
             ticket_type_id = 4,
-            description = "VIP",
+            description = "Comp/Freebie/VIP",
+            jointable_hack = 'leads,companies', 
             paid_flag = 0;
 
 insert into ticket_type set
             ticket_type_id = 5,
-            description = "Comp/Freebie",
-            paid_flag = 0;
-
-insert into ticket_type set
-            ticket_type_id = 6,
             description = "Other",
             paid_flag = 0;
 

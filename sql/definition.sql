@@ -334,7 +334,8 @@ CREATE TABLE tickets (
   family_id int(32) default NULL,
   lead_id int(32) default NULL,
   company_id int(32) default NULL,
- ticket_type enum('Paid for','Included with package', 'Member','VIP','Freebie','Other') default NULL,
+  ticket_type_id int(32) NOT NULL,
+	vip_flag tinyint(1) default NULL,
   school_year varchar(50) default NULL,
   PRIMARY KEY  (ticket_id),
 ) ;
@@ -833,6 +834,7 @@ CREATE TABLE ticket_type (
   ticket_type_id int(32) NOT NULL unique auto_increment,
   description varchar(255) default NULL,
 	paid_flag tinyint(1) default NULL,
+	jointable_hack varchar(255) default NULL,
    PRIMARY KEY  (ticket_type_id)
 ) ;
 

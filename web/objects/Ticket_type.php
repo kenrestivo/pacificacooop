@@ -13,6 +13,7 @@ class Ticket_type extends DB_DataObject
     var $ticket_type_id;                  // int(32)  not_null primary_key unique_key auto_increment
     var $description;                     // string(255)  
     var $paid_flag;                       // int(1)  
+    var $jointable_hack;                  // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
