@@ -31,38 +31,27 @@ while($co->obj->fetch()){
 
 	// soundex search, using mysql to help me
 	$sub = new CoopObject(&$cp, 'companies', &$dop);
-	$sub->obj->whereAdd(sprintf('soundex(company_name) = soundex("%s") 
-								and %s != %d',
-								$co->obj->escape($co->obj->company_name), 
+	$sub->obj->selectAdd(sprintf('soundex(company_name) = soundex("%s") as sdx',
+								 $co->obj->escape($co->obj->company_name)));
+	$sub->obj->whereAdd(sprintf(' %s != %d',
 								$co->pk, $co->obj->{$co->pk}));
-	if($sub->obj->find() && 
-	   (is_array($dupefound) && !in_array($co->obj->{$co->pk}, $dupefound)))
-	{
-		printf("<br>hey %s dupes ", $co->obj->company_name);
-		while($sub->obj->fetch()){
-			$dupefound[] = $sub->obj->{$sub->pk};
-			printf("are %s", $sub->obj->company_name);
-
-		}
-	}
-
-	print "<br>-- similar text";
-
-	/// similar-text search
-	$sub = new CoopObject(&$cp, 'companies', &$dop);
-	$sub->obj->whereAdd(sprintf(' %s != %d', $co->pk, $co->obj->{$co->pk}));
 	$sub->obj->find();
-	while($sub->obj->fetch())
-	{
-		$perc = 0;
-		similar_text($co->obj->company_name, $sub->obj->company_name, &$perc);
-		if($perc > 70){
-			//$dupefound[] = $sub->obj->{$sub->pk};
-			printf("<br> hey %s dupes %s?", 
-				   $co->obj->company_name, $sub->obj->company_name);
-		}
 
+	while($sub->obj->fetch()){
+		if($sub->obj->sdx && !in_array($co->obj->{$co->pk}, $dupefound)){
+			$dupefound[] = $sub->obj->{$sub->pk};
+			printf("<br>hey %s dupes ", $co->obj->company_name);
+			printf("are %s", $sub->obj->company_name);
+		}		
 	}
+	
+
+// 		$perc = 0;
+// 		similar_text($co->obj->company_name, $sub->obj->company_name, &$perc);
+// 		if($perc > 70){
+
+
+// 	}
 	
 }
 
