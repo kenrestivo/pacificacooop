@@ -143,6 +143,7 @@ class IPN
 				|| $_POST['payment_status'] == "Pending")
 			{
 				// we have a successful transaction! 
+				// check for valid transaction... sanity czechs
 				// update income here!				
 				// get incomeid
 				// split out the accountnumber, 

@@ -42,8 +42,7 @@ class paypalForm extends HTML_QuickForm
                 $this->account = "billing@restivo.org"  ;
 				$this->server = 
 					'https://www.sandbox.paypal.com/cgi-bin/webscr';
-                $this->notify_url = 
-                    "http://www.pacificacoop.org/sf-dev/ipn.php";
+                $urlsuffix = "-dev";
             }
 			
 			$this->HTML_QuickForm($formname, 'get', $this->server);
@@ -56,11 +55,11 @@ class paypalForm extends HTML_QuickForm
 			$this->addElement("hidden", "item_number", "EmailBlast");
 			$this->addElement("hidden", "quantity", "1");
 			$this->addElement("hidden", "page_style", "Primary");
-			$this->addElement("hidden", "notify_url", $this->notify_url);
+			$this->addElement("hidden", "notify_url", "http://www.pacificacoop.org/sf$urlsuffix/ipn.php");
 			$this->addElement("hidden", "return", 
-							  "http://www.pacificacoop.org/sf/thankyou.php");
+							  "http://www.pacificacoop.org/sf$urlsuffix/thankyou.php");
 			$this->addElement("hidden", "cancel", 
-							  "http://www.pacificacoop.org/sf/donate.php");
+							  "http://www.pacificacoop.org/sf$urlsuffix/donate.php");
 			$this->addElement("hidden", "no_note", "1");
 			$this->addElement("hidden", "currency_code", "USD");
 		}

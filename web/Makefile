@@ -20,7 +20,7 @@
 
 #NFSNRSYNC="--rsync-path=/nfsn/bin/rsync"
 NFSNUSR=ken
-NFSNHOST=phx1.nearlyfreespeech.net
+NFSNHOST=c1.phx.nearlyfreespeech.net
 NFSNDOCROOT=/nfsn/content/paccoop/htdocs
 NFSNLIVEPATH=$(NFSNDOCROOT)/sf/
 LIVEHERE=../livesite/
@@ -69,6 +69,14 @@ download-dev::
 		--exclude "*.#*" \
 		--exclude '*.sql' \
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)/ $(DEVHERE)
+
+upload-head:: 
+	-rm $(DEVHERE)/.\#*
+	rsync -e ssh \
+		$(NFSNRSYNC) -avxWcC  \
+		--exclude $(XCLUDE) \
+		--exclude "*.#*" \
+		$(PLAYGROUND) $(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)
 
 commit-live:
 	(cd $(LIVEHERE); cvs commit -m "syncing")
