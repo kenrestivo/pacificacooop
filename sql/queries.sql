@@ -114,8 +114,8 @@ select families.name, enrol.sess
     group by dt 
     order by entered;
 
--- the excel export report
-select leads.lead_id  as responsecode
+-- the invitations excel export report
+select distinct(leads.lead_id)  as responsecode
         ,leads.salutation 
         ,leads.first_name  
         ,leads.last_name    

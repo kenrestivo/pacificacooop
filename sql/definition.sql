@@ -71,12 +71,12 @@ CREATE TABLE audit_trail (
 
 CREATE TABLE blog_entry (
   blog_entry_id int(32) NOT NULL unique auto_increment,
-  parent_id int(32) default NULL,
+  family_id int(32) default NULL,
   short_title varchar(255) default NULL,
   body longtext,
   show_on_members_page enum('Unknown','Yes','No') default NULL,
   show_on_public_page enum('Unknown','Yes','No') default NULL,
-  PRIMARY KEY  (blog_entry_id),
+  PRIMARY KEY  (blog_entry_id)
 ) ;
 
 --
