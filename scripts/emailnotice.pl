@@ -29,7 +29,7 @@ use strict 'refs';
 
 
 #opt processing
-getopts('vaesrd:') or &usage();
+getopts('vaesrd:n:') or &usage();
 
 #arggh
 if($opt_d){
@@ -310,6 +310,7 @@ sub getinsuranceinfo()
 
 ######################
 #	EMAILREMINDER
+#	XXX totally broken. needs to be rewritten based on new structs!
 ######################
 sub emailReminder()
 {
@@ -324,6 +325,9 @@ sub emailReminder()
 	my $if = 0; # insurance flag
 	my $lf = 0; # license flag
 	my $newbie = 0;
+
+	print "emailReminder() is totally broken. it must be rewritten based on new structs\n";
+	exit 1;
 
 	$opt_v && printf("emailreminder(): lic %d ins %d\n", $licref->{'exp'}, $insref->{'exp'});
 	
@@ -500,7 +504,7 @@ sub fieldTripReport()
 	if($insref->{'exp'}){
 		if($onlyexpired ? $insref->{'exp'} < $checkdate : 1){
 			$badness .= sprintf(
-					"\t- Insurance %s %s Company: %s Policy#: %s \n",
+					"\t- Insurance %s %s Company: %.10s Policy: %s \n",
 					$insref->{'exp'} < $checkdate  ? "EXPIRED" : "",
 					strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
 					$insref->{'companyname'},
@@ -579,13 +583,14 @@ sub updateNags()
 
 sub usage()
 {
-    print STDERR "usage: $0 -d date [-s -a -v -e -a -r]\n";
+    print STDERR "usage: $0 -d date [-s -a -v -e -a -r -n date ]\n";
     print STDERR "\t-d date (in USA format mm/dd/yyyy)\n";
     print STDERR "\t-s send the actual email, not just show what would happen! \n";
     print STDERR "\t-v verbose \n";
-    print STDERR "\t-e include email parents in report\n";
+    print STDERR "\t-n everyone not nagged since date (mm/dd/yyyy) \n";
+    print STDERR "\t-e skip email-able parents in report\n";
     print STDERR "\t-e include ALL parents, not just expireds!\n";
-    print STDERR "\t-r report mode \n";
+    print STDERR "\t-r report mode (email mode is default) \n";
 	exit 1;
 }
 
