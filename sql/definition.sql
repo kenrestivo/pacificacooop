@@ -1,6 +1,10 @@
 --  $Id$
 --  database schema for co-op insurance database
 
+drop database if exists coop;
+create database coop;
+use coop;
+
 create table coop.ins(
     insid int(32) not null auto_increment,
     last varchar(255),
