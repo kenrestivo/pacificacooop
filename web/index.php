@@ -62,42 +62,22 @@
 	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
 
 	//auction items
-	showMenuRow($auth, $u, 'Springfest Auction Donation Items', 
-		'auctionSummary', 'auction', 'auction.php');
+	showMenuRow($auth, $u, $auctioncallbacks);
 	
 	//invitations
-	showMenuRow($auth, $u, 'Springfest Invitation Contacts', 
-		'nameSummary', 'invitations', '10names.php');
+	showMenuRow($auth, $u, $invitationcallbacks);
 
 	//money items
-	showMenuRow($auth, $u, 'Springfest Fees and Cash Donations', 
-		'incomeSummary', 'money', 'money.php');
+	showMenuRow($auth, $u, $incomecallbacks);
 
 	//packaging check in
-	showMenuRow($auth, $u, 'Springfest Packaging Inventory', 
-		'pkgCheckinSummary', 'packaging', 'packaging_checkin.php' );
+	showMenuRow($auth, $u, $pkgcheckincallbacks);
 
 	/* package management
-	showMenuRow($auth, $u, 'Springfest Package Management', 
-		'pkgManageSummary', 'packaging', 'pkg/package_management.php');
+	showMenuRow($auth, $u, $pkg_mgmt_callbacks);
 	*/
 
 	print "</table>";
-
-	/* solicitation items
-	showMenuRow($auth, $u, 'Springfest Solicitation', 
-		'solicitSummary', 'solicitation', 'solicitation.php');
-	*/
-
-	/* insurance 
-	showMenuRow($auth, $u, 'Insurance and Drivers Licence Information', 
-		'insuranceSummary', 'insurance', 'insurance.php');
-	*/
-
-	/* calendar 
-	showMenuRow($auth, $u, 'Calendar of Events', 
-		'calSummary', 'calendar', 'calendar.php');
-	*/
 
 	/* admin 
 	XXX can't use standard showMenuRow? 
