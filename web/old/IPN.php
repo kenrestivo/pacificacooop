@@ -60,8 +60,8 @@ class IPN
 					}
 					else if (strcmp ($res, "INVALID") == 0) {
 // log for manual investigation
-						$retval = 0
-							}
+						$retval = 0;
+                    }
 				}
 				fclose ($fp);
 			}
