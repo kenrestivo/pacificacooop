@@ -22,7 +22,6 @@
 								  (regexp-substitute/global #f  ",$"
 													(string-join (cdr line))
 													'pre 'post)) ))
-
 ;; clean sql definition line
 (define (clean-line line)
   (map (lambda (y)
@@ -34,7 +33,7 @@
 		   (equal? (cadr line) "table"))
 	  (set! current-table
 			(regexp-substitute/global #f  "\\(" (caddr line) 'pre 'post))
-	  (add-column current-table (clean-line line))))
+	  (add-column current-table line)))
  
 
 ;; make sure it is a valid line
@@ -45,6 +44,7 @@
 
 ;; for loading the proper schema file
 (define (load-definition deffile)
+  (set! new-schema '())
   (let ((p (open-input-file deffile) ) )
 	
 	(do ((line (read-line p) (read-line p)))
@@ -52,7 +52,7 @@
 	  ((lambda (x) (if (valid-def-line x)
 					   (process-def x)))
 	   (clean-line (string-split line #\space))))
-	 (close p) ))	
+	(close p) ))	
 
 ;;;;;;;;;;;;;
 
