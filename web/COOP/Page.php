@@ -21,8 +21,7 @@ require_once('object-config.php');
 function confessObj($obj, $text)
 {
 
-    print"<pre>";
-    print "======== $text ============\n";
+    print"<pre>\n======== $text ============\n";
     print htmlentities(print_r($obj, 1));
     print "</pre>";
  
@@ -189,6 +188,11 @@ class coopPage
 			 return $res;
 		}
 
+	function setFormDefaults(&$form)
+		{
+			
+		}
+
 	function detailForm($id = false )
 		{
 	
@@ -204,6 +208,10 @@ class coopPage
 			$form =& $this->build->getForm();
             //confessObj($form, "form");
   			//$form->freeze();
+			$sy =& $form->getElement('school_year');
+			if($sy && $sy->getValue() == ""){
+				$sy->setValue(findSchoolYear());
+			}
 			if($form->validate ()){
 				$res = $form->process (array 
 									   (&$this->build, 'processForm'), 
