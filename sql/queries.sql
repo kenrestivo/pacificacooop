@@ -328,7 +328,8 @@ select coalesce(companies.company_name,
             on invitation_rsvps.income_id = income.income_id 
             left join leads on invitation_rsvps.lead_id = leads.lead_id
     where leads.lead_id is not null or companies.company_id is not null
-    group by leads.lead_id, companies.company_id  having cash_total >= 150
+    group by leads.lead_id, companies.company_id  
+    having cash_total >= 150
     order by cash_total desc, 
         leads.last_name asc, leads.first_name asc, companies.company_name asc;
 
@@ -350,15 +351,17 @@ select companies.company_name,
 -- show auction totals for SOLICIT AND for family auctions.
 select families.name, sum(auction.item_value) as item_value
     from auction
-        left join auction_items_families_join on auction.auction_donation_item_id =
-            auction_items_families_join.auction_donation_item_id
+        left join auction_items_families_join 
+            on auction.auction_donation_item_id =
+                auction_items_families_join.auction_donation_item_id
         left join companies_auction_join 
             on auction.auction_donation_item_id = 
                 companies_auction_join.auction_donation_item_id
         left join families 
-            on coalesce(auction_items_families_join.family_id, companies_auction_join.family_id) =
-            families.family_id
-    group by coalesce(auction_items_families_join.family_id, companies_auction_join.family_id)
+            on coalesce(auction_items_families_join.family_id, 
+                    companies_auction_join.family_id) = families.family_id
+    group by coalesce(auction_items_families_join.family_id, 
+                    companies_auction_join.family_id)
     order by families.name
 
 --massive solicit nag stuff
