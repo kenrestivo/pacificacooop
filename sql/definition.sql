@@ -239,6 +239,7 @@ create table auction (
     amount decimal(9,2),
 	date_received date,
 	location_in_garage varchar(255),
+    package_id int(32),
     primary key (auctionid)
 );
 
@@ -405,6 +406,21 @@ create table invitation_rsvps (
 	leadsid int(32),
     primary key (invitation_rsvps_id)
 );
+
+
+-- packages.
+create table packages (
+    package_id int(32) not null unique auto_increment,
+	package_type enum ('Silent', 'Live'),
+	package_number varchar(20), 
+	package_title varchar(255), 
+	package_description longtext,
+    package_value decimal(9,2),
+    primary key (package_id)
+);
+
+
+
 -- the user/passwords used by the web view page AND my update tool..
 -- these MUST be done manually for db's not named coop!!
 --TODO: i have to grant all to myself on this db! duh.
