@@ -455,7 +455,7 @@ logoutForm()
 	outputs: a nice main menbu button.
 ******************/
 function
-mainMenuForm()
+mainMenuForm($auth)
 {
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					"index.php"); //force it to go back to index
