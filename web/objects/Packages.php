@@ -80,7 +80,7 @@ class Packages extends DB_DataObject
 									$this->__table, $schoolyear));
 			$this->orderBy('package_number, package_title, package_description');
 			$this->find();
-			$options[''] = '-- CHOOSE ONE --';
+			$options[] = '-- CHOOSE ONE --';
 			while($this->fetch()){
 				$options[$this->package_id] = 
 					sprintf("%.42s...", 

@@ -128,7 +128,7 @@ class Leads extends DB_DataObject
 			$this->orderBy(implode(', ' , $this->fb_linkDisplayFields));
 
 			$this->find();
-			$options[''] = '-- CHOOSE ONE --';
+			$options[] = '-- CHOOSE ONE --';
 			while($this->fetch()){
 				$vals= array();
 				foreach($this->fb_linkDisplayFields as $fname){

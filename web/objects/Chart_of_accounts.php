@@ -36,7 +36,7 @@ class Chart_of_accounts extends DB_DataObject
 			$this->orderBy('description');
 			$this->whereAdd("join_to_table like '%$linktable%'");
 			$this->find();
-			$options[''] = '-- CHOOSE ONE --';
+			$options[] = '-- CHOOSE ONE --';
 			while($this->fetch()){
 				$options[$this->account_number] = $this->description;
 			}
