@@ -97,10 +97,19 @@ order by families.name;
 			 $finj = new CoopObject(&$cp, 'families_income_join', &$top);
 			 $finj->obj->{$fam->pk} = $fam->obj->{$fam->pk};	// THIS fam
 			 $inc = new CoopObject(&$cp, 'income', &$finj);
-			 $inc->account_number = 2; // food-quilt fee
-			 $inc->school_year = $sy;
-			 $inc->joinAdd($finj->obj);
-			 $found = $inc->find();
+			 $inc->obj->account_number = 2; // food-quilt fee
+			 $inc->obj->school_year = $sy;
+			 $inc->obj->joinAdd($finj->obj);
+			 $found = $inc->obj->find();
+			 if(!$found){
+				 //  now check for indulgences... damn this is fucked up
+				 $ind = new CoopObject(&$cp, 'nag_indulgences', &$top);
+				 $ind->obj->{$fam->pk} = $fam->obj->{$fam->pk};	// THIS fam
+				 $ind->obj->school_year = $sy;
+				 $ind->obj->whereAdd('indulgence_type = "Everything"  or
+						indulgence_type = "Quilt Fee"');
+				 $found = $ind->obj->find();
+			 }
 			 $tq = $found > 0 ? 2 : 1;
 			 $sav->ticket_quantity = $tq;
 			 $sav->ticket_type_id = 3; // member ticket
