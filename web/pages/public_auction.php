@@ -39,9 +39,8 @@ function sponsors(&$cp)
 	$sp->obj->school_year = findSchoolYear();
 	$sp->obj->orderBy('sponsorship_price desc');
 	$sp->obj->find();
-	$previous = 1000000000; 		// hack
+	$previous = 1000000000; 		// XXX hack
 	while($sp->obj->fetch()){
-		
 		
 		$co =& new CoopObject(&$cp, 'companies', &$nothing);
 		$co->obj->query(sprintf("
@@ -161,7 +160,20 @@ print '<div id="leftCol">';
 print sponsors(&$cp);
 print '</div><!-- end leftcol div -->';
 
+
+///// the main stuff
 print '<div id="rightCol">';
+
+// show year-specific HTML
+$prettyname = sprintf("static/%s-springfest.template.html", 
+					  $sfyear);
+if(file_exists($prettyname)){
+	print '<div id="springfestpretty">';
+	include($prettyname);
+	print "</div><!-- end springfestpretty div -->";
+}
+
+
 print auctionItems(&$cp, $sy);
 
 

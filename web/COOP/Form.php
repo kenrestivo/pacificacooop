@@ -342,7 +342,10 @@ class coopForm extends CoopObject
 			//confessObj($this, 'this');
 			print $this->page->confessArray($vars, 
 									  'CoopForm::processAddRemove(vars)', 1);
-
+			
+			if(!is_array($this->obj->fb_crossLinks)){
+				return;
+			}
 			//$this->obj->debugLevel(0); 
 			// for everything in crosslinks, 
 			foreach($this->obj->fb_crossLinks as $la){
