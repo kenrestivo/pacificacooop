@@ -62,6 +62,10 @@ the fieldstruct
 		uniqueness: an array of fields to search for unique-distinguising stuff
 			in a pop-up. if the display field has dupes, 
 				dig through this looking for uniqueness to display
+		check_jointo: only show the entries in this popup 
+			where the linktable is in the $callbacks['join'] somewhere
+			NOTE! for this to work, there must be a join_to_table column
+				in the 'linktable', which the popuputll then checks
 
 callbacks struct
 	this is a proto-object. it contains miles and miles of crap
