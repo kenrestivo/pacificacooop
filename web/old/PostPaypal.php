@@ -127,7 +127,7 @@ class PostPaypal
                                      $this->paypal_obj->first_name, 
                                      $this->paypal_obj->last_name);
 
-            $obj->amount = $this->paypal_obj->payment_gross;
+            $obj->payment_amount = $this->paypal_obj->payment_gross;
             $obj->school_year = findSchoolYear();
 			$obj->account_number = $this->account_number;
             //print_r($this);
