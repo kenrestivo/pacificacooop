@@ -1032,8 +1032,9 @@ loggedInState($auth, $states)
 	print "<tr>"; 
 	printf("<td><h3>Welcome %s!</h3></td>\n", $uinfo['username']);
 	print "<td>";
+	mainMenuForm($auth);
+	print "</td><td>";
 	logoutForm();
-	//mainMenuForm($auth);
 	print "</td></tr></table>";
 	return changeState($auth, $states, 'loggedin', 1);
 }/* END LOGGEDINSTATE */
