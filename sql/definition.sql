@@ -429,14 +429,14 @@ create table packages (
 
 -- sources
 create table sources (
-    source_id int(32) not null unique,
+    source_id int(32) not null unique auto_increment,
 	description varchar(255),
 	primary key (source_id)
 );
 
 -- enhancement projects
 create table enhancement_projects (
-    enhancement_project_id int(32) not null unique,
+    enhancement_project_id int(32) not null unique auto_increment,
     project_name varchar(255),
     project_description longtext,
 	project_complete date,
@@ -445,7 +445,7 @@ create table enhancement_projects (
 
 -- enhancement hours
 create table enhancement_hours (
-    enhancement_hour_id int(32) not null unique,
+    enhancement_hour_id int(32) not null unique auto_increment,
     parentid int(32),
     work_date date,
     hours int(5),
