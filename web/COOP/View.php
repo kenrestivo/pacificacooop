@@ -139,7 +139,7 @@ class coopView
 
 
 	//  inspired by formbuilder's getdataobjctselectdisplayvalue (whew!)
-	function checkLinkField(&$obj, $key, $val)
+	function checkLinkField(&$obj, $key, $val, $level = 0)
 		{
 		
 			
@@ -167,6 +167,8 @@ class coopView
 			}
 			$val = false; 		// gotta reset it here.
 			foreach($ldfs as $linkfield){
+				// trying to YAGNI here. i don't need 2-level links yet
+				// so, i'm not coding that recursion in here now. sorry charlie.
 				$val .= sprintf("%s%s", $val ? ' - ' : "", $subobj->$linkfield);
 			}
 
@@ -189,6 +191,13 @@ class coopView
 			return $res;
 		}
 
+	function addHeader(&$tab)
+		{
+			// get the fieldnames out the dataobject somehow
+			// will toArray work?
+
+			$tab->addRow($res); // TODO TH,  but note NULL. augh.
+		}
 
 	function recurseTable()
 		{
@@ -202,8 +211,8 @@ class coopView
 
 			$this->getPK(); // must this be after find? rather constructor.
 
-			//TODO return null or something, if nothing found
 			$tab =& new HTML_Table();
+			$this->addHeader(&$tab);
 			while($this->obj->fetch()){
 				// the main row.
 				if(preg_match('/_join/', $this->table) == 0){
