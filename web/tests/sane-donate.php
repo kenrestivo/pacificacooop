@@ -27,9 +27,7 @@ $cp->pageTop();
 print $cp->selfURL('refresh (for testing)');
 
 $tick = new TicketWizard(&$cp);
-//$tick->setCurrentState('genericentry');
-//$tick->doCurrentState();
-$tick->run();
+$tick->run('genericentry');
 							
 
 
