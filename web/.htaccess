@@ -1,4 +1,5 @@
 <Files ~ "\.inc$">
-  Order allow,deny
-  Deny from all
+	Order allow,deny
+	Deny from all
+	php_flag magic_quotes_gpc off
 </Files>
