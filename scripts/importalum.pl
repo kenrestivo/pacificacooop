@@ -95,6 +95,7 @@ addThem()
 	my $fr = shift;
 	my %f = %$fr;
 	my $arref;
+	my $key;
 	my $query;
 	my $count = 0;
 	my $rquery;
@@ -125,13 +126,20 @@ addThem()
 	#ok. DO it!
 	if($count){
 		if($opt_v){
-			printf("matched %d rows already present for %d %s\n", 
-				$count, $uid, $$arref[2]);
+			printf("matched %d rows already present for %s %s\n", 
+				$count, $f{'last'}, $f{'addr'});
 		}
-		$query = sprintf("insert into privs set 
-				userid = %d, grouplevel = %d, 
-				userlevel = %d, realm = '%s' ", 
-			$uid, $$arref[0], $$arref[1], $$arref[2]);
+		$dupesuppressed += $count;
+	} else {
+		$query = "insert into leads set ";
+		$i = 0;
+		foreach $key (keys %f){ 
+			$query .= sprintf(" %s %s = '%s' ",
+						$i++ ? "," : "",
+						$key, $f{$key}	
+				);
+		}
+		$query .= " relation = 'Alumni', source = 'Springfest', familyid = 0";
 		if($opt_v){
 			print "doing <$query>\n";
 		}
@@ -139,6 +147,8 @@ addThem()
 			print STDERR $dbh->do($query) . "\n"; #THIS DOES IT!
 		}
 	}
+
+	print "suppressed $dupesupressed duplicates\n";
 
 } #END ADDTHEM
 
