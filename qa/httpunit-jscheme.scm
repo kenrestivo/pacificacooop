@@ -4,8 +4,11 @@
 
 (import "net.sourceforge.jwebunit.*")
 
-(define wtc (new 'net.sourceforge.jwebunit.sample.JWebUnitSearchExample "http://www/coop-dev"))
+(define wtc (new 'WebTestCase))
 
+(define gtc (invoke wtc 'getTestContext))
+(invoke gtc 'setBaseUrl "http://www/coop-dev")
 
+(invoke wtc 'beginAt "/")
 
 ;;EOF
