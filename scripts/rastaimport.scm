@@ -11,8 +11,6 @@
 
 (define *rasta* (make-hash-table 3))
 
-(define *debug-flag* #t)
-
 (define *school-year* "2004-2005")		; should prolly calculate this too
 
 (define *start-date* "2004-09-13")  ; this'll be a function, today, or now()
@@ -62,12 +60,10 @@
 					where (soundex(first) = soundex('%s')
 									or first like \"%%%s%%\"
 									or ptype = '%s')
-						and (soundex(last) = soundex('%s')
-								or familyid = %d) "
+								and  familyid = %d "
 											(car split-name)
 											(car split-name)
 											type
-											(cdr split-name)
 											(check-for-new-family line header)
 										; to check index of phone
 											))))
@@ -124,7 +120,8 @@
   (check-for-new-kid line header)
   (check-for-new-enrollment line header)
   (map (lambda (col)
-		 (if (rasta-find col line header) ; handle single parents
+		 (if (not (equal? "" (rasta-find col line header)))
+										; handle single parents
 			 (check-for-new-parent line header col)))
 	   '("Mom Name *" "Dad/Partner *")))
 
@@ -140,10 +137,10 @@
   (let ((families (simplesql-query *dbh*
 								   (sprintf #f "
 				select familyid, name, phone from families
-						where soundex(name) = soundex('%s')
-						or phone like \"%%%s%%\""
-											(rasta-find "Last Name" line header)
-											(rasta-find "Phone" line header)))))
+						where  phone like \"%%%s%%\"
+							or soundex(name) = soundex('%s')"
+											(rasta-find "Phone" line header)
+											(rasta-find "Last Name" line header)))))
 	(if (> (length families) 1)
 		(db-ref-last (choose-duplicates families) "familyid") ;gotcha!
 		(begin (safe-sql *dbh* (sprintf #f "
@@ -189,7 +186,8 @@
 
 ;;;;;;;;;; functions for navigating through the rasta structure (accessors?)
 (define (rasta-find key line header)
-  (list-ref  line (list-position key header)))
+  (let ((res (list-ref  line (list-position key header))))
+	(if res res "")))
 
 ;;;;;;;;;;; functions for importing and cleaning csv's from spreadsheet
 
