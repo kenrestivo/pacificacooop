@@ -22,13 +22,110 @@
 
 require_once('CoopObject.php');
 require_once('DB/DataObject.php');
-require_once("HTML/Table.php");
 require_once('object-config.php');
+
+define('COOP_FOUNDED', 1962);
+define('FIRST_SPRINGFEST', 1972);
+
 
 //////////////////////////////////////////
 /////////////////////// THANKYOU CLASS
 class ThankYou
 {
+	//TODO: put this in a file, and fopen it
+	var $template = 
+"[:DATE:]
+
+[:ADDRESS:]
+
+Dear [:NAME:],
+
+We would like to thank you for your donation of [:ITEMS:] to our [:ITERATION:][:ORDINAL:] Annual Springfest [:YEAR:] Wine Tasting and Auction. Your contribution is greatly appreciated.
+
+Your donation helps fund scholarship programs and improvements to our school.
+
+For [:YEARS:] years, the Pacifica Co-op Nursery School has provided an enriching experience for both children and parents of our community. The Co-op's program enables parents to work together with a highly qualified staff to encourage physical, social, and emotional growth. The theme-based curriculum creates continuous opportunities for our children to enhance their self-esteem and strong sense of regard for others.
+
+The Pacifica Co-op Nursery School is a non-profit, parent participation program. We rely on the assistance of the community in conjunction with friends and family to meet our ever-increasing budget. Again, we thank you for considering the Pacifica Co-op Nursery School a deserving place to offer your community support.
+
+For your tax donation records, our tax-exempt I.D number is 94-1527749.
+
+\"An investment in our children is an investment in our community.\"
+
+
+Sincerely,
+
+[:FROM:]
+
+Pacifica Co-op Nursery School
+548 Carmel Avenue
+Pacifica, Ca 94044
+650 355-3272
+http://www.pacificacoop.org/
+";
+
+	function ThankYou($substitutions)
+		{
+			$this->substitutions = $substitutions;
+			
+			$sy = findSchoolYear();
+
+			// set defaults if empty: date, schoolyear, etc
+			if(!$this->substitutions['YEAR']){
+				$tmp = explode('-', $sy);
+				$this->substitutions['YEAR'] = $tmp[1];
+			}
+
+			if(!$this->substitutions['YEARS']){
+				$this->substitutions['YEARS'] = 
+				$this->substitutions['YEAR'] - COOP_FOUNDED;
+			}
+
+			if(!$this->substitutions['ITERATION']){
+				$this->substitutions['ITERATION'] =
+				$this->substitutions['YEAR'] - FIRST_SPRINGFEST;
+			}
+			if(!$this->substitutions['ORDINAL']){
+				$this->substitutions['ORDINAL'] =
+				$this->ordinal($this->substitutions['ITERATION']);
+			}
+			
+			if(!$this->substitutions['DATE']){
+				$this->substitutions['DATE'] = date('l, F j, Y');
+			}
+			
+			
+		}
+
+	function toHTML()
+		{
+			confessObj($this, 'this');
+
+		}
+
+	//returns just the ordinal part
+	function ordinal($number)
+		{
+			$lastdigit = substr($number, -1);
+			switch ($lastdigit){
+			case 1: 
+				return "st";
+				break;
+				
+			case 2: 
+				return "nd";
+				break;
+				
+			case 3: 
+				return "rd";
+				break;
+				
+			default:
+				return "th";
+				break;
+			}
+		}
+
 
 } // END THANK YOU CLASS
 
