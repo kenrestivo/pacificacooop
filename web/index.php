@@ -19,6 +19,7 @@
 
 	require_once("auth.inc");
 	require_once("auctionfuncs.inc");
+	require_once("financefuncs.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -52,12 +53,21 @@
 	//auction items
 	print "<tr>";
 	$p = getAuthLevel($auth, 'auction');
-	print "<td>Sprintfest Auction Donation Items</td><td>";
+	print "<td>Springfest Auction Donation Items</td><td>";
 	auctionSummary($u['familyid']);
 	print "</td><td align=center>";
 	auctionAction($auth, $p, $u, $u['familyid']);
 	print "</td><tr>";
 	
+
+	//money items
+	print "<tr>";
+	$p = getAuthLevel($auth, 'money');
+	print "<td>Springfest Fees and Cash Donations</td><td>";
+	financeSummary($u['familyid']);
+	print "</td><td align=center>";
+	financeAction($auth, $p, $u, $u['familyid']);
+	print "</td><tr>";
 
 	print "</table>";
 

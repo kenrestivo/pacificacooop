@@ -438,19 +438,31 @@ function loginPopup($uid)
 
 /******************
 	LOGOUTFORM
-	inputs: auth struct, type(password, confirm, both), and user(show, hide)
-	outputs: a nice login entry form.
-	TODO clean this up if possible. it's ugly. but then, hey, it's html!
+	outputs: a nice logout button
 ******************/
 function
 logoutForm()
 {
-
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					"index.php"); //force it to go back to index
 	printf("<INPUT TYPE=submit NAME='logout' VALUE='Log Out'>");
     print "</FORM>";
 }/* END LOGOUTFORM */
+
+/******************
+	MAINMENUFORM
+	inputs: auth struct
+	outputs: a nice main menbu button.
+******************/
+function
+mainMenuForm()
+{
+	printf("<FORM METHOD=POST ACTION='%s'>", 
+					"index.php"); //force it to go back to index
+	thruAuth($auth);
+	printf("<INPUT TYPE=submit NAME='menu' VALUE='Main Menu'>");
+    print "</FORM>";
+}/* END MAINMENUFORM */
 
 /******************
 	LOGINFORM
@@ -1021,6 +1033,8 @@ loggedInState($auth, $states)
 	printf("<td><h3>Welcome %s!</h3></td>\n", $uinfo['username']);
 	print "<td>";
 	logoutForm();
+	print "&nbsp;";
+	mainMenuForm($auth);
 	print "</td></tr></table>";
 	return changeState($auth, $states, 'loggedin', 1);
 }/* END LOGGEDINSTATE */
