@@ -8,16 +8,18 @@
    {
        function toHtml()
        {
-		   confessObj($this, 'formelement');
-		   if ($this->_flagFrozen) {
+		   		   if ($this->_flagFrozen) {
 			   return $this->getFrozenHtml();
 		   } 
 		   $res .= $this->_getTabs();
 		   $res .= $this->_getJs();
 		   $res .= '<input' . $this->_getAttrString($this->_attributes) . ' />';
-		   $res .= sprintf(
-			   '&nbsp;<a href="javascript:todaysDate(\'%s\',\'%s\')">Insert Today\'s Date</a>', 
-			   $this->getName(), $formname);
+		   // TODO: only show this if the field is empty!
+		   if(!$this->getValue()){
+			   $res .= sprintf(
+			   "&nbsp;<input type=\"button\" onClick=\"{$this->_jsPrefix}todaysDate(this.form.elements['%s'])\" value=\"Today\" />", 
+			   $this->getName());
+		   }
 		   
 		   return $res;
 		   
@@ -31,8 +33,8 @@
 			   // We only want to include the javascript code once per form
                define('HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS', true);
 
-               $js .= '
-function todaysDate(fieldname,formname) {
+               $js .= sprintf('
+function %stodaysDate(datefield) {
 		var mydate=new Date()
 		var theyear=mydate.getYear()
 		if (theyear < 1000)
@@ -49,9 +51,9 @@ function todaysDate(fieldname,formname) {
 		var displaysecond=theday
 		var displaythird=theyear
 
-		document.forms[formname][fieldname].value=displayfirst+"/"+displaysecond+"/"+displaythird
+		datefield.value=displayfirst+"/"+displaysecond+"/"+displaythird
 }
-               ';
+               ', $this->_jsPrefix);
                $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
 				   $js . "//]]>\n</script>";
            }

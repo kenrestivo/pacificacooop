@@ -11,8 +11,6 @@ require_once('Enhancement.php');
 
 
 
-PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'confessObj');
-
 
 $debug = 2;
 

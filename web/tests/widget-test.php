@@ -21,7 +21,7 @@ $cp = new coopPage( $debug);
 $cp->pageTop();
 //$cp->createLegacy($cp->auth);
 
-$table = 'income';
+$table = 'auction_donation_items';
 
 $atd = new CoopView(&$cp, $table, $none);
 $atd->recordActions = array('edit' => "Edit");
@@ -31,7 +31,7 @@ $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
 print $menu->topNavigation();
 
-print "<p>Springfest Package Add/Remove Test</p>";
+print "<p>Widget Test</p>";
 
 print $cp->selfURL('Refresh');
 
@@ -41,8 +41,11 @@ print $cp->selfURL('Refresh');
 switch($_REQUEST['action']){
  case 'edit':
 	 $atd = new CoopForm(&$cp, $table, $none); // NOT the coopView above!
-	 $atd->build($_REQUEST);
 
+	 array_push($atd->obj->fb_fieldsToRender, 
+				'date_received');
+
+	 $atd->build($_REQUEST);
 
 	 // ugly assthrus
 	 $atd->form->addElement('hidden', 'action', 'edit'); 

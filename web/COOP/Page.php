@@ -47,6 +47,8 @@ class coopPage
 	function coopPage($debug = false)
 		{
 			$this->debug = $debug;
+			PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 
+								   array(&$this, 'kensPEARErrorHandler'));
 		}
 
 	// for use with the old, non-object-oriented, homegrown auth/dispatcher

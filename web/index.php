@@ -50,8 +50,6 @@ if($auth['state'] != 'loggedin'){
 
 //OK, i am logged in!
 $cp =& new CoopPage;
-PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, array(&$cp, 
-												  'kensPEARErrorHandler'));
 $cp->createLegacy($auth);
 
 $menu =& new CoopMenu;

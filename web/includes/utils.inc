@@ -522,6 +522,7 @@ window.location.reload( false );
 
 }
 
+/// XXX DUPLICATION OF CODE WITH lib/customdatebox.php::_getJs()
 function
 dateJava()
 {
@@ -529,31 +530,32 @@ dateJava()
 	if (!defined('HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS')) {
 		define('HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS', true);
 		// wrapped in comments to make old browsems ignore it
-		return '<script type="text/javascript" language="javascript">
-			<!-- Begin 
-function todaysDate(fieldname,formname) {
-var mydate=new Date()
-var theyear=mydate.getYear()
-if (theyear < 1000)
-theyear+=1900
-var theday=mydate.getDay()
-var themonth=mydate.getMonth()+1
-if (themonth<10)
-themonth="0"+themonth
-var theday=mydate.getDate()
-if (theday<10)
-theday="0"+theday
+               $js .= sprintf('
+function %stodaysDate(datefield) {
+		var mydate=new Date()
+		var theyear=mydate.getYear()
+		if (theyear < 1000)
+				theyear+=1900
+		var theday=mydate.getDay()
+		var themonth=mydate.getMonth()+1
+		if (themonth<10)
+				themonth="0"+themonth
+		var theday=mydate.getDate()
+		if (theday<10)
+				theday="0"+theday
 
-var displayfirst=themonth
-var displaysecond=theday
-var displaythird=theyear
+		var displayfirst=themonth
+		var displaysecond=theday
+		var displaythird=theyear
 
-document.forms[formname][fieldname].value=displayfirst+"/"+displaysecond+"/"+displaythird
+		datefield.value=displayfirst+"/"+displaysecond+"/"+displaythird
+}
+               ', $this->_jsPrefix);
+               $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
+				   $js . "//]]>\n</script>";
+           }
+           return $js;
 
-}			// End -->
-			</script>';
-	}
-	return false;
 } // END DATEJAVA
 
 
