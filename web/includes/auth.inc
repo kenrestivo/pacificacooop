@@ -614,7 +614,7 @@ logIn($vars)
 
 		$state = $auth['state']; // easier on the eyes!
 
-		user_error("logIn(): in $state", E_USER_NOTICE);
+		user_error("logIn(): dispatching to $state", E_USER_NOTICE);
 
 		/* confessArray($auth, sprintf("login() calling %s() with", 
 				$states[$state]['func'] )); 

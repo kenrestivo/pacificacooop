@@ -325,3 +325,100 @@ ok.. STATE MACHINE!
 	logged in
 	unconfirmed new password	
 	detour over!
+
+for future reference: a php/sql forum/groupware package
+	for agenda items, documents, attachments, schedules, reminders, comments
+	to keep history of the project
+	much like BayForums we used at bay!
+
+solicitation notes
+	flyer posting. many years, many flyers, many-to-many table. 
+	glue to auction table!
+	just like money: auction items can come from families, or businesses!
+	track/auth by comittee member?
+		can enter from other areas
+	cash donations too?
+		yes.
+	buy an ad! size, and amount
+		can get some in
+	note field... i.e. a call history log (left message, etc.)?
+		call back/left message
+	not interested, DO NOT CONTACT, want that info in there
+	due date! 
+		what about due date for the donations? do they have one?
+			by febrary 1st-- for business
+		10TH for solicitation meeting: MUST HAVE UI UP!
+	4 actions:
+		donate an item for the auction
+		buy an ad
+		be a sponsor (cash)
+		let us put up a flyer
+	tables
+		flyers
+			to track which are actually PUT up there!
+		glue table for donations (alglue?)
+		ad insertions
+			link to income table!
+		sponsors
+			link to income table!!
+		web links (automated would be GREAT!)
+
+ad insertion 
+	contact table (same as for solicitation)
+		company
+		contact first,last
+		address, city, state,zip
+		phone, fax, email
+		areaid (link)
+	category table (crespi, rockaway, etc)
+		hmm. alumnae? member? or... track that elsewise?
+	ad table
+		contactid (link)
+		sessionid (link)
+		adsizeid (link)
+		ad copy (longtext)
+		artwork flag?
+		possibly pdf/word/something artwork itself? (blob)
+		linkid (link to link glue table. heh. link.)
+		payment? link to money?? hmm...
+	adsize table
+		size
+		price
+
+sponsorship form
+	sponsorship table
+		contactid (link)
+		sessionid (link)
+		sponsortype
+		payment? (link to a glue table?)
+	sponsortype table
+		description
+		price
+		contents
+			link
+			logo
+			ad (size)
+			tickets (quantity)
+			banner (champions? individual?)
+
+web links
+	link table
+		displaytext
+		url
+		logo(jpeg, blob)
+
+misc problems
+	may need a 'key' field in struct
+		to identify what glues a substruct to its parent
+	auugh! how to handle the sponsorship package contents?
+		link from each individual thing?
+		so, when i calculate ads, do i check sponsors? or are ads populated?
+	how to handle money? links to business? or link to THING they paid for?
+		or lots of money glue tables? THINK THIS THROUGH!
+		particularly interesting in the case of sponsorship packages!
+	dual-direction links
+		ads and sponsors can and should dual-link from contacts
+			from ads screen, need to select/add/edit contacts
+			from contacts screen, need to view/edit/add ads and sponsors
+			
+
