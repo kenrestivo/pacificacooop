@@ -22,9 +22,12 @@ MASTERHOST=bc
 DBNAME=coop
 TEMPFILE=/tmp/export.sql
 DATE=${shell date +%Y.%m.%d.%H.%M.%S}
-DATAFILE=coopbackup-data$(DATE)
-DEFFILE=coopbackup-defs$(DATE)
+DATAFILE=backups/coopbackup-data$(DATE)
+DEFFILE=backups/coopbackup-defs$(DATE)
 TABS=cooptabs$(DATE)
+DB=coop
+DBPORT=3306
+DBUSER=ken
 TABLES=ins veh lic kids enrol parents kpglue keglue
 
 all::
@@ -32,22 +35,22 @@ all::
 	@egrep "^[a-z]*:" Makefile | awk '{print $$1}' 
 
 create::
-	mysql -u ken -p -h $(DBHOST) mysql < definition.sql
+	mysql -u $(DBUSER) -p -h $(DBHOST) -P $(DBPORT) mysql < definition.sql
 
 dummy::
-	mysql -u ken -p -h $(DBHOST) $(DBNAME) < dummydata.sql
+	mysql -u $(DBUSER) -p -h $(DBHOST) -P $(DBPORT) $(DBNAME) < dummydata.sql
 	
 
 reports::
-	mysql -u ken -p -h $(DBHOST) $(DBNAME) < queries.sql
+	mysql -u $(DBUSER) -p -h $(DBHOST) -P $(DBPORT) $(DBNAME) < queries.sql
 
-#XXX this is fucking broken. why? it works from shell, but not from makefile
+#XXX this is fucking bro$(DBUSER). why? it works from shell, but not from makefile
 tabdump:
 	-(mkdir backups; cd backups)
 	(mkdir  $(TABS); cd $(TABS))
 	for i in $(TABLES); do \
 		echo "===== exproting $$i=== " ; \
-		mysql -B -e "select * from $$i" coop > $$i.txt ;\
+		mysql -B -e "select * from $$i" $(DB) > $$i.txt ;\
 	done
 
 
@@ -55,23 +58,23 @@ backup-defs::
 	mysqldump \
 		--add-drop-table \
 		--all  \
-		--database coop \
+		--database $(DB) \
 		--lock-tables \
 		--no-data \
-		-h $(DBHOST) -u ken -p > $(DEFFILE)
+		-h $(DBHOST) -P $(DBPORT) -u $(DBUSER) -p > $(DEFFILE)
 	bzip2 -f $(DEFFILE)
 
 backup-data:
 	mysqldump \
 		--add-locks \
 		--all  \
-		--database coop \
+		--database $(DB) \
 		--extended-insert \
 		--lock-tables \
 		--no-create-db \
 		--no-create-info \
 		--quick \
-		-h $(DBHOST) -u ken -p > $(DATAFILE)
+		-h $(DBHOST) -P $(DBPORT) -u $(DBUSER) -p > $(DATAFILE)
 	bzip2 -f $(DATAFILE)
 
 backup: backup-defs backup-data
