@@ -18,6 +18,7 @@
 
 // copied from ipn tutorial
 
+$paypal_hack = 1;
 require_once("first.inc");
 
 
@@ -149,7 +150,7 @@ class IPN
 				//finally save to the appropriate tables
 	
 			} //fi     
-			
+			print $_POST['payment_status'];
 		}  // END ACCEPT
 
 } /// END IPNCLASS

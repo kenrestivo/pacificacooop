@@ -49,7 +49,9 @@
 
 setupDB();
 setupErrors(); //*sigh* have to do this SECOND since it looks at dbhost :-/
-sessionSetup();
+if(!$paypal_hack){
+    sessionSetup();
+}
 
 user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
 		session_id(), $_SESSION['auth']['state']), E_USER_NOTICE);	

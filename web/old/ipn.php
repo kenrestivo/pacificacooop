@@ -28,7 +28,7 @@ if($ipn->verify()){
 }
 
 
-done();
+
 # end of inner php code
 
 ?>
