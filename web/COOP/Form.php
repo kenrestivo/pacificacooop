@@ -92,7 +92,8 @@ class coopForm extends CoopObject
 				// if it's a new entry, fill from vars!
 				// this is a clusterfuck because i'm using setValue.
 				// otherwise, quickform would do this for me. *sigh*
-				$val = $this->obj->{$this->pk} > 0 ? $dbval : $vars[$key];
+				// let vars override
+				$val = isset($vars[$key]) ? $vars[$key] : $dbval;
 
 				if(!$this->isPermittedField($key)){
 					// the hidden thing. i think  i need to do hidden here
@@ -454,12 +455,12 @@ class coopForm extends CoopObject
 										$tf,
 										$far->title(),
 										$options);
- 				$el->setValue($this->is_submitted ? $_REQUEST[$tf] : $incl);
+ 				$el->setValue($this->isSubmitted ? $_REQUEST[$tf] : $incl);
 				
 			}
 		}
 
-	function is_submitted()
+	function isSubmitted()
 		{
 			return isset($_REQUEST['_qf__' . $this->form->_attributes['name']]);
 		}

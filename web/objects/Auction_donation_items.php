@@ -68,4 +68,52 @@ class Auction_donation_items extends DB_DataObject
 			$this->whereAdd("date_received > '2000-01-01'");
 		}
 
+	// form that blasts over to the packages::new, to create a new one
+	// just generates a CREATE NEW button with all the shit inside
+	function newPackageForm(&$cp)
+		{
+			$form =& new HTML_QuickForm('newpackageform', 'post', 
+										'packages.php');
+				 // donated by! first guess families...
+			//$this->debugLevel(2);
+			$aifj =& new CoopObject(&$cp, 
+									'auction_items_families_join', &$top);
+			$aifj->obj->auction_donation_item_id = 
+				$this->auction_donation_item_id; 
+			$fam =& new CoopObject(&$cp, 'families', &$aifj);
+			$fam->obj->joinAdd($aifj->obj);
+			if($fam->obj->find(true)){
+				$donatedby = $fam->obj->name . " Family";
+			}
+			
+			// now guess companies. blah
+			$caj =& new CoopObject(&$cp, 
+								   'companies_auction_join', &$top);
+			$caj->obj->auction_donation_item_id = 
+				$this->auction_donation_item_id; 
+			$co =& new CoopObject(&$cp, 'companies', &$caj);
+			$co->obj->joinAdd($caj->obj);
+			if($co->obj->find(true)){
+				$donatedby = $co->obj->company_name;
+			}
+			
+			
+			foreach(array(
+						'package_type' => 'Silent',
+						'item_type' => $this->item_type,
+						'package_description' => $this->item_description,
+						'donated_by_text' => $donatedby,
+						'package_value' => $this->item_value,
+						'bid_increment' => ceil($this->item_value / 10),
+						'starting_bid' => ceil($this->item_value /2),
+						'school_year' => $this->school_year
+						) as $key => $val)
+			{
+				$form->addElement('hidden', $key, $val);
+			}
+			$form->addElement('submit', null, 'Make New Package');
+
+			return $form;
+		}// end newpackageform
+	
 }
