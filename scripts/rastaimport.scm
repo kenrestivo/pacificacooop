@@ -13,7 +13,9 @@
 
 (define *debug-flag* #t)
 
-(define *school-year* "2004-2005") ; this'll be a function, today, or now()
+(define *school-year* "2004-2005")		; should prolly calculate this too
+
+(define *start-date* "2004-09-13")  ; this'll be a function, today, or now()
 
 ;; be sure to modify this if the damn thing ever changes
 (define *header* '("Last Name"
@@ -33,6 +35,44 @@
 
 ;;;;;;;;;;;;;;; functions for updating the database
 
+(define (split-first-last long-parent)
+  ;; TODO
+  )
+
+;; check for each parent column
+(define (check-for-new-parent line header column-to-check)
+  (let* ((long-parent (rasta-find column-to-check line header))
+		 (split-name (split-first-last long-parent))
+		 (type (if (equal? column-to-check "Mom Name *") "Mom" "Dad"))
+		 (worker (string-index long-parent (char-set #\*)))
+		 (parents (simplesql-query *dbh*
+						(sprintf #f "
+				select parentsid, last, first, worker, ptype familyid
+						from parents
+					where (soundex(first) = soundex('%s')
+						or first like \"%%%s%%\")
+						and soundex(last) = soundex('%s') "
+								 (car split-name)
+								 (car split-name)
+								 (cdr split-name)
+								 ))))
+
+		  (if (>  (length kids) 1)
+			  (db-ref-last (choose-duplicates parents) "parentsid") ; got it!
+			  (safe-sql *dbh* (sprintf #f "
+				insert into parents set 
+							last = '%s' ,
+							first = '%s' ,
+							worker = '%s',
+							ptype = '%s'
+							familyid = %d "
+									   (cdr split-name)
+									   (car split-name)
+									   worker type
+									   (check-for-new-family line header))))))
+
+
+
 ;; TODO: write a function to *update* enrollment, i.e. when people switch from am/pm
 ;; if needed! hopefully i'll have the web interface working before anyone changes sessions
 
@@ -41,8 +81,9 @@
   (let* ((kid-id (check-for-new-kid line header))
 		 (enrollments (simplesql-query *dbh*
 						   (sprintf #f "
-				select enrollment_id, kidsid, am_pm_session, start_date, dropout_date
-						from enrollment
+				select enrollment_id, kidsid, am_pm_session,
+						start_date, dropout_date
+					from enrollment
 						where kidsid = %d and
 						school_year = '%s'"
 									kid-id
@@ -53,8 +94,10 @@
 						insert into enrollment set 
 								kidsid = %d,
 								start_date = '%s',
+								school_year = '%s',
 								am_pm_session = '%s'"
 								 kid-id
+								 *start-date*
 								 *school-year* 
 								 (rasta-find "session" line header)
 								 )))))
