@@ -109,7 +109,7 @@ class coopForm extends CoopObject
 				if(is_array($this->obj->fb_preDefElements) && 
 				   in_array($key, array_keys($this->obj->fb_preDefElements))){
 					$el =& $this->obj->fb_preDefElements[$key];
-					$this->form->addElement($el);
+					$this->form->addElement(&$el);
 				} else if($this->isLinkField(&$this->obj, $key)){
 					$el =& $this->form->addElement('select', $key, false, 
 											 $this->selectOptions($key));
@@ -168,7 +168,7 @@ class coopForm extends CoopObject
 		{
 
 			// i ALWAYS want a choose one. always. screw FB.
-			$options[] = "CHOOSE ONE";
+			$options[] = "-- CHOOSE ONE --";
 			//confessObj($this, 'this');
 			$link = explode(':', $this->forwardLinks[$key]);
 			$sub =& new CoopObject(&$this->page, $link[0], &$this);

@@ -121,6 +121,9 @@ function auctionItems(&$cp, $sy)
 	if($err){
 		user_error("public_auction($title): [$q]: $err", E_USER_ERROR);
 	}
+	if(mysql_num_rows($listq) < 1){
+		return "<p>Coming soon! Watch this space for fabulous auction items.</p>";
+	}
 	while($row = mysql_fetch_assoc($listq)){
 		$tdrow = array();
 		while ( list( $key, $val ) = each($row)) {

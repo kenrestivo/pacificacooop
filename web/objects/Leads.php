@@ -116,22 +116,27 @@ class Leads extends DB_DataObject
 			$schoolyear = $schoolyear ? $schoolyear : findSchoolYear();
 
 			// TODO compare to invites
-
+ 			$inv = DB_DataObject::factory('invitations'); 
+ 			if (PEAR::isError($inv)){
+				user_error("Leads.php::constrainedInvitePopup(): db badness", 
+						   E_USER_ERROR);
+			}
+			$this->joinAdd($inv);
 			$this->whereAdd(sprintf('%s.school_year = "%s"',
-									$this->__table, $schoolyear));
+									$inv->__table, $schoolyear));
 			// TODO fix user func array here
-			$this->orderBy($this->fb_linkDisplayFields);
+			call_user_method('orderBy', 
+							 implode(' ' , $this->fb_linkDisplayFields));
 			$this->find();
 			$options[''] = '-- CHOOSE ONE --';
-			
-			$vals = ' - '; 		// need this for implode
-			foreach($this->fb_linkDisplayFields as $fname){
-				$vals[] = $this->$fname;
-			}
 			while($this->fetch()){
-				$options[$this->package_id] = 
+				$vals= array();
+				foreach($this->fb_linkDisplayFields as $fname){
+					$vals[] = $this->$fname;
+				}
+				$options[$this->lead_id] = 
 					sprintf("%.42s...", 
-							call_user_func_array('implode', $vals));
+							implode(' - ' , $vals));
 			}
 			$el =& HTML_QuickForm::createElement(
 				'select', 'lead_id', 
