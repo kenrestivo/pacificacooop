@@ -109,7 +109,7 @@ addDefaultPrivs()
 	#NOW, add the privs
 	foreach $arref (@$defref){
 		$query = sprintf("insert into privs 
-				set userid = %d, level = %d, realm = '%s' ", 
+				set userid = %d, authlevel = %d, realm = '%s' ", 
 			$uid, $$arref[0], $$arref[1]);
 		if($opt_v){
 			print "doing <$query>\n";

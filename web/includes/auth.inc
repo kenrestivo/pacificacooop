@@ -197,7 +197,7 @@ checkAuthLevel($auth)
 				left join users on users.userid = privs.userid
 			WHERE privs.userid = %d 
 				and (privs.realm = '%s' or privs.realm = 'all')
-				and privs.level > %d
+				and privs.authlevel > %d
 			--",
 			$uid, $realm, $level
 		);

@@ -194,9 +194,8 @@ create table coop.liglue (
 create table coop.users (
     userid int(32) not null auto_increment,
 	password varchar(255),
+	name varchar(255),
 	familyid int(32),
-	realm varchar(55),
-	authlevel int(5),
     primary key (userid)
 );
 
