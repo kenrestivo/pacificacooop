@@ -349,6 +349,8 @@ create table territories_families_join (
 create table raffle_locations(
     raffle_location_id int(32) not null unique auto_increment,
 	location_name varchar(255),
+	start_date date,
+	end_date date,
 	description varchar(255),
     primary key (raffle_location_id)
 );

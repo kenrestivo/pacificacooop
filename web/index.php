@@ -32,6 +32,7 @@
 	require_once("solicit_company.inc");
 	require_once("solicit_auction.inc");
 	require_once("raffle_finance.inc");
+	require_once("raffle_locations.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -69,7 +70,7 @@
 	$menu = array( $auctioncallbacks, $invitationcallbacks, 
 					$incomecallbacks, $pkgcheckincallbacks,  
 					$solicit_company_callbacks, $solicit_auction_callbacks,
-					$raffle_income_callbacks
+					$raffle_income_callbacks, $raffle_location_callbacks
 		);
 
 	
