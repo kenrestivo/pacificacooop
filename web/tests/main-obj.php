@@ -3,6 +3,7 @@
 //$Id$
 
 chdir("../");                   // XXX only for "test" dir hack!
+require_once("utils.inc");
 require_once('CoopPage.php');
 require_once('CoopMenu.php');
 
@@ -13,14 +14,10 @@ $debug = 1;
 
 
 
-$cp =& new coopPage(1);
+$cp =& new coopPage($debug);
 $cp->pageTop();
 
-//global $_DB_DATAOBJECT;
-//confessObj($_DB_DATAOBJECT, "dataobject");
-
 done();
-
 
 ////KEEP EVERTHANG BELOW
 
