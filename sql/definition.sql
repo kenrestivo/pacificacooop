@@ -683,11 +683,12 @@ CREATE TABLE ad_sizes (
 
 CREATE TABLE ads (
     ad_id int(32) NOT NULL unique auto_increment,
-    ad_size_description varchar(255) default NULL,
+    ad_description varchar(255) default NULL,
     ad_copy longtext default NULL,
     artwork_provided enum('Unknown','Yes','No') default NULL,
     school_year varchar(50) default NULL,
     ad_size_id int(32) NOT NULL ,
+	lead_id int(32) default NULL,
     income_id int(32) default NULL,
     PRIMARY KEY (ad_id)
 ) ;

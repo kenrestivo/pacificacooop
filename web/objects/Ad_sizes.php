@@ -23,4 +23,5 @@ class Ad_sizes extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_linkDisplayFields = array ('ad_size_description', 'ad_price');
 }
