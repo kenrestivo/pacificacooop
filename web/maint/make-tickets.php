@@ -62,6 +62,7 @@ switch($_REQUEST['action']){
  case 'maketickets':
 	 $sy=findSchoolYear();
 	 $fam =& new CoopObject(&$cp, 'families', &$none);
+	 // note: account_number = 2 is quilt/food fee. you get a ticket if you drop.
 	 $fam->obj->query("
  select families.* 
 from families
