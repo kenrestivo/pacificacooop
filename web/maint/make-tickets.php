@@ -142,11 +142,11 @@ order by families.name;
  case 'makeblanklines':
 	 $blanks = 20;
  	 $pad = new CoopObject(&$cp, 'springfest_attendees', &$nothing);
-	 $pad->obj->debugLevel(2);
+	 //$pad->obj->debugLevel(2);
 	 $pad->obj->whereAdd('(ticket_id is null or ticket_id < 1)');
 	 $pad->obj->school_year = $sy;
 	 $found = $pad->obj->find();
-	 print $found;
+	 print "<br>$found blank paddles found. ";
 	 $tomake = $blanks - $found;
 	 $tomake > 0 && print "<br>Adding $tomake blank lines... ";
 	 while($tomake-- > 0){

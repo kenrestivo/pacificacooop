@@ -47,9 +47,13 @@ while($co->obj->fetch()){
 						 $sub->obj->company_name, &$perc);
 			if($sub->obj->sdx || $perc > 70){
 				$dupefound[] = $sub->obj->{$sub->pk};
-				printf("<br>does %s dupe %s?", 
+				printf("<br>does %s (%s %s) dupe %s (%s %s)?", 
 					   $co->obj->company_name,
-					   $sub->obj->company_name);
+					   $co->obj->first_name,
+					   $co->obj->last_name,
+					   $sub->obj->company_name,
+					   $sub->obj->first_name,
+					   $sub->obj->last_name);
 			}		
 		}
 	}
