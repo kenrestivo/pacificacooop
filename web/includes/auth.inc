@@ -461,6 +461,7 @@ logIn($auth)
 					description => "New password doesn't meet minimums"
 					),
 		loggedin => array (
+					terminus => "yes",
 					func => "loggedInState",
 					required => array ( "uid", "token"),
 					description => "User is logged in"
@@ -468,11 +469,6 @@ logIn($auth)
 		needinput => array (
 					terminus => "yes",
 					description => "UI needs input. Exit state machine."
-					),
-		done => array (
-					terminus => "yes",
-					required => array ( "uid", "token"),
-					description => "UI finished. Exit state machine."
 					)
 	);
 
@@ -666,6 +662,7 @@ function
 checkLoginState($auth, $states)
 {
 
+
 	// it is possible for a user to enter a password but have none in db!
 	if(!getPass($auth['uid'])){
 		error_log(
@@ -682,7 +679,7 @@ checkLoginState($auth, $states)
 		$newauth = changeState($auth, $states, 'loggedin', 1);
 		$newauth['token'] = $token; // have to inject this manually. grr.
 		return $newauth;
-	} 
+	}
 
 	//incorrect password. let the pachinko machine handle it
 	error_log("checkLoginState(): password does not match", 0);
@@ -859,7 +856,7 @@ loggedInState($auth, $states)
 	$uinfo = getUser($auth['uid']);
 	printf("<h3>Welcome %s!</h3>\n", $uinfo['username']);
 	// TODO logoutForm!()
-	return changeState($auth, $states, 'done', 1);
+	return changeState($auth, $states, 'loggedin', 1);
 }/* END LOGGEDINSTATE */
 
 

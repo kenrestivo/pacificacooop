@@ -35,10 +35,13 @@
 
 	//confessArray($auth, "index.php. login() returns with");
 	error_log("   ");
+
+	if($auth['state'] != 'loggedin'){
+		done();
+	}
 	
+	print "<p>This is the first day of the rest of your life!</p>";
 
-
-	print "</BODY> </HTML>"
-
+	done();
 ?>
 <!-- END INDEX -->
