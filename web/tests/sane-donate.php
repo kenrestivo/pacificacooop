@@ -14,7 +14,7 @@ require_once('TicketWizard.php');
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
-$debug = 0;
+$debug = 1;
 
 //MAIN
 //$_SESSION['toptable'] 

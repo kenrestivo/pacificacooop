@@ -38,8 +38,12 @@ class Income extends DB_DataObject
 	var $fb_linkDisplayFields = array('payer', 
 									  'payment_amount', 
 									  'check_date');
-	var $fb_fieldsToRender= array("check_date", "payer", 'school_year',
-								  "account_number", "payment_amount", "note",
+	var $fb_fieldsToRender= array("check_date", 
+								  "payer", 
+								  'school_year',
+								  "account_number", 
+								  "payment_amount", 
+								  "note",
 								  'thank_you_id');
 
 	var $fb_fieldLabels = array( 
@@ -50,7 +54,10 @@ class Income extends DB_DataObject
 		'payment_amount' => 'Amount ($)' ,
 		"account_number" => "Account",
 		"note" => "Misc Notes" ,
+		'bookkeeper_date' => 'Date Given to Bookkeeper',
+		'cleared_date' => 'Date Check Cleared the Bank',
 		"school_year" => "School Year" ,
+		'txn_id' => 'PayPal Credit Card Transaction ID',
 		"thank_you_id" => "Thank-You Sent" 
 		);
 //	var $fb_crossLinks = array(array('table' => 'families_income_join', 

@@ -30,7 +30,7 @@ require_once('DB/DataObject/Cast.php');
 /////////////////////// COOP FORM CLASS
 class coopForm extends CoopObject
 {
-
+	var $form;  // cache of generated form
 
 
 	// i got disgusted with FB. fuck that. i roll my own here.
@@ -40,17 +40,19 @@ class coopForm extends CoopObject
 			if($id){
 				$this->obj->get($id);
 			}
-
-			$form =& new HTML_QuickForm('editform');
+			$formname = sprintf('edit_%s', $this->table);
+			$form =& new HTML_QuickForm($formname, 'post', false, false, false, true);
 			
-			$form->addElement('header', 'editform', 
+			$form->addElement('header', $formname, 
 							  $this->obj->fb_formHeaderText ?
 							  $this->obj->fb_formHeaderText : 
 							  ucwords($this->table));
 
 			//confessObj($this, 'atd');
-			//TODO: check ispermitted field! like oneform
 			foreach($this->obj->toArray() as $key => $val){
+				if(!$this->isPermittedField($key)){
+					continue;
+				}
 				if(is_array($this->obj->fb_preDefElements) && 
 				   in_array($key, array_keys($this->obj->fb_preDefElements))){
 					$el = $this->obj->fb_preDefElements[$key];
@@ -80,16 +82,21 @@ class coopForm extends CoopObject
 				$el->setValue($val);
 			}
 
+			// my hidden tracking stuff
 			if($sid = thruAuthCore($this->page->auth)){
 				$form->addElement('hidden', 'coop', $sid); 
 			}
-	 
+			
+			// XX is this necessary?
 			$form->addElement('hidden', 'table', $this->table);
-			$form->addElement('hidden', 'action', 'process');
+			
+
+			// finally, sumbit it!
 			$form->addElement('submit', null, 'Save');
 
 			$form->applyFilter('__ALL__', 'trim');
 
+			$this->form = &$form;
 			return $form;
 		}
 
@@ -197,6 +204,12 @@ class coopForm extends CoopObject
 				$doubleopt[$opt]  = $opt;
 			}
 			return $doubleopt;
+		}
+
+	function populateDefaults()
+		{
+			
+
 		}
 
 } // END COOP FORM CLASS

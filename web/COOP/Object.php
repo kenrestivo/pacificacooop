@@ -248,6 +248,24 @@ class coopObject
 			$aud->obj->insert();
 		}
 
+	function isPermittedField($key)
+		{
+			// if it's a key, and we don't show them, then no
+			if($key == $this->pk && !$this->obj->fb_hidePrimaryKey){
+				return 0;
+			}
+			//we don't show if not in fieldstorender
+			if($this->obj->fb_fieldsToRender && 
+			   !in_array($key, $this->obj->fb_fieldsToRender)){
+				return 0;
+			}
+
+			// TODO: check user permissions!
+			
+//			confessArray($this->obj->fb_fieldsToRender, "$key is in:");
+			return 1;
+		}
+
 
 } // END COOP OBJECT CLASS
 
