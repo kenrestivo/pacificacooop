@@ -37,6 +37,7 @@ define('ACCESS_INVALID', -1);
 define('ACCESS_NONE', 0);
 define('ACCESS_SUMMARY', 100);
 define('ACCESS_VIEW', 200);
+define('ACCESS_VIEW_MULT_HACK', 300); // hack to handle menulevel grouplevel
 define('ACCESS_EDIT', 500);
 define('ACCESS_ADD', 600);
 define('ACCESS_DELETE', 700);
