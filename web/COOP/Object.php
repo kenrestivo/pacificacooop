@@ -109,12 +109,23 @@ class coopObject
 			foreach($ldfs as $linkfield){
 				// trying to YAGNI here. i don't need 2-level links yet
 				// so, i'm not coding that recursion in here now. sorry charlie.
-				$val .= sprintf("%s%s", $val ? ' - ' : "", $obj->$linkfield);
+				if($obj->$linkfield){
+					$val .= sprintf("%s%s", $val ? ' - ' : "", $obj->$linkfield);
+				}
 			}
 
 			return $val;
 		}
-	
+
+
+	function getSummary()
+		{
+			
+			$this->obj->find(true);
+				//confessObj($view, "companyDetails(view)");
+			return $this->concatLinkFields(&$this->obj);
+				
+		}
 
 } // END COOP OBJECT CLASS
 

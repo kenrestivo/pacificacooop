@@ -63,7 +63,7 @@ class coopView extends CoopObject
 		}
 	
 	// formats object is current in this object, um, as a table
-	function simpleTable()
+	function simpleTable($summary = false)
 		{
 			$found = $this->obj->find();
 
@@ -81,7 +81,7 @@ class coopView extends CoopObject
 			
 			}
 			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
-			$res .= $this->tableTitle();
+			$res .= $this->tableTitle($summary);
 			$res .= $tab->toHTML();
 			return $res;
 
@@ -204,10 +204,11 @@ class coopView extends CoopObject
 			$tab->addRow($res, 'bgcolor=#9999cc', 'TH'); 
 		}
 
-	function tableTitle()
+	function tableTitle($summary = false)
 		{
-			$res = sprintf("<hr><h2>%s</h2>", 
-						   $this->obj->kr_longTitle ? $this->obj->kr_longTitle : $this->table);
+			$res = sprintf("<hr><h2>%s %s</h2>", 
+						   $this->obj->kr_longTitle ? $this->obj->kr_longTitle : $this->table,
+						   $summary ? "for " . $summary : "");
 														
 			return $res;
 		}
