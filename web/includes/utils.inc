@@ -368,13 +368,15 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 		$i = 0;
 		while ( list( $key, $val ) = each($row)) {
 			if($dollaz && $i){
-				$tdrow[] = sprintf("$%0.2f",$val);
+				$tdrow[] = $val > 0 ? 
+					sprintf("$%s",number_format($val,2,'.',","))
+					: '';
 			} else {
 				$tdrow[] = $val;
 			}
 			$grand[$i++] += $val;
 		}
-		$tab->addRow($tdrow);
+		$tab->addRow($tdrow, 'align=right');
 	
 	}
 	$s = count($headers);
@@ -382,13 +384,26 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 	user_error("showRawQuery([$q]): count $s", E_USER_NOTICE);
 	if($dogt){
 		$grand[0] = 'GRAND TOTAL'; // always 0!
+		// go thru and format them if they are numbers
+		foreach($grand as $val){
+			if(is_numeric($val)){
+				$grandfixed[] = sprintf("%s%s",
+										$dollaz ? "$" :'',
+										number_format($val,
+													  $dollaz ? 2 : 0,
+													  '.',","));
+			} else {
+				$grandfixed[] = $val;
+			}
+		}
 		//confessArray($grand, "grand($s)");
-		$tab->addRow($grand,'bgcolor="#aa99ff"' );
+		$tab->addRow($grandfixed,'bgcolor="#aa99ff" align=right' );
 	}
 
 	$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
 								   'bgcolor="#ccccff"');
 
+	$tab->setColAttributes(0, 'align="left"');
 
 	$toptab->addRow(array($title), 'align="center"', "TH");
 	$toptab->addRow(array($tab->toHTML()));
