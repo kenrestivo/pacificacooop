@@ -53,6 +53,46 @@ $accessnames = array(
 );
 
 
+$states = array(
+	loggedout => array (
+				func => "loggedOutState",
+				description => "Logged out"
+				),
+	nullpass => array (
+				func => "nullPassState",
+				description => "User has password in database"
+				),
+	wrongpass => array (
+				func => "wrongPassState",
+				description => "Wrong password"
+				),
+	nouser => array (
+				func => "noUserState",
+				description => "No such user"
+				),
+	confirmwrong => array (
+				func => "confirmWrongState",
+				description => "Confirmation password doesn't match"
+				),
+	insecurepass => array (
+				func => "insecurePassState",
+				description => "New password doesn't meet minimum requirements"
+				),
+	passsaved => array (
+				func => "passSavedState",
+				description => "New password saved to db"
+				),
+	passcorrect => array (
+				func => "passCorrectState",
+				description => "User typed in correct password!"
+				),
+	loggedin => array (
+				func => "loggedInState",
+				description => "User is logged in"
+				)
+);
+
+
 
 /******************
 	SAVEPASS
@@ -325,13 +365,13 @@ function loginPopup($uid)
 function
 logIn($auth)
 {
+	global $states;
 
 	confessArray($auth, "logIn()");
 
-	//first login, no password entered
-	loginPopup($auth['uid']); 
-	print "Enter password: \n";
-	print "<INPUT TYPE=password NAME='auth[pwd]'>";
+	printf("logIn(): entering %s\n",
+		$states[$auth['state']]['description']);
+	return $states[$auth['state']]['func']($auth);
 
 
 }/* END LOGIN  */
@@ -339,75 +379,93 @@ logIn($auth)
 
 
 /******************
-	JUNK
+
 ******************/
 function
-junk()
+loggedOutState($auth)
 {
-	printf("<FORM METHOD=POST ACTION='%s'>", 
-			$_SERVER['PHP_SELF']);
-
-	print "<INPUT TYPE=submit NAME='login' VALUE='LogIn'>";
-    print "</FORM>";
-}/* END JUNK */
+}/* END  */
 
 
 
 /******************
-	ENTERNEWPASS
-	lets the user create and confirm a new password
+
 ******************/
 function
-enterNewPass($auth)
+nullPassState($auth)
 {
-
-	switch($auth['action']){
-		case 'new':
-			// TODO: inputs: clearpass, uid, action
-			print "Confirm password: \n";
-			print "<INPUT TYPE=password NAME='auth[confirm]'>";
-			thruAuth( array(
-						'token' => generateToken($auth['uid'], $auth['$pwd']) ,
-						'uid' => $auth['uid'] ,
-						'action' => 'confirm'
-					)
-			);
-			break;
-		case 'confirm':
-			//TODO: inputs: uid, action, token(hashed), confirmpass
-			if($auth['$token'] == 
-					generateToken($auth['uid'], $auth['confirm']))
-			{
-				if(getPass($auth['uid']) == 0){
-					return savePass($auth['uid'], $auth['pwd']);
-				}
-			}
-			break;
-		default:
-			//first login, no password entered
-			loginPopup($auth['uid']); 
-			print "Enter password: \n";
-			print "<INPUT TYPE=password NAME='auth[pwd]'>";
-			//	TODO: if uid, include confirmation box too!
-			break;
-	}
-
-
-}/* END  ENTERNEWPASS */
-
+}/* END  */
 
 
 
 /******************
-	PASSSTANDARD
-	TODO: check that password is good enough, smart enough, and people like it
-	returns: 0 if ok, 1 if bad
+
 ******************/
 function
-passStandard()
+wrongPassState($auth)
 {
-	return 0;
-}/* END PASSTANDARD */
+}/* END  */
+
+
+
+/******************
+
+******************/
+function
+noUserState($auth)
+{
+}/* END  */
+
+
+
+/******************
+
+******************/
+function
+confirmWrongState($auth)
+{
+}/* END  */
+
+
+
+/******************
+
+******************/
+function
+insecurePassState($auth)
+{
+}/* END  */
+
+
+
+/******************
+
+******************/
+function
+passSavedState($auth)
+{
+}/* END  */
+
+
+
+/******************
+
+******************/
+function
+passCorrectState($auth)
+{
+}/* END  */
+
+
+
+/******************
+
+******************/
+function
+loggedInState($auth)
+{
+}/* END  */
+
 
 
 
