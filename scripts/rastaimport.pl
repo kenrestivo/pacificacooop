@@ -162,12 +162,88 @@ sub checkNewFamily(){
 	#return $dbh->{'mysql_insertid'};
 }
 
-sub checkNewParents(){
-	#fix the mom's name if need be.
-	#lose the (baby) flag
+
+	#TODO AACK!!! I WILL NEED TO CHECK WORKING PARENT HERE!!
+	#	which means, i'll need the fucking CELL. dammit.
+sub checkOneParent(){
+	my $rowref = shift;
+	my $famid = shift;
+	my $last = shift;
+	my $first = shift;
+	my ($rquery , $rqueryobj , $ritemref, $query);
+	my %ritem;
+	my $cnt =  0;
+
 	#search in db. if parent isn't there, 
 	#	look for family, it should add one if needed.
 	#	note: there are a few single moms here, so note that.
+	$rquery = sprintf("select * from parents 
+			where first like \"%%%s%%\" and last like \"%%%s%%\"
+	",
+		$first, $last
+	) ;
+
+	print "DEBUG doing <$rquery>\n"; #debug only
+	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+	$rqueryobj->execute() or die "couldn't execute $!\n";
+
+	#TODO check for duplicates already in there?
+	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		$cnt++;
+	}
+
+	if($cnt){
+		#	AND check for parents which don't match the family name in there?
+		#		i.e. if my $famid is NOT what's in the db!
+		if($$ritemref['familyid'] != $famid){
+			print "ERROR! $famid for $first $last has changed!\n";
+			exit(1);
+		}
+		print "DEBUG: yes, this parent is in the db\n";
+		return $$ritemref['parentsid'];
+	} 
+	#otherwise, add him or her!
+}
+
+sub fixLastNames()
+{
+	my $last = shift;
+	my $first = shift;
+	my %name;
+
+	$name{'first'} = $first;
+	$name{'last'} = $last;
+
+	#handle leigh ann and jo ann special cases. 
+	if($first =~ /\w+\s+\w+/ && $first !~ /\s+[Aa]nn/){
+		($name{'first'}, $name{'last'}) = split(/ +/, $first);
+	}
+	
+	return \%name;
+}
+
+sub checkNewParents(){
+	my $rowref = shift;
+	my $famid = shift;
+	my ($famname, $something, $nameref) ;
+	my %ritem;
+	my $cnt =  0;
+
+	#*sigh* the annoyance of excel. why not create a "baby" checkbox. grr.
+	$famname = &unBaby($$rowref[0]);
+
+	#check the mom's name
+	$nameref = &fixLastNames($famname, $$rowref[1]);
+	$something = &checkOneParent($rowref, $famid,  
+		$$nameref{'last'}, $$nameref{'first'});
+
+
+	#i have to namecheck the mom AND the dad's name. 
+	#	seriously, it's the 21st centry
+	$nameref = &fixLastNames($famname, $$rowref[2]);
+	$something = &checkOneParent($rowref, $famid,  
+		$$nameref{'last'}, $$nameref{'first'});
+	
 }
 
 sub checkNewKids(){
@@ -186,7 +262,7 @@ sub checkNewKids(){
 	$rquery = sprintf("select * from kids 
 			where first like \"%%%s%%\" and last like \"%%%s%%\"
 	",
-		$$rowref[3], &unBaby($$rowref[0])
+		$$rowref[3], $name
 	);
 
 	print "DEBUG doing <$rquery>\n"; #debug only
@@ -242,7 +318,8 @@ sub checkNewKids(){
 	#print STDERR $dbh->do($query) . "\n";
 	#return $dbh->{'mysql_insertid'};
 
-	#TODO acc parent here too? why not, we know we need them/one
+	#add parent here too? why not, we know we need them/one
+	&checkNewParents($rowref, $famid);	
 	
 }
 
