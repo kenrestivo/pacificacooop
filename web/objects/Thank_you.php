@@ -28,10 +28,12 @@ class Thank_you extends DB_DataObject
 	var $fb_linkDisplayFields = array('date_sent', 'method');
 	var $fb_fieldLabels = array (
 		'thank_you_id' => 'Thank You Note',
+		'date_printed' => 'Date Printed',
 		'date_sent' => 'Date Sent',
 		'method' => 'Sent Via',
 		'family_id' => 'Printed/Sent By'
 		);
 	var $fb_formHeaderText =  'Springfest Thank-You Notes';
+	var $fb_fieldsToRender = array ('date_sent', 'method', 'family_id');
 
 }
