@@ -121,7 +121,7 @@ getPass($uid)
 		//grab 'em all XXX is this really necessary?
 		//user_error(sprintf("debug %s\n", $row['name']), E_USER_NOTICE);
 		if($row['password']){
-			user_error("getPass(): got one for $uid", E_USER_NOTICE);
+			//user_error("getPass(): got one for $uid", E_USER_NOTICE);
 			return($row['password']); //success!
 		} else {
 			user_error("getPass(): no password for uid $uid",E_USER_NOTICE);
