@@ -149,9 +149,11 @@ select distinct(leads.lead_id)  as responsecode
         ,families.name as familyname
     from leads
         left join invitations using (lead_id)
-			left join families using (family_id)
+            left join families using (family_id)
      where  
             invitations.school_year = '2004-2005' 
+        and (invitations.label_printed is null 
+            or invitations.label_printed < '2000-01-01')
        order by leads.last_name, leads.first_name
 
 
@@ -984,5 +986,6 @@ left join
 group by leads.lead_id
 having Total > 0
 order by Company;
+
 
 --- EOF
