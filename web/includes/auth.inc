@@ -456,7 +456,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					$_SERVER['PHP_SELF']);
 	if($auth){ //hey, it could happen...
-		thruAuth($auth);
+		thruAuth();
 	}
 	print "<table border=1>";
 	//user popup (or display) stuff
@@ -1019,24 +1019,16 @@ loggedInState($auth, $states)
 
 /******************
 	THRUAUTH
-	passes the auth structure right through. this is VITAL for forms!
-	inputs: auth, name of struct (default 'auth')
-	outputs: auth as invisible fields!
+	used for cases where i have a FORM (POST), 
+		and can't use SID (GET) constant.
+	inputs: none
+	outputs: session id as invisible fields!
 ******************/
 function
-thruAuth($auth, $newname = 'auth')
+thruAuth()
 {
-	if(!$auth){
-		user_error("um, why was thruAuth() called with no auth!?", 
-			E_USER_ERROR);
-	}
-	while (list($key, $val) = each($auth)){
-		if($val){
-			printf("<INPUT TYPE=hidden NAME='%s[%s]' VALUE='%s'>\n",
-				$newname, $key, $val
-			);
-		}
-	}
+	printf("<INPUT TYPE=hidden NAME='%s' VALUE='%s'>\n",
+		'coop',  session_id());
 }/* END THRUAUTH  */
 
 
