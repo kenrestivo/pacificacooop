@@ -85,14 +85,12 @@ class PostPaypal
             // ok let's go now
             $this->parseCustom();
 			if($this->postIncome()){
-                $this->postFamily(); // TODO: handle leads/companies too
+                $this->family_id && $this->postFamily(); 
+                $this->lead_id && $this->postLead(); 
             }
             //print_r($this);
-			// TODO: send a thank-you note, and save status from postpaypal
-			// NOTE: this isn're really necessary,
-			// since they see the thank-you anyway
-			// BUT: i need to record that they saw the thank-you anyway
 
+			$this->postThankYou();
 		}
 
     function lastInsertID($obj)
@@ -183,6 +181,28 @@ class PostPaypal
             $obj->insert(); // save the giblets
 	}
 
+	function postThankYou()
+		{
+		
+			
+			$ty =& $this->factoryWrapper('thank_you');
+			$ty->date_sent = date('Y-m-d');
+			$ty->method = 'WebPage';
+			$ty->insert(); // save the giblets
+			$tyid = $ty->lastInsertID(&$ty);
+			
+
+			// link it in. *sigh* tedious.
+			$inc =& $this->factoryWrapper('income');
+            $inc->income_id = $this->income_id;
+            if(!$obj->find(true)){
+                user_error("the income was saved, but i didn't find it. Bad.",
+						   E_USER_ERROR);
+            }
+			$inc->thank_you_id = $tyid;
+			$inc->update();
+			    
+	}
 
 } /// END POSTPAYPAL CLASS
 
