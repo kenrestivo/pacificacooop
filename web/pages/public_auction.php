@@ -66,20 +66,26 @@ function sponsors(&$cp)
 					$thing = sprintf("%s %s", $co->obj->first_name,
 									 $co->obj->last_name);
 				}
-			}
-			print $thing . $sp->obj->sponsorship_type_id;
-			$sponsors .= sprintf("<li>%s</li>", $thing);
-		}
-		if($sp->obj->sponsorship_type_id != $savedid){
-			$res .= sprintf(
-				'<p><b>%s Contributors</b> ($%.0f and above)</p><ul>%s</ul>', 
-				$sp->obj->sponsorship_name,
-				$sp->obj->sponsorship_price,
-				$sponsors);
-		}
 
-		$savedid= $sp->obj->sponsorship_type_id;
+				$spons[$sp->obj->sponsorship_name]['price'] = 
+					$sp->obj->sponsorship_price;
+				$spons[$sp->obj->sponsorship_name]['names'][] = $thing;
+			}
+			
+		}
 		
+	}
+	// gah. whew. all done
+	//confessArray($spons, 'spns');
+	foreach($spons as $level => $data){
+		//confessArray($data, 'data');
+		foreach($data['names'] as $name){
+			$sponsors .= sprintf("<li>%s</li>", $name);
+		}
+		$res .= sprintf(
+			'<p><b>%s Contributors</b> ($%.0f and above)</p><ul>%s</ul>', 
+			$level, $data['price'], $sponsors);
+		$sponsors ='';
 	}
 	
 	$res .= "</div><!-- end sponsor -->";
