@@ -142,7 +142,7 @@ addThem()
 					);
 			}
 		}
-		$query .= " relation = 'Alumni', source = 'Springfest', familyid = 0";
+		$query .= " , relation = 'Alumni', source = 'Springfest', familyid = 0";
 		if($opt_v){
 			print "doing <$query>\n";
 		}
@@ -154,65 +154,6 @@ addThem()
 	return $ds;
 
 } #END ADDTHEM
-
-sub
-addUser()
-{
-	my $name = shift;
-	my $familyid = shift;
-	my $query;
-	my $rquery;
-	my $ritemref;
-	my %ritem;
-	my $rqueryobj;
-	my $uid = 0;
-
-
-	if($opt_v){
-		if(!$name || !$familyid){
-			print "addUser() missing data: famid <$familyid> name <$name>. must be teachers?\n";
-		}
-	}
-
-	#ok, add the users
-	#gotta check first that they don't already exist!
-	$rquery = sprintf("select userid from users 
-				where name like '%s' or familyid = %d ",  $name, $familyid);
-	if($opt_v){
-		print "doing <$rquery>\n"; 
-	}
-	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
-	$rqueryobj->execute() or die "couldn't execute $!\n";
-
-	while ($ritemref = $rqueryobj->fetchrow_hashref){
-		$uid = $$ritemref{'userid'};
-
-	} # end while
-	if($uid) {
-		#do NOT re-enter duplicates!!
-		if($opt_v){
-			print "found user $name $familyid in db with id $uid\n";
-		}
-		return $uid;
-	}
-	$query = sprintf("insert into users  set
-					name = \'%s\' ,
-					familyid = %d
-					",
-					$name, $familyid);
-
-	print "adding <$name> into users\n";
-	if($opt_v){
-		print "doing <$query>\n";
-	}
-	unless($opt_t){
-		print STDERR $dbh->do($query) . "\n"; #THIS DOES IT!
-	}
-	
-	#find out what we got for a uid
-	return $dbh->{'mysql_insertid'};
-
-}
 
 #######################
 #	DEBUGSTRUCT
