@@ -621,8 +621,8 @@ sub getampm()
 	$query = "
 		select enrol.sess 
 			from kids 
-				left join keglue on keglue.kidsid = kids.kidsid 
-				left join enrol on enrol.enrolid = keglue.enrolid
+				left join attendance on attendance.kidsid = kids.kidsid 
+				left join enrol on enrol.enrolid = attendance.enrolid
 			where kids.familyid = $famid
 			group by enrol.sess
 	";
