@@ -857,8 +857,8 @@ loggedOutState($auth, $states)
 	}
 
 	//destroy th session here!! read docs.
-	$_SESSION = array();
-	session_destroy();
+	$auth['uid']  = 0;
+	$_SESSION['auth'] = NULL;
 
 	return changeState($auth, $states, 'needlogin', 1);
 	
