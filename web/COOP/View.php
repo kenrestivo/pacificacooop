@@ -34,16 +34,15 @@ class coopView
 {
 	var $obj;
 	var $build;
-	var $auth;
-	var $debug;
-	var $dbname;
+	var $page;
 	var $pager_result_size;
 	var $pager_start;
 	var $table;
 
-	function setup($table = false )
+	function CoopView (&$page, $table = false )
 		{
-			// set it here
+
+			$this->page = $page;
 			$this->table = $table ? $table : $_SESSION['toptable'];
 			
 			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
@@ -77,7 +76,7 @@ class coopView
             //confessObj($this->build, "build");
 			$this->obj->fb_createSubmit = false;
             $form =& new HTML_QuickForm(); 
-			$form->addElement('html', thruAuth($this->auth, 1));
+			$form->addElement('html', thruAuth($page->auth, 1));
 			$buttons[] = &HTML_QuickForm::createElement(
 					'submit', 'cancel', 'Cancel');
 			$buttons[] = &HTML_QuickForm::createElement(
@@ -99,7 +98,7 @@ class coopView
 				if ($res){
 					$this->obj->debug('processed successfully', 
 								'detailform', 0);
-					saveAudit($this->table, $id, $this->auth['uid']);
+					saveAudit($this->table, $id, $page->auth['uid']);
 					// XXX make sure i don't have to unset id's first!
 					///  next action
 					print "PRICESSING SEUCCSSCUL";

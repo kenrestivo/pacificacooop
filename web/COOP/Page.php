@@ -39,14 +39,8 @@ function confessObj($obj, $text)
 /////////////////////// COOP CLASS
 class coopPage
 {
-	var $obj;
-	var $build;
 	var $auth;
 	var $debug;
-	var $dbname;
-	var $pager_result_size;
-	var $pager_start;
-	var $table;
 
 	function coopPage($debug = false)
 		{
@@ -111,7 +105,7 @@ class coopPage
 		}
 
 
- 
+	// XXX broken. it needs to instantiate views first
 	function engine(){
 		if($_REQUEST['tables']){
 			$_SESSION['tables'] = $this->mergeArrays($_SESSION['tables'], 
@@ -119,7 +113,7 @@ class coopPage
 		}
 		//confessArray($tabarr, "tables");
 		foreach($_SESSION['tables'] as $table => $vals){
-			$this->setup($table);
+			$this->setup($table); // XXX botcherunio. needs to instantiate views.
 				//	print_r($cp);
 			// OK copy my dispatcher logic over now
 			switch($vals['action']){
