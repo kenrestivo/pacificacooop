@@ -154,7 +154,20 @@ class coopObject
 			return $val;
 		}
 
+	// returns the IMMEDIATE parent, not including joins
+	function getParent()
+		{
+			// XXX hack to skip over jointables. ugly, but it works.
+			if(preg_match('/_join/', $this->parentCO->table, $matches)){
+				return $this->parentCO->getParent();
+			}
+			//confessObj($view, "companyDetails(view)");
+			return $this->parentCO;
 
+		}
+
+	// nice recursive function. returns summary of parents, skipping joins
+	// note now this is *different* from getParent.. don't try to combine em
 	function getSummary()
 		{
 			
@@ -178,6 +191,14 @@ class coopObject
             return $data;
         }
 
+	// recurses through parents, until it finds the top!
+	function findTop()
+		{
+			if($this->parentCO){
+				return $this->parentCO->findTop();
+			}
+			return($this);
+		}
 
 
 } // END COOP OBJECT CLASS
