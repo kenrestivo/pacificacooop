@@ -123,17 +123,25 @@
 		}
 		if($tennamespaid['notes'])
 			printf("<br>%s",$tennamespaid['notes']);
+		if($tennamespaid['indulgences'])
+			printf("<br>%s",$tennamespaid['indulgences']);
 		print "</td><td align='center'>";
 		if ($quiltpaid['amount'] > 0)
 			printf("$%01.2f", $quiltpaid['amount']);
 		if($quiltpaid['notes'])
 			printf("<br>%s",$quiltpaid['notes']);
+		if($quiltpaid['indulgences'])
+			printf("<br>%s",$quiltpaid['indulgences']);
 		print "</td><td align='center'>";
 		if ($auction['total'] > 0)
 			printf("$%01.2f", $auction['total']);
+		if($auction['indulgences'])
+			printf("<br>%s",$auction['indulgences']);
 		print "</td><td align='center'>";
 		if ($delivery['undelivered'] > 0)
 			printf("%d missing", $delivery['undelivered']);
+		if($undelivered['indulgences'])
+			printf("<br>%s",$undelivered['indulgences']);
 		print "</td><td align='center'>";
 		print $row[sess];
 		print "</td><td align='center'>";
@@ -170,7 +178,7 @@
 function checkPayments($familyid, $type)
 {
 
-	//XXX hack
+	//XXX hack. i hate having to map these manually.
 	$feetypes = array(
 		'10names' => 1,
 		'quilt' => 2,
@@ -255,6 +263,7 @@ checkAuction($familyid)
 	$result['forfeit'] = $tmp['amount'];
 	$result['total'] +=  $result['forfeit'];
 	
+	$result['indulgences'] = checkIndulgences($familyid,  'auction');
 
 	return $result;
 }/* END CHECKAUCTION */
@@ -337,6 +346,55 @@ sortColumns($text, $sortby, $sortdir, $nag)
 }/* END SORTCOLUMNS */
 
 
+/********************
+	CHECKINDULGENCES
+	returns a <br> formatted string with indulgences for this family.
+*****************/
+function
+checkIndulgences($familyid, $uglytype)
+{
+
+	//XXX yet another hacky-hack
+	$mapping = array (
+			'general' => 'Everything', 
+			'auction' => 'Family Auctions', 
+			'quilt' => 'Raffle Fee', 
+			'solicitauction' => 'Solicitation Auctions'
+		);
+
+	$type = $mapping[$uglytype];
+
+	$query = sprintf("
+		select note, granted_date 
+			from nag_indulgences
+			where familyid = %d
+				and indulgence_type = '%s'
+			order by granted_date desc ",
+			$familyid, mysql_escape_string($type));
+
+	user_error("checkINdulgences(): doing [$query] ", E_USER_NOTICE);
+	$list = mysql_query($query);
+
+	$err = mysql_error();
+	if($err){
+		user_error("[$query] errored with $err", E_USER_ERROR);
+	}
+
+	$i = 0;
+	while($row = mysql_fetch_array($list))
+	{
+		$total .= sprintf("Excused %s%s%s%s",
+							$i ? "<br>" : "",
+						  $row['granted_date'],
+						  $row['note'] ? ": " : "",
+							$row['note']
+				);
+		$total && $i++;
+	}
+
+	return $total;
+
+} /* END CHECKINDULGENCES */
 
 ?>
 
