@@ -130,8 +130,9 @@ class CoopMenu extends HTML_Menu
 				if(checkMenuLevel($this->page->auth, 
 								  $this->page->userStruct, 
 								  $cbs, $cbs['fields'])== 0){
-					$res[$key]['url'] = sprintf('%s%s', $cbs['page'], 
-												SID ? "?" .SID :"");
+					$res[$key]['url'] = htmlentities(
+						sprintf('%s%s', $cbs['page'], 
+								SID ? "?" .SID :""));
 
 
 				} else {
