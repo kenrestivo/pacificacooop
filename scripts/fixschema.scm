@@ -113,20 +113,19 @@
 ;; change-line should be (table old-col new-col)
 (define (rename-column change-line schema)
   (let* (
-		 
 		 (old-table (car change-line))
-		 (old-col )
-		 (new-col )
-		 (long-def (assoc-ref (assoc-ref schema old-col) old-table))
+		 (old-col (second change-line))
+		 (new-col (last change-line))
+		 (long-def (assoc-ref (assoc-ref schema old-table) old-col))
 		 )
 	(if long-def
 		(begin 
 		  (safe-sql *dbh* (sprintf #f "alter table %s change column %s %s %s"
-						 table old-col new-col long-def))
-		  (fix-primary-key table old-col new-col schema) )
+						 old-table old-col new-col long-def))
+		  (fix-primary-key old-table old-col new-col schema) )
 		;; TODO: be smart and check first if it is already changed
 		(printf "IGNORING: rename %s:%s is NOT in schema, can't change to %s\n"
-				table old-col new-col) ;; it's a bogus line? huh?
+				old-table old-col new-col) ;; it's a bogus line? huh?
 		)
 	))
 
@@ -164,7 +163,9 @@
 
 ;; this is the engine which actually does the work
 (define (fix-schema change-alist change-tables schema-alist)
-  (for-each rename-column (fold-change-alist change-alist) schema-alist)
+  (for-each (lambda (x)
+			  (rename-column x schema-alist))
+			(flatten-change-alist change-alist))
   (for-each rename-table change-tables)		; finally, follow up with tables
   )
 
