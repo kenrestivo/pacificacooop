@@ -61,25 +61,12 @@ switch($_REQUEST['action']){
 	 $atd = new CoopForm(&$cp, 'packages', $none); // NOT the coopView above!
 	 $atd->build($_REQUEST);
 
-
+	 //confessObj($atd, 'atd');
 	 /////////// what's included
-	 $included = array();
-	 $auc = new CoopObject(&$cp, 'auction_donation_items', $none);
-	 //$auc->obj->debugLevel(2);
-	 $apj =& new CoopObject(&$cp, 'auction_packages_join', &$auc);
-	 $apj->obj->{$atd->pk} = $atd->obj->{$atd->pk};
-	 $auc->obj->joinAdd($apj->obj);
-	 $auc->obj->orderBy(sprintf("%s.%s", $auc->table, $auc->pk));
-	 $found = $auc->obj->find();
-	 while($auc->obj->fetch()){
-		 $included[] = $auc->obj->{$auc->pk};
-	 }
+	 $included = $atd->checkCrossLinks('auction_packages_join',
+									   'auction_donation_items');
 
-	 if(!count($included)){
-		 $included[]= '';
-	 }
-
-	 ///////////// the porphans to add
+	 ///////////// the orphans to add
 	 $auc = new CoopObject(&$cp, 'auction_donation_items', $none);
 	 //$auc->obj->debugLevel(2);
 	 $auc->obj->school_year = findSchoolYear();
@@ -97,9 +84,7 @@ switch($_REQUEST['action']){
 	 $el =& $atd->form->addElement('advmultselect', 'auction_donation_item_id', 
 					   'Auction Items:', $allpossible);
 
-	 print "INCLUDED: " .serialize($included);
-	 confessArray($included,'included');
-	 print "REQUEST: " . serialize($_REQUEST['auction_donation_item_id']);
+	 //confessArray($included,'included');
 
 	 $atd->form->setDefaults(array('auction_donation_item_id' =>
 								   isset(
@@ -121,7 +106,7 @@ switch($_REQUEST['action']){
 
 	 if ($atd->form->validate()) {
 		 print "saving...";
-		 // $atd->form->process(array(&$atd, 'processCrossLinks'));
+		 $atd->form->process(array(&$atd, 'processCrossLinks'));
 		 // gah, now display it again. they may want to make other changes!
 		 print $cp->selfURL('Look again', 
 							array('action' => 'addremove',

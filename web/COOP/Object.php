@@ -271,7 +271,26 @@ class coopObject
 			return true;
 		}
 
-
+	// so commonly used, i need it here
+	function checkCrossLinks($midTable, $farTable)
+		{
+			// TODO: maybe try to calculate mid or fartable? dangerous?
+			$far = new CoopObject(&$this->page, $farTable, $this);
+			//confessObj($this, 'this');
+			//$far->obj->debugLevel(2);
+			$mid =& new CoopObject(&$this->page, $midTable, &$far);
+			$mid->obj->{$this->pk} = $this->obj->{$this->pk};
+			$far->obj->joinAdd($mid->obj);
+			$far->obj->orderBy(sprintf("%s.%s", $far->table, $far->pk));
+			if($far->obj->find()){
+				$included = array();
+				while($far->obj->fetch()){
+					$included[] = $far->obj->{$far->pk};
+				}
+			}
+			return $included;
+		}
+	
 } // END COOP OBJECT CLASS
 
 

@@ -37,11 +37,11 @@ class coopForm extends CoopObject
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function build($vars = false)
 		{
-			$id = (int)$vars[$this->pk];
-			if($id > 0){
-				$this->obj->get($id);
+			$this->id = (int)$vars[$this->pk];
+			if($this->id > 0){
+				$this->obj->get($this->id);
 			} else {
-				user_error("coopForm::build($id) called with no id, assuming NEW", 
+				user_error("coopForm::build($this->id) called with no id, assuming NEW", 
 						   E_USER_NOTICE);
 			}
 			$formname = sprintf('edit_%s', $this->table);
@@ -67,7 +67,7 @@ class coopForm extends CoopObject
 			$this->form->addElement('hidden', 'table', $this->table);
 
 			//set defaults for new
-			if($id < 1){
+			if($this->id < 1){
 				$this->setDefaults();
 			}
 
@@ -318,48 +318,51 @@ class coopForm extends CoopObject
 			foreach($this->obj->fb_crossLinks as $la){
 				$tf = $la['toField'];
 				$tt = $la['table'];
+				$ft = $la['toTable'];
 				$nk = $this->backlinks[$tt];
-				//print "tf $tf tt $tt nk $nk";
-				// is it an add or a remove? remember, i have both
-				if($vars['multiremove-'.$tf]){
-					// if it's a remove, yank 'em all. that's easy
-					foreach($vars['remove-'.$tf] as $id){
-						$lo = new CoopObject(&$this->page, 
-												$tt, &$this);
-						$lo->obj->$tf = $id;
-						$lo->obj->$nk = $vars[$nk];
-						$lo->obj->find();
-						while($lo->obj->fetch()){
-							$copy = $lo->obj;
-							$copy->delete();
-						}
-					}
+ 				if(!isset($vars[$tf])){
+					// XXX this scares me. if i forget to include these...
+					// then they get wiped out of the db? that seems wrong to me.
+					$vars[$tf] = array();
+ 					//continue;
+ 				}
+
+				//print "tt $tt tf $tf ft $ft nk $nk";
+				
+				// yeah, array_diff is the long way with db thrashing.
+				// but i want clear, easily-debugged code
+				$indb = $this->checkCrossLinks($tt,$ft);
+				$toSave = array_diff($vars[$tf], $indb);
+				$toDelete = array_diff($indb, $vars[$tf]);
+				$this->page->confessArray($toSave, 
+										  'CoopForm::processsCrossLinks(save)', 
+										  2);
+				$this->page->confessArray($toDelete, 
+										  'CoopForm::processsCrossLinks(delete)',
+										  2);
+
+
+				//$this->obj->debugLevel(2);
+				// save
+				foreach($toSave as $saveme){
+					$mid =& new CoopObject(&$this->page, $tt, &$this);
+					$mid->obj->$tf = $saveme;
+					$mid->obj->$nk = $this->id;
+					$mid->obj->insert();
 				}
-				if($vars['multiadd-'.$tf]){
-					// if it's an add, check to see if they're there already
-					foreach($vars['add-'.$tf] as $id){
-						$lo = new CoopObject(&$this->page, 
-											 $tt, &$this);
-						$lo->obj->$tf = $id;
-						$lo->obj->$nk = $vars[$nk];
-						$copy = $lo->obj;
-						if($lo->obj->find() < 1){
-							// insert the ones that aren't already there
-							$copy->insert();
-						}
-					}
+				
+				// delete
+				foreach($toDelete as $killme){
+					$mid =& new CoopObject(&$this->page, $tt, &$this);
+					$mid->obj->$tf = $killme;
+					$mid->obj->$nk = $this->id;
+					$mid->obj->delete();
 				}
+
 			}
-
-			
-
-
-			
 		}
 
-
 } // END COOP FORM CLASS
-
 
 ////KEEP EVERTHANG BELOW
 

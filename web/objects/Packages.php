@@ -61,6 +61,7 @@ class Packages extends DB_DataObject
 
 
 	var $fb_crossLinks = array(array('table' => 'auction_packages_join', 
+									 'toTable' => 'auction_donation_items',
 									 'toField' => 'auction_donation_item_id',
 									 'type' => 'select'));
 
