@@ -290,6 +290,7 @@ create table companies_auction_join (
     saglueid int(32) not null unique auto_increment,
 	auctionid int(32),
 	company_id int(32),
+	familyid int(32), -- XXX hack!! i hate this.
     primary key (saglueid)
 );
 

@@ -29,6 +29,7 @@
 	//require_once("adminfuncs.inc");
 	require_once("pkg_checkin_funcs.inc");
 	require_once("solicit_company.inc");
+	require_once("solicit_auction.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -64,7 +65,7 @@
 	//and heeere they are!
 	$menu = array( $auctioncallbacks, $invitationcallbacks, 
 					$incomecallbacks, $pkgcheckincallbacks,  
-					$solicit_company_callbacks
+					$solicit_company_callbacks, $solicit_auction_callbacks
 		);
 
 	

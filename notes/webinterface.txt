@@ -364,7 +364,7 @@ contact management
 ad insertion 
 	ad table
 		contactid (join)
-		sessionid (join)
+		semester (join) -- note, weird. not the sessionid, but the 2003-2004
 		adsizeid (join)
 		ad copy (longtext)
 		artwork_provided flag?
@@ -376,6 +376,16 @@ ad insertion
 		description (varchar)
 		size? or use above?
 		price
+
+raffle tickets: this is join to income, basically
+	raffle_tickets
+		date given to shirley
+		amount
+		locationid (join)
+	raffle_locations
+		description
+		semester (they will change next year)
+
 
 web links stuff
 	link table
@@ -418,8 +428,6 @@ banners
 	type?
 	price?
 
-tickets!!!
-	what to do here?
 
 flyers! (publicity)
 	need to add an "need flyer" date? join to contactid
