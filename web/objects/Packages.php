@@ -36,10 +36,12 @@ class Packages extends DB_DataObject
 	var $fb_textFields = array ('package_description');
 	var $fb_linkDisplayFields = array ('package_number', 
 									   'package_description');
-	var $fb_enumFields = array ('item_type', 'package_type');
+	var $fb_enumFields = array ('item_type', 'package_type', 'display_publicly');
 
-	var $fb_fieldsToRender = array('package_type', 'package_number', 'package_title', 'package_description', 
-								   'item_type', 'package_value');
+	var $fb_fieldsToRender = array('package_type', 'package_number', 
+								   'package_title', 'package_description', 
+								   'item_type', 'package_value',
+								   'display_publicly');
 
 	var $fb_fieldLabels = array (
 		"package_id" => "Package ID" ,
@@ -51,6 +53,7 @@ class Packages extends DB_DataObject
 		"item_type" => "Physical Product or Gift Certificate",
 		"package_value" => 'Estimated Value ($)' ,
 		"starting_bid" => 'Starting Bid ($)' ,
+		'display_publicly' => 'Display on public home page?',
 		"bid_increment" => 'Bid Increment ($)'
 		);
 	var $fb_formHeaderText = "Springfest Packages";
