@@ -12,10 +12,6 @@ the fieldstruct
 	a fieldstruct is a VIEW of data.
 		not analogous to a table, or even necessarily a privilge realm
 	all its possible members and all possible values of each of its members!
-		adminonly: 
-			passed through invisibly in entry forms,
-			not shown in report titles or report body, if user isn't privileged
-			you decide this when you call the display funcs
 		callback: the field's display isn't determined by it's type
 			but rather a callback you supply is executed instead
 			with the arguments: $i, $fname, $field
@@ -34,7 +30,6 @@ the fieldstruct
 			i.e. leave the value in this field out of any "select's"
 			NOTE: NEVER EVER make an index field (i.e. unique id) a dupeignore
 		duplicates: DEPRECIATED! not used.
-		invisible: don't show it. ever. do pass it through, however!
 		len: maximum length of this field, in chars. html enforces this.
 		lines: if > 1, it's a SCROLLING text box, of this number of "rows"
 		linkfield: don't display the data in this fieldname in this table. 
@@ -55,8 +50,9 @@ the fieldstruct
 			called with ($fname, $val)
 			$fname is the field name
 			$val is the raw data value (which the callback then formats)
-
-
+		perms: each field can have its own set of perms
+			default is everyone can do everything
+			the levels are array (group, user). 
 
 auth
 	realms: areas of privilege
@@ -80,8 +76,18 @@ auth
 			can delete records for the realm
 		'ACCESS_ADMIN', 800);
 			can change privileges for users relating to this realm
-	the $u and $p structs
+	the $auth , $u and $p structs
 		TODO document me
+	each field can have its own perms. field perms are a LIMIT
+		if the user/group has at LEAST the field's perm levels, 
+			it can do that action
+		so to calculate a perm for a field, fieldPerms() factors in:
+			the DESIRED action
+			the field's GROUP level
+			the field's USER level
+			whether the desired action is on the user's own family or another
+			the user's USERLEVEL privileges
+			the user's GROUPLEVEL privileges
 
 
 the main state machine
@@ -100,4 +106,6 @@ the main state machine
 	and the possibel field members too: TODO
 
 database things:
-	in general, i've been a relational database sql bigot. i am VERY much for segregation of data into separate tables, and ESPECIALLY where there's any duplication of data. any one-to-many's are done with direct joins, and many-to-many's are done with glue tables. often the glue tables evolve into tables with useful data in their own right (example being the "attendance" table).
+	in general, i've been a relational database sql bigot. i am VERY much for segregation of data into separate tables, and ESPECIALLY where there's any duplication of data. any one-to-many's are done with direct joins, and many-to-many's are done with join ("glue") tables. often the join tables evolve into tables with useful data in their own right (example being the "attendance" table) and get their own names.
+
+
