@@ -31,6 +31,7 @@ DBUSER=ken
 REALDB=pacsql.db
 FARPORT=2299
 BKPW=test
+BKUSER=input
 
 all::
 	@echo "not so fast... get specific"
@@ -76,10 +77,13 @@ backup: backup-defs backup-data
 backup-local: backup
 
 backup-live::
-	$(MAKE) backup DBUSER=input DBHOST=127.0.0.1 DBPORT=$(FARPORT) PW=$(BKPW)
+	$(MAKE) backup DBUSER=$(BKUSR) DBHOST=127.0.0.1 DBPORT=$(FARPORT) PW=$(BKPW)
 
 ssh-tunnel::
 	ssh -n -f -N -L$(FARPORT):$(REALDB):3306 ken@phx1.nearlyfreespeech.net
+
+diagram:
+	autodia.pl -l DBI -i "mysql:$(DB):$(DBHOST)" -U$(BKUSER) -P$(BKPW) -o schema.dia
 
 #EOF
 
