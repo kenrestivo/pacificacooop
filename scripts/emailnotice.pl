@@ -74,20 +74,26 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	$insarref = &getinsuranceinfo($id);
 	$pararref = &getworkers($id);
 	$massivearref = &getlicenseinfo($pararref);
+	$ampm = &getampm($id);
+
+	if(!$ampm){
+		# hacky way to skip dropouts
+		next;
+	}
 
 	# the report of people i need to call or write a note to!
 	if($opt_r){
 		#TODO maybe take a filename on command line, to output the report
 		#XXX this feels really "hacky". but... i'm to tired to do it right.
 		# if it has an email, and option e is specified, then skip
-		if(!$opt_m || &getampm($id) =~ /$opt_m/i) {
+		if(!$opt_m || $ampm =~ /$opt_m/i) {
 			unless($opt_e && $massivearref->[0]->{'parref'}->{'email'}){
 				print &fieldTripReport($famref, $insarref, $massivearref, 
 						$checkdate, $opt_a ? 0 : 1);
 			}
 		}
 	} else {
-		if($massivearref->[0]->{'parref'}->{'email'}){
+		if($massivearref->[0]->{'parref'}->{'email'} ){
 			&emailReminder($famref, $insarref, $massivearref, $checkdate );
 		}
 	}
@@ -529,7 +535,7 @@ sub getampm()
 			from kids 
 				left join attendance on attendance.kidsid = kids.kidsid 
 				left join enrol on enrol.enrolid = attendance.enrolid
-			where kids.familyid = $famid
+			where kids.familyid = $famid and attendance.dropout is null
 			group by enrol.sess
 	";
 

@@ -77,7 +77,7 @@ use constant _ACCESS_ADMIN => 800;
 
 $host = $opt_h ? $opt_h : "bc";
 $port = $opt_p ? ":$opt_p" : "";
-$dbname = $opt_d ? $opt_d : "coop";
+$dbname = $opt_d ? $opt_d : "coop_dev";
 #basic login and housekeeping stuff
 $dbh = DBI->connect("DBI:mysql:$dbname:$host$port", "input", "test" )
     or die "can't connect to database $!\n";
