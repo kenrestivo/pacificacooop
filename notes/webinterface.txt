@@ -849,4 +849,6 @@ ok, ticket jump hack.
 		sourceid xxx for trib, etc.
 	leave familyid in there... may happen.
 		of course, it should ONLY light up if family-supplied. oh well.
-	allow amount 0! perhaps they will pay at the door!
+		allow amount 0! perhaps they will pay at the door!
+	auugh. will NEED a tickets table. and changes to rsvp's.
+		because i can't save a zero-dollar income, dammit, it won't save!.
