@@ -23,71 +23,7 @@
 require_once "HTML/QuickForm.php";
 require_once "HTML/Table.php";
 require_once "HTML/QuickForm/group.php";
-
-
-
-class paypalForm extends HTML_QuickForm
-{
-	var $title;
-
-
-	function paypalForm($title,  $formname)
-		{
-			$this->title = $title;
-			
-			$this->HTML_QuickForm($formname, 'get', 
-								  'https://www.paypal.com/cgi-bin/webscr');
-			$this->addElement('header', 'tickets', $title);
-			$this->addElement('hidden', 'cmd', '_xclick');
-			$this->addElement('hidden', 'business', 'beecooke@yahoo.com');
-			$this->addElement('hidden', 'item_name', $title);
-			$this->addElement("hidden", "item_number", "EmailBlast");
-			$this->addElement("hidden", "quantity", "1");
-			$this->addElement("hidden", "page_style", "Primary");
-			$this->addElement("hidden", "return", 
-							  "http://www.pacificacoop.org/sf/thankyou.php");
-			$this->addElement("hidden", "cancel", 
-							  "http://www.pacificacoop.org/sf/donate.php");
-			$this->addElement("hidden", "no_note", "1");
-			$this->addElement("hidden", "currency_code", "USD");
-		}
-
-
-
-	function buildSelect($fieldname, $prices_raw, $select_first = 1,
-						 $choose_one = 0)
-		{
-
-			if($choose_one){
-				$prices[] = "-- Choose One--"; 
-			}
-			foreach($prices_raw as $descr => $price){
-				$prices[$price] = sprintf($descr, $price) ;
-			}
-			$sel =& HTML_QuickForm::createElement(
-				"select", $fieldname, "Select one:", $prices, 
-				array('size' => count($prices)));
-			if ($select_first){
-				$sel->setSelected(array_shift(array_keys($prices)));
-			}
-			return $sel;
-		}
-    
-function &buildRadioGroup($fieldName, $prices_raw, $selected = false)
-    {
-		foreach($prices_raw as $descr => $price){
-			$prices[$price] = sprintf($descr, $price) ;
-		}
-        $element = array();
-        foreach($prices as $value => $display) {
-            $element[] =& 
-				HTML_QuickForm::createElement(
-					'radio', $fieldName, null, $display, $value);
-        }
-        return  new HTML_QuickForm_group($element, null, null, "<br>");
-    }	
-
-} // end paypalform class
+require_once "paypal.php";
 
 
 

@@ -30,13 +30,15 @@ class paypalForm extends HTML_QuickForm
 	var $title;
 
 
-	function paypalForm($title,  $formname)
+	function paypalForm($title,  $formname, $headerflag = 1)
 		{
 			$this->title = $title;
 			
 			$this->HTML_QuickForm($formname, 'get', 
 								  'https://www.paypal.com/cgi-bin/webscr');
-			$this->addElement('header', 'tickets', $title);
+			if($headerflag){
+				$this->addElement('header', 'tickets', $title);
+			}	
 			$this->addElement('hidden', 'cmd', '_xclick');
 			$this->addElement('hidden', 'business', 'beecooke@yahoo.com');
 			$this->addElement('hidden', 'item_name', $title);
