@@ -373,6 +373,10 @@ raffle tickets: this is join to income, basically
 		semester (they will change next year)
 
 ad insertion 
+	adsize table
+		description (varchar)
+		size? or use above?
+		price
 	ad table
 		contactid (join)
 		semester (join) -- note, weird. not the sessionid, but the 2003-2004
@@ -383,10 +387,6 @@ ad insertion
 		weblinkid (link to weblink join table. heh. link.)
 		incomeid(link) -- to handle payment... or join if many payments!
 		userid, enteredupdated?
-	adsize table
-		description (varchar)
-		size? or use above?
-		price
 
 
 web links stuff

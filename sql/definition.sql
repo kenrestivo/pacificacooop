@@ -282,6 +282,7 @@ create table companies (
 	email varchar(255),
 	territory_id int(32),
 	do_not_contact datetime,
+	flyer_ok enum ('No', 'Yes'),
 	primary key (company_id)
 );
 
