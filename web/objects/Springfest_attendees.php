@@ -12,12 +12,13 @@ class Springfest_attendees extends DB_DataObject
     var $__table = 'springfest_attendees';            // table name
     var $springfest_attendee_id;          // int(32)  not_null primary_key unique_key auto_increment
     var $paddle_number;                   // int(32)  
-    var $invitation_rsvps_id;             // int(32)  
+    var $ticket_id;                       // int(32)  
     var $lead_id;                         // int(32)  
     var $company_id;                      // int(32)  
     var $parent_id;                       // int(32)  
     var $temp_name;                       // string(255)  
     var $school_year;                     // string(50)  
+    var $income_id;                       // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
