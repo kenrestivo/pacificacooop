@@ -140,5 +140,61 @@ money
 			grab this from 10names
 		or, if an RSVP, response code, which is the leadid 
 			(future, for RSVP cards: not right now)
-		
 
+
+security: http auth
+	augh. a complete auth model
+		users with userid's
+			link to parents, for further auth
+			password (md5)
+			are users ALWAYS gonna be parents? add password to parents table?
+			and username/uid. hmm. 
+		a userprivs table (many to many to users and areas)
+			various mysql-esque booleans with privs
+			view
+			add
+			delete
+			edit
+			what about su?
+				what if i want to have su privs, just view. or just add?
+				specifically, privs to edit user privs?
+		an area or domain or realm
+			"area" being, things. 
+				10names
+				money
+				3x5 (text, not money)
+				what else?
+		ah! uid/realm/compennt/instance/level!
+			nifty.
+		ugh. if i am truly going to have secure keys, i need a SESSION table
+			with randumb number, used for auth'ing actions.
+			for super security, regenerate this randumb number for each action
+	http auth "login", and a token that gets passed around!
+		let's try it as a function, on the money page. no login, no dice.
+		footer: a "logged in as" and/or "log out" on every page!
+		i want to do auth ONCE, then pass SOMETHING around../
+			but WHAT?
+				have a look at nfsn.com
+				have a look at pedanticnuke
+	ah, at some time, an interface for managing user privs!
+
+
+
+Basically, it'll be something similar to your report, 			
+	but with a FORM on each line, 
+		each containing an EDIT button 
+			and a hellacious number of hidden fields. 
+		That FORM's action would just call the 
+			entry screen, and, as if by magick, 
+				the user should see all the values 
+				pre-populated and ready for editing. 
+		A DELETE button could sit in that FORM too, 
+			and the main loop would then call a new delete function, 
+				possibly throwing up an "are you sure" beforehand....  
+					no rest for the wicked.
+		The main loop would, 
+		if it sees "edit", call the save function with a (new) arg, 
+			so that it knows that we're changing not saving, 
+			and can conditionally use "update" in the SQL query instead of "insert", 
+	ah shit. i either need multiple forms to call, or, have a smart form
+		that knows whether it's being called to edit, delete, etc
