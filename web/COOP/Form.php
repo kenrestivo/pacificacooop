@@ -80,6 +80,10 @@ class coopForm extends CoopObject
 				{
 					$el =& $form->addElement('select', $key, false, 
 											 $this->getEnumOptions($key));
+				} else if(is_array($this->obj->fb_booleanFields) &&
+						  in_array($key, $this->obj->fb_booleanFields))
+				{
+					$el =& $form->addElement('advcheckbox', $key);
 				} else {
 					$el =& $form->addElement(
 						$key == $this->pk ? 'hidden' : 'text', 

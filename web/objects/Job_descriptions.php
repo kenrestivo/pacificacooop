@@ -38,5 +38,7 @@ class Job_descriptions extends DB_DataObject
 		'tuition_type' => "Tuition Type"
 		);
 	var $fb_textFields = array('long_description');
+	var $fb_enumFields = array ('tuition_type');
+	var $fb_booleanFields = array ('board_position');
 
 }
