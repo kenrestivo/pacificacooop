@@ -1007,6 +1007,49 @@ where enrollment.school_year = '2004-2005'
 group by families.family_id
 order by families.name;
 
+--  nasty paddle report
+select springfest_attendees.paddle_number, tickets.vip_flag, 
+coalesce(leads.first_name, companies.first_name, parents.first_name) 
+		as first_name,
+coalesce(leads.last_name, companies.last_name, parents.last_name) as last_name,
+coalesce(leads.company, companies.company_name) as company_name,
+coalesce(leads.address1, companies.address1, families.address1) as address1,
+coalesce(leads.address2, companies.address2) as address2,
+coalesce(leads.city, companies.city) as city,
+coalesce(leads.state, companies.state) as state,
+coalesce(leads.zip, companies.zip) as zip,
+coalesce(leads.phone, companies.phone, families.phone) as phone,
+coalesce(leads.email_address, companies.email_address, families.email) as email_address,
+income.payment_amount
+from springfest_attendees
+left join leads on springfest_attendees.lead_id = leads.lead_id
+left join companies on springfest_attendees.company_id = companies.company_id
+left join parents on springfest_attendees.parent_id = parents.parent_id
+left join families on parents.family_id = families.family_id
+left join tickets on springfest_attendees.ticket_id = tickets.ticket_id
+		left join income on tickets.income_id = income.income_id
+where springfest_attendees.school_year = '$sy'
+order by last_name, first_name
+
+--- nasty ticket summary
+select tickets.ticket_id, 
+coalesce(leads.first_name, companies.first_name) 
+        as first_name,
+coalesce(leads.last_name, companies.last_name, concat(families.name, ' Family')) as last_name,
+coalesce(leads.company, companies.company_name) as company_name,
+coalesce(leads.address1, companies.address1, families.address1) as address1,
+coalesce(leads.address2, companies.address2) as address2,
+coalesce(leads.city, companies.city) as city,
+coalesce(leads.state, companies.state) as state,
+coalesce(leads.zip, companies.zip) as zip,
+coalesce(leads.phone, companies.phone, families.phone) as phone,
+coalesce(leads.email_address, companies.email_address, families.email) as email_address
+from tickets
+left join leads on tickets.lead_id = leads.lead_id
+left join companies on tickets.company_id = companies.company_id
+left join families on tickets.family_id = families.family_id
+where tickets.school_year = '2004-2005'
+order by last_name, first_name;
 
 
 --- EOF
