@@ -17,6 +17,7 @@
 -- along with this program; if not, write to the Free Software
 -- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+-- just a test query. all kids.
 select last, first 
 	from kids 
 		left join keglue on kids.kidsid = keglue.kidsid 
@@ -37,15 +38,6 @@ select parents.last, parents.first, lic.expires
 	group by parents.last, parents.first;
 
 
--- contact info all families whose working parent doesn't have a vaild dl
-select families.name, parents.last, parents.first, lic.expires, families.phone, parents.email
-	from families 
-		left join parents on parents.familyid = families.familyid 
-		left join lic on parents.parentsid = lic.parentsid 
-	where parents.worker = "Yes" and (expires is null or expires < now())
-	group by parents.last, parents.first;
-
-
 -- give me ocntact info for all families who have expired insurance
 -- XXX: this MAY be the worker, it may not, i don't know
 -- XXX this is THROUHOGHLY FUCKED UP! it ignores matches on the nonworker
@@ -56,5 +48,35 @@ select families.name, parents.last, parents.first, ins.expires,
 		left join ins on parents.parentsid = ins.parentsid 
 	where expires is null or expires < now()
 	group by families.name;
+
+-- all families and working parent info
+select families.name, families.familyid, families.phone,
+		parents.email
+	from families 
+		left join parents on parents.familyid = families.familyid
+	where parents.worker = 'Yes'
+	group by families.name;
+
+
+-- all the working drivers' license expirations, WIHTOUT the family stuff
+select max(lic.expires) as exp, parents.last, parents.first, parents.parentsid, parents.familyid
+	from lic 
+		left join parents on lic.parentsid = parents.parentsid 
+	where parents.worker= "Yes" 
+	group by parents.parentsid
+	order by exp desc;
+	-- note: in an actualy scripted query, i'll add where parents.familyid =
+
+
+-- all the insurance expirations, by parentsid, WIHTOUT the family stuff
+select max(ins.expires) as exp, parents.familyid, families.name, ins.policynum, ins.companyname
+	from ins 
+		left join parents on ins.parentsid = parents.parentsid 
+		left join families on parents.familyid = families.familyid 
+	group by parents.familyid
+	order by exp desc;
+	-- note: in an actualy scripted query, i'll add where parents.familyid =
+
+
 
 --- EOF

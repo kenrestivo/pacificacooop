@@ -1,6 +1,5 @@
 #!/usr/bin/perl -w
 
-
 #$Id$
 #fixes last names
 
@@ -28,19 +27,27 @@ $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
 
 
 #approximate list of families
-$rquery = " <INSERT HERE WHEN YOU GET YOUR SHIT TOGETHER>";
+$rquery = "
+	select families.name, families.familyid, families.phone,
+			parents.email, parents.last, parents.first
+		from families 
+			left join parents on parents.familyid = families.familyid
+		where parents.worker = 'Yes'
+		group by families.name
+";
+
+
 print "doing <$rquery>\n"; #XXX debug only
 $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 $rqueryobj->execute() or die "couldn't execute $!\n";
 
 while ($ritemref = $rqueryobj->fetchrow_hashref){
 	%ritem = %$ritemref;
-	print "Subject: Insurance Information for Co-Op\n\n";
-	print "Hello! My job this year is to keep track of the driver's license and auto insurance information for the school. This is actually an automated email that is being sent by a computer program. I know, it's impersonal, but, computers are good for automating repetitive tasks like this. My apologies.\n\n";
-	print "According my new program-- which may be completely wrong (I wrote itmyself) your auto insurance is with " . $ritem{'companyname'} . " and expired on " . $ritem{'expires'} . "\n\n";
-	print "Regulations require us to have a copy of a valid driver's license and current auto insurance on file. It appears this has to be current in order for you to be allowed to drive your child on any field trips. The next field trip is scheduled for the end of October, so, now is a good time to get all this paperwork up-to-date.\n\n";
-	print "If you could please place a copy of your current insurance card (the one that you keep in your car) into my communications folder, that would be great.\n\n";
-	print "Again, sorry for the impersonal email. Please feel free to call me at 650-355-1317 with any questions.\n\nThanks!\n\n-ken";
+	$id = $ritem{'familyid'};
+	print "family ", $ritem{'name'}, " " , $ritem{'phone'}, 
+		" ", $ritem{'email'},  " \n";
+	&getlicenseinfo($id);
+	&getinsuranceinfo($id);
 
 } # end while
 
@@ -48,3 +55,77 @@ while ($ritemref = $rqueryobj->fetchrow_hashref){
 $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
 #EOF
+
+sub getlicenseinfo()
+{
+	my $famid = shift;
+	my $queryobj;
+	my $itemref;
+	my %item;
+	my $query = "
+		select unix_timestamp(max(lic.expires)) as exp, 
+			lic.last, lic.first, lic.middle
+		from lic 
+			left join parents on lic.parentsid = parents.parentsid 
+		where parents.worker= 'Yes' and parents.familyid = $famid
+		group by parents.parentsid
+		order by exp desc";
+	#print "doing <$query>\n"; #XXX debug only
+	$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
+	$queryobj->execute() or die "couldn't execute $!\n";
+
+	while ($itemref = $queryobj->fetchrow_hashref){
+		%item = %$itemref;
+		print "\tlic ", $item{'exp'}, 
+				" driver ", $item{'first'}, " ", $item{'middle'}, " ", 
+				$item{'last'}, " \n";
+
+	} # end while
+
+}
+
+sub getinsuranceinfo()
+{
+	my $famid = shift;
+	my $queryobj;
+	my $itemref;
+	my %item;
+	my $query = "
+		select unix_timestamp(max(ins.expires)) as exp, parents.familyid, 
+			ins.policynum, ins.companyname, ins.last, ins.first
+			from ins 
+				left join parents on ins.parentsid = parents.parentsid 
+			where parents.familyid = $famid
+			group by parents.parentsid
+			order by exp desc
+		";
+
+	#print "doing <$query>\n"; #XXX debug only
+	$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
+	$queryobj->execute() or die "couldn't execute $!\n";
+
+	while ($itemref = $queryobj->fetchrow_hashref){
+		%item = %$itemref;
+		print "\tins ", $item{'exp'}, 
+			" company ", $item{'companyname'}, 
+			" policy ", $item{'policynum'}, " \n";
+
+	} # end while
+
+}
+
+######################
+#	EMAILREMINDER
+######################
+sub emailreminder()
+{
+	my $ritemref = shift;
+	my %ritem = %$ritemref;
+
+	print "Subject: Insurance Information for Co-Op\n\n";
+	print "Hello! My job this year is to keep track of the driver's license and auto insurance information for the school. This is actually an automated email that is being sent by a computer program. I know, it's impersonal, but, computers are good for automating repetitive tasks like this. My apologies.\n\n";
+	print "According my new program-- which may be completely wrong (I wrote itmyself) your auto insurance is with " . $ritem{'companyname'} . " and expired on " . $ritem{'expires'} . "\n\n";
+	print "Regulations require us to have a copy of a valid driver's license and current auto insurance on file. It appears this has to be current in order for you to be allowed to drive your child on any field trips. The next field trip is scheduled for the end of October, so, now is a good time to get all this paperwork up-to-date.\n\n";
+	print "If you could please place a copy of your current insurance card (the one that you keep in your car) into my communications folder, that would be great.\n\n";
+	print "Again, sorry for the impersonal email. Please feel free to call me at 650-355-1317 with any questions.\n\nThanks!\n\n-ken";
+}
