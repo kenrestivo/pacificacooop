@@ -12,20 +12,8 @@
 			 )
 (require 'printf)
 
+
 (define queries '(
-   "select companies.company_name, companies.address1, companies.city,
-		companies.state, companies.state, companies.zip, companies.phone,
-		companies.email,
-        sum(auction.amount)  as auction_item_total 
-    from auction
-        left join companies_auction_join
-               on auction.auctionid = companies_auction_join.auctionid
-            left join companies 
-                on companies.company_id = 
-                    companies_auction_join.company_id
-    where companies.company_id is not null and companies.do_not_contact is null
-    group by  companies.company_id 
-    order by auction_item_total desc, companies.company_name asc"
 
 "select coalesce(companies.company_name, 
         concat_ws(' ', leads.first, leads.last, leads.company)) as donor,
@@ -35,7 +23,7 @@
 		concat_ws(' ', leads.state, companies.state) as state,
 		concat_ws(' ', leads.zip, companies.zip) as zip,
 		concat_ws(' ', leads.phone, companies.phone) as phone,
-		companies.email,
+		companies.email, leads.leadsid, companies.company_id,
 		      sum(inc.amount)  as cash_total 
     from inc 
         left join companies_income_join
@@ -50,18 +38,39 @@
     group by leads.leadsid, companies.company_id 
     order by cash_total desc, 
         leads.last asc, leads.first asc, companies.company_name asc"
+
+"select companies.company_name, companies.address1, companies.city,
+		companies.state, companies.state, companies.zip, companies.phone,
+		companies.email,  companies.company_id,
+        sum(auction.amount)  as auction_item_total 
+    from auction
+        left join companies_auction_join
+               on auction.auctionid = companies_auction_join.auctionid
+            left join companies 
+                on companies.company_id = 
+                    companies_auction_join.company_id
+    where companies.company_id is not null and companies.do_not_contact is null
+    group by  companies.company_id 
+    order by auction_item_total desc, companies.company_name asc"
    
 ))
 
-;; the corporate auctions
+
+
+
+
+;;;; MAIN
 (define *dbh* (apply simplesql-open "mysql"
 				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf")))
 
+(define out (open-output-file "/mnt/kens/ki/proj/coop/reports/allmoney.txt"))
 
+(map (lambda (query) (list-to-tab-delim (simplesql-query *dbh* query ) out))
+	 queries)
 
-(map (lambda (query) (list-to-tab-delim (simplesql-query *dbh* query )))
-	 queries) 
+(flush-all-ports)
 
+(close-output-port out)
 
 (simplesql-close *dbh*)
 
