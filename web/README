@@ -4,7 +4,7 @@ $Id$
 instead of using some off-the-shelf open-source php web application framework (which i SHOULD have done!) i wrote my own set of gui widgets and database abstractions. in retrospect this was an error but i'm stuck with it now. so, i'm documenting it so that anyone maintaining this (including myself) can figure out what's what.
 
 general philosophy
-	i'm a gtk/gnome xwindows guy. i hate html. so, i abstracted out all the html, and wrote a set of "widgets" to do things: draw popups, display fields, etc. this isn't new: phpnuke and other such systems take a similar approach.
+	i'm a gtk/gnome xwindows guy. i hate html. so, i abstracted out all the html, and wrote a set of "widgets" to do things: draw popups, display fields, etc. this isn't new: postnuke and other such systems take a similar approach.
 
 
 the fieldstruct
@@ -85,6 +85,7 @@ callbacks struct
 
 auth
 	realms: areas of privilege
+		TODO: list realms and what they MEAN!
 	user and group levels, each has an access level
 	ACCESS LEVELS  are:
 		'ACCESS_INVALID', -1);

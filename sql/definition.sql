@@ -286,13 +286,12 @@ create table companies (
 );
 
 -- glue table for many-to-many: companies to auction items
--- TODO: use NEW table and fieldnames!
 create table companies_auction_join (
-    saglueid int(32) not null unique auto_increment,
+    companies_auction_join_id int(32) not null unique auto_increment,
 	auctionid int(32),
 	company_id int(32),
 	familyid int(32), -- XXX hack!! i hate this.
-    primary key (saglueid)
+    primary key (companies_auction_join_id)
 );
 
 
@@ -362,6 +361,14 @@ create table raffle_income_join (
 	raffle_location_id int(32),
 	incid int(32),
     primary key (raffle_income_join_id)
+);
+
+-- glue table for many-to-many: companies to income
+create table companies_income_join (
+    companies_income_join_id int(32) not null unique auto_increment,
+	incid int(32),
+	company_id int(32),
+    primary key (companies_income_join_id)
 );
 
 
