@@ -379,15 +379,8 @@ create table flyer_deliveries(
 	flyer_type varchar(255), -- XXX hack! this wants to be a separate table
 	delivered_date date,
 	familyid int(32), -- someone needs credit for this
-    primary key (flyer_delivery_id)
-);
-
--- glue table for many-to-many: companies to flyers
-create table companies_flyer_delivery_join (
-    companies_flyer_delivery_join_id int(32) not null unique auto_increment,
 	company_id int(32),
-	flyer_delivery_id int(32),
-    primary key (companies_flyer_delivery_join_id)
+    primary key (flyer_delivery_id)
 );
 
 -- the user/passwords used by the web view page AND my update tool..
