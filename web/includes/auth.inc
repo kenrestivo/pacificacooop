@@ -72,7 +72,7 @@ savePass($uid, $clearpass)
 
 	$hash = strtolower(md5($clearpass));
 
-	$query = sprintf("update users set password = '%s' where userid = %d ",
+	$query = sprintf("update users set password = '%s' where user_id = %d ",
 				$hash, $uid);
 	mysql_query($query);
 	$err = mysql_error();
@@ -105,7 +105,7 @@ getPass($uid)
 	}
 
 	// the query
-	$query = sprintf("SELECT * FROM users WHERE userid = %d ", $uid);
+	$query = sprintf("SELECT * FROM users WHERE user_id = %d ", $uid);
 	//user_error("getPass(): [$query]", E_USER_NOTICE);
 	$listq = mysql_query($query);
 	$err = mysql_error();
@@ -220,9 +220,9 @@ checkPass($uid, $clearpass)
 function
 quickLevelCheck($targetlevel, $targetfamilyid, $permstruct, $userstruct)
 {
-		if(($permstruct['userlevel'] >= $targetlevel  && 
+		if(($permstruct['user_level'] >= $targetlevel  && 
 			$targetfamilyid == $userstruct['familyid']) || 
-			$permstruct['grouplevel'] >= $targetlevel) 
+			$permstruct['group_level'] >= $targetlevel) 
 		{
 			return 0;
 		}
@@ -255,7 +255,7 @@ checkAuthLevel($auth, $targetfamilyid, $targetrealm, $targetlevel)
 	AGGREGATELEVEL
 	return the maximum level i can get with this combination of  args
 			check the familyid match, the level in the db, and return highest avail
-				i.e. if my families don't match, return group level, otherwise userlevel
+				i.e. if my families don't match, return group level, otherwise user_level
 	inputs: auth, family to compare to, realm [later group], 
 	returns: max level for this action
 ******************/
@@ -268,13 +268,13 @@ aggregateLevel($auth, $targetfamilyid, $targetrealm)
 		return 0; //pass through the nothing.
 	}
 
-	//userlevel is only relevent if i'm that family. duh
-	if($targetfamilyid == $u['familyid'] ){
-		$userlevel = $perms['userlevel'] ;
+	//user_level is only relevent if i'm that family. duh
+	if($targetfamilyid == $u['family_id'] ){
+		$user_level = $perms['user_level'] ;
 	}
 	
 	//i want to know the higher of the two.
-	return $userlevel > $perms['grouplevel'] ? $userlevel : $perms['grouplevel'];
+	return $user_level > $perms['group_level'] ? $user_level : $perms['group_level'];
 	
 }/* END AGGREGATELEVEL */
 
@@ -284,7 +284,7 @@ aggregateLevel($auth, $targetfamilyid, $targetrealm)
 		return what's up for this uid, let caller decide if that's good or bad
 		checks token just so stuff doesn't sneak up on us
 	inputs: auth structure,realm, and eventually group
-	returns: array of userlevel and grouplevel, or null if checktoken fails
+	returns: array of user_level and grouplevel, or null if checktoken fails
 ******************/
 function
 getAuthLevel($auth, $targetrealm)
@@ -306,7 +306,7 @@ getAuthLevel($auth, $targetrealm)
 	$query = sprintf("
 			SELECT privs.*
 				FROM privs
-			WHERE privs.userid = %d 
+			WHERE privs.user_id = %d 
 				and (privs.realm = '%s' or privs.realm = 'all')
 			",
 			$auth['uid'], $targetrealm
@@ -319,14 +319,14 @@ getAuthLevel($auth, $targetrealm)
 	}
 				
 	if (mysql_num_rows($listq) > 1){
-		user_error(sprintf("getAuthLevel(): You may NOT have more than one entry for userid %d and realm %s (and later, group)! The database is corrupted!", $auth['uid'], $targetrealm), 
+		user_error(sprintf("getAuthLevel(): You may NOT have more than one entry for user_id %d and realm %s (and later, group)! The database is corrupted!", $auth['uid'], $targetrealm), 
 			E_USER_ERROR);
 		return 0; // there can beeee... only one!
 	}                  
 
 	while($row = mysql_fetch_assoc($listq)){
-		$result['userlevel'] = $row['userlevel'];
-		$result['grouplevel'] = $row['grouplevel'];
+		$result['user_level'] = $row['user_level'];
+		$result['group_level'] = $row['group_level'];
 	}
 
 	return $result;
@@ -338,7 +338,7 @@ getAuthLevel($auth, $targetrealm)
 	GETUSER
 	inputs: uid
 	returns: returns the human name of who they are logged in, 
-			and the familyid and familyname if there is one
+			and the family_id and familyname if there is one
 		or 0 if none!
 ******************/
 function
@@ -353,10 +353,10 @@ getUser($uid)
 	// the query
 	$query = sprintf("
 		SELECT users.name as username, families.name as familyname, 
-				users.familyid
+				users.family_id
 			FROM users 
-			left join families on families.familyid = users.familyid
-			WHERE users.userid = %d ",
+			left join families on families.family_id = users.family_id
+			WHERE users.user_id = %d ",
 				$uid );
 	$listq = mysql_query($query);
 	$err = mysql_error();
@@ -384,7 +384,7 @@ getUser($uid)
 
 /******************
 	ACCESSLEVELSTRING
-	returns a text description of user permissions for this realm and userlevel
+	returns a text description of user permissions for this realm and user_level
 	TODO: eventually put THIS beast into the object
 		yes, callbacks are affecting this too. 
 	inputs: privilege number, callbacks
@@ -436,21 +436,21 @@ function loginPopup($uid)
 	
 	$sy = findSchoolYear();
 	#DO THE QUERY
-	// TODO: group by userid
+	// TODO: group by user_id
 	$listq = mysql_query(" select * from users 
-						left join kids on users.familyid = kids.familyid 
-						left join enrollment on kids.kidsid = enrollment.kidsid
+						left join kids on users.family_id = kids.family_id 
+						left join enrollment on kids.kid_id = enrollment.kid_id
 						where enrollment.school_year = '$sy'
-						group by userid
+						group by user_id
 								order by name");
 	$err = mysql_error();
 	if($err){
 		user_error("loginPopup(): [$listq]: $err",E_USER_ERROR);
 	}
 	while($row = mysql_fetch_array($listq)){
-		$sel = $row['userid'] == $uid ? " selected" : "";
+		$sel = $row['user_id'] == $uid ? " selected" : "";
 		printf("<option value=\"%d\" %s>%s</option>\n", 
-			$row['userid'], $sel, $row['name']);
+			$row['user_id'], $sel, $row['name']);
  
 	}
 	print "\n</select>";
@@ -1141,11 +1141,11 @@ displayAuth($p, $u, $callbacks)
 	$pretty = $callbacks['description'];
 
 	print "<h3>$pretty \n";
-	if($p['grouplevel'] < ACCESS_VIEW){
+	if($p['group_level'] < ACCESS_VIEW){
 		printf("for the %s Family. </h3>
 				(You are authorized to %s %s for the %s).\n", 
 			$u['familyname'], 
-			accessLevelString($p['userlevel'], $callbacks),
+			accessLevelString($p['user_level'], $callbacks),
 			$pretty,
 			$u['username']
 		);
@@ -1154,7 +1154,7 @@ displayAuth($p, $u, $callbacks)
 				(%s is authorized to %s %s
 				for ALL families).</h3>",
 			$u['username'],
-			accessLevelString($p['grouplevel'], $callbacks),
+			accessLevelString($p['group_level'], $callbacks),
 			$pretty);
 	}
 
@@ -1177,17 +1177,17 @@ fieldPerms($perms, $targetfamilyid, $p, $u, $targetlevel)
 		return 0;
 	}
 
-	user_error(sprintf("fieldPerms(): targetfamily %d, actualfamilyid %d, targetlevel %d, fieldgroup %d, actualgroup %d, fielduser %d, actualuser %d", $targetfamilyid, $u['familyid'], $targetlevel,
-		$perms[0], $p['grouplevel'], $perms[1], $p['userlevel'] ), 
+	user_error(sprintf("fieldPerms(): targetfamily %d, actualfamilyid %d, targetlevel %d, fieldgroup %d, actualgroup %d, fielduser %d, actualuser %d", $targetfamilyid, $u['family_id'], $targetlevel,
+		$perms[0], $p['group_level'], $perms[1], $p['user_level'] ), 
 		E_USER_NOTICE);
 
 	//the LESSER of two evils
-	$user =  $p['userlevel'] > $perms[1] ? $perms[1] : $p['userlevel'];
-	$group = $p['grouplevel'] > $perms[0] ? $perms[0] : $p['grouplevel'];
+	$user =  $p['user_level'] > $perms[1] ? $perms[1] : $p['user_level'];
+	$group = $p['group_level'] > $perms[0] ? $perms[0] : $p['group_level'];
 
-	//if it's MY record, return the userlevel, otherwise the grouplevel.
+	//if it's MY record, return the user_level, otherwise the group_level.
 	if($group >= $targetlevel ||
-			($targetfamilyid == $u['familyid'] && $user >= $targetlevel ) ) 
+			($targetfamilyid == $u['family_id'] && $user >= $targetlevel ) ) 
 	{
 		user_error("fieldPerms(): ACCEPTING", E_USER_NOTICE);
 		return 0;

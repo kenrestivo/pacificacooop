@@ -4,7 +4,7 @@
 #$Id$
 #attempt at gleaning info from the rasta, for matching it up with the db
 
-# Copyright (C) 2003  ken restivo <ken@restivo.org>
+# Copyright (C) 2003,,2004  ken restivo <ken@restivo.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -50,11 +50,11 @@ my $dbh;
 my $validrowmin = 8;
 
 
-our($opt_t, $opt_v); #loathe perl
+our($opt_t, $opt_v, $schoolyear); #loathe perl
 getopts('vt') or &usage();
-
-&main();
-
+$schoolyear= "2004-2005";
+#&main();
+print "this is the old version. it's all changed now\n";
 exit 0;
 
 #END GLOBAL AREA
@@ -171,6 +171,7 @@ sub checkNewFamily()
 	
 
 	#i want EXACT matches on familyname, none of this %% crap
+	# XXX auugh! what if i get duplicate family names, i.e. smith, jones?
 	$rquery = "select * from families where name like \"$name\" ";
 
 	if($opt_v){
@@ -183,7 +184,7 @@ sub checkNewFamily()
 		%ritem = %$ritemref;
 		if($opt_v){
 			printf("DEBUG %d %s %s\n",
-				$ritem{'familyid'},
+				$ritem{'family_id'},
 				$ritem{'name'},
 				$ritem{'phone'}
 			);
@@ -195,7 +196,7 @@ sub checkNewFamily()
 		if($opt_v){
 			print "DEBUG: yes, this family is in the db\n";
 		}
-		return($ritem{'familyid'});
+		return($ritem{'family_id'});
 	} 
 	
 	$query = sprintf("insert into families set 
@@ -221,9 +222,9 @@ sub checkOneParent()
 {
 	my $rowref = shift;
 	my $famid = shift;
-	my $last = shift;
-	my $first = shift;
-	my $ptype = shift;
+	my $last_name = shift;
+	my $first_name = shift;
+	my $type = shift;
 	my ($rquery , $rqueryobj , $ritemref, $query);
 	my %ritem;
 	my $cnt =  0;
@@ -231,12 +232,12 @@ sub checkOneParent()
 	#search in db. if parent isn't there, 
 	#	look for family, it should add one if needed.
 	#	note: there are a few single moms here, so note that.
-	#	note the weird select! i do NOT want to falsely match bad first/last
+	#	note the weird select! i do NOT want to falsely match bad first_name/last_name
 	$rquery = sprintf("select * from parents 
-			where (first like \"%%%s%%\" and last like \"%%%s%%\")
-			or (first like \"%%%s%%\" and familyid = %d)
+			where (first_name like \"%%%s%%\" and last_name like \"%%%s%%\")
+			or (first_name like \"%%%s%%\" and family_id = %d)
 	",
-		$first, $last, $first, $famid
+		$first_name, $last_name, $first_name, $famid
 	) ;
 
 	if($opt_v){
@@ -254,30 +255,30 @@ sub checkOneParent()
 	if($cnt){
 		#	AND check for parents which don't match the family name in there?
 		#		i.e. if my $famid is NOT what's in the db!
-		if($ritem{'familyid'} != $famid){
-			printf("ERROR! $first $last has changed from famid %d to famid %d!\n",
-				  $famid, $ritem{'familyid'} );
+		if($ritem{'family_id'} != $famid){
+			printf("ERROR! $first_name $last_name has changed from famid %d to famid %d!\n",
+				  $famid, $ritem{'family_id'} );
 			exit(1);
 		}
 		if($opt_v){
 			print "DEBUG: yes, this parent is in the db\n";
 		}
-		return($ritem{'parentsid'});
+		return($ritem{'parent_id'});
 	} 
 	#otherwise, add him or her!
 	$query = sprintf("insert into parents set 
-			familyid = %d ,
-			last = '%s',
-			first = '%s',
-			ptype = '%s',
-			email = '%s',
+			family_id = %d ,
+			last_name = '%s',
+			first_name = '%s',
+			type = '%s',
+			email_address = '%s',
 			worker = '%s'
 	",
-		$famid, $last, $first, $ptype, $$rowref[7],
+		$famid, $last_name, $first_name, $type, $$rowref[7],
 		#TODO AACK!!! I WILL NEED TO CHECK WORKING PARENT HERE!!
 		#	which means, i'll need the fucking CELL. dammit.
 		#in the meantime, i have to make a stupid sexist guess
-		$ptype eq 'Mom' ? 'Yes' : 'No'
+		$type eq 'Mom' ? 'Yes' : 'No'
 	);
 	if($opt_v){
 		print "DEBUG doing <$query>\n";
@@ -295,16 +296,16 @@ sub checkOneParent()
 #######################
 sub fixLastNames()
 {
-	my $last = shift;
-	my $first = shift;
+	my $last_name = shift;
+	my $first_name = shift;
 	my %name;
 
-	$name{'first'} = $first;
-	$name{'last'} = $last;
+	$name{'first_name'} = $first_name;
+	$name{'last_name'} = $last_name;
 
 	#handle leigh ann and jo ann special cases. 
-	if($first =~ /\w+\s+\w+/ && $first !~ /\s+[Aa]nn/){
-		($name{'first'}, $name{'last'}) = split(/ +/, $first);
+	if($first_name =~ /\w+\s+\w+/ && $first_name !~ /\s+[Aa]nn/){
+		($name{'first_name'}, $name{'last_name'}) = split(/ +/, $first_name);
 	}
 	
 	return \%name;
@@ -328,7 +329,7 @@ sub checkNewParents()
 
 	$famid = &checkNewFamily($rowref);
 	if($famid < 1){
-		print "ERROR! familyid $famid\n";
+		print "ERROR! family_id $famid\n";
 		exit(1);
 	}
 
@@ -338,7 +339,7 @@ sub checkNewParents()
 	#check the mom's name
 	$nameref = &fixLastNames($famname, $$rowref[1]);
 	$something = &checkOneParent($rowref, $famid,  
-		$$nameref{'last'}, $$nameref{'first'}, 'Mom');
+		$$nameref{'last_name'}, $$nameref{'first_name'}, 'Mom');
 
 
 	#i have to namecheck the mom AND the dad's name. 
@@ -346,7 +347,7 @@ sub checkNewParents()
 	#	TODO somehow guess dad or partner? um, how?
 	$nameref = &fixLastNames($famname, $$rowref[2]);
 	$something = &checkOneParent($rowref, $famid,  
-		$$nameref{'last'}, $$nameref{'first'}, 'Dad');
+		$$nameref{'last_name'}, $$nameref{'first_name'}, 'Dad');
 
 	#TODO *do* something with $something! return it, check it, SOMETHING!
 	
@@ -360,7 +361,7 @@ sub checkNewKids()
 	my $rowref = shift;
 	my $session = shift;
 	my ($rquery , $rqueryobj , $ritemref, $query);
-	my ($kidsid, $name) ;
+	my ($kid_id, $name) ;
 	my %ritem;
 	my $cnt =  0;
 	my $famid =  0;
@@ -377,7 +378,7 @@ sub checkNewKids()
 	##XXX must check for am/pm session! kid could be in wrong session!
 	# in which case you'll want to un-drop the kid.
 	$rquery = sprintf("select * from kids 
-			where first like \"%%%s%%\" and last like \"%%%s%%\"
+			where first_name like \"%%%s%%\" and last_name like \"%%%s%%\"
 	",
 		$$rowref[3], $name
 	);
@@ -400,22 +401,22 @@ sub checkNewKids()
 		}
 		#TODO check its attendance! and add/change its attendance here!
 		#	i.e. move it from AM to PM
-		return $ritem{'kidsid'};
+		return $ritem{'kid_id'};
 	} 
 	
 	#otherwise, insert the new kid!
-	#	first, get or insert its family
+	#	first_name, get or insert its family
 	$famid = &checkNewFamily($rowref);
 	if($famid < 1){
-		print "ERROR! familyid $famid\n";
+		print "ERROR! family_id $famid\n";
 		exit(1);
 	}
 
 	#OK, add the little munchkin!
 	$query = sprintf("insert into kids set 
-			last = '%s' ,
-			first = '%s' ,
-			familyid = %d 
+			last_name = '%s' ,
+			first_name = '%s' ,
+			family_id = %d 
 	",
 		$name, $$rowref[3], $famid
 	);
@@ -424,24 +425,24 @@ sub checkNewKids()
 	}
 	unless ($opt_t){
 		print STDERR $dbh->do($query) . "\n";
-		$kidsid = $dbh->{'mysql_insertid'};
+		$kid_id = $dbh->{'mysql_insertid'};
 	}
 	
 	#add them to ATTENDANCE too! 
 	#	i am assuming that, since they are NEW kids, 
 	#	there aren't any entries for them in the attendance base yet!
-	#if($kidsid < 1){
-	#	print "ERROR! kidsid $kidsid\n";
+	#if($kid_id < 1){
+	#	print "ERROR! kid_id $kid_id\n";
 	#	exit(1);
 	#}
 	$query = sprintf("insert into attendance set 
-			kidsid = %d ,
+			kid_id = %d ,
 			enrolid = '%s'
 	",
 		#XXX i have horribly hacked this to HARD CODE for 2003-2004 session!
 		#	this MUST be fixed before the end of the school year!
 		#		i.e. "1" and "2" are SPECIFIC to this calendar year. DON'T DO IT!
-		$kidsid, $session eq 'AM' ? 1 : 2
+		$kid_id, $session eq 'AM' ? 1 : 2
 	);
 	if($opt_v){
 		print "DEBUG doing <$query>\n";
@@ -452,8 +453,8 @@ sub checkNewKids()
 	}
 
 	#add parent here too? why not, we know we need them/one
-	&checkNewParents($rowref, $session);	
-	
+	# &checkNewParents($rowref, $session);	
+  
 } #END CHECKNEWKIDS
 
 
@@ -472,15 +473,15 @@ sub checkChanges(){
 	my $cnt = 0;
 
 	$rquery = sprintf("
-		select kids.first, kids.last, kids.kidsid, kids.familyid, 
-				enrol.semester, enrol.sess, attendance.dropout
+		select kids.first_name, kids.last_name, kids.kid_id, kids.family_id, 
+				enrol.school_year, enrol.sess, attendance.dropout
 			from attendance
 				left join enrol on attendance.enrolid = enrol.enrolid
-				left join kids on kids.kidsid = attendance.kidsid
-			where enrol.semester = '2003-2004'  
-				and last like \"%%%s%%\" and first like \"%%%s%%\"
+				left join kids on kids.kid_id = attendance.kid_id
+			where enrol.school_year = '%s'  
+				and last_name like \"%%%s%%\" and first_name like \"%%%s%%\"
 	",
-			$session, $$rowref[0], $$rowref[3]
+			$schoolyear, $$rowref[0], $$rowref[3]
 	);
 
 	if($opt_v){
@@ -495,7 +496,7 @@ sub checkChanges(){
 	}
 	if ($cnt > 1){
 		printf("ERROR! %s %s in same session with same name twice!\n",
-			$ritem{'first'}, $ritem{'last'}
+			$ritem{'first_name'}, $ritem{'last_name'}
 		);
 	} elsif($cnt == 1){
 		if($opt_v){
@@ -508,17 +509,17 @@ sub checkChanges(){
 		#		and update it (change session, undrop if they're back) if needed
 		if( $session eq $ritem{'sess'} || $ritem{'dropout'} ){
 			#TODO change the session, and undrop them (they ARE enrolled)
-			#	ugh.. deal with semester (i.e. 2003-2004)
+			#	ugh.. deal with school_year (i.e. 2003-2004)
 			printf("%s %s was dropped out. un-dropping them\n",
-				$ritem{'first'}, $ritem{'last'}
+				$ritem{'first_name'}, $ritem{'last_name'}
 			);
 		}
 		#XXX this query is brain-dead. fix it.
 		if( $session ne $ritem{'sess'} || !$ritem{'dropout'} ){
 			#TODO gurf
-			#	ugh.. deal with semester (i.e. 2003-2004)
+			#	ugh.. deal with school_year (i.e. 2003-2004)
 			printf ("%s %s wasn't enrolled in this session. adding them\n",
-				$ritem{'first'}, $ritem{'last'}
+				$ritem{'first_name'}, $ritem{'last_name'}
 			);
 		}
 
@@ -526,7 +527,7 @@ sub checkChanges(){
 		#	family.phone
 		
 
-		#	parents.email, parents.worker
+		#	parents.email_address, parents.worker
 
 	}
 
@@ -549,11 +550,11 @@ sub deleteReverse()
 	# then iterates through the sheet looking for them
 
 	$rquery = "
-		select kids.first, kids.last, kids.kidsid, enrol.semester, enrol.sess
+		select kids.first_name, kids.last_name, kids.kid_id, enrol.school_year, enrol.sess
 			from attendance
 			left join enrol on attendance.enrolid = enrol.enrolid
-			left join kids on kids.kidsid = attendance.kidsid
-			where enrol.semester = '2003-2004'  
+			left join kids on kids.kid_id = attendance.kid_id
+			where enrol.school_year = '$schoolyear'  
 				and enrol.sess = '$session'
 				and attendance.dropout is null
 	";
@@ -569,7 +570,7 @@ sub deleteReverse()
 
 		if($opt_v && $opt_v > 1){
 			printf("DEBUG iterating thru, looking for %s %s\n",
-					$ritem{'first'}, $ritem{'last'} );
+					$ritem{'first_name'}, $ritem{'last_name'} );
 		}
 
 		#ok, iterate through the sheet looking for this kid.
@@ -607,14 +608,14 @@ sub deleteReverse()
 					);
 				}
 				#FINALLY! count occurences of this thing!
-				if($ritem{'first'} eq 
+				if($ritem{'first_name'} eq 
 					&unBaby($ws->{'Cells'}[$row][3]->Value) &&
-					$ritem{'last'} eq 
+					$ritem{'last_name'} eq 
 						&unBaby($ws->{'Cells'}[$row][0]->Value) )
 				{
 					if($opt_v){
 						printf("DEBUG found %s %s !\n",
-								$ritem{'first'}, $ritem{'last'} );
+								$ritem{'first_name'}, $ritem{'last_name'} );
 					}
 					$cnt++;
 				}
@@ -626,17 +627,17 @@ sub deleteReverse()
 		if($cnt < 1){
 			#it's been dropped
 			printf("%s %s has been dropped OR moved from $session !\n",
-				$ritem{'first'}, $ritem{'last'} );
+				$ritem{'first_name'}, $ritem{'last_name'} );
 			#TODO check 'sess' versus $session and deduce that they moved!
 			#	HANDLE THIS RIGHT! do i drop them here and then add them later?
 			$query = sprintf("update attendance set 
 					dropout = now() 
-					where kidsid = %d
+					where kid_id = %d
 			",
 				#XXX i have horribly hacked this to 
 				#	HARD CODE for 2003-2004 session!
 				#	this MUST be fixed before the end of the school year!
-				$ritem{'kidsid'}, $session eq 'AM' ? 1 : 2
+				$ritem{'kid_id'}, $session eq 'AM' ? 1 : 2
 			);
 			if($opt_v){
 				print "DEBUG doing <$query>\n";
@@ -650,7 +651,7 @@ sub deleteReverse()
 		} elsif ($cnt > 1){
 			#error! we have TWO matches??!
 			printf("ERROR %s %s is in the roster twice??!\n",
-				$ritem{'first'}, $ritem{'last'} );
+				$ritem{'first_name'}, $ritem{'last_name'} );
 			exit(1);
 		}
 	} #end ritem walk
@@ -697,7 +698,7 @@ sub iterateSheets()
 
 #################
 #	VALIDROW
-#	count that the first x of these have data in them
+#	count that the first_name x of these have data in them
 #	TODO stupid. don't pass $ws and $row, just pass $ws->{'Cells'}[$row] !
 #		can i DO that? array/references?
 #################

@@ -55,12 +55,12 @@
 		 (worker (if (string-index long-parent (char-set #\*)) "Yes" "No"))
 		 (parents (simplesql-query *dbh*
 								   (sprintf #f "
-				select parentsid, last, first, worker, ptype, familyid
+				select parent_id, last_name, first_name, worker, type family_id
 						from parents
-					where (soundex(first) = soundex('%s')
-									or first like \"%%%s%%\"
-									or ptype = '%s')
-								and  familyid = %d "
+					where (soundex(first_name) = soundex('%s')
+									or first_name like \"%%%s%%\"
+									or type = '%s')
+								and  family_id = %d "
 											(car split-name)
 											(car split-name)
 											type
@@ -69,14 +69,14 @@
 											))))
 
 	(if (>  (length parents) 1)
-		(db-ref-last (choose-duplicates parents) "parentsid") ; got it!
+		(db-ref-last (choose-duplicates parents) "parent_id") ; got it!
 		(begin (safe-sql *dbh* (sprintf #f "
 				insert into parents set 
-							last = '%s' ,
-							first = '%s' ,
+							last_name = '%s' ,
+							first_name = '%s' ,
 							worker = '%s',
-							ptype = '%s',
-							familyid = %d "
+							type = '%s',
+							family_id = %d "
 										(cdr split-name)
 										(car split-name)
 										worker type
@@ -93,10 +93,10 @@
   (let* ((kid-id (check-for-new-kid line header))
 		 (enrollments (simplesql-query *dbh*
 									   (sprintf #f "
-				select enrollment_id, kidsid, am_pm_session,
+				select enrollment_id, kid_id, am_pm_session,
 						start_date, dropout_date
 					from enrollment
-						where kidsid = %d and
+						where kid_id = %d and
 						school_year = '%s'"
 												kid-id
 												*school-year*))))
@@ -104,7 +104,7 @@
 		(db-ref-last (choose-duplicates enrollments) "enrollment_id") ;gotcha!
 		(begin (safe-sql *dbh* (sprintf #f "
 						insert into enrollment set 
-								kidsid = %d,
+								kid_id = %d,
 								start_date = '%s',
 								school_year = '%s',
 								am_pm_session = '%s'"
@@ -136,9 +136,9 @@
 (define (check-for-new-family line header)
   (let ((families (simplesql-query *dbh*
 								   (sprintf #f "
-				select families.familyid, families.name,
-								families.phone parents.first as mom
-						from families left join parents using (familyid)
+				select families.family_id, families.name,
+								families.phone parents.first_name as mom
+						from families left join parents using (family_id)
 						where  phone like \"%%%s%%\"
 							or (soundex(name) = soundex('%s')
 								and soundex(mom) = soundex('%s'))"
@@ -146,12 +146,12 @@
 											(rasta-find "Last Name" line header)
 											(rasta-find "Mom Name *")))))
 	(if (> (length families) 1)
-		(db-ref-last (choose-duplicates families) "familyid") ;gotcha!
+		(db-ref-last (choose-duplicates families) "family_id") ;gotcha!
 		(begin (safe-sql *dbh* (sprintf #f "
 						insert into families set 
 								name = '%s',
-								address = '%s',
-								email = '%s',
+								address1 = '%s',
+								email_address = '%s',
 								phone = '%s'"
 										(rasta-find "Last Name" line header)
 										(rasta-find "Address" line header)
@@ -164,23 +164,23 @@
 (define (check-for-new-kid line header)
   (let ((kids (simplesql-query *dbh*
 							   (sprintf #f "
-				select kidsid, last, first, familyid from kids
-					where (soundex(first) = soundex('%s') or
-						first like \"%%%s%%\")
-						and soundex(last) = soundex('%s') "
+				select kid_id, last_name, first_name, family_id from kids
+					where (soundex(first_name) = soundex('%s') or
+						first_name like \"%%%s%%\")
+						and soundex(last_name) = soundex('%s') "
 										(rasta-find "Child" line header)
 										(rasta-find "Child" line header)
 										(rasta-find "Last Name" line header)
 										))))
 
 	(if (>  (length kids) 1)
-		(db-ref-last (choose-duplicates kids) "kidsid") ; got it!
+		(db-ref-last (choose-duplicates kids) "kid_id") ; got it!
 		(begin (safe-sql *dbh* (sprintf #f "
 				insert into kids set 
-							last = '%s' ,
-							first = '%s' ,
+							last_name = '%s' ,
+							first_name = '%s' ,
 							date_of_birth = '%s',
-							familyid = %d "
+							family_id = %d "
 										(rasta-find "Last Name" line header)
 										(rasta-find "Child" line header)
 										(human-to-sql-date

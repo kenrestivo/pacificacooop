@@ -16,8 +16,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-for i in `seq 2  35`; do echo "insert into coop.attendance set kidsid = $i, enrolid = 1"; done  > kidsglue.sql
+for i in `seq 2  35`; do echo "insert into coop.attendance set kid_id = $i, enrolid = 1"; done  > kidsglue.sql
 
-  for i in `seq 36 73`; do echo "insert into coop.attendance set kidsid = $i, enrolid = 2"; done  >> kidsglue.sql
+  for i in `seq 36 73`; do echo "insert into coop.attendance set kid_id = $i, enrolid = 2"; done  >> kidsglue.sql
 
 mysql coop < kidsglue.sql

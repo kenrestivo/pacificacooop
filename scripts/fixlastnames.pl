@@ -30,26 +30,26 @@ $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
 
 
 #approximate list of families
-$rquery = "select * from parents where first like \"% %\"";
+$rquery = "select * from parents where first_name like \"% %\"";
 #print "doing <$rquery>\n"; #XXX debug only
 $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 $rqueryobj->execute() or die "couldn't execute $!\n";
 
 while ($ritemref = $rqueryobj->fetchrow_hashref){
 	%ritem = %$ritemref;
-	$oldlast = $ritem{'last'};
-	$first = $ritem{'first'};
-	$id = $ritem{'parentsid'};
+	$oldlast_name = $ritem{'last_name'};
+	$first_name = $ritem{'first_name'};
+	$id = $ritem{'parent_id'};
 
-	($newfirst, $newlast) = split(/ +/, $first);
-	print "shall i change <$oldlast, $first> into <$newlast, $newfirst>?\n";
+	($newfirst_name, $newlast_name) = split(/ +/, $first_name);
+	print "shall i change <$oldlast_name, $first_name> into <$newlast_name, $newfirst_name>?\n";
 	$reply = <STDIN>;
 
 	if($reply !~ /[nN]/){
 		#ok, fix em!
 		$query = "update parents 
-				set last = \'$newlast\', first = \'$newfirst\' 
-				where parentsid = $id";
+				set last_name = \'$newlast_name\', first_name = \'$newfirst_name\' 
+				where parent_id = $id";
 		print "doing <$query>\n";
 		print STDERR $dbh->do($query) . "\n";
 	}

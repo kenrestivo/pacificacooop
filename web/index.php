@@ -83,7 +83,7 @@
 
 	print "\n</table>\n\n";
 
-	familyDetail($u['familyid']);
+	familyDetail($u['family_id']);
 
 	done();
 ?>

@@ -93,7 +93,7 @@ function
 errorHandler($errno, $msg, $filename, $linenum, $vars)
 {
 	global $coop_sendto;
-	$mailto = $coop_sendto['email'];
+	$mailto = $coop_sendto['email_address'];
 
     // timestamp for the error entry  
     $dt = date("Y-m-d H:i:s (T)");
@@ -360,7 +360,7 @@ setupDB()
 	if(!$coop_sendto){
 		$coop_sendto = array(
 						'name' => 'ken',
-						'email' => 'ken@restivo.org',
+						'email_address' => 'ken@restivo.org',
 						'phone' => '650-355-1317'
 				);
 	}

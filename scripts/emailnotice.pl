@@ -33,17 +33,17 @@ getopts('vaesrd:n:m:') or &usage();
 
 #arggh
 if($opt_d){
-	$checkdate = &humantounix($opt_d);
+	$check_date = &humantounix($opt_d);
 } else {
 	#ok, now is the time to check.
-	print STDERR "You may NOT send out emails without explicitly supplying a checkdate\n";
+	print STDERR "You may NOT send out emails without explicitly supplying a check_date\n";
 	exit 1;
-	#$checkdate = time();
+	#$check_date = time();
 }
 
 $opt_m =~ tr/a-z/A-Z/;
 printf("Checking expiration against %s for %s session%s\n", 
-		strftime('%m/%d/%Y', localtime($checkdate)), 
+		strftime('%m/%d/%Y', localtime($check_date)), 
 		$opt_m ? $opt_m : "BOTH",
 		$opt_m ? "" : "s"
 );
@@ -57,7 +57,7 @@ $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
 
 #approximate list of families
 $rquery = "
-	select families.name, families.familyid, families.phone 
+	select families.name, families.family_id, families.phone 
 		from families 
 	order by families.name
 ";
@@ -69,7 +69,7 @@ $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 $rqueryobj->execute() or die "couldn't execute $!\n";
 
 while ($famref = $rqueryobj->fetchrow_hashref){
-	$id = $famref->{'familyid'};
+	$id = $famref->{'family_id'};
 
 	$insarref = &getinsuranceinfo($id);
 	$pararref = &getworkers($id);
@@ -87,14 +87,14 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 		#XXX this feels really "hacky". but... i'm to tired to do it right.
 		# if it has an email, and option e is specified, then skip
 		if(!$opt_m || $ampm =~ /$opt_m/i) {
-			unless($opt_e && $massivearref->[0]->{'parref'}->{'email'}){
+			unless($opt_e && $massivearref->[0]->{'parref'}->{'email_address'}){
 				print &fieldTripReport($famref, $insarref, $massivearref, 
-						$checkdate, $opt_a ? 0 : 1);
+						$check_date, $opt_a ? 0 : 1);
 			}
 		}
 	} else {
-		if($massivearref->[0]->{'parref'}->{'email'} ){
-			&emailReminder($famref, $insarref, $massivearref, $checkdate );
+		if($massivearref->[0]->{'parref'}->{'email_address'} ){
+			&emailReminder($famref, $insarref, $massivearref, $check_date );
 		}
 	}
 
@@ -119,11 +119,11 @@ sub getworkers()
 
 	#get array of working parent(s)
 	$query = "
-		select parents.email, parents.last, parents.first, 
-				parents.parentsid
+		select parents.email_address, parents.last_name, parents.first_name, 
+				parents.parent_id
 			from parents
 			where parents.worker = 'Yes'
-			and familyid = $famid
+			and family_id = $famid
 	";
 
 
@@ -137,8 +137,8 @@ sub getworkers()
 		if($opt_v){
 			printf("getworkers(): famid %d parent %s %s pid %d\n",
 				$famid,
-				$item->{'last'}, $item->{'first'},
-				$item->{'parentsid'});
+				$item->{'last_name'}, $item->{'first_name'},
+				$item->{'parent_id'});
 		}
 		push(@results, $item); #yes, that's right, a referene
 	} # end while
@@ -205,19 +205,19 @@ sub parentlicensehack()
 	my $queryobj;
 	my $pid;
 
-	$pid = $pars->{'parentsid'};
+	$pid = $pars->{'parent_id'};
 	$query = "
-		select unix_timestamp(max(lic.expires)) as exp, 
-			lic.last, lic.first, lic.middle, lic.state, lic.licensenum
+		select unix_timestamp(max(lic.expiration_date)) as exp, 
+			lic.last_name, lic.first_name, lic.middle_name, lic.state, lic.license_number
 		from lic 
-			where lic.parentsid = $pid
-		group by lic.parentsid
+			where lic.parent_id = $pid
+		group by lic.parent_id
 		order by exp asc";
 	$opt_v && print "parentlicensehack(): doing <$query>\n"; #debug only
 	$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
 	$queryobj->execute() or die "couldn't execute $!\n";
 	$opt_v && printf("parentlicensehack(): checking licenses for  %s %s <%d>\n", 
-			$pars->{'first'}, $pars->{'last'}, $pid
+			$pars->{'first_name'}, $pars->{'last_name'}, $pid
 			);
 
 	while ($itemref = $queryobj->fetchrow_hashref){
@@ -225,8 +225,8 @@ sub parentlicensehack()
 		if($opt_v){
 			printf("parentlicensehack(): returned exp %s for %s %s num %s\n",
 				$item->{'exp'},
-				$item->{'first'}, $item->{'last'},
-				$item->{'licensenum'}
+				$item->{'first_name'}, $item->{'last_name'},
+				$item->{'license_number'}
 			);
 		}
 		push(@results, $item); #yes, that's right, a referene
@@ -286,12 +286,12 @@ sub getinsuranceinfo()
 	my $item;
 	my @results;
 	my $query = "
-		select unix_timestamp(max(ins.expires)) as exp, parents.familyid, 
-			ins.policynum, ins.companyname, ins.last, ins.first
+		select unix_timestamp(max(ins.expiration_date)) as exp, parents.family_id, 
+			ins.policy_number, ins.companyname, ins.last_name, ins.first_name
 			from ins 
-				left join parents on ins.parentsid = parents.parentsid 
-			where parents.familyid = $famid
-			group by parents.parentsid
+				left join parents on ins.parent_id = parents.parent_id 
+			where parents.family_id = $famid
+			group by parents.parent_id
 			order by exp desc
 		";
 
@@ -303,9 +303,9 @@ sub getinsuranceinfo()
 		$item = &itemhack($itemref); #store a local copy, because mysql will blow it away!
 		if($opt_v){
 			printf("getinsuranceinfo(): famid: %s %s %s exp %s %s\n", 
-				$famid, $item->{'last'}, $item->{'first'}, 
+				$famid, $item->{'last_name'}, $item->{'first_name'}, 
 				strftime('%m/%d/%Y', localtime($item->{'exp'})),
-				$item->{'policynum'});
+				$item->{'policy_number'});
 		}
 		push(@results, $item); #yes, that's right, a referene
 	} # end while
@@ -328,13 +328,13 @@ mailIt()
 	my $parref = shift;
 	printf("\n--------------\n<%s>\nemail the above message to %s %s (%s)?\n",
 		$m,
-		$parref->{'first'},
-		$parref->{'last'},
-		$parref->{'email'}
+		$parref->{'first_name'},
+		$parref->{'last_name'},
+		$parref->{'email_address'}
 		);
 	$res = <STDIN>;
 	if($res =~ /^[yY]/){
-			%mail = (       To => $parref->{'email'},
+			%mail = (       To => $parref->{'email_address'},
 					From => 'ken@restivo.org',
 					Subject=> "Insurance Information for Co-Op",
 					Message => $m,
@@ -342,7 +342,7 @@ mailIt()
 		#SEND!
 		if($opt_s){
 			&sendmail(%mail) or die $Mail::Sendmail::error;
-			&updateNags($parref->{'parentsid'});
+			&updateNags($parref->{'parent_id'});
 			printf("result: <%s>\n", $Mail::Sendmail::log);
 		} else {
 			print "-----\nNOTE!!! this is a dry run, no email will actually be sent\n";
@@ -380,7 +380,7 @@ sub fieldTripReport()
 	my $famref = shift;
 	my $insarref = shift;
 	my $marf = shift;
-	my $checkdate = shift;
+	my $check_date = shift;
 	my $onlyexpired = shift;
 	my $licref;
 	my $licarref;
@@ -401,8 +401,8 @@ sub fieldTripReport()
 	$badness .= sprintf(
 				" \tFamily Phone: %s\tEmail: %s\n",
 				$famref->{'phone'} ? $famref->{'phone'} : "",
-				$marf->[0]->{'parref'}->{'email'} ?
-					$marf->[0]->{'parref'}->{'email'} : ""
+				$marf->[0]->{'parref'}->{'email_address'} ?
+					$marf->[0]->{'parref'}->{'email_address'} : ""
 			);
 
 	#insurance
@@ -417,13 +417,13 @@ sub fieldTripReport()
 	#it's more work than it's worth
 	$insref  = $insarref->[0];
 	if($insref->{'exp'}){
-		if($onlyexpired ? $insref->{'exp'} < $checkdate : 1){
+		if($onlyexpired ? $insref->{'exp'} < $check_date : 1){
 			$badness .= sprintf(
 					"\t- Insurance %s %s Company: %.10s #: %s \n",
-					$insref->{'exp'} < $checkdate  ? "EXPIRED" : "expires",
+					$insref->{'exp'} < $check_date  ? "EXPIRED" : "expiration_date",
 					strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
 					$insref->{'companyname'},
-					$insref->{'policynum'}
+					$insref->{'policy_number'}
 				);
 			$insexp++;
 		}
@@ -437,23 +437,23 @@ sub fieldTripReport()
 				#TODO put in the parent's name here, dude
 				$badness .= 
 					sprintf("\t- No license information for working parent %s %s\n",
-						$parref->{'first'},
-						$parref->{'last'}
+						$parref->{'first_name'},
+						$parref->{'last_name'}
 		);
 				$licexp++;
 		}
 		foreach $licref (@$licarref){
 			if($licref->{'exp'}){
-				if($onlyexpired ? $licref->{'exp'} < $checkdate : 1){
+				if($onlyexpired ? $licref->{'exp'} < $check_date : 1){
 					$badness .= sprintf(
 							"\t- License %s %s (%s)%s Driver: %s %s %s \n",
-							$licref->{'exp'} < $checkdate  ? "EXPIRED" : "expires",
+							$licref->{'exp'} < $check_date  ? "EXPIRED" : "expiration_date",
 							strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
 							$licref->{'state'},
-							$licref->{'licensenum'},
-							$licref->{'first'},
-							$licref->{'middle'},
-							$licref->{'last'}
+							$licref->{'license_number'},
+							$licref->{'first_name'},
+							$licref->{'middle_name'},
+							$licref->{'last_name'}
 					);
 					$licexp++;
 				}
@@ -491,11 +491,11 @@ sub updateNags()
 
 	#why enum ('Insurance', 'Springfest', 'Other'),
 	#how enum ('Email', 'Phone', 'CommsFolder', 'InPerson'),
-    #parentsid int(32),
+    #parent_id int(32),
 	#done datetime,
 
 	$query = sprintf("insert into nags set 
-				parentsid = '%s', why = 'Insurance', how = 'Email',
+				parent_id = '%s', which_event = 'Insurance', method_of_contact = 'Email',
 				done = now() ", $pid
 			);
 	$opt_v && print "updateNags(): doing <$query>\n";
@@ -533,9 +533,9 @@ sub getampm()
 	$query = "
 		select enrol.sess 
 			from kids 
-				left join attendance on attendance.kidsid = kids.kidsid 
+				left join attendance on attendance.kid_id = kids.kid_id 
 				left join enrol on enrol.enrolid = attendance.enrolid
-			where kids.familyid = $famid and attendance.dropout is null
+			where kids.family_id = $famid and attendance.dropout is null
 			group by enrol.sess
 	";
 
@@ -563,7 +563,7 @@ sub emailReminder()
 	my $famref = shift;
 	my $insarref = shift;
 	my $marf = shift;
-	my $checkdate = shift;
+	my $check_date = shift;
 	my $licref;
 	my $licarref;
 	my $pararref;
@@ -590,7 +590,7 @@ sub emailReminder()
 	#it's more work than it's worth
 	$insref  = $insarref->[0];
 	if($insref->{'exp'}){
-		if($insref->{'exp'} < $checkdate){
+		if($insref->{'exp'} < $check_date){
 			$badness .= sprintf(
 					"The '%s' insurance card on file for your family expired on %s.\n\n",
 					$insref->{'companyname'},
@@ -609,21 +609,21 @@ sub emailReminder()
 				$badness .= sprintf(
 						"I%s couldn't find any driver's license on file for the working parent on the roster, %s %s.\n\n",
 						$insexp ? " also" : "",
-						$parref->{'first'},
-						$parref->{'last'}
+						$parref->{'first_name'},
+						$parref->{'last_name'}
 				);
 				$licexp++;
 		}
 		foreach $licref (@$licarref){
 			if($licref->{'exp'}){
-				if($licref->{'exp'} < $checkdate){
+				if($licref->{'exp'} < $check_date){
 					$badness .= sprintf(
 							"The copy of the %s driver's license %s on file for %s %s %s expired on %s.\n\n",
 							$licref->{'state'},
-							$licref->{'licensenum'},
-							$licref->{'first'},
-							$licref->{'middle'} ? $licref->{'middle'}: "",
-							$licref->{'last'},
+							$licref->{'license_number'},
+							$licref->{'first_name'},
+							$licref->{'middle_name'} ? $licref->{'middle_name'}: "",
+							$licref->{'last_name'},
 							strftime('%m/%d/%Y', localtime($licref->{'exp'}))
 					);
 					$licexp++;
@@ -641,14 +641,14 @@ sub emailReminder()
 	if($licexp && $insexp){
 		$badness .= sprintf("Regulations require the school to have a copy of a valid driver's license and current auto insurance on file. It appears this has to be current in order for you to be allowed to drive your child on any field trips. The next field trip is scheduled for %s, so now is the time to get all this paperwork up-to-date.\n\n", 
 
-			strftime('%A, %B %d', localtime($checkdate)) );
+			strftime('%A, %B %d', localtime($check_date)) );
 	}
 	##finishing up
 	$badness .= sprintf("If you could, please place a copy of your current %s%s%s into my communications folder (Restivo, PM), at least a day or two before %s.\n\n",
 			$insexp ? "insurance card": "",
 			$licexp && $insexp ? " and " : "",
 			$licexp ? "driver's license": "",
-			strftime('%A, %B %d', localtime($checkdate))
+			strftime('%A, %B %d', localtime($check_date))
 		);
 
 	$badness .= "My apologies for the impersonal, automatic computer-generated email. Please feel free to call me at 650-355-1317 with any questions.\n\nThanks!\n\n-ken\n";

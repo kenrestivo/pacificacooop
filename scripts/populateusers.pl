@@ -90,13 +90,13 @@ $dbh = DBI->connect("DBI:mysql:$dbname:$host$port", "input", "test" )
 
 
 #approximate list of families
-$rquery = "select families.name, families.familyid
+$rquery = "select families.name, families.family_id
 		from families 
-			left join leads on families.familyid = leads.familyid
-		left join kids on kids.familyid = families.familyid
-		left join enrollment on kids.kidsid = enrollment.kidsid
+			left join leads on families.family_id = leads.family_id
+		left join kids on kids.family_id = families.family_id
+		left join enrollment on kids.kid_id = enrollment.kid_id
 		where enrollment.dropout_date is NULL
-	group by families.familyid\n";
+	group by families.family_id\n";
 if($opt_v){
 	print "doing <$rquery>\n"; 
 }
@@ -106,7 +106,7 @@ $rqueryobj->execute() or die "couldn't execute $!\n";
 while ($ritemref = $rqueryobj->fetchrow_hashref){
 	%ritem = %$ritemref;
 
-	$uid = &addUser($ritem{'name'}. " Family", $ritem{'familyid'});
+	$uid = &addUser($ritem{'name'}. " Family", $ritem{'family_id'});
 	&addDefaultPrivs($uid, \@familydefaults);
 	## TODO add group privileges as well!
 
@@ -148,8 +148,8 @@ addDefaultPrivs()
 				$$arref[0], $$arref[1], $$arref[2]);
 		}
 		#gotta check first that they don't already exist!
-		$rquery = sprintf("select count(privid) as counter from privs 
-					where userid = %d and realm = '%s'", $uid, $$arref[2]
+		$rquery = sprintf("select count(privilege_id) as counter from privs 
+					where user_id = %d and realm = '%s'", $uid, $$arref[2]
 		);
 		if($opt_v){
 			print "doing <$rquery>\n"; 
@@ -173,16 +173,16 @@ addDefaultPrivs()
 			}
 			print "resetting privs for uid <$uid>\n";
 			$query = sprintf("
-				update privs set grouplevel = %d, userlevel = %d 
-				where userid = %d and realm = '%s' ", 
+				update privs set group_level = %d, user_level = %d 
+				where user_id = %d and realm = '%s' ", 
 				 $$arref[0], $$arref[1], $uid, $$arref[2]);
 		} else {
 			printf("adding privs for realm <%s> uid <%d>\n",
 					$$arref[2], $uid
 				);
 			$query = sprintf("insert into privs set 
-					userid = %d, grouplevel = %d, 
-					userlevel = %d, realm = '%s' ", 
+					user_id = %d, group_level = %d, 
+					user_level = %d, realm = '%s' ", 
 				$uid, $$arref[0], $$arref[1], $$arref[2]);
 		}
 		if($opt_v){
@@ -199,7 +199,7 @@ sub
 addUser()
 {
 	my $name = shift;
-	my $familyid = shift;
+	my $family_id = shift;
 	my $query;
 	my $rquery;
 	my $ritemref;
@@ -209,15 +209,15 @@ addUser()
 
 
 	if($opt_v){
-		if(!$name || !$familyid){
-			print "addUser() missing data: famid <$familyid> name <$name>. must be teachers?\n";
+		if(!$name || !$family_id){
+			print "addUser() missing data: famid <$family_id> name <$name>. must be teachers?\n";
 		}
 	}
 
 	#ok, add the users
 	#gotta check first that they don't already exist!
-	$rquery = sprintf("select userid from users 
-				where name like '%s' or familyid = %d ",  $name, $familyid);
+	$rquery = sprintf("select user_id from users 
+				where name like '%s' or family_id = %d ",  $name, $family_id);
 	if($opt_v){
 		print "doing <$rquery>\n"; 
 	}
@@ -225,21 +225,21 @@ addUser()
 	$rqueryobj->execute() or die "couldn't execute $!\n";
 
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
-		$uid = $$ritemref{'userid'};
+		$uid = $$ritemref{'user_id'};
 
 	} # end while
 	if($uid) {
 		#do NOT re-enter duplicates!!
 		if($opt_v){
-			print "found user $name $familyid in db with id $uid\n";
+			print "found user $name $family_id in db with id $uid\n";
 		}
 		return $uid;
 	}
 	$query = sprintf("insert into users  set
 					name = \'%s\' ,
-					familyid = %d
+					family_id = %d
 					",
-					$name, $familyid);
+					$name, $family_id);
 
 	print "adding <$name> into users\n";
 	if($opt_v){

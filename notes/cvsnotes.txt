@@ -40,3 +40,7 @@ syncing dev (MINE!) directly withe livesite
 
 backwards-syncing HEAD with livesite
 	cvs update -kk -j HEAD -j livesite filename.php (assuming only ONE file!)
+
+
+to get the names of all revisions
+  cvs status -v | grep '(revision:' | awk '{print $1}'| sort -nr | uniq

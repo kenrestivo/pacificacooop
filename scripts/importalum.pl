@@ -29,13 +29,13 @@ getopts('vtfh:p:d:') or &usage();
 
 
 @fn = (
-	"salut" ,
-	"first" ,
-	"last"  ,
+	"salutation" ,
+	"first_name" ,
+	"last_name"  ,
 	"title" ,
 	"company" ,
-	"addr" ,
-	"addrcont"  ,
+	"address1" ,
+	"address2"  ,
 	"city"  ,
 	"state" ,
 	"zip" ,
@@ -107,13 +107,13 @@ addThem()
 	my $rqueryobj;
 
 	#NOW, add the privs
-	#gotta check first that they don't already exist!
+	#gotta check first_name that they don't already exist!
 	$count = 0; #again, just to be sure
-	$rquery = sprintf("select count(leadsid) as counter from leads 
-				where last = %s ", $dbh->quote($f{'last'})
+	$rquery = sprintf("select count(lead_id) as counter from leads 
+				where last_name = %s ", $dbh->quote($f{'last_name'})
 	);
 	unless($opt_f){
-		$rquery .= sprintf(" and addr = %s ",  $dbh->quote($f{'addr'}));
+		$rquery .= sprintf(" and address1 = %s ",  $dbh->quote($f{'address1'}));
 	}
 	if($opt_v){
 		print "doing <$rquery>\n"; 
@@ -129,14 +129,14 @@ addThem()
 	#ok. DO it!
 	if($count){
 		printf("%d possible duplicate for <%s> <%s>\n", 
-			$count, $f{'last'},  $f{'addr'});
+			$count, $f{'last_name'},  $f{'address1'});
 		$ds += $count;
 	} else {
 		$query = "insert into leads set ";
 		$i = 0;
 		foreach $key (keys %f){ 
 			if($f{$key} !~ /^\W*$/){
-				if($key eq 'last' && !$f{'first'}){
+				if($key eq 'last_name' && !$f{'first_name'}){
 					$val = $dbh->quote($f{$key} . " Family");
 				} else {
 					$val = $dbh->quote($f{$key});
@@ -146,7 +146,7 @@ addThem()
 							$key, $val);
 			}
 		}
-		$query .= " , relation = 'Alumni', source = 'Springfest', familyid = 0";
+		$query .= " , relation = 'Alumni', source = 'Springfest', family_id = 0";
 		if($opt_v){
 			print "doing <$query>\n";
 		}

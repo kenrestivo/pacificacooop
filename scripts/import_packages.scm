@@ -12,7 +12,7 @@
 ;; unassigned-auctions
 (define (unassigned-auctions cid)
   (sql-query cid
-			 "select auctionid, description, amount
+			 "select auction_donation_item_id, item_description, item_value
 				from auction
 				where (package_id is null or package_id < 1)
 					and date_received > '0000-00-00'"))
@@ -26,7 +26,7 @@
 ;;;; MAIN
 
 ;; startup
-(define cid (sql-create "coop"  "bc" "input" "test"))
+
 
 (sql-query cid "select packages.* from packages left join auction using (package_id) where auction.package_id is null")
 

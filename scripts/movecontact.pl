@@ -30,7 +30,7 @@ use DBI;
 $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
     or die "can't connect to database $!\n";
 
-&movethem('email', 'kids', 'parents');
+&movethem('email_address', 'kids', 'parents');
 &movethem('phone', 'kids', 'families');
 
 $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
@@ -51,10 +51,10 @@ sub movethem {
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
 		%ritem = %$ritemref;
 		$changer = $ritem{$col};
-		$id = $ritem{'familyid'};
+		$id = $ritem{'family_id'};
 
 		#ok, fix em!
-		$query = "update $to set $col = \"$changer\" where familyid = $id";
+		$query = "update $to set $col = \"$changer\" where family_id = $id";
 		print "doing <$query>\n";
 		print STDERR $dbh->do($query) . "\n";
 	} # end while

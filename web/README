@@ -156,7 +156,7 @@ auth
 		'ACCESS_ADMIN', 800);
 			can change privileges for users relating to this realm
 	$auth struct
-		uid: the userid. duh
+		uid: the user_id. duh
 		pwd: the password supplied by the user. 
 		confirm: the confirm password supplied by the user
 		token: a hash of the md5 hash of the password, and the uid
@@ -166,7 +166,7 @@ auth
 	$u struct: returned by getUser():
 		username
 		familyname
-		familyid
+		family_id
 	each field can have its own perms. field perms are a LIMIT
 		if the user/group has at LEAST the field's perm levels, 
 			it can do that action

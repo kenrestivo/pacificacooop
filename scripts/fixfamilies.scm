@@ -18,18 +18,18 @@
 (for-each 
  (lambda (vec)
    (safe-sql *dbh*
-					(sprintf #f "update leads set last = '%s'
-							where leadsid = %d" 
+					(sprintf #f "update leads set last_name = '%s'
+							where lead_id = %d" 
 							 (vector-ref vec 2)
 							 (vector-ref vec 0))))
 
  (cdr (simplesql-query *dbh*
-			 "select leads.leadsid, leads.last, inc.payer 
+			 "select leads.lead_id, leads.last_name, inc.payer 
 				from leads left join invitation_rsvps 
-					on leads.leadsid = invitation_rsvps.leadsid 
-				left join inc on invitation_rsvps.incid = inc.incid 
-			where last like \"%Family%\" 
-				and invitation_rsvps.incid is not null")))
+					on leads.lead_id = invitation_rsvps.lead_id 
+				left join inc on invitation_rsvps.income_id = inc.income_id 
+			where last_name like \"%Family%\" 
+				and invitation_rsvps.income_id is not null")))
 
 
 (simplesql-close *dbh*)

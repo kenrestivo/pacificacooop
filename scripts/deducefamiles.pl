@@ -29,14 +29,14 @@ $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
 
 
 #approximate list of families
-$rquery = "select last from kids group by last order by last";
+$rquery = "select last_name from kids group by last_name order by last_name";
 print "doing <$rquery>\n"; #XXX debug only
 $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 $rqueryobj->execute() or die "couldn't execute $!\n";
 
 while ($ritemref = $rqueryobj->fetchrow_hashref){
 	%ritem = %$ritemref;
-	push(@fams, $ritem{'last'});
+	push(@fams, $ritem{'last_name'});
 } # end while
 
 #create (and save) the family id's for them.
@@ -48,7 +48,7 @@ foreach $fam (@fams){
 
 	#ok, do the updating
 	foreach $tab ('parents', 'kids'){
-		$squery = "update $tab set familyid = $id where last = \'$fam\'";
+		$squery = "update $tab set family_id = $id where last_name = \'$fam\'";
 		print "doing <$squery>\n";
 		print STDERR $dbh->do($squery) . "\n";
 	}

@@ -2,7 +2,7 @@
 
 
 #$Id$
-#fixes last names
+#fixes last_name names
 #this is SO fucking ugly... i can't stand it. things i hate about sql
 #one-shot, mostly. now that i have popup's and much of this guessing code in the data entry screen itself, i shouldn't need this one anymore
 
@@ -41,7 +41,7 @@ $rqueryobj->execute() or die "couldn't execute $!\n";
 
 while ($ritemref = $rqueryobj->fetchrow_hashref){
 	%ritem = %$ritemref;
-	$fam{$ritem{'name'}} = $ritem{'familyid'};
+	$fam{$ritem{'name'}} = $ritem{'family_id'};
 } # end while
 
 #well, this here does most of the work!
@@ -73,7 +73,7 @@ sub fixem {
 	my $tab = shift;
 	#ok, who needs help? let's fix 'em
 	#TODO subroutine this. we want not "ins" but $tab
-	$rquery = "select * from $tab where parentsid  = 0 or parentsid is null";
+	$rquery = "select * from $tab where parent_id  = 0 or parent_id is null";
 	print "doing <$rquery>\n"; #XXX debug only
 	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 	$rqueryobj->execute() or die "couldn't execute $!\n";
@@ -84,9 +84,9 @@ sub fixem {
 	#XXX this multis global thing is bullshit.
 		&checkformatches($tab, 
 				$ritem{$tab . "id"}, 
-				$ritem{'last'}, 
-				$ritem{'first'}, 
-				$ritem{'middle'});
+				$ritem{'last_name'}, 
+				$ritem{'first_name'}, 
+				$ritem{'middle_name'});
 
 	} # end while
 } #end FIXEM
@@ -98,20 +98,20 @@ sub fixem {
 sub checkformatches {
 	my $tab = shift;
 	my $lostid = shift;
-	my $lostlast = shift;
-	my $lostfirst = shift;
-	my $lostmiddle = shift;
+	my $lostlast_name = shift;
+	my $lostfirst_name = shift;
+	my $lostmiddle_name = shift;
 
-	print "found id $lostid: $lostlast, $lostfirst $lostmiddle\n"; #DEBUG
+	print "found id $lostid: $lostlast_name, $lostfirst_name $lostmiddle_name\n"; #DEBUG
 	
-	#count how many last/first matches
-	my $where = "where last like \"\%$lostlast\%\" and first like \"\%$lostfirst\%\" ";
+	#count how many last_name/first_name matches
+	my $where = "where last_name like \"\%$lostlast_name\%\" and first_name like \"\%$lostfirst_name\%\" ";
 	#NOTE! $where is used often, DO NOT just stuff the string in the checkcount()!
 	my $fcount = &checkcount($where);
 	if($fcount < 1){
-		#if 0; count last-only matches
-		print "NO match for $lostlast, $lostfirst $lostmiddle\n";
-		$where = "where last like \"\%$lostlast\%\"";
+		#if 0; count last_name-only matches
+		print "NO match for $lostlast_name, $lostfirst_name $lostmiddle_name\n";
+		$where = "where last_name like \"\%$lostlast_name\%\"";
 		$fcount = &checkcount($where);
 	}
 
@@ -132,9 +132,9 @@ sub checkformatches {
 	}
 
 	if($fcount < 1){
-		print "NO match for $lostlast AT ALL\n";
+		print "NO match for $lostlast_name AT ALL\n";
 		#XXX shall i push the data? or justid?
-		push(@nomatch, [ ($tab, $lostid, $lostlast, $lostfirst, $lostmiddle) ]); 
+		push(@nomatch, [ ($tab, $lostid, $lostlast_name, $lostfirst_name, $lostmiddle_name) ]); 
 	}
 
 } # END CHECKFORMATCHES
@@ -146,7 +146,7 @@ sub checkformatches {
 #####################
 sub checkcount {
 	my $where = shift;
-	my $fquery = "select count(parentsid) as howmany from parents $where";
+	my $fquery = "select count(parent_id) as howmany from parents $where";
 	print "doing <$fquery>\n"; #debug
 	my $fqueryobj = $dbh->prepare($fquery) or die "can't prepare <$fquery>\n";
 	$fqueryobj->execute() or die "couldn't execute $!\n";
@@ -181,9 +181,9 @@ sub choosemulti {
 
 	while (my $mitemref = $mqueryobj->fetchrow_hashref){
 		my %mitem = %$mitemref;
-		push(@choices, $mitem{'parentsid'});
-		print "\tid: " , $mitem{'parentsid'}, " " , 
-			$mitem{'last'}, ", " , $mitem{'first'}, "\n";
+		push(@choices, $mitem{'parent_id'});
+		print "\tid: " , $mitem{'parent_id'}, " " , 
+			$mitem{'last_name'}, ", " , $mitem{'first_name'}, "\n";
 	}
 	$reply = <STDIN>;
 	chomp $reply;
@@ -205,14 +205,14 @@ sub useonly {
 	my $lostid = shift;
 	my $id;
 	#do the query AGAIN, and use it!
-	my $mquery = "select parentsid from parents $where";
+	my $mquery = "select parent_id from parents $where";
 	my $mqueryobj = $dbh->prepare($mquery) 
 		or die "can't prepare <$mquery>\n";
 	$mqueryobj->execute() or die "couldn't execute $!\n";
 
 	while (my $mitemref = $mqueryobj->fetchrow_hashref){
 		my %mitem = %$mitemref;
-		$id = $mitem{'parentsid'};
+		$id = $mitem{'parent_id'};
 	}
 
 	&replace($tab, $id, $lostid);
@@ -227,7 +227,7 @@ sub replace {
 	my $id = shift;
 	my $lostid = shift;
 	#ok, now replace the bitch
-	my $squery = "update $tab set parentsid = $id where " . $tab . "id = $lostid";
+	my $squery = "update $tab set parent_id = $id where " . $tab . "id = $lostid";
 	print "doing <$squery>\n";
 	print STDERR $dbh->do($squery) . "\n";
 } #END REPLACE
