@@ -40,7 +40,7 @@ select parents.last, parents.first, lic.expires
 
 -- give me ocntact info for all families who have expired insurance
 -- XXX: this MAY be the worker, it may not, i don't know
--- XXX this is THROUHOGHLY FUCKED UP! it ignores matches on the nonworker
+-- XXX this is THROUHOGHLY FUX0RED! it ignores matches on the nonworker
 select families.name, parents.last, parents.first, ins.expires,
 		families.phone, parents.email
 	from families 
@@ -78,7 +78,10 @@ select max(ins.expires) as exp, parents.familyid, families.name, ins.policynum, 
 	-- note: in an actualy scripted query, i'll add where parents.familyid =
 
 --- show kids and enrollment
-select kids.*, enrol.sess from kids left join keglue on keglue.kidsid = kids.kidsid left join enrol on enrol.enrolid = keglue.enrolid;
+select kids.*, enrol.sess 
+	from kids 
+		left join keglue on keglue.kidsid = kids.kidsid 
+		left join enrol on enrol.enrolid = keglue.enrolid;
 
 
 --- EOF

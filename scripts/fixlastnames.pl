@@ -46,7 +46,9 @@ while ($ritemref = $rqueryobj->fetchrow_hashref){
 
 	if($reply !~ /[nN]/){
 		#ok, fix em!
-		$query = "update parents set last = \'$newlast\', first = \'$newfirst\' where parentsid = $id";
+		$query = "update parents 
+				set last = \'$newlast\', first = \'$newfirst\' 
+				where parentsid = $id";
 		print "doing <$query>\n";
 		print STDERR $dbh->do($query) . "\n";
 	}

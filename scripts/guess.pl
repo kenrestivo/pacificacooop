@@ -80,6 +80,7 @@ sub fixem {
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
 		%ritem = %$ritemref;
 
+	#XXX this multis global thing is bullshit.
 		&checkformatches($tab, 
 				$ritem{$tab . "id"}, 
 				$ritem{'last'}, 
@@ -124,6 +125,7 @@ sub checkformatches {
 		print "several matches for $where\n";
 		# instead of calling this here, build an array of args
 		# and push it onto an array. then do these all in batch at end
+		# XXX this multis global is bullshit. pass by ref instead
 		push(@multis, [ ($tab, $where, $lostid) ]);
 		return;
 	}
