@@ -68,6 +68,11 @@ insert into coa set
 			description = "SpringFest Misc Solicitation Cash Donation";
 
 
+insert into coa set
+			acctnum = 10,
+			join_to_table = "leads",
+			description = "SpringFest Misc Invitations Cash Donation";
+
 
 -- groups
 insert into groups set

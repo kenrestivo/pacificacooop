@@ -395,6 +395,13 @@ create table nag_indulgences(
     primary key (nag_indulgence_id)
 );
 
+-- glue table for many-to-many: leads to income
+create table invitations_income_join (
+    invitations_income_join_id int(32) not null unique auto_increment,
+	incid int(32),
+	leadsid int(32),
+    primary key (invitations_income_join_id)
+);
 -- the user/passwords used by the web view page AND my update tool..
 -- these MUST be done manually for db's not named coop!!
 --TODO: i have to grant all to myself on this db! duh.
