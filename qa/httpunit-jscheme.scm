@@ -118,7 +118,7 @@
 (define (many-visit-hack wtc url)
   (for-each (lambda (family)
 			  (write-line (string-append ".....checking " family))
-			  (visit-all-links wtc family))
-			'("Cooke" "Bartlett" "Restivo" "Walker")))
+			  (visit-all-links wtc family url))
+			'("Cooke" "Bartlett" "Restivo")))
 
 ;;EOF
