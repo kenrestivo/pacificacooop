@@ -23,9 +23,7 @@
 
 use strict;
 use Spreadsheet::ParseExcel;
-my $xls = new Spreadsheet::ParseExcel;
 
-my $wb = $xls->Parse('../imports/PM.xls');
 
 #my %fieldarray = {
 	#Last Name
@@ -45,24 +43,103 @@ my $wb = $xls->Parse('../imports/PM.xls');
 	#Springfest Job
 #};
 
-print "FILE  :", $wb->{File} , "\n";
-print "COUNT :", $wb->{SheetCount} , "\n";
-print "AUTHOR:", $wb->{Author} , "\n";
-
-my($ws, $sh);
-for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
-	$ws = $wb->{Worksheet}[$sh];
-	
-	#i only care about the schedule
-	if($ws->{'Name'} !~ /Schedule/){
-		next;
-	}
-	&iterateRows($ws);
-
-} #END MAIN
+&main();
 
 exit 0;
+
+#END GLOBAL AREA
 ###################################################
+
+#######################
+#	DEBUGSTRUCT
+#	nifty utility function, 
+#	to print the contents of ANY complex perl structure
+#	TODO move this to an external utility library
+#######################
+sub debugStruct()
+{
+	my $whatsit = shift;
+	my $level = shift;
+	my $item;
+
+	printf("\n%*s", -($level*4), "");
+	if( $whatsit =~ /ARRAY/){
+		printf("array of %d elements", scalar @$whatsit);
+		foreach $item (@$whatsit){
+			&debugStruct($item, $level + 1);
+		}
+	} 
+	elsif( $whatsit =~ /HASH/){
+		printf("hash of %d elements", scalar %$whatsit);
+		$level++;
+		foreach $item (sort(keys %$whatsit)) {
+			printf("\n%*s", -($level*4), "");
+			printf("key: <%s> ", $item);
+			&debugStruct($whatsit->{$item}, $level + 1);
+		}
+
+	} 
+	elsif( $whatsit =~ /SCALAR/){
+		printf("scalar ref <%s>", $$whatsit);
+	} else {
+		printf("value <%s>", $whatsit);
+	}
+
+} #END DEBUGSTRUCT
+
+
+sub checkDeletes(){
+}
+
+sub checkHeaders(){
+	my $rowref = shift;
+	my $col;
+
+	printf("DEBUG the header cb, is a ref to an %s\n", ref($rowref));
+	#&debugStruct($rowref);
+}
+
+sub checkNewKids(){
+}
+
+sub checkNewParents(){
+}
+
+sub checkNewFamily(){
+}
+
+sub checkChanges(){
+}
+
+
+
+#################
+#	ITERATESHEETS
+#	do all the stuff to a sheet that needs be done
+#################
+sub iterateSheets()
+{
+	my $wb = shift;
+	my($ws, $sh);
+
+	print "FILE  :", $wb->{File} , "\n";
+	print "COUNT :", $wb->{SheetCount} , "\n";
+	print "AUTHOR:", $wb->{Author} , "\n";
+
+	for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
+		$ws = $wb->{Worksheet}[$sh];
+		
+		#i only care about the schedule
+		if($ws->{'Name'} !~ /Schedule/){
+			next;
+		}
+		&iterateRows($ws, \&checkDeletes, \&checkHeaders);
+		&iterateRows($ws, \&checkNewKids);
+		&iterateRows($ws, \&checkChanges);
+
+	} 
+
+} #END ITERATESHEETS
 
 
 #################
@@ -94,6 +171,33 @@ sub validRow()
 
 
 #################
+#	EXTRACT ROW
+#	turn this annoying object-oriented peice of shit into a proper row!
+#################
+sub extractRow()
+{
+	my $ws = shift;
+	my $rownum = shift;
+	my $col = shift;
+	my $check = shift;
+	my $i ;
+	my @row;
+	my $cell;
+
+	for($i = $col; $i < $check ; $i++){
+		#brutally ugly, but NECESSARY!. must exist, and must have data
+		$cell = $ws->{'Cells'}[$rownum][$i];
+		if($cell) {
+			$row[$i] = $cell->Value;
+			printf("( $rownum , $i ) => %s\n", $cell->Value) ;
+		}
+	}
+
+	return \@row;
+} #END EXTRACTROW
+
+
+#################
 #	ITERATEROWS
 #	iterate through a spreadsheet, separating out the good rows
 #	and applying callback functions to them
@@ -101,6 +205,8 @@ sub validRow()
 sub iterateRows()
 {
 	my $ws = shift;
+	my $checkCb = shift;
+	my $headerCb = shift;
 	my $start = 0;
 	my $end = 0;
 	my $vr = 0;
@@ -122,25 +228,40 @@ sub iterateRows()
 		if ($vr == $maxcol){
 			#this is my header row!
 			#print "DEBUG this is the start row!\n";
+			if($headerCb){
+				&$headerCb(&extractRow($ws, $row, $col, $maxcol));
+			}
 			$start++;
-		}
-		#a blank line means END of data
-		$end = $start && !$vr ? 1 : $end;
+		} else {
+			#a blank line means END of data
+			$end = $start && !$vr ? 1 : $end;
 
-		#i only want to do stuff if i've already passed the start row
-		if($start && !$end){
-			printf("ROW $row ------- from %d to %d cols\n", $col, $maxcol);
+			#i only want to do stuff if i've already passed the start row
+			if($start && !$end){
+				printf("ROW $row ------- from %d to %d cols\n", $col, $maxcol);
 
-			while(defined $maxcol && $col <= $maxcol){
-				$cell = $ws->{'Cells'}[$row][$col];
-				if($cell){
-					printf("( $row , $col ) => %s\n", $cell->Value) ;
+				if($checkCb){
+					&$checkCb(&extractRow($ws, $row, $col, $maxcol));
 				}
-				$col++;
 			}
 		}
 		$row++;
 	}
 } #END ITERATEROWS
+
+
+
+#################
+# MAIN
+#################
+sub main()
+{
+
+	my $xls = new Spreadsheet::ParseExcel;
+	my $wb = $xls->Parse('../imports/PM.xls');
+	&iterateSheets($wb);
+
+} #END MAIN
+
 
 #EOF
