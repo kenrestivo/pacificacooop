@@ -187,6 +187,18 @@
 	flat-list
 	))
 
+
+;; VITAL function. cleans up the alist so i can use it in fixstyle
+(define (clean-change-alist change-alist)
+  (let* ((flat (flatten-change-alist change-alist))
+		 (short (map (lambda (x) (cdr x))
+					 flat))
+		 (sorted (sort short
+					   (lambda (x y)
+						 (string<= (car x) (car y)))))
+		 (stripped (strip-duplicates sorted)))
+	(list-to-pair stripped)))
+
 ;;;;;;;;;;;;;;;
 ;; main
 
@@ -205,3 +217,4 @@
 (simplesql-close *dbh*)
 
 ;; EOF
+
