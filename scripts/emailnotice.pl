@@ -208,7 +208,7 @@ sub getlicenseinfo()
 	$opt_v && printf("getlicenseinfo(): returning %d total\n", 
 		scalar @total);
 
-	&debugstruct(\@total, 0);
+	$opt_v && &debugstruct(\@total, 0);
 
 	return \@total; # massive.
 }# END GETLICENSEINFO
@@ -219,6 +219,7 @@ sub debugstruct()
 	my $level = shift;
 	my $item;
 
+	printf("%*s", -($level*5), "");
 	if( $whatsit =~ /ARRAY/){
 		printf("array of %d elements\n", scalar @$whatsit);
 		foreach $item (@$whatsit){
@@ -227,16 +228,18 @@ sub debugstruct()
 	} 
 	elsif( $whatsit =~ /HASH/){
 		printf("hash of %d elements\n", scalar %$whatsit);
+		$level++;
 		foreach $item (sort(keys %$whatsit)) {
+			printf("%*s", -($level*5), "");
 			printf("key: <%s>\n", $item);
 			&debugstruct($whatsit->{$item}, $level + 1);
 		}
 
 	} 
 	elsif( $whatsit =~ /SCALAR/){
-		printf("scalar: <%s>\n", $$whatsit);
+		printf("scalar ref <%s>\n", $$whatsit);
 	} else {
-		printf("scalar: <%s>\n", $whatsit);
+		printf("value <%s>\n", $whatsit);
 	}
 
 }
