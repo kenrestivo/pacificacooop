@@ -234,6 +234,7 @@ create table privs (
 create table auction (
     auctionid int(32) not null unique auto_increment,
 	description longtext,
+	quantity int(5),
     amount decimal(9,2),
 	date_received date,
 	location_in_garage varchar(255),
