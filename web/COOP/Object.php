@@ -75,6 +75,7 @@ class coopObject
 			// and only if, um, the links.ini agrees that they are there
 			$links = $obj->links();
 			if(!$links){
+				//print "no links for $this->table $key $val<br>";
 				return $val;
 			}
 			$this->page->confessArray($links, 
@@ -113,6 +114,6 @@ class coopObject
 ////KEEP EVERTHANG BELOW
 
 ?>
-<!-- END COOP VIEW -->
+<!-- END COOP OBJECT -->
 
 

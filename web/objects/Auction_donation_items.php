@@ -36,6 +36,15 @@ class Auction_donation_items extends DB_DataObject
 	var $fb_selectAddEmpty = array ('package_id');
 	var $fb_fieldLabels = array ('item_description' => 'Item Description');
 	var $fb_enumFields = array ('item_type');
-	var $fb_fieldsToRender = array('item_description', 'item_value', 'date_received', 'quantity', 'school_year');
-	
+	var $fb_fieldsToRender = array('item_description', 'item_value',  'quantity', 'school_year');
+	var $fb_fieldLabels = array(
+		"family_id" => "Co-Op Family",
+		"quantity" => "Quantity of items", 
+		"item_description" => "Description of item" ,
+		'item_value' => 'Estimated TOTAL Value ($)' ,
+		"item_type" => "Physical Product or Gift Certificate",
+		"date_received" => "Date Item received (MM/DD/YYYY)" ,
+		"school_year" => "School Year (YYYY-YYYY)" ,
+		"auction_donation_item_id" => "Unique ID" 
+		);
 }

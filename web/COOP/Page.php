@@ -88,11 +88,15 @@ class coopPage
 	function indexEverything($everything)
 		{
 			foreach ($everything as $thang => $val){
+				//XXX i can't grab the fields, because they're globals. globals SUCK!
+				//global $$val['fields'];
+				//print $val['fields'];
+				//$this->confessArray($val['fields'], 'fields');
 				$val['fields'] = $$val['fields'];
 				$indexed_everything[$val['page']] = $val;
 	
 			}
-			//confessArray($indexed_everything, 'indexedeverythinag');
+			//$this->confessArray($indexed_everything, 'indexedeverythinag');
 			return $indexed_everything;
 		} 
 

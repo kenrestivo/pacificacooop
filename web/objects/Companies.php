@@ -35,7 +35,21 @@ class Companies extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_linkDisplayFields = array('company_name', 'address1', 'phone');
-	var $fb_fieldLabels = array ('company_name' => 'Company Name');
+	var $fb_fieldLabels = array (
+		'company_name' => 'Company Name',
+		"family_id" => 'Is this company owned by a Co-Op Family?',
+		"address1" => "Address" ,
+		"address2" => "Address2" ,
+		"city" => "City" ,
+		"state" => "State" ,
+		"zip" => "Zip/PC" ,
+		"country" => "Country" ,
+		"phone" => "Phone Number" ,
+		"fax" => "FAX Number" ,
+		"email_address" => "Email Address" ,
+		"territory_id" => "Territory",
+		"flyer_ok" => "OK to place a flyer there?" 
+);
 	var $fb_enumFields = array ('flyer_ok');
 	var $fb_selectAddEmpty = array ('territory_id', 'family_id', 
 									'do_not_contact');

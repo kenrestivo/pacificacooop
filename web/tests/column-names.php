@@ -9,8 +9,9 @@ require_once("everything.inc");
 require_once('CoopPage.php');
 require_once('CoopView.php');
 require_once('CoopMenu.php');
+require_once('Config.php');
 
-$debug = 0;
+$debug = 1;
 
 //MAIN
 //$_SESSION['toptable'] 
@@ -24,6 +25,12 @@ $menu->createLegacy(&$cp);
 print $menu->kenRender();
 
 $cp->confessArray($menu->indexed_all, "indexedall");
+
+$conf = new Config;
+$indexall =& $conf->parseConfig($menu->indexed_all, 'phparray');
+
+$cp->confessArray($indexall, "indexedall config");
+$conf->writeConfig('/tmp/wtf', 'phparray');
 
 done ();
 

@@ -37,9 +37,19 @@ class Income extends DB_DataObject
 	var $fb_linkDisplayFields = array('payer', 
 									  'payment_amount', 
 									  'check_date');
-	var $fb_fieldsToRender= array("check_number", "check_date", "payer", "account_number", 
-								  "note", "bookkeeper_date", "cleared_date");
+	var $fb_fieldsToRender= array("check_number", "check_date", "payer", 
+								  "account_number", "note");
 
+	var $fb_fieldLabels = array( 
+		"family_id" => "Co-Op Family",
+		"check_number" => "Check or Credit Card Auth number" ,
+		"check_date" => "Date of Check (MM/DD/YYYY)" ,
+		"payer" => "Person issuing check" ,
+		'payment_amount' => 'Amount ($)' ,
+		"account_number" => "Account",
+		"note" => "Misc Notes" ,
+		"school_year" => "School Year (YYYY-YYYY)" 
+		);
 //	var $fb_crossLinks = array(array('table' => 'families_income_join', 
 	//'fromFild' => 'income_id', 'toField' => 'family_id'));
 }
