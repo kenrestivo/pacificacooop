@@ -515,7 +515,6 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 function
 logIn($vars)
 {
-	global $_SESSION;
 	//confessArray($vars, 'logIn($vars) called with');
 
 	$auth = $vars['auth']; //duh!
@@ -829,7 +828,6 @@ function
 loggedOutState($auth, $states)
 {
 
-	global $_SESSION;
 
 	if($auth['uid']){
 		$uinfo = getUser($auth['uid']);
@@ -1019,7 +1017,6 @@ insecurePassState($auth, $states)
 function
 loggedInState($auth, $states)
 {
-	global $_SESSION;
 	$newauth =  changeState($auth, $states, 'loggedin', 1);
 	$_SESSION['auth'] = $newauth; // save it!
 	return  $newauth;
