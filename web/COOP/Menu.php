@@ -46,7 +46,7 @@ class CoopMenu extends HTML_Menu
 		'tickets' => 'Tickets'
 		);
 	var $other_realms = array(
-		'roster' => 'Roster',
+		'roster' => 'Membership',
 		'enhancement' => 'Enhancement'
 		);
 
