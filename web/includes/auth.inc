@@ -477,7 +477,7 @@ logIn($vars)
 					),
 		insecurepass => array (
 					func => "insecurePassState",
-					required => array ( "pwd"),
+					required => array ( "uid", "pwd"),
 					description => "New password doesn't meet minimums"
 					),
 		loggedin => array (
@@ -908,7 +908,8 @@ function
 thruAuth($auth, $newname = 'auth')
 {
 	if(!$auth){
-		user_error("um, why was thruAuth() called with no auth!?", E_USER_ERROR);
+		user_error("um, why was thruAuth() called with no auth!?", 
+			E_USER_ERROR);
 	}
 	while (list($key, $val) = each($auth)){
 		if($val){
@@ -929,8 +930,18 @@ thruAuth($auth, $newname = 'auth')
 function
 weakPass($clearpass)
 {
-	//TODO code up some regexp's here! i.e. at least 5 alphanum chars, no spaces
-	return 0;
+	/* XXX bug. pcre won't take /^\w{5}$/ 
+			but it *will* take it WITHOUT the '$'
+			weird.
+	*/
+	$rs = sprintf("/^\w{%d}/", MIN_PASS);
+	$matches = preg_match($rs, preg_quote($clearpass));
+	user_error("weakPass(): rs $rs, clearpass <$clearpass>, $matches matches", 
+			E_USER_NOTICE);
+	if($matches == 1){
+		return 0;
+	}
+	return 1;
 }/* END WEAKPASS */
 
 
