@@ -240,6 +240,7 @@ class coopView extends CoopObject
 
 	function makeHeader()
 		{
+
 			// get the fieldnames out the dataobject
 			foreach($this->obj->toArray() as $key => $trash){
 				if($this->isPermittedField($key)){

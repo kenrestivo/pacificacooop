@@ -257,6 +257,7 @@ class coopObject
 
 	function isPermittedField($key)
 		{
+
 			// if it's a key, and we don't show them, then no
 			if($key == $this->pk && $this->obj->fb_hidePrimaryKey){
 				return false;
