@@ -25,7 +25,7 @@ use coop;
 
 -- insurance information
 create table ins(
-    insid int(32) not null auto_increment,
+    insid int(32) not null unique auto_increment,
     last varchar(255),
     first varchar(255),
     middle varchar(255),
@@ -58,7 +58,7 @@ create table veh(
 
 -- license information
 create table lic(
-    licid int(32) not null auto_increment,
+    licid int(32) not null unique auto_increment,
     last varchar(255),
     first varchar(255),
     middle varchar(255),
@@ -71,7 +71,7 @@ create table lic(
 
 -- children
 create table kids(
-    kidsid int(32) not null auto_increment,
+    kidsid int(32) not null unique auto_increment,
     last varchar(255),
     first varchar(255),
 	familyid int(32),
@@ -80,7 +80,7 @@ create table kids(
 
 -- enrollment info (many-to-many to kids)
 create table enrol(
-    enrolid int(32) not null auto_increment,
+    enrolid int(32) not null unique auto_increment,
 	semester varchar(50),
 	sess enum ('AM', 'PM'),
     primary key (enrolid)
@@ -88,7 +88,7 @@ create table enrol(
 
 -- glue table for many-to-many: kids to enrolmment sessions
 create table attendance (
-    attendanceid int(32) not null auto_increment,
+    attendanceid int(32) not null unique auto_increment,
 	kidsid int(32),
 	enrolid int(32),
 	dropout date,
@@ -97,7 +97,7 @@ create table attendance (
 
 -- parents who have insurance and/or licenses. (many-to-many to kids)
 create table parents(
-    parentsid int(32) not null auto_increment,
+    parentsid int(32) not null unique auto_increment,
     last varchar(255),
     first varchar(255),
 	ptype enum ('Mom', 'Dad', 'Partner'),
@@ -109,7 +109,7 @@ create table parents(
 
 -- main table for many-to-many: kids and parents
 create table families (
-    familyid int(32) not null auto_increment,
+    familyid int(32) not null unique auto_increment,
 	name varchar(255),
     phone varchar(20),
     primary key (familyid)
@@ -121,7 +121,7 @@ create table families (
 -- 'source' field will only be "springfest" this time around
 -- you'll know WHICH springfest by comparing the 'entered' date
 create table leads (
-    leadsid int(32) not null auto_increment,
+    leadsid int(32) not null unique auto_increment,
 	last varchar(255),
 	first varchar(255),
 	salut varchar(50),
@@ -144,7 +144,7 @@ create table leads (
 	
 -- table to keep record of who, why, how, when i have nagged
 create table nags (
-    nagsid int(32) not null auto_increment,
+    nagsid int(32) not null unique auto_increment,
 	why enum ('Insurance', 'Springfest', 'Other'),
 	how enum ('Email', 'Phone', 'CommsFolder', 'InPerson'),
     familyid int(32),
@@ -165,7 +165,7 @@ create table coa (
 	
 -- income tracking
 create table inc (
-    incid int(32) not null auto_increment,
+    incid int(32) not null unique auto_increment,
 	checknum varchar(255),
 	checkdate date,
 	payer varchar(255),
@@ -178,7 +178,7 @@ create table inc (
 
 -- glue table for many-to-many: families to income
 create table figlue (
-    figlueid int(32) not null auto_increment,
+    figlueid int(32) not null unique auto_increment,
 	incid int(32),
 	familyid int(32),
     primary key (figlueid)
@@ -187,7 +187,7 @@ create table figlue (
 -- glue table for many-to-many: leads to income
 --- TODO: need separate one for businesses? or same one?
 create table liglue (
-    liglueid int(32) not null auto_increment,
+    liglueid int(32) not null unique auto_increment,
 	incid int(32),
 	leadsid int(32),
     primary key (liglueid)
@@ -195,7 +195,7 @@ create table liglue (
 
 -- users
 create table users (
-    userid int(32) not null auto_increment,
+    userid int(32) not null unique auto_increment,
 	password varchar(255),
 	name varchar(255),
 	familyid int(32),
@@ -204,14 +204,14 @@ create table users (
 
 -- groups
 create table groups (
-    groupid int(32) not null auto_increment,
+    groupid int(32) not null unique auto_increment,
 	name varchar(55),
     primary key (groupid)
 );
 
 -- glue table for many to many: users and groups
 create table groupmembers (
-    memberid int(32) not null auto_increment,
+    memberid int(32) not null unique auto_increment,
     userid int(32),
     groupid int(32),
     primary key (memberid)
@@ -219,7 +219,7 @@ create table groupmembers (
 
 -- privs
 create table privs (
-    privid int(32) not null auto_increment,
+    privid int(32) not null unique auto_increment,
     userid int(32),
     groupid int(32),
 	realm varchar(55),
@@ -230,7 +230,7 @@ create table privs (
 
 -- auction donation item
 create table auction (
-    auctionid int(32) not null auto_increment,
+    auctionid int(32) not null unique auto_increment,
 	description longtext,
     amount decimal(9,2),
 	entered datetime,
@@ -240,7 +240,7 @@ create table auction (
 
 -- glue table for many-to-many: families to auction items
 create table faglue (
-    faglueid int(32) not null auto_increment,
+    faglueid int(32) not null unique auto_increment,
 	auctionid int(32),
 	familyid int(32),
     primary key (faglueid)
@@ -248,14 +248,14 @@ create table faglue (
 	
 -- events
 create table events (
-    eventid int(32) not null unique,
+    eventid int(32) not null unique auto_increment,
 	description varchar(255),
 	primary key (eventid)
 );
 	
 -- calendar
 create table cal (
-    calid int(32) not null unique,
+    calid int(32) not null unique auto_increment,
 	eventid int(32),
 	notes longtext,
 	status enum ('Active', 'tentative', 'cancelled') default 'Active',

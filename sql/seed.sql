@@ -65,5 +65,22 @@ insert into events set
 			eventid = 4,
 			description = "Springfest Auction Donation Items Due";
 
+-- calendar items for this first online year. TEMP!
+insert into cal set
+			eventid = 4,
+			eventdate = "2003-12-18",
+			notes = "Please enter your auction donation online here";
+
+insert into cal set
+			eventid = 3,
+			eventdate = "2003-11-04",
+			notes = "Please enter a list of 10 people to be invited to Springfest ";
+
+insert into cal set
+			eventid = 1,
+			eventdate = "2003-12-12",
+			notes = "Christmas tree farm. Please maks sure your insurance and drivers licenses are up-to-date.";
+
+
 
 -- EOF
