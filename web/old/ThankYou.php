@@ -109,7 +109,7 @@ http://www.pacificacoop.org/
 		{
 
 			$subst = $this->substitutions;
-
+		
 			//un-arrayify the ones that are arrays
 			// and format them html-like
 			$subst['ADDRESS'] = implode('<br>', $subst['ADDRESS']);
@@ -127,11 +127,15 @@ http://www.pacificacoop.org/
 			$text .= '<div id="toplogo"><img src="/round-small-logo.gif"></div>';
 	
 			$text .= '<div id="mainletter"><p class="letter">';
-			$text .= str_replace($from, $to, nl2br($this->template));
+			$text .= str_replace($from, $to, 
+								 nl2br(htmlspecialchars($this->template)));
 			$text .= '</p></div>';
 
-			//TODO: hack for the "tagline" at the bottom. preg_match?
-			// if it starts with a " and ends with a ", curly and bolditalic
+			//hack for the "tagline" at the bottom. 
+			// if it starts with a " and ends with a ",  bolditalic
+			$text = preg_replace('/&quot;(.+?)&quot;/', 
+								 '<strong><i>&quot;$1&quot;</i></strong>;', 
+								 $text);
 			
 			return $text;
 		}
@@ -182,7 +186,7 @@ http://www.pacificacoop.org/
 		
 			$text .= str_replace($from, $to, $this->template);
 		
-
+			
 			//TODO: hack for the "tagline" at the bottom. preg_match?
 			// if it starts with a " and ends with a ", curly and bolditalic
 		
