@@ -534,9 +534,12 @@ select  auction_items_families_join.family_id  ,
 
 
 -- check thank-you's
- select company_name, sum(income.payment_amount) as cash_donations,
-      sum(auction_donation_items.item_value) as auction_donations,
-        sum(in_kind_donations.item_value) as in_kind_donations
+ select company_name, 
+    count(distinct(income.income_id)) as cash_donations,
+    count(distinct(auction_donation_items.auction_donation_item_id)) 
+            as auction_donations,
+    count(distinct(in_kind_donations.in_kind_donation_id)) 
+        as in_kind_donations
       from companies
           left join companies_auction_join 
               on companies_auction_join.company_id = companies.company_id
@@ -544,22 +547,26 @@ select  auction_items_families_join.family_id  ,
               on companies_auction_join.auction_donation_item_id = 
                 auction_donation_items.auction_donation_item_id 
                     and auction_donation_items.school_year = '2004-2005'
-          left join companies_income_join 
+                    and auction_donation_items.thank_you_id is null
+        left join companies_income_join 
               on companies_income_join.company_id = companies.company_id
           left join income 
             on companies_income_join.income_id = income.income_id    
                 and income.school_year = '2004-2005'
+           and income.thank_you_id is null
           left join companies_in_kind_join
                 on companies_in_kind_join.company_id = companies.company_id
          left join in_kind_donations
                 on in_kind_donations.in_kind_donation_id =
                     companies_in_kind_join.in_kind_donation_id 
                         and in_kind_donations.school_year = '2004-2005'
-           group by companies.company_id  
+                         and in_kind_donations.thank_you_id is null
+      group by companies.company_id  
      having cash_donations > 0 or auction_donations > 0 
                 or in_kind_donations > 0
      order by  cash_donations desc, auction_donations desc,
         in_kind_donations desc, companies.company_name asc;
+
 
 ---- the infamous parent-popup query
 select count(distinct(parents.parent_id)) as count, 
@@ -572,7 +579,8 @@ select count(distinct(parents.parent_id)) as count,
 	order by parents.last_name, parents.first_name
 
 -- find the duplicate or non-existent workers!!
-select name, sum(if(parents.worker = 'yes',1,0)) as worker_count 
+select name, families.family_id,
+    sum(if(parents.worker = 'yes',1,0)) as worker_count 
     from families 
         left join parents on families.family_id = parents.parent_id 
     group by parents.family_id 
