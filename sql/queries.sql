@@ -99,7 +99,7 @@ select families.name, sum(income.payment_amount) as total
     group by families.family_id
     order by families.family_id
 
---- show session families
+--- show enrolled families
 select families.* 
 from families
     left join kids on families.family_id = kids.family_id 
@@ -990,6 +990,15 @@ having Total > 0
 order by Company;
 
 
-
+-- show ticket families
+select families.* 
+from families
+    left join kids on families.family_id = kids.family_id 
+    left join enrollment on kids.kid_id = enrollment.kid_id
+where enrollment.school_year = '2004-2005'
+    and (enrollment.dropout_date < '2000-01-01'
+        or enrollment.dropout_date is null)
+group by families.family_id
+order by families.name;
 
 --- EOF
