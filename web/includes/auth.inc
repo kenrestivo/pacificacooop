@@ -225,29 +225,17 @@ checkAuthLevel($auth)
 
 
 /******************
-	DISPLAYLOGIN
-	inputs: auth
-	outputs: shows who they are logged in as, and a "logout" button
-			or, a "login here" link
+	GETUSER
+	inputs: uid
+	returns: returns the human name of who they are logged in 
 ******************/
 function
-displayLogin($auth)
+getUser($uid)
 {
 
-	confessArray($auth, "displaylogin");
-	
-	// well, they're not.
-	if(!($auth['uid'] && $auth['token'])){
-		printf("You are NOT logged in. <a href='%s'>Login here</a>",
-			//XXX should this be menu.php?
-			$_SERVER['PHP_SELF']);
-		return;
-	}
-
-	// reflexively check the token first
-	if(($err = checkToken($auth['uid'], $auth['token'])) > 0){
-		print "displayLogin(): bad login!\n";
-		return;
+	if($uid < 1){
+		fwrite(STDERR, "ERROR! no uid\n");
+		exit(1);
 	}
 
 	// the query
@@ -255,19 +243,18 @@ displayLogin($auth)
 		SELECT family.name 
 			FROM users 
 			left join families on families.familyid = users.familyid
-			WHERE users.userid = %d --",
-				$auth['uid'] );
+			WHERE users.userid = %d ",
+				$uid );
 	$listq = mysql_query($query);
 	$err = mysql_error();
 	if($err){
-		#TODO: log this, don't display it
-		print "displayLogin(): [SECRET]: $err\n";
+		fwrite(STDERR, "getUser(): [SECRET]: $err\n");
 	}
 				
 	// sanity czech
 	if (mysql_num_rows($result) < 1) {
-		printf("displayLogin(): ERROR! no name for family with uid %d?\n",
-			$auth['uid']);
+		printf("getUser(): ERROR! no name for family with uid %d?\n",
+			$uid);
 		return;
 	}
 
@@ -275,10 +262,9 @@ displayLogin($auth)
 		$name = $row['name']; 
 	}
 
-	printf("You are logged in as %s. <a href='%s'>Logout here</a>",
-		$name, $_SERVER['PHP_SELF']);
+	return $name;
 
-}/* END DISPLAYLOGIN */
+}/* END GETUSER */
 
 
 
@@ -390,17 +376,39 @@ logIn($auth)
 
 
 /******************
-
+	LOGINFORM
+	inputs: auth struct, type(password, confirm, both), and user(show, hide)
 ******************/
-loginForm($auth, $guts)
+function
+loginForm($auth, $type == 'password', $user == 'show')
 {
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					$_SERVER['PHP_SELF']);
-	thruAuth($newauth);
-	print $guts;
+	thruAuth($auth);
+	//user popup (or display) stuff
+	if($user == 'show'){
+		print "Choose user name: \n";
+		loginPopup($auth);
+	} else {
+		printf("For %s\n", getUser($auth['uid']));
+	}
+
+	//password stuff
+	if($type == 'password' || $type == 'both'){
+		print "Enter password: \n";
+		print "<INPUT TYPE=password NAME='auth[pwd]'>";
+	}
+
+	//confirm stuff
+	if($type == 'confirm' || $type == 'both'){
+		print "Re-type your password: \n";
+		print "<INPUT TYPE=password NAME='auth[confirm]'>";
+	}
+
 	printf("<INPUT TYPE=submit NAME='login' VALUE='LogIn'>");
+	printf("<INPUT TYPE=cancel NAME='cancel' VALUE='Cancel'>");
     print "</FORM>";
-}/* END  */
+}/* END LOGINFORM */
 
 
 
@@ -417,6 +425,7 @@ loggedOutState($auth)
 		if no pass (and no uid)
 			state loggedout
 			show an entry form (prepop with uid if given)
+			loginForm($auth, 'password', 'show');
 			DONE state needinput
 		if uid isn't real
 			DONE state nouser
@@ -463,12 +472,10 @@ wrongPassState($auth)
 			state => "loggedout" // explicitly set it
 	);
 
-	/*
-		complain.
-		show the password form again, prepopulated with uid
-	*/
-	$newauth['state'] = "needinput";
+	print "<p>Bad password. Try again.</p>\n";
+	loginForm($newauth, 'password', 'hide');
 
+	$newauth['state'] = "needinput";
 	return $newauth;
 }/* END  WRONGPASSSTATE */
 
@@ -483,13 +490,11 @@ noUserState($auth)
 	$newauth = array(
 			state => "loggedout" // explicitly set it
 	);
-	/*
-		complain.
-		show the main entry form, no prepopulation
-	*/
+	
+	print "<p>No such user. Try again.</p>\n";
+	loginForm($newauth, 'password', 'show');
 
 	$newauth['state'] = "needinput";
-
 	return $newauth;
 }/* END NOUSERSTATE */
 
@@ -505,11 +510,9 @@ confirmWrongState($auth)
 			uid => $auth['uid'],
 			state => "loggedout" // explicitly set it
 	);
-	/*
-		complain
-		i know the uid, so show a form with both confirmation AND entry
-	*/
 	$newauth['state'] = "loggedout";
+	print "<p>Passwords do not match. Please try again.</p>\n";
+	loginForm($newauth, 'both', 'hide');
 }/* END CONFIRMWRONGSTATE */
 
 
@@ -524,10 +527,8 @@ insecurePassState($auth)
 			uid => $auth['uid'],
 			state => "loggedout" // explicitly set it
 	);
-	/*
-		inputs: password
-		password sucks. complain. offer suggestions
-	*/
+	print "<p>Password needs to be at least x letters. Please try again.</p>\n";
+	loginForm($newauth, 'both', 'hide');
 
 	$newauth['state'] = "needinput";
 }/* END INSECUREPASSSTATE */
@@ -543,7 +544,8 @@ loggedInState($auth)
 {
 	$newauth = array(
 			uid => $auth['uid'],
-			token => $auth['token']
+			token => $auth['token'],
+			state => "loggedin"
 	);
 	return $newauth;
 }/* END LOGGEDINSTATE */
