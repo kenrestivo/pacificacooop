@@ -40,12 +40,7 @@
 	$gv = $HTTP_POST_VARS ? $HTTP_POST_VARS : $HTTP_GET_VARS;
 	
 	//i'm sorry. it was too convenient not to include here as well.
-	print "<script language=javascript>
-			function submitForm() {
-				document.forms[0].submit(); 
-				return(true); 
-			} 
-			</script>";
+	javaSubmit();
 
 	$nagonlychecked =  $gv['nagonly'] ? "checked" : "";
 	printf("\t<input type='checkbox' onchange='javascript:submitForm()' 
@@ -94,12 +89,12 @@
 	
 	while($row = mysql_fetch_array($list))
 	{
-		$tennamespaid = checkPayments($row['familyid'], 1);
-		$quiltpaid = checkPayments($row['familyid'], 2);
+		$tennamespaid = checkPayments($row['familyid'], '10names');
+		$quiltpaid = checkPayments($row['familyid'], 'quilt');
 		$auction = checkAuction($row['familyid']);
+		//TODO: delivery for solicitation too-- separate column.
 		$delivery = checkDelivery($row['familyid']);
 		$tennamesdone = ($row[cntlead] >= 10);
-
 		#some nifty running totals
 		$total['leads'] += $row[cntlead];
 		$total['tennames'] += $tennamespaid['amount'];
@@ -108,12 +103,13 @@
 		$total['undelivered'] += $delivery['undelivered']; 
 		$total['delivered'] += $delivery['delivered']; 
 
-		#don't print this row if it's already complete
+		#don't print this row if it's already complete, or indulgence granted
 		if ($nagonlychecked && 
-				(($tennamespaid['amount'] >= 50) || $tennamesdone) && 
-				($quiltpaid['amount'] >=45) && 
-				($auction['total'] >= 50) && 
-				!$delivery['undelivered'])
+				(($tennamespaid['amount'] >= 50) || $tennamesdone || 
+					$tennamespaid['indulgences']) && 
+				($quiltpaid['amount'] >=45 || $quiltpaid['indulgences']) && 
+				($auction['total'] >= 50 || $auction['indulgences']) && 
+				!$delivery['undelivered'] || $delivery['indulgences'])
 		{
 			continue;
 		}
@@ -171,8 +167,20 @@
 #	inputs: familyid
 #	returns: array with amount (numbers) and notes (text)
 #############################
-function checkPayments($familyid, $acctnum)
+function checkPayments($familyid, $type)
 {
+
+	//XXX hack
+	$feetypes = array(
+		'10names' => 1,
+		'quilt' => 2,
+		'auction' => 3
+	);
+		
+	$acctnum = $feetypes[$type];
+	if(!$acctnum){
+		user_error("checkPayments() called with invalid type [$type] for familyid [$familyid]", E_USER_ERROR);
+	}
 
 	$query = "
 		select families.familyid, inc.amount, inc.note
@@ -243,7 +251,7 @@ checkAuction($familyid)
 
 
 	// check if they paid in any forfiet fees!
-	$tmp = checkPayments($familyid, 3); //returns array.
+	$tmp = checkPayments($familyid, 'auction'); //returns array.
 	$result['forfeit'] = $tmp['amount'];
 	$result['total'] +=  $result['forfeit'];
 	
