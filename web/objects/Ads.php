@@ -47,7 +47,7 @@ class Ads extends DB_DataObject
 		);
 
 	var $fb_fieldsToRender = array(
-		"company_id" , "ad_size_id" ,
+		"ad_size_id" ,
 		"artwork_provided" , "artwork_received" , "family_id" ,
 		"school_year", 'income_id' , 'lead_id'
 		);
