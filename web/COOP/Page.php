@@ -148,7 +148,7 @@ class coopPage
 			// OK copy my dispatcher logic over now
 			switch($vals['action']){
 			case 'list':
-				print $this->listTable();
+				print $this->editAddTable();
 				break;
 			case 'detail':
 				print $this->detailForm($vals['id']);
@@ -248,6 +248,7 @@ class coopPage
 
             $this->build->useForm($form);
 			$form =& $this->build->getForm();
+			$form->applyFilter('__ALL__', 'trim');
             //confessObj($form, "form");
   			//$form->freeze();
 			// XXX BROKEN FUCK FUCK FUCK FUCK $this->setFormDefaults(&$form);
@@ -287,8 +288,8 @@ class coopPage
 			$pager_parms = array (
 				'mode' => 'Sliding',
 				'perPage' => 10,
-				'urlVar' => $this->table . '_pageID', // does not like heir?
-				'sessionVar' => $this->table . '_pageID', 
+				'urlVar' => 'pageID' . $this->table, 
+				'sessionVar' => 'pageID' . $this->table, 
 				'delta' => 2,
                 'useSessions' => 1,
                 'itemData' => $pager_item_data
@@ -334,7 +335,7 @@ class coopPage
 		}
 	
 
-	function listTable($table = false, $id = false)
+	function editAddTable($table = false, $id = false)
 		{
 
 			// most have only one key. feel around for primary if not
@@ -343,7 +344,6 @@ class coopPage
 				$primaryKey = $keys[0];
 			}
 			
-			$tab =& new HTML_Table();
 
 			$pagertext = $this->calcPager();
 			$this->obj->limit($this->pager_start - 1, 
@@ -359,9 +359,8 @@ class coopPage
 			}
 
 
-
-				
 			// now the table
+			$tab =& new HTML_Table();
 			$hdr = 0;
 			while ($this->obj->fetch()){
 				$this->getBackLinks();
@@ -383,8 +382,16 @@ class coopPage
 
 			}
 
-	
+			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
+			$res .= $tab->toHTML();
 
+			$res .= $pagertext;
+		
+			return $res;
+		}
+
+	function addCancelButtons()
+		{
 
 				// this may not actually belong here
 			$res .= $this->selfURL('Add New', 
@@ -394,18 +401,8 @@ class coopPage
 			$res .= $this->selfURL('Close', 
 							sprintf('tables[%s][action]=done', 
 									$this->table));
-
-
-			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
-			$res .= $tab->toHTML();
-
-//			$res .= "<hr><br>";
-
-			$res .= $pagertext;
-		
 			return $res;
 		}
-
 	
 
 } // END CLASS
