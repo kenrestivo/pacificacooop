@@ -22,17 +22,20 @@
 
 require_once "HTML/QuickForm.php";
 require_once "HTML/QuickForm/group.php";
+require_once('CoopObject.php');
+require_once('HTML/QuickForm.php');
 
 
-
-class paypalForm extends HTML_QuickForm
+class paypalForm
 {
 	var $title;
 	var $account = 'beecooke@yahoo.com';
 	var $server = 'https://www.paypal.com/cgi-bin/webscr';
     var $notify_url ="http://www.pacificacoop.org/sf/ipn.php";
 
-	function paypalForm($title,  $formname,  $headerflag = 1)
+
+	// THIS IS BORKEN
+	function buildOldPayPalForm($title,  $formname,  $headerflag = 1)
 		{
 			$this->title = $title;
 
@@ -45,17 +48,20 @@ class paypalForm extends HTML_QuickForm
                 $urlsuffix = "-dev";
             }
 			
-			$this->HTML_QuickForm($formname, 'get', $this->server, false, 1);
+			$form =& HTML_QuickForm($formname, 'get', 
+									$this->server, false, 1);
 			if($headerflag){
 				$this->addElement('header', 'tickets', $title);
 			}	
 			$this->addElement('hidden', 'cmd', '_xclick');
 			$this->addElement('hidden', 'business', $this->account);
 			$this->addElement('hidden', 'item_name', $title);
-			$this->addElement("hidden", "item_number", $_REQUEST['source'] ? $_REQUEST['source'] : "EmailBlast");
+			$this->addElement("hidden", "item_number", 
+							  $_REQUEST['source'] ? $_REQUEST['source'] : "EmailBlast");
 			$this->addElement("hidden", "quantity", "1");
 			$this->addElement("hidden", "page_style", "Primary");
-			$this->addElement("hidden", "notify_url", "http://www.pacificacoop.org/sf$urlsuffix/ipn.php");
+			$this->addElement("hidden", "notify_url", 
+							  "http://www.pacificacoop.org/sf$urlsuffix/ipn.php");
 			$this->addElement("hidden", "return", 
 							  "http://www.pacificacoop.org/sf$urlsuffix/thankyou.php");
 			$this->addElement("hidden", "cancel", 
@@ -65,7 +71,7 @@ class paypalForm extends HTML_QuickForm
 		}
 
 
-
+	// THIS IS OLDE AND SHITTY
 	function buildSelect($fieldname, $prices_raw, $select_first = 1,
 						 $choose_one = 0)
 		{
@@ -85,8 +91,60 @@ class paypalForm extends HTML_QuickForm
 			return $sel;
 		}
     
-} // end paypalform class
 
+	// the new improved form
+	function buildRSVP(&$cp)
+		{
+			
+			$form =& new HTML_QuickForm( 'Springfest RSVP', 'rsvpform');
+			
+			// ticket quantity box NOTE: use "invoice" when sumbitting to paypal
+			$form->addElement('text', 'ticket_quantity', 'Number of tickets:', 
+							  'size="4"');
+			
+			//popup for sponsor levels: grab from dbdo
+			$stypes['none'] = '-- CHOOSE ONE --';
+			$spon =& new CoopObject(&$cp, 'sponsorship_types', &$nothing);
+			$spon->obj->school_year = '2004-2005';
+			$spon->obj->orderBy('sponsorship_price desc');
+			$spon->obj->find();
+			while($spon->obj->fetch()){
+				$stypes[$spon->obj->sponsorship_price] = 
+					sprintf('%s ($%.0f)', $spon->obj->sponsorship_name,
+							$spon->obj->sponsorship_price);
+			}
+			$stypes['other'] = 'Other...';
+			//confessArray($stypes, 'stypes');
+			
+			$combo[] =& HTML_QuickForm::createElement('select', 
+													  'sponsor_amount', 
+													  'Sponsorship Level', 
+													  $stypes);
+			
+			// dynamically add OTHER box based on its presence
+			$combo[] =& HTML_QuickForm::createElement('text', 'other_amount', 
+													  'Other Amount:',
+													  'size="4"');
+			
+			$form->addGroup($combo, 'combo', 'Donate:', '&nbsp;Other Amount: ');
+			
+			
+			// a frozen TOTAL DONATION box too, before they paypal in
+			$form->addElement('submit', 'verify', 'Next>>');
+			
+			// important
+			if(SID){
+				$form->addElement('hidden', 'coop', session_id()); 
+			}
+			
+				//TODO pass through ANY OTHER VARS!
+			// i.e. the lead id, weirdo paypal.php vars, etc
+			
+			return $form;
+			
+		} // END BUILDRSVP
+	
+} // end paypalform class
 
 // keep below
 ?>
