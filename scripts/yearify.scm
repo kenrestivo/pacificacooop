@@ -14,23 +14,15 @@
 (define dbh (apply simplesql-open "mysql"
 				   (read-conf "/mnt/kens/ki/proj/coop/sql/db.conf")))
 
-;; silly little diagnostic, WITH safety valve
+
 (define *debug-flag* #t)
-(define (doit dbh query)
-  (if *debug-flag*
-	  (pp query)
-	  (catch #t
-			 (lambda ()
-			   (simplesql-query dbh query) )
-			 (lambda x (printf "caught error on [%s]\n" query) (pp x) #f))))
-
-
 
 ;;;;;;;;;;;;;;;
 ;; main
 
 (for-each  (lambda (table)
-			 (add-new-column table "school_year" "varchar(50)" "2003-2004"))
+			 (add-new-column dbh table
+							 "school_year" "varchar(50)" "2003-2004"))
 		   '("auction_donation_items"
 			 "packages"
 			 "income"
