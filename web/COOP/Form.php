@@ -223,7 +223,7 @@ class coopForm extends CoopObject
 			
 			//XXX not needed? $old->get($vars[$this->pk]);
 			$found = $old->find(true);
-			if(!$old->{$this->pk){
+			if(!$old->{$this->pk}){
 				PEAR::raiseError("save couldn't get its pk", 888);
 			}
 
