@@ -339,13 +339,16 @@ class coopView extends CoopObject
 			}
 
 			//confessObj($this, 'this');
+			// the new style!
 			if($this->permissions){
-				return $this->page->selfURL('Edit', 
-									  array( 
-										  'action' => 'edit',
-										  'table' => $this->table,
-										  $this->pk => $this->obj->{$this->pk}
-										  ));
+				foreach($this->permissions as $action => $title){
+					return $this->page->selfURL($title, 
+												array( 
+													'action' => $action,
+													'table' => $this->table,
+													$this->pk => $this->obj->{$this->pk}
+													));
+				}
 			}
 			return $res;
 		}

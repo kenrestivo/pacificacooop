@@ -24,6 +24,7 @@ require_once('CoopObject.php');
 require_once('DB/DataObject.php');
 require_once('Mail.php');
 require_once('object-config.php');
+require_once('DB/DataObject/Cast.php');
 
 define('COOP_FOUNDED', 1962);
 define('FIRST_SPRINGFEST', 1972);
@@ -53,7 +54,7 @@ class ThankYou
 	// if i put in in a db, schoolyearify them, and grab this years or latest
 	// so they can override it in the future
 	var $template = 
-"[:DATE:]
+	"[:DATE:]
 
 [:NAME:]
 [:ADDRESS:]
@@ -584,6 +585,49 @@ http://www.pacificacoop.org/
 			//  COMPANIES BROKEN! have to guess from income or inkind. bah. 
 			$this->guessCompany($company_guess_hack);
 		}
+
+	function repairOrphaned()
+		{
+			$save = new CoopObject(&$this->cp, 'thank_you', &$nothing);
+			$save->obj->thank_you_id = DB_DataObject_Cast::sql('NULL');
+			
+			foreach(array('in_kind_donations', 'auction_donation_items', 'income') as $table){
+				// have to save it b4 each query
+				$save = $ty->obj;
+				$real = new CoopView(&$this->cp, $table, &$nothing);
+				$real->obj->whereAdd("$table.thank_you_id is not null");
+				$real->obj->joinAdd($save);
+				print $real->simpleTable();
+				$real->obj->find();
+				while($real->obj->fetch()){
+					$mistake_summary .= print_r($real->obj, true);
+					//clear it now! or try at least...
+					$real->obj->thank_you_id = DB_DataObject_Cast::sql('NULL');
+					//$real->obj->update(); // TODO enable this when i'm ready to test
+	}
+			} // end foreach
+					
+					
+					return; /// TODO remove this to test email interface
+					
+					$mistake_summary .= print_r($_REQUEST, true);
+					
+					$headers['From']    = 'bugreport@pacificacoop.org';
+					
+					global $coop_sendto;
+					$headers['To']      = 	 $coop_sendto['email_address'];
+					
+					$headers['Subject'] = 'ORPHANED thank-you notes found';
+					
+					
+					$mail_object =& Mail::factory('smtp', $params);
+					
+					$body = $mistake_summary;
+					$mail_object->send($this->email, 
+									   $headers, 
+									   $body);
+					
+		} // END REPAIRORPHANS	
 
 } // END THANK YOU CLASS
 
