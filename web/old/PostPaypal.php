@@ -119,7 +119,8 @@ class PostPaypal
 			foreach (array('txn_id','check_number') as $key => $val){ 
 				$obj->$val = $this->paypal_obj->txn_id;
 			}
-			foreach (array('bookkeeper_date','cleared_date') as $key => $val){ 
+			foreach (array('bookkeeper_date','cleared_date', 'check_date') 
+                     as $key => $val){ 
 				$obj->$val = $this->paypal_obj->confirm_date;
 			}
 			$obj->payer = sprintf("%s %s", 
