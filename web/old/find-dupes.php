@@ -39,7 +39,7 @@ while($co->obj->fetch()){
 
 	while($sub->obj->fetch()){
 		// don't do expensive simipar_text if it's already a dupe
-		if(is_array($dupefound) && !in_array($co->obj->{$co->pk}, $dupefound)){	
+		if( !in_array($co->obj->{$co->pk}, $dupefound)){	
 			$perc = 0;
 			similar_text($co->obj->company_name, 
 						 $sub->obj->company_name, &$perc);
