@@ -53,10 +53,10 @@
 			left join kids on kids.familyid = families.familyid
 			left join attendance on attendance.kidsid = kids.kidsid
 			left join enrol on enrol.enrolid = attendance.enrolid
-		where enrol.semester like \"2003-2004\" %s
+		where enrol.semester like \"2003-2004\" 
+			and attendance.dropout is NULL
 		group by enrol.sess, families.name
 		order by enrol.sess, cntlead desc, families.name\n",
-			$nagonlychecked ? "and attendance.dropout is NULL" : ""
 		);
 
 	$list = mysql_query($query);
