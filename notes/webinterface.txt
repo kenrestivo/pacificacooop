@@ -214,7 +214,7 @@ concepts/data structures
 		this opaque token is what gets passed around as the user surfs the site
 	realm: an "area" of the site
 		invitations, money, auction, roster, insurance, menu, users
-	uid: a user, distinct from family, but linked to a family.
+	uid: a user, distinct from family, but joined to a family.
 	level(action): levels of authorisation for this user and realm
 		none, summary, view detail, edit, add, delete, admin(superuser)
 
@@ -340,37 +340,37 @@ contact management
 		company
 		address, city, state,zip
 		phone, fax, email
-		territoryid (link)
+		territoryid (join)
 			or temporary familyid hack, or territory-family id.
-		dead contact flag/date: do not contact. essentially, obsolete date.
+		dead contact flag/date: do not contact. essentially, an obsolete-after date.
 		userid, entered, updated
 	contact table
 		first,last
-		companyid (link)
+		companyid (join)
 	territory table 
 		description (crespi, rockaway, etc)
 		hmm. alumnae/member familyid? or... track that elsewise?
-	territory-family (persistence!) glue table
+	territory-family (persistence!) join table
 		include sessionid! this'll change year-to-year!
 	contactnotes table
 		contactid
 		entered/updated (don't allow updates! it's history, it stays)
 		note (longtext)
-	contact-to-income glue table
+	contact-to-income join table
 		to handle any stray non-categorized donations. ugly but will need this.
-	contact-to-auction glue table (like faglue)
+	contact-to-auction join table (like fajoin)
 		to handle any donations of hard goods
 
 ad insertion 
 	ad table
-		contactid (link)
-		sessionid (link)
-		adsizeid (link)
+		contactid (join)
+		sessionid (join)
+		adsizeid (join)
 		ad copy (longtext)
 		artwork_provided flag?
-		fileid(link) -- for artwork submitted
-		weblinkid (link to weblink glue table. heh. link.)
-		incomeid(link) -- to handle payment... or glue if many payments!
+		fileid(join) -- for artwork submitted
+		weblinkid (link to weblink join table. heh. link.)
+		incomeid(link) -- to handle payment... or join if many payments!
 		userid, enteredupdated?
 	adsize table
 		description (varchar)
@@ -380,9 +380,9 @@ ad insertion
 web links stuff
 	link table
 		displaytext
-		fileid(link)
+		fileid(join)
 		url
-		incomeid(link)? will people PAY for these alone?
+		incomeid(join)? will people PAY for these alone?
 	linkTYPE table?
 		kind of link?
 
@@ -394,10 +394,10 @@ filenames table (for various uploads!)
 
 sponsorship form
 	sponsorship table
-		contactid (link)
-		sessionid (link) -- these will change year to year!
+		contactid (join)
+		sessionid (join) -- these will change year to year!
 		sponsortype
-		incomeid(link) -- to handle payment... or glue if many payments!
+		incomeid(join) -- to handle payment... or join if many payments!
 		userid, entered, updated(timestamp)
 	sponsortype table
 		description
@@ -407,11 +407,11 @@ sponsorship form
 				i.e. will some user later on want to ADD to these, 
 				w/o changing code?
 				or will it necessarily involve code changes?
-			link (to linktype table?)
+			join (to linktype table?)
 			logo
-			ad (link to adsize table)
-			tickets quantity? link to tickettype table?
-			banner (champions? individual? link to bannertype table?)
+			ad (join to adsize table)
+			tickets quantity? join to tickettype table?
+			banner (champions? individual? join to bannertype table?)
 			anything else?
 
 banners
@@ -422,8 +422,42 @@ tickets!!!
 	what to do here?
 
 flyers! (publicity)
-	need to add an "need flyer" date? link to contactid
+	need to add an "need flyer" date? join to contactid
 	and.. a "flyer put up" date, and user who did it
+
+money:
+	add to coa table?
+		jointable?
+		joinidfield?
+		joinSTRUCT??!
+		or... keep this in struct?
+			could get ugly if there are multiple nested joins?
+	could be joined to 
+		ticket  (join ticket table, and join to an invitation?!), 
+		generic business lead (join contacts table)
+		ad (join ad table), 
+		one of various forfeit fees (join familyid)
+	handling
+		aha! an "apply payment to" field WHICH IS REQUIRED!
+			it pops up the relevant "apply" sub-screen.
+				can add new one or apply to existing one.
+			which basically throws up various options depending on popup
+				this is a special case tho!!
+		pop-up in case of business lead, since inputter won't know
+			ad-id? must it join to that?
+				nice if it had prices too... to verify check amount
+				SO WE KNOW IT WAS PAID!
+			raw cash donation is easy: just join to business lead
+			it should show any unpaid stuff.
+		leadid in case of invitation. 
+			possibly with pop-up?
+		and... tickets? what of tickets?
+	will need a special-case checkEntry function, i'm certain
+		to handle all the different weirdo cases
+		callback?
+	perhaps we'll have to handle it like a proper accounts-receivable!
+		i.e. you'll have to "apply payments"
+		
 
 sub-view gui handling
 	will probably need to have multiple structs, and a field to choose them
@@ -451,11 +485,11 @@ sub-view gui handling
 		i.e. so showreprt can generate views programatically?
 		and, so it can  be included from elsewhere!
 		including: means it can be passed around
-		linking: it MAY not be so easy to pass it around... collisions, etc
-			augh. how to handle a linked struct from another file?! grr.
-			gonna have to have the structs be links, not embedded. damn.
+		joining: it MAY not be so easy to pass it around... collisions, etc
+			augh. how to handle a joined struct from another file?! grr.
+			gonna have to have the structs be joins, not embedded. damn.
 	add handling!
-		ONE-TO-ONE: just include it in the struct, like now with glue tables!
+		ONE-TO-ONE: just include it in the struct, like now with join tables!
 			no changes. this is good.
 		ONE-TO-MANY with ONE required
 			how to check that the one is entered? auugh.
@@ -497,40 +531,6 @@ sub-view gui handling
 			viewOne(): view that auction, and any sub-structs
 					i.e. additional families!
 
-
-money:
-	add to coa table?
-		linktable?
-		linkidfield?
-		linkSTRUCT??!
-		or... keep this in struct?
-			could get ugly if there are multiple nested joins?
-	could be linked to 
-		ticket  (link ticket table, and glue to an invitation?!), 
-		generic business lead (link contacts table)
-		ad (link ad table), 
-		one of various forfeit fees (link familyid)
-	handling
-		aha! an "apply payment to" field WHICH IS REQUIRED!
-			it pops up the relevant "apply" sub-screen.
-				can add new one or apply to existing one.
-			which basically throws up various options depending on popup
-				this is a special case tho!!
-		pop-up in case of business lead, since inputter won't know
-			ad-id? must it link to that?
-				nice if it had prices too... to verify check amount
-				SO WE KNOW IT WAS PAID!
-			raw cash donation is easy: just link to business lead
-			it should show any unpaid stuff.
-		leadid in case of invitation. 
-			possibly with pop-up?
-		and... tickets? what of tickets?
-	will need a special-case checkEntry function, i'm certain
-		to handle all the different weirdo cases
-		callback?
-	perhaps we'll have to handle it like a proper accounts-receivable!
-		i.e. you'll have to "apply payments"
-		
 
 report notes: these are getting hairy
 	ad/flyer/link/etc will need to left join sponsorship packages (and session?)
