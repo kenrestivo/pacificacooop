@@ -53,6 +53,8 @@ the fieldstruct
 		perms: each field can have its own set of perms
 			default is everyone can do everything
 			the levels are array (group, user). 
+		realval: with fieldstructs used for display, has the REAL value
+			i.e. the value of the 'linkfield', not of the field itself
 
 auth
 	realms: areas of privilege
