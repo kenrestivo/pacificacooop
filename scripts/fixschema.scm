@@ -222,11 +222,11 @@
 (define (load-code-changes)
   (load-dict-list (clean-change-alist *change-alist*))
   (set! results-list '())
-  (foreach (lambda (dir) (file-read (plain-files dir)))
-									'("/mnt/kens/ki/proj/coop/web"
-									  "/mnt/kens/ki/proj/coop/scripts"))
-  )
-
+  (for-each file-read
+			(append-map (lambda (dir) (plain-files dir))
+				 '("/mnt/kens/ki/proj/coop/web"
+				   "/mnt/kens/ki/proj/coop/scripts"))))
+  
  
 
 ;; EOF
