@@ -49,6 +49,10 @@ contents of responses
 	any Error/Warning messages from PHP?
 		would have to make php display them in html, not to logs
 
+build test cases for all the weirdo shit i just did
+	& 's > < in input
+	in company name, for example.
+	make sure it shows up: in new popup, in display
 
 Big task. Right now I'm probably going to start writing cases for the new stuff: solicitation, raffles, packaging.  Any thoughts on how to prioritise this? Want to split it up and take a portion yourself? The thing is really quite pleasant to use.
 

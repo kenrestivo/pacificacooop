@@ -358,7 +358,7 @@ contact management
 		contactid
 		entered/updated (don't allow updates! it's history, it stays)
 		note (longtext)
-	contact-to-income join table
+	contact-to-income join table DONE
 		to handle any stray non-categorized donations. ugly but will need this.
 
 raffle tickets: this is join to income, basically DONE!
@@ -377,6 +377,7 @@ ad insertion
 		description (varchar)
 		size? or use above?
 		price
+	do an income join table. really.	
 	ad table
 		contactid (join)
 		semester (join) -- note, weird. not the sessionid, but the 2003-2004
@@ -411,20 +412,21 @@ sponsorship form
 		sponsortype
 		incomeid(join) -- to handle payment... or join if many payments!
 		userid, entered, updated(timestamp)
+	do an income join table. really.	
 	sponsortype table
 		description
 		price
 		contents (fields? field?)
 			(like privs, one for each? or vertical columns?)
 				i.e. will some user later on want to ADD to these, 
-				w/o changing code?
-				or will it necessarily involve code changes?
-			join (to linktype table?)
-			logo
-			ad (join to adsize table)
-			tickets quantity? join to tickettype table?
-			banner (champions? individual? join to bannertype table?)
-			anything else?
+				w/o changing code?) YES
+				it'll change. you know it will.
+		join (to linktype table?)
+		logo? or in ad?
+		ad (join to adsize table)
+		tickets quantity? join to tickettype table?
+		banner (champions? individual? join to bannertype table?)
+		anything else?
 
 banners
 	type?
@@ -434,6 +436,13 @@ flyers! (publicity) DONE!!
 	need to add an "need flyer" date join to contactid
 	and.. a "flyer put up" date, and user who did it
 
+packages
+	live or silent? 
+	package number (different ones for live/silent)
+	description
+	sub-item number, description
+		will track back 
+
 money:
 	add to coa table?
 		jointable?
@@ -441,15 +450,20 @@ money:
 		joinSTRUCT??!
 		or... keep this in struct?
 			could get ugly if there are multiple nested joins?
+		so that i can join BACK for reporting purposes!!!
 	could be joined to 
 		ticket  (join ticket table, and join to an invitation?!), 
-		generic business lead (join contacts table)
+			i think you join to an invitation. MUST have, to have ticket
+		generic business lead (join contacts table) DONE
 		ad (join ad table), 
+		sponsorships
 		one of various forfeit fees (join familyid)
 	MUST i keep track from money table, WHERE these were joined to?
 		or, must the display code go fishing around for all of them?
+			i'm thinking the display is going to have to deal with this.
 	handling
 		aha! an "apply payment to" field WHICH IS REQUIRED!
+				use coa, basically.
 			it pops up the relevant "apply" sub-screen.
 				can add new one or apply to existing one.
 			which basically throws up various options depending on popup
@@ -458,7 +472,7 @@ money:
 			ad-id? must it join to that?
 				nice if it had prices too... to verify check amount
 				SO WE KNOW IT WAS PAID!
-			raw cash donation is easy: just join to business lead
+			raw cash donation is easy: just join to business lead DONE
 			it should show any unpaid stuff.
 		leadid in case of invitation. 
 			possibly with pop-up?
@@ -549,7 +563,6 @@ report notes: these are getting hairy
 		it is at least the center of springfest!
 		any tracking of revenue back to families will be HAIRY!
 			through any revenue-generating thing, back to family and/or user.
-	
 
 year-to-year things
 	populate the sponsorship packages? or... do it automatically?
@@ -559,12 +572,12 @@ year-to-year things
 ok, rearchitecture!
 
 features:
-	sessions for auth, instead of passing $auth through.
+	sessions for auth, instead of passing $auth through. DONE
 	nestable navigation: 
 		keep track of the PAGE and PATH
 	modular display: each object can display "views" from anywhere
 	keep track of the STATE of each view: add/edit/delete/confirm
-	keep track of auth stuff.
+	keep track of auth stuff. DONE
 
 open questions:
 	keep track of the path in through things, and back out?
@@ -576,4 +589,166 @@ open questions:
 			then pass those thru to showForm()?
 	
 
+----------------------
 
+a meta-check-entering screen! context-sensitive
+	show ALL coa's
+	onChange() them (and put REFRESH button in too)
+	maybe quick hackie... for dealing with immediate need for ads!?
+	the save target for that form, will DISPATCH to the proper callback
+		need to add that to db, or to some struct
+		i.e. join_to families get dispatched to money.php
+			join_to companies get dispatched to various...
+		sub-dispatches too!
+			i.e. in companies, auctions get dispatched to auction,
+				ads get dispatched to ads
+		would need to be SMART about popping up just ads for THEM
+			and an "enter new" for that too!
+	why? because the glue fields are all different!!
+	maybe can combine some of these into one file, eventually.
+	this will have to be a QUICK HACK! 
+	hey! maybe it brings up a pre-populated screen WITH THE VALS!
+		i.e. yes, hidden vars again.
+		it's ok, because inputToFieldStruct will handle it, if need be.
+	so, a money view like my existing one
+		but with onchange and refresh, that is basically a submit
+		but a custom process-one-entry
+			if it's misc donations, chain up to regular processoneentry
+			if it's ads, display an edit screen FOR ADS
+				which is a different callbacks/fieldspec
+					pre-populate the edit screen
+					add a pop-up for company (as in solicit_auction)
+					and a different set of linktables
+			if it's leads, display an edit screen FOR LEADS
+				with a field for response code
+				and, again, a different set of linktables
+			all the subscreens MUST include the same acctnum and onchange
+				so if the person entering fucks up, they can switch.
+		this would be the first use of callbacks as objects
+			i.e. money would have the callbacks/fields for all of these
+			and, different ones get passed around, depending.
+	ok, serious problem here: what about the STATES.INC!!
+		how do i deal with bouncing back through again?
+			i.e. error reporting? saving? confirmdelete? all those states!!
+			do i have separate .php files? HAACK!
+			i think i'm stuck with that for now.
+	this is orthagonal to the MAIN money screen
+		hmm. should i combine them ALL into one??
+			can't do... privs! different realms. dammit.
+		well, maybe there is ONE big money screen, for admin.
+			someone is gonna want that!! sit there with checks, entering.
+		avoid duplication if possible
+	I NEED A NEW TARGET! not processone, but 'redisplay'
+		that would be called from onchange() or a refresh button
+		'save'/'edit' won't show up until it's all filled out.
+			i.e. a COA has been chosen.
+		my top-level fieldspec/callback won't HAVE a save, only a refresh.
+
+hmm. well, crosslinks to let people enter money AND ads, or ads AND money
+	could get tricky: how to save intermediate data!?
+
+
+will have to do a check for orphans, in confirmdelete!
+	search for this id in all glue fields (in callbacks? in fields?)
+	and ask user if they REALLY want to do this?? or, disallow it.
+	then, allow deletes by things like flyer committee
+	BUT! it'd have to KNOW all the possible peer join tables! ack!
+		yes, money WILL have to understand BACK to what it came from.
+
+i will have to deal with SORTING
+	in showTitles(), make each of those headings a LINK
+		the link should be a struct: colname, dir, maybe viewname?
+			so i can show them, too. and so 'view' callback can do it
+			or, STORE it in SESSION! or in the object! so i KNOW
+				so the sorts persist between pageviews!
+		maybe show arrows?
+		then, i'd need to KNOW what the sort order is.
+	now, integrating this with the 'view' callback should be interesting!
+		how to pass it thru? straight from states.inc?
+			a _SESSION var?
+			be careful of nesting here. WHICH view am i sorting?
+		what do i do with the default order by's?
+			might i need to pass these thru to showreport?
+			i think at least one is an implode!
+			carefully study these, looking for duplication and comonality
+	i will also have to NOT USE SQL FOR SORTING!!
+		i'll have to keep all this shit in memory, and sort it there
+		because... sql sucks. i'll need to sort by multi-joins.
+	i WILL need to include sorting shit, for the reports and view/edits
+		and a "only not checked in" flags one too.
+
+
+now... the multi-level views
+	will need BACK-STACK in $_SESSION! to keep track of the flipping around, 
+		and main menu is getting too crowded-- i can whack stuff from it now.
+		a backstack SESSION array. 
+		pop on action completed-- i.e. no-display actions like save, delete
+			if nothing there, default will be to return to itself.
+			i don't want to back() through adds, form submits, etc
+			i.e. adds that are from main menu will go back to adds again
+			deal with cancel handling too. cancel goes to 'view' now. always?
+		every time i am done displaying a page, 
+			push the name of its callback and action on the stack
+			unless it's already there, of course-- avoid loop
+		when i flip to an add, 
+			store in the backstsck, the mysql_index_id() of what i just saved!
+			then, i want the 'crosscallback'-ing popup to <SELECT> it
+				when i go back to it.
+		use this to display a user-friendly heirarchal "back" menu to user.
+	a new 'details' action (in states.inc and in callbacks)
+		this will basically call showReportForm on the mainindex
+			just like confirmdelete does, but with action edit.
+		add links to "Details", in showReport().. but be careful.
+			don't want it to recurse!
+		need some kind of recursive, object-traversing COUNT function!
+			so i know if there is anything to DISPLAY for 'details'
+				and actionbuttons shouldn't show it unless it's there!
+	a details() function
+		gets called from 'details' state
+		also call it manually from within edit oneFormShell() too!
+			only when i am editing, not adding. make sure i KNOW that in there!
+				i do, sorta. i have 'save', 'replace' to check
+		cycles through all the $callbacks['subviews'], 
+			and calls their respective 'view' callbacks on them
+				passing along the $callbacks[indexfield']
+			make sure it includes the actionButtons() for them too
+				so people can ADD. and with descriptive text of what to add
+	new 'subviews' array in callbacks, 
+		contains names (references?) of callbacks for subviews
+		basically, like the main menu!
+		all views by default have $auditcallbacks in their subview!
+	'view' callbacks MAY have to be changed! to include dynamic index
+		i.e. it's NOT always familyid. 
+			it's sometimes the $callbacks['mainindex']
+			it's the familyid by default, and when called from the mainmenu
+			note 'countindex' now used for count function. re-use? different?
+			it could be other things too
+        this will likely lead to the showreportform() being more generic: COOL!
+	start with AUDIT as a test-case
+		besides, ALL the views will need it anyway.
+	then NOTES and CONTACTS for companies.
+	finallly... packaging management for sue langlands!!
+		export into word or excel
+			for program committee
+	
+whooops... small packaging report issue
+	how do i pop-up only the items that HAVE NOT YET been selected?
+		i'd have to feed a custom "while" to popuputil, i suppose.
+			and hack recursepopup to deal with it.
+	yes, because ads will need that too.
+
+
+----
+thoughts on ads and checks
+	like auctions, basically.
+	very similar, popup for company
+but... SOMEONE is going to have to be the main link!
+	i.e. is it 
+		ads->checks->company
+		ads->company, ads->checks->company
+		checks->ads->company
+			difficult. you'll need to CORRECTLY pick which ad.
+			and, company will have to be included IN it's popup!
+		checks->company, checks->ads->company
+			UGH! dual-link!
+	or, do you pick company, then it pops up ONLY those ads relevant?

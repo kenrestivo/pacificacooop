@@ -60,12 +60,11 @@
 					  'getResponse))))
 
 ;; go as far as you can, so far.
-(define get-to-main-page 
-  (lambda(wtc)
+(define (get-to-main-page wtc)
 	(begin
 	  (choose-family wtc)
 	  (enter-password wtc)
-	  (main-page-ok wtc))))
+	  (main-page-ok wtc)))
 
 ;; like foreach, cycles through a vector vec, doing procedure.
 ;; if use-number, pass the procedure the vector's index

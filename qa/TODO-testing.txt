@@ -1,5 +1,10 @@
 TODO testing stuff
 
+how to navigate links?
+	find the right table
+	find the right row/col.
+	find the right link
+	click on it!
 
 go back and have a look at my test plan!
 ok, the basics: login, etc.
@@ -24,3 +29,4 @@ ok... LINKS
 		asText, or getParameterNames, or getURLString
 write a get-link-by(text,url,parameter) function
 	so i can CLICK on the  bastard and get to the next step!!
+
