@@ -23,13 +23,21 @@
 				 "F"
 				 "School Job"))
 
+(define (merge-am-pm rasta)
+  (hash-set! rasta "BOTH"
+			 (append 
+			  (map  (lambda (x) (append x '("AM"))) (hash-ref *rasta* "AM"))
+			  (map  (lambda (x) (append x '("PM"))) (hash-ref *rasta* "PM")))))
+  
 (define (process-rasta-line rasta header session line )
-  (hash-set! rasta session
-			 (append
-			  (hash-ref rasta session '())
-			  (list
-			   (safe-list-head (parse-csv line)
-							   (length header))))))
+  (let ((parsed-line (parse-csv line)))
+	(if (> (length header) (length parsed-line))
+		(throw 'too-short))
+	(hash-set! rasta session
+			   (append
+				(hash-ref rasta session '())
+				(list
+				 (safe-list-head parsed-line (length header)))))))
 
 (define (clean-up-rasta rasta header session)
   (hash-set! rasta session
@@ -48,5 +56,6 @@
 
 (grab-csv-rasta "AM" "/mnt/kens/ki/proj/coop/imports/AM.csv")
 (grab-csv-rasta "PM" "/mnt/kens/ki/proj/coop/imports/PM.csv")
+(merge-am-pm *rasta*)
 
 ;; EOF
