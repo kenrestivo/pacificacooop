@@ -86,7 +86,7 @@ select kids.*, enrollment.*
         left join enrollment using (kid_id);
 
 -- show all springfest payments
-select families.name, sum(income.amount) as total
+select families.name, sum(income.payment_amount) as total
     from families
         left join families_income_join 
             on families.family_id = families_income_join.family_id
@@ -132,7 +132,7 @@ select leads.lead_id  as responsecode
 
 -- detailed list of payments
 select  income.income_id, income.check_number, income.payer, 
-        chart_of_accounts.item_description, income.amount, families.name
+        chart_of_accounts.item_description, income.payment_amount, families.name
     from income
         left join chart_of_accounts 
             on chart_of_accounts.account_number = income.account_number
@@ -163,10 +163,10 @@ select kids.first_name, kids.last_name, enrol.school_year, enrol.sess
     where enrol.school_year = '2003-2004'  and attendance.dropout is null
 
 -- find orphaned auctionss XXX BROKEN! i have new linkfields!
-select auction.*, families.name 
+select auction_donation_items.*, families.name 
     from auction 
         left join auction_items_families_join
-        on auction_items_families_join.auction_donation_item_id = auction.auction_donation_item_id 
+        on auction_items_families_join.auction_donation_item_id = auction_donation_items.auction_donation_item_id 
         left join families on families.family_id = auction_items_families_join.family_id 
     where auction_items_families_join.family_id is null 
     order by auction_donation_item_id
@@ -182,11 +182,11 @@ select income.*, families.name
     order by income_id
 
 -- show the total auction item_value (for a family)
-select families.name, sum(auction.item_value) as item_value
+select families.name, sum(auction_donation_items.item_value) as item_value
     from families
         left join auction_items_families_join on families.family_id = auction_items_families_join.family_id
         left join auction 
-        on auction_items_families_join.auction_donation_item_id = auction.auction_donation_item_id
+        on auction_items_families_join.auction_donation_item_id = auction_donation_items.auction_donation_item_id
     group by families.family_id
 
 -- money totals
@@ -263,7 +263,7 @@ select relation,
 -- show me the money! all of it, in this case
 select chart_of_accounts.item_description, 
      sum(if(families_income_join.family_id>0 || 
-            companies.family_id>0,income.amount,0)) 
+            companies.family_id>0,income.payment_amount,0)) 
         as family_paid ,
         sum(amount)  as total 
     from income 
@@ -284,22 +284,22 @@ select chart_of_accounts.item_description,
 
 
 --- nasty package join. the 'users' hack is to get "xxx family" w/o coding
-select auction.* , 
+select auction_donation_items.* , 
             coalesce(users.name, companies.company_name) as donor
         from auction 
             left join packages on auction.package_id = packages.package_id 
             left join auction_items_families_join 
         on auction_items_families_join.auction_donation_item_id = 
-                auction.auction_donation_item_id 
+                auction_donation_items.auction_donation_item_id 
             left join users on users.family_id = 
                 auction_items_families_join.family_id 
             left join companies_auction_join
                  on companies_auction_join.auction_donation_item_id = 
-                        auction.auction_donation_item_id
+                        auction_donation_items.auction_donation_item_id
                 left join companies 
                     on companies_auction_join.company_id = 
                         companies.company_id
-        where auction.package_id < 1 and date_received is not null 
+        where auction_donation_items.package_id < 1 and date_received is not null 
             and date_received > '0000-00-00'
 
 -- the package summary
@@ -317,7 +317,7 @@ select package_type, package_number, package_title,
 select coalesce(companies.company_name, 
         concat_ws(' ', leads.first_name, leads.last_name, leads.company))
             as company,
-        sum(income.amount)  as cash_total 
+        sum(income.payment_amount)  as cash_total 
     from income 
         left join companies_income_join
                on income.income_id = companies_income_join.income_id
@@ -335,14 +335,14 @@ select coalesce(companies.company_name,
 
 -- nasty sponsorship join to check AUCTION levels
 select companies.company_name,
-        sum(auction.item_value)  as auction_item_total
+        sum(auction_donation_items.item_value)  as auction_item_total
 		sum(in_kind_donations.item_value) as in_kind_donation_total 
     from companies
        left join companies_auction_join 
                 on companies.company_id = 
                     companies_auction_join.company_id
      	   left join auction_donation_items
-        	       on auction.auction_donation_item_id =
+        	       on auction_donation_items.auction_donation_item_id =
             	        companies_auction_join.auction_donation_item_id
 		left join companies_in_kind_join
 				on companies_in_kind_join.company_id =
@@ -356,13 +356,13 @@ select companies.company_name,
 
 
 -- show auction totals for SOLICIT AND for family auctions.
-select families.name, sum(auction.item_value) as item_value
+select families.name, sum(auction_donation_items.item_value) as item_value
     from auction
         left join auction_items_families_join 
-            on auction.auction_donation_item_id =
+            on auction_donation_items.auction_donation_item_id =
                 auction_items_families_join.auction_donation_item_id
         left join companies_auction_join 
-            on auction.auction_donation_item_id = 
+            on auction_donation_items.auction_donation_item_id = 
                 companies_auction_join.auction_donation_item_id
         left join families 
             on coalesce(auction_items_families_join.family_id, 
@@ -372,17 +372,17 @@ select families.name, sum(auction.item_value) as item_value
     order by families.name
 
 --Massive solicit nag stuff
- select company_name, sum(income.amount) as cash_donations,
-      sum(auction.item_value) +  sum (in_kind_donations.item_value) 
+ select company_name, sum(income.payment_amount) as cash_donations,
+      sum(auction_donation_items.item_value) +  sum(in_kind_donations.item_value) 
             as non_cash_donations,
-      sum(income.amount) + sum(auction.item_value) + 
+      sum(income.payment_amount) + sum(auction_donation_items.item_value) + 
         sum(in_kind_donations.item_value) as total
     from companies
           left join companies_auction_join 
               on companies_auction_join.company_id = companies.company_id
-          left join auction 
+          left join auction_donation_items 
               on companies_auction_join.auction_donation_item_id = 
-                auction.auction_donation_item_id
+                auction_donation_items.auction_donation_item_id
           left join companies_income_join 
               on companies_income_join.company_id = companies.company_id
           left join income 
@@ -489,23 +489,5 @@ select  auction_items_families_join.family_id  ,
     order by families.name asc, companies.company_name 
 
 ---- The people who need thankyous
-select companies.company_name,
-        sum(auction_donation_items.item_value) as auction_total,
-        sum(income.payment_amount) as cash_total
-    from companies         
-        left join companies_income_join 
-               on companies.company_id = 
-                   companies_income_join.company_id
-            left join income
-                    on income.income_id = companies_income_join.income_id
-        left join companies_auction_join
-                on companies_auction_join.company_id = companies.company_id
-            left join auction_donation_items
-                    on auction_donation_items.auction_donation_item_id =
-                            auction_donation_items.auction_donation_item_id
-    where income.school_year = '$sy'
-            or auction_donation_items.school_year = '$sy'
-    group by companies.company_id
-    order by company_name
 
 --- Eof
