@@ -52,8 +52,7 @@ class Tickets extends DB_DataObject
 		{
 
 			if($this->ticket_id < 1){
-				user_error('tickets::updatepaddles ticketid <1', 
-						   E_USER_NOTICE);
+				PEAR::raiseError('null or zero ticketid. bad.', 666);
 				return;
 			}
 

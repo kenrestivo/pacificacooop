@@ -73,10 +73,13 @@ class coopView extends CoopObject
 			}
 			$tab = new HTML_Table('  bgcolor="#ffffff"');	
 		
-			$tab->addRow($this->makeHeader(), 
-						 'bgcolor=#aabbff align=left', 'TH'); 
-			
 			while($this->obj->fetch()){
+				if(!$rowcnt++){
+					// MUST do this *after* fetch, to handl custom queries
+					// where column names are different from what's in obj
+					$tab->addRow($this->makeHeader(), 
+							 'bgcolor=#aabbff align=left', 'TH'); 
+				}
 				//$tab->addRow(array_values($this->obj->toArray()));
 				$tab->addRow($this->toArray(),'valign="top"');
 			
@@ -241,8 +244,10 @@ class coopView extends CoopObject
 	function makeHeader()
 		{
 
+			///confessArray($this->obj->toArray(), 'makeheader:toarray');
 			// get the fieldnames out the dataobject
 			foreach($this->obj->toArray() as $key => $trash){
+				//print "checking $key<br>";
 				if($this->isPermittedField($key)){
 					if($this->obj->fb_fieldLabels[$key]){
 						$res[] = $this->obj->fb_fieldLabels[$key];
