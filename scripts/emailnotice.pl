@@ -68,7 +68,7 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 
 	$insarref = &getinsuranceinfo($id);
 	$pararref = &getworkers($id);
-	$licarref = &getlicenseinfo($pararref);
+	$massivearref = &getlicenseinfo($pararref);
 
 	#TODO the entire architecture of this thing is botched!
 	#	i MUST handle the case of more than one working parent!
@@ -77,10 +77,10 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	# the report of people i need to call or write a note to!
 	if($opt_r){
 		#TODO maybe take a filename on command line, to output the report
-		print &fieldTripReport($famref, $insarref, $licarref, 
+		print &fieldTripReport($famref, $insarref, $massivearref, 
 				$checkdate, $opt_a ? 0 : 1);
 	} else {
-		&emailReminder($famref, $insarref, $licarref, 
+		&emailReminder($famref, $insarref, $massivearref, 
 			$checkdate, $opt_a ? 0 : 1);
 	}
 
@@ -148,6 +148,7 @@ sub getlicenseinfo()
 	my %item;
 	my $query;
 	my $pars;
+	my %everthang;
 
 	#TODO perhaps heirarchal hashen. this glumps all parents together in one array.
 	foreach $pars (@$pararref){
@@ -171,7 +172,10 @@ sub getlicenseinfo()
 
 	$opt_v && printf("getlicenseinfo(): returning %d items\n", scalar @results);
 
-	return \@results; # ref to the results which is an array of refs!
+	$everthang{'pararref'} = $pararref;
+	$everthang{'licarref'} = \@results;
+
+	return \%everthang; # massive.
 }# END GETLICENSEINFO
 
 
@@ -371,10 +375,11 @@ sub fieldTripReport()
 {
 	my $famref = shift;
 	my $insarref = shift;
-	my $licarref = shift;
+	my $marf = shift;
 	my $checkdate = shift;
 	my $onlyexpired = shift;
 	my $licref;
+	my $licarref;
 	my $insref;
 	my $badness = "";
 	my $flag = 0;
@@ -389,7 +394,7 @@ sub fieldTripReport()
 	$badness .= sprintf(
 				" \tFamily Phone: %s\tEmail: %s\n",
 				$famref->{'phone'} ? $famref->{'phone'} : "",
-				$famref->{'email'} ? $famref->{'email'} : ""
+				$marf->{'pararref'}->[0]->{'email'}
 			);
 
 	#insurance
