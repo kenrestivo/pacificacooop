@@ -112,14 +112,6 @@ errorHandler($errno, $msg, $filename, $linenum, $vars)
 }/* END ERRORHANDLER */
 
 
-	function byebye()
-	{
-		global $dbh;
-
-			mysql_close($dbh);
-	}
-
-
 /******************
 	SESSIONSETUP
 ******************/
@@ -196,7 +188,7 @@ readSess($sessid)
 
 	if($sessid == ""){
 		user_error("readSess: called with null session id!!", 
-			E_USER_WARNING);
+			E_USER_NOTICE);
 		return("");
 	}
 	user_error("readSess: reading session id for [$sessid]", 
@@ -292,7 +284,10 @@ GCsess($maxlifetime)
 {
 	user_error("GCsess: garbage collecting sessions older than [$maxlifetime]", 
 		E_USER_NOTICE);
-	//TODO: haven't attacked this yet. may have to do ugly date calculations
+	/*TODO: haven't attacked this yet. may have to do ugly date calculations
+	 be sure in any case to delete any sessions older than just-recent 
+		that have a state of 'needsomething' or 'loggedout', etc.
+	*/
 }/* END  */
 
 
@@ -314,12 +309,24 @@ setupDB()
 
 	if(is_file($dbfile)){
 		include($dbfile);
+		global $dbhost;
+		global $coop_sendto;
+		global $dbuser;
+		global $dbpwd;
 	}
+
 
 	$dbhost = $dbhost ? $dbhost : "bc";
 	$coop_sendto = $coop_sendto ? $coop_sendto : 'ken@restivo.org';
 
 
+	if(!($dbuser && $dbpwd && $dbhost)){
+		user_error("ack! db user/host/pwd globals not defined", E_USER_ERROR);
+	} 
+	else {
+		user_error("setupDB(): connecting to $dbhost as $dbuser with $dbpwd", 
+			E_USER_NOTICE);
+	}
 
 	/*  handle dev stuff. 
 		special-case hack around bc, where i don't use a -dev database 
@@ -341,7 +348,6 @@ setupDB()
 		exit(1);
 	}
 
-	register_shutdown_function(byebye);
 	mysql_select_db($dbname) or die ("can't use $dbname! ack!\n");
 }/* END  */
 

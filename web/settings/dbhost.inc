@@ -22,6 +22,10 @@
 
 	#change these to match the host that you move the app to.
 	#useful for testing
+	global $dbuser ;
+	global $dbpwd ;
+	global $dbhost ;
+
 	$dbuser = "springfest";
 	$dbpwd = "92xPi9";
 	$dbhost =  "bc";
