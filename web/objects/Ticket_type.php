@@ -24,7 +24,7 @@ class Ticket_type extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 
-	var $fb_booleanFields = array('paid_flag');
+	var $fb_enumFields = array('paid_flag');
 	var $fb_linkDisplayFields = array('description');
 	var $fb_fieldLabels = array ('description' => "Description",
 								 'paid_flag' => 'Paid?');
