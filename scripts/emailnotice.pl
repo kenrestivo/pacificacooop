@@ -470,112 +470,6 @@ sub humantounix()
 
 
 ######################
-#	EMAILREMINDER
-#	inputs:
-#	outputs: a tabular style report
-######################
-sub emailReminder()
-{
-	my $famref = shift;
-	my $insarref = shift;
-	my $marf = shift;
-	my $checkdate = shift;
-	my $licref;
-	my $licarref;
-	my $pararref;
-	my $insref;
-	my $badness = "";
-	my $flag = 0;
-	my $mar;
-	my $insexp = 0; #flag
-	my $licexp = 0; #flag
-	my $skip = 0;
-
-	#families
-	$badness .= sprintf(
-				"\n-------------\n%s family Insurance and License\n",
-				$famref->{'name'} ? $famref->{'name'} : ""
-			);
-	$badness .= sprintf(
-				" \tFamily Phone: %s\tEmail: %s\n",
-				$famref->{'phone'} ? $famref->{'phone'} : "",
-				$marf->[0]->{'parref'}->{'email'} ?
-					$marf->[0]->{'parref'}->{'email'} : ""
-			);
-
-	#insurance
-	unless(scalar @$insarref){
-			$badness .= "\t- No insurance information for this family\n";
-			$insexp++;
-		}
-
-	#XXX i only print the FIRST (latest) insurance ref, not all
-	# i could print all of them.
-	#if i want this as a -i switch, for example, 
-	#it's more work than it's worth
-	$insref  = $insarref->[0];
-	if($insref->{'exp'}){
-		if($insref->{'exp'} < $checkdate){
-			$badness .= sprintf(
-					"\t- Insurance %s %s Company: %.10s #: %s \n",
-					$insref->{'exp'} < $checkdate  ? "EXPIRED" : "expires",
-					strftime('%m/%d/%Y', localtime($insref->{'exp'})) ,
-					$insref->{'companyname'},
-					$insref->{'policynum'}
-				);
-			$insexp++;
-		}
-	} 
-	
-	#license
-	foreach $mar ( @$marf){
-		$licarref = $mar->{'licarref'};
-		$parref = $mar->{'parref'};
-		unless(scalar @$licarref){
-				#TODO put in the parent's name here, dude
-				$badness .= 
-					sprintf("\t- No license information for working parent %s %s\n",
-						$parref->{'first'},
-						$parref->{'last'}
-		);
-				$licexp++;
-		}
-		foreach $licref (@$licarref){
-			if($licref->{'exp'}){
-				if($licref->{'exp'} < $checkdate){
-					$badness .= sprintf(
-							"\t- License %s %s (%s)%s Driver: %s %s %s \n",
-							$licref->{'exp'} < $checkdate  ? "EXPIRED" : "expires",
-							strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
-							$licref->{'state'},
-							$licref->{'licensenum'},
-							$licref->{'first'},
-							$licref->{'middle'},
-							$licref->{'last'}
-					);
-					$licexp++;
-				}
-			} 
-		}
-	}
-
-	if($opt_v){
-		printf("fieldtripreport(): exp lic %d exp ins %d\n", 
-			$licexp, $insexp);
-	}
-
-
-	if(($insexp || $licexp) && !$skip){
-
-		&mailIt($badness, $marf->[0]->{'parref'});
-		return $badness;
-	}
-
-	return "";
-
-} # END EMAILREMINDER
-
-######################
 #	FIELDTRIPREPORT
 #	inputs:
 #	outputs: a tabular style report
@@ -757,5 +651,109 @@ sub getampm()
 	return $sess;
 
 }  #END GETAMPM
+
+######################
+#	EMAILREMINDER
+#	inputs:
+#	outputs: a tabular style report
+######################
+sub emailReminder()
+{
+	my $famref = shift;
+	my $insarref = shift;
+	my $marf = shift;
+	my $checkdate = shift;
+	my $licref;
+	my $licarref;
+	my $pararref;
+	my $insref;
+	my $badness = "";
+	my $flag = 0;
+	my $mar;
+	my $insexp = 0; #flag
+	my $licexp = 0; #flag
+	my $skip = 0;
+
+	$badness .= "Hello! My job this year is to keep track of the automobile insurance and driver's license information for the school.\n\n";
+
+
+	#insurance
+	unless(scalar @$insarref){
+			$badness .= sprintf("The school doesn't have any insurance card on file for the %s family (or, at least, I couldn't find it).\n\n", $famref->{'name'});
+			$insexp++;
+		}
+
+	#XXX i only print the FIRST (latest) insurance ref, not all
+	# i could print all of them.
+	#if i want this as a -i switch, for example, 
+	#it's more work than it's worth
+	$insref  = $insarref->[0];
+	if($insref->{'exp'}){
+		if($insref->{'exp'} < $checkdate){
+			$badness .= sprintf(
+					"The '%s' insurance card on file for your family expired on %s.\n\n",
+					$insref->{'companyname'},
+					strftime('%m/%d/%Y', localtime($insref->{'exp'})) 
+				);
+			$insexp++;
+		}
+	} 
+	
+	#license
+	foreach $mar ( @$marf){
+		$licarref = $mar->{'licarref'};
+		$parref = $mar->{'parref'};
+		unless(scalar @$licarref){
+				#TODO put in the parent's name here, dude
+				$badness .= sprintf(
+						"I couldn't find any driver's license on file for the working parent on the roster, %s %s.\n\n",
+						$parref->{'first'},
+						$parref->{'last'}
+				);
+				$licexp++;
+		}
+		foreach $licref (@$licarref){
+			if($licref->{'exp'}){
+				if($licref->{'exp'} < $checkdate){
+					$badness .= sprintf(
+							"The copy of the %s driver's license %s on file for %s %s %s expired on %s.\n\n",
+							$licref->{'state'},
+							$licref->{'licensenum'},
+							$licref->{'first'},
+							$licref->{'middle'} ? $licref->{'middle'}: "",
+							$licref->{'last'},
+							strftime('%m/%d/%Y', localtime($licref->{'exp'}))
+					);
+					$licexp++;
+				}
+			} 
+		}
+	}
+
+	if($opt_v){
+		printf("emailreminder(): exp lic %d exp ins %d\n", 
+			$licref->{'exp'}, $insexp->{'exp'});
+	}
+
+	##finishing up
+	$badness .= sprintf("If you could, please place a copy of your current %s%s%s into my communications folder (Restivo, PM), before %s.\n\n",
+			,
+			,
+			,
+			strftime('%A, %B %d', localtime($checkdate))
+		);
+
+	$badness .= "My apologies for the impersonal, automatic computer-generated email. Please feel free to call me at 650-355-1317 with any questions.\n\nThanks!\n\n-ken\n";
+
+
+	if(($insexp || $licexp) && !$skip){
+
+		&mailIt($badness, $marf->[0]->{'parref'});
+		return $badness;
+	}
+
+	return "";
+
+} # END EMAILREMINDER
 
 #EOF
