@@ -62,17 +62,17 @@ the fieldstruct
 		uniqueness: an array of fields to search for unique-distinguising stuff
 			in a pop-up. if the display field has dupes, 
 				dig through this looking for uniqueness to display
-		check_jointo: only show the entries in this popup 
-			where the linktable is in the $callbacks['join'] somewhere
+		check_jointo: for popups. only show the entries where 
+			the linktable is in the $callbacks['join'] somewhere
 			NOTE! for this to work, there must be a join_to_table column
-				in the 'linktable', which the popuputll then checks
+				in the sql table 'linktable', which the popuputll then checks
 
 callbacks struct
 	this is a proto-object. it contains miles and miles of crap
 		it'll eventually be an object, but i'm not ready to take that leap yet
-	mainindex: 
-	maintable: 
-	realm:
+	maintable: the, um, main table. the table that this view is mostly "about"
+	mainindex: the unique id (index) field in the maintable
+	realm: privilege realm for this view. 
 	countindex: the field in $fields which should be where'd for counting
 	countmode: the mode of the count. default 'count', but could be 'sum'
 	fields: the NAME of the fieldspec array. eventually will be REFERENCE here
@@ -88,7 +88,20 @@ callbacks struct
 
 auth
 	realms: areas of privilege
-		TODO: list realms and what they MEAN!
+		these are mostly arbitrary, but do center around various "views"
+		realms are neither tables nor views nor committees. 
+			they are orthoganal to all of them. yes, i know this is confusing.
+		auction: family auction-related stuff. roughly "auction committee"
+		calendar: the calendar of events
+		flyers: the flyer placement. roughly the "publicity committee"
+		insurance: insurance information. roughly the "insurance coordinator"
+		invitations: springfest invitations. roughly the "invitation committee"
+		money: income received. roughly springfest coordinator, and treasurer
+		packaging: stuff related to packaging up auctions. mostly pkg committee
+		raffle: stuff related to the raffle. mostly raffle and quilt committees
+		roster: the roster. mostly the roster coordinator
+		solicitation: related to solicitation. mostly "solicitation committee"
+		user: user administration. mostly the membership, board, and web
 	user and group levels, each has an access level
 	ACCESS LEVELS  are:
 		'ACCESS_INVALID', -1);
