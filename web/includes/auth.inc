@@ -1168,16 +1168,16 @@ displayAuth($p, $u, $callbacks)
 	print "<h3>$pretty \n";
 	if($p['group_level'] < ACCESS_VIEW){
 		printf("for the %s Family. </h3>
-				(You are authorized to %s %s for the %s).\n", 
+				<p>(You are authorized to %s %s for the %s).</p>\n", 
 			$u['familyname'], 
 			accessLevelString($p['user_level'], $callbacks),
 			$pretty,
 			$u['username']
 		);
 	} else {
-		printf("for ALL users.</h3><h3>
-				(%s is authorized to %s %s
-				for ALL families).</h3>",
+		printf("for ALL users.</h3>
+				<p>(%s is authorized to %s %s
+				for ALL families).</p>",
 			$u['username'],
 			accessLevelString($p['group_level'], $callbacks),
 			$pretty);
