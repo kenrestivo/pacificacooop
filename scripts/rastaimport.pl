@@ -373,6 +373,8 @@ sub checkNewKids()
 	#	then add the kid
 	$name = $$rowref[0];
 
+	##XXX must check for am/pm session! kid could be in wrong session!
+	# in which case you'll want to un-drop the kid.
 	$rquery = sprintf("select * from kids 
 			where first like \"%%%s%%\" and last like \"%%%s%%\"
 	",
@@ -506,21 +508,17 @@ sub checkChanges(){
 		if( $session eq $ritem{'sess'} || $ritem{'dropout'} ){
 			#TODO change the session, and undrop them (they ARE enrolled)
 			#	ugh.. deal with semester (i.e. 2003-2004)
-			if($opt_v){
-				printf ("DEBUG: %s %s was dropped out. un-dropping them\n",
-					$ritem{'first'}, $ritem{'last'}
-				);
-			}
+			printf ("%s %s was dropped out. un-dropping them\n",
+				$ritem{'first'}, $ritem{'last'}
+			);
 		}
 		#XXX this query is brain-dead. fix it.
 		if( $session ne $ritem{'sess'} || !$ritem{'dropout'} ){
 			#TODO gurf
 			#	ugh.. deal with semester (i.e. 2003-2004)
-			if($opt_v){
-				printf ("DEBUG: %s %s wasn't enrolled in this session. adding them\n",
-					$ritem{'first'}, $ritem{'last'}
-				);
-			}
+			printf ("%s %s wasn't enrolled in this session. adding them\n",
+				$ritem{'first'}, $ritem{'last'}
+			);
 		}
 
 
@@ -626,10 +624,8 @@ sub deleteReverse()
 		#ok, what do to if it's not there?
 		if($cnt < 1){
 			#it's been dropped
-			if($opt_v){
-				printf("DEBUG %s %s has been dropped OR moved from $session !\n",
-					$ritem{'first'}, $ritem{'last'} );
-			}
+			printf("%s %s has been dropped OR moved from $session !\n",
+				$ritem{'first'}, $ritem{'last'} );
 			#TODO check 'sess' versus $session and deduce that they moved!
 			#	HANDLE THIS RIGHT! do i drop them here and then add them later?
 			$query = sprintf("update attendance set 
