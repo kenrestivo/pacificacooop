@@ -40,12 +40,14 @@ upload-live::
 	rsync -e ssh \
 		--rsync-path=$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
+		--exclude ".#*" \
 		$(LIVEHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNLIVEPATH)
 
 download-live::
 	rsync -e ssh \
 		--rsync-path=$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
+		--exclude ".#*" \
 		--exclude '*.sql' \
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNLIVEPATH)/ $(LIVEHERE)
 
@@ -53,12 +55,14 @@ upload-dev::
 	rsync -e ssh \
 		--rsync-path=$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
+		--exclude ".#*" \
 		$(DEVHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)
 
 download-dev::
 	rsync -e ssh \
 		--rsync-path=$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
+		--exclude ".#*" \
 		--exclude '*.sql' \
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)/ $(DEVHERE)
 
