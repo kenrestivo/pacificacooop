@@ -23,6 +23,7 @@
 require_once("first.inc");
 require_once("shared.inc");
 require_once("auth.inc");
+require_once('Mail.php');
 
 
 function confessObj($obj, $text)
@@ -224,7 +225,24 @@ class coopPage
 			 return $res;
 		}
 
-	
+	function mailError($subject, $body)
+		{
+			// TODO: blow away the global from legacy, use var
+			global $coop_sendto;
+			$to =  $coop_sendto['email_address'];
+			
+			$headers['From']    = 'bugreport@pacificacoop.org';
+			$headers['To']      = 	$to;
+			$headers['Subject'] = 'ORPHANED thank-you notes found';
+			
+			$mail_object =& Mail::factory('smtp', $params);
+			
+			$mail_object->send($to, 
+							   $headers, 
+							   $body);
+			
+
+		}	
 
 } // END COOP PAGE CLASS
 

@@ -87,6 +87,9 @@ http://www.pacificacoop.org/
 
 	function ThankYou(&$cp)
 		{
+			if(!is_object($cp)){
+				user_error("must pass cooppage object in to thankyou", E_USER_ERROR);
+			}
 			$this->cp = $cp;
 		}
 
@@ -480,6 +483,8 @@ http://www.pacificacoop.org/
 		{
 
 			if(!array_sum($company_id_array)){
+				$this->cp->mailError('EMPTY thank you note found',
+									 print_r($this, true));
 				user_error("no company_id's in array! this shouldn't happen",
 						   E_USER_ERROR);
 			}
@@ -612,23 +617,12 @@ http://www.pacificacoop.org/
 			} // end foreach
 					
 			if($mistake_summary){
-					$mistake_summary .= print_r($_REQUEST, true);
-					$mistake_summary .= print_r($this->cp, true);
-					
-					// now send it
-					global $coop_sendto;
-					$to =  $coop_sendto['email_address'];
-
-					$headers['From']    = 'bugreport@pacificacoop.org';
-					$headers['To']      = 	$to;
-					$headers['Subject'] = 'ORPHANED thank-you notes found';
-					
-					$mail_object =& Mail::factory('smtp', $params);
-	
-					$mail_object->send($to, 
-									   $headers, 
-									   $mistake_summary);
-					
+				$mistake_summary .= print_r($_REQUEST, true);
+				$mistake_summary .= print_r($this->cp, true);
+				
+				// now send it
+				$this->cp->mailError("ORPHANED thank you note found",
+									 $mistake_summary);
 			}
 		} // END REPAIRORPHANS	
 

@@ -76,19 +76,18 @@ $u = $cp->userStruct; // createlegacy keeps this for me
 $fs = inputToFieldStruct($_REQUEST['entry0'], $fields);
 //confessArray($fs, "fs");
 
-
+$ty =& new ThankYou(&$cp);
+$ty->repairOrphaned();
 
 switch($_REQUEST['subaction']){
  case 'reprint':
 	$tid = $fs['thank_you_id']['def'];
-	 $ty =& new ThankYou(&$cp);
 	 $ty->recoverExisting($tid);
 	 $ty->substitute();
 	 print $ty->toHTML();
 	 break;
  case 'print':
 	$fs['family_id']['def'] = $u['family_id'];
-	 $ty =& new ThankYou(&$cp);
 	 $ty->findThanksNeeded($_REQUEST['pk'], $_REQUEST['id'], 'Letter');
 	 $ty->substitute();
 	 print $ty->toHTML();
