@@ -34,8 +34,10 @@ class coopView extends CoopObject
 {
 	var $backlinks;				// list of links that are linked FROM here
 	var $forwardLinks;
-	var $parentSummary; 		// miserable hack. summary of top parent object
-	var $legacyPage;			// hack to let it know what old page 2 use
+
+	var $legacyCallbacks;			// hack for old callbacks
+	var $legacyPerms; 			// cache of permissions for this page ($p)
+	//var $legacyFields;  //YAGNI. i hope
 
 	function getLinks()
 		{
@@ -83,7 +85,7 @@ class coopView extends CoopObject
 			
 			}
 			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
-			$res .= $this->tableTitle($summary);
+			$res .= $this->tableTitle();
 			$res .= $tab->toHTML();
 			return $res;
 
@@ -138,23 +140,25 @@ class coopView extends CoopObject
 	
 	
 	//  checks if this table is repeated up the parent heirarchy
+	// XXX bitrot! needs a-fixin'
+	// also should move to coopobjet
 	function isRepeatedTable($tablename)
 		{
 			$debug  = 1;
-			if(!$this->parentObj){
+			if(!$this->parentCO){
 				$debug && printf("%s is end of the line", $this->table);
 				return 0;
 			}
-			if($this->parentObj->table == $tablename){
+			if($this->parentCO->table == $tablename){
 				$debug && printf("%s: %s is repeated", 
 								 $this->table, $tablename);
 				return 1;
 			}
 			$debug && printf("%s: %s  != %s, , checking up the line<br>", 
-							 $this->table, $this->parentObj->table, 
+							 $this->table, $this->parentCO->table, 
 							 $tablename);
 			
-			return $this->parentObj->isRepeatedTable($tablename);
+			return $this->parentCO->isRepeatedTable($tablename);
 		}
 
 	function isPermittedField($key)
@@ -218,8 +222,8 @@ class coopView extends CoopObject
 		{
 			$res = sprintf("<hr><h2>%s %.50s</h2>", 
 						   $this->title(),
-						   $this->parentSummary ? 
-						   "for " . $this->parentSummary : "");
+						   $this->parentCO ? 
+						   "for " . $this->parentCO->getSummary() : "");
 														
 			return $res;
 		}
@@ -245,7 +249,7 @@ class coopView extends CoopObject
 				$meat = $this->page->selfURL($mainlink, 
 											 $this->nastyInner(&$this->obj, 
 															   'details'),
-											 $this->legacyPage);
+											 $this->legacyCallbacks['page']);
 
 				$tab->addRow(array($meat));
 			

@@ -37,17 +37,17 @@ class coopObject
 	var $table;					// convenience: the table the $this->obj is
 	var $pk;					// the primary key. convenience, really.
 	var $recurseLevel;			// level, if i'm linked from somewhere
-	var $parentObj;				// reference to parent object
+	var $parentCO;				// reference. "parent" is reserved word
 	var $backlinks;				// list of links that are linked FROM here
 	var $forwardLinks;
 
-	function CoopObject (&$page, $table, $level = 0, $parent = NULL )
+	function CoopObject (&$page, $table, &$parentCO, $level = 0)
 		{
 
 			$this->page = $page;
 			$this->table = $table ;
 			$this->recurseLevel = $level;
-			$this->parentObj = $parent;
+			$this->parentCO = $parentCO;
 			
 			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
 			if (PEAR::isError($obj)){
@@ -148,8 +148,10 @@ class coopObject
 	function getSummary()
 		{
 			
-			$this->obj->find(true);
-				//confessObj($view, "companyDetails(view)");
+			if(preg_match('/_join/', $this->table, $matches)){
+				return $this->parentCO->getSummary();
+			}
+			//confessObj($view, "companyDetails(view)");
 			return $this->concatLinkFields(&$this->obj);
 				
 		}
