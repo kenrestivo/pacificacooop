@@ -101,5 +101,10 @@ select families.name, enrol.sess
 	group by families.familyid
 	order by enrol.sess, families.name
 
+-- how bad do people do at leaving things to the last damn minute
+ select date_format(entered, "%W, %b %d %Y") as dt, count(leadsid) as cnt 
+		from leads 
+	group by dt 
+	order by entered;
 
 --- EOF
