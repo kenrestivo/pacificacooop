@@ -102,8 +102,8 @@ create table parents(
     first varchar(255),
 	ptype enum ('Mom', 'Dad', 'Partner'),
 	worker enum ('Yes', 'No'),
-	email varchar(255),
 	familyid int(32),
+	email varchar(255),
     primary key (parentsid)
 );
 
