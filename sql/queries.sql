@@ -537,7 +537,7 @@ select  auction_items_families_join.family_id  ,
 
 
 -- check solicitation thank-you's
- select company_name, 
+ select companies.company_name, companies.company_id,
     count(distinct(income.income_id)) as cash_donations,
     count(distinct(auction_donation_items.auction_donation_item_id)) 
             as auction_donations,

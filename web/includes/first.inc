@@ -41,3 +41,4 @@ user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
 
 
 ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">

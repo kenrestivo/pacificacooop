@@ -219,7 +219,7 @@ class coopView extends CoopObject
 			   !in_array($key, $this->obj->fb_fieldsToRender)){
 				return 0;
 			}
-
+//			confessArray($this->obj->fb_fieldsToRender, "$key is in:");
 			return 1;
 		}
 

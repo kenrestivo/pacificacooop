@@ -430,7 +430,7 @@ function loginPopup($uid)
 {
 	javaSubmit();
 
-	print "<select name='auth[uid]' SINGLE 
+	print "<select name='auth[uid]'
 				onchange='javascript:submitForm()'>\n";
 	print "<option value='0'>CHOOSE ONE</option>\n";
 	
@@ -502,12 +502,14 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	print "</tr>\n";
 
 	//confirm stuff
-	print "\n<tr>\n";
+
 	if($type == 'confirm' || $type == 'both'){
+		print "\n<tr>\n";
 		print "\t<td>Please re-type your password to confirm it: </td>\n";
 		print "\t<td><INPUT TYPE=password NAME='auth[confirm]'></td>\n";
+		print "</tr>\n";
 	}
-	print "</tr>\n";
+
 
 	print "\n</table>\n";
 
@@ -1012,7 +1014,7 @@ wrongPassState($auth, $states)
 	$auth['pwd'] = $auth['confirm'] = NULL;
 	loginForm(changeState($auth, $states, 'needlogin', 1),
 		'password', 'hide', 
-		"<font color='#ff0000'>Incorrect password</font>. Please try again. Remember to check your CAPS LOCK key. Also, your husband, wife, or partner may already have entered a password for you. You may want to ask them." );
+		"<span color='#ff0000'>Incorrect password</span>. Please try again. Remember to check your CAPS LOCK key. Also, your husband, wife, or partner may already have entered a password for you. You may want to ask them." );
 
 	return changeState($auth, $states, 'needinput', 1);
 }/* END  WRONGPASSSTATE */

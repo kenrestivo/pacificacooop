@@ -4,13 +4,10 @@ p,table,li,h1,h2,h3
   font-family: verdana, arial, 'sans serif'; 
 }
 
-
-.menutext
-{
-
-  font-size: 9px;
-
-}
+body{ 
+	margin: 0;
+	padding: 0;
+ }
 
 p,li,th,td
 {
@@ -38,6 +35,10 @@ html>body p {
 .foobar {
   background: grey;
 }
+
+h3 { 
+	font-size: 110%;
+ }
 
 div.box { 
 	border: solid;
@@ -74,14 +75,26 @@ div.box {
 #leftCol {
   width: 25ex;
 	background-color:  #ffcc99;
-  float: left;
-	margin-right: 1em;
+	  float: left;
+	margin-right:  1em;
+	padding-right: 1em;
+	padding-left: 1em;
 }
+
+#header { 
+	padding-left: 4px;
+ }
 
 #rightCol {
   width: 85%;
+	/* margin: 0 0 0 40ex; */
 }
 
+#footer {
+	width: 100%;
+	float: left;
+	text-align: center; 
+}
 
 input, textarea, select {
   border: solid 1px black;
@@ -92,7 +105,6 @@ input[type="submit"] {
   cursor: hand;
 }
 
-footer {float: left;  }
 
 TABLE { 
   margin-top: .5em;

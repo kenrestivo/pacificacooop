@@ -28,7 +28,7 @@
 
 	$dbuser = "springfest";
 	$dbpwd = "92xPi9";
-	$dbhost =  "bc";
+	$dbhost =  "localhost";
 	#$coop_sendto =  "ken@restivo.org";
 
 	##<!-- END DBHOST -->

@@ -29,8 +29,10 @@ require_once("CoopMenu.php");
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
-print '<HTML>
+print '<HTML lang="en">
 		<HEAD>
+			<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+
 				<link rel=stylesheet href="main.css" title=main>
 			<TITLE>Data Entry</TITLE>
 		</HEAD>
@@ -68,7 +70,7 @@ print "\n<hr></div> <!-- end header div -->\n";
 
 
 //confessObj($menu, "menuonb");
-print '<div id="leftcol">';
+print '<div id="leftCol">';
 print $menu->kenRender();
 print '</div><!-- end leftcol div -->';
 

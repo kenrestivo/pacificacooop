@@ -144,7 +144,7 @@ function done()
 {
 	global $coop_sendto;
 
-	print "</div> <!-- rightcol div end -->";	
+	print "</div><!-- rightcol div end -->";	
 	print '<div id="footer"><hr>';
 	printf("<p>If anything on this site appears to be not working properly, 
 			email <a href='mailto:%s'>%s</a> or call %s at %s</p>",
@@ -153,9 +153,9 @@ function done()
 	/* AUUGH! testcasetool is case sensitive, and for some reason apache
 		lowers the case of my tags only when checkloing was used. weird.
 	*/
-	print "</div> <!-- end footer div -->"; // closes out bottom div
+	print "</div><!-- end footer div -->"; // closes out bottom div
 	
-	print"</div><!-- end page div --> </body></html> ";
+	print"</div><!-- end page div --></body></html> ";
 	session_write_close();		// redundant?
 	exit;
 } #END DONE
@@ -185,12 +185,12 @@ warnDev()
 function
 javaSubmit()
 {
-	print "<script language=javascript>
+	print '<script type="text/javascript" language="javascript">
 			function submitForm() {
 				document.forms[0].submit(); 
 				return(true); 
 			} 
-			</script>";
+			</script>';
 } /* END JAVASUBMIT */
 
 /*******************

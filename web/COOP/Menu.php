@@ -85,14 +85,16 @@ class CoopMenu extends HTML_Menu
 			switch($type){
 			case 'sitemap':
 				$this->renderer =& new HTML_Menu_DirectTreeRenderer();
+				$this->renderer->setEntryTemplate(HTML_MENU_ENTRY_ACTIVE, 
+												  '{title}');
 				$this->render($this->renderer, $type);
 				break;
 			case 'urhere':
 				$this->renderer =& new HTML_Menu_DirectRenderer();
 				$this->renderer->setMenuTemplate(
- 					'<span class="menutext"><table border="0">',
- 					'</span></table>');
-				 //print "HEYY HEEYY";
+ 					'<table border="0">',
+ 					'</table>');
+				//print "HEYY HEEYY";
 				$this->render($this->renderer, $type);
 				//	confessArray($this->getPath(), "apath");
  				if(count($this->getPath()) < 2){
