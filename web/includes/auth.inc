@@ -19,7 +19,7 @@
 #  the Free Software Foundation; either version 2 of the License, or
 #  (at your option) any later version.
 # 
-#  This program is distributed in the hope that it will be useful,
+///#  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details. 
@@ -433,9 +433,16 @@ function loginPopup($uid)
 	print "<select name='auth[uid]' SINGLE 
 				onchange='javascript:submitForm()'>\n";
 	print "<option value='0'>CHOOSE ONE</option>\n";
-
+	
+	$sy = findSchoolYear();
 	#DO THE QUERY
-	$listq = mysql_query(" select * from users order by name");
+	// TODO: group by userid
+	$listq = mysql_query(" select * from users 
+						left join kids on users.familyid = kids.familyid 
+						left join enrollment on kids.kidsid = enrollment.kidsid
+						where enrollment.school_year = '$sy'
+						group by userid
+								order by name");
 	$err = mysql_error();
 	if($err){
 		user_error("loginPopup(): [$listq]: $err",E_USER_ERROR);
