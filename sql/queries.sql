@@ -183,7 +183,7 @@ select coa.description, sum(amount)  as total
         left join coa on inc.acctnum = coa.acctnum 
     group by inc.acctnum order by total desc;
 
--- specific to invites
+-- income specific to invites
 select coa.description, sum(amount)  as total 
     from inc 
         left join invitation_rsvps 
@@ -288,7 +288,7 @@ select auction.* ,
 
 -- nasty sponsorship join to check levels IN REAL CASH
 select coalesce(companies.company_name, 
-		concat_ws(' ', leads.first, leads.last, leads.company)) as company,
+        concat_ws(' ', leads.first, leads.last, leads.company)) as company,
         sum(inc.amount)  as cash_total 
     from inc 
         left join companies_income_join
@@ -301,7 +301,7 @@ select coalesce(companies.company_name,
             left join leads on invitation_rsvps.leadsid = leads.leadsid
     where leads.leadsid is not null or companies.company_id is not null
     group by leads.leadsid, companies.company_id  having cash_total >= 150
-	order by cash_total desc, 
+    order by cash_total desc, 
         leads.last asc, leads.first asc, companies.company_name asc;
 
 -- nasty sponsorship join to check AUCTION levels
@@ -403,5 +403,13 @@ insert into enrollment
 	select attendance.kidsid, enrol.semester, enrol.sess, 
 		attendance.start_date, attendance.dropout 
 	from attendance left join enrol using (enrolid);
+
+-- the family names which should be updated
+    select leads.leadsid, leads.last, inc.payer 
+        from leads left join invitation_rsvps 
+            on leads.leadsid = invitation_rsvps.leadsid 
+        left join inc on invitation_rsvps.incid = inc.incid 
+    where last like "%Family%" 
+        and invitation_rsvps.incid is not null;
 
 --- EOF
