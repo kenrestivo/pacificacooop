@@ -271,6 +271,7 @@ class coopPage
             //confessObj($form, "form");
   			//$form->freeze();
 			// XXX BROKEN FUCK FUCK FUCK FUCK $this->setFormDefaults(&$form);
+			$this->getBackLinks();
 			if($form->validate ()){
 				$res = $form->process (array 
 									   (&$this->build, 'processForm'), 
@@ -327,8 +328,7 @@ class coopPage
 			return $res;
 		}
 
-	// returns a nested structure with tables that link to this one
-	// in format tableThatLinksToUs => (columnOnOurSide, columnOnTheirSide)
+	// returns an action structure: tables[tablename][action], etc
 	function getBackLinks()
 		{
 			
@@ -342,18 +342,37 @@ class coopPage
 					// split up farline and chzech it
 					list($fartable, $farcol) = explode(':', $farline);
 					if($fartable == $tab){
-						$res[$maintable] = array($farcol, $nearcol);
+						$id = $this->obj->$farcol;
+						//$res[$maintable] = array($farcol, $nearcol);
+						if($id){
+							$res[$maintable]['id'] = $id;
+							$res[$maintable]['action'] = 'detail';
+						} else {
+							$res[$maintable]['action'] = 'list';
+						}
 					}
 				}
 			}
-			$this->confessArray($res,"res");
+			$this->confessArray($res,"backlinks");
 			return $res;
 		}
 	
+	//assumes obj is already set to the current id. valid assumption?
+	function addBackLinks($backlinks)
+		{
+			$overrides = array();
+			$table = $this->obj->tableName();
+			foreach($backlinks as $col => $struct){
+				list($our, $their) = $struct;
+				$overrides[$table]['action'] = 'list';
+				$overrides[$table]['id'] = $this->obj->$our;
+			}
+			return $overrides;
+		}
 
 
 
-	function listTable($table = false)
+	function listTable($table = false, $id = false)
 		{
 
 			// most have only one key. feel around for primary if not
@@ -367,8 +386,13 @@ class coopPage
 			$pagertext = $this->calcPager();
 			$this->obj->limit($this->pager_start - 1, 
 							  $this->pager_result_size);
-			$this->obj->find();					// new find with limit.
-			
+			// constrain for searches
+			if($id){
+				$this->obj->get($id);
+			} else {
+				$this->obj->find();					// new find with limit.
+			}
+
 			$this->getBackLinks();
 
 				

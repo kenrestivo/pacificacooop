@@ -20,6 +20,9 @@ print $menu->topNavigation();
 print $menu->toHTML();
 $cp->engine();
 
+//global $_DB_DATAOBJECT;
+//confessObj($_DB_DATAOBJECT, "dataobject");
+
 done();
 
 
