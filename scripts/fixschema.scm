@@ -43,11 +43,17 @@
 		 (string-split line #\space)))
 	  (close p) )))
 
+;; clean sql definition line
+(define (clean-line line)
+  (delete "" 
+		  (map (lambda (x)
+				 (regexp-substitute/global #f  ",$" x  'pre 'post)) line)))
 
+;; make sure it is a valid line
 (define (valid-def-line l)
-	  (if (and (not (equal? (car l) "--")) 
-		   (> (length l) 1))
-	  #t #f))
+	  (if (and 
+		   (> (length l) 1)
+	  (not (equal? (car l) "--"))) #t #f))
 
 ;; for loading the proper schema file
 (define (load-definition deffile)
@@ -56,7 +62,7 @@
 	(do ((line (read-line p) (read-line p)))
 		((or (eof-object? line) ))
 	  ((lambda (x) (if (valid-def-line x) (pp x)))
-	   (string-split line #\space)))
-	 (close p) ))
+	   (clean-line (string-split line #\space))))
+	 (close p) ))	
 
-;;; EOF
+;; EOF
