@@ -114,6 +114,8 @@ class coopForm extends CoopObject
 				{
 					$el =& $this->form->addElement('advcheckbox', $key);
 				} else {
+					//i ALWAYS hide primary key. it's hardcoded here.
+					// note this is different from FB behaviour.
 					$el =& $this->form->addElement(
 						$key == $this->pk ? 'hidden' : 'text', 
 						$key);
