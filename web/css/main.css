@@ -188,3 +188,9 @@ p.error {
 	padding-right: 0;
  }
 
+@media print { 
+	#header { display:none }
+	#footer { display:none }
+	#leftCol { display:none }
+	a { display:none }
+ }

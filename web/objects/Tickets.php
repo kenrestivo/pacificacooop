@@ -16,8 +16,8 @@ class Tickets extends DB_DataObject
     var $lead_id;                         // int(32)  
     var $school_year;                     // string(50)  
     var $family_id;                       // int(32)  
-    var $vip_flag;                        // string(3)  enum
     var $ticket_type_id;                  // int(32)  
+    var $vip_flag;                        // string(3)  enum
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

@@ -60,6 +60,10 @@ class Packages extends DB_DataObject
 								   'item_type');
 
 
+	var $fb_crossLinks = array(array('table' => 'auction_packages_join', 
+									 'toField' => 'auction_donation_item_id',
+									 'type' => 'select'));
+
 
 	function constrainedPackagePopup($schoolyear = false)
 		{

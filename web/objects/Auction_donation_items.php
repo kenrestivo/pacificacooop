@@ -19,7 +19,6 @@ class Auction_donation_items extends DB_DataObject
     var $audit_user_id;                   // int(32)  
     var $location_in_garage;              // string(255)  
     var $quantity;                        // int(5)  
-    var $package_id;                      // int(32)  
     var $item_type;                       // string(16)  enum
     var $school_year;                     // string(50)  
     var $committed;                       // string(3)  enum
@@ -51,5 +50,8 @@ class Auction_donation_items extends DB_DataObject
 		"thank_you_id" => "Thank-You Sent" 
 		);
 	var $fb_formHeaderText =  'Springfest Auction Donation Items';
+	var $fb_crossLinks = array(array('table' => 'auction_packages_join', 
+									 'toField' => 'package_id',
+									 'type' => 'select'));
 
 }
