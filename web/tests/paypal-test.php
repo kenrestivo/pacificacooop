@@ -12,6 +12,7 @@ require_once('DB/DataObject.php');
 require_once("HTML/Table.php");
 require_once 'HTML/QuickForm.php';
 require_once('DB/DataObject/FormBuilder.php');
+require_once('Pager/Pager.php');
 
 require_once('object-config.php');
 
@@ -123,6 +124,28 @@ print "$count records found<br>";
 
 $tab =& new HTML_Table();
 
+
+/// pager driver calculations
+for($i = 1; $i <= $count; $i++){
+	$pager_item_data[] = $i;
+}
+$pager_parms = array (
+	'mode' => 'Jumping',
+	'perPage' => 10,
+	'delta' => 4,
+	'itemData' => $pager_item_data
+	);
+$pager = new Pager($pager_parms);
+$pager_result_data = $pager->getPageData();
+$pager_links = $pager->getLinks();
+
+//confessArray($pager_result_data, "pagerresult");
+$pager_result_size = sizeof($pager_result_data);
+$start = array_shift($pager_result_data);
+$obj->limit($start - 1, $pager_result_size);
+$obj->find();					// new find with limit.
+
+// now the table
 $hdr = 0;
 while ($obj->fetch()){
 	$ar = array_merge(sprintf('<a href="%s?action=detail&id=%s&table=%s">
@@ -146,13 +169,18 @@ while ($obj->fetch()){
 	
 }
 
-printf('<hr><a href="%s?action=detail&table=%s">Add new</a>', 
+printf('<p><a href="%s?action=detail&table=%s">Add new</a></p>', 
 	   $_SERVER['PHP_SELF'], $table) ;
 
 $tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
 $tab->display();
 
 print "<hr><br>";
+
+//confessArray($pager_links, "pagerlinks");
+print $pager_links['first'];
+print $pager_links['all'];
+print $pager_links['last'];
 
 done();
 
