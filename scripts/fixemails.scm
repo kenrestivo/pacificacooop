@@ -1,6 +1,6 @@
 ;;; $Id$
 ;; put the parentid in for all the solicitation auction and money
-;; NOTE! this is NOT USED! this is a dead-end
+;; one-off script to handle my having stuck the emails in the wrong place
 ;; (load "/mnt/kens/ki/proj/coop/scripts/fixemails.scm")
 
 (use-modules (ice-9 slib)
