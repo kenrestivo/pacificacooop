@@ -14,13 +14,18 @@
 (define new-schema '()) ;; well, here it is.
 (define current-table "") ;; there has to be a more schemey way 
 
+(define (add-primary-key table line)
+  (add-sub-alist new-schema table "primary key"
+				 (unparen (caddr line)))
+  )
+
 ;; if it is a COLUMN, i'll want to do:
 (define (add-column table line)
   ;; NOTE! must combine before yanking ,'s!
   (set! new-schema (add-sub-alist new-schema table 
 								  (car line)
 								  (regexp-substitute/global #f  ",$"
-													(string-join (cdr line))
+													(join-strings (cdr line))
 													'pre 'post)) ))
 ;; clean sql definition line
 (define (clean-line line)
@@ -28,12 +33,19 @@
 		 (regexp-substitute/global #f  "[ \t]" y  'pre 'post)) 
 	   (delete "" line)))
 
+(define (unparen string)
+  (regexp-substitute/global #f  "[\\(\\)]" string 'pre 'post))
+  
+
 (define (process-def line)
-  (if (and (equal? (car line) "create")
-		   (equal? (cadr line) "table"))
-	  (set! current-table
-			(regexp-substitute/global #f  "\\(" (caddr line) 'pre 'post))
-	  (add-column current-table line)))
+  (cond ((and (equal? (car line) "create")
+			 (equal? (cadr line) "table"))
+		 (set! current-table
+			   (unparen (caddr line))))
+		((and (equal? (car line) "primary")
+			  (equal? (cadr line) "key"))
+		 (add-primary-key current-table line))
+		(else (add-column current-table line))))
  
 
 ;; make sure it is a valid line
