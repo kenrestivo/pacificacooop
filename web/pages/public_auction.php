@@ -19,10 +19,13 @@
 require_once("first.inc");
 require_once("shared.inc");
 
+$sy = findSchoolYear();
+$tmp = explode('-', $sy);
+$sfyear = $tmp[1];
 
-print "<html> <head> 
+printf('<html> <head> 
 	<title>Pacifica Co-Op Nursery School - Springfest Auction Items</title>
-	<link href='../main.css' rel='stylesheet' type='text/css'>
+	<link href="main.css" rel="stylesheet" type="text/css">
 	</head>
 
 	<body>
@@ -30,7 +33,8 @@ print "<html> <head>
 	<h2>Springfest Auction Items</h2>
 
 	<p>Here are some fabulous items that will be auctioned off 
-			at the 2004 Springfest!</p>";
+			at the %s Springfest!</p>',
+	   $sfyear);
 
 
 print "<table width='100%' border='1' cellspacing='0'>";
@@ -42,13 +46,14 @@ print "<tr valign='top' align='center'>
 		<td><strong>Value</strong></td>
 	</tr> ";
 
-$q = "select package_number, package_title, package_description,
+$q = sprintf('select package_number, package_title, package_description,
         package_value
         from packages
-		where package_type like 'Live' 
-			or package_type like 'Silent'
+		where (package_type like "Live" 
+			or package_type like "Silent")
+and school_year = "%s"
         order by package_type, package_number, package_title, 
-			package_description";
+			package_description', $sy);
 
 $listq = mysql_query($q);
 $i = 0;
