@@ -148,6 +148,14 @@ sessionSetup()
 
 	user_error("sessionSetup(): setting up session", E_USER_NOTICE);
 
+	/* magic quotes aren't magic, they're evil! turn them off!!
+	ini_set('magic_quotes_gpc', 0);
+	*/
+	ini_set('magic_quotes_runtime', 0);
+
+	if(get_magic_quotes_gpc() || get_magic_quotes_runtime()){
+		user_error("You CANNOT use this code with magic quotes on. Administrator needs to set this in .htaccess or php.ini. Sorry.", E_USER_ERROR);
+	}
 	// Stop adding SID to URLs. annoying and not all ISPs allow it
 	ini_set('session.use_trans_sid', 0);
 
