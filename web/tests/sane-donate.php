@@ -116,6 +116,7 @@ function donateDispatcher(&$cp, $action = false)
 		$form->addElement('hidden', 'action', 'newrsvp');
 		if($form->validate()){
 			//$form->freeze();
+			// change action here to confirmrsvp? or process?
 			//print $form->toHTML();
 			donateDispatcher(&$cp, 'confirmrsvp');
 		} else {
@@ -124,8 +125,17 @@ function donateDispatcher(&$cp, $action = false)
 		break;
 		
 	case 'confirmrsvp':
+		printf("<p>You be donating $%.02f", 
+			   $_REQUEST['other_amount']);
+		if($_REQUEST['ticket_quantity']){
+			printf(" which includes reservations for %d persons for the event", 
+				   $_REQUEST['ticket_quantity']);
+		}
+		print ". Is this correct?</p?>";
 		// the setup to call the proper paypal form
 		// something must set SOURCE
+		// the edit will be a FORM with all hidden except EDIT button
+		//it'll bounce back to newrsvp!
 
 		
 		print "confirm";
