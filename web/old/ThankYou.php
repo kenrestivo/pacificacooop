@@ -257,8 +257,8 @@ http://www.pacificacoop.org/
 			
 			//sanity czech
 			if(!$this->email){
-				$this->cp->mailError('no email address? huh?', 
-									 print_r($this, true));
+				PEAR::raiseError('no email address? huh?', 888);
+								
 				user_error(
 					"thankyou::sendEmail(): no email address for $this->name!",
 						   E_USER_ERROR);
@@ -330,7 +330,22 @@ http://www.pacificacoop.org/
 	// which really should just be a true/false flag. bah.
 	// the right thing to do is to separate finding, substituting, and saving
 			// returns true when it saves and/or finds
-	function findThanksNeeded($pk, $id, $save = false)
+	  function findThanksNeeded($pk, $id, $save = false)
+		{
+			switch($pk){
+			case 'lead_id':
+				PEAR::raiseError('not implemented yet', 999);
+				break;
+			case 'company_id':
+				return $this->_findSolicitThanksNeeded($pk, $id, $save);
+				break;
+			default:
+				break;
+			}
+
+		}
+	
+	  function _findSolicitThanksNeeded($pk, $id, $save)
 		{
 
 			// clear out some items in case i re-use objects
@@ -354,8 +369,7 @@ http://www.pacificacoop.org/
 					$safety = new ThankYou(&$this->cp);
 					$safety->findThanksNeeded($pk, $id, false);
 					if(count($safety->items_array) < 1){
-						$this->cp->mailError('Asked to save thankyous for this company, but none actually exist!', 
-											 print_r($this, true));
+						PEAR::raiseError('Asked to save thankyous for this company, but none actually exist!', 666); 
 						//this find is out of sync with the one in show
 						return false;
 					}
@@ -669,8 +683,8 @@ http://www.pacificacoop.org/
 			}
 
 			if(!count($this->items_array)){
-				$this->cp->mailError('EMPTY thank you note', 
-									 print_r($this, true));
+				PEAR::raiseError('EMPTY thank you note', 777);
+								
 				return false;
 			}
 		
@@ -716,19 +730,17 @@ http://www.pacificacoop.org/
 					$new = $real->obj; //  hacks around DBDO bugs
 					$new->thank_you_id = DB_DataObject_Cast::sql('NULL');
 					if(!$new->update($old)){
-						user_error("failed to update when cleaning up orphaned thank you's. this is really bad. you probably have a corrupt database. stop immediately.", E_USER_ERROR);
+						PEAR::raiseError("failed to update when cleaning up orphaned thank you's. this is really bad. you probably have a corrupt database. stop immediately.", 555);
 					}
-	}
+				}
 			} // end foreach
 					
-			if($mistake_summary){
-				$mistake_summary .= print_r($_REQUEST, true);
-				$mistake_summary .= print_r($this->cp, true);
-				
-				// now send it
-				$this->cp->mailError("Item found with thank_you_id that points to no actual thankyou..",
-									 $mistake_summary);
-			}
+	  $mistake_summary .= print_r($_REQUEST, true);
+					
+	  // now send it
+	  $this->cp->mailError("Item found with thank_you_id that points to no actual thankyou.", $mistake_summary);
+
+	  
 		} // END REPAIRORPHANS	
 
 } // END THANK YOU CLASS
