@@ -1,0 +1,175 @@
+# INSURANCE
+ins.insid ins.insurance_information_id
+ins.last ins.last_name
+ins.middle ins.middle_name
+ins.first ins.first_name
+ins.policynum ins.policy_number
+ins.expires ins.policy_expiration_date
+# not sure what naic means?
+# Table rename:
+ins insurance_information
+
+
+# DRIVERS LICENSE
+lic.licid lic.drivers_license_id
+lic.last lic.last_name
+lic.middle lic.middle_name
+lic.first lic.first_name
+lic.licensenum lic.license_number
+lic.expires lic.expiration_date
+# Table rename:
+lic drivers_licenses
+
+# CHILDREN
+kids.kidsid kids.kid_id
+kids.last kids.last_name
+kids.first kids.first_name
+
+
+# ENROLLMENT
+enrol.enrolid enrol.enrollment_id
+enrol.sess enrol.am_or_pm_session
+# Table rename:
+enrol enrollment
+
+
+# ATTENDANCE
+attendance.attendanceid attendance.kids_enrollment_join_id
+attendance.kidsid attendance.kid_id
+attendance.enrolid attendance.enrollment_id
+attendance.dropout attendance.dropout_date
+# Table rename:
+attendance kids_enrollment_join
+
+
+# PARENTS
+parents.parentsid parents.parent_id
+parents.last parents.last_name
+parents.first parents.first_name
+parents.ptype parents.type
+parents.email parents.email_address
+
+
+# FAMILIES
+families.familyid families.family_id
+
+
+# LEADS
+leads.leadsid leads.lead_id
+leads.last leads.last_name
+leads.first leads.first_name
+leads.salut leads.salutation
+leads.addr leads.address1
+leads.addrcont leads.address2
+leads.familyid leads.family_id
+
+
+# NAGS
+nags.nagsid nags.nag_id
+nags.why nags.which_event
+nags.how nags.method_of_contact
+nags.familyid nags.family_id
+nags.naguid nags.user_id
+
+
+# CHART OF ACCOUNTS
+coa.acctype coa.account_type
+# Table rename:
+coa chart_of_accounts
+
+
+# INCOME TRACKING
+inc.incid inc.income_id
+inc.checknum inc.check_number
+inc.checkdate inc.check_date
+inc.acctnum inc.account_number
+inc.amount inc.payment_amount
+# Table rename
+inc income
+
+
+# FAMILIES AND INCOME
+figlue.figlueid figlue.families_income_join_id
+figlue.incid figlue.income_id
+figlue.familyid figlue.family_id
+# Table rename:
+figlue families_income_join
+
+
+# LEADS AND INCOME
+liglue.liglueid liglue.leads_income_join_id
+liglue.incid liglue.income_id
+liglue.leadsid liglue.lead_id
+# Table rename:
+liglue leads_income_join
+
+
+# USERS
+users.userid users.user_id
+
+
+# GROUPS
+groups.groupid groups.group_id
+
+
+# USERS AND GROUPS
+groupmembers.memberid groupmembers.users_groups_join_id
+groupmembers.memberid groupmembers.user_id
+groupmembers.groupid groupmembers.group_id
+# Table rename:
+groupmembers users_groups_join
+
+
+# PRIVILEGES
+privs.privid privs.privilege_id
+privs.userid privs.user_id
+privs.groupid privs_group_id
+privs.userlevel privs.user_level
+privs.grouplevel privs.group_level
+# Table rename:
+privs user_privileges
+
+
+# AUCTION DONTATIONS
+auction.auctionid auction.auction_donation_item_id
+auction.description aution.item_description
+auction.received_on aution.date_received
+auction.amount auction.item_value
+# Table rename:
+auction auction_donation_items
+
+
+# AUCTION ITEMS AND FAMILIES 
+faglue.faglueid faglue.auction_items_families_join_id
+faglue.auctionid faglue.aution_donation_item_id
+faglue.familyid faglue.family_id
+# Table rename:
+faglue auction_items_families_join
+
+
+# EVENTS
+events.eventid events.event_id
+
+
+# CALENDAR
+cal.calid cal.calendar_event_id
+# MIGRATE 'notes' TO EVENTS TABLE?
+cal.hideuntil cal.keep_event_hidden_until_date
+cal.eventdate cal.event_date
+# MIGRATE 'url' TO EVENTS TABLE?
+# Table rename:
+cal calendar_events
+
+
+# COMPANIES
+companies.companyid companies.company_id
+companies.name companies.company_name
+companies.address companies.address1
+companies.addres_continued companies.address2
+# NOT SURE WHAT 'dead' is for
+
+# COMPANIES AND AUCTION ITEMS
+saglue.saglueid saglue.companies_auction_items_join_id
+saglue.auctionid saglue.auction_donation_item_id
+# Table rename:
+saglue companies_auction_items_join
