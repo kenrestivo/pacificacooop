@@ -163,13 +163,12 @@ sub checkNewFamily(){
 }
 
 
-	#TODO AACK!!! I WILL NEED TO CHECK WORKING PARENT HERE!!
-	#	which means, i'll need the fucking CELL. dammit.
 sub checkOneParent(){
 	my $rowref = shift;
 	my $famid = shift;
 	my $last = shift;
 	my $first = shift;
+	my $ptype = shift;
 	my ($rquery , $rqueryobj , $ritemref, $query);
 	my %ritem;
 	my $cnt =  0;
@@ -203,6 +202,23 @@ sub checkOneParent(){
 		return $$ritemref['parentsid'];
 	} 
 	#otherwise, add him or her!
+	$query = sprintf("insert into parents set 
+			familyid = %d ,
+			last = '%s',
+			first = '%s',
+			ptype = '%s',
+			email = '%s',
+			worker = '%s',
+	",
+		$famid, $last, $first, $ptype, $$rowref[7],
+		#TODO AACK!!! I WILL NEED TO CHECK WORKING PARENT HERE!!
+		#	which means, i'll need the fucking CELL. dammit.
+		#in the meantime, i make a stupid sexist guess
+		$ptype eq 'Mom' ? 'Yes' : 'No'
+	);
+	print "DEBUG doing <$query>\n";
+	#print STDERR $dbh->do($query) . "\n";
+	#return $dbh->{'mysql_insertid'};
 }
 
 sub fixLastNames()
@@ -235,14 +251,17 @@ sub checkNewParents(){
 	#check the mom's name
 	$nameref = &fixLastNames($famname, $$rowref[1]);
 	$something = &checkOneParent($rowref, $famid,  
-		$$nameref{'last'}, $$nameref{'first'});
+		$$nameref{'last'}, $$nameref{'first'}, 'Mom');
 
 
 	#i have to namecheck the mom AND the dad's name. 
 	#	seriously, it's the 21st centry
+	#	TODO somehow guess dad or partner? um, how?
 	$nameref = &fixLastNames($famname, $$rowref[2]);
 	$something = &checkOneParent($rowref, $famid,  
-		$$nameref{'last'}, $$nameref{'first'});
+		$$nameref{'last'}, $$nameref{'first'}, 'Dad');
+
+	#TODO *do* something with $something! return it, check it, SOMETHING!
 	
 }
 
