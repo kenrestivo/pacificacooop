@@ -401,6 +401,9 @@ sponsorship form
 			tickets quantity? link to tickettype table?
 			banner (champions? individual? link to bannertype table?)
 			anything else?
+	gui notes for sponsorship:
+		only show the non-obsoleted ones
+		in the various others, you'll need to left join sponsorships to look for 'em
 
 banners
 	type?
@@ -408,6 +411,7 @@ banners
 
 tickets!!!
 	what to do here?
+
 
 sub-view gui handling
 	will probably need to have multiple structs, and a field to choose them
@@ -435,43 +439,84 @@ sub-view gui handling
 		i.e. so showreprt can generate views programatically?
 		and, so it can  be included from elsewhere!
 		including: means it can be passed around
-		linking: means it MAY not be so easy to pass it around... collisions, etc
-			DECIDE THIS NOW!
+		linking: it MAY not be so easy to pass it around... collisions, etc
+			augh. how to handle a linked struct from another file?! grr.
+			gonna have to have the structs be links, not embedded. damn.
+	add handling!
+		ONE-TO-ONE: just include it in the struct, like now with glue tables!
+			no changes. this is good.
+		ONE-TO-MANY with ONE required
+			how to check that the one is entered? auugh.
+		ONE-TO-MANY with NO required
+			make them save, then view/edit/add later.
+				THIS IS UGLY THO! they might have to go thru several screens
+			or an "add" button that saves, and shows the top level next
+				the struct MUST be heirarchal then: so it knows.
+				and so it knows what comes ABOVE it.
+		MANY-TO-MANY: they'll have to go through a different screen. 	
+			can i add it?
+		where do add buttons go?
+			in the top-level? in teh viewOne? in viewMany?
 	examples:
-		insurance
+		insurance:
 			view: if !$admin, call viewOne for this familyid
 				else, show all with summary line, and VIEW(DETAIL?) button
+			add: no top-level add, but sub-level adds for each
+				i.e. add,edit/delete's like in viewone!
 			viewone for FAMILY/LINE (what to call this?)
 				show parent info (summary viewonly)
 				show summary line for insurance, 
 					with EDIT/DELETE button(if priv)
 				show summary line for license 
 					with EDIT/DELETE button(if priv)
-		solicitation
+		solicitation:
 			view: all your contacts, or ALL contacts if $admin.
-			4 actions:
-				donate an item for the auction
-				buy an ad
-				be a sponsor (cash)
-				let us put up a flyer
-		money:
-			interesting problem!! how to deal with lead checks?
-			could be linked to 
-				an invitation, 
-				a business lead, 
-				an ad, 
-				a donation
-			handling
-				pop-up in case of business lead, since inputter won't know
-					ad-id? must it link to that?
-						nice if it had prices too... to verify check amount
-					raw cash donation is easy: just link to business lead
-				leadid in case of invitation. 
-					possibly with pop-up?
-				and... tickets? what of tickets?
-					ASK CARRIE!
-			will need a special-case checkEntry function, i'm certain
-				to handle all the different weirdo cases
-				callback?
-				
+				show the basic stuff? or summary of other stuff
+			add: the contact info. 
+			viewOne shows the contact summary
+				4 actions:
+					add,view/edit/delete auction donation
+					add,view/edit/delete ad (heh heh)
+					add,view/edit/delete sponsorship (package)
+					add,view/edit/delete flyer
+		roster:
+		auction(split):
+			view: all your auctions
+
+
+money:
+	add to coa table?
+		linktable?
+		linkidfield?
+		or... keep this in struct?
+	interesting problem!! how to deal with various checks?
+	could be linked to 
+		ticket  (link ticket table, and glue to an invitation?!), 
+		generic business lead (link contacts table)
+		ad (link ad table), 
+		one of various forfeit fees (link familyid)
+	handling
+		aha! an "apply payment to" field WHICH IS REQUIRED!
+			it pops up the relevant "apply" sub-screen.
+				can add new one or apply to existing one.
+			ah! need to add field to coa!
+				which is: which table/key it links to!!
+			which basically throws up various options depending on popup
+				this is a special case tho!!
+		pop-up in case of business lead, since inputter won't know
+			ad-id? must it link to that?
+				nice if it had prices too... to verify check amount
+				SO WE KNOW IT WAS PAID!
+			raw cash donation is easy: just link to business lead
+			it should show any unpaid stuff.
+		leadid in case of invitation. 
+			possibly with pop-up?
+		and... tickets? what of tickets?
+			ASK CARRIE!
+	will need a special-case checkEntry function, i'm certain
+		to handle all the different weirdo cases
+		callback?
+	perhaps we'll have to handle it like a proper accounts-receivable!
+		i.e. you'll have to "apply payments"
 		
+
