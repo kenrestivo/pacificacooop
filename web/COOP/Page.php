@@ -189,9 +189,11 @@ class coopPage
 	// fishes the tables out of a request or session
 
 
-	function selfURL($value = false, $inside = false)
+	function selfURL($value = false, $inside = false, $base = false)
 		{
-			$base = $_SERVER['PHP_SELF'];
+			if(!$base){
+				$base = $_SERVER['PHP_SELF'];
+			}
 			 if(($pos = strpos($base, '?')) !== false) {
                 $base = substr($base, 0, $pos);
             }

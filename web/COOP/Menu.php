@@ -111,7 +111,10 @@ class CoopMenu extends HTML_Menu
 				if(checkMenuLevel($this->page->auth, 
 								  getUser($this->page->auth['uid']), 
 								  $cbs, $cbs['fields'])== 0){
-					$res[$key]['url'] = $cbs['page'];
+					$res[$key]['url'] = sprintf('%s%s', $cbs['page'], 
+												SID ? "?" .SID :"");
+
+
 				} else {
 					unset($res[$key]['url']);
 				}
@@ -126,7 +129,9 @@ class CoopMenu extends HTML_Menu
 				if($cbs['maintable'] == 'income'){
 					$moneymenu[] = array(
 						'title' => $cbs['shortdesc'],
-						'url' => $cbs['page']);
+						// TODO the permissions checking!
+						'url' => sprintf('%s%s', $cbs['page'], 
+										 SID ? "?" .SID :""));
 				}
 				confessArray($moneymenu, 'moneymenu');
 				return $moneymenu;
@@ -157,7 +162,10 @@ class CoopMenu extends HTML_Menu
 						if(checkMenuLevel($this->page->auth, 
 										  getUser($this->page->auth['uid']), 
 										  $cbs, $cbs['fields'])== 0){
-							$res[$realm]['sub'][$key]['url'] = $cbs['page'];
+							$res[$realm]['sub'][$key]['url'] = 
+								sprintf('%s%s', $cbs['page'], 
+										SID ? "?" .SID :"");
+
 						} else {
 							unset($res[$realm]['sub'][$key]['url']);
 						}
