@@ -18,7 +18,7 @@ class Springfest_attendees extends DB_DataObject
     var $parent_id;                       // int(32)  
     var $temp_name;                       // string(255)  
     var $school_year;                     // string(50)  
-    var $income_id;                       // int(32)  
+    var $entry_type;                      // string(9)  enum
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -38,12 +38,17 @@ class Springfest_attendees extends DB_DataObject
 		'lead_id' => 'Invitee',
 		'company_id' => 'Company',
 		'parent_id' => 'Parent',
+		'entry_type' => 'Entry Control',
 		'temp_name' => 'HACK temporary name',
 		'school_year' => 'School Year'
 		);
+	var $fb_enumFields = array ('entry_type');
 	var $fb_selectAddEmpty = array ('lead_id', 'parent_id', 'company_id',
 									'ticket_id');
 	var $fb_formHeaderText =  'Springfest Attendees';
+	var $fb_fieldsToRender = array ('paddle_number' , 'ticket_id' , 
+									'lead_id' , 'company_id', 'parent_id' 
+		);
 
 									
 

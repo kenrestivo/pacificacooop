@@ -92,7 +92,7 @@ order by families.name;
 			 $sav->ticket_type_id = 3; // member ticket
 			 $sav->school_year = $sy;
 			 //XXX if i move this to the object, yank the printf!
-			 printf("Inserting 2 tickets for %s family...", 
+			 printf("<br>Inserting 2 tickets for %s family...", 
 					$fam->obj->name);
 			 $sav->insert();
 		 }

@@ -12,7 +12,7 @@ class Packages extends DB_DataObject
 
     var $__table = 'packages';                        // table name
     var $package_id;                      // int(32)  not_null primary_key unique_key auto_increment
-    var $package_type;                    // string(8)  enum
+    var $package_type;                    // string(10)  enum
     var $package_number;                  // string(20)  
     var $package_title;                   // string(255)  
     var $package_description;             // blob(16777215)  blob

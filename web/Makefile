@@ -20,7 +20,7 @@
 
 #NFSNRSYNC="--rsync-path=/nfsn/bin/rsync"
 NFSNUSR=ken
-NFSNHOST=c1.phx.nearlyfreespeech.net
+NFSNHOST=dev.phx.nearlyfreespeech.net
 NFSNDOCROOT=/nfsn/content/paccoop/htdocs
 NFSNLIVEPATH=$(NFSNDOCROOT)/sf/
 LIVEHERE=../livesite/
