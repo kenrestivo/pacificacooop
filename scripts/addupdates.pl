@@ -76,14 +76,15 @@ sub addthem {
 	my $tablename = shift;
 	my $addref = shift;
 	my $query;
-	#approximate list of families
 	#ok, fix em!
-	$query = "this is the $tablename query";
-	if($opt_v){
-		print "doing <$query>\n";
-	}
-	unless($opt_t){
-		print STDERR $dbh->do($query) . "\n";
+	foreach $blah (@$addref){
+		$query = "alter table $tablename add column $blah";
+		if($opt_v){
+			print "doing <$query>\n";
+		}
+		unless($opt_t){
+			print STDERR $dbh->do($query) . "\n";
+		}
 	}
 } #END ADDTHEM
 
