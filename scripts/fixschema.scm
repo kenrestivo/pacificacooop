@@ -6,7 +6,7 @@
 			 (database simplesql))
 (require 'printf)
 
-(define *main-schema* '()) ;; well, here it is.
+(define *main-schema* '()) ;; this is an aLIST of ACONS'es
 (define *current-table* "") ;; there has to be a more schemey way 
 (define *tables* '()) ;; hack. need to handle tables last.
 
@@ -61,7 +61,7 @@
 ;; for loading the proper schema file
 (define (load-definition! deffile)
   (set! *main-schema* '())
-kl  (let ((p (open-input-file deffile) ) )
+  (let ((p (open-input-file deffile) ) )
 	
 	(do ((line (read-line p) (read-line p)))
 		((or (eof-object? line) ))
@@ -100,7 +100,8 @@ kl  (let ((p (open-input-file deffile) ) )
 		  (safe-sql *dbh* (sprintf #f "alter table %s change column %s %s %s"
 						 table old-col new-col long-def))
 		  (fix-primary-key table old-col new-col schema) )
-		(printf "ignoring %s:%s\n" table old-col ) ;; it's a bogus line? huh?
+		;; TODO: be smart and check first if it is already changed
+		(printf "IGNORING: rename spec  %s:%s is NOT in schema, can't change to %s\n" table old-col new-col) ;; it's a bogus line? huh?
 		)
 	))
 
@@ -145,6 +146,6 @@ kl  (let ((p (open-input-file deffile) ) )
 (fix-schema "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
 (for-each rename-table *tables*)			; finally, follow up with tables
 
-(simplesql-close dbh)
+(simplesql-close *dbh*)
 
 ;; EOF
