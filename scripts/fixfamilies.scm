@@ -4,23 +4,26 @@
 ;; (load "/mnt/kens/ki/proj/coop/scripts/fixfamilies.scm")
 
 (use-modules (ice-9 slib)
+			 (kenlib)
 			 (database simplesql))
 (require 'printf)
 
-;;(load "/mnt/kens/ki/is/scheme/lib/kenlib.scm")
 
-;; XXX note, this is fakery. you'll need to manually put in the root pw's
-;;(define dbh (simplesql-open 'mysql "coop" "127.0.0.1" "input" "test" "2299"))
-(define dbh (simplesql-open 'mysql "coop" "bc" "input" "test"))
+(define *debug-flag* #t)
+
+(define *dbh* (apply simplesql-open "mysql"
+				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf")))
+
 	
 (for-each 
  (lambda (vec)
-   (simplesql-query dbh
+   (safe-sql *dbh*
 					(sprintf #f "update leads set last = '%s'
 							where leadsid = %d" 
 							 (vector-ref vec 2)
 							 (vector-ref vec 0))))
- (cdr (simplesql-query dbh
+
+ (cdr (simplesql-query *dbh*
 			 "select leads.leadsid, leads.last, inc.payer 
 				from leads left join invitation_rsvps 
 					on leads.leadsid = invitation_rsvps.leadsid 
@@ -29,6 +32,6 @@
 				and invitation_rsvps.incid is not null")))
 
 
-(simplesql-close dbh)
+(simplesql-close *dbh*)
 
 ;;; EOF
