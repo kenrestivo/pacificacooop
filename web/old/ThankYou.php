@@ -297,7 +297,7 @@ http://www.pacificacoop.org/
 	// the right thing to do is to separate finding, substituting, and saving
 	function findThanksNeeded($pk, $id, $save = false)
 		{
-			
+
 			// if i'm going to save objects, don't createlegacy them.
 			// save MY view objects, not the DBDO objects,
 			// so that i can createlegacy them later if needed.
