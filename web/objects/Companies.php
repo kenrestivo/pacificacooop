@@ -1,0 +1,37 @@
+<?php
+/**
+ * Table Definition for companies
+ */
+require_once 'DB/DataObject.php';
+
+class Companies extends DB_DataObject 
+{
+    ###START_AUTOCODE
+    /* the code below is auto generated do not remove the above tag */
+
+    var $__table = 'companies';                       // table name
+    var $company_id;                      // int(32)  not_null primary_key unique_key auto_increment
+    var $company_name;                    // string(255)  
+    var $address1;                        // string(255)  
+    var $address2;                        // string(255)  
+    var $city;                            // string(255)  
+    var $state;                           // string(255)  
+    var $zip;                             // string(255)  
+    var $country;                         // string(255)  
+    var $phone;                           // string(255)  
+    var $fax;                             // string(255)  
+    var $email_address;                   // string(255)  
+    var $territory_id;                    // int(32)  
+    var $do_not_contact;                  // datetime(19)  
+    var $flyer_ok;                        // string(7)  enum
+    var $family_id;                       // int(32)  
+
+    /* ZE2 compatibility trick*/
+    function __clone() { return $this;}
+
+    /* Static get */
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Companies',$k,$v); }
+
+    /* the code above is auto generated do not remove the tag below */
+    ###END_AUTOCODE
+}

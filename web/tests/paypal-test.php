@@ -1,122 +1,89 @@
 <?php 
+//$Id$
 
+require_once("first.inc");
 require_once("shared.inc");
-require_once("HTML/QuickForm.php");
+require_once("auth.inc");
+
+require_once("roster.inc");
+
+require_once('DB/DataObject.php');
 require_once("HTML/Table.php");
-require_once("DB.php");
+
+require_once('object-config.php');
+
 
 print "<HTML>
 		<HEAD>
-			<TITLE>TESTING</TITLE>
+			<TITLE>Data Entry</TITLE>
 		</HEAD>
 
 		<BODY>
 
+		<h2>Pacifica Co-Op Nursery School Data Entry</h2>
 	";
 
-// TODO: use array instead
-$dbh =& DB::connect("mysql://input:test@bc/coop");
-if (DB::isError($dbh)) {
-    die($dbh->getMessage());
-}
-$dbh->setFetchMode(DB_FETCHMODE_ASSOC);
-
-$colnames = array ('privilege_id', 'user_id', 'group_id', 'realm', 
-				   'user_level', 'group_level');
-
-function
-formOne()
-{
-	$form = new HTML_QuickForm('test', 'get');
-	$form->addElement('header', 'testheader', 'this is a test');
-	$form->addElement('text', 'testtext', 'What is your name?');
-	$form->addElement('header', 'testheader1', 'can i have another?');
-
-	$form->addElement('reset', 'clearbutton', 'Clear');
-	$form->addElement('submit', 'submitbutton', 'Submit');
-
-	$form->addRule('testtext', ' name is required', 'required', '', 'client');
-
-
-	if ($form->validate()) {
-		// If the form validates then freeze the data
-		$form->freeze();
-	}
-
-
-	$form->display();
+// common code, abstract out
+if (!isset ($_GET['table'])){
+	die ('specify table');
 }
 
-function
-formTwo()
-{
+$table = $_GET['table'];
 
-
-	$defaults = array ( test2text => 'horsehockey',
-						test1text => 'sheepshit');
-
-	$form = new HTML_QuickForm('test2', 'put');
-	$form->addElement('header', 'test2header', 'this is also a test');
-	$form->addElement('text', 'test1text', 'What is your slock?');
-	$form->addElement('text', 'test2text', 'What is your penis size?');
-	$sumbits[] = 
-		&HTML_QuickForm::createElement('reset', 'clear2button', 'Clear');
-	$sumbits[] = 
-		&HTML_QuickForm::createElement('submit', 'submit2button', 'Submit');
-	$form->addGroup($sumbits, 'sumbit buttons', 'you sumbit!', '&nbsp;');
-
-	$form->applyFilter(__ALL__, 'trim');
-
-	$form->addRule('testtext', 'Size', 
-				   'required', '', 'client');
-
-	// hmm. i can do cool stuff here with conditionals!
-	if ($form->validate()) {
-		// If the form validates then freeze the data
-		$form->freeze();
-		
-		confessArray($_POST, "postvars");
-		confessArray($GLOBALS, "globals");
-		
-
-	} else {
-		$form->setDefaults($defaults);
-		$form->display();	
-	}
-}
- 
-function
-testQuery($dbh, $colnames)
-{
-	$res =& $dbh->query(sprintf(
-							"select %s from user_privileges", 
-							implode(", ", $colnames)));
-	if (DB::isError($dbh)) {
-		die($dbh->getMessage());
-	}
-
-	$tab =& new HTML_Table();
-	$tab->addRow( $colnames);
-	$tab->setRowType(0, 'th');
-	while ($row = $res->fetchrow()){
-		$tab->addRow(array_values($row));
-	}
-
-	$tab->display();
-									
+$obj = DB_DataObject::factory ($table);
+if (PEAR::isError($obj)){
+	die ($obj->getMessage ());
 }
 
+// end common
 
-formOne();
-formTwo();
-testQuery($dbh, $colnames);
+// most have only one key. feel around for primary if not
+$keys = $obj->keys ();
+if (is_array ($keys)){
+	$primaryKey = $keys[0];
+}
+
+// wtf is this, actually?? a smart cool thing no doubt
+$titlefield = $_DB_DATAOBJECT_FORMBUILDER['CONFIG']['select_display_field'];
+
+if (isset ($obj->select_display_field)){
+	$titlefield = $obj->select_display_field;
+}
+
+$obj->find();
+
+$tab =& new HTML_Table();
 
 
+while ($obj->fetch()){
+	$ar = array_values($obj->toArray());
+	array_push($ar, 
+			   sprintf ('<a href="details.php?id=%s&table=%s">Edit</a><br>',
+   		  $obj->$primaryKey, $table));
+	//yay! i updated my config.php, and now $obj->$titlefield works!
+	
+	$tab->addRow($ar);
+
+	//print_r($obj->toArray());
+
+//	print_r ($obj);
+//oh, this so fuckign rules
+	
+}
+
+echo '<hr><a href="details.php?table=' . $table . '">Add new</a>';
+
+$tab->display();
+
+print "<hr><br>";
 
 done();
 
-$dbh->disconnect();
+
+////KEEP EVERTHANG BELOW
 
 ?>
+<!-- END TEST -->
+
 
  
