@@ -32,32 +32,42 @@ getopts('vth:p:d:') or &usage();
 #the access hash
 # in perl, the hash keys should NOT be quoted, or all hell will break loose!!
 %access = (
-	ACCESS_NONE => 0,
-	ACCESS_SUMMARY => 100,
-	ACCESS_VIEW => 200,
-	ACCESS_VIEWALL => 300,
-	ACCESS_EDIT => 500,
-	ACCESS_ADD => 600,
-	ACCESS_DELETE => 700,
-	ACCESS_ADMIN => 800
+	0 => 'ACCESS_NONE',
+	100 => 'ACCESS_SUMMARY' ,
+	200 => 'ACCESS_VIEW' ,
+	300 => 'ACCESS_VIEWALL' ,
+	500 => 'ACCESS_EDIT' ,
+	600 => 'ACCESS_ADD' ,
+	700 => 'ACCESS_DELETE' ,
+	800 => 'ACCESS_ADMIN' 
 );
+
+use constant _ACCESS_NONE => 0;
+use constant _ACCESS_SUMMARY => 100;
+use constant _ACCESS_VIEW => 200;
+use constant _ACCESS_VIEWALL => 300;
+use constant _ACCESS_EDIT => 500;
+use constant _ACCESS_ADD => 600;
+use constant _ACCESS_DELETE => 700;
+use constant _ACCESS_ADMIN => 800;
+
 
 #default privs for all families
 #  				group, 					user, 				item
 @familydefaults =  (
-	[ $access{'ACCESS_SUMMARY'},$access{'ACCESS_DELETE'}, "invitations" ],
-	[ $access{'ACCESS_SUMMARY'},$access{'ACCESS_DELETE'}, "auction" ],
-	[ $access{'ACCESS_NONE'},$access{'ACCESS_VIEW'}, "money" ],
-	[ $access{'ACCESS_NONE'},$access{'ACCESS_VIEW'}, "insurance" ],
-	[ $access{'ACCESS_VIEW'},$access{'ACCESS_EDIT'}, "roster" ],
-	[ $access{'ACCESS_NONE'},$access{'ACCESS_VIEW'}, "user" ]
+	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "invitations" ],
+	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "auction" ],
+	[ _ACCESS_NONE, _ACCESS_VIEW, "money" ],
+	[ _ACCESS_NONE, _ACCESS_VIEW, "insurance" ],
+	[ _ACCESS_VIEW, _ACCESS_EDIT, "roster" ],
+	[ _ACCESS_NONE, _ACCESS_VIEW, "user" ]
 );
 
 @teacherdefaults =  (
-	[ $access{'ACCESS_VIEW'}, $access{'ACCESS_EDIT'}, "roster" ],
-	[ $access{'ACCESS_SUMMARY'},$access{'ACCESS_DELETE'}, "auction" ],
-	[ $access{'ACCESS_DELETE'}, $access{'ACCESS_EDIT'}, "insurance" ],
-	[ $access{'ACCESS_NONE'},$access{'ACCESS_VIEW'}, "user" ]
+	[ _ACCESS_VIEW, _ACCESS_EDIT, "roster" ],
+	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "auction" ],
+	[ _ACCESS_DELETE, _ACCESS_EDIT, "insurance" ],
+	[ _ACCESS_NONE, _ACCESS_VIEW, "user" ]
 );
 
 ### main code starts here
