@@ -87,7 +87,9 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 			}
 		}
 	} else {
-		&emailReminder($famref, $insarref, $massivearref, $checkdate );
+		if($massivearref->[0]->{'parref'}->{'email'}){
+			&emailReminder($famref, $insarref, $massivearref, $checkdate );
+		}
 	}
 
 } # end while
@@ -429,7 +431,7 @@ mailIt()
 		$m,
 		$parref->{'first'},
 		$parref->{'last'},
-		$parref->{'email'},
+		$parref->{'email'}
 		);
 	$res = <STDIN>;
 	if($res =~ /^[yY]/){
@@ -674,7 +676,7 @@ sub emailReminder()
 	my $licexp = 0; #flag
 	my $skip = 0;
 
-	$badness .= "Hello! My job this year is to keep track of the automobile insurance and driver's license information for the school.\n\n";
+	$badness .= "Hello! My job this year at the Pacifica Co-Op Nursery School is to keep track of the automobile insurance and driver's license information for the school.\n\n";
 
 
 	#insurance
@@ -704,7 +706,7 @@ sub emailReminder()
 		$licarref = $mar->{'licarref'};
 		$parref = $mar->{'parref'};
 		unless(scalar @$licarref){
-				#TODO put in the parent's name here, dude
+				#put in the parent's name here, dude
 				$badness .= sprintf(
 						"I%s couldn't find any driver's license on file for the working parent on the roster, %s %s.\n\n",
 						$insexp ? " also" : "",
@@ -755,6 +757,7 @@ sub emailReminder()
 
 	if(($insexp || $licexp) && !$skip){
 
+		#&debugstruct($marf, 0);
 		&mailIt($badness, $marf->[0]->{'parref'});
 		return $badness;
 	}
