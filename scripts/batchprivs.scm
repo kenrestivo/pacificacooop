@@ -19,7 +19,6 @@
   "nag"
   "packaging"
   "raffle"
-  "roster"
   "solicitation"
   "solicit_money"
   "thankyou"
