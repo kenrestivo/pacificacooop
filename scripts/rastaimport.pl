@@ -48,7 +48,7 @@ use Getopt::Std;
 my $dbh;
 
 #XXX these don't work!
-my $opt_t;
+my $opt_t ;
 my $opt_v;
 
 getopts('vt') or &usage();
@@ -193,10 +193,12 @@ sub checkOneParent(){
 	#search in db. if parent isn't there, 
 	#	look for family, it should add one if needed.
 	#	note: there are a few single moms here, so note that.
+	#	note the weird select! i do NOT want to falsely match bad first/last
 	$rquery = sprintf("select * from parents 
-			where first like \"%%%s%%\" and last like \"%%%s%%\"
+			where (first like \"%%%s%%\" and last like \"%%%s%%\")
+			or (first like \"%%%s%%\" and familyid = %d)
 	",
-		$first, $last
+		$first, $last, $first, $famid
 	) ;
 
 	print "DEBUG doing <$rquery>\n"; #debug only
@@ -205,18 +207,19 @@ sub checkOneParent(){
 
 	#TODO check for duplicates already in there?
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		%ritem = %$ritemref;
 		$cnt++;
 	}
 
 	if($cnt){
 		#	AND check for parents which don't match the family name in there?
 		#		i.e. if my $famid is NOT what's in the db!
-		if($$ritemref{'familyid'} != $famid){
+		if($ritem{'familyid'} != $famid){
 			print "ERROR! $famid for $first $last has changed!\n";
 			exit(1);
 		}
 		print "DEBUG: yes, this parent is in the db\n";
-		return($$ritemref{'parentsid'});
+		return($ritem{'parentsid'});
 	} 
 	#otherwise, add him or her!
 	$query = sprintf("insert into parents set 
@@ -225,7 +228,7 @@ sub checkOneParent(){
 			first = '%s',
 			ptype = '%s',
 			email = '%s',
-			worker = '%s',
+			worker = '%s'
 	",
 		$famid, $last, $first, $ptype, $$rowref[7],
 		#TODO AACK!!! I WILL NEED TO CHECK WORKING PARENT HERE!!
@@ -259,10 +262,16 @@ sub fixLastNames()
 
 sub checkNewParents(){
 	my $rowref = shift;
-	my $famid = shift;
-	my ($famname, $something, $nameref) ;
+	my $session = shift;
+	my ($famname, $something, $nameref, $famid) ;
 	my %ritem;
 	my $cnt =  0;
+
+	$famid = &checkNewFamily($rowref);
+	if($famid < 1){
+		print "ERROR! familyid $famid\n";
+		exit(1);
+	}
 
 	#*sigh* the annoyance of excel. why not create a "baby" checkbox. grr.
 	$famname = &unBaby($$rowref[0]);
@@ -310,12 +319,13 @@ sub checkNewKids(){
 
 	#TODO check for duplicates already in there?
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		%ritem = %$ritemref;
 		$cnt++;
 	}
 
 	if($cnt){
 		print "DEBUG: yes, this kid is in the db\n";
-		return $$ritemref{'kidsid'};
+		return $ritem{'kidsid'};
 	} 
 	
 	#otherwise, insert the new kid!
@@ -362,7 +372,7 @@ sub checkNewKids(){
 	}
 
 	#add parent here too? why not, we know we need them/one
-	&checkNewParents($rowref, $famid);	
+	&checkNewParents($rowref, $session);	
 	
 }
 
@@ -428,6 +438,7 @@ sub iterateSheets()
 		&iterateRows($ws, $session, \&checkHeaders, 'header');
 		#&checkDeletes($ws, $session); #TODO add the callback data!
 		&iterateRows($ws, $session, \&checkNewKids, 'row');
+		&iterateRows($ws, $session, \&checkNewParents, 'row');
 		&iterateRows($ws, $session, \&checkChanges, 'row');
 
 	} 
