@@ -257,6 +257,10 @@ insert into sources set
             source_id = 8,
             description = "VIP List";
 
+insert into sources set
+            source_id = 9,
+            description = "Solicitation";
+
 --- ad sizes
 insert into ad_sizes set
     ad_size_description = "Back Page or Inside Front/Back Cover",
@@ -355,6 +359,6 @@ insert into counters set
 insert into counters set
             column_name = 'paddle_number',
             school_year = '2004-2005',
-			counter = 1;
+            counter = 1;
 
 -- EOF

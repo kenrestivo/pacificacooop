@@ -1095,4 +1095,13 @@ left join
 left join income on ticket_summary.income_id = income.income_id
 order by last_name, first_name;
 
+--- copy the companies to leads, so they're there
+-- this will be critical once i yank companies.
+insert into leads (first_name, last_name, salutation, title, company, 
+    address1, address2, city, state, zip, country, phone, company_id, 
+	do_not_contact, source_id) 
+select first_name, last_name, salutation, title, company_name, address1, 
+    address2, city, state, zip, country, phone, company_id , do_not_contact, 9
+from companies;
+
 --- EOF
