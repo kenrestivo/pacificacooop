@@ -77,7 +77,7 @@ callbacks struct
 	mainindex: the unique id (index) field in the maintable
 	realm: privilege realm for this view. 
 	countindex: the field in $fields which should be where'd for counting
-	countmode: the mode of the count. default 'count', but could be 'sum'
+	sumfield: sets the mode of the count to 'sum', using this field for totals
 	fields: the NAME of the fieldspec array. eventually will be REFERENCE here
 	joins: an array of arrays of join info, in order of joining (important!)
 		each containing :
