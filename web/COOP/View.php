@@ -106,8 +106,7 @@ class coopView
 // 			$tab->setCellContents($rowcount, 0, 
 // 									  "ROW $rowcount COl $colcount");
 
-			//might first need to getcellatrs, then add to array
-			$tab->setCellAttributes($rowcount,0,"colspan=$colcount");
+			$tab->updateCellAttributes($rowcount,0,"colspan=$colcount");
 	
 		}
 
@@ -152,8 +151,9 @@ class coopView
 			$tab =& new HTML_Table();
 			while($this->obj->fetch()){
 				// the main row.
-				$tab->addRow(array_values($this->obj->toArray()));
-				
+				if(preg_match('/_join/', $this->table) == 0){
+					$tab->addRow(array_values($this->obj->toArray()));
+				}
 				//subrows
 			$this->addSubTables(&$tab, $pk, $backlinks);
 
