@@ -57,6 +57,7 @@ use constant _ACCESS_ADMIN => 800;
 @familydefaults =  (
 	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "invitations" ],
 	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "auction" ],
+	[ _ACCESS_VIEW, _ACCESS_VIEW, "calendar" ],
 	[ _ACCESS_NONE, _ACCESS_VIEW, "money" ],
 	[ _ACCESS_NONE, _ACCESS_VIEW, "insurance" ],
 	[ _ACCESS_VIEW, _ACCESS_EDIT, "roster" ],
@@ -65,6 +66,8 @@ use constant _ACCESS_ADMIN => 800;
 
 @teacherdefaults =  (
 	[ _ACCESS_VIEW, _ACCESS_EDIT, "roster" ],
+	[ _ACCESS_DELETE, _ACCESS_VIEW, "calendar" ],
+	[ _ACCESS_NONE, _ACCESS_VIEW, "money" ],
 	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "auction" ],
 	[ _ACCESS_DELETE, _ACCESS_EDIT, "insurance" ],
 	[ _ACCESS_NONE, _ACCESS_VIEW, "user" ]
@@ -125,7 +128,7 @@ addDefaultPrivs()
 	my $defref = shift;
 	my $arref;
 	my $query;
-	my $count;
+	my $count = 0;
 	my $rquery;
 	my $ritemref;
 	my %ritem;
@@ -133,6 +136,7 @@ addDefaultPrivs()
 
 	#NOW, add the privs
 	foreach $arref (@$defref){
+		$count = 0; #gotta reset this each time!
 		if($opt_v){
 			printf("\tsurfing through privs: %d %d %s\n", 
 				$$arref[0], $$arref[1], $$arref[2]);
@@ -160,7 +164,7 @@ addDefaultPrivs()
 			}
 			$query = sprintf("
 				update privs set grouplevel = %d, userlevel = %d 
-				where userid = %d, realm = '%s' ", 
+				where userid = %d and realm = '%s' ", 
 				 $$arref[0], $$arref[1], $uid, $$arref[2]);
 		} else {
 			$query = sprintf("insert into privs set 
