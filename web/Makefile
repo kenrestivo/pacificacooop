@@ -26,6 +26,7 @@ NFSNLIVEPATH=$(NFSNDOCROOT)/sf/
 LIVEHERE=../livesite/
 NFSNDEVPATH=$(NFSNDOCROOT)/sf-dev/
 DEVHERE=../web-online/
+PLAYGROUND=../web/
 XCLUDE='*dbhost*' 
 
 
@@ -78,6 +79,12 @@ sync-live: commit-live download-live
 
 #TODO do a cvs update after downloading?
 sync-dev: download-dev
+
+diff-live:
+	(cd $(PLAYGROUND); cvs diff -r livesite -r HEAD > $(LIVEHERE).temp.diff )
+
+diff-dev:
+	(cd $(PLAYGROUND); cvs diff -r dev_online -r HEAD > $(DEVHERE).temp.diff )
 
 tags:
 	etags *
