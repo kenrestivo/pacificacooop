@@ -1,5 +1,6 @@
 TODO testing stuff
 
+a test case for mike, to show my bug
 
 finally we get to the "basic" stuff
 	edit a record 

@@ -612,4 +612,9 @@ CREATE TABLE temp (
     group by Month 
     order by check_date;
 
+
+--- attempt to fix leads
+select temp_name, invitation_rsvps.invitation_rsvps_id from springfest_attendees left join invitation_rsvps using (lead_id) where invitation_rsvps.lead_id is not null;
+
+
 --- EOF

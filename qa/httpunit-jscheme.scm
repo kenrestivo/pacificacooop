@@ -88,11 +88,11 @@
 		 (cddr (list-head links
 					  (- (length links) 1))))))
 
-
+;;or http://validator.w3.org/check
 (define (validate-html wtc)
-  (let ((html (dump-page wtc)))
-	(post-url "http://fred/w3c-markup-validator/check"
-			  (list (list "uploaded_file" html) '("ss" "1")))
+  (let* ((html (dump-page wtc))
+		 (result (post-url "http://fred/w3c-markup-validator/check"
+			  (list (list "uploaded_file" html) '("ss" "1")))))
 	;; TODO: check it for <h2 id="result" class="valid">
 	;; and save it if it's not present
 	))
