@@ -178,4 +178,20 @@ select families.name, sum(auction.amount) as amount
 		left join auction on faglue.auctionid = auction.auctionid
 	group by families.familyid
 
+-- money totals
+select coa.description, sum(amount)  as total 
+	from inc 
+		left join coa on inc.acctnum = coa.acctnum 
+	group by inc.acctnum order by total desc;
+
+-- specific to invites
+select coa.description, sum(amount)  as total 
+	from inc 
+		left join invitation_rsvps 
+			on invitation_rsvps.incid = inc.incid 
+		left join coa on inc.acctnum = coa.acctnum 
+	where invitation_rsvps.leadsid is not null 
+	group by inc.acctnum order by total desc;
+
+
 --- EOF

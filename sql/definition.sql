@@ -137,6 +137,7 @@ create table leads (
 	relation enum ('Relative','Friend', 'Coworker', 'Alumni', 'Other'),
 	source enum ('Springfest', 'Other'),
     familyid int(32),
+	do_not_contact date,
 	audit_user_id int(32), -- XXX remove after first mailing!
 	entered datetime, -- XXX remove after first mailing!
 	updated timestamp, -- XXX remove after first mailing!
