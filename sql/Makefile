@@ -86,5 +86,11 @@ ssh-tunnel::
 diagram:
 	autodia.pl -l DBI -i "mysql:$(DB):$(DBHOST)" -U$(BKUSER) -P$(BKPW) -o schema.dia
 
+ksql-live:
+	ksql $(DBNAME) 127.0.0.1 $(BKUSER) $(FARPORT)
+
+mysql-live:
+	mysql -h  127.0.0.1 -u $(BKUSER) -P $(FARPORT) $(DBNAME)
+
 #EOF
 
