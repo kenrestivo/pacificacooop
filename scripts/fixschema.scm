@@ -6,9 +6,6 @@
 			 (database simplesql))
 (require 'printf)
 
-(define dbh (apply simplesql-open "mysql"
-				   (read-conf "/mnt/kens/ki/proj/coop/sql/db.conf")))
-
 (define *main-schema* '()) ;; well, here it is.
 (define *current-table* "") ;; there has to be a more schemey way 
 (define *tables* '()) ;; hack. need to handle tables last.
@@ -140,6 +137,9 @@ kl  (let ((p (open-input-file deffile) ) )
 
 ;;;;;;;;;;;;;;;
 ;; main
+
+(define dbh (apply simplesql-open "mysql"
+				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-fake.conf")))
 
 (load-definition! "/mnt/kens/ki/proj/coop/sql/olddefinition.sql")
 (fix-schema "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
