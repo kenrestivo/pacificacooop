@@ -37,7 +37,7 @@ class Income extends DB_DataObject
 	var $fb_linkDisplayFields = array('payer', 
 									  'payment_amount', 
 									  'check_date');
-	var $fb_fieldsToRender= array("check_date", "payer", 
+	var $fb_fieldsToRender= array("check_date", "payer", 'school_year',
 								  "account_number", "payment_amount", "note");
 
 	var $fb_fieldLabels = array( 
