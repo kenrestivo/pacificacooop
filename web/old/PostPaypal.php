@@ -149,7 +149,7 @@ class PostPaypal
             }
 
             $obj->family_id = $this->family_id;
-            $obj->insert(); // save the giblets?
+            $obj->insert(); // save the giblets
 	}
 
 
