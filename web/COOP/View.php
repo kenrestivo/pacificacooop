@@ -129,7 +129,7 @@ class coopView extends CoopObject
 						 'align=right', 'TH');
 
 			while($this->obj->fetch()){
-				$tab->addCol($this->toArray(),'bgcolor=#cccccc' );
+				$tab->addCol($this->toArray(),'bgcolor="#cccccc"' );
 			
 			}
 

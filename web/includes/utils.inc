@@ -172,7 +172,7 @@ warnDev()
 		print "<p><font color='#ff0000'>NOTE! THIS IS THE DEV SITE! 
 				THIS IS NOT LIVE DATA, THIS IS ONLY FOR TESTING.</font>
 				<br>If you want the live site, use the 'members' link, 
-				NOT 'members-dev'. Thanks.";
+				NOT 'members-dev'. Thanks.</p>";
 	}
 	
 }/* END WARNDEV */
