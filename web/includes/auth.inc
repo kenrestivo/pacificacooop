@@ -495,7 +495,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 			print "<td>Please type in your new password here: </td>\n";
 		} else {
 			print "\t<td>Enter password 
-				(or leave blank if you don't have one yet): </td>\n";
+				(or type in a new password if you don't have one yet): </td>\n";
 		}
 		print "\t<td><INPUT TYPE=password NAME='auth[pwd]'></td>\n";
 	}
@@ -1014,7 +1014,7 @@ wrongPassState($auth, $states)
 	$auth['pwd'] = $auth['confirm'] = NULL;
 	loginForm(changeState($auth, $states, 'needlogin', 1),
 		'password', 'hide', 
-		"<span color='#ff0000'>Incorrect password</span>. Please try again. Remember to check your CAPS LOCK key. Also, your husband, wife, or partner may already have entered a password for you. You may want to ask them." );
+		"<span color='#ff0000'>Incorrect password</span>. You already have a password in the system, and what you typed isn't it. Please try again.</p><p>Helpful hints:</p><ul class=normal><li>Check your CAPS LOCK key.</li><li>Your husband, wife, or partner may already have entered a password for you. You may want to ask him or her.</li><li>Finally, people forget their passwords. A lot. If you've forgotten, email or call and we'll reset it for you.</li></ul>" );
 
 	return changeState($auth, $states, 'needinput', 1);
 }/* END  WRONGPASSSTATE */
