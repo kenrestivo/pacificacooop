@@ -30,25 +30,26 @@ class Files extends DB_DataObject
 	function postGenerateForm(&$uploadForm)
 		{
 			$uploadForm->setMaxFileSize(8388608); // 8MB s/b as big as i need
-			$this->kenFile =& $uploadForm->addElement('file', 'filename', 'File:');
-			$uploadForm->addRule('filename', 'You must select a file', 'uploadedfile');
+			$this->kenFile =& $uploadForm->addElement('file', 'original_filename', 'File:');
+			$uploadForm->addRule('original_filename', 'You must select a file', 'uploadedfile');
 		}
 
-	function preProcessForm(&$values)
+	function preProcessForm(&$formValues)
 		{
-			$path = "../files"; 
-			
-			print"<pre>";
-			print_r($this->kenFile);
-			print_r($values);
-			print"</pre>";
+			$path = "../../files"; // NOTE! for the tests folder
+			$fileValues =& $this->kenFile->getValue();
+		
+			print_r_html($this->kenFile);
+		  
+			print_r_html($fileValues);
+		
 			
 			$unique_filename = sprintf("%d-%s", rand(1,200), 
-									   $values['filename']['name']);
+									   $fileValues['name']);
 			if ($this->kenFile->isUploadedFile()) {
 				$this->kenFile->moveUploadedFile($path, $unique_filename);
 				print "file uploaded!";
-				// TODO: add the unique_filename to the db's field
+				// TODO: add the original_filename['name'] unique_file and to the db's field
 			}
 			else {
 				print "No file uploaded";
