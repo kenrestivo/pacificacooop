@@ -17,11 +17,11 @@
 ;; if it is a COLUMN, i'll want to do:
 (define (add-column table line)
   ;; NOTE! must combine before yanking ,'s!
-  ;; (add-sub-alist new-schema table ...
-  (cons (car line)
-		(regexp-substitute/global #f  ",$"
-								  (string-join (cdr line))
-								  'pre 'post)) )
+  (set! new-schema (add-sub-alist new-schema table 
+								  (car line)
+								  (regexp-substitute/global #f  ",$"
+													(string-join (cdr line))
+													'pre 'post)) ))
 
 ;; clean sql definition line
 (define (clean-line line)
@@ -54,6 +54,7 @@
 	   (clean-line (string-split line #\space))))
 	 (close p) ))	
 
+;;;;;;;;;;;;;
 
 ;; TODO i have to fish the definition out of the definition.sql,
 ;; or out of a mysqldump somewhere
