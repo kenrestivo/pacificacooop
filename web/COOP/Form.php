@@ -32,56 +32,6 @@ class coopForm extends CoopObject
 {
 
 
-	function fbBuild($id)
-		{
-	
-			//print_r($this);
-			$this->obj->get($id);
-            $this->build =& DB_DataObject_FormBuilder::create (&$this->obj);
-            //confessObj($this->build, "build");
-
-			// is there a cleanerway to do this? i hate it.
-			$hackform = new HTML_QuickForm();
-			if($sid =thruAuthCore($this->page->auth)){
-				$hackform->addElement('hidden', 'coop', $sid); 
-			}
-
-			$hackform->addElement('hidden', 'table', $this->table);
-			$hackform->addElement('hidden', 'action', 'process');
-
-			// NOTE i can't use facking [] here. bummer
-			$this->build->elementNamePrefix = $this->table . '-';
-			
-			$this->build->useForm($hackform);
-			$form =& $this->build->getForm();
-
-			$form->applyFilter('__ALL__', 'trim');
-
-            //confessObj($form, "form");
-  			//$form->freeze();
-
-			if($form->validate ()){
-				
-				$res = $form->process (array 
-									   (&$this->build, 'processForm'), 
-									   false);
-				if ($res){
-					$this->obj->debug('processed successfully', 
-								'detailform', 0);
-					saveAudit($this->table, $id, $page->auth['uid']);
-					// XXX make sure i don't have to unset id's first!
-					///  next action
-					print "PRICESSING SEUCCSSCUL";
-					$_SESSION['tables'][$this->table]['action'] = 'list'; 
- 			 		//header('Location: ' . $this->selfURL());
-				}
-				echo "process failed!<br>";
-			}
-
-			return $form->toHTML();
-	
-		}
-
 
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function build($id)
