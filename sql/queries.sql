@@ -15,24 +15,27 @@ select parents.last, parents.first , families.phone, parents.email
 
 -- expired licenses
 select parents.last, parents.first, lic.expires 
-	from lic 
-		left join parents on parents.parentsid = lic.parentsid 
-	where expires < now() group by parents.last, parents.first;
+	from parents 
+		left join lic on parents.parentsid = lic.parentsid 
+	where parents.worker = "Yes" and (expires is null or expires < now())
+	group by parents.last, parents.first;
 
 
 -- give me ocntact info for all parents who have expired licenses
 select parents.last, parents.first, lic.expires,  families.phone, parents.email
-	from lic 
-		left join parents on parents.parentsid = lic.parentsid 
+	from parents 
+		left join lic on parents.parentsid = lic.parentsid 
 		left join families on parents.familyid = families.familyid 
 		left join kids on kids.familyid = families.familyid 
-	where expires < now() group by parents.last, parents.first;
+	where parents.worker = "Yes" and (expires is null or expires < now())
+	group by parents.last, parents.first;
 
 -- give me ocntact info for all parents who have expired insurance
 select parents.last, parents.first, ins.expires,  
 	ins.companyname, ins.policynum, families.phone, parents.email
-	from ins 
-		left join parents on parents.parentsid = ins.parentsid 
+	from parents 
+		left join ins on parents.parentsid = ins.parentsid 
 		left join families on parents.familyid = families.familyid 
 		left join kids on kids.familyid = families.familyid 
-	where expires < now() group by parents.last, parents.first;
+	where parents.worker = "Yes" and (expires is null or expires < now())
+	group by parents.last, parents.first;

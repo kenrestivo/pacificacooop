@@ -2,7 +2,7 @@
 
 
 #$Id$
-#fixes last names
+#deciphers hypenated last names
 
 use DBI;
 

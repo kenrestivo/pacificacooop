@@ -22,7 +22,7 @@ $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 sub movethem {
 	$col = shift;
 	$from = shift;
-	$tab = shift;
+	$to = shift;
 	#approximate list of families
 	$rquery = "select * from $from where $col is not null";
 	#print "doing <$rquery>\n"; #XXX debug only
@@ -35,7 +35,7 @@ sub movethem {
 		$id = $ritem{'familyid'};
 
 		#ok, fix em!
-		$query = "update $tab set $col = \"$changer\" where familyid = $id";
+		$query = "update $to set $col = \"$changer\" where familyid = $id";
 		print "doing <$query>\n";
 		print STDERR $dbh->do($query) . "\n";
 	} # end while

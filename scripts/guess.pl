@@ -28,6 +28,11 @@ while ($ritemref = $rqueryobj->fetchrow_hashref){
 fixem('ins');
 fixem('lic');
 
+#XXX THIS SCRIPT IS BROKEN!!
+## the lic should in fact link to parents. BUT! the ins must link to FAMILIES
+#	though it uses the select on parents to do the name-guessing. *sigh*
+exit 1; ###XXX because it is broken
+
 $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
 #END OF MAIN CODE
