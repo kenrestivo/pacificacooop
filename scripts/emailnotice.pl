@@ -129,7 +129,7 @@ sub getworkers()
 		}
 	} # end while
 
-	$opt_v && printf("getworkers(): returning %d items\n", scalar @results);
+	$opt_v && printf("getworkers(): returning %d workers\n", scalar @results);
 
 	return \@results; # ref to the results which is an array of refs!
 
@@ -180,12 +180,15 @@ sub getlicenseinfo()
 		} # end while
 
 		#this is so bizarre
+		$opt_v && printf("getlicenseinfo(): returning %d licenses\n", 
+					scalar @total);
 		$everthang{'licarref'} = \@results;
 		$everthang{'pararref'} = $pararref;
 		push(@total, \%everthang); #yes, that's right, a referene
 	}
 
-	$opt_v && printf("getlicenseinfo(): returning %d items\n", scalar @total);
+	$opt_v && printf("getlicenseinfo(): returning %d total\n", 
+		scalar @total);
 
 
 	return \@total; # massive.
@@ -396,6 +399,7 @@ sub fieldTripReport()
 	my $insref;
 	my $badness = "";
 	my $flag = 0;
+	my $mar;
 	my $insexp = 0; #flag
 	my $licexp = 0; #flag
 
@@ -407,7 +411,7 @@ sub fieldTripReport()
 	$badness .= sprintf(
 				" \tFamily Phone: %s\tEmail: %s\n",
 				$famref->{'phone'} ? $famref->{'phone'} : "",
-				$marf->[0]->{'pararref'}->[0]->{'email'}
+				"" #$marf->[0]->{'pararref'}->[0]->{'email'}
 			);
 
 	#insurance
@@ -431,7 +435,8 @@ sub fieldTripReport()
 	}
 		
 	#license
-	foreach $mar ( @$marf->{'pararref'}){
+	foreach $mar ( @$marf){
+		$licarref = $mar->{'licarref'};
 		unless(scalar @$licarref){
 				#TODO put in the parent's name here, dude
 				$badness .= "\t- No license information for working parent\n";
