@@ -78,22 +78,15 @@ create table kids(
     primary key (kidsid)
 );
 
--- enrollment info (many-to-many to kids)
-create table enrol(
-    enrolid int(32) not null unique auto_increment,
-	semester varchar(50),
-	sess enum ('AM', 'PM'),
-    primary key (enrolid)
-);
-
--- glue table for many-to-many: kids to enrolmment sessions
-create table attendance (
-    attendanceid int(32) not null unique auto_increment,
+-- kids' enrolmment sessions. this is the core of the whole db, actually.
+create table enrollment (
+    enrollment_id int(32) not null unique auto_increment,
 	kidsid int(32),
-	enrolid int(32),
+	school_year varchar(50),
+	am_pm_session enum ('AM', 'PM'),
 	start_date date,
-	dropout date,
-    primary key (attendanceid)
+	dropout_date date,
+    primary key (enrollment_id)
 );
 
 -- parents who have insurance and/or licenses. (many-to-many to kids)

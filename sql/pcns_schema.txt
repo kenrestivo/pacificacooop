@@ -26,21 +26,6 @@ kids.last kids.last_name
 kids.first kids.first_name
 
 
-# ENROLLMENT
-enrol.enrolid enrol.enrollment_id
-enrol.sess enrol.am_or_pm_session
-# Table rename:
-enrol enrollment
-
-
-# ATTENDANCE
-attendance.attendanceid attendance.kids_enrollment_join_id
-attendance.kidsid attendance.kid_id
-attendance.enrolid attendance.enrollment_id
-attendance.dropout attendance.dropout_date
-# Table rename:
-attendance kids_enrollment_join
-
 
 # PARENTS
 parents.parentsid parents.parent_id

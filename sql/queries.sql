@@ -365,11 +365,12 @@ select ticket_quantity , amount, last, first, addr , addrcont, city ,
 create temporary table enrolled (
 	name varchar(255),
     sess enum ('AM', 'PM'),
-    familyid int(32) not null unique
+    familyid int(32) not null unique,
+    phone varchar(20)
 );
 insert into enrolled
 select families.name, enrol.sess, 
-    families.familyid 
+    families.familyid , families.phone
         from families 
            left join kids on kids.familyid = families.familyid
            left join attendance on kids.kidsid = attendance.kidsid
@@ -377,12 +378,12 @@ select families.name, enrol.sess,
         where enrol.semester = '2003-2004'
             and attendance.dropout is null
     group by families.familyid
-    order by enrol.sess, families.name
+    order by enrol.sess, families.name;
 
 -- the enhancement hours, sold separately
 select enrolled.name as Family_Name,
-    sum(enhancement_hours.hours) as Total, 
-	enrolled.sess as Session
+    sum(if(enhancement_hours.hours, enhancement_hours.hours,0)) as Total, 
+	enrolled.sess as Session, enrolled.phone as Phone
 	from enrolled
            left join parents 
                on parents.familyid = enrolled.familyid
@@ -390,6 +391,19 @@ select enrolled.name as Family_Name,
                on parents.parentsid = enhancement_hours.parentsid
 	group by enrolled.familyid
 	having Total < 4
-	order by enrolled.sess, enrolled.name
+	order by enrolled.sess, enrolled.name;
+
+-- so often used, it needs to be here
+select privs.*, users.name 
+	from users 
+        left join privs using (userid) 
+	where users.name like "%whatever%";
+
+-- one-shot to convert the old-style to the new-style
+insert into enrollment 
+	(kidsid, school_year, am_pm_session, start_date, dropout_date) 
+	select attendance.kidsid, enrol.semester, enrol.sess, 
+		attendance.start_date, attendance.dropout 
+	from attendance left join enrol using (enrolid);
 
 --- EOF
