@@ -37,6 +37,7 @@ $_DB_DATAOBJECT_FORMBUILDER['CONFIG'] = $config['DB_DataObject_FormBuilder'];
 require_once("session-init.php");
 setupDB(1);
 global $dburl;
+$options = &PEAR::getStaticProperty('DB_DataObject','options');
 $options['database'] = $dburl;
 
 
