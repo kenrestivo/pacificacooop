@@ -1,6 +1,8 @@
 
    <?php
 
+   // $Id$
+
    require_once('HTML/QuickForm/select.php');
    class HTML_QuickForm_advmultselect extends HTML_QuickForm_select
    {
@@ -148,7 +150,7 @@
    // took this code from SelectFilter - much better than messing with QuickForm.php
    if (class_exists('HTML_QuickForm')) {
        HTML_QuickForm::registerElementType('advmultselect',
-										   'HTML/QuickForm/advmultselect.php', 
+										   'lib/advmultselect.php', 
 										   'HTML_QuickForm_advmultselect');
    }
 
