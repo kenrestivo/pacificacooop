@@ -52,16 +52,14 @@ $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
 
 #approximate list of families
 $rquery = "
-	select families.name, families.familyid, families.phone,
-			parents.email, parents.last, parents.first, parents.parentsid
+	select families.name, families.familyid, families.phone 
 		from families 
-			left join parents on parents.familyid = families.familyid
-		where parents.worker = 'Yes'
-		group by families.name
+	order by families.name
 ";
 
 
-#print "doing <$rquery>\n"; #XXX debug only
+$opt_v && print "doing <$rquery>\n"; #debug only
+
 $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 $rqueryobj->execute() or die "couldn't execute $!\n";
 
@@ -69,7 +67,8 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	$id = $famref->{'familyid'};
 
 	$insarref = &getinsuranceinfo($id);
-	$licarref = &getlicenseinfo($id);
+	$pararref = &getworkers($id);
+	$licarref = &getlicenseinfo($pararref);
 
 	#TODO the entire architecture of this thing is botched!
 	#	i MUST handle the case of more than one working parent!
@@ -95,6 +94,47 @@ $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
 ########### END OF MAIN CODE
 
+######################
+#	GETWORKERS
+#	i can have more than one worker. grr.
+######################
+sub getworkers()
+{
+	my $famid = shift;
+	my @results;
+	my %item;
+	my $itemref;
+	my $query;
+
+	#get array of working parent(s)
+	$query = "
+		select parents.email, parents.last, parents.first, parents.parentsid
+			from parents
+			where parents.worker = 'Yes'
+			and familyid = $famid
+	";
+
+
+	$opt_v && print "doing <$query>\n"; #debug only
+	$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
+	$queryobj->execute() or die "couldn't execute $!\n";
+
+
+	while ($itemref = $queryobj->fetchrow_hashref){
+		%item = %$itemref; #store a local copy, because mysql will blow it away!
+		push(@results, \%item); #yes, that's right, a referene
+		if($opt_v){
+			printf("DEBUG famid %d parent %s %s pid %d\n",
+				$famid,
+				$item{'last'}, $item{'first'},
+				$item{'parentsid'});
+		}
+	} # end while
+
+
+	return \@results; # ref to the results which is an array of refs!
+
+}  #END GETWORKERS
 
 
 ######################
@@ -102,28 +142,33 @@ $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 ######################
 sub getlicenseinfo()
 {
-	my $famid = shift;
+	my $pararref = shift;
 	my $queryobj;
 	my $itemref;
 	my @results;
 	my %item;
-	my $query = "
-		select unix_timestamp(max(lic.expires)) as exp, 
-			lic.last, lic.first, lic.middle, lic.state
-		from lic 
-			left join parents on lic.parentsid = parents.parentsid 
-		where parents.worker= 'Yes' 
-			and parents.familyid = $famid
-		group by parents.parentsid
-		order by exp asc";
-	#print "doing <$query>\n"; #XXX debug only
-	$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
-	$queryobj->execute() or die "couldn't execute $!\n";
+	my $query;
+	my $pars;
 
-	while ($itemref = $queryobj->fetchrow_hashref){
-		%item = %$itemref; #store a local copy, because mysql will blow it away!
-		push(@results, \%item); #yes, that's right, a referene
-	} # end while
+	#TODO perhaps heirarchal hashen. this glumps all parents together in one array.
+	foreach $pars (@$pararref){
+		$pid = $pars->{'parentsid'};
+		$query = "
+			select unix_timestamp(max(lic.expires)) as exp, 
+				lic.last, lic.first, lic.middle, lic.state
+			from lic 
+				where lic.parentsid = $pid
+			group by lic.parentsid
+			order by exp asc";
+		$opt_v && print "doing <$query>\n"; #debug only
+		$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
+		$queryobj->execute() or die "couldn't execute $!\n";
+
+		while ($itemref = $queryobj->fetchrow_hashref){
+			%item = %$itemref; #store a local copy, because mysql will blow it away!
+			push(@results, \%item); #yes, that's right, a referene
+		} # end while
+	}
 
 
 	return \@results; # ref to the results which is an array of refs!
@@ -151,16 +196,18 @@ sub getinsuranceinfo()
 			order by exp asc
 		";
 
-	#print "doing <$query>\n"; #XXX debug only
+	$opt_v && print "doing <$query>\n"; #debug only
 	$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
 	$queryobj->execute() or die "couldn't execute $!\n";
 
 	while ($itemref = $queryobj->fetchrow_hashref){
 		%item = %$itemref; #store a local copy, because mysql will blow it away!
-		#printf("DEBUG famid: %s %s %s exp %s %s\n", 
-		#	$famid, $item{'last'}, $item{'first'}, 
-		#	strftime('%m/%d/%Y', localtime($item{'exp'})),
-		#	$item{'policynum'});
+		if($opt_v){
+			printf("DEBUG famid: %s %s %s exp %s %s\n", 
+				$famid, $item{'last'}, $item{'first'}, 
+				strftime('%m/%d/%Y', localtime($item{'exp'})),
+				$item{'policynum'});
+		}
 		push(@results, \%item); #yes, that's right, a referene
 	} # end while
 
@@ -187,9 +234,8 @@ sub emailReminder()
 	my $lf = 0; # license flag
 	my $newbie = 0;
 
-	#printf("DEBUG lic %d ins %d\n", 
-	#	$licref->{'exp'}, $insref->{'exp'});
-	#
+	$opt_v && printf("DEBUG lic %d ins %d\n", $licref->{'exp'}, $insref->{'exp'});
+	
 
 	$m .= "Hello! My job this year is to keep track of the automobile insurance and driver's license information for the school.\n\n";
 
@@ -332,8 +378,10 @@ sub fieldTripReport()
 	my $insexp = 0; #flag
 	my $licexp = 0; #flag
 
-	#printf("DEBUG lic %d ins %d\n", 
-	#	$licref->{'exp'}, $insref->{'exp'});
+	if($opt_v){
+		printf("DEBUG lic %d ins %d\n", 
+			$licref->{'exp'}, $insref->{'exp'});
+	}
 
 	#families
 	$badness .= sprintf(
@@ -412,7 +460,7 @@ sub updateNags()
 				parentsid = '%s', why = 'Insurance', how = 'Email',
 				done = now() ", $pid
 			);
-	#print "DEBUG doing <$query>\n";
+	$opt_v && print "DEBUG doing <$query>\n";
 	print STDERR $dbh->do($query) . "\n";
 
 } #END UPDATENAGS
