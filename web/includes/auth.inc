@@ -383,25 +383,26 @@ getUser($uid)
 
 
 /******************
-	SHOWACCESSLEVELS
-	prints out a description of user permissions for this realm
+	ACCESSLEVELSTRING
+	returns a text description of user permissions for this realm and userlevel
 	inputs: perms struct, and a realm name
-	outputs: text showing what the user's perms are
+	returns: text showing what the perms are in english
 ******************/
 function
-showAccessLevels($p, $pfield, $realm)
+accessLevelString($p, $pfield, $realm)
 {
 	global $accessnames;
 	$i = 0;
 	while (list($key, $val) = each($accessnames)){
 		//print "[$key] ";
 		if($key <= $p[$pfield] && $key > 0){
-			printf("%s%s",  $i ? ", " : "", $accessnames[$key]);
+			$result .= sprintf("%s%s",  $i ? ", " : "", $accessnames[$key]);
 			$i++;
 		}
 	}
 	reset ($accessnames);
-}/* END SHOWACCESSLEVELS */
+	return $result;
+}/* END ACCESSLEVELSTRING */
 
 
 
