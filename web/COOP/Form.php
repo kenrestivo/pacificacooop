@@ -309,16 +309,21 @@ class coopForm extends CoopObject
 
 	function processCrossLinks($vars)
 		{
-			confessObj($this, 'this');
+			//confessObj($this, 'this');
+			print $this->page->confessArray($vars, 
+									  'CoopForm::processAddRemove(vars)', 1);
+
+			//$this->obj->debugLevel(2);
 			// for everything in crosslinks, 
-			foreach($this->fb_crossLinks as $la){
+			foreach($this->obj->fb_crossLinks as $la){
 				$tf = $la['toField'];
 				$tt = $la['table'];
 				$nk = $this->backlinks[$tt];
+				//print "tf $tf tt $tt nk $nk";
 				// is it an add or a remove? remember, i have both
-				if('multiremove-'.$vars[$tf){
+				if($vars['multiremove-'.$tf]){
 					// if it's a remove, yank 'em all. that's easy
-					foreach($vars['remove-'.$tf as $id){
+					foreach($vars['remove-'.$tf] as $id){
 						$lo = new CoopObject(&$this->page, 
 												$tt, &$this);
 						$lo->obj->$tf = $id;
@@ -330,9 +335,9 @@ class coopForm extends CoopObject
 						}
 					}
 				}
-				if('multiadd-'.$vars[$la['toField']){
+				if($vars['multiadd-'.$tf]){
 					// if it's an add, check to see if they're there already
-					foreach($vars['add-'.$tf as $id){
+					foreach($vars['add-'.$tf] as $id){
 						$lo = new CoopObject(&$this->page, 
 											 $tt, &$this);
 						$lo->obj->$tf = $id;
@@ -349,8 +354,6 @@ class coopForm extends CoopObject
 			
 
 
-			print $this->page->confessArray($vars, 
-									  'CoopForm::processAddRemove(vars)', 1);
 			
 		}
 

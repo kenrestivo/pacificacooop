@@ -90,8 +90,10 @@ switch($_REQUEST['action']){
 	 $sel->setMultiple(true);
 
 	 ///////// the buttons
-	 $form->addElement('submit', 'multiadd-auction_donation_id', '<<Add');
-	 $form->addElement('submit', 'multiremove-auction_donation_id', 'Remove>>');
+	 $form->addElement('submit', 'multiadd-auction_donation_item_id', 
+					   '<<Add');
+	 $form->addElement('submit', 'multiremove-auction_donation_item_id', 
+'Remove>>');
 
 	 ///////////// the orphans to add
 	 $auc = new CoopObject(&$cp, 'auction_donation_items', $none);
@@ -129,6 +131,9 @@ switch($_REQUEST['action']){
 		 print "saving...";
 		 $form->process(array(&$atd, 'processCrossLinks'));
 		 // gah, now display it again. they may want to make other changes!
+		 print $cp->selfURL('Look again', 
+							array('action' => 'addremove',
+								$atd->pk => $_REQUEST[$atd->pk]));
 	 } else {
 		 print $form->toHTML();
 	 }
