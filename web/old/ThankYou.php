@@ -125,7 +125,7 @@ http://www.pacificacoop.org/
 			//un-arrayify the ones that are arrays
 			// and format them html-like
 			$subst['ADDRESS'] = implode('<br>', $this->address_array);
-			$subst['ITEMS'] = implode(',', $this->items_array);
+			$subst['ITEMS'] = implode(' and ', $this->items_array);
 			$subst['FROM'] = sprintf('<br><br><br>%s', $this->from);
 			$subst['ORDINAL'] = sprintf('<sup>%s</sup>', $this->ordinal);
 
@@ -181,14 +181,6 @@ http://www.pacificacoop.org/
 
 			$subst = $this->varsToArray();
 
-			//un-arrayify the ones that are arrays
-			// and format them html-like
-			$subst['ADDRESS'] = implode("\n", $this->address_array);
-			$subst['ITEMS'] = implode(',', $this->items_array);
-			$subst['FROM'] = sprintf("\n\n\n%s", $this->from);
-			$subst['ORDINAL'] = sprintf('%s', $this->ordinal);
-
-			
 	  			//confessObj($this, 'this');
 			foreach(array_keys($subst) as $key){
 				$from[] = sprintf('[:%s:]', $key);
@@ -205,6 +197,7 @@ http://www.pacificacoop.org/
 			return $text;
 		}
 
+	// does it in EMAIL/TXT format by default! override these to do html
 	function varsToArray()
 		{
 			$subst['DATE']  = $this->date ; 
@@ -217,7 +210,7 @@ http://www.pacificacoop.org/
 			$subct['EMAIL'] = $this->email; 
 			// i use the text default for these, html will override them anyway
 			$subst['ADDRESS'] = implode("\n", $this->address_array);
-			$subst['ITEMS'] = implode(',', $this->items_array);
+			$subst['ITEMS'] = implode(' and ', $this->items_array);
 
 			return $subst;
 		}
@@ -232,6 +225,8 @@ http://www.pacificacoop.org/
 				user_error("thankyou::sendEmail(): no email address for $this->name!",
 						   E_USER_ERROR);
 			}
+
+			// XXX CHECK DEV SITE AND DO NOT SEND IT IF I'M ON THE DEV SITE!
 
 			$from = $this->from ? $this->from :
 					    'Pacifica Co-Op Nursery School ';
@@ -278,6 +273,91 @@ http://www.pacificacoop.org/
 							 mktime(0,0,0,
 									$matches[2], $matches[3], $matches[1]));
 	
+		}
+
+	function findThanksNeeded(&$cp, $pk, $id)
+		{
+
+
+			// if i'm going to save objects, don't createlegacy them.
+			// save MY view objects, not the DBDO objects,
+			// so that i can createlegacy them later if needed.
+			
+
+			// COMPANY
+			$co = new CoopView(&$cp, 'companies', &$top);
+			$co->obj->$pk = $id;
+			$co->obj->find(true);
+
+			foreach(array('company_name', 'address1', 'address2') as $var){
+				if($co->obj->$var){
+					$this->address_array[] = $co->obj->$var;
+				}
+			}
+			$this->address_array[] = sprintf("%s %s, %s", 
+											 $co->obj->city,
+											 $co->obj->state,
+											 $co->obj->zip);		
+			$this->name = sprintf('%s %s', $co->obj->first_name, 
+								  $co->obj->last_name);
+
+			//INCOME
+			$co = new CoopObject(&$cp, 'companies_income_join', &$top);
+			$co->obj->$pk = $id;
+			$real = new CoopView(&$cp, 'income', &$co);
+			$real->obj->orderBy('school_year desc');
+			$real->obj->joinadd($co->obj);
+			// TODO: add "and cleared_date is not null" cleared checks!
+			$real->obj->whereAdd('thank_you_id is null');
+			$real->obj->find();
+			while($real->obj->fetch()){
+				$cashtotal += $real->obj->payment_amount;
+				// TODO: grab the parentid of familyid... for from. bah.
+				//$from .=  
+			}
+			$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
+				
+			//AUCTION
+			$co = new CoopObject(&$cp, 'companies_auction_join', 
+								 &$top);
+			$co->obj->$pk = $id;
+			$real = new CoopView(&$cp, 'auction_donation_items', 
+								 &$co);
+			$real->obj->orderBy('school_year desc');
+			//TODO: add "and date_received is not null"! only received!
+			$real->obj->whereAdd('thank_you_id is null');
+			$real->obj->joinadd($co->obj);
+			$real->obj->find();
+			while($real->obj->fetch()){
+				$this->items_array[] = sprintf("%d %s (total value $%01.02f)",
+											   $real->obj->quantity,
+											   $real->obj->item_description,
+											   $real->obj->item_value);
+				// TODO: grab the parentid of familyid... for from. bah.
+				//$from .=  
+			}
+
+			//IN-KIND
+			$co = new CoopObject(&$cp, 'companies_in_kind_join', 
+								 &$top);
+			$co->obj->$pk = $id;
+			$real = new CoopView(&$cp, 'in_kind_donations', 
+								 &$co);
+			$real->obj->orderBy('school_year desc');
+			//TODO: add "and date_received is not null"! only received!
+			$real->obj->whereAdd('thank_you_id is null');
+			$real->obj->joinadd($co->obj);
+			$real->obj->find();
+			while($real->obj->fetch()){
+				$this->items_array[] = sprintf("%d %s total value $%01.02f",
+											   $real->obj->quantity,
+											   $real->obj->item_description,
+											   $real->obj->item_value);
+				// TODO: grab the parentid of familyid... for from. bah.
+				//$from .=  
+			}
+	
+
 		}
 
 } // END THANK YOU CLASS

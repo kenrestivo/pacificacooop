@@ -15,7 +15,8 @@ $headers['From']    = 'Test User <test@pacificacoop.org>';
 $headers['To']      = 'ken@restivo.org';
 $headers['Subject'] = 'Test message';
 
-$body = 'Test message. this be a test. i am testing. 1 2 3. check 1,2. check.';
+$body = 'Test message. this be a test. i am testing. 
+		1 2 3. check 1,2. check.';
 
 
 // Create the mail object using the Mail::factory method

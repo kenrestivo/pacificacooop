@@ -192,6 +192,8 @@ class coopView extends CoopObject
 		}
 
 
+	/// generates an array of values, with permitted fields,
+	/// and record buttons, ready for passing to html::table::addRow()
 	function toArray()
 		{
 						
@@ -210,9 +212,9 @@ class coopView extends CoopObject
 			{
 				$row['family_id'] = 0;
 			}
-				$res[] = $this->recordButtons($row);
 			
-
+			$res[] = $this->recordButtons($row);
+			
 
 			// the Simple Version. useful for debuggin'
 			//return array_values($this->obj->toArray());
@@ -299,6 +301,8 @@ class coopView extends CoopObject
 
 		}
 	
+	// i accept the row and i don't toarray it myself.
+	// because i might need hidden fields that toarray would remove!
 	function recordButtons(&$row)
 		{
  		 	return recordButtons($row, $this->legacyCallbacks, 

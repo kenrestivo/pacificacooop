@@ -165,12 +165,18 @@ class coopPage
 
 
 	// TODO: some nifty way to get session vars outta there
+	// fishes the tables out of a request or session
 	function requestOrSession($itemName){
 	}
 	
-	// fishes the tables out of a request or session
 
 
+	// USAGE: selfURL(
+	//					"text to display",
+	//					"var=value&morevar=morevalue",
+	//					"page.php")
+	// all of which are optional
+	// without any args, returns just coop session var for use in Header()
 	function selfURL($value = false, $inside = false, $base = false)
 		{
 			if(!$base){
