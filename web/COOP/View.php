@@ -49,7 +49,7 @@ class coopView
 			if (PEAR::isError($obj)){
 				die ($obj->getMessage ());
 			}
-			confessObj($this->obj, "object for $this->table");
+			//confessObj($this->obj, "object for $this->table");
 		
 		}
  
@@ -148,22 +148,38 @@ class coopView
 			return $tab->toHTML();
 		}
 
-	function addSubTables($backlinks)
+	function addSubTable(&$tab, $text)
 		{
-			
-			$subview =& new CoopView(&$page, 
-									 'companies_auction_join');
-			$subview->obj->company_id = $this->obj->company_id;
-			return  "SHIT"; //$subview->simpleTable();
+			// what goes here?
+			$tab->addRow(array($text));				
+
+			$colcount = $tab->getColCount();
+			$rowcount = $tab->getRowCount() - 1; // zero based
+// 			$tab->setCellContents($rowcount, 0, 
+// 									  "ROW $rowcount COl $colcount");
+
+			//might first need to getcellatrs, then add to array
+			$tab->setCellAttributes($rowcount,0,"colspan=$colcount");
+	
 		}
+
 	
-	
+	function addSubTables(&$tab, $backlinks)
+		{
+			foreach($backlinks as $backlink){
+
+				$subview =& new CoopView(&$page, $backlink);
+				$subview->obj->company_id = $this->obj->company_id;
+				$this->addSubTable(&$tab, $subview->simpleTable());
+			}
+		}
+
 	function recurseTable()
 		{
-
 			$this->obj->find();
 
 			$backlinks = $this->getBackLinks();	// MUST be after find!
+
 
 			//TODO return null or something, if nothing found
 			$tab =& new HTML_Table();
@@ -171,14 +187,8 @@ class coopView
 				// the main row.
 				$tab->addRow(array_values($this->obj->toArray()));
 				
-				// sub rows
-				$tab->addRow(array($this->addSubTables($backlinks)));				
-				$colcount = $tab->getColCount();
-				$rowcount = $tab->getRowCount() - 1; // zero based
-				$tab->setCellContents($rowcount, 0, 
-									  "ROW $rowcount COl $colcount");
-				//might first need to getcellatrs, then add to array
-				$tab->setCellAttributes($rowcount,0,"colspan=$colcount");
+				//subrows
+			$this->addSubTables(&$tab, $backlinks);
 
 			}
 			return $tab->toHTML();
