@@ -3,18 +3,12 @@
 //$Id$
 // to move a few auction items over to in-kind items.
 
-chdir("../");                   // XXX only for "test" dir hack!
-require_once('CoopPage.php');
-require_once('CoopView.php');
+//chdir("../");                   // XXX only for "test" dir hack!
+
+require_once("session-init.php");
 require_once('DB.php');
 
-
-$debug = 0;
-
-//DB_DataObject::debugLevel(2);
-
-$cp = new coopPage( $debug);
-$cp->pageTop();
+setupDB();
 
 
 global $dburl;
@@ -44,7 +38,7 @@ foreach($tables as $table){
 }
 
 // ok, now the actual links
-reset($tables);
+//reset($tables);
 foreach($tables as $table){
 	foreach($tableFields[$table] as $field){
 		if($pkeys[$field]){
@@ -52,16 +46,16 @@ foreach($tables as $table){
 		}
 	}
 }
+//reset($links);
 
-
-//confessArray($pkeys, "keys");
-//confessArray($tableFields, "tables");
-//confessArray($links, "links");
+//print_r($pkeys, "keys");
+//print_r($tableFields, "tables");
+//print_r($links, "links");
 
 
 
 // ok format it for printing now
-reset($links);
+//reset($links);
 foreach($links as $table => $tablelinks){
 	$res .= sprintf("\n[%s]\n", $table);
 	foreach($tablelinks as $id => $totable){
@@ -70,18 +64,17 @@ foreach($links as $table => $tablelinks){
 	}
 }
 
-//ken's hacky one that doesn't fit the mold
-$res .= "\n[audit_trail]\naudit_user_id = users:user_id\n";
 
-printf("<pre>\n\n$res</pre>");
 
-done ();
+// OBNOXIOUS! i have no idea why i need to do this
+$res = preg_replace('/^Object/', '', $res);
+
+print $res;
+
+//printf("<pre>\n\n$res</pre>");
 
 ////KEEP EVERTHANG BELOW
 
 ?>
-
-
-<!-- END IMPORTRASTA -->
 
 

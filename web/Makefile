@@ -113,11 +113,9 @@ guarantee-pear::
 	@for i in Archive_Tar Console_Getopt DB DB_DataObject  DB_DataObject_FormBuilder-beta Date HTML_Common HTML_Menu HTML_QuickForm HTML_Table HTML_Template_Sigma HTTP Mail Net_SMTP Net_Socket PEAR Pager Validate-alpha XML_Parser XML_RPC  ; do sudo pear install $i ; done
 
 update-links::
-	guile  -l ~/.guile -l /mnt/kens/ki/is/scheme/lib/build-links.scm \
-		-c '(do-links-list)' > $(LINKSFILE)
+	php maint/make-links.php > $(LINKSFILE)		
 	@echo "[audit_trail]">> $(LINKSFILE)
 	@echo "audit_user_id = users:user_id" >> $(LINKSFILE)
-
 	@echo "remember to manually check for ones the script doesn't catch"
 
 #EOF

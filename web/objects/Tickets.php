@@ -10,7 +10,7 @@ class Tickets extends DB_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'tickets';                         // table name
-    var $invitation_rsvps_id;             // int(32)  not_null primary_key unique_key auto_increment
+    var $ticket_id;                       // int(32)  not_null primary_key unique_key auto_increment
     var $income_id;                       // int(32)  
     var $ticket_quantity;                 // int(5)  
     var $lead_id;                         // int(32)  
