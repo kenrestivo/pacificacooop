@@ -66,11 +66,11 @@ print "\n<hr>\n";
 
 
 //confessObj($menu, "menuonb");
-print '<div id="leftcol">';
+print '<div id="leftcol" width="15%" float="left">';
 print $menu->kenRender();
 print '</div>';
 
-print '<div id="rightCol">';
+print '<div id="rightCol" margin-left="17%">';
 print "<p>Please choose an action:</p>";
 
 print "\n\n<table border=0>\n";

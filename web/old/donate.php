@@ -115,7 +115,6 @@ print '<HTML>
 
 
 
-print '<div class="rowblock">';
 print	"<h3>Angel Contribution of $1,000.00 or more:</h3>
 <li>Site link on Pacifica Co-Op Nursery website 
 <li>Sponsor logo on Pacifica Co-Op Nursery website 
