@@ -77,7 +77,7 @@
 	sortColumns('Leads Submitted', 'cntlead', 'desc', $nagonlychecked);
 	print "\t<td align='center'><em><u>Quilt Fee Paid</u></em></td>\n";
 	print "\t<td align='center'><em><u>Auction Donated</u></em></td>\n";
-	print "\t<td align='center'><em><u>Auction Undelivered</u></em></td>\n";
+	print "\t<td align='center'><em><u>Auction Inventory</u></em></td>\n";
 	print "\t<td align='center'><em><u>Session</u></em></td>\n";
 	print "\t<td align='center'><em><u>Phone</u></em></td>\n";
 	print "</tr>\n";
@@ -87,7 +87,7 @@
 		$tennamespaid = checkPayments($row['familyid'], 1);
 		$quiltpaid = checkPayments($row['familyid'], 2);
 		$auction = checkAuction($row['familyid']);
-		$undelivered = checkDelivery($row['familyid']);
+		$delivery = checkDelivery($row['familyid']);
 		$tennamesdone = ($row[cntlead] >= 10);
 
 		#some nifty running totals
@@ -95,14 +95,15 @@
 		$total['tennames'] += $tennamespaid['amount'];
 		$total['quilt'] += $quiltpaid['amount'];
 		$total['auction'] += $auction['total']; //symmetry!
-		$total['undelivered'] += $undelivered; 
+		$total['undelivered'] += $delivery['undelivered']; 
+		$total['delivered'] += $delivery['delivered']; 
 
 		#don't print this row if it's already complete
 		if ($nagonlychecked && 
 				(($tennamespaid['amount'] >= 50) || $tennamesdone) && 
 				($quiltpaid['amount'] >=45) && 
 				($auction['total'] >= 50) && 
-				!$undelivered)
+				!$delivery['undelivered'])
 		{
 			continue;
 		}
@@ -125,8 +126,8 @@
 		if ($auction['total'] > 0)
 			printf("$%01.2f", $auction['total']);
 		print "</td><td align='center'>";
-		if ($undelivered > 0)
-			printf("%d", $undelivered);
+		if ($delivery['undelivered'] > 0)
+			printf("%d missing", $delivery['undelivered']);
 		print "</td><td align='center'>";
 		print $row[sess];
 		print "</td><td align='center'>";
@@ -140,7 +141,8 @@
 				$total['leads'],
 				sprintf("$%01.2f", $total['quilt']),
 				sprintf("$%01.2f", $total['auction']),
-				sprintf("%d", $total['undelivered']),
+				sprintf("%d missing<br>(%d received)", $total['undelivered'], 
+					$total['delivered']),
 				"",
 				""
 			),
@@ -253,7 +255,8 @@ checkDelivery($familyid)
 			from auction
 				left join faglue on faglue.auctionid = auction.auctionid
 			where faglue.familyid = $familyid
-				and (auction.date_received is null or auction.date_received < '2004-01-01')
+				and (auction.date_received is null 
+					or auction.date_received < '2004-01-01')
 		";
 	#print "DEBUG <$query>";
 	$list = mysql_query($query);
@@ -266,7 +269,30 @@ checkDelivery($familyid)
 	$i = 0;
 	while($row = mysql_fetch_array($list))
 	{
-		$result += $row['counter'];
+		$result['undelivered'] += $row['counter'];
+	}
+
+	//now the DELIVERED ones!
+	$query = "
+		select count(auction.auctionid) as counter
+			from auction
+				left join faglue on faglue.auctionid = auction.auctionid
+			where faglue.familyid = $familyid
+				and auction.date_received is not null 
+				and auction.date_received > '2004-01-01'
+		";
+	#print "DEBUG <$query>";
+	$list = mysql_query($query);
+	
+	$err = mysql_error();
+	if($err){
+		user_error("[$query] errored with $err", E_USER_ERROR);
+	}
+
+	$i = 0;
+	while($row = mysql_fetch_array($list))
+	{
+		$result['delivered'] += $row['counter'];
 	}
 
 
