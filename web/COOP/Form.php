@@ -26,6 +26,7 @@ require_once 'HTML/QuickForm.php';
 require_once('object-config.php');
 require_once('DB/DataObject/Cast.php');
 require_once('lib/advmultselect.php');
+require_once('lib/customdatebox.php');
 
 //////////////////////////////////////////
 /////////////////////// COOP FORM CLASS
@@ -127,6 +128,12 @@ class coopForm extends CoopObject
 						  in_array($key, $this->obj->fb_booleanFields))
 				{
 					$el =& $this->form->addElement('advcheckbox', $key);
+				} else if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
+					$el =& $this->form->addElement('customdatebox', $key);
+					$this->form->addRule($key, 
+								   'Date must be in format MM/DD/YYYY', 
+								   'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
+					$val && $val = sql_to_human_date($val);
 				} else {
 					//i ALWAYS hide primary key. it's hardcoded here.
 					// note this is different from FB behaviour.
@@ -139,12 +146,6 @@ class coopForm extends CoopObject
 				$el->setLabel($this->obj->fb_fieldLabels[$key] ? 
 							  $this->obj->fb_fieldLabels[$key] : $key);
 				
-				if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
-					$this->form->addRule($key, 
-								   'Date must be in format MM/DD/YYYY', 
-								   'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
-					$val && $val = sql_to_human_date($val);
-				}
 				
 				// finally, pas through default or editable vals
 				$el->setValue($val);

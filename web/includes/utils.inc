@@ -525,9 +525,11 @@ window.location.reload( false );
 function
 dateJava()
 {
-	// wrapped in comments to make old browsems ignore it
-
-	return '<script type="text/javascript" language="javascript">
+	//i use this in quickform too, so i'm playing nice here.
+	if (!defined('HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS')) {
+		define('HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS', true);
+		// wrapped in comments to make old browsems ignore it
+		return '<script type="text/javascript" language="javascript">
 			<!-- Begin 
 function todaysDate(fieldname,formname) {
 var mydate=new Date()
@@ -550,6 +552,8 @@ document.forms[formname][fieldname].value=displayfirst+"/"+displaysecond+"/"+dis
 
 }			// End -->
 			</script>';
+	}
+	return false;
 } // END DATEJAVA
 
 
