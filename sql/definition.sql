@@ -793,8 +793,7 @@ CREATE TABLE thank_you (
   date_sent date default NULL,
   family_id int(32) default NULL,
    method  enum('Other', 'Letter', 'WebPage', 'Email') default NULL,
-  school_year varchar(50) default NULL,
-  PRIMARY KEY  (thank_you_id)
+   PRIMARY KEY  (thank_you_id)
 ) ;
 
 -- EOF

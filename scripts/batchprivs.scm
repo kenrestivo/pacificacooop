@@ -22,6 +22,7 @@
   "roster"
   "solicitation"
   "solicit_money"
+  "thankyou"
   "tickets"))
 
 ;;;;;;;;;;;;; funcs
@@ -92,6 +93,7 @@
     ("invitations" . "david")
     ("raffle" . "ambrose")
     ("tickets" . "stangeland")
+    ("thankyou" . "milch")
     ("money" . "devry")
 		))
 

@@ -42,6 +42,7 @@ class CoopMenu extends HTML_Menu
 		'packaging' => 'Packaging',
 		'raffle' => 'Raffles',
 		'solicit' => 'Solicitation',
+		'thankyou' => 'Thank You',
 		'tickets' => 'Tickets'
 		);
 
