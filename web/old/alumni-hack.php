@@ -64,7 +64,7 @@ while($top->obj->fetch()){
 		// got one! now... let's dump all the info in
 		if($family->address1){
 			$lead->obj->source_id = 7; // ken's  temporary alumni hack
-			$lead->obj->first_name = sprintf("%s Family", $family->name);
+			$lead->obj->last_name = sprintf("%s Family", $family->name);
 			$lead->obj->address1 = $family->address1;
 			$lead->obj->email_address = $family->email;
 			$lead->obj->phone = $family->phone;

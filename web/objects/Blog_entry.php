@@ -11,7 +11,7 @@ class Blog_entry extends DB_DataObject
 
     var $__table = 'blog_entry';                      // table name
     var $blog_entry_id;                   // int(32)  not_null primary_key unique_key auto_increment
-    var $parent_id;                       // int(32)  
+    var $family_id;                       // int(32)  
     var $short_title;                     // string(255)  
     var $body;                            // blob(16777215)  blob
     var $show_on_members_page;            // string(7)  enum
@@ -27,4 +27,15 @@ class Blog_entry extends DB_DataObject
     ###END_AUTOCODE
 	var $fb_enumFields = array ('show_on_members_page', 
 								'show_on_public_page');
+	var $fb_linkDisplayFields = array('short_title');
+	var $fb_fieldLabels = array ('family_id' => 'Entered by Co-Op Family',
+								 'short_title' => 'Headline',
+								 'body' => 'Story',
+								 'show_on_members_page' => 'OK to show on members-only page?',
+								 'show_on_public_page' => 'OK to show on public web-site'
+		);
+	var $fb_fieldsToRender = array('family_id', 'short_title', 'body', 'show_on_members_page', 
+								   'show_on_public_page');
+	var $fb_formHeaderText =  'Breaking News';
+
 }
