@@ -217,8 +217,8 @@ select session_info.ip_addr, session_info.updated, users.name
 
 
 --- privilege information
-select privs.* ,users.name 
-    from privs 
+select user_privileges.* ,users.name 
+    from user_privileges 
     left join users using (user_id) 
     where realm = 'packaging';
 

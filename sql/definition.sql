@@ -727,7 +727,7 @@ CREATE TABLE solicitation_calls (
   company_id int(32) default NULL,
   call_note longtext,
   family_id int(32) default NULL,
-  done datetime default NULL,
+  done date default NULL,
     school_year varchar(50) default NULL,
   PRIMARY KEY  (solicitation_call_id)
 ) ;

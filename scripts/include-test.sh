@@ -4,8 +4,13 @@
 
 # checks for a narsty-ass pear include fuckup on the nfsn side
 
-URL=http://www/coop-dev/include-test.php 
-#URL=http://www.pacificacoop.org/members/include-test.php 
+LOCAL="$1"
+
+if [ "$LOCAL" ] ; then
+	URL=http://www/coop-dev/tests/include-test.php 
+else
+	URL=http://www.pacificacoop.org/members/tests/include-test.php 
+fi
 
 RES=`lynx -dump $URL`
 
@@ -15,7 +20,8 @@ if [ "$OK" ]; then
 	echo "includes OK"
 else
 	 echo "$RES no ay hose"
-	echo "$RES" | mail -s "CO-OP INCLUDES ARE B0RKEN" ken@bc
+	echo "$RES at $URL" | mail -s "CO-OP INCLUDES ARE B0RKEN" ken@bc
+	exit 1
 fi
 
 #EOF

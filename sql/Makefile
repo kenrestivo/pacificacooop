@@ -55,7 +55,7 @@ backup-defs::
 		--database $(DB) \
 		--lock-tables \
 		--no-data \
-		-h $(DBHOST) -P $(DBPORT) -u $(DBUSER) -p$(PW)> $(DEFFILE)
+		-h $(DBHOST) -P $(DBPORT) -u $(DBUSER) --password=$(PW) > $(DEFFILE)
 	bzip2 -f $(DEFFILE)
 
 backup-data:
@@ -68,7 +68,7 @@ backup-data:
 		--no-create-db \
 		--no-create-info \
 		--quick \
-		-h $(DBHOST) -P $(DBPORT) -u $(DBUSER) -p$(PW)> $(DATAFILE)
+		-h $(DBHOST) -P $(DBPORT) -u $(DBUSER) --password=$(PW) > $(DATAFILE)
 	bzip2 -f $(DATAFILE)
 
 backup: backup-defs backup-data
