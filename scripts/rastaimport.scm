@@ -37,7 +37,7 @@
 ;; easy version:  (string-join (cdr (string-tokenize long-parent)))
 (define (split-first-last long-parent)
   (let* ((name-list (string-tokenize
-					 (string-delete long-parent (char-set #\*)))
+					 (string-delete long-parent (char-set #\*))))
 		 (middle-index (list-index
 					   (lambda (x) (or (equal? x "Ann")
 									   (equal? x "Jo")))
