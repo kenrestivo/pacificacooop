@@ -10,16 +10,16 @@ create table coop.ins(
     last varchar(255),
     first varchar(255),
     middle varchar(255),
-    poilicynum varchar(255),
-    vidnum varchar(255),
+    policynum varchar(255),
+    vidnum varchar(17),
     expires date,
     companyname varchar(255),
-    naic varchar(255),
+    naic int(20),
     primary key (insid)
 );
 
 
-create table coop.license(
+create table coop.lic(
     licid int(32) not null auto_increment,
     last varchar(255),
     first varchar(255),
@@ -51,6 +51,12 @@ create table coop.parents(
     kidsfirst varchar(255),
     primary key (parentsid)
 );
+
+-- the user/passwords used by the web view page AND my update tool..
+grant select, update, insert, delete on coop.* to input@'%' 
+	identified by 'test'; 
+grant select, update, insert, delete on coop.* to input@localhost 
+	identified by 'test';
 
 
 -- EOF
