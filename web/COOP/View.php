@@ -300,10 +300,15 @@ class coopView extends CoopObject
 				//confessObj($this, 'onelinetable');
 				$mainlink = $this->concatLinkFields(&$this->obj);
 
-				$meat = $this->page->selfURL($mainlink, 
+				if($this->legacyCallbacks){
+					$meat = $this->page->selfURL($mainlink, 
 											 $this->nastyInner(&$this->obj, 
 															   'details'),
-											 $this->legacyCallbacks['page']);
+												 $this->legacyCallbacks['page']);
+				} else {
+					// TODO: handle the no-legacy-callbacks case
+					$meat = $mainlink;
+				}
 
 				$tab->addRow(array($meat,
 								  $this->recordButtons(
@@ -323,10 +328,21 @@ class coopView extends CoopObject
 	// because i might need hidden fields that toarray would remove!
 	function recordButtons(&$row)
 		{
- 		 	$res .= recordButtons($row, $this->legacyCallbacks, 
+
+			// handle the simple case first: i have old callbacks
+			if($this->legacyCallbacks){
+				return recordButtons($row, $this->legacyCallbacks, 
  								 $this->legacyPerms, 
  								 $this->page->userStruct, 
 								 "");
+			}
+
+			//confessObj($this, 'this');
+			$res .= $this->page->selfURL('Edit', 
+									  array( 
+										  'table' => $this->table,
+										  $this->pk => $this->obj->{$this->pk}
+										  ));
 			return $res;
 		}
 
@@ -336,18 +352,16 @@ class coopView extends CoopObject
 	function actionButtons($showview = 0)
 		{
 			
-// XXX doesn't work because i don't have fields struct in here. yet. but i will.			
-// 		if($showview){
-// 				$admin = $this->legacyPerms['group_level'] >= ACCESS_ADD ? 1 : 0;
-// 				$showview = $this->legacyCallbacks['count']($u['family_id'], $callbacks, $fields) + $admin;
-// 			}
-			$res .= actionButtonsCore($this->page->auth, 
-									 $this->legacyPerms, 
-									 $this->page->userStruct, 
-									 $this->page->userStruct['family_id'], 
-									 $this->legacyCallbacks, 
-									 $showview,  1);
-
+			// handle the simple case first: i have old callbacks
+			if($this->legacyCallbacks){
+				return actionButtonsCore($this->page->auth, 
+										 $this->legacyPerms, 
+										 $this->page->userStruct, 
+										 $this->page->userStruct['family_id'], 
+										 $this->legacyCallbacks, 
+										 $showview,  1);
+			}
+			
 			return $res;
 		}
 

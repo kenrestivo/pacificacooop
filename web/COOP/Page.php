@@ -173,10 +173,12 @@ class coopPage
 	// USAGE: selfURL(
 	//					"text to display",
 	//					"var=value&morevar=morevalue",
+	//							or an array of pairs
 	//					"page.php")
 	// all of which are optional
 	// without any args, returns just coop session var for use in Header()
-	function selfURL($value = false, $inside = false, $base = false, $popup = false)
+	function selfURL($value = false, $inside = false, 
+					 $base = false, $popup = false)
 		{
 			if(!$base){
 				$base = $_SERVER['PHP_SELF'];
@@ -191,9 +193,21 @@ class coopPage
 				 }
 			 }
 			 if($inside){
- 				 $res .= htmlentities(sprintf("%s?%s%s",
+				 if(is_array($inside)){
+					 foreach($inside as $var => $val){
+						 $pairs[] = sprintf('%s=%s', $var, 
+											htmlentities($val));
+					 }
+					 if(SID){
+						 $pairs[] = SID;
+					 }
+					 $inside = implode('&', $pairs);
+				 } 
+				 // NOTE i can't call htmlentities on string $insides
+				 // because i don't want to fuck up the &'s
+				 $res .=sprintf("%s?%s%s",
 								$base, $inside,
-								SID ? "&" . SID  : ""));
+								SID ? "&" . SID  : "");
 			 } else {
 				 $res .= htmlentities($base .  SID ? "?" . SID  : "");
 			 }
