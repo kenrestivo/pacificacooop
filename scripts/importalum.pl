@@ -53,10 +53,16 @@ $dbh = DBI->connect("DBI:mysql:$dbname:$host$port", "input", "test" )
 
 #get the stuff
 $filename = shift;
+$filename  or die "must supply filename to open\n";
 open(IMPORT , $filename) or die "coulnt' open $filename $!\n";
 while($line = <IMPORT>){
 	(@fields) = split(/\t/, $line);
-	&addThem(&makeHash(\@fields, \@fn));
+	$i = 0;
+	foreach $f (@fn){
+		$h{$f} = $fields[$i];
+		$i++;
+	}
+	&addThem(\%h);
 }
 
 close(IMPORT) or die "coulnt' close $filename $!\n";
@@ -70,19 +76,17 @@ sub
 makeHash()
 {
 	my $ar = shift;
+	&debugStruct($ar, 0); #SUPERDEBUG!
 	my $fn = shift;
 	my @a = @$ar;
 	my @f = @$fn;
 	my %h;
 	my $i;
 
-	$i = 0;
-	foreach $field (@a){
-		$h{$f[$i]} = $field;
-		$i++;
-	}
 
-	return %h;
+	#&debugStruct(\%h, 0);
+
+	return \%h;
 } #END MAKEHASH
 
 sub
@@ -101,9 +105,12 @@ addThem()
 	#NOW, add the privs
 	#gotta check first that they don't already exist!
 	$count = 0; #again, just to be sure
-	$rquery = sprintf("select count(privid) as counter from privs 
-				where userid = %d and realm = '%s'", $uid, $$arref[2]
+	$rquery = sprintf("select count(leadsid) as counter from leads 
+				where last = '%s' ", $f{'last'}
 	);
+	unless($opt_f){
+		$rquery .= sprintf(" and addr = '%s' ",  $f{'addr'});
+	}
 	if($opt_v){
 		print "doing <$rquery>\n"; 
 	}
@@ -233,7 +240,7 @@ sub debugStruct()
 
 sub usage()
 {
-    print STDERR "usage: $0 -v -t\n";
+    print STDERR "usage: $0 -v -t <filename>\n";
     print STDERR "imports alumni\n";
     print STDERR "\t-v verbose \n";
     print STDERR "\t-t test (don't actually update db) \n";
