@@ -213,7 +213,7 @@ concepts/data structures
 	token: an md5 hash of the uid and the password's hash
 		this opaque token is what gets passed around as the user surfs the site
 	realm: an "area" of the site
-		10names, money, 3x5 cards, roster, insurance, menu, users
+		invitations, money, auction, roster, insurance, menu, users
 	uid: a user, distinct from family, but linked to a family.
 	level(action): levels of authorisation for this user and realm
 		none, summary, view detail, edit, add, delete, admin(superuser)

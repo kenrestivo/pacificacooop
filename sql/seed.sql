@@ -31,7 +31,10 @@ insert into coa set
 
 insert into coa set
 			acctnum = 3,
-			description = "SpringFest donation item forfeit fee";
+			description = "SpringFest auction item forfeit fee";
 
+insert into coa set
+			acctnum = 4,
+			description = "SpringFest Misc Cash donation";
 
 -- EOF

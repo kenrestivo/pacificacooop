@@ -35,6 +35,7 @@ getopts('vt') or &usage();
 	ACCESS_NONE => 0,
 	ACCESS_SUMMARY => 100,
 	ACCESS_VIEW => 200,
+	ACCESS_VIEWALL => 300,
 	ACCESS_EDIT => 500,
 	ACCESS_ADD => 600,
 	ACCESS_DELETE => 700,
@@ -42,11 +43,18 @@ getopts('vt') or &usage();
 );
 
 #default privs for all families
-@defaults =  (
+@familydefaults =  (
 	[ $access{'ACCESS_DELETE'}, "invitations" ],
-	[ $access{'ACCESS_DELETE'}, "donations" ],
+	[ $access{'ACCESS_DELETE'}, "auction" ],
 	[ $access{'ACCESS_EDIT'}, "roster" ]
 );
+
+@teacherdefaults =  (
+	[ $access{'ACCESS_VIEW'}, "roster" ],
+	[ $access{'ACCESS_DELETE'}, "insurance" ]
+);
+
+### main code starts here
 
 #basic login and housekeeping stuff
 $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
@@ -71,10 +79,17 @@ $rqueryobj->execute() or die "couldn't execute $!\n";
 while ($ritemref = $rqueryobj->fetchrow_hashref){
 	%ritem = %$ritemref;
 
-	$uid = &addUser($ritem{'name'}, $ritem{'familyid'});
-	&addDefaultPrivs($uid);
+	$uid = &addUser($ritem{'name'}. " Family", $ritem{'familyid'});
+	&addDefaultPrivs($uid, \@familydefaults);
 
 } # end while
+
+
+#add users for teacher sandy, teacher pat, teacher catherine
+foreach $teacher ("Teacher Sandy", "Teacher Catherine", "Teacher Pat"){
+	$uid = &addUser($teacher);
+	&addDefaultPrivs($uid, \@teacherdefaults);
+}
 
 $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
@@ -87,11 +102,12 @@ sub
 addDefaultPrivs()
 {
 	my $uid = shift;
+	my $defref = shift;
 	my $arref;
 	my $query;
 
 	#NOW, add the privs
-	foreach $arref (@defaults){
+	foreach $arref (@$defref){
 		$query = sprintf("insert into privs 
 				set userid = %d, level = %d, realm = '%s' ", 
 			$uid, $$arref[0], $$arref[1]);
@@ -115,9 +131,11 @@ addUser()
 	print "adding <$name> into users\n";
 
 	#ok, add the users
-	$query = sprintf("insert into users 
-			set familyid = %d, name = \'%s Family\' ", 
-			$familyid, $name);
+	$query = sprintf("insert into users  set
+			name = \'%s\' ,
+			familyid = %d
+			",
+			$name, $familyid);
 	if($opt_v){
 		print "doing <$query>\n";
 	}
