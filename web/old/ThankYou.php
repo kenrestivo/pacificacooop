@@ -348,7 +348,7 @@ http://www.pacificacoop.org/
 					$safety = new ThankYou(&$this->cp);
 					$safety->findThanksNeeded($pk, $id, false);
 					if(count($safety->items_array) < 1){
-						$this->cp->mailError('Find is out of sync', 
+						$this->cp->mailError('Asked to save thankyous for this company, but none actually exist!', 
 											 print_r($this, true));
 						//this find is out of sync with the one in show
 						return false;
@@ -398,7 +398,7 @@ http://www.pacificacoop.org/
 			$real->obj->school_year = $sy;
 			$real->obj->orderBy('school_year desc');
 			$real->obj->joinadd($co->obj);
-			$real->obj->whereAdd('thank_you_id is null
+			$real->obj->whereAdd('(thank_you_id is null or thank_you_id < 1)
 								and cleared_date > "2000-01-01" ');
 			$found = $real->obj->find();
 			
@@ -426,7 +426,7 @@ http://www.pacificacoop.org/
 								 &$co);
 			$real->obj->orderBy('school_year desc');
 			$real->obj->school_year = $sy;
-			$real->obj->whereAdd('thank_you_id is null
+			$real->obj->whereAdd('(thank_you_id is null or thank_you_id < 1) 
 						and date_received > "2000-01-01" ');
 			$real->obj->joinadd($co->obj);
 			$found = $real->obj->find();
@@ -454,7 +454,7 @@ http://www.pacificacoop.org/
 								 &$co);
 			$real->obj->orderBy('school_year desc');
 			$real->obj->school_year = $sy;
-			$real->obj->whereAdd('thank_you_id is null
+			$real->obj->whereAdd('(thank_you_id is null or thank_you_id < 1) 
 						and date_received > "2000-01-01" ');
 			$real->obj->joinadd($co->obj);
 			$real->obj->find();
@@ -622,22 +622,30 @@ http://www.pacificacoop.org/
 
 	function repairOrphaned()
 		{
-			$ty = new CoopObject(&$this->cp, 'thank_you', &$nothing);
-			$ty->obj->whereAdd('thank_you.thank_you_id is null');
-//			$ty->obj->debugLevel(2);
-
-			foreach(array('in_kind_donations', 'auction_donation_items', 'income') as $table){
+	
+			foreach(array('in_kind_donations', 'auction_donation_items',
+						  'income') as $table)
+			{
 				// have to save it b4 each query
 				$save = $ty->obj;
 				$real = new CoopView(&$this->cp, $table, &$nothing);
-				$real->obj->whereAdd("$table.thank_you_id is not null");
-				$real->obj->joinAdd($save, 'left');
-				// print $real->simpleTable();
-				// continue;
-				$real->obj->find();
+				$real->obj->query(sprintf("select %s.* from %s
+						left join thank_you using (thank_you_id)
+						where %s.thank_you_id > 0 
+						and thank_you.thank_you_id is null", 
+										  $table, $table, $table));
+				//print $real->simpleTable(false);
+				//continue;
 				while($real->obj->fetch()){
+					// silly superstitious hack. i don't trust dbdo anymore
+					if($real->obj->thank_you_id < 1){
+						continue;
+					}
 					$mistake_summary .= print_r($real->obj, true);
 					//clear it now! or try at least...
+					user_error(sprintf("repairOrphaned(): clearing %d from %s", 
+									   $real->obj->thank_you_id, $table), 
+							   E_USER_NOTICE);
 					$real->obj->thank_you_id = DB_DataObject_Cast::sql('NULL');
 					if(!$real->obj->update()){
 						user_error("failed to update when cleaning up orphaned thank you's. this is really bad. you probably have a corrupt database. stop immediately.", E_USER_ERROR);
@@ -650,7 +658,7 @@ http://www.pacificacoop.org/
 				$mistake_summary .= print_r($this->cp, true);
 				
 				// now send it
-				$this->cp->mailError("Thank you note found whose thank_you_id points to no records in the db..",
+				$this->cp->mailError("Item found with thank_you_id that points to no actual thankyou..",
 									 $mistake_summary);
 			}
 		} // END REPAIRORPHANS	
