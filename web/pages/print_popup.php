@@ -94,6 +94,7 @@ switch($_REQUEST['subaction']){
  case 'print':
 	 $fs['family_id']['def'] = $u['family_id']; // hack, but it works
 	 $ty =& new ThankYou(&$cp);
+	 $ty->check_reconcile = $_REQUEST['reconcile'];
 	 if(!$ty->findThanksNeeded($_REQUEST['pk'], $_REQUEST['id'])){
 		 print "<p>This thank-you has already been entered. 
 			Close this window and check 'View/Edit' in the other window.</p>";
