@@ -59,6 +59,9 @@ the fieldstruct
 			i.e. the value of the 'linkfield', not of the field itself
 		savealways: a hack. if this flag exists, ignore the perms system :-/
 			this is for index fields and such
+		uniqueness: an array of fields to search for unique-distinguising stuff
+			in a pop-up. if the display field has dupes, 
+				dig through this looking for uniqueness to display
 
 callbacks struct
 	this is a proto-object. it contains miles and miles of crap
