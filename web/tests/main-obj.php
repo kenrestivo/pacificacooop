@@ -7,7 +7,7 @@ require_once("utils.inc");
 require_once('CoopPage.php');
 require_once('CoopView.php');
 
-$debug = 0;
+$debug = 1;
 
 //MAIN
 //$_SESSION['toptable'] 

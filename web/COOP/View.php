@@ -85,10 +85,12 @@ class coopView
 	function simpleTable()
 		{
 			$this->obj->find();
+			$this->getPK(); // must this be after find? rather constructor.
 			//TODO return null or something, if nothing found
 			$tab =& new HTML_Table();
 			while($this->obj->fetch()){
-				$tab->addRow(array_values($this->obj->toArray()));
+				//$tab->addRow(array_values($this->obj->toArray()));
+				$tab->addRow($this->toArray());
 			
 			}
 			return $tab->toHTML();
@@ -135,6 +137,36 @@ class coopView
 			return $this->pk;
 	}
 
+	//  inspired by formbuilder's getdataobjctselectdisplayvalue (whew!)
+	function checkLinks(&$obj, $val)
+		{
+			// no links? see ya.
+			if(!isset($obj->fb_linkDisplayFields)){
+				return $val;
+			}
+			
+			$links = $obj->links();
+			$this->confessArray($links, "links for  $this->table");
+			return $val;
+		}
+
+	function toArray()
+		{
+			
+			foreach($this->obj->toArray() as $key => $val){
+				// this is where the fun begins.
+				$val = $this->checkLinks(&this->obj, $val);
+				$res[] = $val;
+			}
+
+			// the Simple Version. useful for debuggin'
+			//return array_values($this->obj->toArray());
+
+			//$this->page->confessArray($res, "resR array");
+			return $res;
+		}
+
+
 	function recurseTable()
 		{
 			$found = $this->obj->find();
@@ -145,17 +177,17 @@ class coopView
 
 			$this->getBackLinks();	// MUST be after find!
 
-			$this->getPK();
+			$this->getPK(); // must this be after find? rather constructor.
 
 			//TODO return null or something, if nothing found
 			$tab =& new HTML_Table();
 			while($this->obj->fetch()){
 				// the main row.
 				if(preg_match('/_join/', $this->table) == 0){
-					$tab->addRow(array_values($this->obj->toArray()));
+					$tab->addRow($this->toArray());
 				}
 				//subrows
-			$this->addSubTables(&$tab, $pk, $backlinks);
+				$this->addSubTables(&$tab, $pk, $backlinks);
 
 			}
 			return $tab->toHTML();
