@@ -19,7 +19,24 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
+use Time::Local; 
+use POSIX;
 use DBI;
+
+#arggh
+$in = shift;
+if($in){
+	$checkdate = &humantounix($in);
+} else {
+	#ok, now is the time to check.
+	$checkdate = time();
+}
+
+print "checking against $in date $checkdate which is ", 
+		strftime('%m/%d/%Y', localtime($checkdate)), "\n";
+
+
+exit 0;
 
 #basic login and housekeeping stuff
 $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
@@ -82,6 +99,12 @@ sub getlicenseinfo()
 
 	} # end while
 
+	if($queryobj->rows() > 1){
+		print "ERROR! more than one row returned\n";
+		exit 1;
+	}
+
+	return \%item;
 }
 
 sub getinsuranceinfo()
@@ -112,6 +135,13 @@ sub getinsuranceinfo()
 
 	} # end while
 
+	if($queryobj->rows() > 1){
+		print "ERROR! more than one row returned\n";
+		exit 1;
+	}
+
+	return \%item;
+
 }
 
 ######################
@@ -128,4 +158,22 @@ sub emailreminder()
 	print "Regulations require us to have a copy of a valid driver's license and current auto insurance on file. It appears this has to be current in order for you to be allowed to drive your child on any field trips. The next field trip is scheduled for the end of October, so, now is a good time to get all this paperwork up-to-date.\n\n";
 	print "If you could please place a copy of your current insurance card (the one that you keep in your car) into my communications folder, that would be great.\n\n";
 	print "Again, sorry for the impersonal email. Please feel free to call me at 650-355-1317 with any questions.\n\nThanks!\n\n-ken";
+}
+
+
+######################
+#	HUMANTOUNIX
+#	takes in a HUMAN time dd/mm/yyyy and conerts to unix
+######################
+sub humantounix()
+{
+	my $humandate = shift;
+	my $mon;
+	my $day;
+	my $yr;
+	my $nix;
+	($mon, $day, $yr) = ($humandate =~ /(\d+)\/(\d+)\/(\d{4})/);
+	#print "date is $mon/$day/$yr\n";
+		
+	return timelocal(0,0,0, $day, $mon - 1, $yr);
 }
