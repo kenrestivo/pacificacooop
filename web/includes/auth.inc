@@ -41,14 +41,15 @@ define('ACCESS_ADD', 600);
 define('ACCESS_DELETE', 700);
 define('ACCESS_ADMIN', 800);
 
+// the numbers, their display names, and the callback 'action' asssociated with them
 $accessnames = array(  
-		  0 => 'None',
-		100 => 'Summarize',
-		200 => 'View',
-		500 => 'Edit',
-		600 => 'Add',
-		700 => 'Delete',
-		800 => 'Administer permissions for'
+		  0 => array('None', NULL),
+		100 => array('Summarize', 'summary'),
+		200 => array('View', 'view'),
+		500 => array('Edit', 'edit'),
+		600 => array('Add', 'add'),
+		700 => array('Delete', 'confirmdelete'),
+		800 => array('Administer permissions for', NULL)
 );
 
 
@@ -383,22 +384,27 @@ getUser($uid)
 /******************
 	ACCESSLEVELSTRING
 	returns a text description of user permissions for this realm and userlevel
-	inputs: privilege number
+	TODO: eventually put THIS beast into the object
+		yes, callbacks are affecting this too. 
+	inputs: privilege number, callbacks
 	returns: text showing what the perms are in english
 ******************/
 function
-accessLevelString($privnum)
+accessLevelString($privnum, $callbacks)
 {
 	global $accessnames;
 	$i = 0;
 	if(!$privnum){
 		//handle 0 as special case
-		return $accessnames[$privnum];
+		return $accessnames[$privnum][0];
 	}
 	while (list($key, $val) = each($accessnames)){
 		//print "[$key] ";
-		if($key <= $privnum && $key > 0){
-			$result .= sprintf("%s%s",  $i ? ", " : "", $accessnames[$key]);
+		if(	$key <= $privnum && 
+			$key > 0 && 
+			$callbacks[$accessnames[$key][1]])
+		{
+			$result .= sprintf("%s%s",  $i ? ", " : "", $accessnames[$key][0]);
 			$i++;
 		}
 	}
@@ -1101,7 +1107,7 @@ displayAuth($p, $u, $callbacks)
 		printf("for the %s Family. </h3>
 				(You are authorized to %s the %s Family's %s).\n", 
 			$u['familyname'], 
-			accessLevelString($p['userlevel']),
+			accessLevelString($p['userlevel'], $callbacks),
 			$u['familyname'],
 			$pretty);
 	} else {
@@ -1109,7 +1115,7 @@ displayAuth($p, $u, $callbacks)
 				(%s is authorized to %s the %s
 				for ALL families).</h3>",
 			$u['username'],
-			accessLevelString($p['grouplevel']),
+			accessLevelString($p['grouplevel'], $callbacks),
 			$pretty);
 	}
 
