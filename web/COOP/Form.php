@@ -32,33 +32,30 @@ class coopForm extends CoopObject
 {
 
 
-
-	function detailForm($id = false )
+	function detailForm($id)
 		{
 	
 			//print_r($this);
-			$id = $id ? $id : $_SESSION[$this->table]['id'];
 			$this->obj->get($id);
             $this->build =& DB_DataObject_FormBuilder::create (&$this->obj);
             //confessObj($this->build, "build");
-			$this->obj->fb_createSubmit = false;
-            $form =& new HTML_QuickForm(); 
-			$form->addElement('html', thruAuth($page->auth, 1));
-			$buttons[] = &HTML_QuickForm::createElement(
-					'submit', 'cancel', 'Cancel');
-			$buttons[] = &HTML_QuickForm::createElement(
-				'submit', '__submit__', 'Save');
-			$form->addGroup($buttons, null, null, '&nbsp;');
 
-
-            $this->build->useForm($form);
+			// is there a cleanerway to do this? i hate it.
+			$hackform = new HTML_QuickForm();
+			confessArray($this->page->auth, 'pageauth');
+			$hackform->addElement('hidden', 'coop', thruAuthCore($this->page->auth)); 
+			$hackform->addElement('hidden', 'action', 'process');
+			
+			$this->build->useForm($hackform);
 			$form =& $this->build->getForm();
+
 			$form->applyFilter('__ALL__', 'trim');
+
             //confessObj($form, "form");
   			//$form->freeze();
-			// XXX BROKEN FUCK FUCK FUCK FUCK $this->setFormDefaults(&$form);
-			$this->getBackLinks();
+
 			if($form->validate ()){
+				
 				$res = $form->process (array 
 									   (&$this->build, 'processForm'), 
 									   false);
@@ -70,7 +67,7 @@ class coopForm extends CoopObject
 					///  next action
 					print "PRICESSING SEUCCSSCUL";
 					$_SESSION['tables'][$this->table]['action'] = 'list'; 
- 			 		header('Location: ' . $this->selfURL());
+ 			 		//header('Location: ' . $this->selfURL());
 				}
 				echo "AAAAUUUUUUUUUUUGGH!<br>";
 			}

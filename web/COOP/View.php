@@ -340,6 +340,7 @@ class coopView extends CoopObject
 			//confessObj($this, 'this');
 			$res .= $this->page->selfURL('Edit', 
 									  array( 
+										  'action' => 'edit',
 										  'table' => $this->table,
 										  $this->pk => $this->obj->{$this->pk}
 										  ));

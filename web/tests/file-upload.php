@@ -43,7 +43,9 @@ print "\n<hr>\n"; //ok, we're logged in. show the rest of the page
 $uploadForm = new HTML_QuickForm('upload_form', 'post');
 $uploadForm->setMaxFileSize(8388608); // 8MB s/b as big as i need
 $file =& $uploadForm->addElement('file', 'filename', 'File:');
-$uploadForm->addElement('html', thruAuth($cp->auth, 1));
+if($sid = thruAuthCore($cp->auth)){
+	$uploadForm->addElement('hidden', 'coop',$sid ); // make conditional on thruauthcore
+}
 $uploadForm->addRule('filename', 'You must select a file', 'uploadedfile');
 $uploadForm->addElement('submit', 'btnUpload', 'Upload');
 if ($uploadForm->validate()) {

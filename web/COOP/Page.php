@@ -57,17 +57,20 @@ class coopPage
  
 	function pageTop()
 		{
+			
+			global $metalinks; // from first.inc. bah.
+			printf('<HTML lang="en">
+		<HEAD> %s
+			<TITLE>Data Entry</TITLE>
+		</HEAD>
 
-			print '<HTML>
-				<HEAD>
-						<link rel=stylesheet href="main.css" title=main>
-							<TITLE>Data Entry</TITLE>
-				</HEAD>
-				<BODY>
-				<h2>Pacifica Co-Op Nursery School Data Entry</h2>
-				';
+		<BODY>
 
-
+		<div id="header">
+				<h2>Pacifica Co-Op Nursery School Data Entry</h2>',
+				   $metalinks);
+			
+			
 				$this->confessArray($_REQUEST, "test REQUEST");
 				$this->confessArray($_SESSION, "test SESSION");
 				$this->confessArray($_SERVER, "test SERVER");
@@ -81,6 +84,7 @@ class coopPage
 
 			$this->auth = logIn($_REQUEST);
 
+			$this->confessArray($this->auth, 'auth -- post login');
 
 			if($this->auth['state'] != 'loggedin'){
 				done();

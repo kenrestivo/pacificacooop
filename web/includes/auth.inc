@@ -1095,37 +1095,31 @@ loggedInState($auth, $states)
 	outputs: session id as invisible fields!
 ******************/
 function
-thruAuth($auth, $return = 0)
+thruAuth($auth)
 {
-	$_SESSION['auth'] = $auth;
-	if(SID){
-		$ret = sprintf("<INPUT TYPE=hidden NAME='%s' VALUE='%s'>\n",
-			'coop',  session_id());
+	$sid = thruAuthCore($auth);
+	if($sid){
+		printf("<INPUT TYPE=hidden NAME='%s' VALUE='%s'>\n",
+					   'coop',  $sid);
 	}
-	if($return){
-		return $ret;
-	}
-	print $ret;
 }/* END THRUAUTH  */
 
-
-/******************
-	HACKAUTH
-		necessary for the object stuff
-	used for cases where i have a FORM (POST), 
-		and can't use SID (GET) constant.
-	inputs: none
-	outputs: session id as invisible fields!
-******************/
 function
-hackAuth($auth)
+thruAuthCore($auth)
 {
-	$_SESSION['auth'] = $auth;
-	if(SID){
-		return sprintf("<INPUT TYPE=hidden NAME='%s' VALUE='%s'>\n",
-			'coop',  session_id());
+	if(!is_array($auth)){
+		user_error("thruAuthCore($auth): is not an array. that would reset the session, and that would be bad. cowardly refusing to do so.", E_USER_ERROR);
 	}
-}/* END HACKUTH  */
+
+	$_SESSION['auth'] = $auth;
+
+	if(SID){
+		return session_id();
+	}
+	return false;
+
+}/* END THRUAUTHCORE  */
+
 
 
 
