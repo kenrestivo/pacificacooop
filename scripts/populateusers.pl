@@ -49,13 +49,15 @@ getopts('vth:p:d:') or &usage();
 	[ $access{'ACCESS_SUMMARY'},$access{'ACCESS_DELETE'}, "auction" ],
 	[ $access{'ACCESS_NONE'},$access{'ACCESS_VIEW'}, "money" ],
 	[ $access{'ACCESS_NONE'},$access{'ACCESS_VIEW'}, "insurance" ],
-	[ $access{'ACCESS_VIEW'},$access{'ACCESS_EDIT'}, "roster" ]
+	[ $access{'ACCESS_VIEW'},$access{'ACCESS_EDIT'}, "roster" ],
+	[ $access{'ACCESS_NONE'},$access{'ACCESS_VIEW'}, "user" ]
 );
 
 @teacherdefaults =  (
 	[ $access{'ACCESS_VIEW'}, $access{'ACCESS_EDIT'}, "roster" ],
 	[ $access{'ACCESS_SUMMARY'},$access{'ACCESS_DELETE'}, "auction" ],
-	[ $access{'ACCESS_DELETE'}, $access{'ACCESS_EDIT'}, "insurance" ]
+	[ $access{'ACCESS_DELETE'}, $access{'ACCESS_EDIT'}, "insurance" ],
+	[ $access{'ACCESS_NONE'},$access{'ACCESS_VIEW'}, "user" ]
 );
 
 ### main code starts here
