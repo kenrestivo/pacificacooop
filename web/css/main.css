@@ -188,9 +188,11 @@ p.error {
 	padding-right: 0;
  }
 
-@media print { 
-	#header { display:none }
-	#footer { display:none }
+@media print { 	
+	#header { display:none }	
+	#footer { display:none }	
 	#leftCol { display:none }
-	a { display:none }
+	#springfestpretty { display:none }
+	a { display:none }	
+	  #rightCol { margin: 0 	}
  }
