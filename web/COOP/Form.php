@@ -32,7 +32,7 @@ class coopForm extends CoopObject
 {
 
 
-	function detailForm($id)
+	function fbBuild($id)
 		{
 	
 			//print_r($this);
@@ -82,6 +82,45 @@ class coopForm extends CoopObject
 	
 		}
 
+
+	// i got disgusted with FB. fuck that. i roll my own here.
+	function build($id)
+		{
+			$form =& new HTML_QuickForm('editform');
+			
+
+			$this->obj->get($id);
+
+			//confessObj($this, 'atd');
+			foreach($this->obj->toArray() as $key => $val){
+				if($key == $this->pk){
+					continue;
+				}
+				$el =& $form->addElement('text', $key);
+				$el->setLabel($this->obj->fb_fieldLabels[$key] ? 
+							  $this->obj->fb_fieldLabels[$key] : $key);
+				$clf = $this->checkLinkField(&$this->obj, $key, $val);
+				$el->setValue($clf);
+			}
+
+			if($sid = thruAuthCore($this->page->auth)){
+				$form->addElement('hidden', 'coop', $sid); 
+			}
+	 
+			$form->addElement('hidden', 'table', $this->table);
+			$form->addElement('hidden', 'action', 'process');
+			$form->addElement('submit', null, 'Save');
+
+			return $form;
+		}
+
+	function save($vars)
+		{
+
+
+			//saveAudit($this->table, $id, $page->auth['uid']);
+					
+		}
 
 
 } // END COOP FORM CLASS
