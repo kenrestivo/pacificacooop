@@ -205,17 +205,47 @@ class coopView extends CoopObject
 			$tab->addRow($res, 'bgcolor=#9999cc', 'TH'); 
 		}
 
+	function title()
+		{
+			if($this->obj->kr_longTitle){ 
+				return $this->obj->kr_longTitle;
+			}
+			return ucwords($this->table);
+		}
+
 	function tableTitle()
 		{
 			$res = sprintf("<hr><h2>%s %.50s</h2>", 
-						   $this->obj->kr_longTitle ? 
-						   $this->obj->kr_longTitle : ucwords($this->table),
+						   $this->title(),
 						   $this->parentSummary ? 
 						   "for " . $this->parentSummary : "");
 														
 			return $res;
 		}
 
+	function oneLineTable($find= 1)
+		{
+			if($find){
+				$found = $this->obj->find();
+				
+				if($found < 1){
+					return false;
+				}
+			}
+			$tab =& new HTML_Table();
+		
+			
+			$tab->addRow(array($this->title()), 'bgcolor=#9999cc', 'TH'); 
+
+			while($this->obj->fetch()){
+				$tab->addRow(array($this->concatLinkFields(&$this->obj)));
+			
+			}
+			//	$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
+			$res .= $tab->toHTML();
+			return $res;
+
+		}
 	
 
 } // END COOP VIEW CLASS
