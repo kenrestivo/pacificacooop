@@ -35,21 +35,20 @@ class coopForm extends CoopObject
 	var $_tableDef; //  cached table stuff
 
 	// i got disgusted with FB. fuck that. i roll my own here.
-	function build($id = false)
+	function build($vars = false)
 		{
-			$id = (int)$id;
-			if($id){
+			$id = (int)$vars[$this->pk];
+			if($id > 0){
 				$this->obj->get($id);
 			} else {
 				user_error("coopForm::build($id) called with no id, assuming NEW", 
 						   E_USER_NOTICE);
 			}
 			$formname = sprintf('edit_%s', $this->table);
-			$form =& new HTML_QuickForm($formname, false, false, false, 
+			$this->form =& new HTML_QuickForm($formname, false, false, false, 
 										false, true);
-			$this->form = &$form; //  save it so i can dick with it later
 			
-			$form->addElement('header', $formname, 
+			$this->form->addElement('header', $formname, 
 							  $this->obj->fb_formHeaderText ?
 							  $this->obj->fb_formHeaderText : 
 							  ucwords($this->table));
@@ -57,35 +56,61 @@ class coopForm extends CoopObject
 			// will need to guess field types
 			$this->_tableDef = $this->obj->table();
 
+			$this->fillVars($vars);
+
+
+			// my hidden tracking stuff
+			if($sid = thruAuthCore($this->page->auth)){
+				$this->form->addElement('hidden', 'coop', $sid); 
+			}
+			
+			// XX is this necessary?
+			$this->form->addElement('hidden', 'table', $this->table);
+
+			// finally, sumbit it!
+			$this->form->addElement('submit', null, 'Save');
+
+			$this->form->applyFilter('__ALL__', 'trim');
+
+			return $this->form;	// XXX not really necessary?
+		}
+
+	function fillVars($vars)
+		{
 			//confessObj($this, 'coopForm::build($id) found');
-			foreach($this->obj->toArray() as $key => $val){
+			foreach($this->obj->toArray() as $key => $dbval){
 				if(!$this->isPermittedField($key)){
 					// NOTE the hidden thing. i think  i need to do hidden here
 					continue;
 				}
+				// if it's a new entry, fill from vars!
+				// this is a clusterfuck because i'm using setValue.
+				// otherwise, quickform would do this for me. *sigh*
+				$val = $this->obj->{$this->pk} > 0 ? $dbval : $vars[$key];
+
 				if(is_array($this->obj->fb_preDefElements) && 
 				   in_array($key, array_keys($this->obj->fb_preDefElements))){
 					$el =& $this->obj->fb_preDefElements[$key];
-					$form->addElement($el);
+					$this->form->addElement($el);
 				} else if($this->isLinkField(&$this->obj, $key)){
-					$el =& $form->addElement('select', $key, false, 
+					$el =& $this->form->addElement('select', $key, false, 
 											 $this->selectOptions($key));
 				} else if(is_array($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{
-					$el =& $form->addElement('textarea', $key, false, 
+					$el =& $this->form->addElement('textarea', $key, false, 
 											 array('rows' => 4, 'cols' => 30 ));
 				} else if(is_array($this->obj->fb_enumFields) &&
 						  in_array($key, $this->obj->fb_enumFields))
 				{
-					$el =& $form->addElement('select', $key, false, 
+					$el =& $this->form->addElement('select', $key, false, 
 											 $this->getEnumOptions($key));
 				} else if(is_array($this->obj->fb_booleanFields) &&
 						  in_array($key, $this->obj->fb_booleanFields))
 				{
-					$el =& $form->addElement('advcheckbox', $key);
+					$el =& $this->form->addElement('advcheckbox', $key);
 				} else {
-					$el =& $form->addElement(
+					$el =& $this->form->addElement(
 						$key == $this->pk ? 'hidden' : 'text', 
 						$key);
 				}
@@ -94,7 +119,7 @@ class coopForm extends CoopObject
 							  $this->obj->fb_fieldLabels[$key] : $key);
 				
 				if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
-					$form->addRule($key, 
+					$this->form->addRule($key, 
 								   'Date must be in format MM/DD/YYYY', 
 								   'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
 					$val && $val = sql_to_human_date($val);
@@ -104,20 +129,6 @@ class coopForm extends CoopObject
 				$el->setValue($val);
 			}
 
-			// my hidden tracking stuff
-			if($sid = thruAuthCore($this->page->auth)){
-				$form->addElement('hidden', 'coop', $sid); 
-			}
-			
-			// XX is this necessary?
-			$form->addElement('hidden', 'table', $this->table);
-
-			// finally, sumbit it!
-			$form->addElement('submit', null, 'Save');
-
-			$form->applyFilter('__ALL__', 'trim');
-
-			return $form;
 		}
 
 	function selectOptions($key)
@@ -202,7 +213,7 @@ class coopForm extends CoopObject
 			if($this->page->debug > 1){
 				$this->obj->debugLevel(2);
 			}
-			if($this->page->debug > 3){
+			if($this->page->debug > 2){
 				confessObj($old, 'OLD data');
 				confessObj($this->obj, 'NEW data');
 			}

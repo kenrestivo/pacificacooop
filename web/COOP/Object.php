@@ -81,7 +81,7 @@ class coopObject
 
 			$this->page->confessArray($links, 
 									  "getLinks: links for $this->table",
-									  3);
+									  4);
 
 			$this->forwardLinks = $links[$this->table];
 
@@ -97,7 +97,7 @@ class coopObject
 			$this->backlinks = $res;
 			$this->page->confessArray($res,
 									  "getLinks() backlinks for $this->table",
-									  3);
+									  4);
 			return $this->backlinks;
 		}
 
@@ -110,7 +110,7 @@ class coopObject
 				return false;
 			}
 			$this->page->confessArray($links, 
-									  "checkLInkField(): links for $this->table", 3);
+									  "checkLInkField(): links for $this->table", 4);
 
 			if(!$links[$key]){
 				return false;
