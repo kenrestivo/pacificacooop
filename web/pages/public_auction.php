@@ -18,10 +18,14 @@
 
 require_once("first.inc");
 require_once("shared.inc");
+require_once("HTML/Table.php");
 
 $sy = findSchoolYear();
 $tmp = explode('-', $sy);
 $sfyear = $tmp[1];
+
+// TODO! make this pretty. use HTML_Table. use floats for sponsorship.
+
 
 printf('<html> <head> 
 	<title>Pacifica Co-Op Nursery School - Springfest Auction Items</title>
@@ -37,14 +41,14 @@ printf('<html> <head>
 	   $sfyear);
 
 
-print "<table width='100%' border='1' cellspacing='0'>";
 
-print "<tr valign='top' align='center'>
-		<td><strong>Item Number</strong></td>
-		<td><strong>Item Name</strong></td>
-		<td><strong>Description</strong></td>
-		<td><strong>Value</strong></td>
-	</tr> ";
+$tab =& new HTML_Table();
+$tab->addRow(array('Item Number',
+				   'Item Name',
+				   'Description',
+				   'Value'), 
+			 'TH');
+
 
 $q = sprintf('select package_number, package_title, package_description,
         package_value
@@ -74,10 +78,22 @@ while($row = mysql_fetch_assoc($listq)){
 			$tdrow[] = $val;
 		}
 	}
-	tdArray($tdrow);
+	$tab->addRow($tdrow, 'bgcolor="#aabbff" align="left"');
 }
-print "</table>
-	<p><a href='../index.html'>Home</a></p>
+$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
+					   'bgcolor="#ccccff"');
+
+print $tab->toHTML();
+
+
+// now a word from our sponsors
+print "<h3>With many thanks to our generous sponsors:</h3>";
+$tab =& new HTML_Table();
+//a weird merge of all solicitation and leads, by sponsor level
+// get sponsor levels, then do the search for each
+
+
+print "<p><a href='../index.html'>Home</a></p>
 	</body>
 	</html>
 ";
