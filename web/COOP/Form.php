@@ -222,8 +222,9 @@ class coopForm extends CoopObject
 		{
 			
 			//XXX not needed? $old->get($vars[$this->pk]);
-			if(!$old->find(true)){
-				user_error("save couldn't get its pk", E_USER_ERROR);
+			$found = $old->find(true);
+			if(!$old->{$this->pk){
+				PEAR::raiseError("save couldn't get its pk", 888);
 			}
 
 			if($this->page->debug > 1){
@@ -233,6 +234,7 @@ class coopForm extends CoopObject
 				confessObj($old, 'OLD data');
 				confessObj($this->obj, 'NEW data');
 			}
+
 			$this->obj->update($old);
 			$this->id = $this->obj->{$this->pk};
 		
@@ -330,6 +332,10 @@ class coopForm extends CoopObject
 				$mt = $la['table'];
 				$ft = $la['toTable'];
 				$nk = $this->backlinks[$mt];
+				if(!($tf && $mt && $ft && $nk)){
+					PEAR::raiseError('your crosslinks spec sucks', 777);
+				}
+				
  				if(!isset($vars[$tf])){
 					// XXX this scares me. if i forget to include these...
 					// then they get wiped out of the db? that seems wrong to me.
@@ -385,6 +391,10 @@ class coopForm extends CoopObject
 	function addCrossLinks()
 		{
 			
+			if(!is_array($this->obj->fb_crossLinks)){
+				return;
+			}
+
 			foreach($this->obj->fb_crossLinks as $la){
 				$tf = $la['toField'];
 				$mt = $la['table'];
@@ -399,7 +409,9 @@ class coopForm extends CoopObject
 				// IIRC this has a different name in FB. use theirs!
  				if(is_callable(array($far->obj, 'fb_linkConstraints'))){
 					$far->obj->fb_linkConstraints();
-				} 
+				} else {
+					$far->defaultConstraints();
+				}
 				$far->obj->orderBy(implode(', ', 
 										   $far->obj->fb_linkDisplayFields));
 				$far->obj->find();

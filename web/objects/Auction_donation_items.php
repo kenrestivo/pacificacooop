@@ -53,6 +53,7 @@ class Auction_donation_items extends DB_DataObject
 		);
 	var $fb_formHeaderText =  'Springfest Auction Donation Items';
 	var $fb_crossLinks = array(array('table' => 'auction_packages_join', 
+									 'toTable' => 'packages',
 									 'toField' => 'package_id',
 									 'type' => 'select'));
 

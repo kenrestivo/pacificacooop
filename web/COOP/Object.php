@@ -41,8 +41,8 @@ class coopObject
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
 		{
 			if(!is_object($page) || !$table){
-				user_error("coopObject: blank page or table object passed", 
-						   E_USER_ERROR);
+				PEAR::raiseError("non-page object or table ($table) passed", 
+								 666);
 			}
 
 			$this->page = $page;
@@ -308,6 +308,12 @@ class coopObject
 			return ucwords($this->table);
 		}
 	
+	// by default, i want to constrain finds in this way:
+	function defaultConstraints()
+		{
+			$this->obj->school_year = findSchoolYear();
+		}
+
 } // END COOP OBJECT CLASS
 
 
