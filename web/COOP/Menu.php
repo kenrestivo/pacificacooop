@@ -33,7 +33,7 @@ class CoopMenu extends HTML_Menu
 	var $realms;
 	var $page;
 	var $renderer;
-	var $realm_map = array( 
+	var $springfest_realms = array( 
 		'auction' => 'Auctions',
 		'flyers' => 'Flyers',
 		'invitations' => 'Invitations',
@@ -45,6 +45,10 @@ class CoopMenu extends HTML_Menu
 		'thankyou' => 'Thank You',
 		'tickets' => 'Tickets'
 		);
+	var $other_realms = array(
+		'enhancement' => 'Enhancement'
+		);
+
 
 	function createLegacy($page )
 		{
@@ -67,14 +71,14 @@ class CoopMenu extends HTML_Menu
 			$this->page->indexed_all = array_merge($members, $sf);
 
 			$heirmenu = array(
-				array(
-					'title' => 'Enhancement',
-					'sub' => $this->callbacksToMenu($members)),
+				array_pop($this->nestByRealm($members, 
+													$this->other_realms)),
 				array(
 					'title' => 'Springfest',
-					'sub' => $this->nestByRealm($sf)));
+					'sub' => $this->nestByRealm($sf, 
+												$this->springfest_realms)));
 
-
+			confessArray($heirmenu, "menuarray");
 			$this->setMenu($heirmenu);
 
 		}
@@ -159,9 +163,9 @@ class CoopMenu extends HTML_Menu
 // 			return $realms;
 // 		}
 
-	function nestByRealm($ie)
+	function nestByRealm($ie, $realm_map)
 		{
-			foreach($this->realm_map as $realm => $description){
+			foreach($realm_map as $realm => $description){
 				$res[$realm]['title'] = $description;
 				foreach($ie as $key => $cbs){
 					if(strncmp($cbs['realm'], $realm, 7) == 0){
