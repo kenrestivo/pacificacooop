@@ -37,10 +37,11 @@ class Auction_donation_items extends DB_DataObject
 	var $fb_selectAddEmpty = array ('package_id');
 	var $fb_fieldLabels = array ('item_description' => 'Item Description');
 	var $fb_enumFields = array ('item_type');
+	var $fb_textFields = array ('item_description'); 
 	var $fb_fieldsToRender = array('item_description', 'item_value',  
 								   'quantity', 'school_year', 'thank_you_id');
 	var $fb_fieldLabels = array(
-		"family_id" => "Co-Op Family",
+		"family_id" => "Co-Op Family", //  XXX this is bunk. 
 		"quantity" => "Quantity of items", 
 		"item_description" => "Description of item" ,
 		'item_value' => 'Estimated TOTAL Value ($)' ,
@@ -56,6 +57,10 @@ class Auction_donation_items extends DB_DataObject
 									 'toTable' => 'packages',
 									 'toField' => 'package_id',
 									 'type' => 'select'));
+
+	var $fb_requiredFields = array('item_description', 'quantity', 
+								   'school_year',  'item_value', 
+								   'item_type');
 
 	function fb_linkConstraints()
 		{

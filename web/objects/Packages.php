@@ -61,7 +61,7 @@ class Packages extends DB_DataObject
 	var $fb_requiredFields = array('package_description', 'donated_by_text', 
 								   'starting_bid', 'bid_increment', 
 								   'package_type', 'package_value', 
-								   'item_type');
+								   'item_type', 'package_number');
 
 
 	var $fb_crossLinks = array(array('table' => 'auction_packages_join', 

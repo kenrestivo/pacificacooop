@@ -82,9 +82,11 @@ class coopForm extends CoopObject
 
 			return $this->form;	// XXX not really necessary?
 		}
-
+	
+	// yes this is easily as ugly as my old shared.inc, or FB. oh well.
 	function addAndFillVars($vars)
 		{
+			$frozen = array();
 			//confessObj($this, 'coopForm::build($id) found');
 			foreach($this->obj->toArray() as $key => $dbval){
 				// if it's a new entry, fill from vars!
@@ -111,7 +113,8 @@ class coopForm extends CoopObject
 						  in_array($key, $this->obj->fb_textFields))
 				{
 					$el =& $this->form->addElement('textarea', $key, false, 
-											 array('rows' => 4, 'cols' => 30 ));
+											 array('rows' => 4, 
+												   'cols' => 30 ));
 				} else if(is_array($this->obj->fb_enumFields) &&
 						  in_array($key, $this->obj->fb_enumFields))
 				{
@@ -142,8 +145,16 @@ class coopForm extends CoopObject
 				// finally, pas through default or editable vals
 				$el->setValue($val);
 
-			}
+				if(is_array($this->obj->fb_userEditableFields) &&
+ 							!in_array($key, 
+ 									  $this->obj->fb_userEditableFields))
+				{
+					$frozen[] = $key;
+				}
 
+			}
+			confessArray($frozen, 'fruzen gladje');			
+			$this->form->freeze($frozen);
 		}
 
 	function selectOptions($key)
