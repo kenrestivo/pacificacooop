@@ -38,21 +38,19 @@ while($co->obj->fetch()){
 	$sub->obj->find();
 
 	while($sub->obj->fetch()){
-		if($sub->obj->sdx && !in_array($co->obj->{$co->pk}, $dupefound)){
-			$dupefound[] = $sub->obj->{$sub->pk};
-			printf("<br>hey %s dupes ", $co->obj->company_name);
-			printf("are %s", $sub->obj->company_name);
-		}		
+		// don't do expensive simipar_text if it's already a dupe
+		if(is_array($dupefound) && !in_array($co->obj->{$co->pk}, $dupefound)){	
+			$perc = 0;
+			similar_text($co->obj->company_name, 
+						 $sub->obj->company_name, &$perc);
+			if($sub->obj->sdx || $perc > 70){
+				$dupefound[] = $sub->obj->{$sub->pk};
+				printf("<br>does %s dupe %s?", 
+					   $co->obj->company_name,
+					   $sub->obj->company_name);
+			}		
+		}
 	}
-	
-
-// 		$perc = 0;
-// 		similar_text($co->obj->company_name, $sub->obj->company_name, &$perc);
-// 		if($perc > 70){
-
-
-// 	}
-	
 }
 
 
