@@ -10,8 +10,6 @@
 				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-ken.conf")))
 
 
-(define *debug-flag* #t)
-
 ;;;;;;;;;;;;;;;
 ;; main
 
