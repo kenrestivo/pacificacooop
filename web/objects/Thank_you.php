@@ -31,6 +31,6 @@ class Thank_you extends DB_DataObject
 		'method' => 'Sent Via',
 		'family_id' => 'Printed/Sent By'
 		);
-	var $kr_longTitle =  'Springfest Thank-You Notes';
+	var $fb_formHeaderText =  'Springfest Thank-You Notes';
 
 }

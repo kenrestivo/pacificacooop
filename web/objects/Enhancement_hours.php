@@ -29,7 +29,7 @@ class Enhancement_hours extends DB_DataObject
     var $fb_fieldsToRender = array (
         'parent_id', 'enhancement_project_id', 'work_date', 'hours'
         );
-	var $kr_longTitle =  'Enhancement Hours';
+	var $fb_formHeaderText =  'Enhancement Hours';
 	var $fb_linkDisplayFields = array('work_date', 'hours');
 	var $fb_fieldLabels = array (
         'enhancement_hour_id' => 'Unique ID',

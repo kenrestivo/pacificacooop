@@ -33,7 +33,7 @@ class Ads extends DB_DataObject
 	var $fb_linkDisplayFields = array ('ad_size_id' , 'ad_description');
 	var $fb_textFields = array ('ad_copy');
 	var $fb_enumFields = array ('artwork_provided');
-	var $kr_longTitle = 'Springfest Ads';
+	var $fb_formHeaderText = 'Springfest Ads';
 	var $fb_fieldLabels = array(
 		"company_id" => "Company Name",
 		"ad_size_id" => "Ad size",

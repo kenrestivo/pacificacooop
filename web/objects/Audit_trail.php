@@ -24,7 +24,7 @@ class Audit_trail extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $kr_longTitle =  'Audit Trail';
+	var $fb_formHeaderText =  'Audit Trail';
 	var $fb_linkDisplayFields = array();
 	var $fb_fieldLabels = array (
 		'table_name' => 'Name of Table',

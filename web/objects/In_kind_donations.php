@@ -26,7 +26,7 @@ class In_kind_donations extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $kr_longTitle = 'Springfest In-Kind Donations';
+	var $fb_formHeaderText = 'Springfest In-Kind Donations';
 	var $fb_fieldLabels = array(
 		"family_id" => "Co-Op Family",
 		"quantity" => "Quantity of items", 

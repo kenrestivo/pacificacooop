@@ -56,6 +56,6 @@ class Income extends DB_DataObject
 //	var $fb_crossLinks = array(array('table' => 'families_income_join', 
 	//'fromFild' => 'income_id', 'toField' => 'family_id'));
 
-	var $kr_longTitle = "Cash Donations and Fees";
+	var $fb_formHeaderText = "Cash Donations and Fees";
 
 }

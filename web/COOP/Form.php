@@ -42,9 +42,11 @@ class coopForm extends CoopObject
 
 			// is there a cleanerway to do this? i hate it.
 			$hackform = new HTML_QuickForm();
-			confessArray($this->page->auth, 'pageauth');
-			$hackform->addElement('hidden', 'coop', thruAuthCore($this->page->auth)); 
+			if($sid =thruAuthCore($this->page->auth)){
+				$hackform->addElement('hidden', 'coop', $sid); 
+			}
 			$hackform->addElement('hidden', 'action', 'process');
+			$hackform->addElement('hidden', 'table', $this->table);
 			
 			$this->build->useForm($hackform);
 			$form =& $this->build->getForm();
@@ -69,7 +71,7 @@ class coopForm extends CoopObject
 					$_SESSION['tables'][$this->table]['action'] = 'list'; 
  			 		//header('Location: ' . $this->selfURL());
 				}
-				echo "AAAAUUUUUUUUUUUGGH!<br>";
+				echo "process failed!<br>";
 			}
 
 			return $form->toHTML();

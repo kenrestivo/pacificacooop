@@ -53,6 +53,6 @@ class Packages extends DB_DataObject
 		"school_year" => "School Year" 
 
 		);
-	var $kr_longTitle = "Springfest Packages";
+	var $fb_formHeaderText = "Springfest Packages";
 }
 

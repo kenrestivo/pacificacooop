@@ -49,6 +49,6 @@ class Auction_donation_items extends DB_DataObject
 		"auction_donation_item_id" => "Unique ID" ,
 		"thank_you_id" => "Thank-You Sent" 
 		);
-	var $kr_longTitle =  'Springfest Auction Donation Items';
+	var $fb_formHeaderText =  'Springfest Auction Donation Items';
 
 }
