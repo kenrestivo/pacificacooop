@@ -13,8 +13,6 @@ class Groups extends DB_DataObject
     var $group_id;                        // int(32)  not_null primary_key unique_key auto_increment
     var $name;                            // string(55)  
     var $audit_user_id;                   // int(32)  
-    var $entered;                         // datetime(19)  binary
-    var $updated;                         // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

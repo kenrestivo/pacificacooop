@@ -845,7 +845,7 @@ CREATE TABLE job_descriptions (
   long_description longtext,
     family_type enum('New', 'Returning') default 'New',
     board_position enum('No', 'Yes') default 'No',
-  tuition_type enum('Family Pays', 'Half-Price', 'Free') default 'Family Pays',
+  tuition_type enum('Family Pays', 'Half-Price', 'School Pays') default 'Family Pays',
      PRIMARY KEY  (job_description_id)
 ) ;
 
@@ -865,6 +865,16 @@ CREATE TABLE auction_packages_join (
   PRIMARY KEY  (auction_packages_join_id)
 ) ;
 
+
+CREATE TABLE sponsorships (
+    sponsorship_id int(32) NOT NULL unique auto_increment,
+	company_id int(32) default NULL,
+	lead_id int(32) default NULL,
+    sponsorship_type_id int(32) default NULL,
+    entry_type enum('Automatic', 'Manual') default 'Automatic',
+    school_year varchar(50) default NULL,
+    PRIMARY KEY (sponsorship_id)
+) ;
 
 
 -- EOF

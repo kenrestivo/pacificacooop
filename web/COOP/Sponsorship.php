@@ -36,7 +36,7 @@ class Sponsorship
 	var $sponsorTypes = array(); // cache of sponsortypes for this year
 	var $schoolYear; // cache of schoolyear
 	
-	function Sponsorships(&$cp, $schoolyear = false)
+	function Sponsorship(&$cp, $schoolyear = false)
 		{
 			if(!is_object($cp)){
 				PEAR::raiseError('must pass coop object in', 888);
@@ -54,7 +54,7 @@ class Sponsorship
 			$typeid= $this->calculateSponsorship($id, $idname);
 
 			//anything already there?
-			$sp =& new CoopObject(&$cp, 'sponsorships', &$nothing);
+			$sp =& new CoopObject(&$this->cp, 'sponsorships', &$nothing);
 			$sp->obj->school_year = $this->schoolYear;
 			$sp->obj->$idname = $id;
 			if($sp->obj->find(true)){
@@ -72,7 +72,7 @@ class Sponsorship
 			}
 							
 			// otherwise save a new one
-			$sp =& new CoopObject(&$cp, 'sponsorships', &$nothing);
+			$sp =& new CoopObject(&$this->cp, 'sponsorships', &$nothing);
 			$sp->obj->school_year = $this->schoolYear;
 			$sp->obj->$idname = $id;
 			$sp->obj->sponsorship_type_id = $typeid;
@@ -94,7 +94,8 @@ class Sponsorship
 					));
 
 			// i curse the very day that i agreed to do this goddamned project
-			$co =& new CoopObject(&$cp, $hack[$idname]['table'], &$nothing);
+			$co =& new CoopObject(&$this->cp, $hack[$idname]['table'], 
+								  &$nothing);
 			$co->obj->debug(2);
 			$co->obj->query(sprintf("
     select  sum(payment_amount) as payment_amount
@@ -103,11 +104,10 @@ class Sponsorship
               on cinj.income_id = 
                 income.income_id
         where school_year = '%s'
-				and %s.%s = %d
+				and cinj.%s = %d
         group by cinj.%s",
 									$hack[$idname]['join'],
 									$this->schoolYear, 
-									$hack[$idname]['join'],
 									$idname, $id, $idname));
 			$co->obj->fetch(); // there can be, only one
 				
@@ -127,7 +127,8 @@ class Sponsorship
 
 	function getSponsorTypes()
 		{
-				$sp =& new CoopObject(&$cp, 'sponsorship_types', &$nothing);
+				$sp =& new CoopObject(&$this->cp, 'sponsorship_types', 
+									  &$nothing);
 				$sp->obj->school_year = $this->schoolYear;
 				$sp->obj->orderBy('sponsorship_price desc');
 				$sp->obj->find();

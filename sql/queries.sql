@@ -258,6 +258,11 @@ select user_privileges.* ,users.name
     left join users using (user_id) 
     where realm = 'packaging';
 
+-- common. i want to know what realms i have available
+select distinct(realm) from user_privileges
+group by realm
+order by realm;
+
 -- tickets by family
 select  families.name, sum(ticket_quantity)  as total 
     from invitation_rsvps
@@ -597,7 +602,10 @@ left join
     as pur
         on pur.company_id = companies.company_id
 group by companies.company_id
-having cash_donations > 0 or auction_purchases > 0 or auction_donations > 0 or in_kind_donations > 0
+having cash_donations > 0 
+    or auction_purchases > 0 
+    or auction_donations > 0 
+    or in_kind_donations > 0
 order by cash_donations desc, auction_purchases desc, 
     auction_donations desc, in_kind_donations desc;
 
@@ -739,5 +747,20 @@ left join auction_packages_join using (auction_donation_item_id)
 where (package_id != 202 
 or auction_packages_join.auction_donation_item_id is null) and 
 auction_donation_items.school_year = "2004-2005";
+
+----- paid ads
+select distinct income.income_id, income.payment_amount, ads.ad_id , 
+    companies.company_name, companies.company_id
+from income 
+left join companies_income_join 
+    on companies_income_join.income_id = income.income_id
+left join ads on companies_income_join.company_id = ads.company_id  
+left join companies on companies_income_join.company_id = companies.company_id 
+where ads.ad_id is not null 
+    and ads.school_year = '2004-2005' 
+group by ads.ad_id
+order by companies.company_name;
+
+
 
 --- EOF

@@ -13,8 +13,6 @@ class Auction_donation_items extends DB_DataObject
     var $auction_donation_item_id;        // int(32)  not_null primary_key unique_key auto_increment
     var $item_description;                // blob(16777215)  blob
     var $item_value;                      // real(11)  
-    var $entered;                         // datetime(19)  binary
-    var $updated;                         // timestamp(19)  not_null unsigned zerofill binary timestamp
     var $date_received;                   // date(10)  binary
     var $audit_user_id;                   // int(32)  
     var $location_in_garage;              // string(255)  

@@ -43,6 +43,8 @@ function sponsors(&$cp)
 	while($sp->obj->fetch()){
 		
 		$co =& new CoopObject(&$cp, 'companies', &$nothing);
+		// XXX make this check the sponsorship table, not calculate
+
 		$co->obj->query(sprintf("
 select company_name,
         sum(inc.payment_amount) as cash_donations
@@ -67,6 +69,8 @@ order by company_name
 
 		$sponsors = ''; // because HTML sucks
 		while($co->obj->fetch()){
+
+			// when i redo it, this is where the test for existing goes
 			if($co->obj->url > ''){
 				$thing = sprintf('<a href="%s">%s</a>', 
 								 $cp->fixURL($co->obj->url),

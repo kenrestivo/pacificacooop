@@ -20,8 +20,6 @@ class Insurance_information extends DB_DataObject
     var $naic;                            // int(5)  
     var $parent_id;                       // int(32)  
     var $audit_user_id;                   // int(32)  
-    var $entered;                         // datetime(19)  binary
-    var $updated;                         // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
