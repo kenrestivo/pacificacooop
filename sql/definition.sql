@@ -15,6 +15,7 @@ create table coop.ins(
     expires date,
     companyname varchar(255),
     naic int(5),
+	parentsid int(32),
     primary key (insid)
 );
 
