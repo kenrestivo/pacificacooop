@@ -45,7 +45,9 @@ while($co->obj->fetch()){
 
 		}
 	}
-	
+
+	print "<br>-- similar text";
+
 	/// similar-text search
 	$sub = new CoopObject(&$cp, 'companies', &$dop);
 	$sub->obj->whereAdd(sprintf(' %s != %d', $co->pk, $co->obj->{$co->pk}));
@@ -54,7 +56,7 @@ while($co->obj->fetch()){
 	{
 		$perc = 0;
 		similar_text($co->obj->company_name, $sub->obj->company_name, &$perc);
-		if($perc > 80){
+		if($perc > 70){
 			//$dupefound[] = $sub->obj->{$sub->pk};
 			printf("<br> hey %s dupes %s?", 
 				   $co->obj->company_name, $sub->obj->company_name);
