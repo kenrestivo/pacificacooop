@@ -89,26 +89,45 @@ sub debugStruct()
 
 
 sub checkDeletes(){
+	#this one goes through the logic BACKWARDSS!
+	#it selects * from kids where they haven't dropped out,
+	# then iterates through the sheet looking for them
+	#if it doesn't find them, it drops them. (confirm first!!?)
+	
 }
 
 sub checkHeaders(){
 	my $rowref = shift;
 	my $col;
 
+	#check that my header rows haven't changed on me, and puke if they have
+	#TODO in future, programatise the assignment of headers, so they can move
+
 	printf("DEBUG the header cb, is a ref to an %s\n", ref($rowref));
 	#&debugStruct($rowref);
-}
-
-sub checkNewKids(){
-}
-
-sub checkNewParents(){
 }
 
 sub checkNewFamily(){
 }
 
+sub checkNewParents(){
+	#fix the mom's name if need be.
+	#lose the (baby) flag
+	#search in db. if parent isn't there, 
+	#	look for family, it should add one if needed.
+	#	then add the parent
+	#	do for moms and dads
+}
+
+sub checkNewKids(){
+	#search in db. if kid isn't there, 
+	#	look for family, it should add one if needed.
+	#	then add the kid
+}
+
 sub checkChanges(){
+	#search in db. compare all relevant fields
+	#issue updates if needed
 }
 
 
