@@ -93,13 +93,12 @@ order by company_name
 	return $res;
 } // end sponsors
 
-function auctionItems(&$cp, $sfyear)
+function auctionItems(&$cp, $sf)
 {
 	$res .= sprintf('	<h2>Springfest Auction Items</h2>
 
 	<p>Here are some fabulous items that will be auctioned off 
-			at the %s Springfest!</p>',
-	   $sfyear);
+			at  Springfest!</p>');
 
 	$tab =& new HTML_Table();
 	$tab->addRow(array('Item Number',
@@ -164,7 +163,7 @@ print sponsors(&$cp);
 print '</div><!-- end leftcol div -->';
 
 print '<div id="rightCol">';
-print auctionItems(&$cp, $sfyear);
+print auctionItems(&$cp, $sy);
 
 
 print "<p><a href='../index.html'>Home</a></p>
