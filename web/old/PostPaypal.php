@@ -159,8 +159,10 @@ class PostPaypal
 
 	function postLead()
 		{
-		
-			$obj =& $this->factoryWrapper('leads_income_join');
+			
+			$table = $this->paypal_obj->invoice > 0) ? 'tickets' : 'leads_income_join';
+				
+			$obj =& $this->factoryWrapper($table);
 
             //don't dupe. XXX this is dumb. what do i do about refunds?
             $obj->income_id = $this->income_id;
@@ -168,11 +170,14 @@ class PostPaypal
                 return;   
             }
 
-			//TODO: ticket quantity here
-			//if($obj->account_number = SOMETHING){
-			//$obj->ticket_quantity =??
-			//$obj->ticket_type = 'Paid for';
-			//}
+			// here come da hokey hackies
+			if($table == 'tickets'){
+				$obj->ticket_type = 'Paid for';
+				$obj->school_year = findSchoolYear();
+				$obj->ticket_quantity = $this->paypal_obj->invoice;
+			} 
+			
+		
 
             $obj->lead_id = $this->lead_id;
             $obj->insert(); // save the giblets
