@@ -56,8 +56,7 @@ class coopForm extends CoopObject
 			// will need to guess field types
 			$this->_tableDef = $this->obj->table();
 
-			$this->fillVars($vars);
-
+			$this->addAndFillVars($vars);
 
 			// my hidden tracking stuff
 			if($sid = thruAuthCore($this->page->auth)){
@@ -67,6 +66,11 @@ class coopForm extends CoopObject
 			// XX is this necessary?
 			$this->form->addElement('hidden', 'table', $this->table);
 
+			//set defaults for new
+			if($id < 1){
+				$this->setDefaults();
+			}
+
 			// finally, sumbit it!
 			$this->form->addElement('submit', null, 'Save');
 
@@ -75,7 +79,7 @@ class coopForm extends CoopObject
 			return $this->form;	// XXX not really necessary?
 		}
 
-	function fillVars($vars)
+	function addAndFillVars($vars)
 		{
 			//confessObj($this, 'coopForm::build($id) found');
 			foreach($this->obj->toArray() as $key => $dbval){
@@ -127,6 +131,7 @@ class coopForm extends CoopObject
 				
 				// finally, pas through default or editable vals
 				$el->setValue($val);
+
 			}
 
 		}
@@ -288,6 +293,16 @@ class coopForm extends CoopObject
 										 "$key mustn't be empty.", 'required');
 				}
 			}
+		}
+
+
+	function setDefaults()
+		{
+			if(!is_array($this->obj->fb_defaults)){
+				return;
+			}
+
+			$this->form->setDefaults($this->obj->fb_defaults);
 		}
 
 } // END COOP FORM CLASS

@@ -69,8 +69,12 @@ class Leads extends DB_DataObject
 								   'city', 'state', 'zip', 'country', 
 								   'source_id');
 
+	var $fb_defaults = array ('city' => 'Pacifica',
+							  'state' => 'CA',
+							  'zip' => '94044',
+							  'country' => 'USA'
+		);
 
-//	var $fb_preGenerateForm
 
 	// can be called with no leadid if it's already in the object itself
 	// and no find is needed
@@ -107,5 +111,5 @@ class Leads extends DB_DataObject
 			return $address;
 		}
 
-
+	
 }
