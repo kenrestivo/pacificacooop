@@ -315,6 +315,8 @@ function loginPopup($uid)
 /******************
 	LOGIN
 	the state machine
+		only returns if it either needs more user input or is finished!
+		if it needs more user input, the caller wants to done()
 	inputs: an auth struct
 	outputs: status/error messages as needed
 	returns: the auth struct with necessary changes
@@ -378,7 +380,7 @@ logIn($auth)
 
 		// dispatch the appropriate action for this state, and collect result
 		$newauth = $states[$auth['state']]['func']($auth);
-	} while (/* TODO some test! */ );
+	} while ($newauth['state'] != "needinput" );
 
 	return($newauth);
 
@@ -413,7 +415,7 @@ loggedOutState($auth)
 			DONE state loggedin!
 		if no pass (and no uid)
 			show an entry form (prepop with uid if given)
-			DONE
+			DONE state needinput
 		if uid isn't real
 			DONE state nouser
 		if password is null
@@ -423,7 +425,7 @@ loggedOutState($auth)
 			DONE state loggedin!
 	*/
 	
-}/* END  */
+}/* END LOGGEDOUTSTATE */
 
 
 
@@ -457,10 +459,10 @@ wrongPassState($auth)
 		complain.
 		show the password form again, prepopulated with uid
 	*/
-	$newauth['state'] = "loggedout";
+	$newauth['state'] = "needinput";
 
 	return $newauth;
-}/* END  */
+}/* END  WRONGPASSSTATE */
 
 
 
@@ -475,10 +477,10 @@ noUserState($auth)
 		show the main entry form, no prepopulation
 	*/
 
-	$newauth['state'] = "loggedout";
+	$newauth['state'] = "needinput";
 
 	return $newauth;
-}/* END  */
+}/* END NOUSERSTATE */
 
 
 
@@ -493,7 +495,7 @@ confirmWrongState($auth)
 		i know the uid, so show a form with both confirmation AND entry
 	*/
 	$newauth['state'] = "loggedout";
-}/* END  */
+}/* END CONFIRMWRONGSTATE */
 
 
 
@@ -510,7 +512,7 @@ insecurePassState($auth)
 	*/
 
 	$newauth['state'] = "loggedout";
-}/* END  */
+}/* END INSECUREPASSSTATE */
 
 
 
