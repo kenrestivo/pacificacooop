@@ -86,34 +86,34 @@
 
 ;;;;;;;;;;;;; pcns_schema-processing stuff
 
-(define (fix-primary-key key-table old-col new-col)
+(define (fix-primary-key key-table old-col new-col schema)
   (for-each
    (lambda (linked-table)
 										; only if this is a primary key!
-	 (if (and (equal? (get-primary-key key-table *main-schema*) old-col)
-			  (assoc-ref linked-table old-col)
-			  (not (equal? (car linked-table) key-table)))
+	 (if (and (equal? (get-primary-key key-table schema) old-col)
+			  (assoc-ref linked-table old-col) ; it exists in this table
+			  (not (equal? (car linked-table) key-table))) ; i'm not primary
 		 (doit (sprintf #f "alter table %s change column %s %s %s"
 						(car linked-table) old-col new-col
 						; get the definition from the actual subtable
-						(get-definition old-col linked-table *main-schema*)))
+						(get-definition old-col linked-table schema)))
 			   ))
-	 *main-schema*))
+	 schema))
 
 
-(define (rename-column items)
+(define (rename-column items schema)
   (let* ((sp (string-split (car items) #\.))
 		 (new (string-split (cadr items) #\.))
 		 (table (car sp))
 		 (old-col (cadr sp))
 		 (new-col (cadr new))
-		 (long-def (assoc-ref (assoc-ref *main-schema* (car sp)) (cadr sp)))
+		 (long-def (assoc-ref (assoc-ref schema (car sp)) (cadr sp)))
 		 )
 	(if long-def
 		(begin 
 		  (doit (sprintf #f "alter table %s change column %s %s %s"
 						 table old-col new-col long-def))
-		  (fix-primary-key table old-col new-col) )
+		  (fix-primary-key table old-col new-col schema) )
 		(printf "ignoring %s:%s\n" table old-col ) ;; it's a bogus line? huh?
 		)
 	))
@@ -130,10 +130,9 @@
 ;; simple dispatcher, using cute scheme-ism
 ;; in the file, tables don't have .'s in them, columns do.
 (define (process-change items)
-  ((if (string-index (car items) #\.)
-	   rename-column
-	   save-table! )
-   items))
+  (if (string-index (car items) #\.)
+	  (rename-column items *main-schema*)
+	  (save-table! items)))
 
 
 ;;; this is basically MAIN, though the load-definition must occur first
