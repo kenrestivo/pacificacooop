@@ -225,11 +225,12 @@ class Enhancement
             //confessObj($this, 'enhancement');
             
             if($semester == 'fall'){
-                return $this->completed[$semester];
+                return $this->completed['fall'];
             }
             if($semester == 'spring'){
-                $total = $this->completed['fall'] - $this->owed['fall'] 
-                    + $this->completed[$semester];
+                $total = $this->completed['fall'] 
+					- $this->owed['fall'] 
+                    + $this->completed['spring'];
                 $total = $total > 0 ? $total : 0; // clamp!
                 return $total;
             }
