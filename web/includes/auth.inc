@@ -338,6 +338,22 @@ function loginPopup($uid)
 	
 
 /******************
+	LOGOUTFORM
+	inputs: auth struct, type(password, confirm, both), and user(show, hide)
+	outputs: a nice login entry form.
+	TODO clean this up if possible. it's ugly. but then, hey, it's html!
+******************/
+function
+logoutForm()
+{
+
+	printf("<FORM METHOD=POST ACTION='%s'>", 
+					$_SERVER['PHP_SELF']);
+	printf("<INPUT TYPE=submit NAME='logout' VALUE='Log Out'>");
+    print "</FORM>";
+}/* END LOGOUTFORM */
+
+/******************
 	LOGINFORM
 	inputs: auth struct, type(password, confirm, both), and user(show, hide)
 	outputs: a nice login entry form.
@@ -394,7 +410,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 
 	printf("<INPUT TYPE=submit NAME='login' VALUE='%s'>",
 		$type == 'confirm' || $type == 'both' ? 'Save New Password' : 'Log In');
-	printf("<INPUT TYPE=submit NAME='cancel' VALUE='Cancel'>");
+	printf("<INPUT TYPE=submit NAME='logout' VALUE='Cancel'>");
     print "</FORM>";
 }/* END LOGINFORM */
 
@@ -414,7 +430,7 @@ logIn($vars)
 	//confessArray($vars, 'logIn($auth) called with');
 
 	//force us to drop all previous state if 'cancel' button pressed!
-	$auth = $vars['cancel'] ? "" : $vars['auth'];
+	$auth = $vars['logout'] ? "" : $vars['auth'];
 
 
 	/* vital information for each state.
@@ -899,7 +915,7 @@ loggedInState($auth, $states)
 {
 	$uinfo = getUser($auth['uid']);
 	printf("<h3>Welcome %s!</h3>\n", $uinfo['username']);
-	// TODO logoutForm!()
+	logoutForm();
 	return changeState($auth, $states, 'loggedin', 1);
 }/* END LOGGEDINSTATE */
 
