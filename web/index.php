@@ -44,19 +44,75 @@
 		done();
 	}
 	
-	print "<p>This is the first day of the rest of your life!</p>";
+	print "<p>Please choose an action</p>";
 
-/*
+	// TODO abstract this out. it needs to be a utility function.
+	print "<table border=1>";
+
+	//names
 	printf("<FORM METHOD=POST ACTION='%s'>", 
-					$_SERVER['PHP_SELF']);
+					"10names.php");
+	tdArray(array (
+					"SpringFest Invitation Contacts",
+					"You have entered XXX names so far", 
+					sprintf("<INPUT TYPE=submit NAME='%s' VALUE='%s'>", 
+						'view', 'View') // eventually decide this via auth
+				)
+	);
+	print "</FORM>";
 
-	Enter/Edit SpringFest Invitation Contacts
-	printf("<INPUT TYPE=submit NAME='login' VALUE='%s'>",);
-	Enter/Edit SpringFest Auction Donation Items
-	Edit Roster Information
-	View Insurance Information
-	//printf("<a href='money.php%s'>Enter checks</a><br>\n";
-*/
+
+	// auction items
+	printf("<FORM METHOD=POST ACTION='%s'>", 
+					"auction.php");
+	tdArray(array (
+					"SpringFest Auction Donation Items",
+					"You have donated XXX items so far", 
+					sprintf("<INPUT TYPE=submit NAME='%s' VALUE='%s'>", 
+						'view', 'View') // eventually decide this via auth
+				)
+	);
+	print "</FORM>";
+
+	//payments, etc
+	printf("<FORM METHOD=POST ACTION='%s'>", 
+					"money.php");
+	tdArray(array (
+					"Payments", 
+					"You have paid xxx dollars so far", 
+					sprintf("<INPUT TYPE=submit NAME='%s' VALUE='%s'>", 
+						'view', 'View') // eventually decide this via auth
+				)
+	);
+	print "</FORM>";
+
+
+	//rasta
+	printf("<FORM METHOD=POST ACTION='%s'>", 
+					"roster.php");
+	tdArray(array (
+					"Roster Information",
+					"You have paid xxx dollars so far", 
+					sprintf("<INPUT TYPE=submit NAME='%s' VALUE='%s'>", 
+						'view', 'View') // eventually decide this via auth
+				)
+	);
+	print "</FORM>";
+
+	//insurance
+	printf("<FORM METHOD=POST ACTION='%s'>", 
+					"insurance.php");
+	tdArray(array (
+					"Auto Insurance Information",
+					"Your insurance is current/expired", 
+					sprintf("<INPUT TYPE=submit NAME='%s' VALUE='%s'>", 
+						'view', 'View') // eventually decide this via auth
+				)
+	);
+	print "</FORM>";
+
+	print "</table>";
+
 
 	done();
 ?>
