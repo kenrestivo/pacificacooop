@@ -60,6 +60,8 @@ class coopForm extends CoopObject
 			//confessObj($this, 'coopForm::build($id) found');
 			foreach($this->obj->toArray() as $key => $val){
 				if(!$this->isPermittedField($key)){
+					user_error("coopForm::build($key) not permitted", 
+							   E_USER_NOTICE);
 					// NOTE the hidden thing. i think  i need to do hidden here
 					continue;
 				}
@@ -225,14 +227,19 @@ class coopForm extends CoopObject
 	function getEnumOptions($key)
 		{
 			$db =& $this->obj->getDatabaseConnection();
-			$data =& $db->getRow("show columns from blog_entry like '$key'",
+			$data =& $db->getRow(sprintf("show columns from %s like '$key'",
+										 $this->table),
 								 DB_FETCHMODE_ASSOC);
 			if (DB::isError($data)) {
                 die($data->getMessage());
             }
+			$this->page->confessArray($data, "coopForm::getEnumOptions($key)");
 			preg_match('/enum\((.+?)\)/', $data['Type'], $matches);
 			$options = explode(',', ereg_replace("'", "", $matches[1]));
-
+			//array_unshift($options, '-- CHOOSE ONE --');
+			
+			// TODO set default to , um, default
+			
 			// selects must stutter: key => val. bah, give me LISP!
 			foreach($options as $opt){
 				$doubleopt[$opt]  = $opt;
