@@ -1101,6 +1101,25 @@ thruAuth($auth)
 }/* END THRUAUTH  */
 
 
+/******************
+	HACKAUTH
+		necessary for the object stuff
+	used for cases where i have a FORM (POST), 
+		and can't use SID (GET) constant.
+	inputs: none
+	outputs: session id as invisible fields!
+******************/
+function
+hackAuth($auth)
+{
+	$_SESSION['auth'] = $auth;
+	if(SID){
+		return sprintf("<INPUT TYPE=hidden NAME='%s' VALUE='%s'>\n",
+			'coop',  session_id());
+	}
+}/* END HACKUTH  */
+
+
 
 /******************
 	WEAKPASS

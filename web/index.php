@@ -36,7 +36,7 @@
 	";
 	warnDev();
 
-	$pv = $HTTP_POST_VARS ? $HTTP_POST_VARS : $HTTP_GET_VARS;
+	$pv = $_POST ? $_POST : $_GET;
 
 
 	$auth = logIn($pv);
