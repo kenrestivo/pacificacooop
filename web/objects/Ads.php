@@ -38,10 +38,10 @@ class Ads extends DB_DataObject
 		"company_id" => "Company Name",
 		"ad_size_id" => "Ad size",
 		"artwork_provided" => "Customer will provide their own artwork?",
-		"artwork_received" => "Date Artwork Received (MM/DD/YYYY)" ,
+		"artwork_received" => "Date Artwork Received" ,
 		"ad_copy" => "Type Ad Copy here (if applicable)" ,
 		"family_id" => "Soliciting Family",
-		"school_year" => "School Year (YYYY-YYYY)" ,
+		"school_year" => "School Year" ,
 		'income_id' =>  'Payment Summary',
 		'lead_id' => "Invitee"
 		);
