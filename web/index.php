@@ -31,7 +31,7 @@
 
 	//confessArray($HTTP_POST_VARS, "vars");
 
-	$auth = logIn($HTTP_POST_VARS['auth']);
+	$auth = logIn($HTTP_POST_VARS);
 
 	//confessArray($auth, "index.php. login() returns with");
 	error_log("   ");

@@ -31,6 +31,7 @@
 
 require_once("movetoshared.inc");
 
+define('MIN_PASS', 5);
 
 #thank you, phpnuke
 define('ACCESS_INVALID', -1);
@@ -408,14 +409,18 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	the state machine
 		only returns if it either needs more user input or is finished!
 		if it returns without state == 'loggedin', caller wants to done()
-	inputs: an auth struct
+	inputs: HTTP_VARS
 	outputs: status/error messages as needed
 	returns: the auth struct with necessary changes
 ******************/
 function
-logIn($auth)
+logIn($vars)
 {
-	//confessArray($auth, 'logIn($auth) called with');
+	//confessArray($vars, 'logIn($auth) called with');
+
+	//force us to drop all previous state if 'cancel' button pressed!
+	$auth = $vars['cancel'] ? "" : $vars['auth'];
+
 
 	// vital information for each state.
 	$states = array(
@@ -863,8 +868,9 @@ insecurePassState($auth, $states)
 {
 	loginForm(changeState($auth, $states, 'nullpass', 1),
 			'both', 'hide',
-			"Weak password, please make it at least x letters. 
-						Please try again.");
+			sprintf("Weak password, please make it at least %d letters 
+					or numbers, and try again.", MIN_PASS)
+	);
 
 	return changeState($auth, $states, 'needinput', 1);
 }/* END INSECUREPASSSTATE */
@@ -914,11 +920,11 @@ thruAuth($auth, $newname = 'auth')
 	WEAKPASS
 	inputs: a cleartext password
 	returns: 0 if ok, 1 if bad
-	TODO code up some regexp's here
 ******************/
 function
 weakPass($clearpass)
 {
+	//TODO code up some regexp's here! i.e. at least 5 alphanum chars, no spaces
 	return 0;
 }/* END WEAKPASS */
 
