@@ -590,4 +590,17 @@ select name, families.family_id,
     group by parents.family_id 
     order by worker_count desc, families.name;
 
+
+--- ugly one-off import
+CREATE TABLE temp (
+  temp_id int(32) NOT NULL unique auto_increment,
+  last_name varchar(255) default NULL,
+  first_name varchar(255) default NULL,
+  address varchar(255) default NULL,
+    date_of_birth date default NULL, 
+  PRIMARY KEY  (temp_id)
+) ;
+
+
+
 --- EOF

@@ -160,30 +160,6 @@ insert into territories set
 ;
 
 
------ sources
-insert into sources set
-            source_id = 0,
-            description = "Unknown";
-
-insert into sources set
-            source_id = 1,
-            description = "Entered by Member";
-
-insert into sources set
-            source_id = 2,
-            description = "Previous Alumni List";
-
-insert into sources set
-            source_id = 3,
-            description = "Springfest Flyer";
-
-insert into sources set
-            source_id = 4,
-            description = "Tribune Ad";
-
-insert into sources set
-            source_id = 5,
-            description = "Tribune Article";
 
 -- projects
 insert into enhancement_projects set
@@ -220,6 +196,22 @@ insert into sources  set
             source_id = 3,
             description = "Misc Advertising";
 
+insert into sources set
+            source_id = 4,
+            description = "Springfest Flyer";
+
+insert into sources set
+            source_id = 5,
+            description = "Tribune Ad";
+
+insert into sources set
+            source_id = 6,
+            description = "Tribune Article";
+
+insert into sources set
+            source_id = 7,
+            description = "Ken Temporary Alumni Hack";
+ 
 
 --- ad sizes
 insert into ad_sizes set
