@@ -35,7 +35,7 @@ class coopObject
 	var $obj;					// ref to db dataobject for this view
 	var $page;					// reference to the cooppage
 	var $table;					// convenience: the table the $this->obj is
-	var $pk;					// the primary key
+	var $pk;					// the primary key. convenience, really.
 	var $recurseLevel;			// level, if i'm linked from somewhere
 	var $parentObj;				// reference to parent object
 
@@ -52,6 +52,8 @@ class coopObject
 				die ($obj->getMessage ());
 			}
 			//confessObj($this->obj, "CONSTRUCTOR object for $this->table");
+
+			$this->getPK(); // must this be after find? rather constructor.
 				
 		}
  

@@ -33,7 +33,7 @@ require_once('object-config.php');
 class coopView extends CoopObject
 {
 	var $backlinks;				// list of links that are linked FROM here
-
+	var $forwardLinks;
 
 
 	// returns an action structure: tables[tablename][action], etc
@@ -43,8 +43,9 @@ class coopView extends CoopObject
 //			confessObj($this, "view");
 			global $_DB_DATAOBJECT;
 			//confessObj($_DB_DATAOBJECT, "getBackLinks() dataobject");
-			$tab =  $this->obj->tableName();
-			$links =& $_DB_DATAOBJECT['LINKS']['coop']; // XXX hard code hack! 
+			$tab =  $this->obj->tableName(); // XXX dup with $this->table
+			$links =& $_DB_DATAOBJECT['LINKS'][$this->obj->database()];
+			$this->forwardLinks = $links[$tab];
 			$this->page->confessArray($links, 
 									  "getBackLinks: links for $this->table");
 			foreach($links as $maintable => $mainlinks){
@@ -119,6 +120,41 @@ class coopView extends CoopObject
 				}
 			}
 		}
+	
+	//  checks if this table is repeated up the parent heirarchy
+	function isRepeatedTable($tablename)
+		{
+			if(!$this->parentObj){
+				return 0;
+			}
+			if($this->parentObj->table == $tablename){
+			
+				return 1;
+			}
+//			print "$this->parentObj->table != $tablename<br>";
+			return $this->parentObj->isRepeatedTable($tablename);
+		}
+
+	function addForwardTables(&$tab)
+		{
+	
+			//confessObj(&$this, "addForwardTables() ");	
+			$this->page->confessArray($this->links, 
+									  "addForwardTables() links");		
+			if(!$this->forwardLinks){
+				return false;
+			}
+			
+
+			foreach($this->forwardLinks as $nearkey => $farline){
+				list($fartable, $farcol) = explode(':', $farline);
+				if(!$this->isRepeatedTable($fartable)){
+					$this->addSubTable(&$tab, "FORWARDtable $fartable <br>");		
+				}
+			}
+
+
+		}
 
 
 	function toArray()
@@ -165,8 +201,6 @@ class coopView extends CoopObject
 
 			$this->getBackLinks();	// MUST be after find!
 
-			$this->getPK(); // must this be after find? rather constructor.
-
 			$jointable = 0; //preg_match('/_join/', $this->table);
 
 			// only indent the sub-level tables
@@ -184,7 +218,8 @@ class coopView extends CoopObject
 					$tab->addRow($this->toArray());
 				}
 				//subrows
-				$this->addSubTables(&$tab, $pk, $backlinks);
+				$this->addSubTables(&$tab);
+				$this->addForwardTables(&$tab);
 
 			}
 
