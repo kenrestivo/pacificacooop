@@ -53,7 +53,7 @@ function sponsors(&$cp)
 			$co =& new CoopObject(&$cp, $table, &$nothing);
 			$co->obj->{$co->pk} = $sp->obj->{$co->pk};
 			$co->obj->find(true);
-//			confessObj($co->obj, 'co');
+			//confessObj($co->obj, 'co');
 			// when i redo it, this is where the test for existing goes
 			if($co->obj->url > ''){
 				$thing = sprintf('<a href="%s">%s</a>', 
@@ -66,7 +66,7 @@ function sponsors(&$cp)
 					$thing = sprintf("%s %s", $co->obj->first_name,
 									 $co->obj->last_name);
 				}
-
+				
 				$spons[$sp->obj->sponsorship_name]['price'] = 
 					$sp->obj->sponsorship_price;
 				$spons[$sp->obj->sponsorship_name]['names'][] = $thing;
@@ -145,6 +145,28 @@ function auctionItems(&$cp, $sy)
 	return $res . $tab->toHTML();
 } // end auctions
 
+function ads(&$cp, $sy)
+{
+	$res .= '<div class="sponsor">';
+	$res .= "<p><b>And our advertisers:</b></p>";
+	$ad =& new CoopObject(&$cp, 'ads', &$nothing);
+	$ad->obj->query("select distinct * from ads left join companies on companies.company_id = ads.company_id left join sponsorships on companies.company_id = sponsorships.company_id where ads.school_year = '$sy' and sponsorship_id is null order by company_name");
+	$res .= "<ul>";
+	while($ad->obj->fetch()){
+		if($ad->obj->url > ''){
+			$res .= sprintf('<li><a href="%s">%s</a></li>', 
+							 $cp->fixURL($ad->obj->url),
+							 $ad->obj->company_name);
+		} else {
+			$res .= sprintf("<li>%s</li>", $ad->obj->company_name);
+		}
+	}
+	$res .= "</ul></div><!-- end ad div -->";
+
+	return $res;
+}
+
+
 
 ///MAIN
 $sy = findSchoolYear();
@@ -161,6 +183,7 @@ print "\n<hr></div> <!-- end header div -->\n";
 
 print '<div id="leftCol">';
 print sponsors(&$cp);
+print ads(&$cp, $sy);
 print '</div><!-- end leftcol div -->';
 
 

@@ -115,8 +115,7 @@ guarantee-pear::
 
 update-links::
 	php maint/make-links.php > $(LINKSFILE)		
-	@echo "[audit_trail]">> $(LINKSFILE)
-	@echo "audit_user_id = users:user_id" >> $(LINKSFILE)
+	cat schema/coop-manual-links.ini >> $(LINKSFILE)
 	@echo "remember to manually check for ones the script doesn't catch"
 
 #EOF

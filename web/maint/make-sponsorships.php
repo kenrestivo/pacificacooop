@@ -34,8 +34,6 @@ $cp->pageTop();
 //$cp->createLegacy($cp->auth);
 
 $atd = new CoopView(&$cp, 'sponsorships', $none);
-$atd->recordActions = array('edit' => "Edit",
-							'confirmdelete' => 'Delete');
 
 $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
@@ -44,9 +42,8 @@ print $menu->topNavigation();
 print "<p>Springfest Sponsors Needed</p>";
 
 print $cp->selfURL('View Sponsorships');
-print $cp->selfURL('Create New Sponsorship Manually', array('action' => 'new'));
-// print $cp->selfURL('Find Needed', array('action' => 'findneeded'));
-// print $cp->selfURL('Add Needed', array('action' => 'addneeded'));
+ print $cp->selfURL('Find Needed', array('action' => 'findneeded'));
+ print $cp->selfURL('Add Needed', array('action' => 'addneeded'));
 
 //confessObj($cp, 'cp');
 $level = ACCESS_EDIT;
@@ -54,9 +51,10 @@ $p = getAuthLevel($cp->auth, 'solicitation');
 $admin = $p['group_level'] >= $level ? 1 : 0;
 $user = $p['user_level'] >= $level ? 1 : 0;
 
+// TODO put this back after i push it live
 // if($admin + $user < 1){
-// 	print "You don't have permissions to do this. Sorry.";
-// 	done();
+//  	print "You don't have permissions to do this. Sorry.";
+//  	done();
 // }
 
 
@@ -128,84 +126,6 @@ switch($_REQUEST['action']){
 	 
 	 break;
 	 
-//// EDIT AND NEW //////
- case 'new':
- case 'edit':
-	 print "<p>Choose either a Solicitation Company Name or Response Code, not both. If you set both by mistake, change the one to 'CHOOSE ONE'.</p>";
-
-	 $atdf = new CoopForm(&$cp, 'sponsorships', $none); // NOT the coopView above!
-
-	 $atdf->obj->fb_fieldsToRender = array('company_id', 'lead_id', 
-										   'sponsorship_type_id', 
-										   'entry_type');
-
-
-	 // constrain those damned leads
-	 $sub = new CoopObject(&$cp, 'leads', $atdf); 
-	 $atdf->obj->fb_preDefElements = array('lead_id' => 
-										   $sub->obj->constrainedInvitePopup());
-	 
-	 $atdf->build($_REQUEST);
-
-
-	 // ugly assthrus for my cheap dispatcher
-	 $atdf->form->addElement('hidden', 'action', 'edit'); 
-
-	 $atdf->legacyPassThru();
-
-	 $atdf->addRequiredFields();
-	 
-	 // tweak them all to be manual now!
-	 $el =& $atdf->form->getElement('entry_type');
-	 $el->setValue('Manual');
-
-	 if ($atdf->form->validate()) {
-		 print "saving...";
-		 print $atdf->form->process(array(&$atdf, 'process'));
-		 // gah, now display it again. they may want to make other changes!
-		 print viewHack(&$cp, &$atd);
-	 } else {
-		 print $atdf->form->toHTML();
-	 }
-	 break;
-
- case 'confirmdelete':
-	 print "<p>Are you sure you wish to delete this? Click 'Delete' below to delete it, or the 'Back' button in your broswer to cancel.</p>";	 $atdf = new CoopForm(&$cp, 'sponsorships', $none); // NOT the coopView above!
-	 $atdf->build($_REQUEST);
-
-	 // ugly assthrus for my cheap dispatcher
-	 $atdf->form->addElement('hidden', 'action', 'edit'); 
-
-	 $atdf->legacyPassThru();
-
-	 $atdf->addRequiredFields();
-
-
-	 // change the save button and action to delete
- 	 $el =& $atdf->form->getElement('savebutton');
- 	 $el->setValue('Delete');
- 	 $el =& $atdf->form->getElement('action');
- 	 $el->setValue('delete');
-	 
-	 //TODO and add a cancel button
-	 //$atdf->form->addElement('button', 'cancelbutton', 'Cancel');
-
-	 $atdf->form->freeze();
-
-	 print $atdf->form->toHTML();
-
-	 break;
-
-//// DELETE ////
- case 'delete':
- // hack , but it works. why reinvent the wheel?
-	 $atdf = new CoopForm(&$cp, 'sponsorships', $none); // NOT the coopView above!
-	 $atdf->build($_REQUEST);
-	 $atdf->obj->delete();
-	 print viewHack(&$cp, &$atd);
-
-	 break;
-
 
 //// DEFAULT (VIEW) //////
  default:
@@ -224,6 +144,6 @@ done ();
 ?>
 
 
-<!-- END MAKE PACKAGES -->
+<!-- END MAKE SPONSORSHIPS -->
 
 
