@@ -139,9 +139,11 @@ class CoopMenu extends HTML_Menu
 						 
 			$res .= $tab->toHTML();
 			if(count($this->getPath()) > 1){
+///				print $this->getCurrentURL();
+	//			confessArray($this->getPath(), "getpath");
 				$res .= $this->get('urhere');	
 			}
-//			confessArray($this->getPath(), "getpath");
+
 			return $res;
 		}
 	
