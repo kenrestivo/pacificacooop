@@ -61,6 +61,9 @@
 
 			nameSummary($id);
 
+			#for debugging, to show all records
+			nameTable($id);
+
 			print "<br>Feel free to enter more names if you like!<br>";
 
 			#finally, give them a form to enter data!
@@ -89,10 +92,8 @@
 		#uncomment for debugging, to show all records
 		#nameTable($id);
 
-		print "<P>Enter more names here.
-					You may enter less than 10 if you wish, then 
-					come back later and enter more if you like.
-					Remember to click 'Save Names' 
+		print "<P>Enter a name here.
+					Remember to click 'Save' 
 					at the bottom of this screen when you are done!</p>";
 		#finally, give them a form to enter data!
 		oneNameForm($id);
