@@ -231,7 +231,7 @@ create table auction (
     amount decimal(9,2),
 	date_received date,
 	location_in_garage varchar(255),
-	item_type enum ('Real Thing', 'Gift Certificate'),
+	item_type enum ('Product', 'Service'),
     package_id int(32),
     primary key (auctionid)
 );
