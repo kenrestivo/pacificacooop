@@ -38,4 +38,5 @@ class Solicitation_calls extends DB_DataObject
 		"done" => "Date of Call (MM/DD/YYYY)" ,
 		"school_year" => "School Year (YYYY-YYYY)" 
 		);
+	var $kr_longTitle = 'Springfest Solicitation Miscellaneous Notes';
 }

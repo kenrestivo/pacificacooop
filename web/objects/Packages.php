@@ -36,5 +36,23 @@ class Packages extends DB_DataObject
 	var $fb_linkDisplayFields = array ('package_number', 
 									   'package_description');
 	var $fb_enumFields = array ('item_type', 'package_type');
+
+	var $fb_fieldsToRender = array('package_type', 'package_number', 'package_title', 'package_description', 
+								   'item_type', 'package_value');
+
+	var $fb_fieldLabels = array (
+		"package_type" => "Package Type" ,
+		"package_number" => "Package Number (as it will be printed in program)" ,
+		"package_title" => "Package Title (short)" ,
+		"package_description" => "Package Description (long)" ,
+		"donated_by_text" => "Generously Donated By" ,
+		"item_type" => "Physical Product or Gift Certificate",
+		"package_value" => 'Estimated Value ($)' ,
+		"starting_bid" => 'Starting Bid ($)' ,
+		"bid_increment" => 'Bid Increment ($)', 
+		"school_year" => "School Year (YYYY-YYYY)" 
+
+		);
+	var $kr_longTitle = "Springfest Packages";
 }
 

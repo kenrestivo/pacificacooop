@@ -53,4 +53,5 @@ class Companies extends DB_DataObject
 	var $fb_enumFields = array ('flyer_ok');
 	var $fb_selectAddEmpty = array ('territory_id', 'family_id', 
 									'do_not_contact');
+	var $kr_longTitle =  'Springfest Solicitation Contacts';
 }

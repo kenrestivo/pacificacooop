@@ -47,4 +47,6 @@ class Auction_donation_items extends DB_DataObject
 		"school_year" => "School Year (YYYY-YYYY)" ,
 		"auction_donation_item_id" => "Unique ID" 
 		);
+	var $kr_longTitle =  'Springfest Auction Donation Items';
+
 }

@@ -72,7 +72,7 @@ class coopView extends CoopObject
 			}
 
 			$tab =& new HTML_Table();
-			//$this->addTableTitle(&$tab); // XXX do i need this anymore?
+		
 			$this->addHeader(&$tab);
 
 			while($this->obj->fetch()){
@@ -81,8 +81,10 @@ class coopView extends CoopObject
 			
 			}
 			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
-						
-			return $tab->toHTML();
+			$res .= $this->tableTitle();
+			$res .= $tab->toHTML();
+			return $res;
+
 		}
 
 	function insertIntoRow(&$tab, $text)
@@ -202,7 +204,13 @@ class coopView extends CoopObject
 			$tab->addRow($res, 'bgcolor=#9999cc', 'TH'); 
 		}
 
-
+	function tableTitle($linkfield)
+		{
+			$res = sprintf("<hr><h2>%s</h2>", 
+						   $this->obj->kr_longTitle ? $this->obj->kr_longTitle : $this->table);
+														
+			return $res;
+		}
 
 	
 
