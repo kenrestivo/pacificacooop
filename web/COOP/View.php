@@ -113,40 +113,6 @@ class coopView
 		}
 
 
-	// get the pager info for the table ->obj
-	function calcPager($count)
-		{
-		
-			/// pager driver calculations
-			for($i = 1; $i <= $count; $i++){
-				$pager_item_data[] = $i;
-			}
-			$pager_parms = array (
-				'mode' => 'Sliding',
-				'perPage' => 10,
-                'urlVar' => sprintf('%s%s_pageID',
-                                    SID ?  SID . '&' : "",
-                                    $table) ,
-                'sessionVar' => 'pageID' . $this->table, 
-				'delta' => 2,
-                'useSessions' => 1,
-                'itemData' => $pager_item_data
-				);
-			$pager =& new Pager($pager_parms);
-			$pager_result_data = $pager->getPageData();
-			$pager_links = $pager->getLinks();
-			$this->pager_result_size = sizeof($pager_result_data);
-			$this->pager_start = array_shift($pager_result_data);
-			//confessArray($pager_result_data, "pagerresult");
-			//confessArray($pager_links, "pagerlinks");
-			
-            $res .= sprintf("%d total records found, in %d pages<br>",
-                $count, $pager->numPages());
-            $res .= $pager_links['all'];
-            			
-			return $res;
-		}
-
 	// returns an action structure: tables[tablename][action], etc
 	function getBackLinks()
 		{
