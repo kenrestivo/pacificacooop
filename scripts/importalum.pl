@@ -99,6 +99,7 @@ addThem()
 	my $query;
 	my $count = 0;
 	my $rquery;
+	my $ds = 0;
 	my $ritemref;
 	my %ritem;
 	my $rqueryobj;
@@ -129,7 +130,7 @@ addThem()
 			printf("matched %d rows already present for %s %s\n", 
 				$count, $f{'last'}, $f{'addr'});
 		}
-		$dupesuppressed += $count;
+		$ds += $count;
 	} else {
 		$query = "insert into leads set ";
 		$i = 0;
@@ -148,7 +149,7 @@ addThem()
 		}
 	}
 
-	print "suppressed $dupesupressed duplicates\n";
+	print "suppressed $ds duplicates\n";
 
 } #END ADDTHEM
 
