@@ -20,11 +20,11 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
+//THIS STUFF MUST EXECUTE BEFORE ANY HTML IS SENT!!!! BEFORE HEADERS, ANYTHING!
 
 setupDB();
 setupErrors(); //*sigh* have to do this SECOND since it looks at dbhost :-/
 sessionSetup();
-
 
 user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
 		session_id(), $_SESSION['auth']['state']), E_USER_NOTICE);	
@@ -360,6 +360,8 @@ setupDB()
 
 	mysql_select_db($dbname) or die ("can't use $dbname! ack!\n");
 }/* END  SETUPDB */
+
+
 
 
 ?>

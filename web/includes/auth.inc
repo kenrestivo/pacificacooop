@@ -47,7 +47,7 @@ $accessnames = array(
 		100 => array('Summarize', 'summary'),
 		200 => array('View', 'view'),
 		500 => array('Edit', 'edit'),
-		600 => array('Create', 'add'),
+		600 => array('Enter New', 'add'),
 		700 => array('Delete', 'confirmdelete'),
 		800 => array('Administer permissions for', NULL)
 );

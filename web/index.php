@@ -40,6 +40,7 @@
 
 		<h2>Pacifica Co-Op Nursery School Data Entry</h2>
 	";
+	warnDev();
 
 	$pv = $HTTP_POST_VARS ? $HTTP_POST_VARS : $HTTP_GET_VARS;
 
