@@ -24,14 +24,16 @@
 use DBI;
 use Getopt::Std;
 
-getopts('vth:p:d:') or &usage();
+getopts('vth:p:d:u:s:') or &usage();
 
 
 $host = $opt_h ? $opt_h : "bc";
+$user = $opt_u ? $opt_u : "root";
+$pw = $opt_s ? $opt_s : "secret";
 $port = $opt_p ? ":$opt_p" : "";
 $dbname = $opt_d ? $opt_d : "coop_dev";
 #basic login and housekeeping stuff
-$dbh = DBI->connect("DBI:mysql:$dbname:$host$port", "input", "test" )
+$dbh = DBI->connect("DBI:mysql:$dbname:$host$port", $user, $pw )
     or die "can't connect to database $!\n";
 
 @adds = ("audituserid int(32)", "entered datetime", "updated timestamp");
@@ -58,16 +60,15 @@ sub addall {
 		%ritem = %$ritemref;
 		if($opt_v){
 			foreach $key (keys %ritem) {
-				printf("%s -> %s\n", $key, $ritem{$key});
+				printf("%s -> %s\n", $key, $ritem{$key} ? $ritem{$key} : "");
 			}
 			print("\n");
 		}
 		if($ritem{'TABLE_TYPE'} ne 'TABLE'){
+			printf("%s is not a table\n", $ritem{'TABLE_NAME'});
 			next;
 		}
-		unless($opt_t){
-			&addthem($ritem{'TABLE_NAME'}, \@adds);
-		}
+		&addthem($ritem{'TABLE_NAME'}, \@adds);
 	} # end while
 } #END ADDALL
 
@@ -94,6 +95,8 @@ sub usage()
     print STDERR "\t-t test (don't actually update db) \n";
     print STDERR "\t-h hostname of db\n";
     print STDERR "\t-p port db is running on\n";
+    print STDERR "\t-u username on db (must have ALTER table privs)\n";
+    print STDERR "\t-s password to use\n";
     print STDERR "\t-d database name\n";
 	exit 1;
 }
