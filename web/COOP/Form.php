@@ -34,9 +34,12 @@ class coopForm extends CoopObject
 
 
 	// i got disgusted with FB. fuck that. i roll my own here.
-	function build($id)
+	function build($id = false)
 		{
 			$id = (int)$id;
+			if($id){
+				$this->obj->get($id);
+			}
 
 			$form =& new HTML_QuickForm('editform');
 			
@@ -45,9 +48,6 @@ class coopForm extends CoopObject
 							  $this->obj->fb_formHeaderText : 
 							  ucwords($this->table));
 
-			if($id){
-				$this->obj->get($id);
-			}
 			//confessObj($this, 'atd');
 			//TODO: check ispermitted field! like oneform
 			foreach($this->obj->toArray() as $key => $val){

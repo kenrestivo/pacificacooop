@@ -114,8 +114,26 @@ select families.name, enrol.sess
     group by dt 
     order by entered;
 
+-- HACKY temporary way to keep record of who was sent what!
+insert into invitations (lead_id, school_year, family_id, relation, label_printed)
+select distinct(leads.lead_id)  as lead_id,
+    '2004-2005',
+    leads.family_id,
+    leads.relation,
+	now()
+    from leads
+        left join families on families.family_id = leads.family_id
+        left join kids on kids.family_id = leads.family_id
+        left join enrollment on enrollment.kid_id = kids.kid_id 
+     where  
+            ((leads.family_id is null or leads.family_id < 1) 
+             or relation = 'Alumni' or
+             (enrollment.school_year = '2004-2005' 
+                 and enrollment.dropout_date is NULL))
+			and  (do_not_contact is null or do_not_contact > '2000-01-01')
+       order by leads.last_name, leads.first_name
+
 -- the invitations excel export report
---- NOTE! you MUST then do the following query, to keep a record of their invite date!
 select distinct(leads.lead_id)  as responsecode
         ,leads.salutation 
         ,leads.first_name  
@@ -130,34 +148,11 @@ select distinct(leads.lead_id)  as responsecode
         ,leads.country
         ,families.name as familyname
     from leads
-        left join families on families.family_id = leads.family_id
-        left join kids on kids.family_id = leads.family_id
-        left join enrollment on enrollment.kid_id = kids.kid_id 
+        left join invitations using (lead_id)
+			left join families using (family_id)
      where  
-            (leads.family_id is null or leads.family_id < 1) 
-             or relation = 'Alumni' or
-             (enrollment.school_year = '2004-2005' 
-                 and enrollment.dropout_date is NULL)
+            invitations.school_year = '2004-2005' 
        order by leads.last_name, leads.first_name
-
--- keep record of who was sent what!
-insert into invitations (lead_id, school_year, family_id, relation, label_printed)
-select distinct(leads.lead_id)  as lead_id,
-    '2004-2005',
-    leads.family_id,
-    leads.relation,
-	now()
-    from leads
-        left join families on families.family_id = leads.family_id
-        left join kids on kids.family_id = leads.family_id
-        left join enrollment on enrollment.kid_id = kids.kid_id 
-     where  
-            (leads.family_id is null or leads.family_id < 1) 
-             or relation = 'Alumni' or
-             (enrollment.school_year = '2004-2005' 
-                 and enrollment.dropout_date is NULL)
-       order by leads.last_name, leads.first_name
-
 
 
 -- detailed list of payments
@@ -629,7 +624,7 @@ having cash_donations > 0 or auction_purchases > 0 or auction_donations > 0 or i
 order by cash_donations desc, auction_purchases desc, 
     auction_donations desc, in_kind_donations desc;
 
---- by acctnum
+--- solicitation by acctnum
 select coa.description as Description,
         sum(inc.total) as Before_Event, 
         sum(pur.total) as At_Event
@@ -710,5 +705,33 @@ having cash_donations > 0 or auction_donations > 0 or in_kind_donations > 0
 order by cash_donations desc, 
     auction_donations desc, in_kind_donations desc;
 
+--- invites by acctnum
+select coa.description as Description,
+        sum(inc.total) as Donations,
+        sum(tic.total) as Ticket_Purchases
+from chart_of_accounts as coa
+left join 
+    (select account_number, sum(payment_amount) as total
+     from leads_income_join as linj
+     left join income 
+              on linj.income_id = 
+                income.income_id
+        where income.school_year = '2003-2004'
+        group by linj.lead_id) 
+    as inc
+        on inc.account_number = coa.account_number
+left join 
+    (select account_number, sum(payment_amount) as total
+     from tickets
+     left join income 
+              on tickets.income_id = 
+                income.income_id
+        where income.school_year = '2003-2004'
+        group by tickets.lead_id) 
+    as tic
+        on tic.account_number = coa.account_number
+group by coa.account_number
+having Donations >0 or Ticket_Purchases > 0
+order by Donations desc, Ticket_purchases desc;
 
 --- EOF

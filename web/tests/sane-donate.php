@@ -5,28 +5,36 @@
 chdir("../");                   // XXX only for "test" dir hack!
 require_once('first.inc');
 require_once('CoopPage.php');
+require_once('CoopView.php');
+require_once('CoopForm.php');
 require_once('TicketWizard.php');
+
+
 
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
-$debug = 1;
+$debug = 0;
 
+//MAIN
+//$_SESSION['toptable'] 
+
+//DB_DataObject::debugLevel(2);
 
 $cp = new coopPage( $debug);
+$cp->pageTop();
 
-// make it leagal html, and test it
-$cp->header();
+print $cp->selfURL('refresh (for testing)');
+
+$tick = new TicketWizard(&$cp);
+$tick->run();
+
+							
 
 
 
-print $cp->selfURL('Refresh');
 
 
-$wiz =& new TicketWizard(&$cp);
-$wiz->run();
-
-$_SESSION=$_REQUEST; 			// keep sessioninit happy
 
 done ();
 
