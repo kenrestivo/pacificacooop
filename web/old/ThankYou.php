@@ -588,45 +588,48 @@ http://www.pacificacoop.org/
 
 	function repairOrphaned()
 		{
-			$save = new CoopObject(&$this->cp, 'thank_you', &$nothing);
-			$save->obj->thank_you_id = DB_DataObject_Cast::sql('NULL');
-			
+			$ty = new CoopObject(&$this->cp, 'thank_you', &$nothing);
+			$ty->obj->whereAdd('thank_you.thank_you_id is null');
+//			$ty->obj->debugLevel(2);
+
 			foreach(array('in_kind_donations', 'auction_donation_items', 'income') as $table){
 				// have to save it b4 each query
 				$save = $ty->obj;
 				$real = new CoopView(&$this->cp, $table, &$nothing);
 				$real->obj->whereAdd("$table.thank_you_id is not null");
-				$real->obj->joinAdd($save);
-				print $real->simpleTable();
+				$real->obj->joinAdd($save, 'left');
+				// print $real->simpleTable();
+				// continue;
 				$real->obj->find();
 				while($real->obj->fetch()){
 					$mistake_summary .= print_r($real->obj, true);
 					//clear it now! or try at least...
 					$real->obj->thank_you_id = DB_DataObject_Cast::sql('NULL');
-					//$real->obj->update(); // TODO enable this when i'm ready to test
+					if(!$real->obj->update()){
+						user_error("failed to update when cleaning up orphaned thank you's. this is really bad. you probably have a corrupt database. stop immediately.", E_USER_ERROR);
+					}
 	}
 			} // end foreach
 					
-					
-					return; /// TODO remove this to test email interface
-					
+			if($mistake_summary){
 					$mistake_summary .= print_r($_REQUEST, true);
+					$mistake_summary .= print_r($this->cp, true);
 					
-					$headers['From']    = 'bugreport@pacificacoop.org';
-					
+					// now send it
 					global $coop_sendto;
-					$headers['To']      = 	 $coop_sendto['email_address'];
-					
+					$to =  $coop_sendto['email_address'];
+
+					$headers['From']    = 'bugreport@pacificacoop.org';
+					$headers['To']      = 	$to;
 					$headers['Subject'] = 'ORPHANED thank-you notes found';
 					
-					
 					$mail_object =& Mail::factory('smtp', $params);
-					
-					$body = $mistake_summary;
-					$mail_object->send($this->email, 
+	
+					$mail_object->send($to, 
 									   $headers, 
-									   $body);
+									   $mistake_summary);
 					
+			}
 		} // END REPAIRORPHANS	
 
 } // END THANK YOU CLASS
