@@ -104,7 +104,7 @@
 	 (solicits dbh
 			   '("depriest" "refino" "kaitz" "solano" "mrad" "gaffney" "bauer"))
      ;; packaging committee
-     (change-privs-list dbh '("white-roger+michelle" "walker" "pacheco")
+     (change-privs-list dbh '("white-roger+michelle" "walker" "pacheco" "harvey")
                         "packaging" 700 500)
      ;; program committee: packages
      (change-privs-list dbh '("treckeme" "stewart")
@@ -130,6 +130,10 @@
 
      ;; the chairs, overriding defaults
 	 (do-chairs dbh chairs)
+
+	 ;; the accountants
+	 (change-privs-list dbh '("depriest") "solicit_money" 700 700)
+	 (change-privs-list dbh '("depriest") "solicitation" 700 700)
      
 	 ;; finally the admins, overriding al;
 	 (springfest-goddesses dbh '("vreeland" "cooke"))
