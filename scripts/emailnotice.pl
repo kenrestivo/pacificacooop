@@ -487,7 +487,8 @@ sub fieldTripReport()
 	$badness .= sprintf(
 				" \tFamily Phone: %s\tEmail: %s\n",
 				$famref->{'phone'} ? $famref->{'phone'} : "",
-				$marf->[0]->{'parref'}->{'email'}
+				$marf->[0]->{'parref'}->{'email'} ?
+					$marf->[0]->{'parref'}->{'email'} : ""
 			);
 
 	#insurance

@@ -150,6 +150,27 @@ create table coop.nags (
 	primary key (nagsid)
 );
 
+	
+-- chart of accounts
+create table coop.coa (
+    acctnum int(32) not null unique,
+	description varchar(255),
+	acctype enum ('Income', 'Expense', 'Equity'),
+	primary key (acctnum)
+);
+
+	
+-- income
+create table coop.inc (
+    incnum int(32) not null unique,
+	checknumber varchar(255),
+	checkdate date,
+	payer varchar(255),
+    acctnum int(32),
+    amount decimal(9,2),
+	primary key (incnum)
+);
+
 
 -- the user/passwords used by the web view page AND my update tool..
 grant select, update, insert, delete on coop.* to input@'%' 

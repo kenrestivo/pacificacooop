@@ -84,4 +84,39 @@ later:
 	soliciting db
 		region? 
 	track # of tickets, $ donated
+
+
+---------------------------------
+Wed Oct 22 13:47:55 PDT 2003
+
+
+three different types of revenue to track
+	- 10 names forfeit charge ($50, and optional)
+		only if you opt to NOT supply 10 names
+		they would PREFER to have the 10 names, but this'll let them escape
+	- food/quilt $50 REQUIRED
+		everyone MUST pay this
+		someone likely will need to nag people about this, like with 10 names
+	- 3x5 card item forfeit charge ($50, optional)
+		the 3x5 card tracking will be similar or identical to the 10 names
+		this charge is, just like 10 names forfeit charge, if they opt out
+		they can choose not to supply the 3x5 items, and pay $50 instead
+	
+	10 names RSVP cards
+		they will print or otherwise right the leads id number on the cards
+		when donations are entered, they'll enter the response number
+		to track revenue to each lead, and, summary by each family
+
+	an input screen, to enter 
+		payer, 
+		check num, 
+		date (on check?), 
+		category  (popup)
+			10-names forfeit charge
+			food/quilt
+			3x5 card forfeit charge
+		family popup (if 3x5 or quilt) 
+		or, if an RSVP, response code, which is the leadid 
+			(future, for RSVP cards: not right now)
+		
 	
