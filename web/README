@@ -12,23 +12,48 @@ the fieldstruct
 	a fieldstruct is a VIEW of data.
 		not analogous to a table, or even necessarily a privilge realm
 	all its possible members and all possible values of each of its members!
-		adminonly
-		callback
-		choices
-		def
-		display
-		dupeignore
-		duplicates
-		invisible
-		len
-		lines
-		linkfield
-		linktable
-		required
-		size
-		table
-		type
-		viewcallback
+		adminonly: 
+			passed through invisibly in entry forms,
+			not shown in report titles or report body, if user isn't privileged
+			you decide this when you call the display funcs
+		callback: the field's display isn't determined by it's type
+			but rather a callback you supply is executed instead
+			with the arguments: $i, $fname, $field
+				where $i is the entrynumber (for spreadsheet-like editing)
+				fname is the name of the field, and $field is its struct
+					populated with any values the user input
+		choices: force type to be a popup field
+			the choices are an array supplied... these are displayed
+		def: the default value. this is the MOST important field!
+			this is either the default value that the PROGRAMMER entered,
+			or the value that teh user entered. yes overloads suck.
+			has to be overloaded, so that entry and confirm forms use same code
+		display: the TITLE of the field, which is displayed 
+			in reports, and in entry forms
+		dupeignore: don't check this field when calculating duplicates
+			i.e. leave the value in this field out of any "select's"
+		duplicates: DEPRECIATED! not used.
+		invisible: don't show it. ever. do pass it through, however!
+		len: maximum length of this field, in chars. html enforces this.
+		lines: if > 1, it's a SCROLLING text box, of this number of "rows"
+		linkfield: don't display the data in this fieldname in this table. 
+			instead, show the date in $linkfield, from $linktable
+			the $fieldname data is saved/checked in $table, but not shown
+			instead, $linkfield is shown.
+		linktable: data in $linkfield comes from a join to THIS table
+		required: user must enter SOME valid data for this field
+		size: size of the entry box, in chars. html draws this
+		table: table from which this field comes.
+		type: type of field. used mostly for user entry validation, 
+			and for display formatting. valid values are:
+				date: a 2004-01-01 type date
+				datetime: a date, but with a 24:00:00 time
+				currency: in this case, US dollaz
+				url: show the href for linking
+		viewcallback: instead of showing the raw data, use this callback 
+			called with ($fname, $val)
+			$fname is the field name
+			$val is the raw data value (which the callback then formats)
 
 
 
