@@ -48,6 +48,7 @@ OK, CODE!
 		simple query: into table
 	drawing the names-to-date info DONE
 		simple query, again.
+		it would be nice to show how many days left until cutoffdate
 	drawing the web form
 		name the fields in a loop: name1, name2, addr1, addr2
 		invis field with parentid: because there'll be no popup on this page

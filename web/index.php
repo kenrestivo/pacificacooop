@@ -68,7 +68,7 @@
 				should be invited to attend or donate to Springfest. 
 				These can be family, friends, business associates, etc. 
 				They will be sent formal invitations on behalf of the School. 
-				You must enter at least 10 names by 11/04/2003<br>";
+				You must enter at least 10 names by $cutoffdate<br>";
 		#show them what they've already got, don pardo
 		nameSummary($id);
 

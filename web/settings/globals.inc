@@ -20,6 +20,9 @@
     global $HTTP_POST_VARS;
     global $_SERVER;
 
+	#XXX hack
+	$cutoffdate = "11/04/2003";
+
 ?>
 
 <!-- END GLOBALS -->
