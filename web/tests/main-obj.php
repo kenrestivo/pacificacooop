@@ -12,28 +12,31 @@ $debug = 0;
 //MAIN
 //$_SESSION['toptable'] 
 
+//DB_DataObject::debugLevel(2);
+
+$cp = new coopPage( $debug);
+$cp->pageTop();
+
+$sy = findSchoolYear();
+
+$top = new CoopView(&$cp, 'companies');
 
 
-$page = new coopPage( $debug);
-$page->pageTop();
+// $top->obj->query("select * from companies         
+//         left join companies_income_join 
+//                 on companies.company_id = 
+//                     companies_income_join.company_id
+// 		left join income
+//                on income.income_id = companies_income_join.income_id
+// 		where income.income_id is not null and income.school_year = '$sy'
+// ");
 
-$mi= 'thank_you_id';
-$cid = 1;
+//print "FOUND " . $top->obj->find();
 
-$top = new CoopView(&$cp, 'thank_you');
-//print "CHECKING $table<br>";
-$top->obj->$mi = $cid;
-$summary = $top->getSummary();
+$aij = new CoopObject(&$cp, 'companies_income_join');
+$top->obj->joinAdd($aij->obj);
+
 print $top->simpleTable($summary);
-
-// XXX this just SXCREAMS for a refactoring. a repetitive function.
-// linktable, destinationtable, mainindex, and id?
-$co =& new CoopObject(&$cp, 'companies_income_join');
-$co->obj->$mi = $cid;
-$real =& new CoopView(&$cp, 'income');
-$real->obj->joinadd($co->obj);
-$real->parentSummary = $summary;
-print $real->simpleTable($summary);
 	
 
 
