@@ -30,7 +30,7 @@ require_once('DB/DataObject/Cast.php');
 
 //////////////////////////////////////////
 /////////////////////// SPONSORSHIP CLASS
-class Sponsorships
+class Sponsorship
 {
 	var $cp ;  // alias to coop page object
 	var $sponsorTypes = array(); // cache of sponsortypes for this year
