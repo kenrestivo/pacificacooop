@@ -22,7 +22,7 @@
 
 */
 
-
+require_once("PEAR.php");
 
 $config = parse_ini_file('coop-dbobj.ini',TRUE);
 foreach($config as $class=>$values) {

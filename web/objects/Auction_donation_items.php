@@ -22,6 +22,7 @@ class Auction_donation_items extends DB_DataObject
     var $package_id;                      // int(32)  
     var $item_type;                       // string(16)  enum
     var $school_year;                     // string(50)  
+    var $committed;                       // string(3)  enum
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

@@ -29,6 +29,9 @@ class Leads extends DB_DataObject
     var $do_not_contact;                  // date(10)  
     var $school_year;                     // string(50)  
     var $source_id;                       // int(32)  
+    var $fax;                             // string(255)  
+    var $email_address;                   // string(255)  
+    var $company_id;                      // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

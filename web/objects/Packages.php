@@ -22,6 +22,7 @@ class Packages extends DB_DataObject
     var $starting_bid;                    // real(11)  
     var $bid_increment;                   // real(11)  
     var $school_year;                     // string(50)  
+    var $wish_list;                       // string(3)  enum
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

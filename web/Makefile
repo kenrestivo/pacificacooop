@@ -98,5 +98,8 @@ diff-dev:
 tags:
 	etags *
 
+update-dbobject:
+	 php /usr/share/php/DB/DataObject/createTables.php coop-dbobj.ini
+
 #EOF
 

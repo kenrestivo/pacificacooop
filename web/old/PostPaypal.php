@@ -65,7 +65,7 @@ class PostPaypal
 				$longname = $this->key_mapping[$index];
 				// save them into var's
 				$this->$longname = $value;
-				print "index $index longname $longname value $value\n";
+				//print "index $index longname $longname value $value\n";
 			}
 		}
 
@@ -90,12 +90,12 @@ class PostPaypal
 
             $obj->txn_id = $this->paypal_obj->txn_id;
 
-            print_r($obj);
+            //print_r($obj);
             $obj->debugLevel(5);
             //don't dupe. XXX this is dumb. what do i do about refunds?
             $obj->whereAdd(sprintf("txn_id = '%s'", $obj->txn_id));
 			$numrows = $obj->find() ; 
-            print "NUM $numrows";
+            //print "NUM $numrows";
             if($numrows > 0){
                 return 0;   
             }
@@ -113,7 +113,7 @@ class PostPaypal
             $obj->amount = $this->paypal_obj->payment_gross;
             $obj->school_year = findSchoolYear();
 			$obj->account_number = $this->account_number;
-            print_r($this);
+            //print_r($this);
             $this->income_id = $obj->insert();
             return 1;
 	}

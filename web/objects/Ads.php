@@ -18,6 +18,9 @@ class Ads extends DB_DataObject
     var $ad_size_id;                      // int(32)  not_null
     var $income_id;                       // int(32)  
     var $lead_id;                         // int(32)  not_null
+    var $artwork_received;                // date(10)  
+    var $family_id;                       // int(32)  
+    var $company_id;                      // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
