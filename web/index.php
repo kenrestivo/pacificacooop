@@ -49,7 +49,7 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 	}
 
 	//OK, i am logged in!
-$cp = new CoopPage;
+$cp =& new CoopPage;
 $menu =& new CoopMenu;
 $cp->auth = $auth;
 $menu->createLegacy(&$cp);
@@ -66,14 +66,14 @@ $menu->createLegacy(&$cp);
 
 //confessObj($menu, "menuonb");
 print '<div id="leftcol">';
-print $menu->toHTML();
+print $menu->kenRender();
 print '</div>';
 
 print '<div id="rightCol">';
 	print "<p>Please choose an action:</p>";
 
-	print "\n\n<table border=1>\n";
-	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
+	print "\n\n<table border=0>\n";
+//	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
 
 	//narsty-ass ugly hack
 

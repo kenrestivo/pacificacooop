@@ -23,6 +23,7 @@
 
 require_once 'HTML/Menu.php';
 require_once 'HTML/Menu/DirectTreeRenderer.php';
+require_once 'HTML/Menu/DirectRenderer.php';
 
 require_once('shared.inc');
 
@@ -49,6 +50,12 @@ class CoopMenu extends HTML_Menu
 		
 			$this->page =& $page;
 
+			// fix prefix, dammit
+			preg_match("|/(.+)/|", $_SERVER['PHP_SELF'],$match);
+			$prefix = $match[0];
+			//print "ADDING [$prefix] to prefix";
+			$this->setURLPrefix($prefix);
+
 			// grab the legacy stuff
 		
 			global $sf_everything;
@@ -70,17 +77,29 @@ class CoopMenu extends HTML_Menu
 
 			$this->setMenu($heirmenu);
 
-			$this->renderer =& new HTML_Menu_DirectTreeRenderer();
-			$this->render($this->renderer, 'sitemap');
-
 		}
 
-	function toHTML()
+	function kenRender($type = 'sitemap')
 		{
-			$res .= '<span class="menutext"';
-			$res .= $this->renderer->toHTML();
-			$res .= '</span>';
-			return $res;
+			$this->setMenuType($type);
+			
+			switch($type){
+			case 'sitemap':
+				$this->renderer =& new HTML_Menu_DirectTreeRenderer();
+				$this->render($this->renderer, $type);
+				return($this->renderer->toHTML());
+				break;
+			case 'urhere':
+				$this->renderer =& new HTML_Menu_DirectRenderer();
+				$this->renderer->setMenuType($type);
+				 $this->renderer->setMenuTemplate(
+ 					'<span class="menutext"><table border="0">',
+ 					'</span></table>');
+				 //print "HEYY HEEYY";
+				return($this->get($type));
+			break;
+			}
+			return "BROKEN TYPE $type";
 		}
 
 	function callbacksToMenu($everything)
@@ -92,6 +111,8 @@ class CoopMenu extends HTML_Menu
 								  getUser($this->page->auth['uid']), 
 								  $cbs, $cbs['fields'])== 0){
 					$res[$key]['url'] = $cbs['page'];
+				} else {
+					unset($res[$key]['url']);
 				}
 			}
 			//confessArray($menustruct, 'menustruct');
@@ -136,12 +157,16 @@ class CoopMenu extends HTML_Menu
 										  getUser($this->page->auth['uid']), 
 										  $cbs, $cbs['fields'])== 0){
 							$res[$realm]['sub'][$key]['url'] = $cbs['page'];
+						} else {
+							unset($res[$realm]['sub'][$key]['url']);
 						}
+						
 					}
 				}
 			}
 			return $res;
 		}
+
 	function topNavigation()
 		{
 
@@ -160,11 +185,6 @@ class CoopMenu extends HTML_Menu
 			
 						 
 			$res .= $tab->toHTML();
-			if(count($this->getPath()) > 1){
-///				print $this->getCurrentURL();
-				//			confessArray($this->getPath(), "getpath");
-				$res .= $this->get('urhere');	
-			}
 
 			return $res;
 		}
@@ -188,8 +208,6 @@ class CoopMenu extends HTML_Menu
 
 			$this->setMenu($heirmenu);
 
-			$this->renderer =& new HTML_Menu_DirectTreeRenderer();
-			$this->render($this->renderer, 'sitemap');
 		}
 
 	//useless wrapper around get urhere

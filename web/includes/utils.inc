@@ -142,9 +142,9 @@ function done()
 {
 	global $coop_sendto;
 
-	print "\n<hr>\n";
+	print '<div id="bottom"><hr>';
 	printf("<br><small>If anything on this site appears to be not working properly, 
-			email <a href='mailto:%s'>%s</a> or call %s at %s</small>",
+			email <a href='mailto:%s'>%s</a> or call %s at %s</small></div>",
 			$coop_sendto['email_address'], $coop_sendto['email_address'], 
 			$coop_sendto['name'], $coop_sendto['phone'] );
 	/* AUUGH! testcasetool is case sensitive, and for some reason apache
