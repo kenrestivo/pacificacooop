@@ -157,11 +157,6 @@ class coopPage
 		}
 
 	} /// end engine
- 
-
-	function findTables()
-		{
-		}
 	
 	function mergeArrays($array, $overrides, $level = 0)
 		{
@@ -276,10 +271,8 @@ class coopPage
 
 
 	// get the pager info for the table ->obj
-	function calcPager()
+	function calcPager($count)
 		{
-
-			$count = $this->obj->find();
 		
 			/// pager driver calculations
 			for($i = 1; $i <= $count; $i++){
@@ -334,6 +327,17 @@ class coopPage
 			return $res;
 		}
 	
+	function displayFields($permitted_keys, $array)
+		{
+			$this->confessArray($array, "displayfields input");
+			foreach($array as $key => $val){
+				if(in_array($key, $permitted_keys)){
+					$res[$key] = $val;
+				}
+			}
+			$this->confessArray($res, "displayfields result");
+			return $res;
+		}
 
 	function editAddTable($table = false, $id = false)
 		{
@@ -345,7 +349,9 @@ class coopPage
 			}
 			
 
-			$pagertext = $this->calcPager();
+			$count = $this->obj->find();
+
+			$pagertext = $this->calcPager($count);
 			$this->obj->limit($this->pager_start - 1, 
 							  $this->pager_result_size);
 
@@ -359,23 +365,25 @@ class coopPage
 			}
 
 
-			// now the table
+
 			$tab =& new HTML_Table();
 			$hdr = 0;
 			while ($this->obj->fetch()){
 				$this->getBackLinks();
+				//XXX get the filtering function to work first!
+				$filtered_row = $this->obj->toArray();
 				$ar = array_merge(
 					$this->selfURL("Edit", 
 							sprintf('tables[%s][action]=detail&tables[%s][id]=%s',
 									$this->table, $this->table , 
 									$this->obj->$primaryKey)),
-					array_values($this->obj->toArray()));
+					array_values($filtered_row));
 
 
 				if($hdr++ < 1){
 					$tab->addRow(array_merge("Action", 
 											 array_keys(
-												 $this->obj->toArray())), 
+												 $filtered_row)), 
 								 "bgcolor=9999cc", "TH" );
 				}
 				$tab->addRow($ar);
