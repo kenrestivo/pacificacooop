@@ -22,6 +22,8 @@
 
 	#change these to match the host that you move the app to.
 	#useful for testing
+	$dbuser = "springfest";
+	$dbpwd = "92xPi9";
 	$dbhost =  "bc";
 	#$coop_sendto =  "ken@restivo.org";
 

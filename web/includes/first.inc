@@ -20,52 +20,12 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-//TODO: try encapsulating this in a setupDB() function. i hate naked code
 
-#conditionally include a file with the dbhost name
-#this is a separate file so that i can CVS this code without having 
-#all kinds of spurious commits whenever i move it from one host to another
-#for testing and such.
-$dbfile ="dbhost.inc" ;
-
-if(is_file($dbfile)){
-	include($dbfile);
-}
-
-$dbhost = $dbhost ? $dbhost : "bc";
-$coop_sendto = $coop_sendto ? $coop_sendto : 'ken@restivo.org';
-
-$dbuser = "springfest";
-$dbpwd = "92xPi9";
-
-
-/*  handle dev stuff. 
-	special-case hack around bc, where i don't use a -dev database 
-*/
-$parth = pathinfo($_SERVER['SCRIPT_FILENAME']);
-$dir = $parth['dirname'] ;
-if(preg_match('/-dev/', $dir) > 0  && $dbhost != "bc"){
-	$dbname = "coop_dev";
-} else {
-	$dbname = "coop";
-}
-
-
-#connect to the database
-$dbh = mysql_connect($dbhost,$dbuser,$dbpwd);
-if(!$dbh){
-	user_error("can't connect to $dbhost as $dbuser\n", 
-		E_USER_ERROR);
-	exit(1);
-}
-
-register_shutdown_function(byebye);
-mysql_select_db($dbname) or die ("can't use $dbname! ack!\n");
-
+setupDB();
 setupErrors();
 sessionSetup();
 
-user_error(sprintf("first.inc: everything should be set up for session <%s> auth <%s>",
+user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
 		session_id(), $_SESSION['auth']['state']), E_USER_NOTICE);	
 
 // end of main code
@@ -101,6 +61,7 @@ setupErrors()
 /******************
 	ERRORHANDLER
 	function lifted from php docs
+	NOT USED (right now anwyay)
 ******************/
 function
 errorHandler($errno, $msg, $filename, $linenum, $vars)
@@ -289,25 +250,6 @@ writeSess($sessid, $vars)
 		user_error("writeSess(): [$query]: $err", E_USER_ERROR);
 	}
 
-	/* hack. nothign affected, so it must be new.
-	if($rows){
-		return true;
-	}
-
-	user_error("writeSess: FIRST TIME for new session [$sessid] [$vars]", 
-		E_USER_NOTICE);
-	$query = sprintf("insert into session_info 
-			set vars = '%s', session_id = '%s', entered = now()",
-			 mysql_escape_string($vars), $sessid);
-	if(mysql_query($query)){
-		$rows = mysql_affected_rows();
-	}
-	$err = mysql_error();
-	if($err){
-		user_error("writeSess(): [$query]: $err", E_USER_ERROR);
-	}
-	*/
-
 	return true;
 }/* END WRITESESS  */
 
@@ -351,6 +293,56 @@ GCsess($maxlifetime)
 	user_error("GCsess: garbage collecting sessions older than [$maxlifetime]", 
 		E_USER_NOTICE);
 	//TODO: haven't attacked this yet. may have to do ugly date calculations
+}/* END  */
+
+
+
+/******************
+	SETUPDB
+******************/
+function
+setupDB()
+{
+
+	global $dbh;
+
+	#conditionally include a file with the dbhost name
+	#this is a separate file so that i can CVS this code without having 
+	#all kinds of spurious commits whenever i move it from one host to another
+	#for testing and such.
+	$dbfile ="dbhost.inc" ;
+
+	if(is_file($dbfile)){
+		include($dbfile);
+	}
+
+	$dbhost = $dbhost ? $dbhost : "bc";
+	$coop_sendto = $coop_sendto ? $coop_sendto : 'ken@restivo.org';
+
+
+
+	/*  handle dev stuff. 
+		special-case hack around bc, where i don't use a -dev database 
+	*/
+	$parth = pathinfo($_SERVER['SCRIPT_FILENAME']);
+	$dir = $parth['dirname'] ;
+	if(preg_match('/-dev/', $dir) > 0  && $dbhost != "bc"){
+		$dbname = "coop_dev";
+	} else {
+		$dbname = "coop";
+	}
+
+
+	#connect to the database
+	$dbh = mysql_connect($dbhost,$dbuser,$dbpwd);
+	if(!$dbh){
+		user_error("can't connect to $dbhost as $dbuser\n", 
+			E_USER_ERROR);
+		exit(1);
+	}
+
+	register_shutdown_function(byebye);
+	mysql_select_db($dbname) or die ("can't use $dbname! ack!\n");
 }/* END  */
 
 
