@@ -646,8 +646,10 @@ http://www.pacificacoop.org/
 					user_error(sprintf("repairOrphaned(): clearing %d from %s", 
 									   $real->obj->thank_you_id, $table), 
 							   E_USER_NOTICE);
-					$real->obj->thank_you_id = DB_DataObject_Cast::sql('NULL');
-					if(!$real->obj->update()){
+					$old = $real->obj; //  hacks around DBDO bugs
+					$new = $real->obj; //  hacks around DBDO bugs
+					$new->thank_you_id = DB_DataObject_Cast::sql('NULL');
+					if(!$new->update($old)){
 						user_error("failed to update when cleaning up orphaned thank you's. this is really bad. you probably have a corrupt database. stop immediately.", E_USER_ERROR);
 					}
 	}
