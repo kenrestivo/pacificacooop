@@ -59,6 +59,8 @@ print $cp->selfURL('Make Family Tickets',
 				   array('action' => 'makefamilytickets'));
 print $cp->selfURL('Make Paddles for all tickets', 
 				   array('action' => 'makepaddles'));
+print $cp->selfURL('Make Blank Paddles', 
+				   array('action' => 'makeblanklines'));
 
 // cheap dispatcher
 //confessArray($_REQUEST,'req');
@@ -136,6 +138,25 @@ order by families.name;
 		 $atd->obj->updatePaddles(&$cp);
 	 }
 	 break;
+
+ case 'makeblanklines':
+	 $blanks = 20;
+ 	 $pad = new CoopObject(&$cp, 'springfest_attendees', &$nothing);
+	 $pad->obj->debugLevel(2);
+	 $pad->obj->whereAdd('(ticket_id is null or ticket_id < 1)');
+	 $pad->obj->school_year = $sy;
+	 $found = $pad->obj->find();
+	 print $found;
+	 $tomake = $blanks - $found;
+	 $tomake > 0 && print "<br>Adding $tomake blank lines... ";
+	 while($tomake-- > 0){
+		 $pad = new CoopObject(&$cp, 'springfest_attendees', &$nothing);
+		 $pad->obj->insert();
+	 }
+
+	 print "Done.<br>";
+	 break;
+
 		
  default:
 	 //print showList(&$atd);
