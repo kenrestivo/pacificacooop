@@ -136,9 +136,18 @@ sub getworkers()
 }  #END GETWORKERS
 
 
-######################
+###############################################################
 #	GETLICENSEINFO
-######################
+#	returns: a reference, 
+#			to an array, 
+#				of hashes 
+#					of a reference
+#						to a hash of parents fields (
+#					and a reference
+#						to an array
+#							of references
+#								to  hashes of license fields
+###############################################################
 sub getlicenseinfo()
 {
 	my $pararref = shift;
@@ -149,6 +158,7 @@ sub getlicenseinfo()
 	my $query;
 	my $pars;
 	my %everthang;
+	my @total;
 
 	#TODO perhaps heirarchal hashen. this glumps all parents together in one array.
 	foreach $pars (@$pararref){
@@ -168,14 +178,17 @@ sub getlicenseinfo()
 			%item = %$itemref; #store a local copy, because mysql will blow it away!
 			push(@results, \%item); #yes, that's right, a referene
 		} # end while
+
+		#this is so bizarre
+		$everthang{'licarref'} = \@results;
+		$everthang{'pararref'} = $pararref;
+		push(@total, \%everthang); #yes, that's right, a referene
 	}
 
-	$opt_v && printf("getlicenseinfo(): returning %d items\n", scalar @results);
+	$opt_v && printf("getlicenseinfo(): returning %d items\n", scalar @total);
 
-	$everthang{'pararref'} = $pararref;
-	$everthang{'licarref'} = \@results;
 
-	return \%everthang; # massive.
+	return \@total; # massive.
 }# END GETLICENSEINFO
 
 
@@ -394,7 +407,7 @@ sub fieldTripReport()
 	$badness .= sprintf(
 				" \tFamily Phone: %s\tEmail: %s\n",
 				$famref->{'phone'} ? $famref->{'phone'} : "",
-				$marf->{'pararref'}->[0]->{'email'}
+				$marf->[0]->{'pararref'}->[0]->{'email'}
 			);
 
 	#insurance
@@ -418,25 +431,27 @@ sub fieldTripReport()
 	}
 		
 	#license
-	unless(scalar @$licarref){
-			#TODO put in the parent's name here, dude
-			$badness .= "\t- No license information for working parent\n";
-			$licexp++;
-	}
-	foreach $licref (@$licarref){
-		if($licref->{'exp'}){
-			if($onlyexpired ? $licref->{'exp'} < $checkdate : 1){
-				$badness .= sprintf(
-						"\t- License %s %s Driver's Name: %s %s %s \n",
-						$licref->{'exp'} < $checkdate  ? "EXPIRED" : "",
-						strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
-						$licref->{'first'},
-						$licref->{'middle'},
-						$licref->{'last'}
-				);
+	foreach $mar ( @$marf->{'pararref'}){
+		unless(scalar @$licarref){
+				#TODO put in the parent's name here, dude
+				$badness .= "\t- No license information for working parent\n";
 				$licexp++;
-			}
-		} 
+		}
+		foreach $licref (@$licarref){
+			if($licref->{'exp'}){
+				if($onlyexpired ? $licref->{'exp'} < $checkdate : 1){
+					$badness .= sprintf(
+							"\t- License %s %s Driver's Name: %s %s %s \n",
+							$licref->{'exp'} < $checkdate  ? "EXPIRED" : "",
+							strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
+							$licref->{'first'},
+							$licref->{'middle'},
+							$licref->{'last'}
+					);
+					$licexp++;
+				}
+			} 
+		}
 	}
 
 	if($opt_v){
