@@ -26,13 +26,6 @@ require_once("auth.inc");
 
 require_once("roster.inc");
 
-require_once('DB/DataObject.php');
-require_once("HTML/Table.php");
-
-require_once('object-config.php');
-
-//DB_DataObject::debugLevel(5);
-
 function confessObj($obj, $text)
 {
 
@@ -60,20 +53,6 @@ class coopPage
 			$this->debug = $debug;
 		}
 
-	// fafactory.
-	function setup($table = false )
-		{
-			// set it here
-			$this->table = $table ? $table : $_SESSION['toptable'];
-			
-			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
-			if (PEAR::isError($obj)){
-				die ($obj->getMessage ());
-			}
-//			print_r($this->obj);
-		
-		}
-
  
 	function pageTop()
 		{
@@ -95,7 +74,7 @@ class coopPage
 
 			warnDev();
 
-			user_error("states.inc: ------- NEW PAGE --------", 
+			user_error("CoopPage.php: ------- NEW PAGE --------", 
 					   E_USER_NOTICE);
 
 

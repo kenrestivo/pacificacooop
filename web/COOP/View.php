@@ -32,98 +32,28 @@ require_once('Pager/Pager.php');
 /////////////////////// COOP VIEW CLASS
 class coopView
 {
-			}
-			//confessArray($indexed_everything, 'indexedeverythinag');
-			return $indexed_everything;
-		} 
+	var $obj;
+	var $build;
+	var $auth;
+	var $debug;
+	var $dbname;
+	var $pager_result_size;
+	var $pager_start;
+	var $table;
 
-	function confessArray($array, $message)
+	function setup($table = false )
 		{
-			if($this->debug < 1){
-				return;
+			// set it here
+			$this->table = $table ? $table : $_SESSION['toptable'];
+			
+			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
+			if (PEAR::isError($obj)){
+				die ($obj->getMessage ());
 			}
-			confessArray($array, $message);
+//			print_r($this->obj);
+		
 		}
-
-
  
-	function engine(){
-		if($_REQUEST['tables']){
-			$_SESSION['tables'] = $this->mergeArrays($_SESSION['tables'], 
-													 $_REQUEST['tables']);
-		}
-		//confessArray($tabarr, "tables");
-		foreach($_SESSION['tables'] as $table => $vals){
-			$this->setup($table);
-				//	print_r($cp);
-			// OK copy my dispatcher logic over now
-			switch($vals['action']){
-			case 'list':
-				print $this->editAddTable();
-				break;
-			case 'detail':
-				print $this->detailForm($vals['id']);
-				break;
-			}
-		}
-
-	} /// end engine
-	
-	function mergeArrays($array, $overrides, $level = 0)
-		{
-			$this->confessArray($array, "BEFORE merge: level $level");
-
-			foreach($overrides as $key => $val){
-				if(array_key_exists($key, $array)){
-					if(is_array($val)){
-						$array[$key] = 
-							$this->mergeArrays($array[$key], $val, $level +1);
-					} else {
-						$array[$key] = $val;
-					}
-					
-				} else {
-					$array[$key] = $val;
-				}
-			}
-						
-
-			$this->confessArray($array, "AFTER  merge, level $level");
-		   			return $array;
-		}
-
-
-	// TODO: some nifty way to get session vars outta there
-	function requestOrSession($itemName){
-	}
-	
-	// fishes the tables out of a request or session
-
-
-	function selfURL($value = false, $inside = false, $base = false)
-		{
-			if(!$base){
-				$base = $_SERVER['PHP_SELF'];
-			}
-			 if(($pos = strpos($base, '?')) !== false) {
-                $base = substr($base, 0, $pos);
-            }
-			 if($value){
-				 $res .= '<p><a href="';
-
-			 }
-			 if($inside){
- 				 $res .= sprintf("%s?%s%s",
-								$base, $inside,
-								SID ? "&" . SID  : "");
-			 } else {
-				 $res .= $base .  SID ? "?" . SID  : "";
-			 }
-			 if($value){
-				 $res .= sprintf('">%s</a></p>', $value);
-			 }
-			 return $res;
-		}
 
 	// global defaults, common through *all* forms, so not in objs
 	function setFormDefaults(&$form)
