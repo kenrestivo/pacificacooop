@@ -1087,6 +1087,37 @@ displayAuth($p, $u, $realm, $pretty)
 
 }/* END DISPLAYAUTH */
 
+
+/******************
+	FIELDPERMS
+	inputs: a perms sturcture (array of group, user levels for this field),
+		a perms structure, a user structure, and the level to test against
+	returns: 0 if permitted, 1 if not
+******************/
+function
+fieldPerms($perms, $targetfamilyid, $p, $u, $targetlevel)
+{
+
+	// no perms? no problem! default is i don't care.
+	if(!is_array($perms)){
+		return 0;
+	}
+	//the LESSER of two evils
+	$user =  $p['userlevel'] > $perms[1] ? $perms[1] : $p['userlevel'];
+	$group = $p['grouplevel'] > $perms[0] ? $perms[0] : $p['grouplevel'];
+
+	//if it's MY record, return the userlevel, otherwise the grouplevel.
+	if(($targetfamilyid == $u['familyid'] && $user >= $targetlevel ) || 
+		$group >= $targetlevel) 
+	{
+		return 0;
+	}
+
+	return 1;
+	
+}/* END FIELDPERMS */
+
+
 #note bin2hex... do i need it?
 
 ?>
