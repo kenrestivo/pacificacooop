@@ -41,6 +41,7 @@ class Packages extends DB_DataObject
 								   'item_type', 'package_value');
 
 	var $fb_fieldLabels = array (
+		"package_id" => "Package ID" ,
 		"package_type" => "Package Type" ,
 		"package_number" => "Package Number (as it will be printed in program)" ,
 		"package_title" => "Package Title (short)" ,
@@ -49,10 +50,41 @@ class Packages extends DB_DataObject
 		"item_type" => "Physical Product or Gift Certificate",
 		"package_value" => 'Estimated Value ($)' ,
 		"starting_bid" => 'Starting Bid ($)' ,
-		"bid_increment" => 'Bid Increment ($)', 
-		"school_year" => "School Year" 
-
+		"bid_increment" => 'Bid Increment ($)'
 		);
 	var $fb_formHeaderText = "Springfest Packages";
+
+	var $fb_requiredFields = array('package_description', 'donated_by_text', 
+								   'starting_bid', 'bid_increment', 
+								   'package_type', 'package_value', 
+								   'item_type');
+
+
+
+	function constrainedPackagePopup($schoolyear = false)
+		{
+			$schoolyear = $schoolyear ? $schoolyear : findSchoolYear();
+
+			$this->whereAdd(sprintf('%s.school_year = "%s"',
+									$this->__table, $schoolyear));
+			$this->orderBy('package_number, package_title, package_description');
+			$this->find();
+			$options[''] = '-- CHOOSE ONE --';
+			while($this->fetch()){
+				$options[$this->package_id] = 
+					sprintf("%.42s...", 
+							implode(' - ', 
+									array(
+										$this->package_number, 
+										$this->package_title, 
+										$this->package_description)));
+			}
+			$el =& HTML_QuickForm::createElement('select', 'package_id', 
+												 $this->fb_fieldLabels['package_id'], 
+												 &$options);
+
+			return $el;
+		}
+
 }
 

@@ -37,7 +37,8 @@ class Auction_donation_items extends DB_DataObject
 	var $fb_selectAddEmpty = array ('package_id');
 	var $fb_fieldLabels = array ('item_description' => 'Item Description');
 	var $fb_enumFields = array ('item_type');
-	var $fb_fieldsToRender = array('item_description', 'item_value',  'quantity', 'school_year', 'thank_you_id');
+	var $fb_fieldsToRender = array('item_description', 'item_value',  
+								   'quantity', 'school_year', 'thank_you_id');
 	var $fb_fieldLabels = array(
 		"family_id" => "Co-Op Family",
 		"quantity" => "Quantity of items", 

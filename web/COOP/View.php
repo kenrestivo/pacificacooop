@@ -339,7 +339,7 @@ class coopView extends CoopObject
 			// the new style!
 			if($this->recordActions){
 				foreach($this->recordActions as $action => $title){
-					return $this->page->selfURL($title, 
+					$res .= $this->page->selfURL($title, 
 												array( 
 													'action' => $action,
 													'table' => $this->table,
