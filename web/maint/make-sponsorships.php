@@ -44,8 +44,9 @@ print $menu->topNavigation();
 print "<p>Springfest Sponsors Needed</p>";
 
 print $cp->selfURL('View Sponsorships');
-print $cp->selfURL('Find Needed', array('action' => 'findneeded'));
-print $cp->selfURL('Add Needed', array('action' => 'addneeded'));
+print $cp->selfURL('Create New Sponsorship Manually', array('action' => 'new'));
+// print $cp->selfURL('Find Needed', array('action' => 'findneeded'));
+// print $cp->selfURL('Add Needed', array('action' => 'addneeded'));
 
 //confessObj($cp, 'cp');
 $level = ACCESS_EDIT;
@@ -127,15 +128,23 @@ switch($_REQUEST['action']){
 	 
 	 break;
 	 
-//// EDIT //////
+//// EDIT AND NEW //////
+ case 'new':
  case 'edit':
-	 print "<p>Choose either a company name or invitee name, not both. If you picked the wrong one by mistake, change the other one to 'CHOOSE ONE'.</p>";
+	 print "<p>Choose either a Solicitation Company Name or Response Code, not both. If you set both by mistake, change the one to 'CHOOSE ONE'.</p>";
 
 	 $atdf = new CoopForm(&$cp, 'sponsorships', $none); // NOT the coopView above!
 
 	 $atdf->obj->fb_fieldsToRender = array('company_id', 'lead_id', 
 										   'sponsorship_type_id', 
 										   'entry_type');
+
+
+	 // constrain those damned leads
+	 $sub = new CoopObject(&$cp, 'leads', $atdf); 
+	 $atdf->obj->fb_preDefElements = array('lead_id' => 
+										   $sub->obj->constrainedInvitePopup());
+	 
 	 $atdf->build($_REQUEST);
 
 

@@ -111,5 +111,34 @@ class Leads extends DB_DataObject
 			return $address;
 		}
 
+	function constrainedInvitePopup($schoolyear = false)
+		{
+			$schoolyear = $schoolyear ? $schoolyear : findSchoolYear();
+
+			// TODO compare to invites
+
+			$this->whereAdd(sprintf('%s.school_year = "%s"',
+									$this->__table, $schoolyear));
+			// TODO fix user func array here
+			$this->orderBy($this->fb_linkDisplayFields);
+			$this->find();
+			$options[''] = '-- CHOOSE ONE --';
+			
+			$vals = ' - '; 		// need this for implode
+			foreach($this->fb_linkDisplayFields as $fname){
+				$vals[] = $this->$fname;
+			}
+			while($this->fetch()){
+				$options[$this->package_id] = 
+					sprintf("%.42s...", 
+							call_user_func_array('implode', $vals));
+			}
+			$el =& HTML_QuickForm::createElement(
+				'select', 'lead_id', 
+				$this->fb_fieldLabels['lead_id'], 
+				&$options);
+
+			return $el;
+		}
 	
 }
