@@ -288,11 +288,10 @@ select auction.* ,
         
 
 -- nasty sponsorship join to check levels IN REAL CASH
-select  leads.first, leads.last, 
-        coalesce(companies.company_name, leads.company) as company,
+select coalesce(companies.company_name, 
+		concat_ws(' ', leads.first, leads.last, leads.company)) as company,
         sum(inc.amount)  as cash_total 
     from inc 
-        -- the cash only stuff first
         left join companies_income_join
                on inc.incid = companies_income_join.incid
             left join companies 
@@ -302,22 +301,22 @@ select  leads.first, leads.last,
             on invitation_rsvps.incid = inc.incid 
             left join leads on invitation_rsvps.leadsid = leads.leadsid
     where leads.leadsid is not null or companies.company_id is not null
-    group by leads.leadsid, companies.company_id order by cash_total desc, 
+    group by leads.leadsid, companies.company_id  having cash_total >= 150
+	order by cash_total desc, 
         leads.last asc, leads.first asc, companies.company_name asc;
 
 -- nasty sponsorship join to check AUCTION levels
 select companies.company_name,
         sum(auction.amount)  as auction_item_total 
     from auction
-        -- the cash only stuff first
         left join companies_auction_join
                on auction.auctionid = companies_auction_join.auctionid
             left join companies 
                 on companies.company_id = 
                     companies_auction_join.company_id
     where companies.company_id is not null
-    group by  companies.company_id 
-    order by auction_item_total desc, companies.company_name asc;
+    group by  companies.company_id having auction_item_total >= 150
+    order by auction_item_total desc, companies.company_name asc
 
 
 -- show auction totals for SOLICIT AND for family auctions.
@@ -348,5 +347,12 @@ select families.name, sum(auction.amount) as amount
     group by companies.company_id 
     order by total desc, cash_donations desc, companies.company_name asc;
 
+-- yay! fix packages
+    update packages 
+        set package_number = concat("S0", right(package_number, 2)) 
+    where length(package_number) < 4 and package_number like "S%";
+
+-- tickets export
+select ticket_quantity , amount, last, first, addr , addrcont, city , state , zip , leads.leadsid as response_code from invitation_rsvps left join leads on invitation_rsvps.leadsid = leads.leadsid left join inc on invitation_rsvps.incid = inc.incid where ticket_quantity > 0 order by leads.last, leads.first;
 
 --- EOF

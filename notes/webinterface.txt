@@ -852,3 +852,27 @@ ok, ticket jump hack.
 		allow amount 0! perhaps they will pay at the door!
 	auugh. will NEED a tickets table. and changes to rsvp's.
 		because i can't save a zero-dollar income, dammit, it won't save!.
+
+---------------------
+enhancement hours stuff
+	admin only, no parent can edit, just view. and, only their own
+	fields
+		parent!
+		family(hmm... necessary?)
+		project (link)
+		date (not part of project)
+		# hours.
+		that's it!
+
+	summary should show hours owed, that's it.
+	
+	tricky bit: calculating the cutoff's
+		can overdo and carry over, but must do the minimum in a period
+		i know when they STARTED.
+		well, we know the latecomers' start dates, and we can assume the rest
+
+	deadline
+		want to see it by tuesday
+		want it live by the 24th
+
+		

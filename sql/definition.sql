@@ -91,6 +91,7 @@ create table attendance (
     attendanceid int(32) not null unique auto_increment,
 	kidsid int(32),
 	enrolid int(32),
+	start_date date,
 	dropout date,
     primary key (attendanceid)
 );
@@ -174,6 +175,7 @@ create table inc (
 	bookkeeper_date date,
 	payer varchar(255),
     acctnum int(32),
+	cleared_date date,
     amount decimal(9,2),
 	note varchar(255),
 	primary key (incid)
@@ -413,7 +415,7 @@ create table springfest_attendees (
 -- packages.
 create table packages (
     package_id int(32) not null unique auto_increment,
-	package_type enum ('Unknown', 'Live', 'Silent', 'Balloon', 'Ignore'),
+	package_type enum ('Unknown', 'Live', 'Silent', 'Balloon', 'Ignore', 'Flat Fee'),
 	package_number varchar(20), 
 	package_title varchar(255), 
 	package_description longtext,
@@ -431,6 +433,25 @@ create table sources (
 	description varchar(255),
 	primary key (source_id)
 );
+
+-- enhancement projects
+create table enhancement_projects (
+    enhancement_project_id int(32) not null unique,
+    project_name varchar(255),
+    project_description longtext,
+	project_complete date,
+    primary key (enhancement_project_id)
+);
+
+-- enhancement hours
+create table enhancement_hours (
+    enhancement_hour_id int(32) not null unique,
+    parentid int(32),
+    work_date date,
+    hours int(5),
+    primary key (enhancement_hour_id)
+);
+
 
 
 -- the user/passwords used by the web view page AND my update tool..
