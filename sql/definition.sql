@@ -360,6 +360,19 @@ create table saglue (
     primary key (saglueid)
 );
 
+
+-- session info
+create table session_info (
+	session_id varchar(32) not null unique,
+	ip_addr varchar(20),
+	entered datetime,
+	updated  timestamp,
+	user_id int(32),
+	vars blob,
+	primary key (session_id)
+);
+
+
 -- the user/passwords used by the web view page AND my update tool..
 -- these MUST be done manually for db's not named coop!!
 --TODO: i have to grant all to myself on this db! duh.
