@@ -60,6 +60,6 @@
 				  (toast-columns x)))
 		  fixems))
 
-(sql-destroy 0)
+(simplesql-close dbh)
 
 ;;; EOF
