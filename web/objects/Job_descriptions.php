@@ -24,4 +24,19 @@ class Job_descriptions extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_formHeaderText =  'Job Descriptions';
+	var $fb_linkDisplayFields = array('summary');
+	var $fb_fieldsToRender = array(
+		'summary',
+		'board_position',
+		'tuition_type'
+		);
+	var $fb_fieldLabels = array (
+		'summary' => "Name of Position",
+		'long_description' => "Job Description",
+		'board_position' => "Board-level position?",
+		'tuition_type' => "Tuition Type"
+		);
+	var $fb_textFields = array('long_description');
+
 }
