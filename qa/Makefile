@@ -7,7 +7,7 @@ JAVABIN=/usr/local/java/bin
 CLASSPATH=/usr/local/testcasetool/lib
 FAKEPORT=9292
 DATE=${shell date +%Y.%m.%d.%H.%M.%S}
-HERE=plans/
+HERE=plans
 
 
 all::
@@ -21,6 +21,6 @@ record:
 
 run:
 	$(JAVABIN)/java -classpath $(CLASSPATH)/webtest.jar \
-		webtest.textui.TestCaseRunner $(HERE) reports/
+		webtest.textui.TestCaseRunner -debug $(HERE) reports 1,
 
 #EOF
