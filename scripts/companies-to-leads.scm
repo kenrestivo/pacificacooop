@@ -19,39 +19,35 @@
 	("phone" . "phone")
 	("fax" . "fax")
 	("email_address" . "email_address")
-	("territory_id" . "territory_id")
 	("family_id" . "family_id") 
 	("do_not_contact" . "do_not_contact")
-	("flyer_ok" . "flyer_ok")))
+	("company_id" . "company_id")))
 
+(define old-cols
+  '(
+	)
   
-(string-join (map (lambda (x) (car x)) table-mapping) ", ")
 
-(define (get-old dbh tables old-table old-index )
+(define (replace-new dbh cols new-table old-table)
   (safe-sql dbh
-			(sprintf #f "select %s, %s from %s"
-					 old-index
+			(sprintf #f "replace into %s (%s) 
+						select %s from %s"
+					 new-table
 					 (string-join
-					  (map (lambda (x) (car x)) tables) ", ")
+					  (map (lambda (x) (cdr x)) cols) ", ")
+					 (string-join
+					  (map (lambda (x) (car x)) cols) ", ")
 					 old-table)))
 
-(define (insert-new dbh line tables  old-table new-table old-index new-index)
-  (safe-sql dbh (sprintf #f " insert into %s (%s) %s"
-						 new-table 
-						 (string-join
-						  (map (lambda (x) (cdr x)) tables) ", ")
-						 )
-						 )
-						 (last-insert-id dbh)))))
 
-  )
 
 (define (do-companies-leads)
   (let ((dbh
 		 (apply simplesql-open "mysql"
 				(read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf"))))
-	(get-old dbh table-mapping "companies" "company_id" )	
-    (simplesql-close *dbh*)))
+	(replace-new dbh table-mapping "leads" "companies"  )	
+; 	(remove-old dbh old-cols)			
+	(simplesql-close *dbh*)))
 
 
 ;; EOF
