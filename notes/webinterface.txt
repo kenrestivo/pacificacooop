@@ -548,14 +548,21 @@ year-to-year things
 ok, rearchitecture!
 
 features:
-	nestable navigation: keep track of the path in to things, and back out
-	modular display: can display "views" from anywhere
+	sessions for auth, instead of passing $auth through.
+	nestable navigation: 
+		keep track of the PAGE and PATH
+	modular display: each object can display "views" from anywhere
 	keep track of the STATE of each view: add/edit/delete/confirm
 	keep track of auth stuff.
 
 open questions:
+	keep track of the path in through things, and back out?
+		array? pop/push?
 	handling nested forms? just nest the tables, but not the forms?
 	re-associating the form fields with their relevant objects
+	cool! can i do away with form buttons in reports? and just have a GET url with id?
+		i.e. on edit, instead of getting vars from POST, get id, and fetch from db?
+			then pass those thru to showForm()?
 	
 
 
