@@ -49,6 +49,7 @@ class coopForm extends CoopObject
 				$this->obj->get($id);
 			}
 			//confessObj($this, 'atd');
+			//TODO: check ispermitted field! like oneform
 			foreach($this->obj->toArray() as $key => $val){
 				if(is_array($this->obj->fb_preDefElements) && 
 				   in_array($key, array_keys($this->obj->fb_preDefElements))){
@@ -56,6 +57,16 @@ class coopForm extends CoopObject
 				} else if($this->isLinkField(&$this->obj, $key)){
 					$el =& $form->addElement('select', $key, false, 
 											 $this->selectOptions($key));
+				} else if(is_array($this->obj->fb_textFields) &&
+						  in_array($key, $this->obj->fb_textFields))
+				{
+					$el =& $form->addElement('textarea', $key, false, 
+											 array('rows' => 4, 'cols' => 30 ));
+				} else if(is_array($this->obj->fb_enumFields) &&
+						  in_array($key, $this->obj->fb_enumFields))
+				{
+					$el =& $form->addElement('select', $key, false, 
+											 $this->getEnumOptions($key));
 				} else {
 					$el =& $form->addElement(
 						$key == $this->pk ? 'hidden' : 'text', 
@@ -170,6 +181,10 @@ class coopForm extends CoopObject
 			$this->saveAudit(true);
 		}
 
+	function getEnumOptions($key)
+		{
+			return array();
+		}
 
 } // END COOP FORM CLASS
 
