@@ -25,7 +25,7 @@ use DBI;
 use Getopt::Std;
 
 
-getopts('rvth:p:d:') or &usage();
+getopts('vtfh:p:d:') or &usage();
 
 
 @fn = (
@@ -69,9 +69,20 @@ exit 0;
 sub
 makeHash()
 {
+	my $ar = shift;
+	my $fn = shift;
+	my @a = @$ar;
+	my @f = @$fn;
+	my %h;
+	my $i;
 
+	$i = 0;
+	foreach $field (@a){
+		$h{$f[$i]} = $field;
+		$i++;
+	}
 
-
+	return %h;
 } #END MAKEHASH
 
 sub
@@ -183,15 +194,50 @@ addUser()
 
 }
 
+#######################
+#	DEBUGSTRUCT
+#	nifty utility function, 
+#	to print the contents of ANY complex perl structure
+#	TODO move this to an external utility library
+#######################
+sub debugStruct()
+{
+	my $whatsit = shift;
+	my $level = shift;
+	my $item;
+
+	printf("\n%*s", -($level*4), "");
+	if( $whatsit =~ /ARRAY/){
+		printf("array of %d elements", scalar @$whatsit);
+		foreach $item (@$whatsit){
+			&debugStruct($item, $level + 1);
+		}
+	} 
+	elsif( $whatsit =~ /HASH/){
+		printf("hash of %d elements", scalar %$whatsit);
+		$level++;
+		foreach $item (sort(keys %$whatsit)) {
+			printf("\n%*s", -($level*4), "");
+			printf("key: <%s> ", $item);
+			&debugStruct($whatsit->{$item}, $level + 1);
+		}
+
+	} 
+	elsif( $whatsit =~ /SCALAR/){
+		printf("scalar ref <%s>", $$whatsit);
+	} else {
+		printf("value <%s>", $whatsit);
+	}
+
+} #END DEBUGSTRUCT
+
 sub usage()
 {
     print STDERR "usage: $0 -v -t\n";
-    print STDERR "makes sure there are users for each family/teacher\n";
-    print STDERR "and that they have privs for all default realms\n";
-    print STDERR "sets privs for new realms/users to defaults\n";
+    print STDERR "imports alumni\n";
     print STDERR "\t-v verbose \n";
-    print STDERR "\t-r reset ALL privs to defaults (dangerous!!) \n";
     print STDERR "\t-t test (don't actually update db) \n";
+    print STDERR "\t-f dupecheck families not families AND addresses \n";
     print STDERR "\t-h hostname of db\n";
     print STDERR "\t-p port db is running on\n";
     print STDERR "\t-d database name\n";
