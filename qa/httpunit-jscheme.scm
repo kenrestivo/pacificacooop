@@ -13,13 +13,13 @@
 (invoke gtc 'setBaseUrl "http://www/coop-dev")
 
 ;; choose family
-(define (choose-family wtc)
+(define (choose-family wtc family)
   (invoke wtc 'beginAt "/")
   ;; TODO add asserts that this is the RIGHT page
   (invoke wtc 'assertTextPresent "</html>")
   (invoke wtc 'assertFormPresent )
   (invoke wtc 'assertSubmitButtonPresent "login")
-  (invoke wtc 'selectOption "auth[uid]" "Restivo Family")
+  (invoke wtc 'selectOption "auth[uid]" family)
   (invoke wtc 'assertSubmitButtonPresent "login")
   (invoke wtc 'submit "login")
   )
@@ -53,8 +53,8 @@
 			'getResponse))
 
 ;; go as far as you can, so far.
-(define (get-to-main-page wtc)
-  (choose-family wtc)
+(define (get-to-main-page wtc family)
+  (choose-family wtc family)
   (enter-password wtc)
   (main-page-ok wtc))
 
@@ -71,8 +71,8 @@
 
   )
 
-(define (visit-all-links wtc)
-  (get-to-main-page wtc)
+(define (visit-all-links wtc family)
+  (get-to-main-page wtc family)
   (let ((links (vector->list (invoke (get-response wtc) 'getLinks)) ))
 	(for-each
 	 (lambda (link)

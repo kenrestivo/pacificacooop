@@ -1,5 +1,31 @@
 TODO testing stuff
 
+
+finally we get to the "basic" stuff
+	edit a record 
+		HOOKS FOR OTHER STUFF. so i can test linked records too
+	delete a record (with and without cancelling)
+	as privileged user and as non-privileged user
+
+i'll need to do this as a couple users, just to make sure
+	go through the database and do all links as all *real* users?
+
+harder:
+	add a record (with and without errors)
+	with errors for editing
+
+then, post the pages to the validator
+	try mike's code
+		so far so good
+	somehow capture the results, saving them somewhere
+		files? db?
+	it does write-char... i don't like that
+		some way to capture it to a file?
+	is there any way to get status codes back from the validator?
+		only save the errors
+		be sure to include the source and dom tree
+	<h2 id="result" class="valid">
+
 how to navigate links?
 	find the right table
 	find the right row/col.
@@ -30,3 +56,7 @@ ok... LINKS
 write a get-link-by(text,url,parameter) function
 	so i can CLICK on the  bastard and get to the next step!!
 
+start with REALLY simple shit
+	go through all the links from the main page
+	and make sure they WORK. i.e. i get an html at the end
+		useful for checking for WARNINGS
