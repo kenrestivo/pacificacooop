@@ -28,7 +28,7 @@ function sponsors(&$cp)
 	setlocale(LC_MONETARY, 'en_US'); // for money_format
 
 // now a word from our sponsors
-	$res .= "<h3>With many thanks to our generous sponsors:</h3>";
+	$res .= "<p><b>With many thanks to our generous sponsors:</b></p>";
 	$tab =& new HTML_Table();
 //TODO: a weird merge of all solicitation and leads, by sponsor level
 // get sponsor levels, then do the search for each
@@ -78,7 +78,7 @@ order by company_name
 		
 		if($hack){
 			$res .= sprintf(
-				'<h3>%s Contributor (%s and above)</h3><ul>%s</ul>', 
+				'<p><b>%s Contributors (%s and above)</b></p><ul>%s</ul>', 
 				$sp->obj->sponsorship_name,
 				money_format('$%.0i', $sp->obj->sponsorship_price),
 				$hack);
