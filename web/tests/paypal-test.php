@@ -78,6 +78,7 @@ class coopPage
 		}
 
 ////utility, not inside of class
+// XXX thsi function, how do you say in your country? it SUCKS.
 	function findTables($haystack)
 		{
 			$needles = array();
@@ -89,6 +90,13 @@ class coopPage
 					$_SESSION[$key] = $val;
 				}
 			}
+			foreach($_SESSION as $key => $val){
+				if(is_array($val) && array_key_exists('action', $val) &&
+					!(is_array ($needles[$key]) && 
+					  array_key_exists($needles['action']))){
+					$needles[$key] = $val;
+				}
+			}	
 			return $needles;
 		}
 	// TODO: some nifty way to get session vars outta there
@@ -128,7 +136,7 @@ class coopPage
 	function detailForm($id = false )
 		{
 	
-			print "DETAIL HAS BEEN CALLED";
+			print_r($this);
 			$id = $id ? $id : $_SESSION[$this->table]['id'];
 			$this->obj->get($id);
 			$this->build =& DB_DataObject_FormBuilder::create ($this->obj);
@@ -141,17 +149,18 @@ class coopPage
 									   (&$this->build, 'processForm'), 
 									   false);
 				if ($res){
-					$obj->debug('processed successfully', 
+					$this->obj->debug('processed successfully', 
 								'detailform', 0);
 					// XXX make sure i don't have to unset id's first!
 					///  next action
+					print "PRICESSING SEUCCSSCUL";
 					$_SESSION[$this->table]['action'] = 'list'; 
-					header(sprintf(
-							   'Location: %s%s', 
-							   $_SERVER['PHP_SELF'], 
-							   SID ? "?" . SID  : ""));
+ 			 		header(sprintf(
+  							   'Location: %s%s', 
+  							   $_SERVER['PHP_SELF'], 
+  							   SID ? "?" . SID  : ""));
 				}
-				echo "aaauugh!<br>";
+				echo "AAAAUUUUUUUUUUUGGH!<br>";
 			}
 
 			return $form->toHTML();
@@ -270,7 +279,7 @@ $cp =& new coopPage();
 $cp->pageTop();
 confessArray($cp->findTables($_REQUEST), "tables");
 foreach($cp->findTables($_REQUEST) as $table => $vals){
-	$cp->setup('income');
+	$cp->setup($table);
 //	print_r($cp);
 	// OK copy my dispatcher logic over now
 	if($_SESSION[$table]['action'] == 'list'){
