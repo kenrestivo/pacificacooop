@@ -43,7 +43,8 @@
   (let ((families (simplesql-query *dbh*
 						   (sprintf #f "
 				select familyid, name, phone from families
-						where name like \"%%%s%%\" or phone like \"%%%s%%\""
+						where soundex(name) = soundex('%s')
+						or phone like \"%%%s%%\""
 									(rasta-find "Last Name" line header)
 									(rasta-find "Phone" line header)))))
 	(if (> (length families) 1)
