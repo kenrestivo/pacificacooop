@@ -26,12 +26,12 @@
 			 "springfest_attendees"
 			 "territories"))
 
-(add-new-column *dbh* "kids" "date_of_birth" "date" #f)
-(add-new-column *dbh* "families" "address" "varchar(255)" #f)
-(add-new-column *dbh* "families" "email" "varchar(255)" #f)
-
-;; NOTE: this will *not* move data around.
+;; NOTE: this will *not* move any old data around.
 ;; you need a new-architecture  script to do it
+(for-each (lambda (args) (apply add-new-column *dbh* args))
+		  '(("kids" "date_of_birth" "date" #f)
+			("families" "address" "varchar(255)" #f)
+			("families" "email" "varchar(255)" #f)))
 
 (simplesql-close *dbh*)
 
