@@ -298,10 +298,12 @@ http://www.pacificacoop.org/
 			$sy = findSchoolYear();
 
 			// COMPANY
+			// find company
 			$co = new CoopView(&$this->cp, 'companies', &$top);
 			$co->obj->$pk = $id;
 			$co->obj->find(true);
 
+			// format company
 			foreach(array('company_name', 'address1', 'address2') as $var){
 				if($co->obj->$var){
 					$this->address_array[] = $co->obj->$var;
@@ -315,6 +317,7 @@ http://www.pacificacoop.org/
 								  $co->obj->last_name);
 
 			//INCOME
+			//find income
 			$co = new CoopObject(&$this->cp, 'companies_income_join', &$top);
 			$co->obj->$pk = $id;
 			$real = new CoopView(&$this->cp, 'income', &$co);
@@ -324,6 +327,8 @@ http://www.pacificacoop.org/
 			$real->obj->whereAdd('thank_you_id is null
 								and cleared_date > "2000-01-01" ');
 			$found = $real->obj->find();
+			
+			//format income
 			while($real->obj->fetch()){
 				$cashtotal += $real->obj->payment_amount;
 				$soliciting_families[]= $real->obj->family_id;
@@ -334,6 +339,7 @@ http://www.pacificacoop.org/
 				
 
 			//AUCTION
+			// find auction
 			$co = new CoopObject(&$this->cp, 'companies_auction_join', 
 								 &$top);
 			$co->obj->$pk = $id;
@@ -345,6 +351,8 @@ http://www.pacificacoop.org/
 						and date_received > "2000-01-01" ');
 			$real->obj->joinadd($co->obj);
 			$found = $real->obj->find();
+
+			// format auction
 			while($real->obj->fetch()){
 				$this->items_array[] = sprintf("%d %s (total value $%01.02f)",
 											   $real->obj->quantity,
@@ -355,6 +363,7 @@ http://www.pacificacoop.org/
 			}
 
 			//IN-KIND
+			//find in-kind
 			$co = new CoopObject(&$this->cp, 'companies_in_kind_join', 
 								 &$top);
 			$co->obj->$pk = $id;
@@ -366,6 +375,8 @@ http://www.pacificacoop.org/
 						and date_received > "2000-01-01" ');
 			$real->obj->joinadd($co->obj);
 			$real->obj->find();
+
+			//format in-kind
 			while($real->obj->fetch()){
 				$this->items_array[] = sprintf("%d %s total value $%01.02f",
 											   $real->obj->quantity,
