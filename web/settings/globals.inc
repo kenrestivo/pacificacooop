@@ -22,6 +22,7 @@
 
 	#XXX hack
 	$cutoffdate = "11/04/2003";
+	$auctioncutoff = "12/18/2003";
 
 ?>
 
