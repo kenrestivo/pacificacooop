@@ -37,6 +37,7 @@ help::
 	@egrep "^[a-z-_]*:" Makefile | awk '{print $$1}'
 
 upload-live::
+	-rm $(LIVEHERE)/.\#*
 	rsync -e ssh \
 		--rsync-path=$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
@@ -52,6 +53,7 @@ download-live::
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNLIVEPATH)/ $(LIVEHERE)
 
 upload-dev:: 
+	-rm $(DEVHERE)/.\#*
 	rsync -e ssh \
 		--rsync-path=$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \

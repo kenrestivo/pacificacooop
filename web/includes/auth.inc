@@ -1173,7 +1173,7 @@ fieldPerms($perms, $targetfamilyid, $p, $u, $targetlevel)
 
 	// no perms? no problem! default is i don't care.
 	if(!is_array($perms)){
-		user_error("fieldPerms(): no perms, using default", E_USER_NOTICE);
+		user_error("fieldPerms(): no perms, using default (ACCEPT)", E_USER_NOTICE);
 		return 0;
 	}
 
