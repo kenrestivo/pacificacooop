@@ -114,7 +114,10 @@ class coopView
 			$nearkey = $this->pk;	
 			foreach($this->backlinks as $backtable => $farkey){
 				$subview =& new CoopView($this->page, $backtable);
-				$subview->obj->$nearkey = $this->obj->$farkey;
+				$subview->obj->$farkey = $this->obj->$nearkey;
+// 				printf("linking %s.%s to %s.%s<br>", 
+// 					   $this->table, $this->pk, 
+// 					   $backtable, $farkey);
 				$this->addSubTable(&$tab, $subview->recurseTable());
 			}
 		}
