@@ -30,8 +30,12 @@ fixem('lic');
 
 $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
-#EOF
+#END OF MAIN CODE
+####################
 
+####################
+#	FIXEM
+####################
 sub fixem {
 	my $tab = shift;
 	#ok, who needs help? let's fix 'em
@@ -51,9 +55,12 @@ sub fixem {
 				$ritem{'middle'});
 
 	} # end while
-} #end sub
+} #end FIXEM
 
 
+#####################
+# CHECKFORMATCHES
+#####################
 sub checkformatches {
 	my $tab = shift;
 	my $lostid = shift;
@@ -91,7 +98,13 @@ sub checkformatches {
 		print "NO match for $lostlast AT ALL\n";
 	}
 
-}
+} # END CHECKFORMATCHES
+
+
+
+#####################
+# CHECKCOUNT
+#####################
 sub checkcount {
 	my $where = shift;
 	my $fquery = "select count(parentsid) as howmany from parents $where";
@@ -105,8 +118,11 @@ sub checkcount {
 	$fqueryobj->finish();
 	print "um, there are $fcount matches\n"; #debug
 	return $fcount;
-}
+}  #END CHECKCOUNT
 
+#####################
+# CHOOSEMULTI
+#####################
 sub choosemulti {
 	my $tab = shift;
 	my $where = shift;
@@ -135,8 +151,12 @@ sub choosemulti {
 	if($nreply > 0){ #XXX check that the reply is valid, it was in @choices!
 		&replace($tab, $nreply, $lostid);
 	}
-}
+}  #END CHOOSEMULTI
 
+
+#####################
+# USEONLY
+#####################
 sub useonly {
 	my $tab = shift;
 	my $where = shift;
@@ -154,8 +174,12 @@ sub useonly {
 	}
 
 	&replace($tab, $id, $lostid);
-}
+} #END USEONLY
 
+
+#####################
+# REPLACE
+#####################
 sub replace {
 	my $tab = shift;
 	my $id = shift;
@@ -164,6 +188,6 @@ sub replace {
 	my $squery = "update $tab set parentsid = $id where " . $tab . "id = $lostid";
 	print "doing <$squery>\n";
 	#print STDERR $dbh->do($squery) . "\n";
-}
+} #END REPLACE
 
 #EOF
