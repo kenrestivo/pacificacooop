@@ -50,7 +50,7 @@ $accessnames = array(
 		500 => 'Edit',
 		600 => 'Add',
 		700 => 'Delete',
-		800 => 'Administer permissions'
+		800 => 'Administer permissions for'
 );
 
 
@@ -1113,8 +1113,8 @@ fieldPerms($perms, $targetfamilyid, $p, $u, $targetlevel)
 	$group = $p['grouplevel'] > $perms[0] ? $perms[0] : $p['grouplevel'];
 
 	//if it's MY record, return the userlevel, otherwise the grouplevel.
-	if(($targetfamilyid == $u['familyid'] && $user >= $targetlevel ) || 
-		$group >= $targetlevel) 
+	if($group >= $targetlevel ||
+			($targetfamilyid == $u['familyid'] && $user >= $targetlevel ) ) 
 	{
 		user_error("fieldPerms(): ACCEPTING", E_USER_NOTICE);
 		return 0;
