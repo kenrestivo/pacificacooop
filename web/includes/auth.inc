@@ -514,11 +514,17 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 function
 logIn($vars)
 {
-	//confessArray($vars, 'logIn($auth) called with');
+	global $_SESSION;
+	//confessArray($vars, 'logIn($vars) called with');
 
 	//force us to drop all previous state if 'cancel' button pressed!
 	$auth = $vars['logout'] ? "" : $vars['auth'];
-
+	
+	if($_SESSION['auth']){
+		user_error("logIn: grabbing previous auth from session!", 
+			E_USER_NOTICE);
+		$auth =  $_SESSION['auth'];
+	}
 
 	/* vital information for each state.
 		func = callback function for this state
@@ -996,16 +1002,16 @@ insecurePassState($auth, $states)
 
 /******************
 	LOGGEDINSTATE
-	show who i am, and buttons.
+	i am me. 
 	i do *not* want this to evolve (devolve?) into a menu system
 ******************/
 function
 loggedInState($auth, $states)
 {
-	/* TODO: log it for future session logging?
-	user_error("user so-and-so logged in", E_USER_NOTICE);
-	*/
-	return changeState($auth, $states, 'loggedin', 1);
+	global $_SESSION;
+	$newauth =  changeState($auth, $states, 'loggedin', 1);
+	$_SESSION['auth'] = $newauth; // save it!
+	return  $newauth;
 }/* END LOGGEDINSTATE */
 
 

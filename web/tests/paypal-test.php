@@ -1,6 +1,9 @@
 <?php
 
 
+	require_once("session.inc");
+	sessionSetup();
+
 	require_once("auth.inc");
 
 	print "<HTML>
@@ -27,6 +30,8 @@
 	$u = getUser($auth['uid']);
 
 	topNavigation($auth, $u);
+
+	printf("\n<a href='index.php?%s'>test session-enabled link</a>\n", SID);
 
 
 ?>
