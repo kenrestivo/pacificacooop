@@ -188,15 +188,6 @@ create table figlue (
     primary key (figlueid)
 );
 
--- glue table for many-to-many: leads to income
---- TODO: need separate one for businesses? or same one?
-create table liglue (
-    liglueid int(32) not null unique auto_increment,
-	incid int(32),
-	leadsid int(32),
-    primary key (liglueid)
-);
-
 -- users
 create table users (
     userid int(32) not null unique auto_increment,
@@ -240,6 +231,7 @@ create table auction (
     amount decimal(9,2),
 	date_received date,
 	location_in_garage varchar(255),
+	item_type enum ('Real Thing', 'Gift Certificate'),
     package_id int(32),
     primary key (auctionid)
 );
@@ -406,6 +398,14 @@ create table invitation_rsvps (
 	ticket_quantity int(5), -- XXX conditional hack! handle income right!
 	leadsid int(32),
     primary key (invitation_rsvps_id)
+);
+
+-- the RIGHT way to handle attendees
+create table springfest_attendees (
+    springfest_attendee_id int(32) not null unique auto_increment,
+	leadsid int(32),
+	company_id int(32),
+    primary key (springfest_attendee_id)
 );
 
 

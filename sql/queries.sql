@@ -155,7 +155,7 @@ select kids.first, kids.last, enrol.semester, enrol.sess
 		left join kids on kids.kidsid = attendance.kidsid
 	where enrol.semester = '2003-2004'  and attendance.dropout is null
 
--- find orphaned auctionss
+-- find orphaned auctionss XXX BROKEN! i have new linkfields!
 select auction.*, families.name 
 	from auction 
 		left join faglue on faglue.auctionid = auction.auctionid 
@@ -163,7 +163,7 @@ select auction.*, families.name
 	where faglue.familyid is null 
 	order by auctionid
 
--- find orphaned checks (serious)
+-- find orphaned checks (serious) XXX BROKEN! i have new linkfields!
 select inc.*, families.name 
 	from inc 
 		left join figlue on figlue.incid = inc.incid 
@@ -193,5 +193,54 @@ select coa.description, sum(amount)  as total
 	where invitation_rsvps.leadsid is not null 
 	group by inc.acctnum order by total desc;
 
+
+--- audit trails
+select audit_trail.*, users.name 
+    from audit_trail
+        left join users on users.userid = audit_trail.audit_user_id
+    order by updated desc;
+
+-- logins
+select session_info.ip_addr, session_info.updated, users.name 
+    from session_info
+        left join users on users.userid = session_info.user_id
+    where session_info.user_id > 0
+    order by updated desc;
+
+
+--- privilege information
+select privs.* ,users.name 
+	from privs 
+	left join users using (userid) 
+	where realm = 'packaging';
+
+-- tickets by family
+select  families.name, sum(ticket_quantity)  as total 
+    from invitation_rsvps
+        left join leads on leads.leadsid = invitation_rsvps.leadsid
+        left join families on families.familyid = leads.familyid
+    where invitation_rsvps.leadsid is not null 
+    group by families.name
+    order by total desc;
+
+-- tickets, summary
+select  leads.relation, sum(ticket_quantity)  as total 
+    from invitation_rsvps
+        left join leads on leads.leadsid = invitation_rsvps.leadsid
+    where invitation_rsvps.leadsid is not null 
+    group by leads.relation
+    order by total desc;
+
+-- bad address
+select relation, 
+	sum(if(leads.familyid>1,1,0)) as family_supplied ,
+	sum(if(leads.familyid>1,0,1)) as alumni_list ,
+    count(leads.leadsid) as total
+    from leads 
+        left join families using (familyid) 
+    where do_not_contact is not null 
+            and do_not_contact > '0000-00-00' 
+    group by relation 
+    order by total desc;
 
 --- EOF
