@@ -73,11 +73,18 @@
 				(change-privs dbh user-name "solicit_money" 100 200)))
 			list-of-names))
 
+(define (do-chairs dbh chairs)
+  (for-each
+   (lambda (chair-pair)
+	 (change-privs dbh (cdr chair-pair) (car chair-pair) 800 800))
+   chairs))
+
 
 ;;;;;;;;;;;
 ;; now do stuff
 (define chairs
-  '(("solicitation" . "bauer")
+  '(
+	("solicitation" . "bauer")
 	))
 
 
@@ -91,7 +98,8 @@
 	 (solicits dbh
 			   '("depriest" "refino" "kaitz" "solano" "mrad" "gaffney" "bauer"))
 	;; finally the chairs, overriding all
-	(simplesql-close dbh)))
+	 (do-chairs dbh chairs)
+	 (simplesql-close dbh)))
 
 
 
