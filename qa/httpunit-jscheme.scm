@@ -10,23 +10,34 @@
 (invoke gtc 'setBaseUrl "http://www/coop-dev")
 
 ;; choose family
-(invoke wtc 'beginAt "/")
-;; TODO add asserts that this is the RIGHT page
-(invoke wtc 'selectOption "auth[uid]" "Restivo Family")
-(invoke wtc 'assertSubmitButtonPresent "login")
-(invoke wtc 'submit "login")
-;; TODO add asserts here that i have the RIGHT page!
+(define choose-family
+  (lambda(wtc)
+	(begin
+	  (invoke wtc 'beginAt "/")
+	  ;; TODO add asserts that this is the RIGHT page
+
+	  (invoke wtc 'selectOption "auth[uid]" "Restivo Family")
+	  (invoke wtc 'assertSubmitButtonPresent "login")
+	  (invoke wtc 'submit "login")
+	  )))
 
 ;;enter password
-(invoke wtc 'setFormElement "auth[pwd]" "tester")
-(invoke wtc 'setFormElement "auth[pwd]" "tester")
-(invoke wtc 'assertSubmitButtonPresent "login")
-(invoke wtc 'assertFormElementPresent "auth[pwd]")
-(invoke wtc 'submit "login")
-;; TODO assertions here that it's the right page.
+(define enter-password
+  (lambda (wtc)
+	(begin
+	  (invoke wtc 'assertSubmitButtonPresent "login")
+	  (invoke wtc 'assertFormElementPresent "auth[pwd]")
 
+	  (invoke wtc 'setFormElement "auth[pwd]" "tester")
+	  (invoke wtc 'setFormElement "auth[pwd]" "tester")
+	  (invoke wtc 'submit "login")
+	  )))
 
-(define dl (invoke wtc 'getDialog))
-(invoke dl 'getResponseText)
+(define dump-page
+  (lambda(wtc)
+	(begin
+	  (define dl (invoke wtc 'getDialog))
+	  (invoke dl 'getResponseText)
+	  )))
 
 ;;EOF
