@@ -618,6 +618,9 @@ logIn($vars)
 	}
 
 	//confessArray($auth, "login(auth)");
+
+	//if they have cookie problems, let's find out NOW!
+	checkSessionId($auth);
 	
 	/* start the pachinko machine. 
 		no way out unless user input needed, or success */
@@ -1158,6 +1161,33 @@ fieldPerms($perms, $targetfamilyid, $p, $u, $targetlevel)
 	return 1;
 	
 }/* END FIELDPERMS */
+
+
+/******************
+	CHECKSESSIONID
+	puke if there's some evil cookie problem
+	inputs: an auth
+	outputs: a message if no session id is present
+******************/
+function
+checkSessionId($auth)
+{
+	if(!session_id()){
+		print "<br>This web site, just like our kids, needs cookies in order to function.
+				<br>ME WANT COOKIE!!!!!
+				<br>Please either:
+				<li>Turn on cookies in your browser
+				<li>Enable cookies for this site (check its 'security settings')
+				<li>Upgrade your browser if 
+						you have an old one that doesn't support cookies
+				<li>Try reloading this page, or typing in the URL manually
+				<br>If it still doesn't work, call us. 
+						Something may be wrong that we need to fix.
+				";
+		done();
+	}	
+}/* END CHECKSESSIONID */
+
 
 
 #note bin2hex... do i need it?
