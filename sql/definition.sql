@@ -283,6 +283,7 @@ create table auction (
 	description longtext,
     amount decimal(9,2),
 	date_received date,
+	location_in_garage varchar(255),
     audit_user_id int(32),
 	entered datetime,
 	updated timestamp,

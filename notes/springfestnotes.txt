@@ -161,3 +161,9 @@ solicitation screen, first cut
     kirsten will need to be able to VIEW these entries,
         separate from regular auctions.
 
+
+-----------
+2004-01-19
+
+auction attendee, number
+amount

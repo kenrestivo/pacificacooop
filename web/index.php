@@ -25,6 +25,7 @@
 	require_once("insurancefuncs.inc");
 	require_once("calendarfuncs.inc");
 	require_once("adminfuncs.inc");
+	require_once("pkg_checkin_funcs.inc");
 	//require_once("solicitfuncs.inc");
 
 	print "<HTML>
@@ -74,25 +75,31 @@
 	showMenuRow($auth, $u, 'Springfest Fees and Cash Donations', 
 		'incomeSummary', 'money', 'money.php');
 
+	//packaging
+	showMenuRow($auth, $u, 'Springfest Packaging Committee', 
+		'pkgCheckinSummary', 'packaging', 'packaging_menu.php');
+
 	/* solicitation items
 	showMenuRow($auth, $u, 'Springfest Solicitation', 
 		'solicitSummary', 'solicitation', 'solicitation.php');
 	*/
 
-	/* insurance */
+	/* insurance 
 	showMenuRow($auth, $u, 'Insurance and Drivers Licence Information', 
 		'insuranceSummary', 'insurance', 'insurance.php');
+	*/
 
-	/* calendar */
+	/* calendar 
 	showMenuRow($auth, $u, 'Calendar of Events', 
 		'calSummary', 'calendar', 'calendar.php');
+	*/
 
 	/* admin 
 	XXX can't use standard showMenuRow? 
 		it uses FAMILYID, but admin wants USERID
-	*/
 	showMenuRow($auth, $u, 'User Administration', 
 		'adminSummary', 'user', 'admin.php');
+	*/
 
 	print "</table>";
 
