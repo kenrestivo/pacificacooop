@@ -127,7 +127,7 @@ class paypalForm
 													  'Other Amount:',
 													  'size="4"');
 			
-			$form->addGroup($combo, false,  'Donate:', 
+			$form->addGroup($combo, false,  'Additional Donation ($):', 
 							'&nbsp;Other Amount: ');
 			
 			
@@ -139,8 +139,12 @@ class paypalForm
 				$form->addElement('hidden', 'coop', session_id()); 
 			}
 			
-				//TODO pass through ANY OTHER VARS!
+			//TODO pass through ANY OTHER VARS!
 			// i.e. the lead id, weirdo paypal.php vars, etc
+			$form->addElement('hidden', 'response_code', 
+							  $_REQUEST['response_code']); 
+
+			$form->applyFilter('__ALL__', 'trim');
 			
 			return $form;
 			
