@@ -8,7 +8,7 @@
 DBS="leads figlue inc faglue auction users groups privs families parents kids attendance"
 
 #SAVE=../sql/backups
-SAVE=/mnt/kens/ki/is/c/coopinsurance/sql/backups
+SAVE=/mnt/kens/ki/is/proj/coop/sql/backups
 
 BASEURL="http://www.pacificacoop.org/sf/export.php?command=backup&db="
 DATE=`/bin/date +%Y.%m.%d.%H.%M.%S`
