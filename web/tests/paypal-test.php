@@ -1,4 +1,4 @@
-26868<?php 
+<?php 
 
 //$Id$
 
@@ -49,6 +49,19 @@ if($auth['state'] != 'loggedin'){
 
 topNavigation($auth,  getUser($auth['uid']));
 
+////utility, not inside of class
+function findTables($haystack)
+{
+	$needles = array();
+	foreach($haystack as $key => $val){
+		//print "table $key vars $val<br>";
+		if(is_array($val) && array_key_exists('action', $val)){
+			$needles[$key] = $val;
+		}
+	}
+	return $needles;
+}
+
 //////////////////////////////////////////
 /////////////////////// COOP CLASS
 class coopPage
@@ -60,21 +73,25 @@ class coopPage
 	var $table;
 
 	// constructor.
-	function coopPage($table)
+	function coopPage($table = false )
 		{
 			// set it here
-			$this->table = $table;
-
-			$this->obj = DB_DataObject::factory ($this->table); // & instead?
+			$this->auth = $_SESSION['auth'];
+			$this->table = $table ? $table : $_SESSION['toptable'];
+			
+			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
 			if (PEAR::isError($obj)){
 				die ($obj->getMessage ());
 			}
-
+//			print_r($this->obj);
 
 		}
 
+	// TODO: some nifty way to get session vars outta there
 	function requestOrSession($itemName){
 	}
+	
+	// fishes the tables out of a request or session
 
 	// HANDL EOBJ STUFF
 	function tablePopup()
@@ -104,25 +121,26 @@ class coopPage
 			//print "<hr>";
 		}
 
-	function detailForm()
+	function detailForm($id = false )
 		{
-			$auth = $_SESSION['auth'];
-			$table = $_SESSION['table'];
-
-			$this->obj->get($_SESSION[$this->table]['id']);
+	
+			$id = $id ? $id : $_SESSION[$this->table]['id'];
+			$this->obj->get($id);
 			$this->build =& DB_DataObject_FormBuilder::create ($this->obj);
 			$form = new HTML_QuickForm($_SERVER['PHP_SELF']); // XXX &
 			$form->addElement('html', thruAuth($auth, 1));
-			$build->useForm($form);
-			$form =& $build->getForm();
+			$this->build->useForm($form);
+			$form =& $this->build->getForm();
 			if($form->validate ()){
 				$res = $form->process (array 
-									   (&$build, 'processForm'), 
+									   (&$this->build, 'processForm'), 
 									   false);
 				if ($res){
 					$obj->debug('processed successfully', 
 								'detailform', 0);
-					$_SESSION['action'] = 'list'; //  next action
+					// XXX make sure i don't have to unset id's first!
+					///  next action
+					$_SESSION[$this->table]['action'] = 'list'; 
 					header(sprintf(
 							   'Location: %s%s', 
 							   $_SERVER['PHP_SELF'], 
@@ -148,9 +166,9 @@ class coopPage
 				$pager_item_data[] = $i;
 			}
 			$pager_parms = array (
-				'mode' => 'Jumping',
+				'mode' => 'Sliding',
 				'perPage' => 10,
-				'delta' => 4,
+				'delta' => 2,
 				'itemData' => $pager_item_data
 				);
 			$pager =& new Pager($pager_parms);
@@ -161,9 +179,12 @@ class coopPage
 			//confessArray($pager_result_data, "pagerresult");
 			//confessArray($pager_links, "pagerlinks");
 			
-			$res .= $pager_links['first'];
+//			$res .= $pager_links['first'];
 			$res .= $pager_links['all'];
-			$res .= $pager_links['last'];
+		//	$res .= $pager_links['back']; 
+//			$res .= sprintf("&nbsp;%d&nbsp;", $pager->getCurrentPageID());
+			//$res .= $pager_links['next'];
+	//		$res .= $pager_links['last'];
 			
 			return $res;
 		}
@@ -178,7 +199,7 @@ class coopPage
 		}
 
 
-	function listTable()
+	function listTable($table = false)
 		{
 
 		// most have only one key. feel around for primary if not
@@ -190,7 +211,7 @@ class coopPage
 
 			$tab =& new HTML_Table();
 
-			$res .= $this->calcPager();	
+			$pagertext = $this->calcPager();	
 			$this->obj->limit($this->pager_start - 1, 
 							  $this->pager_result_size);
 			$this->obj->find();					// new find with limit.
@@ -202,10 +223,11 @@ class coopPage
 					$this->obj);
 
 				$ar = array_merge(
-					sprintf('<a href="%s?action=detail&id=%s&table=%s">
+					sprintf('<a href="%s?%s[action]=detail&%s[id]=%s">
 						Edit</a><br>',
 							$_SERVER['PHP_SELF'], 
-							$this->obj->$primaryKey, $this->table),
+							$this->table, $this->table , 
+							$this->obj->$primaryKey),
 					array_values($this->obj->toArray()));
 
 
@@ -224,14 +246,15 @@ class coopPage
 
 				
 			$res .= sprintf(
-				'<p><a href="%s?action=detail&table=%s">Add new</a></p>', 
-				   $_SERVER['PHP_SELF'], $table) ;
+				'<p><a href="%s?%s[action]=detail">Add new</a></p>', 
+				   $_SERVER['PHP_SELF'], $this->table) ;
 
 			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
 			$res .= $tab->toHTML();
 
 //			$res .= "<hr><br>";
 
+			$res .= $pagertext;
 		
 			return $res;
 		}
@@ -240,10 +263,20 @@ class coopPage
 
 
 //MAIN
-//$_SESSION['table'] = 'income';
+//$_SESSION['toptable'] 
 
-$cp =& new coopPage('income');
-print $cp->listTable();
+//confessArray(findTables($_REQUEST), "tables");
+foreach(findTables($_REQUEST) as $table => $vals){
+	$cp =& new coopPage('income');
+	// OK copy my dispatcher logic over now
+	if($vals['action'] == 'list'){
+		print $cp->listTable();
+	} else {
+		print $cp->detailForm($vals['id']);
+	}
+}
+
+
 done();
 
 
