@@ -33,6 +33,7 @@ class User_privileges extends DB_DataObject
 	function preGenerateForm() {
 
 // the numbers, their display names, and the callback 'action' asssociated with them DUPLICATE OF AUTH.INC!
+/// screw this. put it in the db
 $accessnames = array(  
 		  0 => array('None', NULL),
 		100 => array('Summarize', 'summary'),

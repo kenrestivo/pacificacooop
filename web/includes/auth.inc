@@ -294,6 +294,7 @@ getAuthLevel($auth, $targetrealm)
 	//confessArray($auth, "getauthlevel");
 
 	if(!($auth['uid'] && $targetrealm && $auth['token'] )) {
+		PEAR::raiseError('not enough info', 111);
 		user_error("getAuthLevel(): ERROR not enough info",E_USER_ERROR);
 		return 1;
 	}

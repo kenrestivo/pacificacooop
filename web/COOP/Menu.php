@@ -185,7 +185,7 @@ class CoopMenu extends HTML_Menu
 							$cbs['shortdesc'];
 						// TODO: put the menu stuff in here
 						if(checkMenuLevel($this->page->auth, 
-										  getUser($this->page->auth['uid']), 
+										  $this->page->userStruct, 
 										  $cbs, $cbs['fields'])== 0){
 							$res[$realm]['sub'][$key]['url'] = 
 								sprintf('%s%s', $cbs['page'], 
@@ -204,6 +204,8 @@ class CoopMenu extends HTML_Menu
 	function topNavigation()
 		{
 
+			// i don't user this->page->userStruct
+			// since it requires createlegacy adn i may not have that!
 			$u = getUser($this->page->auth['uid']);	// ugh.
 
 
