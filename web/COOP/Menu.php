@@ -70,7 +70,7 @@ class CoopMenu extends HTML_Menu
 								  getUser($this->page->auth['uid']), 
 								  $cbs, $cbs['fields'])== 0){
 					$res[$key]['url'] = $cbs['page'];
-						}
+				}
 			}
 			//confessArray($menustruct, 'menustruct');
 			return $res; 
@@ -140,13 +140,35 @@ class CoopMenu extends HTML_Menu
 			$res .= $tab->toHTML();
 			if(count($this->getPath()) > 1){
 ///				print $this->getCurrentURL();
-	//			confessArray($this->getPath(), "getpath");
+				//			confessArray($this->getPath(), "getpath");
 				$res .= $this->get('urhere');	
 			}
 
 			return $res;
 		}
 	
+
+	function create(&$page)
+		{		
+			$this->page =& $page;
+ 
+		//	print "HEY" .  $page->selfURL(false, 'companies[action]=list');
+			$heirmenu = array(
+				array(
+					'title' => 'Solicitation Test',
+					'url' => $page->selfURL(
+						false, 'tables[companies][action]=list')),
+				array(
+					'title' => 'Invitations Test',
+					'url' => $page->selfURL(
+						false, 'tables[invitations][action]=list')));
+
+
+			$this->setMenu($heirmenu);
+
+			$this->renderer =& new HTML_Menu_DirectTreeRenderer();
+			$this->render($this->renderer, 'sitemap');
+		}
 
 } // END COOPMENU CLASS
 

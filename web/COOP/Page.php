@@ -136,13 +136,16 @@ class coopPage
 
  
 	function engine(){
-		$_SESSION = $this->mergeTables($_SESSION, $_REQUEST);
+		if($_REQUEST['tables']){
+			$_SESSION['tables'] = $this->mergeArrays($_SESSION['tables'], 
+													 $_REQUEST['tables']);
+		}
 		//confessArray($tabarr, "tables");
-		foreach($tabarr as $table => $vals){
+		foreach($_SESSION['tables'] as $table => $vals){
 			$this->setup($table);
 				//	print_r($cp);
 			// OK copy my dispatcher logic over now
-			switch($tabarr[$table]['action']){
+			switch($vals['action']){
 			case 'list':
 				print $this->listTable();
 				break;
@@ -159,7 +162,7 @@ class coopPage
 		{
 		}
 	
-	function mergeTables($array, $overrides, $level = 0)
+	function mergeArrays($array, $overrides, $level = 0)
 		{
 			$this->confessArray($array, "BEFORE merge: level $level");
 
@@ -167,7 +170,7 @@ class coopPage
 				if(array_key_exists($key, $array)){
 					if(is_array($val)){
 						$array[$key] = 
-							$this->mergeTables($array[$key], $val, $level +1);
+							$this->mergeArrays($array[$key], $val, $level +1);
 					} else {
 						$array[$key] = $val;
 					}
@@ -242,9 +245,10 @@ class coopPage
 
 	function setFormDefaults(&$form)
 		{
-			
+			// start with schoolyear
+			//confessObj($sy, "element");
 			$sy =& $form->getElement('school_year');
-			if($sy && $sy->getValue() == ""){
+			if($sy->getValue() == ""){
 				$sy->setValue(findSchoolYear());
 			}
 		}
@@ -265,7 +269,7 @@ class coopPage
 			$form =& $this->build->getForm();
             //confessObj($form, "form");
   			//$form->freeze();
-			$this->setFormDefaults(&$form);
+			// XXX BROKEN FUCK FUCK FUCK FUCK $this->setFormDefaults(&$form);
 			if($form->validate ()){
 				$res = $form->process (array 
 									   (&$this->build, 'processForm'), 
@@ -277,7 +281,7 @@ class coopPage
 					// XXX make sure i don't have to unset id's first!
 					///  next action
 					print "PRICESSING SEUCCSSCUL";
-					$_SESSION[$this->table]['action'] = 'list'; 
+					$_SESSION['tables'][$this->table]['action'] = 'list'; 
  			 		header('Location: ' . $this->selfURL());
 				}
 				echo "AAAAUUUUUUUUUUUGGH!<br>";
@@ -345,7 +349,7 @@ class coopPage
 			while ($this->obj->fetch()){
 				$ar = array_merge(
 					$this->selfURL("Edit", 
-							sprintf('%s[action]=detail&%s[id]=%s',
+							sprintf('tables[%s][action]=detail&tables[%s][id]=%s',
 									$this->table, $this->table , 
 									$this->obj->$primaryKey)),
 					array_values($this->obj->toArray()));
@@ -366,11 +370,11 @@ class coopPage
 
 				// this may not actually belong here
 			$res .= $this->selfURL('Add New', 
-							sprintf('%s[action]=detail', 
+							sprintf('tables[%s][action]=detail', 
 									$this->table));
 				 
 			$res .= $this->selfURL('Close', 
-							sprintf('%s[action]=done', 
+							sprintf('tables[%s][action]=done', 
 									$this->table));
 
 
