@@ -857,12 +857,14 @@ http://www.pacificacoop.org/
 					}
 				}
 			} // end foreach
-					
-	  $mistake_summary .= print_r($_REQUEST, true);
-					
-	  // now send it
-	  $this->cp->mailError("Item found with thank_you_id that points to no actual thankyou.", $mistake_summary);
-
+		
+	  // could check N here too, alternately
+	  if($mistake_summary){
+		  $mistake_summary .= print_r($_REQUEST, true);
+		  
+		  // now send it
+		  $this->cp->mailError("Item found with thank_you_id that points to no actual thankyou.", $mistake_summary);
+	  }
 	  
 		} // END REPAIRORPHANS	
 
