@@ -19,28 +19,9 @@
 
 	require_once("first.inc");
 	require_once("shared.inc");
-
 	require_once("auth.inc");
-	require_once("auctionfuncs.inc");
-	require_once("financefuncts.inc");
-	require_once("roster.inc");
-	require_once("10names.inc");
-	//require_once("insurancefuncs.inc");
-	//require_once("calendarfuncs.inc");
-	//require_once("adminfuncs.inc");
-	require_once("pkg_checkin_funcs.inc");
-	require_once("solicit_company.inc");
-	require_once("solicit_auction.inc");
-	require_once("solicit_cash.inc");
-	require_once("raffle_finance.inc");
-	require_once("raffle_locations.inc");
-	require_once("flyer_company.inc");
-	require_once("flyer_delivery.inc");
-	require_once("nag.inc");
-	require_once("indulgences.inc");
-	require_once("invitation_cash.inc");
- 	require_once("packages.inc");
- 	require_once("ticket_sales.inc");
+
+	require_once("everything.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -74,31 +55,14 @@
 	print "\n\n<table border=1>\n";
 	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
 
-	//and heeere they are!
-	$menu = array($auctioncallbacks, 
-				  $invitationcallbacks, $invitation_cash_callbacks,
-				  $incomecallbacks, $pkgcheckincallbacks,  
-				  $solicit_company_callbacks, $solicit_auction_callbacks,
-				  $solicit_cash_callbacks, 
-				  $ticket_sales_callbacks, 
-				  $raffle_location_callbacks, $raffle_income_callbacks, 
-				  $flyer_company_callbacks,  $flyer_delivery_callbacks ,
-				  $nag_callbacks, $indulgence_callbacks
-		);
-
 	
-    while ( list( $key, $val ) = each($menu)) {
+    while ( list( $key, $val ) = each($everything)) {
 		user_error(sprintf("main(): showing row for %s", $val['description']),
 			E_USER_NOTICE);
 		// hack around the $callbacks not yet including fields, which it SHOULD
 		showMenuRow($auth, $u, $val, ${$val['fields']});
 	}
 	
-	/* package management
-	 $pkg_mgmt_callbacks);
-	*/
-
-
 
 	/* admin 
 	XXX can't use standard showMenuRow? 
