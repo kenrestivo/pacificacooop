@@ -143,7 +143,9 @@ grant select, update, insert, delete on coop.* to input@'%'
 	identified by 'test'; 
 grant select, update, insert, delete on coop.* to input@localhost 
 	identified by 'test';
-grant select, insert, update, delete on springfest.* to coop@'%'
+grant select, insert, update, delete on coop.* to springfest@'%'
+    identified by '92xPi9';
+grant select, insert, update, delete on coop.* to springfest@localhost
     identified by '92xPi9';
 
 

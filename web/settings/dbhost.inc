@@ -1,5 +1,10 @@
 <!-- $Id$ -->
 <?php
+
+#this file is here so that we can run the site on multiple machines
+#without having to change the .globals.inc file all the damn time
+#this file is intended to be in the .cvsignore so that it doesn't get updated
+
 #  Copyright (C) 2003  ken restivo <ken@restivo.org>
 # 
 #  This program is free software; you can redistribute it and/or modify
@@ -16,11 +21,10 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-	#this file is here so that we can run the site on multiple machines
-	#without having to change the .globals.inc file all the damn time
-	#this file is intended to be in the .cvsignore so that it doesn't get updated
-
+	#change these to match the host that you move the app to.
+	#useful for testing
 	$dbhost =  "bc";
+	#$coop_sendto =  "ken@restivo.org";
 
 ?>
 

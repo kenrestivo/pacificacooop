@@ -73,7 +73,7 @@ arch
 	like 5mins
 	common folder
 		.dbfuncs.inc/php
-		.common.php
+		shared.php
 			most everything!
 				assume it goes here
 				popup, parentinfo
