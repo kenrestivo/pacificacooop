@@ -120,9 +120,10 @@ create table coop.families (
 -- you'll know WHICH springfest by comparing the 'entered' date
 create table coop.leads (
     leadsid int(32) not null auto_increment,
-	title varchar(255),
 	last varchar(255),
 	first varchar(255),
+	salut varchar(50),
+	title varchar(255),
 	company varchar(255),
 	addr varchar(255),
 	addrcont varchar(255),
