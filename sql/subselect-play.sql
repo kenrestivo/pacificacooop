@@ -141,9 +141,12 @@ union all
                 ikd.in_kind_donation_id
  
 -- with groups
-select company_name,
-        auct.item_value as auction_donations,
-        iks.item_value as in_kind_donations
+select left(company_name, 20) as company,
+        left(concat_ws(' ', first_name, last_name), 20) as name,
+        sum(inc.payment_amount) as cash_donations,
+        sum(pur.payment_amount) as auction_purchases,
+        sum(auct.item_value) as auction_donations,
+        sum(iks.item_value) as in_kind_donations
 from companies
 left join 
     (select  item_value, company_id
@@ -163,4 +166,27 @@ left join
         group by cikj.company_id) 
     as iks
         on iks.company_id = companies.company_id
-where companies.company_id = 82;
+left join 
+    (select  payment_amount, company_id
+     from companies_income_join as cinj
+     left join income 
+              on cinj.income_id = 
+                income.income_id
+        group by cinj.company_id) 
+    as inc
+        on inc.company_id = companies.company_id
+left join 
+    (select  payment_amount, company_id
+     from springfest_attendees as atd
+    left join auction_purchases  as ap
+            on ap.springfest_attendee_id = 
+                atd.springfest_attendee_id
+     left join income 
+              on ap.income_id = 
+                income.income_id
+        group by atd.company_id) 
+    as pur
+        on pur.company_id = companies.company_id
+group by companies.company_id
+order by cash_donations desc, auction_purchases desc, 
+    auction_donations desc, in_kind_donations desc;
