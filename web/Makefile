@@ -45,6 +45,7 @@ download::
 	rsync -e ssh \
 		--rsync-path=$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
+		--exclude '*.sql' \
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNPATH)/ $(HERE)
 
 commit:
