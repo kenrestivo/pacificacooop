@@ -9,7 +9,7 @@ Capturing someone surfing is very helpful. Capturing someone surfing RANDOMLY is
 Here's what I'm thinking in terms of organising the task:
 
 each slice/view
-	login
+	login SIMPLE DONE
 	10names
 	auction
 	money
