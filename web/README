@@ -79,11 +79,21 @@ callbacks struct
 	countindex: the field in $fields which should be where'd for counting
 	sumfield: sets the mode of the count to 'sum', using this field for totals
 	fields: the NAME of the fieldspec array. eventually will be REFERENCE here
-	joins: an array of arrays of join info, in order of joining (important!)
+	joins: a recursive array of arrays of join info, 
+		in order of joining (important!)
+		each MUST start from the 'maintable'. period. no argument. it must.
 		each containing :
+			the table to join to
 			the index that is common to the joins
-			the left table
-			the right table (or, if empty, the 'maintable' is used!)
+				indexes MUST have the same name! no fancy index naming!
+			optional recursive set of (table, index) arrays to join to THIS one
+		 	so, to join maintable->atable, just:
+				('atable', 'aindex')
+			or, to join maintable->atable->btable->ctable,
+				('atable, 'aindex',
+					array('btable', 'bindex',
+						array('ctable', 'cindex)))
+				and, yes, i am becoming a LISP programmer. ;-)
 	input callback: used by processoneentry to redisplay user-error entries
 	dupecheck callback: used by processoneentry to dupecheck b4 saving
 	realsave callback: used by processoneentry to REALLY save the thing!
