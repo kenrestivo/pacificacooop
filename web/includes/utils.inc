@@ -399,7 +399,7 @@ findSchoolYear($date = 0, $guess = 1, $increment = 0)
 	if($increment){
 		//force next year, and sync it up for query purposes too
 		$mdy[1]++;
-		$date = sprintf("%4d-%2d-%2d", $mdy[1], $mdy[2]. $mdy[3]);
+		$date = sprintf("%4d-%2d-%2d", $mdy[1], $mdy[2], $mdy[3]);
 	}
 
 
