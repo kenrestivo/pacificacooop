@@ -27,6 +27,7 @@ use DBI;
 use Getopt::Std;
 
 
+#this wants to be an anonymous hash array
 #my %fieldarray = {
 	#Last Name
 	#Mom Name*
@@ -50,7 +51,7 @@ my $validrowmin = 8;
 
 
 our($opt_t, $opt_v); #loathe perl
-getopts('vt') or &usage();
+getopts('v:t') or &usage();
 
 &main();
 
@@ -61,15 +62,18 @@ exit 0;
 
 
 
+#######################
+#	USAGE
+#######################
 sub usage()
 {
-    print STDERR "usage: $0 [-t -v ] \n";
+    print STDERR "usage: $0 [-t -v verbositylevel ] \n";
 	#TODO pass in session as a param, and REQUIRE it!
     print STDERR "\t-t debug (don't actually DO anything!)\n";
     print STDERR "\t-v verbose \n";
 
 	exit(1);
-}
+} #END USAGE
 
 
 #######################
@@ -110,7 +114,11 @@ sub debugStruct()
 } #END DEBUGSTRUCT
 
 
-sub checkHeaders(){
+#######################
+#	CHECKHEADERS
+#######################
+sub checkHeaders()
+{
 	my $rowref = shift;
 	my $col;
 
@@ -119,8 +127,12 @@ sub checkHeaders(){
 
 	printf("DEBUG the header cb, is a ref to an %s\n", ref($rowref));
 	#&debugStruct($rowref);
-}
+} #END CHECKHEADERS
 
+
+#######################
+#	UNBABY
+#######################
 sub unBaby()
 {
 	my $annoying = shift;
@@ -130,9 +142,14 @@ sub unBaby()
 	$annoying =~ s/^\s*(.+?)\s*$/$1/;
 	#TODO eliminate doublespaces within! i.e. "  " to " "
 	return($annoying);
-}
+} #END UNBABY
 
-sub checkNewFamily(){
+
+#######################
+#	CHECKNEWFAMILY
+#######################
+sub checkNewFamily()
+{
 	#look for a family. add a new one if it's not there, 
 	#	and return the insertid
 	#search in db. if kid isn't there, 
@@ -182,10 +199,14 @@ sub checkNewFamily(){
 		print STDERR $dbh->do($query) . "\n";
 		return($dbh->{'mysql_insertid'});
 	}
-}
+} #END CHECKNEWFAMILY
 
 
-sub checkOneParent(){
+#######################
+#	CHECKONEPARENT
+#######################
+sub checkOneParent()
+{
 	my $rowref = shift;
 	my $famid = shift;
 	my $last = shift;
@@ -246,8 +267,13 @@ sub checkOneParent(){
 		print STDERR $dbh->do($query) . "\n";
 		return($dbh->{'mysql_insertid'});
 	}
-}
+} #END CHECKONEPARENT
 
+
+
+#######################
+#	FIXLASTNAMES
+#######################
 sub fixLastNames()
 {
 	my $last = shift;
@@ -263,9 +289,14 @@ sub fixLastNames()
 	}
 	
 	return \%name;
-}
+} #END FIXLASTNAMES
 
-sub checkNewParents(){
+
+#######################
+#	CHECKNEWPARENTS
+#######################
+sub checkNewParents()
+{
 	my $rowref = shift;
 	my $session = shift;
 	my ($famname, $something, $nameref, $famid) ;
@@ -298,9 +329,13 @@ sub checkNewParents(){
 
 	#TODO *do* something with $something! return it, check it, SOMETHING!
 	
-}
+} #END CHECKNEWPARENTS
 
-sub checkNewKids(){
+#######################
+#	CHECKNEWKIDS
+#######################
+sub checkNewKids()
+{
 	my $rowref = shift;
 	my $session = shift;
 	my ($rquery , $rqueryobj , $ritemref, $query);
@@ -385,15 +420,23 @@ sub checkNewKids(){
 	#add parent here too? why not, we know we need them/one
 	&checkNewParents($rowref, $session);	
 	
-}
+} #END CHECKNEWKIDS
 
+#######################
+#	CHECKCHANGES
+#######################
 sub checkChanges(){
 	#search in db. compare all relevant fields
 	#issue updates if needed
 	#XXX should i call the newkids, etc here?
-}
+} #END CHECKCHANGES
 
-sub deleteReverse(){
+
+#######################
+#	DELETEREVERSE
+#######################
+sub deleteReverse()
+{
 	my $ws = shift;
 	my $session = shift;
 	my ($rquery , $rqueryobj , $ritemref, $query) ;
@@ -498,7 +541,7 @@ sub deleteReverse(){
 		}
 	} #end ritem walk
 	
-}
+} #END DELETEREVERSE
 
 
 #################
