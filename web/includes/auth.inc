@@ -329,6 +329,11 @@ getAuthLevel($auth, $targetrealm)
 		$result['user_level'] = $row['user_level'];
 		$result['group_level'] = $row['group_level'];
 	}
+	if(!is_array($result)){
+		user_error(sprintf("getAuthLevel: NO permissions for user %d in realm %s", 
+						   $auth['uid'],$targetrealm ),
+				   E_USER_NOTICE); 
+	}
 
 	return $result;
 }/* END GETAUTHLEVEL */
