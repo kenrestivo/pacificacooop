@@ -134,30 +134,37 @@
 
 ;; find family
 (define (check-for-new-family line header)
-  (let ((families (simplesql-query *dbh*
-								   (sprintf #f "
+  (let ((families (begin
+					(catch #t (lambda () (simplesql-query *dbh*
+						 "create temporary table tempparents (
+						first_name varchar(255), last_name varchar (255),
+						family_id int(32))"))
+						   (lambda x #f))
+					(simplesql-query *dbh*
+						 "insert into tempparents select first_name, last_name,
+								family_id from parents where type = 'Mom' ")
+					(simplesql-query *dbh*
+									 (sprintf #f "
 				select families.family_id, families.name,
-								families.phone, parents.first_name
-						from families left join parents using (family_id)
+								families.phone, tempparents.first_name
+						from families left join tempparents using (family_id)
 						where  phone like \"%%%s%%\"
 							or (soundex(name) = soundex('%s')
 								and soundex(first_name) = soundex('%s'))"
-											(rasta-find "Phone" line header)
-											(rasta-find "Last Name"
-														line header)
-											(rasta-find "Mom Name *"
-														line header)))))
+											  (rasta-find "Phone" line header)
+											  (rasta-find "Last Name"
+														  line header)
+											  (rasta-find "Mom Name *"
+														  line header))))))
 	(if (> (length families) 1)
 		(db-ref-last (choose-duplicates families) "family_id") ;gotcha!
 		(begin (safe-sql *dbh* (sprintf #f "
 						insert into families set 
 								name = '%s',
 								address1 = '%s',
-								email_address = '%s',
 								phone = '%s'"
 										(rasta-find "Last Name" line header)
 										(rasta-find "Address" line header)
-										(rasta-find "Email" line header)
 										(rasta-find "Phone" line header)
 										))
 			   (last-insert-id *dbh*)))))
