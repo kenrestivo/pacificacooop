@@ -94,11 +94,26 @@ class Tickets extends DB_DataObject
 
 				if($this->family_id > 0){
 					// check for parents, tag them otherwise
+					$par = new CoopObject(&$page, 'parents', &$top);
+					$par->obj->family_id = $this->family_id;
+					if($par->obj->find() < 1){
+						PEAR::raiseError("no parents for familyid $this->family_id ??", 447);
+					}
+					while($par->obj->fetch()){
+						$clone->parent_id = $par->obj->parent_id;
+						$found = $clone->find();
+						if(!$found){
+							$pado->obj->parent_id = $par->obj->parent_id;
+						}
+					}
 				}
-				IF($this->lead_id){
-					// make sure at least one automatic has this leadid
+				if($this->lead_id > 0){
+					// make sure at least one has this leadid
 					$clone->lead_id = $this->lead_id;
 					$found = $clone->find();
+					if(!$found){
+						$pado->obj->lead_id = $this->lead_id;
+					}
 				}
 
 				$pado->obj->insert();
