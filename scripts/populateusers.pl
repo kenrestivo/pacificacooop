@@ -26,7 +26,7 @@ use DBI;
 use Getopt::Std;
 
 
-getopts('vth:p:') or &usage();
+getopts('vth:p:d:') or &usage();
 
 
 #the access hash
@@ -43,23 +43,25 @@ getopts('vth:p:') or &usage();
 );
 
 #default privs for all families
+#  group, user, item
 @familydefaults =  (
-	[ $access{'ACCESS_DELETE'}, "invitations" ],
-	[ $access{'ACCESS_DELETE'}, "auction" ],
-	[ $access{'ACCESS_EDIT'}, "roster" ]
+	[ $access{'ACCESS_SUMMARY'},$access{'ACCESS_DELETE'}, "invitations" ],
+	[ $access{'ACCESS_VIEW'},$access{'ACCESS_DELETE'}, "auction" ],
+	[ $access{'ACCESS_VIEW'},$access{'ACCESS_EDIT'}, "roster" ]
 );
 
 @teacherdefaults =  (
-	[ $access{'ACCESS_VIEW'}, "roster" ],
-	[ $access{'ACCESS_DELETE'}, "insurance" ]
+	[ $access{'ACCESS_VIEW'}, $access{'ACCESS_EDIT'}, "roster" ],
+	[ $access{'ACCESS_DELETE'}, $access{'ACCESS_EDIT'}, "insurance" ]
 );
 
 ### main code starts here
 
 $host = $opt_h ? $opt_h : "bc";
 $port = $opt_p ? ":$opt_p" : "";
+$dbname = $opt_d ? $opt_d : "coop";
 #basic login and housekeeping stuff
-$dbh = DBI->connect("DBI:mysql:coop:$host$port", "input", "test" )
+$dbh = DBI->connect("DBI:mysql:$dbname:$host$port", "input", "test" )
     or die "can't connect to database $!\n";
 
 
@@ -111,8 +113,8 @@ addDefaultPrivs()
 	#NOW, add the privs
 	foreach $arref (@$defref){
 		$query = sprintf("insert into privs 
-				set userid = %d, authlevel = %d, realm = '%s' ", 
-			$uid, $$arref[0], $$arref[1]);
+				set userid = %d, grouplevel = %d, authlevel = %d, realm = '%s' ", 
+			$uid, $$arref[0], $$arref[1], $$arref[2]);
 		if($opt_v){
 			print "doing <$query>\n";
 		}
@@ -157,6 +159,7 @@ sub usage()
     print STDERR "\t-t test (don't actually update db) \n";
     print STDERR "\t-h hostname of db\n";
     print STDERR "\t-p port db is running on\n";
+    print STDERR "\t-d database name\n";
 	exit 1;
 }
 

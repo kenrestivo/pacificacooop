@@ -208,6 +208,7 @@ create table privs (
     userid int(32),
 	realm varchar(55),
 	authlevel int(5),
+	grouplevel int(5),
     primary key (privid)
 );
 
