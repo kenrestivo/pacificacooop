@@ -34,6 +34,7 @@
 	require_once("solicit_cash.inc");
 	require_once("raffle_finance.inc");
 	require_once("raffle_locations.inc");
+	require_once("flyer_company.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -73,6 +74,7 @@
 					$solicit_company_callbacks, $solicit_auction_callbacks,
 					$solicit_cash_callbacks, 
 					$raffle_location_callbacks, $raffle_income_callbacks, 
+					$flyer_company_callbacks, /* $flyer_delivery_callbacks  */
 		);
 
 	
