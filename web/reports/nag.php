@@ -35,15 +35,13 @@
 
 	printf("<form method=POST ACTION='%s'>\n", $_SERVER['PHP_SELF']);
 	
-	#TODO:  unpaidchecked? or something like that
-	$latechecked =  $HTTP_POST_VARS['lateonly'] ? "checked" : "";
-	printf("\t<input type='checkbox' name='lateonly' %s>", $latechecked);
+	$nagonlychecked =  $HTTP_POST_VARS['nagonly'] ? "checked" : "";
+	printf("\t<input type='checkbox' name='nagonly' %s>", $nagonlychecked);
 	
-	print "Show only families with fewer than 10 leads submitted<br>\n";
+	print "Show only families that need nagging<br>\n";
 	print "\t<input type='submit' name='subbutton' value='refresh'>\n";
 	print "</form>\n";
 
-	
 	print "<font size=10>\n";
 	print "<table border='0'>";
 
@@ -54,12 +52,8 @@
 			left join kids on kids.familyid = families.familyid
 			left join keglue on keglue.kidsid = kids.kidsid
 			left join enrol on enrol.enrolid = keglue.enrolid
-		group by enrol.sess, families.name\n";
-		
-	if ($latechecked)
-		$query = $query . "having cntlead < 10\n";
-
-	$query = $query . "order by enrol.sess, cntlead desc, families.name;";
+		group by enrol.sess, families.name
+		order by enrol.sess, cntlead desc, families.name;\n";
 
 	$list = mysql_query($query);
 	
@@ -78,19 +72,22 @@
 	{
 		$tennamespaid = checkPayments($row['familyid'], 1);
 		$quiltpaid = checkPayments($row['familyid'], 2);
+		$tennamesdone = ($row[cntlead] >= 10);
 
-		#don't print this row if it's already paid up
-		if($unpaidchecked && $paid > 0)
+		#don't print this row if it's already complete
+		if ($nagonlychecked && (($tennamespaid >= 50) || $tennamesdone) && ($quiltpaid >=45))
 			continue;
-
+	
 		print "<tr><td>\n";
 		print $row[name];
 		print "</td><td align='center'>";
 		print $row[cntlead];
 		print "</td><td align='center'>";
-		$tennamespaid && printf("$%01.2f", $tennamespaid);
+		if ($tennamespaid > 0)
+			printf("$%01.2f", $tennamespaid);
 		print "</td><td align='center'>";
-		$quiltpaid && printf("$%01.2f", $quiltpaid);
+		if ($quiltpaid > 0)
+			printf("$%01.2f", $quiltpaid);
 		print "</td><td align='center'>";
 		print $row[sess];
 		print "</td><td align='center'>";
