@@ -205,12 +205,25 @@ javaSubmit()
 function 
 timestamp_db_php($date)
 {
-	$year   = substr($date,0,4);
-	$month  = substr($date,4,2);
-	$day    = substr($date,6,2);
-	$hour   = substr($date,8,2);
-	$minute = substr($date,10,2);
-	$second = substr($date,12,2);
+	//2004-12-04 19:07:14
+	if(preg_match('/(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2}):(\d{2})/', 
+				  $date, $matches)){
+		$year   = $matches[1];
+		$month  = $matches[2];
+		$day    = $matches[3];
+		$hour   = $matches[4];
+		$minute = $matches[5];
+		$second = $matches[6];
+
+	} else {
+		$year   = substr($date,0,4);
+		$month  = substr($date,4,2);
+		$day    = substr($date,6,2);
+		$hour   = substr($date,8,2);
+		$minute = substr($date,10,2);
+		$second = substr($date,12,2);
+	}
+
 	$ampm = $hour < 12 ? "AM" : "PM";
 	if($hour > 12){
 		$hour -= 12;
