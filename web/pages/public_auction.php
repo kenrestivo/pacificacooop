@@ -27,60 +27,50 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 function sponsors(&$cp)
 {
 
-
 // now a word from our sponsors
 	$res .= '<div class="sponsor">';
 	$res .= "<p><b>Thanks to our generous sponsors:</b></p>";
 	$tab =& new HTML_Table();
-//TODO: a weird merge of all solicitation and leads, by sponsor level
-// get sponsor levels, then do the search for each
-// first step: just get the damn companies
-	$sp =& new CoopObject(&$cp, 'sponsorship_types', &$nothing);
+
+		// check the sponsorship table, not calculate
+	$sp =& new CoopObject(&$cp, 'sponsorships', &$nothing);
+	$st =& new CoopObject(&$cp, 'sponsorship_types', &$nothing);
 	$sp->obj->school_year = findSchoolYear();
+	$sp->obj->joinAdd($st->obj);
+	//TODO: gah, this sucks. gotta sort by company or company_name...
+	//maybe a congeal custom query instead?
 	$sp->obj->orderBy('sponsorship_price desc');
 	$sp->obj->find();
-	$previous = 1000000000; 		// XXX hack
 	while($sp->obj->fetch()){
+		$lasttype = $sp->obj->sponsorship_type_id;
 		
-		$co =& new CoopObject(&$cp, 'companies', &$nothing);
-		// XXX make this check the sponsorship table, not calculate
+		while($sp->obj->fetch()){
 
-		$co->obj->query(sprintf("
-select company_name,
-        sum(inc.payment_amount) as cash_donations
-from companies
-left join 
-    (select  sum(payment_amount) as payment_amount, company_id
-     from companies_income_join as cinj
-     left join income 
-              on cinj.income_id = 
-                income.income_id
-        where school_year = '2004-2005'
-        group by cinj.company_id) 
-    as inc
-        on inc.company_id = companies.company_id
-group by companies.company_id
-having cash_donations >= %d and cash_donations < %d
-order by company_name
-", 
-								$sp->obj->sponsorship_price,
-								$previous));
-		$previous = $sp->obj->sponsorship_price;
-
-		$sponsors = ''; // because HTML sucks
-		while($co->obj->fetch()){
-
+			/// XXX i hate hate hate this database layout.
+			/// renormalise and group sponsors and leads into one!
+			
+			$table = $sp->obj->lead_id> 0 ? 'leads' : 'companies';
+			$co =& new CoopObject(&$cp, $table, &$nothing);
+			$co->obj->{$co->pk} = $sp->obj->{$co->pk};
+			$co->obj->find(true);
+//			confessObj($co->obj, 'co');
 			// when i redo it, this is where the test for existing goes
 			if($co->obj->url > ''){
 				$thing = sprintf('<a href="%s">%s</a>', 
 								 $cp->fixURL($co->obj->url),
 								 $co->obj->company_name);
 			} else {
-				$thing = $co->obj->company_name;
+				//XXX cheap congeal: company-lead hack
+				$thing = $co->obj->company_name . $co->obj->company;
+				if(!$thing){
+					$thing = sprintf("%s %s", $co->obj->first_name,
+									 $co->obj->last_name);
+				}
 			}
+			print $thing . $sp->obj->sponsorship_type_id;
 			$sponsors .= sprintf("<li>%s</li>", $thing);
 		}
-		if($co->obj->N){
+		if($sp->obj->sponsorship_type_id != $savedid){
 			$res .= sprintf(
 				'<p><b>%s Contributors</b> ($%.0f and above)</p><ul>%s</ul>', 
 				$sp->obj->sponsorship_name,
@@ -88,7 +78,7 @@ order by company_name
 				$sponsors);
 		}
 
-
+		$savedid= $sp->obj->sponsorship_type_id;
 		
 	}
 	
