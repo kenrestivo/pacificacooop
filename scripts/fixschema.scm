@@ -11,18 +11,31 @@
 ;; XXX note, this is fakery. you'll need to manually put in the root pw's
 ;;(define dbh (simplesql-open 'mysql "coop" "127.0.0.1" "paccoop" "test" "2299"))
 
-;; if it is a COLUMN, i'll want to do:
-;;(cons (car tl) (string-join (cdr tl)))
+(define new-schema '()) ;; well, here it is.
+(define current-table "") ;; there has to be a more schemey way 
 
+;; if it is a COLUMN, i'll want to do:
+(define (add-column table line)
+  ;; NOTE! must combine before yanking ,'s!
+  ;; (add-sub-alist new-schema table ...
+  (cons (car line)
+		(regexp-substitute/global #f  ",$"
+								  (string-join (cdr line))
+								  'pre 'post)) )
 
 ;; clean sql definition line
-;; TODO! must combine before yanking ,'s!
 (define (clean-line line)
-		 (map (lambda (y)
-				 (regexp-substitute/global #f  "[ \t]" y  'pre 'post)) 
-		  (map (lambda (x)
-				 (regexp-substitute/global #f  ",$" x  'pre 'post)) 
-			   (delete "" line))))
+  (map (lambda (y)
+		 (regexp-substitute/global #f  "[ \t]" y  'pre 'post)) 
+	   (delete "" line)))
+
+(define (process-def line)
+  (if (and (equal? (car line) "create")
+		   (equal? (cadr line) "table"))
+	  (set! current-table
+			(regexp-substitute/global #f  "\\(" (caddr line) 'pre 'post))
+	  (add-column current-table (clean-line line))))
+ 
 
 ;; make sure it is a valid line
 (define (valid-def-line l)
@@ -37,15 +50,10 @@
 	(do ((line (read-line p) (read-line p)))
 		((or (eof-object? line) ))
 	  ((lambda (x) (if (valid-def-line x)
-					   (pp x)))
+					   (process-def x)))
 	   (clean-line (string-split line #\space))))
 	 (close p) ))	
 
-
-;;; the easy one: tables.
-(define (rename-table-query items)
-   (sprintf #f "rename table %s to %s"
-		   (car items) (cadr items))) 
 
 ;; TODO i have to fish the definition out of the definition.sql,
 ;; or out of a mysqldump somewhere
@@ -54,6 +62,11 @@
 		(new (string-split (cadr items) #\.)))
 	(sprintf #f "alter table %s change column %s %s"
 				 (car sp) (cadr sp) (cadr new))) )
+
+;;; the easy one: tables.
+(define (rename-table-query items)
+   (sprintf #f "rename table %s to %s"
+		   (car items) (cadr items))) 
 
 ;; simple dispatcher, using cute scheme-ism
 (define (rename-query items)
