@@ -20,7 +20,7 @@
 	 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require_once('CoopPage.php');
+require_once('CoopObject.php');
 require_once('DB/DataObject.php');
 require_once("HTML/Table.php");
 require_once 'HTML/QuickForm.php';
@@ -30,32 +30,10 @@ require_once('object-config.php');
 
 //////////////////////////////////////////
 /////////////////////// COOP VIEW CLASS
-class coopView
+class coopView extends CoopObject
 {
-	var $obj;					// ref to db dataobject for this view
-	var $page;					// reference to the cooppage
-	var $table;					// convenience: the table the $this->obj is
-	var $pk;					// the primary key
 	var $backlinks;				// list of links that are linked FROM here
-	var $recurseLevel;			// level, if i'm linked from somewhere
-	var $parent;				// reference to parent object
 
-	function CoopView (&$page, $table, $level = 0, $parent = NULL )
-		{
-
-			$this->page = $page;
-			$this->table = $table ;
-			$this->recurseLevel = $level;
-			$this->parent = $parent;
-			
-			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
-			if (PEAR::isError($obj)){
-				die ($obj->getMessage ());
-			}
-			//confessObj($this->obj, "CONSTRUCTOR object for $this->table");
-				
-		}
- 
 
 
 	// returns an action structure: tables[tablename][action], etc
@@ -142,52 +120,6 @@ class coopView
 			}
 		}
 
-
-	function getPK()
-		{
-			$keys = $this->obj->keys();
-			$this->pk = $keys[0];
-			return $this->pk;
-	}
-
-
-	//  inspired by formbuilder's getdataobjctselectdisplayvalue (whew!)
-	function checkLinkField(&$obj, $key, $val)
-		{
-		
-			
-			// and only if, um, the links.ini agrees that they are there
-			$links = $obj->links();
-			if(!$links){
-				return $val;
-			}
-			$this->page->confessArray($links, 
-									  "checkLInkField(): links for $this->table");
-
-			if(!$links[$key]){
-				return $val;
-			}
-
-			//ok, we have run the fucking gauntlet here.
-			//confessObj($obj, 
-//					   "checkLinkField() from $this->table: obj with links for $key of $val");
-			$subobj = $obj->getLink($key); 
-	//confessObj($subobj, "checkLInkFild() subobj $subobj->__table for $key of $val");
-
-				// only if i have linkfields in the dataobj
-			$ldfs = $subobj->fb_linkDisplayFields;
-			if(!$ldfs){
-				return $val;
-			}
-			$val = false; 		// gotta reset it here.
-			foreach($ldfs as $linkfield){
-				// trying to YAGNI here. i don't need 2-level links yet
-				// so, i'm not coding that recursion in here now. sorry charlie.
-				$val .= sprintf("%s%s", $val ? ' - ' : "", $subobj->$linkfield);
-			}
-
-			return $val;
-		}
 
 	function toArray()
 		{
