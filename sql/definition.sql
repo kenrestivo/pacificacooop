@@ -293,6 +293,7 @@ CREATE TABLE income (
   cleared_date date default NULL,
   payment_amount decimal(9,2) default NULL,
   note varchar(255) default NULL,
+    txn_id varchar(20) NOT NULL default '0',
   school_year varchar(50) default NULL,
   PRIMARY KEY  (income_id),
 ) ;
@@ -732,7 +733,7 @@ CREATE TABLE solicitation_calls (
 ) ;
 
 
---- BOGUS not using this
+
 CREATE TABLE wishlist_items (
   wishlist_item_id int(32) NOT NULL unique auto_increment,
   wishlist_description longtext,
@@ -743,6 +744,20 @@ CREATE TABLE wishlist_items (
   package_id int(32) default NULL,
   school_year varchar(50) default NULL,
   PRIMARY KEY  (wishlist_item_id)
+) ;
+
+
+CREATE TABLE files (
+    file_id int(32) NOT NULL unique auto_increment,
+    file_description varchar(255) default NULL,
+	 original_filename varchar(255) default NULL,
+	disk_filename varchar(255) default NULL,
+	school_year varchar(50) default NULL,
+    file_date date default NULL,
+    upload_date datetime default NULL,
+    mime_type varchar(255) default NULL,
+	file_size int(20) default NULL,
+    PRIMARY KEY (file_id)
 ) ;
 
 
