@@ -56,6 +56,11 @@
   (last-item (simplesql-query dbh (sprintf #f "
 				select user_id from users where name like \"%%%s%%\" "
 								name))))
+(define (change-privs-list dbh list-of-names realm group-level user-level)
+  (for-each (lambda (user-name)
+			  (begin
+				(change-privs dbh user-name realm group-level user-level)))
+            list-of-names))
 
 
 ;;;;; the various committee defaults here
@@ -67,11 +72,9 @@
 			list-of-names))
 
 (define (solicits dbh list-of-names)
-  (for-each (lambda (user-name)
-			  (begin
-				(change-privs dbh user-name "solicitation" 200 700)
-				(change-privs dbh user-name "solicit_money" 100 200)))
-			list-of-names))
+  (change-privs-list dbh list-of-names "solicitation" 200 700)
+  (change-privs-list dbh list-of-names "solicit_money" 100 200))
+
 
 (define (do-chairs dbh chairs)
   (for-each
@@ -88,8 +91,8 @@
 	("packaging" . "White-Roger+Michelle")
     ("invitations" . "david")
     ("raffle" . "ambrose")
-    ("tickets" "stangeland")
-    ("money" "devry")
+    ("tickets" . "stangeland")
+    ("money" . "devry")
 		))
 
 
@@ -100,12 +103,28 @@
 	;; now the solicitation
 	 (solicits dbh
 			   '("depriest" "refino" "kaitz" "solano" "mrad" "gaffney" "bauer"))
-     (packaging "white-roger+michelle" "walker" "pacheco")
-     (program "treckeme" "stewart")
-     (publicity "manning-villlar" "cunniffe" "glasman" "klieder" "simonson")
-     (raffle "ambrose" "cresci-torres" )
-     (tickets "fitzpatrick" "stangeland")
-     (invitations "david" )
+     ;; packaging committee
+     (change-privs-list dbh '("white-roger+michelle" "walker" "pacheco")
+                        "packaging" 700 500)
+     ;; program committee
+     (change-privs-list dbh '("treckeme" "stewart")
+                        "packaging" 200 200 )
+     ;; program: so they can see the ads too
+     (change-privs-list dbh '("treckeme" "stewart")
+                        "solicitation" 200 200 )
+     ;; publicity committee
+     (change-privs-list dbh '("manning-villlar" "cunniffe" "glasman"
+                              "klieder" "simonson")
+                        "flyers" 200 700)
+     ;; raffle committee
+     (change-privs-list dbh '("ambrose" "cresci-torres" )
+                        "raffle" 200 200)
+     ;; ticket committee
+     (change-privs-list dbh '("fitzpatrick" "stangeland")
+                        "tickets" 200 200)
+     ;; invitations committee
+     (change-privs-list dbh '("david" "devry") "invitations" 700 600)
+     
      ;; the chairs, overriding defaults
 	 (do-chairs dbh chairs)
 	 ;; finally the admins, overriding al;
