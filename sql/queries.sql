@@ -100,13 +100,15 @@ select families.name, sum(income.payment_amount) as total
     order by families.family_id
 
 --- show session families
-select families.name, enrol.sess 
-    from families
-        left join kids on kids.family_id = families.family_id
-        left join attendance on attendance.kid_id = kids.kid_id 
-        left join enrol on enrol.enrolid = attendance.enrolid
-    group by families.family_id
-    order by enrol.sess, families.name
+select families.* 
+from families
+    left join kids on families.family_id = kids.family_id 
+    left join enrollment on kids.kid_id = enrollment.kid_id
+where enrollment.school_year = '2004-2005'
+    and (enrollment.dropout_date < '2000-01-01'
+    or enrollment.dropout_date is null)
+group by families.family_id
+order by families.name;
 
 -- how bad do people do at leaving things to the last damn minute
  select date_format(entered, "%W, %b %d %Y") as dt, count(lead_id) as cnt 
@@ -986,6 +988,8 @@ left join
 group by leads.lead_id
 having Total > 0
 order by Company;
+
+
 
 
 --- EOF
