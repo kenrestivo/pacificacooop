@@ -2,9 +2,8 @@
 
 /*
 	<!-- $Id$ -->
-	the vital setup stuff that ALL files MUST have
 
-  Copyright (C) 2003  ken restivo <ken@restivo.org>
+  Copyright (C) 2004  ken restivo <ken@restivo.org>
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

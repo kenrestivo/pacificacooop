@@ -1,47 +1,35 @@
+<?php
 
+// turns an "entirepost" from the db, into a valid test post
 
+$formurl = "http://www.pacificacoop.org/sf-dev/ipn.php";
 
-<form method="post" action="http://www.pacificacoop.org/sf-dev/ipn.php">
-<input type="hidden" name="mc_gross" value="0.01">
-<input type="hidden" name="address_status" value="unconfirmed">
-<input type="hidden" name="payer_id" value="QGVDAFGZ9XHLJ">
-<input type="hidden" name="tax" value="0.00">
-<input type="hidden" name="payment_date" value="13:50:26 Mar 11, 2004 PST">
-<input type="hidden" name="address_street" value="1840 Embarcadero Road">
-<input type="hidden" name="payment_status" value="Pending">
-<input type="hidden" name="address_zip" value="94303">
-<input type="hidden" name="first_name" value="Patrick">
-<input type="hidden" name="address_name" value="Patrick Breitenbach">
-<input type="hidden" name="notify_version" value="1.6">
-<input type="hidden" name="custom" value="">
-<input type="hidden" name="payer_status" value="unverified">
-<input type="hidden" name="business" value="pb-pdn@paypal.com">
-<input type="hidden" name="address_country" value="United States">
-<input type="hidden" name="address_city" value="Palo Alto">
-<input type="hidden" name="quantity" value="1">
-<input type="hidden" name="verify_sign" 
-        value= "AkU-lzGsIkV0gazwa9nDVpmsx9X0AMF3KqbmhBuM8UTVNO5CFNAptk78">
-<input type="hidden" name="payer_email" value=" pb-test@paypal.com">
-<input type="hidden" name="txn_id" value="4MX09190KB7728256">
-<input type="hidden" name="payment_type" value="instant">
-<input type="hidden" name="last_name" value="Breitenbach">
-<input type="hidden" name="address_state" value="CA">
-<input type="hidden" name="receiver_email" value=" pb-pdn@paypal.com">
-<input type="hidden" name="receiver_id" value="WAT63H8628SRN">
-<input type="hidden" name="pending_reason" value="verify">
-<input type="hidden" name="txn_type" value="web_accept">
-<input type="hidden" name="item_name" value="Test">
-<input type="hidden" name="mc_currency" value="USD">
-<input type="hidden" name="item_number" value="">
-<input type="hidden" name="payment_gross" value="0.01">
-<input type="submit" value="Test IPN">
-</form>
+$entirepost = "[mc_gross]='45.00',[address_status]='confirmed',[payer_id]='E87MA7BES46JG',[tax]='0.00',[address_street]='923 Crespi Drive',[payment_date]='11:06:27 Nov 10, 2004 PST',[payment_status]='Completed',[address_zip]='94044',[first_name]='Lynn',[mc_fee]='1.61',[address_name]='Lynn Schuette',[notify_version]='1.6',[custom]='fid90:coa2',[payer_status]='verified',[business]='beecooke@yahoo.com',[address_country]='United States',[address_city]='Pacifica',[quantity]='1',[payer_email]='lizacolby1@yahoo.com',[verify_sign]='A-.rN679Fa58w112CZLxIzmi6U7qA0FpRaLXR.fCsaIGGX8josktSV1N',[txn_id]='7D282392D90946420',[payment_type]='instant',[last_name]='Schuette',[address_state]='CA',[receiver_email]='beecooke@yahoo.com',[payment_fee]='1.61',[receiver_id]='99EH7EZNMZF9Y',[txn_type]='web_accept',[item_name]='Springfest Food/Raffle Fee',[mc_currency]='USD',[item_number]='',[payment_gross]='45.00'";
+
+preg_match_all("/\[.+?\]='.*?'/", $entirepost, $entiresplit);
+//print_r($entiresplit);
+reset($entiresplit);
+foreach ($entiresplit[0] as $trash=>$pair){
+    preg_match("/^\[(.+?)\]='(.*?)'/", $pair, $matches);
+    $all[$matches[1]] = $matches[2];
+}
+//print_r($all);
+//reset($all);
+foreach($all as $key=>$val){
+    $posties .= sprintf('<input type="hidden" name="%s" value="%s">', 
+                        $key, $val);
+}
+
+printf('<form method="post" action="%s">', $formurl);
+print $posties;
+print '<input type="submit" value="Test IPN">';
+print "</form>";
 
 
 
 
 
-
+?>
 
 <!-- END TEST -->
 
