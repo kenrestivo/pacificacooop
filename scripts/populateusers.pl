@@ -148,7 +148,8 @@ addDefaultPrivs()
 				$$arref[0], $$arref[1], $$arref[2]);
 		}
 		#gotta check first that they don't already exist!
-		$rquery = sprintf("select count(privilege_id) as counter from privs 
+		$rquery = sprintf("select count(privilege_id) as counter 
+				from user_privileges 
 					where user_id = %d and realm = '%s'", $uid, $$arref[2]
 		);
 		if($opt_v){
@@ -173,14 +174,14 @@ addDefaultPrivs()
 			}
 			print "resetting privs for uid <$uid>\n";
 			$query = sprintf("
-				update privs set group_level = %d, user_level = %d 
+				update user_privileges set group_level = %d, user_level = %d 
 				where user_id = %d and realm = '%s' ", 
 				 $$arref[0], $$arref[1], $uid, $$arref[2]);
 		} else {
 			printf("adding privs for realm <%s> uid <%d>\n",
 					$$arref[2], $uid
 				);
-			$query = sprintf("insert into privs set 
+			$query = sprintf("insert into user_privileges set 
 					user_id = %d, group_level = %d, 
 					user_level = %d, realm = '%s' ", 
 				$uid, $$arref[0], $$arref[1], $$arref[2]);
