@@ -156,6 +156,28 @@ class coopPage
 			//print "<hr>";
 		}
 
+	function selfURL($value, $inside = false)
+		{
+			$base = $_SERVER['PHP_SELF'];
+			 if(($pos = strpos($base, '?')) !== false) {
+                $base = substr($base, 0, $pos);
+            }
+			 if($value){
+				 $res .= '<p><a href="';
+
+			 }
+			 if($inside){
+ 				 $res .= sprintf("%s?%s%s",
+								$base, $inside,
+								SID ? "&" . SID  : "");
+			 } else {
+				 $res .= $base .  SID ? "?" . SID  : "";
+			 }
+
+			 $res .= sprintf('">%s</a></p>', $value);
+			 return $res;
+		}
+
 	function detailForm($id = false )
 		{
 	
@@ -163,7 +185,7 @@ class coopPage
 			$id = $id ? $id : $_SESSION[$this->table]['id'];
 			$this->obj->get($id);
 			$this->build =& DB_DataObject_FormBuilder::create ($this->obj);
-			$form = new HTML_QuickForm($_SERVER['PHP_SELF']); // XXX &
+			$form = new HTML_QuickForm(); // XXX should i use selfurl?
 			$form->addElement('html', thruAuth($this->auth, 1));
 			$this->build->useForm($form);
 			$form =& $this->build->getForm();
@@ -180,10 +202,7 @@ class coopPage
 					///  next action
 					print "PRICESSING SEUCCSSCUL";
 					$_SESSION[$this->table]['action'] = 'list'; 
- 			 		header(sprintf(
-  							   'Location: %s%s', 
-  							   $_SERVER['PHP_SELF'], 
-  							   SID ? "?" . SID  : ""));
+ 			 		header('Location: ' . $this->selfURL());
 				}
 				echo "AAAAUUUUUUUUUUUGGH!<br>";
 			}
@@ -262,11 +281,10 @@ class coopPage
 			$hdr = 0;
 			while ($this->obj->fetch()){
 				$ar = array_merge(
-					sprintf('<a href="%s?%s[action]=detail&%s[id]=%s">
-						Edit</a><br>',
-							$_SERVER['PHP_SELF'], 
-							$this->table, $this->table , 
-							$this->obj->$primaryKey),
+					$this->selfURL("Edit", 
+							sprintf('%s[action]=detail&%s[id]=%s',
+									$this->table, $this->table , 
+									$this->obj->$primaryKey)),
 					array_values($this->obj->toArray()));
 
 
@@ -284,13 +302,14 @@ class coopPage
 
 
 				// this may not actually belong here
-			$res .= sprintf(
-				'<p><a href="%s?%s[action]=detail">Add new</a></p>', 
-				$_SERVER['PHP_SELF'], $this->table) ;
+			$res .= $this->selfURL('Add New', 
+							sprintf('%s[action]=detail', 
+									$this->table));
+				 
+			$res .= $this->selfURL('Close', 
+							sprintf('%s[action]=done', 
+									$this->table));
 
-			$res .= sprintf(
-				'<p><a href="%s?%s[action]=done">Close</a></p>', 
-				$_SERVER['PHP_SELF'], $this->table) ;
 
 			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
 			$res .= $tab->toHTML();
