@@ -21,6 +21,8 @@ foreach($all as $key=>$val){
                         $key, $val);
 }
 
+print "THIS WILL SEND PAYPAL DATA TO $formurl . are you SURE?";
+
 printf('<form method="post" action="%s">', $formurl);
 print $posties;
 print '<input type="submit" value="Test IPN">';

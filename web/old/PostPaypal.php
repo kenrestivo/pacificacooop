@@ -88,6 +88,9 @@ class PostPaypal
                 $this->postFamily(); // TODO: handle leads/companies too
             }
             //print_r($this);
+			// TODO: send a thank-you note, and save status from postpaypal
+			// AAAGH! the parsing of paypal to thankyou is in thankyou.pp
+
 		}
 
     function lastInsertID($obj)

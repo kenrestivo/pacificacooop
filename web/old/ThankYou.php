@@ -22,6 +22,7 @@
 
 require_once('CoopObject.php');
 require_once('DB/DataObject.php');
+require_once('Mail.php');
 require_once('object-config.php');
 
 define('COOP_FOUNDED', 1962);
@@ -37,11 +38,13 @@ class ThankYou
 	var $name; // NAME: address of who it gets sent to
 	var $address_array; // ADDRESS: multiple line array, the address
 	var $items_array; // ITEMS: multiple line array, list of things they donated
-	var $iteration; // ITERATION: the number of springfests so far. system calculates this for you.
+	var $iteration; // ITERATION: the number of springfests so far.
+					// system calculates this for you.
 	var $ordinal; // ORDINAL: st/nd/rd, etc. system calculates this.
 	var $year; // YEAR: the year of this springfest. system calclates this
 	var $years; // YEARS: how many springfests so far
-	var $from; // FROM: who sent the letter. will get filled in with name of solicitor
+	var $from; // FROM: who sent the letter. will get filled in with
+			   // name of solicitor
 	var $email; // EMAIL: email address
 
 	//TODO: put this in a file, and fopen it, or in a DB blob!
@@ -219,6 +222,36 @@ http://www.pacificacoop.org/
 			return $subst;
 		}
 
+	function sendEmail()
+		{
+
+			//print "EMAIL " . $this->email;
+			
+			//sanity czech
+			if(!$this->email){
+				user_error("thankyou::sendEmail(): no email address for $this->name!",
+						   E_USER_ERROR);
+			}
+
+			$from = $this->from ? $this->from :
+					    'Pacifica Co-Op Nursery School ';
+			// TODO: grab the parent's email
+
+			$headers['From']    = sprintf('%s <thank_you@pacificacoop.org>',
+										  $from);
+			$headers['To']      = sprintf("%s <%s>", 
+										  trim($this->name), 
+										  trim($this->email));
+			$headers['Subject'] = 'Thank you for your donation!';
+
+
+			$mail_object =& Mail::factory('smtp', $params);
+
+			$mail_object->send($this->email, 
+							   $headers, 
+							   $this->toText());
+
+		}
 
 } // END THANK YOU CLASS
 
