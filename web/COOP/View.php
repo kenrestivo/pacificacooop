@@ -194,7 +194,6 @@ class coopView extends CoopObject
 			/// view and edit are different!
 			$this->obj->fb_hidePrimaryKey = true;
 
-						
 			$table = $this->obj->table();
 			$row = $this->obj->toArray();
 			foreach($row as $key => $val){
@@ -208,6 +207,18 @@ class coopView extends CoopObject
 						$res[] = timestamp_db_php($val);
 					} else if ($table[$key] &  DB_DATAOBJECT_DATE){
 						$res[] = sql_to_human_date($val);
+					} else if(is_array($this->obj->fb_URLFields) &&
+						in_array($key, $this->obj->fb_URLFields)) 
+					{
+						// hack around fuckedup urls
+						// the RIGHT way to do this is to validate at input time
+						if(!preg_match('/^http:\/\/.+/', $val, $matches)){
+							$inval = sprintf("http://%s", $val);
+						} else {
+							$inval = $val;
+						}
+						$res[] = sprintf('<a href="%s">%s</a>',
+										 $inval, $val);
 					} else {
 						$res[] = $this->checkLinkField(&$this->obj, $key, $val);
 					}

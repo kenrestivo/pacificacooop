@@ -15,6 +15,7 @@ class Job_descriptions extends DB_DataObject
     var $long_description;                // blob(16777215)  blob
     var $board_position;                  // string(3)  enum
     var $tuition_type;                    // string(4)  enum
+    var $family_type;                     // string(9)  enum
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

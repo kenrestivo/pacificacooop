@@ -29,6 +29,7 @@ class Companies extends DB_DataObject
     var $last_name;                       // string(255)  
     var $title;                           // string(255)  
     var $salutation;                      // string(50)  
+    var $url;                             // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -56,6 +57,7 @@ class Companies extends DB_DataObject
 		"phone" => "Phone Number" ,
 		"fax" => "FAX Number" ,
 		"email_address" => "Email Address" ,
+		"url" => "Web Page URL" ,
 		'do_not_contact' => "Don't contact after this date",
 		"territory_id" => "Territory",
 		"flyer_ok" => "OK to place a flyer there?" 
@@ -74,6 +76,7 @@ class Companies extends DB_DataObject
 		"country", 
 		"phone" ,
 		"fax" ,
+		"url",
 		"email_address" ,
 		'do_not_contact' ,
 		"territory_id" ,
@@ -83,4 +86,5 @@ class Companies extends DB_DataObject
 	var $fb_selectAddEmpty = array ('territory_id', 'family_id', 
 									'do_not_contact');
 	var $fb_formHeaderText =  'Springfest Solicitation Contacts';
+	var $fb_URLFields = array ('url');
 }

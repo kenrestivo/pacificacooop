@@ -35,6 +35,7 @@ class Auction_purchases extends DB_DataObject
 		);
 	var $fb_fieldsToRender = array (
 		'package_id',
+//		'income_id',
 		'package_sale_price'
 		);
 	var $fb_formHeaderText =  'Springfest Auction Purchases';
