@@ -462,17 +462,6 @@ create table blog_entry (
 );
 
 
--- the user/passwords used by the web view page AND my update tool..
--- these MUST be done manually for db's not named coop!!
---TODO: i have to grant all to myself on this db! duh.
-grant select, update, insert, delete, create on coop.* to input@'%' 
-	identified by 'test'; 
-grant select, update, insert, delete on coop.* to input@localhost 
-	identified by 'test';
-grant select, insert, update, delete, create on coop.* to springfest@'%'
-    identified by '92xPi9';
-grant select, insert, update, delete on coop.* to springfest@localhost
-    identified by '92xPi9';
 
 
 -- EOF
