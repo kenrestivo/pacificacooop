@@ -1,5 +1,5 @@
+<!-- $Id$ -->
 <?php
-	//<!-- $Id$ -->
 
 	#  Copyright (C) 2003  ken restivo <ken@restivo.org>
 	# 
@@ -16,11 +16,6 @@
 	#  You should have received a copy of the GNU General Public License
 	#  along with this program; if not, write to the Free Software
 	#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-	// session stuff
-	require_once("session.inc");
-	sessionSetup();
-	$auth = $_SESSION['auth'];
 
 	require_once("auth.inc");
 	require_once("auctionfuncs.inc");
@@ -43,28 +38,20 @@
 		<h2>Pacifica Co-Op Nursery School Data Entry</h2>
 	";
 
-	//invalid or non-existent session
-	if(!($auth && ($auth['state'] == 'loggedin'))){
-		$pv = $HTTP_POST_VARS ? $HTTP_POST_VARS : $HTTP_GET_VARS;
-		$auth = logIn($pv);
-	}
+	$pv = $HTTP_POST_VARS ? $HTTP_POST_VARS : $HTTP_GET_VARS;
+
+
+	$auth = logIn($pv);
 
 	if($auth['state'] != 'loggedin'){
-		user_error(sprintf("main(): session [%s] is not logged in", SID),
-			E_USER_NOTICE);
 		done();
 	}
 
-	//yay! i'm logged in! save it!
-	$_SESSION['auth'] = $auth;
-
+	//OK, i am logged in!
+	
 	$u = getUser($auth['uid']);
-	user_error(sprintf("main(): LOGGED IN AS username [%s], familyname [%s], uid %d familyid %d sid [%s]", 
-		$u['username'], $u['familyname'], $auth['uid'], $u['familyid'], SID), 
-		E_USER_NOTICE);
 
 	topNavigation($auth, $u);
-
 	print "<hr>\n";
 
 	print "<p>Please choose an action:</p>";
