@@ -93,7 +93,7 @@ order by company_name
 	return $res;
 } // end sponsors
 
-function auctionItems(&$cp, $sf)
+function auctionItems(&$cp, $sy)
 {
 	$res .= sprintf('	<h2>Springfest Auction Items</h2>
 
