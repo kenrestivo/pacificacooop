@@ -34,7 +34,7 @@
 				 "School Job"))
 
 ;;;;;;;;;;;;;;; functions for updating the database
-;; easy version:  (string-join (cdr (string-tokenize long-parent)))
+
 (define (split-first-last long-parent)
   (let* ((name-list (string-tokenize
 					 (string-delete long-parent (char-set #\*))))
@@ -56,7 +56,7 @@
 		 (type (if (equal? column-to-check "Mom Name *") "Mom" "Dad"))
 		 (worker (if (string-index long-parent (char-set #\*)) "Yes" "No"))
 		 (parents (simplesql-query *dbh*
-						(sprintf #f "
+								   (sprintf #f "
 				select parentsid, last, first, worker, ptype familyid
 						from parents
 					where (soundex(first) = soundex('%s')
@@ -64,26 +64,28 @@
 									or ptype = '%s')
 						and (soundex(last) = soundex('%s')
 								or familyid = %d) "
-								 (car split-name)
-								 (car split-name)
-								 type
-								 (cdr split-name)
-								 (check-for-new-family line header)	; phone
-								 ))))
+											(car split-name)
+											(car split-name)
+											type
+											(cdr split-name)
+											(check-for-new-family line header)
+										; to check index of phone
+											))))
 
-		  (if (>  (length parents) 1)
-			  (db-ref-last (choose-duplicates parents) "parentsid") ; got it!
-			  (safe-sql *dbh* (sprintf #f "
+	(if (>  (length parents) 1)
+		(db-ref-last (choose-duplicates parents) "parentsid") ; got it!
+		(begin (safe-sql *dbh* (sprintf #f "
 				insert into parents set 
 							last = '%s' ,
 							first = '%s' ,
 							worker = '%s',
 							ptype = '%s',
 							familyid = %d "
-									   (cdr split-name)
-									   (car split-name)
-									   worker type
-									   (check-for-new-family line header))))))
+										(cdr split-name)
+										(car split-name)
+										worker type
+										(check-for-new-family line header)))
+			   (last-insert-id *dbh*)))))
 
 
 
@@ -94,27 +96,28 @@
 (define (check-for-new-enrollment line header)
   (let* ((kid-id (check-for-new-kid line header))
 		 (enrollments (simplesql-query *dbh*
-						   (sprintf #f "
+									   (sprintf #f "
 				select enrollment_id, kidsid, am_pm_session,
 						start_date, dropout_date
 					from enrollment
 						where kidsid = %d and
 						school_year = '%s'"
-									kid-id
-									*school-year*))))
+												kid-id
+												*school-year*))))
 	(if (> (length enrollments) 1)
 		(db-ref-last (choose-duplicates enrollments) "enrollment_id") ;gotcha!
-		(safe-sql *dbh* (sprintf #f "
+		(begin (safe-sql *dbh* (sprintf #f "
 						insert into enrollment set 
 								kidsid = %d,
 								start_date = '%s',
 								school_year = '%s',
 								am_pm_session = '%s'"
-								 kid-id
-								 *start-date*
-								 *school-year* 
-								 (rasta-find "session" line header)
-								 )))))
+										kid-id
+										*start-date*
+										*school-year* 
+										(rasta-find "session" line header)
+										))
+			   (last-insert-id *dbh*)))))
 
 
 (define (db-updates line header)
@@ -135,52 +138,54 @@
 ;; find family
 (define (check-for-new-family line header)
   (let ((families (simplesql-query *dbh*
-						   (sprintf #f "
+								   (sprintf #f "
 				select familyid, name, phone from families
 						where soundex(name) = soundex('%s')
 						or phone like \"%%%s%%\""
-									(rasta-find "Last Name" line header)
-									(rasta-find "Phone" line header)))))
+											(rasta-find "Last Name" line header)
+											(rasta-find "Phone" line header)))))
 	(if (> (length families) 1)
 		(db-ref-last (choose-duplicates families) "familyid") ;gotcha!
-		(safe-sql *dbh* (sprintf #f "
+		(begin (safe-sql *dbh* (sprintf #f "
 						insert into families set 
 								name = '%s',
 								address = '%s',
 								email = '%s',
 								phone = '%s'"
-								 (rasta-find "Last Name" line header)
-								 (rasta-find "Address" line header)
-								 (rasta-find "Email" line header)
-								 (rasta-find "Phone" line header)
-								 )))))
+										(rasta-find "Last Name" line header)
+										(rasta-find "Address" line header)
+										(rasta-find "Email" line header)
+										(rasta-find "Phone" line header)
+										))
+			   (last-insert-id *dbh*)))))
 
 ;; find kid
 (define (check-for-new-kid line header)
   (let ((kids (simplesql-query *dbh*
-						(sprintf #f "
+							   (sprintf #f "
 				select kidsid, last, first, familyid from kids
 					where (soundex(first) = soundex('%s') or
 						first like \"%%%s%%\")
 						and soundex(last) = soundex('%s') "
-								 (rasta-find "Child" line header)
-								 (rasta-find "Child" line header)
-								 (rasta-find "Last Name" line header)
-								 ))))
+										(rasta-find "Child" line header)
+										(rasta-find "Child" line header)
+										(rasta-find "Last Name" line header)
+										))))
 
-		  (if (>  (length kids) 1)
-			  (db-ref-last (choose-duplicates kids) "kidsid") ; got it!
-			  (safe-sql *dbh* (sprintf #f "
+	(if (>  (length kids) 1)
+		(db-ref-last (choose-duplicates kids) "kidsid") ; got it!
+		(begin (safe-sql *dbh* (sprintf #f "
 				insert into kids set 
 							last = '%s' ,
 							first = '%s' ,
 							date_of_birth = '%s',
 							familyid = %d "
-									   (rasta-find "Last Name" line header)
-									   (rasta-find "Child" line header)
-									   (human-to-sql-date
-										(rasta-find "DOB" line header))
-									   (check-for-new-family line header))))))
+										(rasta-find "Last Name" line header)
+										(rasta-find "Child" line header)
+										(human-to-sql-date
+										 (rasta-find "DOB" line header))
+										(check-for-new-family line header)))
+			   (last-insert-id *dbh*)))))
 
 ;;;;;;;;;; functions for navigating through the rasta structure (accessors?)
 (define (rasta-find key line header)
