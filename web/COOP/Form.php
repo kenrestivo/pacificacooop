@@ -51,7 +51,7 @@ class coopForm extends CoopObject
 							  ucwords($this->table));
 
 			// will need to guess field types
-			$this->tableDef = $this->obj->table();
+			$this->_tableDef = $this->obj->table();
 
 			//confessObj($this, 'atd');
 			foreach($this->obj->toArray() as $key => $val){
@@ -87,8 +87,12 @@ class coopForm extends CoopObject
 				
 
 				if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
-					$val = sql_to_human_date($val);
+					$form->addRule($key, 'Date must be in format MM/DD/YYYY', 
+								   'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
+					$val && $val = sql_to_human_date($val);
 				}
+				
+				// finally, pas through default or editable vals
 				$el->setValue($val);
 			}
 
