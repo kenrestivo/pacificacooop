@@ -136,10 +136,14 @@ addThem()
 		$i = 0;
 		foreach $key (keys %f){ 
 			if($f{$key} !~ /^\W*$/){
+				if($key eq 'last' && !$f{'first'}){
+					$val = $dbh->quote($f{$key} . " Family");
+				} else {
+					$val = $dbh->quote($f{$key});
+				}
 				$query .= sprintf(" %s %s = %s ",
 							$i++ ? "," : "",
-							$key, $dbh->quote($f{$key})
-					);
+							$key, $val);
 			}
 		}
 		$query .= " , relation = 'Alumni', source = 'Springfest', familyid = 0";
