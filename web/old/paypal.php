@@ -30,16 +30,21 @@ class paypalForm extends HTML_QuickForm
 	var $title;
 	var $account = 'beecooke@yahoo.com';
 	var $server = 'https://www.paypal.com/cgi-bin/webscr';
+    var $notify_url ="http://www.pacificacoop.org/sf/ipn.php";
 
-
-	function paypalForm($title,  $formname, $debug = 0, $headerflag = 1)
+	function paypalForm($title,  $formname,  $headerflag = 1)
 		{
 			$this->title = $title;
-			if($debug){
-				$this->account = "billing@restivo.org"  ;
+
+            $parth = pathinfo($_SERVER['SCRIPT_FILENAME']);
+            $dir = $parth['dirname'] ;
+            if(preg_match('/-dev/', $dir) > 0 ) {
+                $this->account = "billing@restivo.org"  ;
 				$this->server = 
 					'https://www.sandbox.paypal.com/cgi-bin/webscr';
-			}
+                $this->notify_url = 
+                    "http://www.pacificacoop.org/sf-dev/ipn.php";
+            }
 			
 			$this->HTML_QuickForm($formname, 'get', $this->server);
 			if($headerflag){
@@ -51,8 +56,7 @@ class paypalForm extends HTML_QuickForm
 			$this->addElement("hidden", "item_number", "EmailBlast");
 			$this->addElement("hidden", "quantity", "1");
 			$this->addElement("hidden", "page_style", "Primary");
-			$this->addElement("hidden", "notify_url", 
-							  "http://www.pacificacoop.org/sf/ipn.php");
+			$this->addElement("hidden", "notify_url", $this->notify_url);
 			$this->addElement("hidden", "return", 
 							  "http://www.pacificacoop.org/sf/thankyou.php");
 			$this->addElement("hidden", "cancel", 
