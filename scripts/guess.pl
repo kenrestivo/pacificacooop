@@ -12,6 +12,7 @@ $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
     or die "can't connect to database $!\n";
 
 
+#init globs
 $fcount = 0;
 
 #list of families, in a backwards hash (look up name, get id)
@@ -25,13 +26,22 @@ while ($ritemref = $rqueryobj->fetchrow_hashref){
 	$fam{$ritem{'name'}} = $ritem{'familyid'};
 } # end while
 
-fixem('ins');
-fixem('lic');
+#well, this here does most of the work!
+foreach $i ('ins', 'lic'){
+	&fixem($i);
+}
 
-#XXX THIS SCRIPT IS BROKEN!!
-## the lic should in fact link to parents. BUT! the ins must link to FAMILIES
-#	though it uses the select on parents to do the name-guessing. *sigh*
-exit 1; ###XXX because it is broken
+#all the ones that failed utterly
+for $aref ( @nomatch ) {
+	print " @$aref \n";
+}
+
+#ok, now go through all the ones that needed user input.
+#TODO make this a gtk list thing! this rules!
+for $aref ( @multis ) {
+	print " @$aref \n";
+	&choosemulti(@$aref);
+}
 
 $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
@@ -95,12 +105,16 @@ sub checkformatches {
 	if($fcount > 1){
 		#if > 1; multichoose
 		print "multiple choice for $lostlast, $lostfirst $lostmiddle:\n";
-		&choosemulti($tab, $where, $lostid);
+		# instead of calling this here, build an array of args
+		# and push it onto an array. then do these all in batch at end
+		push(@multis, [ ($tab, $where, $lostid) ]);
 		return;
 	}
 
 	if($fcount < 1){
 		print "NO match for $lostlast AT ALL\n";
+		#XXX shall i push the data? or justid?
+		push(@nomatch, [ ($tab, $lostid, $lostlast, $lostfirst, $lostmiddle) ]); 
 	}
 
 } # END CHECKFORMATCHES
@@ -124,6 +138,7 @@ sub checkcount {
 	print "um, there are $fcount matches\n"; #debug
 	return $fcount;
 }  #END CHECKCOUNT
+
 
 #####################
 # CHOOSEMULTI
