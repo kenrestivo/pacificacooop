@@ -79,6 +79,8 @@ auth
 			can delete records for the realm
 		'ACCESS_ADMIN', 800);
 			can change privileges for users relating to this realm
+	the $u and $p structs
+		TODO document me
 
 
 the main state machine
@@ -97,4 +99,4 @@ the main state machine
 	and the possibel field members too: TODO
 
 database things:
-	in general, i've been a relational database sql bigot. i am VERY much for segregation of data into separate tables, and ESPECIALLY where there's any duplication of data. any one-to-many's are done with links, and many-to-many's are done with glue tables. often the glue tables evolve into tables with useful data in their own right (example being the "attendance" table).
+	in general, i've been a relational database sql bigot. i am VERY much for segregation of data into separate tables, and ESPECIALLY where there's any duplication of data. any one-to-many's are done with direct joins, and many-to-many's are done with glue tables. often the glue tables evolve into tables with useful data in their own right (example being the "attendance" table).

@@ -336,19 +336,20 @@ for future reference: a php/sql forum/groupware package
 next phase gui/schema
 
 contact management
-	contact table (for solicitation)
+	company table (for solicitation)
 		company
-		contact first,last
 		address, city, state,zip
 		phone, fax, email
 		territoryid (link)
-		user entered/updated?
 		dead contact flag/date: do not contact. essentially, obsolete date.
 		userid, entered, updated
+	contact table
+		first,last
+		companyid (link)
 	territory table 
 		description (crespi, rockaway, etc)
 		hmm. alumnae/member familyid? or... track that elsewise?
-	territory-user (or family?) glue table
+	territory-user (or family? persistence?) glue table
 		include sessionid! this'll change year-to-year!
 	contactnotes table
 		contactid
@@ -356,6 +357,8 @@ contact management
 		note (longtext)
 	contact-to-income glue table
 		to handle any stray non-categorized donations. ugly but will need this.
+	contact-to-auction glue table (like faglue)
+		to handle any donations of hard goods
 
 ad insertion 
 	ad table
