@@ -50,14 +50,21 @@ $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
 
 
 #approximate list of families
-$rquery = "select * from families ";
+$rquery = "select families.name, families.familyid
+		from families 
+			left join leads on families.familyid = leads.familyid
+		left join kids on kids.familyid = families.familyid
+		left join attendance on attendance.kidsid = kids.kidsid
+		left join enrol on enrol.enrolid = attendance.enrolid
+		where attendance.dropout is NULL
+	group by families.familyid\n";
 #print "doing <$rquery>\n"; #XXX debug only
 $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 $rqueryobj->execute() or die "couldn't execute $!\n";
 
 while ($ritemref = $rqueryobj->fetchrow_hashref){
 	%ritem = %$ritemref;
-	$id = $ritem{'familyid'};
+	$familyid = $ritem{'familyid'};
 	$name = $ritem{'name'};
 
 	print "adding <$name> into users\n";
