@@ -220,7 +220,7 @@ function
 checkAuthLevel($auth)
 {
 
-	confessArray($auth, "authlevel");
+	confessArray($auth, "checkauthlevel");
 
 	if(!($auth['uid'] && $auth['realm'] && 
 			$auth['token'] && $auth['level']))
@@ -239,7 +239,7 @@ checkAuthLevel($auth)
 				left join users on users.userid = privs.userid
 			WHERE privs.userid = %d 
 				and (privs.realm = '%s' or privs.realm = 'all')
-				and privs.authlevel > %d
+				and privs.userlevel > %d
 			--",
 			$auth['uid'], $auth['realm'], $auth['level']
 		);

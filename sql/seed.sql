@@ -20,6 +20,7 @@
 
 use coop;
 
+-- accounts
 insert into coa set
 			acctnum = 1,
 			description = "SpringFest 10-names forfeit fee";
@@ -36,5 +37,16 @@ insert into coa set
 insert into coa set
 			acctnum = 4,
 			description = "SpringFest Misc Cash donation";
+
+
+-- groups
+insert into groups set
+			groupid = 1,
+			name = "Parents";
+
+insert into groups set
+			groupid = 2,
+			name = "Teachers";
+
 
 -- EOF

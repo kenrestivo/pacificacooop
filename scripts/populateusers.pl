@@ -85,6 +85,7 @@ while ($ritemref = $rqueryobj->fetchrow_hashref){
 
 	$uid = &addUser($ritem{'name'}. " Family", $ritem{'familyid'});
 	&addDefaultPrivs($uid, \@familydefaults);
+	## TODO add group privileges as well!
 
 } # end while
 
@@ -113,7 +114,7 @@ addDefaultPrivs()
 	#NOW, add the privs
 	foreach $arref (@$defref){
 		$query = sprintf("insert into privs 
-				set userid = %d, grouplevel = %d, authlevel = %d, realm = '%s' ", 
+				set userid = %d, grouplevel = %d, userlevel = %d, realm = '%s' ", 
 			$uid, $$arref[0], $$arref[1], $$arref[2]);
 		if($opt_v){
 			print "doing <$query>\n";

@@ -202,12 +202,28 @@ create table users (
     primary key (userid)
 );
 
+-- groups
+create table groups (
+    groupid int(32) not null auto_increment,
+	name varchar(55),
+    primary key (groupid)
+);
+
+-- glue table for many to many: users and groups
+create table groupmembers (
+    memberid int(32) not null auto_increment,
+    userid int(32),
+    groupid int(32),
+    primary key (memberid)
+);
+
 -- privs
 create table privs (
     privid int(32) not null auto_increment,
     userid int(32),
+    groupid int(32),
 	realm varchar(55),
-	authlevel int(5),
+	userlevel int(5),
 	grouplevel int(5),
     primary key (privid)
 );
