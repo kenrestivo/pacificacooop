@@ -243,4 +243,23 @@ select relation,
     group by relation 
     order by total desc;
 
+-- massive beast!
+select coa.description, 
+   sum(if(figlue.familyid>0 || companies.familyid>0,inc.amount,0)) 
+        as family_paid ,
+   sum(amount)  as total 
+    from inc 
+           left join coa on inc.acctnum = coa.acctnum 
+           left join figlue on inc.incid = figlue.incid
+           left join raffle_income_join 
+                   on inc.incid = raffle_income_join.incid
+           left join invitation_rsvps 
+                   on inc.incid = invitation_rsvps.incid
+           left join companies_income_join
+                   on inc.incid = companies_income_join.incid
+                left join companies 
+                    on companies.company_id = 
+                        companies_income_join.company_id
+    group by inc.acctnum order by total desc
+
 --- EOF

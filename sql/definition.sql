@@ -419,7 +419,7 @@ create table packages (
 	package_description longtext,
 	donated_by_text varchar(255), 
     package_value decimal(9,2),
-	item_type enum ('Product', 'Service'),
+	item_type enum ('Actual Item', 'Gift Certificate'),
     primary key (package_id)
 );
 
