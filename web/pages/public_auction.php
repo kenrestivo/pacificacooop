@@ -24,7 +24,7 @@ require_once("HTML/Table.php");
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
 
-function sponsors(&$cp)
+function sponsors(&$cp, $sy)
 {
 
 // now a word from our sponsors
@@ -33,17 +33,16 @@ function sponsors(&$cp)
 	$tab =& new HTML_Table();
 
 		// check the sponsorship table, not calculate
-	$sp =& new CoopObject(&$cp, 'sponsorships', &$nothing);
+
 	$st =& new CoopObject(&$cp, 'sponsorship_types', &$nothing);
-	$sp->obj->school_year = findSchoolYear();
-	$sp->obj->joinAdd($st->obj);
-	//TODO: gah, this sucks. gotta sort by company or company_name...
-	//maybe a congeal custom query instead?
-	$sp->obj->orderBy('sponsorship_price desc');
-	$sp->obj->find();
-	while($sp->obj->fetch()){
-		$lasttype = $sp->obj->sponsorship_type_id;
-		
+	$st->obj->school_year = $sy;
+	$st->obj->orderBy('sponsorship_price desc');
+	$st->obj->find();
+	while($st->obj->fetch()){
+		//confessObj($st->obj, 'st obh');
+		$sp =& new CoopObject(&$cp, 'sponsorships', &$nothing);
+		$sp->obj->{$st->pk} = $st->obj->{$st->pk};
+		$sp->obj->find();
 		while($sp->obj->fetch()){
 			//confessObj($sp->obj, 'sponb');
 			/// XXX i hate hate hate this database layout.
@@ -67,14 +66,14 @@ function sponsors(&$cp)
 									 $co->obj->last_name);
 				}
 				
-				$spons[$sp->obj->sponsorship_name]['price'] = 
-					$sp->obj->sponsorship_price;
-				$spons[$sp->obj->sponsorship_name]['names'][] = $thing;
+				$spons[$st->obj->sponsorship_name]['price'] = 
+					$st->obj->sponsorship_price;
+				$spons[$st->obj->sponsorship_name]['names'][] = $thing;
 			}
 			
 		}
-		
 	}
+	
 	// gah. whew. all done
 	//confessArray($spons, 'spns');
 	foreach($spons as $level => $data){
@@ -183,7 +182,7 @@ print $cp->header("Springfest $sfyear",
 print "\n<hr></div> <!-- end header div -->\n";
 
 print '<div id="leftCol">';
-print sponsors(&$cp);
+print sponsors(&$cp, $sy);
 print ads(&$cp, $sy);
 print '</div><!-- end leftcol div -->';
 
