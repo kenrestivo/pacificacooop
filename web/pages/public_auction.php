@@ -25,7 +25,7 @@ require_once("HTML/Table.php");
 
 function sponsors(&$cp)
 {
-	setlocale(LC_MONETARY, 'en_US'); // for money_format
+
 
 // now a word from our sponsors
 	$res .= '<div class="sponsor">';
@@ -78,9 +78,9 @@ order by company_name
 		}
 		if($co->obj->N){
 			$res .= sprintf(
-				'<ul><p><b>%s Contributors (%s and above)</b></p>%s</ul>', 
+				'<ul><p><b>%s Contributors ($%.0f and above)</b></p>%s</ul>', 
 				$sp->obj->sponsorship_name,
-				money_format('$%.0i', $sp->obj->sponsorship_price),
+				$sp->obj->sponsorship_price,
 				$sponsors);
 		}
 
