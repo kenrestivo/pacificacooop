@@ -44,7 +44,7 @@ class Ticket_type extends DB_DataObject
 				$opts[$this->ticket_type_id] = 
 					sprintf("%s (%s)",
 							$this->description,
-							$this->paid_flag ? "Payment Required" : "Free");
+							$this->paid_flag == 'Yes' ? "Payment Required" : "Free");
 			}
 			return $opts;
 		}
