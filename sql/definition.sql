@@ -160,17 +160,33 @@ create table coop.coa (
 );
 
 	
--- income
+-- income tracking
 create table coop.inc (
-    incnum int(32) not null unique,
-	checknumber varchar(255),
+    incid int(32) not null unique,
+	checknum varchar(255),
 	checkdate date,
 	payer varchar(255),
     acctnum int(32),
     amount decimal(9,2),
-	primary key (incnum)
+	primary key (incid)
 );
 
+
+-- glue table for many-to-many: families to income
+create table coop.figlue (
+    figlueid int(32) not null auto_increment,
+	incid int(32),
+	familyid int(32),
+    primary key (figlueid)
+);
+
+-- glue table for many-to-many: leads to income
+create table coop.liglue (
+    liglueid int(32) not null auto_increment,
+	incid int(32),
+	leadsid int(32),
+    primary key (liglueid)
+);
 
 -- the user/passwords used by the web view page AND my update tool..
 grant select, update, insert, delete on coop.* to input@'%' 
