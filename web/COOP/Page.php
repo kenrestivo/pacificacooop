@@ -214,6 +214,7 @@ class coopPage
 			 return $res;
 		}
 
+	// global defaults, common through *all* forms, so not in objs
 	function setFormDefaults(&$form)
 		{
 			// start with schoolyear
@@ -388,7 +389,7 @@ class coopPage
 					$tab->addRow(array_merge("Action", 
 											 array_keys(
 												 $filtered_row)), 
-								 "bgcolor=9999cc", "TH" );
+								 "bgcolor=#9999cc", "TH" );
 				}
 				$tab->addRow($ar);
 

@@ -32,6 +32,7 @@ class Files extends DB_DataObject
 	var	$kenPath = "../../files/"; // NOTE! for the tests folder
 
     var $fb_timeFields = array ('upload_date');
+    var $fb_fieldLabels = array( 'file_description' => "Description of file");
     var $fb_fieldsToRender = array ('file_description', 'original_filename');
 
 	function preGenerateForm()
@@ -64,10 +65,11 @@ class Files extends DB_DataObject
                 //OK dump all the data about the file into the db
                 $this->disk_filename = $unique_filename;
                 $this->original_filename = $actual['name'];
-                //$this->school_year = findSchoolYear(); // generify?
                 $this->mime_type = $actual['type'];
                 $this->upload_date = date("Y-m-d H:m:s");
                 $this->file_size = $actual['size'];
+                // NOTE: assume school_year taken care of
+                // by CoopPage::setFormDefaults
                 return parent::insert();
             }
             
