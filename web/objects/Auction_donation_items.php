@@ -74,6 +74,10 @@ class Auction_donation_items extends DB_DataObject
 		{
 			$form =& new HTML_QuickForm('newpackageform', 'post', 
 										'packages.php');
+
+
+			$form->addElement('header', 'newpackageheader', 
+							  'Create a new Package starting with this Auction Item?');
 				 // donated by! first guess families...
 			//$this->debugLevel(2);
 			$aifj =& new CoopObject(&$cp, 
