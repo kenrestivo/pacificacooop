@@ -40,6 +40,7 @@ class CoopMenu extends HTML_Menu
 		'money' => 'Family Fees',
 		'nag' => 'Reminders',
 		'packaging' => 'Packaging',
+		'program,' => 'Program',
 		'raffle' => 'Raffles',
 		'solicit' => 'Solicitation',
 		'thankyou' => 'Thank You',
