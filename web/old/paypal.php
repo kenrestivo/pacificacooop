@@ -94,7 +94,7 @@ class paypalForm
     
 
 	// the new improved form
-	function buildRSVP(&$cp)
+	function buildRSVP(&$cp, $responsecode)
 		{
 			
 			$form =& new HTML_QuickForm( 'Springfest RSVP', 'rsvpform');

@@ -104,9 +104,9 @@ function donateDispatcher(&$cp, $action = false)
 		break;
 		
 	case 'newrsvp':
-		//NOTE whatever calls this must set "leadid"
+		print showUser(&$cp, $_REQUEST['response_code']);
 		$ppf =& new PayPalForm();
-		$form =& $ppf->buildRSVP(&$cp);
+		$form =& $ppf->buildRSVP(&$cp, $_REQUEST['response_code']);
 		// make sure dispatcher brings me back here for validation. duh.
 		$form->addElement('hidden', 'action', 'newrsvp');
 		if($form->validate()){
@@ -121,11 +121,14 @@ function donateDispatcher(&$cp, $action = false)
 	case 'confirmrsvp':
 		// the setup to call the proper paypal form
 		// something must set SOURCE
+
+		
 		print "confirm";
 		break;
 		
 	default:
-		print "HEY DEFAULT";
+		// XXX WATCH OUT! i have a fallthrough bug in verifyuser
+		//print "HEY DEFAULT";
 		donateDispatcher(&$cp, 'getcode');
 		break;
 	}
