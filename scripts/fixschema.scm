@@ -9,9 +9,9 @@
 (define dbh (apply simplesql-open "mysql"
 				   (read-conf "/mnt/kens/ki/proj/coop/sql/db.conf")))
 
-(define main-schema '()) ;; well, here it is.
-(define current-table "") ;; there has to be a more schemey way 
-(define tables '()) ;; hack. need to handle tables last.
+(define *main-schema* '()) ;; well, here it is.
+(define *current-table* "") ;; there has to be a more schemey way 
+(define *tables* '()) ;; hack. need to handle tables last.
 
 (define debug-flag #t)
 
@@ -27,7 +27,7 @@
 
 ;;;;;;;; definition-processing stuff
 (define (add-primary-key table line)
-  (add-sub-alist main-schema table "primary key"
+  (add-sub-alist *main-schema* table "primary key"
 				 (unparen (caddr line))) )
 
 ;; utility
@@ -40,7 +40,7 @@
 ;; if it is a COLUMN, i'll want to do:
 (define (add-column table line)
   ;; NOTE! must combine before yanking ,'s!
-  (set! main-schema (add-sub-alist main-schema table 
+  (set! *main-schema* (add-sub-alist *main-schema* table 
 						  (car line)
 						  (regexp-substitute/global #f  ",$"
 											(join-strings (cdr line))
@@ -58,12 +58,12 @@
 (define (process-def line)
   (cond ((and (equal? (car line) "create")
 			 (equal? (cadr line) "table"))
-		 (set! current-table
+		 (set! *current-table*
 			   (unparen (caddr line))))
 		((and (equal? (car line) "primary")
 			  (equal? (cadr line) "key"))
-		 (add-primary-key current-table line))
-		(else (add-column current-table line))))
+		 (add-primary-key *current-table* line))
+		(else (add-column *current-table* line))))
 
 
 ;; make sure it is a valid line
@@ -74,7 +74,7 @@
 
 ;; for loading the proper schema file
 (define (load-definition deffile)
-  (set! main-schema '())
+  (set! *main-schema* '())
   (let ((p (open-input-file deffile) ) )
 	
 	(do ((line (read-line p) (read-line p)))
@@ -90,15 +90,15 @@
   (for-each
    (lambda (linked-table)
 										; only if this is a primary key!
-	 (if (and (equal? (get-primary-key key-table main-schema) old-col)
+	 (if (and (equal? (get-primary-key key-table *main-schema*) old-col)
 			  (assoc-ref linked-table old-col)
 			  (not (equal? (car linked-table) key-table)))
 		 (doit (sprintf #f "alter table %s change column %s %s %s"
 						(car linked-table) old-col new-col
 						; get the definition from the actual subtable
-						(get-definition old-col linked-table main-schema)))
+						(get-definition old-col linked-table *main-schema*)))
 			   ))
-	 main-schema))
+	 *main-schema*))
 
 
 (define (rename-column items)
@@ -107,7 +107,7 @@
 		 (table (car sp))
 		 (old-col (cadr sp))
 		 (new-col (cadr new))
-		 (long-def (assoc-ref (assoc-ref main-schema (car sp)) (cadr sp)))
+		 (long-def (assoc-ref (assoc-ref *main-schema* (car sp)) (cadr sp)))
 		 )
 	(if long-def
 		(begin 
@@ -125,7 +125,7 @@
 
 ;;i have to save these up, because i have to handle join keys first 
 (define (save-table items)
-  (set! tables (append tables (list items))))
+  (set! *tables* (append *tables* (list items))))
 
 ;; simple dispatcher, using cute scheme-ism
 ;; in the file, tables don't have .'s in them, columns do.
@@ -155,7 +155,7 @@
 
 (load-definition "/mnt/kens/ki/proj/coop/sql/definition.sql")
 (fix-schema "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
-(for-each rename-table tables)			; finally, follow up with tables
+(for-each rename-table *tables*)			; finally, follow up with tables
 
 (simplesql-close dbh)
 
