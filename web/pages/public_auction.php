@@ -111,9 +111,8 @@ function auctionItems(&$cp, $sy)
 	$q = sprintf('select package_number, package_title, package_description,
         package_value
         from packages
-		where (package_type like "Live" 
-			or package_type like "Silent")
-and school_year = "%s"
+		where display_publicly = "Yes"
+				and school_year = "%s"
         order by package_type, package_number, package_title, 
 			package_description', $sy);
 
@@ -163,7 +162,7 @@ print sponsors(&$cp);
 print '</div><!-- end leftcol div -->';
 
 print '<div id="rightCol">';
-//print auctionItems(&$cp, $sy);
+print auctionItems(&$cp, $sy);
 
 
 print "<p><a href='../index.html'>Home</a></p>
