@@ -136,7 +136,8 @@ money
 			10-names forfeit charge
 			food/quilt
 			3x5 card forfeit charge
-		family popup (if 3x5 or quilt) 
+		family popup (if 3x5, quilt, or 10namesforfeit) 
+			grab this from 10names
 		or, if an RSVP, response code, which is the leadid 
 			(future, for RSVP cards: not right now)
 		
