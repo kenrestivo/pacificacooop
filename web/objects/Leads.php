@@ -49,5 +49,19 @@ class Leads extends DB_DataObject
 	var $fb_enumFields = array ('relation', 'source'); // make this a link
 	var $fb_linkDisplayFields = array ('last_name', 'first_name', 'address1');
 	var $fb_selectAddEmpty = array ('source_id', 'family_id');
+	var $fb_fieldLabels = array( 'lead_id' => "Response Code", 
+								 'last_name' => "Last Name", 
+								 'first_name' => "First Name",
+									'salutation' => "Mr. Ms. Dr.", 
+								 'title' => "Title", 
+								 'company' => "Company Name",
+									'address1' => "Address", 
+								 'address2' => "Address(continued)", 
+								 'city' => "City", 
+								 'state' => "State",
+									'zip'=> "Zip Code", 
+								 'country' => "Country", 
+								 'phone' => "Phone Number", 
+									'do_not_contact'=> "Do Not Contact After");
 //	var $fb_preGenerateForm
 }

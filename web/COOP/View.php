@@ -40,12 +40,14 @@ class coopView
 	var $table;
 	var $pk;
 	var $backlinks;
+	var $recurseLevel;
 
-	function CoopView (&$page, $table )
+	function CoopView (&$page, $table, $level = 0 )
 		{
 
 			$this->page = $page;
 			$this->table = $table ;
+			$this->recurseLevel = $level;
 			
 			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
 			if (PEAR::isError($obj)){
@@ -120,7 +122,8 @@ class coopView
 			}
 			$nearkey = $this->pk;	
 			foreach($this->backlinks as $backtable => $farkey){
-				$subview =& new CoopView($this->page, $backtable);
+				//TODO i have to check forbidden tables here too!
+				$subview =& new CoopView($this->page, $backtable, $this->recurseLevel + 1);
 				$subview->obj->$farkey = $this->obj->$nearkey;
 // 				printf("linking %s.%s to %s.%s<br>", 
 // 					   $this->table, $this->pk, 
@@ -139,7 +142,7 @@ class coopView
 
 
 	//  inspired by formbuilder's getdataobjctselectdisplayvalue (whew!)
-	function checkLinkField(&$obj, $key, $val, $level = 0)
+	function checkLinkField(&$obj, $key, $val)
 		{
 		
 			
@@ -155,10 +158,10 @@ class coopView
 			}
 
 			//ok, we have run the fucking gauntlet here.
-			confessObj($obj, 
-					   "from $this->table: obj with links for $key of $val");
+			//confessObj($obj, 
+//					   "from $this->table: obj with links for $key of $val");
 			$subobj = $obj->getLink($key); 
-			confessObj($subobj, "subobj $subobj->__table for $key of $val");
+	//confessObj($subobj, "subobj $subobj->__table for $key of $val");
 
 				// only if i have linkfields in the dataobj
 			$ldfs = $subobj->fb_linkDisplayFields;
@@ -193,10 +196,26 @@ class coopView
 
 	function addHeader(&$tab)
 		{
-			// get the fieldnames out the dataobject somehow
-			// will toArray work?
+			// get the fieldnames out the dataobject
+			foreach($this->obj->toArray() as $key => $trash){
+				if($this->obj->fb_fieldLabels[$key]){
+					$res[] = $this->obj->fb_fieldLabels[$key];
+				} else {
+					$res[] = $key;
+				}
+			}
+			
+			$tab->addRow($res, 'bgcolor=#9999cc', 'TH'); 
+		}
 
-			$tab->addRow($res); // TODO TH,  but note NULL. augh.
+	function addTableTitle(&$tab)
+		{
+			$index = 
+			$this->addSubTable(&$tab, 
+								   sprintf("%s: for %s", 
+										   $this->table, 
+										   $this->obj->family_id));
+	
 		}
 
 	function recurseTable()
@@ -211,17 +230,26 @@ class coopView
 
 			$this->getPK(); // must this be after find? rather constructor.
 
+			$jointable = preg_match('/_join/', $this->table);
+
 			$tab =& new HTML_Table();
-			$this->addHeader(&$tab);
+
+			// TODO:  forbidden names XXX nasty hack
+			if(!$jointable){
+				$this->addTableTitle(&$tab);
+				$this->addHeader(&$tab);
+			}
 			while($this->obj->fetch()){
 				// the main row.
-				if(preg_match('/_join/', $this->table) == 0){
+				if(!$jointable){
 					$tab->addRow($this->toArray());
 				}
 				//subrows
 				$this->addSubTables(&$tab, $pk, $backlinks);
 
 			}
+
+			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
 			return $tab->toHTML();
 		}
 
