@@ -61,59 +61,24 @@
 	*/
 
 	//auction items
-	print "<tr>";
-	$p = getAuthLevel($auth, 'auction');
-	$admin = $p['grouplevel'] >= ACCESS_EDIT ? 1 : 0;
-	print "<td>Springfest Auction Donation Items</td><td>";
-	$s = auctionSummary($u['familyid']);
-	print "</td><td align=center>";
-	actionButtons($auth, $p, $u, $u['familyid'], 'auction', 
-			'auction.php', $s + $admin);
-	print "</td><tr>";
+	showMenuRow($auth, $u, 'Springfest Auction Donation Items', 
+		'nameSummary', 'auction', 'auction.php');
 	
 	//invitations
-	print "<tr>";
-	$p = getAuthLevel($auth, 'auction');
-	$admin = $p['grouplevel'] >= ACCESS_EDIT ? 1 : 0;
-	print "<td>Springfest Invitation Contacts</td><td>";
-	$s = nameSummary($u['familyid']);
-	print "</td><td align=center>";
-	actionButtons($auth, $p, $u, $u['familyid'], 'invitations', 
-			'10names.php', $s + $admin);
-	print "</td><tr>";
+	showMenuRow($auth, $u, 'Springfest Invitation Contacts', 
+		'nameSummary', 'invitations', '10names.php');
 
 	//money items
-	print "<tr>";
-	$p = getAuthLevel($auth, 'money');
-	$admin = $p['grouplevel'] >= ACCESS_EDIT ? 1 : 0;
-	print "<td>Springfest Fees and Cash Donations</td><td>";
-	$s = incomeSummary($u['familyid']);
-	print "</td><td align=center>";
-	actionButtons($auth, $p, $u, $u['familyid'], 'money', 
-		'money.php' , $s + $admin);
-	print "</td><tr>";
+	showMenuRow($auth, $u, 'Springfest Fees and Cash Donations', 
+		'incomeSummary', 'money', 'money.php');
 
 	//insurance 
-	$p = getAuthLevel($auth, 'insurance');
-	$admin = $p['grouplevel'] >= ACCESS_EDIT ? 1 : 0;
-	print "<tr>";
-	print "<td>Insurance and Drivers' Licence Information</td><td>";
-	$s = insuranceSummary($u['familyid']);
-	print "</td><td align=center>";
-	actionButtons($auth, $p, $u, $u['familyid'], 'insurance', 
-		'insurance.php' , $s + $admin);
-	print "</td><tr>";
+	showMenuRow($auth, $u, 'Insurance and Drivers Licence Information', 
+		'insuranceSummary', 'insurance', 'insurance.php');
 
 	//calendar 
-	$p = getAuthLevel($auth, 'calendar');
-	$admin = $p['grouplevel'] >= ACCESS_EDIT ? 1 : 0;
-	print "<tr>";
-	print "<td>Calendar of Events</td><td>";
-	$s = calSummary($u['familyid']);
-	print "</td><td align=center>";
-	actionButtons($auth, $p, $u, $u['familyid'], 'calendar', 
-		'calendar.php' , $s + $admin);
-	print "</td><tr>";
+	showMenuRow($auth, $u, 'Calendar of Events', 
+		'calSummary', 'calendar', 'calendar.php');
 
 	print "</table>";
 
