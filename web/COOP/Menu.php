@@ -11,6 +11,7 @@ class CoopMenu extends HTML_Menu
 {
 	var $realms;
 	var $page;
+	var $indexed_all; 			// legacy stuff. ALL of the callbacks
 	var $renderer;
 	var $realm_map = array( 
 		'auction' => 'Auctions',
@@ -31,11 +32,12 @@ class CoopMenu extends HTML_Menu
 
 			// grab the legacy stuff
 			include('everything.inc');
-			$sf = $this->page->indexEverything($everything);
+			$sf = $this->page->indexEverything($sf_everything);
 			include('members.inc');
-			$members = $this->page->indexEverything($everything);
+			$members = $this->page->indexEverything($members_everything);
 
- 
+			$this->indexed_all = array_merge($members, $sf);
+
 			$heirmenu = array(
 				array(
 					'title' => 'Enhancement',
