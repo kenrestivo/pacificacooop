@@ -115,12 +115,45 @@ addDefaultPrivs()
 	my $defref = shift;
 	my $arref;
 	my $query;
+	my $count;
+	my $rquery;
+	my $ritemref;
+	my %ritem;
+	my $rqueryobj;
 
 	#NOW, add the privs
 	foreach $arref (@$defref){
-		$query = sprintf("insert into privs 
-				set userid = %d, grouplevel = %d, userlevel = %d, realm = '%s' ", 
-			$uid, $$arref[0], $$arref[1], $$arref[2]);
+		#gotta check first that they don't already exist!
+		$rquery = sprintf("select count(privid) as counter from privs 
+					where userid = %d and realm = '%s'", $uid, $$arref[2]
+		);
+		if($opt_v){
+			print "doing <$rquery>\n"; 
+		}
+		$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+		$rqueryobj->execute() or die "couldn't execute $!\n";
+
+		while ($ritemref = $rqueryobj->fetchrow_hashref){
+			$count += $$ritemref{'counter'};
+
+		} # end while
+	
+		#ok. DO it!
+		if($count){
+			if($opt_v){
+				printf("matched %d rows already present for %d %s\n", 
+					$count, $uid, $$arref[2]);
+			}
+			$query = sprintf("
+				update privs set grouplevel = %d, userlevel = %d 
+				where userid = %d, realm = '%s' ", 
+				 $$arref[0], $$arref[1], $uid, $arref[2]);
+		} else {
+			$query = sprintf("insert into privs set 
+					userid = %d, grouplevel = %d, 
+					userlevel = %d, realm = '%s' ", 
+				$uid, $$arref[0], $$arref[1], $$arref[2]);
+		}
 		if($opt_v){
 			print "doing <$query>\n";
 		}
@@ -137,15 +170,41 @@ addUser()
 	my $name = shift;
 	my $familyid = shift;
 	my $query;
+	my $rquery;
+	my $ritemref;
+	my %ritem;
+	my $rqueryobj;
+
 
 	print "adding <$name> into users\n";
 
 	#ok, add the users
+	#gotta check first that they don't already exist!
+	$rquery = sprintf("select userid from users 
+				where name like '%s' or familyid = %d ",  $name, $familyid);
+	if($opt_v){
+		print "doing <$rquery>\n"; 
+	}
+	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+	$rqueryobj->execute() or die "couldn't execute $!\n";
+
+	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		$uid = $$ritemref{'userid'};
+
+	} # end while
+	if($uid) {
+		#do NOT re-enter duplicates!!
+		if($opt_v){
+			print "found user $name $familyid in db with id $uid\n";
+		}
+		return $uid;
+	}
 	$query = sprintf("insert into users  set
-			name = \'%s\' ,
-			familyid = %d
-			",
-			$name, $familyid);
+					name = \'%s\' ,
+					familyid = %d
+					",
+					$name, $familyid);
+
 	if($opt_v){
 		print "doing <$query>\n";
 	}

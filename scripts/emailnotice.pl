@@ -75,10 +75,6 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	$pararref = &getworkers($id);
 	$massivearref = &getlicenseinfo($pararref);
 
-	#TODO the entire architecture of this thing is botched!
-	#	i MUST handle the case of more than one working parent!
-	#	i.e. BOTH their drivers licenses must be up to date.
-
 	# the report of people i need to call or write a note to!
 	if($opt_r){
 		#TODO maybe take a filename on command line, to output the report
