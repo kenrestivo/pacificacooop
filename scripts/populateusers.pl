@@ -74,6 +74,8 @@ use constant _ACCESS_ADMIN => 800;
 	[ _ACCESS_NONE, _ACCESS_VIEW, "user" ]
 );
 
+@teachers = ("Teacher Sandy", "Teacher Catherine", "Teacher Pat");
+
 ### main code starts here
 
 $host = $opt_h ? $opt_h : "bc";
@@ -109,8 +111,8 @@ while ($ritemref = $rqueryobj->fetchrow_hashref){
 } # end while
 
 
-#add users for teacher sandy, teacher pat, teacher catherine
-foreach $teacher ("Teacher Sandy", "Teacher Catherine", "Teacher Pat"){
+#add users for teachers
+foreach $teacher (@teachers){
 	$uid = &addUser($teacher);
 	&addDefaultPrivs($uid, \@teacherdefaults);
 }
@@ -201,6 +203,7 @@ addUser()
 	my $ritemref;
 	my %ritem;
 	my $rqueryobj;
+	my $uid = 0;
 
 
 	if($opt_v){
