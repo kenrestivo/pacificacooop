@@ -1,6 +1,23 @@
 --  $Id$
 --  database schema for co-op insurance database
 
+-- Copyright (C) 2003  ken restivo <ken@restivo.org>
+--
+-- This program is free software; you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation; either version 2 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details. 
+--
+-- You should have received a copy of the GNU General Public License
+-- along with this program; if not, write to the Free Software
+-- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
 drop database if exists coop;
 create database coop;
 use coop;
@@ -18,6 +35,18 @@ create table coop.ins(
 	parentsid int(32),
     primary key (insid)
 );
+
+-- TODO: this is future. i can't handle it now, it's too goddamned complex
+-- insureds information, (many-to-many parents to insurance)
+-- create table coop.insureds(
+--     insureds int(32) not null auto_increment,
+    -- last varchar(255),
+    -- first varchar(255),
+    -- middle varchar(255),
+    -- insid int(32) ,
+	-- parentsid int(32),
+    -- primary key (insuredsid)
+-- );
 
 -- vehicle information (one-to-many to insurance)
 create table coop.veh(
