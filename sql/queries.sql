@@ -287,26 +287,37 @@ select auction.* ,
 			package_description
         
 
--- nasty BROKEN sponsorship join to check levels
+-- nasty sponsorship join to check levels IN REAL CASH
 select  leads.first, leads.last, 
         coalesce(companies.company_name, leads.company) as company,
-        sum(inc.amount)  as cash_total ,
-        sum(auction.amount)  as non_cash_total 
+        sum(inc.amount)  as cash_total 
     from inc 
+        -- the cash only stuff first
+        left join companies_income_join
+               on inc.incid = companies_income_join.incid
+            left join companies 
+                on companies.company_id = 
+                    companies_income_join.company_id
         left join invitation_rsvps 
             on invitation_rsvps.incid = inc.incid 
-       left join companies_income_join
-               on inc.incid = companies_income_join.incid
-		left join income_auction_join 
-                on income_auction_join.incid = inc.incid
-        left join leads 
-			on companies_income_join.leadsid = leads.leadsid 
-        left join companies 
-            on companies.company_id = 
-                companies_income_join.company_id
+            left join leads on invitation_rsvps.leadsid = leads.leadsid
     where leads.leadsid is not null or companies.company_id is not null
-    group by leads.leadsid, companies.company_id order by total desc, 
+    group by leads.leadsid, companies.company_id order by cash_total desc, 
         leads.last asc, leads.first asc, companies.company_name asc;
+
+-- nasty sponsorship join to check AUCTION levels
+select companies.company_name,
+        sum(auction.amount)  as auction_item_total 
+    from auction
+        -- the cash only stuff first
+        left join companies_auction_join
+               on auction.auctionid = companies_auction_join.auctionid
+            left join companies 
+                on companies.company_id = 
+                    companies_auction_join.company_id
+    where companies.company_id is not null
+    group by  companies.company_id 
+    order by auction_item_total desc, companies.company_name asc;
 
 
 -- show auction totals for SOLICIT AND for family auctions.
