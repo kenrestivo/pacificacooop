@@ -35,7 +35,6 @@ CREATE TABLE auction_donation_items (
   location_in_garage varchar(255) default NULL,
   item_type enum('Unknown','Actual Item','Gift Certificate') default NULL,
   committed enum('No','Yes') default 'No',
-  package_id int(32) default NULL,
   school_year varchar(50) default NULL,
 	thank_you_id int(32),
   PRIMARY KEY  (auction_donation_item_id),
@@ -125,6 +124,7 @@ CREATE TABLE companies (
   phone varchar(255) default NULL,
   fax varchar(255) default NULL,
   email_address varchar(255) default NULL,
+  url varchar(255) default NULL,
   territory_id int(32) default NULL,
   family_id int(32) default NULL,
   do_not_contact datetime default NULL,
@@ -856,6 +856,14 @@ CREATE TABLE job_descriptions_families_join (
   family_id int(32) default NULL,
   PRIMARY KEY  (job_descriptions_families_join_id)
 ) ;
+
+CREATE TABLE auction_packages_join (
+  auction_packages_join_id int(32) NOT NULL unique auto_increment,
+  package_id int(32) default NULL,
+  auction_donation_item_id int(32) default NULL,
+  PRIMARY KEY  (auction_packages_join_id)
+) ;
+
 
 
 -- EOF

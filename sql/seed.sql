@@ -344,6 +344,6 @@ insert into ticket_type set
 insert into ticket_type set
             ticket_type_id = 5,
             description = "Other",
-            paid_flag = 'No;
+            paid_flag = 'No';
 
 -- EOF

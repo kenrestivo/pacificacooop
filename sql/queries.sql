@@ -342,47 +342,22 @@ select package_type, package_number, package_title,
         
 
 -- nasty sponsorship join to check levels IN REAL CASH
---- NOTE this is now broken
-select coalesce(companies.company_name, 
-        concat_ws(' ', leads.first_name, leads.last_name, leads.company))
-            as company,
-        sum(income.payment_amount)  as cash_total 
-    from income 
-        left join companies_income_join
-               on income.income_id = companies_income_join.income_id
-            left join companies 
-                on companies.company_id = 
-                    companies_income_join.company_id
-        left join invitation_rsvps 
-            on invitation_rsvps.income_id = income.income_id 
-            left join leads on invitation_rsvps.lead_id = leads.lead_id
-    where leads.lead_id is not null or companies.company_id is not null
-    group by leads.lead_id, companies.company_id  
-    having cash_total >= 150
-    order by cash_total desc, 
-        leads.last_name asc, leads.first_name asc, companies.company_name asc;
-
--- nasty sponsorship join to check AUCTION levels
---- NOTE this is now broken
-select companies.company_name,
-        sum(auction_donation_items.item_value)  as auction_item_total
-		sum(in_kind_donations.item_value) as in_kind_donation_total 
-    from companies
-       left join companies_auction_join 
-                on companies.company_id = 
-                    companies_auction_join.company_id
-     	   left join auction_donation_items
-        	       on auction_donation_items.auction_donation_item_id =
-            	        companies_auction_join.auction_donation_item_id
-		left join companies_in_kind_join
-				on companies_in_kind_join.company_id =
-					companies.company-id
-			left join in_kind_donations
-				on companies_in_kind_join.in_kind_donation_id =
-					in_kind_donations.in_kind_donation_id
-    where companies.company_id is not null
-    group by  companies.company_id having auction_item_total >= 150
-    order by auction_item_total desc, companies.company_name asc
+select company_name,
+        sum(inc.payment_amount) as cash_donations
+from companies
+left join 
+    (select  sum(payment_amount) as payment_amount, company_id
+     from companies_income_join as cinj
+     left join income 
+              on cinj.income_id = 
+                income.income_id
+        where school_year = '2004-2005'
+        group by cinj.company_id) 
+    as inc
+        on inc.company_id = companies.company_id
+group by companies.company_id
+having cash_donations >= 150
+order by company_name;
 
 
 -- show auction totals for SOLICIT AND for family auctions.
@@ -707,7 +682,7 @@ order by cash_donations desc,
 
 --- invites by acctnum
 select coa.description as Description,
-        sum(inc.total) as Donations,
+        sum(inc.total) as Donations,	
         sum(tic.total) as Ticket_Purchases
 from chart_of_accounts as coa
 left join 
@@ -717,7 +692,7 @@ left join
               on linj.income_id = 
                 income.income_id
         where income.school_year = '2003-2004'
-        group by linj.lead_id) 
+        group by income.account_number) 
     as inc
         on inc.account_number = coa.account_number
 left join 
@@ -727,7 +702,7 @@ left join
               on tickets.income_id = 
                 income.income_id
         where income.school_year = '2003-2004'
-        group by tickets.lead_id) 
+        group by income.account_number) 
     as tic
         on tic.account_number = coa.account_number
 group by coa.account_number
@@ -756,6 +731,13 @@ where tickets.lead_id in
         from invitations
         where invitations.family_id = 56 and school_year = '2004-2005')	
 	and income.school_year = '2004-2005';
+
+---- unchoosen auction items TEST
+select * from auction_donation_items
+left join auction_packages_join using (auction_donation_item_id)
+where (package_id != 202 
+or auction_packages_join.auction_donation_item_id is null) and 
+auction_donation_items.school_year = "2004-2005";
 
 
 --- EOF
