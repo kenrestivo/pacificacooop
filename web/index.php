@@ -52,11 +52,17 @@
 	print "<table border=1>";
 	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
 
+	/* hmm. i see a repetitive pattern here. and... wherever i see a pattern, 
+		i can't resist abstracting it out into a libraray function. 
+		so... guess what's gonna be next here 
+	*/
+
 	//auction items
 	print "<tr>";
 	$p = getAuthLevel($auth, 'auction');
+	$admin = $p['grouplevel'] >= ACCESS_EDIT ? 1 : 0;
 	print "<td>Springfest Auction Donation Items</td><td>";
-	$s = auctionSummary($u['familyid']);
+	$s = $admin || auctionSummary($u['familyid']);
 	print "</td><td align=center>";
 	actionButtons($auth, $p, $u, $u['familyid'], 'auction', 
 			'auction.php', $s);
@@ -65,8 +71,9 @@
 	//invitations
 	print "<tr>";
 	$p = getAuthLevel($auth, 'auction');
+	$admin = $p['grouplevel'] >= ACCESS_EDIT ? 1 : 0;
 	print "<td>Springfest Invitation Contacts</td><td>";
-	$s = nameSummary($u['familyid']);
+	$s = $admin || nameSummary($u['familyid']);
 	print "</td><td align=center>";
 	actionButtons($auth, $p, $u, $u['familyid'], 'invitations', 
 			'10names.php', $s);
@@ -75,8 +82,9 @@
 	//money items
 	print "<tr>";
 	$p = getAuthLevel($auth, 'money');
+	$admin = $p['grouplevel'] >= ACCESS_EDIT ? 1 : 0;
 	print "<td>Springfest Fees and Cash Donations</td><td>";
-	$s = incomeSummary($u['familyid']);
+	$s = $admin || incomeSummary($u['familyid']);
 	print "</td><td align=center>";
 	actionButtons($auth, $p, $u, $u['familyid'], 'money', 'money.php' , $s);
 	print "</td><tr>";
