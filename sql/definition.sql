@@ -231,7 +231,7 @@ create table privs (
 -- auction donation item
 create table auction (
     auctionid int(32) not null auto_increment,
-	description varchar(55),
+	description longtext,
     amount decimal(9,2),
 	entered datetime,
 	updated timestamp,
