@@ -16,51 +16,7 @@ require_once('Pager/Pager.php');
 
 require_once('object-config.php');
 
-
-print '<HTML>
-		<HEAD>
-				<link rel=stylesheet href="main.css" title=main>
-			<TITLE>Data Entry</TITLE>
-		</HEAD>
-
-		<BODY>
-
-		<h2>Pacifica Co-Op Nursery School Data Entry</h2>
-	';
-
 //DB_DataObject::debugLevel(5);
-
-confessArray($_REQUEST, "test REQUEST");
-confessArray($_SESSION, "test SESSION");
-
-///
-warnDev();
-
-user_error("states.inc: ------- NEW PAGE --------", E_USER_NOTICE);
-
-
-$auth = logIn($_REQUEST);
-
-
-if($auth['state'] != 'loggedin'){
-	done();
-}
-
-
-topNavigation($auth,  getUser($auth['uid']));
-
-////utility, not inside of class
-function findTables($haystack)
-{
-	$needles = array();
-	foreach($haystack as $key => $val){
-		//print "table $key vars $val<br>";
-		if(is_array($val) && array_key_exists('action', $val)){
-			$needles[$key] = $val;
-		}
-	}
-	return $needles;
-}
 
 //////////////////////////////////////////
 /////////////////////// COOP CLASS
@@ -68,15 +24,15 @@ class coopPage
 {
 	var $obj;
 	var $build;
+	var $auth;
 	var $pager_result_size;
 	var $pager_start;
 	var $table;
 
 	// constructor.
-	function coopPage($table = false )
+	function setup($table = false )
 		{
 			// set it here
-			$this->auth = $_SESSION['auth'];
 			$this->table = $table ? $table : $_SESSION['toptable'];
 			
 			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
@@ -87,6 +43,54 @@ class coopPage
 
 		}
 
+ 
+	function pageTop()
+		{
+
+			print '<HTML>
+				<HEAD>
+						<link rel=stylesheet href="main.css" title=main>
+							<TITLE>Data Entry</TITLE>
+				</HEAD>
+				<BODY>
+				<h2>Pacifica Co-Op Nursery School Data Entry</h2>
+				';
+
+			confessArray($_REQUEST, "test REQUEST");
+			confessArray($_SESSION, "test SESSION");
+
+///
+			warnDev();
+
+			user_error("states.inc: ------- NEW PAGE --------", E_USER_NOTICE);
+
+
+			$this->auth = logIn($_REQUEST);
+
+
+			if($this->auth['state'] != 'loggedin'){
+				done();
+			}
+
+
+			topNavigation($this->auth,  getUser($this->auth['uid']));
+
+		}
+
+////utility, not inside of class
+	function findTables($haystack)
+		{
+			$needles = array();
+			foreach($haystack as $key => $val){
+				//print "table $key vars $val<br>";
+				if(is_array($val) && array_key_exists('action', $val)){
+					$needles[$key] = $val;
+					// override session now
+					$_SESSION[$key] = $val;
+				}
+			}
+			return $needles;
+		}
 	// TODO: some nifty way to get session vars outta there
 	function requestOrSession($itemName){
 	}
@@ -124,11 +128,12 @@ class coopPage
 	function detailForm($id = false )
 		{
 	
+			print "DETAIL HAS BEEN CALLED";
 			$id = $id ? $id : $_SESSION[$this->table]['id'];
 			$this->obj->get($id);
 			$this->build =& DB_DataObject_FormBuilder::create ($this->obj);
 			$form = new HTML_QuickForm($_SERVER['PHP_SELF']); // XXX &
-			$form->addElement('html', thruAuth($auth, 1));
+			$form->addElement('html', thruAuth($this->auth, 1));
 			$this->build->useForm($form);
 			$form =& $this->build->getForm();
 			if($form->validate ()){
@@ -161,7 +166,7 @@ class coopPage
 			$count = $this->obj->find();
 			$res .= "$count total records found<br>";
 
-				/// pager driver calculations
+			/// pager driver calculations
 			for($i = 1; $i <= $count; $i++){
 				$pager_item_data[] = $i;
 			}
@@ -179,12 +184,7 @@ class coopPage
 			//confessArray($pager_result_data, "pagerresult");
 			//confessArray($pager_links, "pagerlinks");
 			
-//			$res .= $pager_links['first'];
 			$res .= $pager_links['all'];
-		//	$res .= $pager_links['back']; 
-//			$res .= sprintf("&nbsp;%d&nbsp;", $pager->getCurrentPageID());
-			//$res .= $pager_links['next'];
-	//		$res .= $pager_links['last'];
 			
 			return $res;
 		}
@@ -202,7 +202,7 @@ class coopPage
 	function listTable($table = false)
 		{
 
-		// most have only one key. feel around for primary if not
+			// most have only one key. feel around for primary if not
 			$keys = $this->obj->keys ();
 			if (is_array ($keys)){
 				$primaryKey = $keys[0];
@@ -216,7 +216,7 @@ class coopPage
 							  $this->pager_result_size);
 			$this->obj->find();					// new find with limit.
 
-		// now the table
+			// now the table
 			$hdr = 0;
 			while ($this->obj->fetch()){
 				$this->build =& DB_DataObject_FormBuilder::create (
@@ -247,7 +247,7 @@ class coopPage
 				
 			$res .= sprintf(
 				'<p><a href="%s?%s[action]=detail">Add new</a></p>', 
-				   $_SERVER['PHP_SELF'], $this->table) ;
+				$_SERVER['PHP_SELF'], $this->table) ;
 
 			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
 			$res .= $tab->toHTML();
@@ -265,11 +265,15 @@ class coopPage
 //MAIN
 //$_SESSION['toptable'] 
 
-//confessArray(findTables($_REQUEST), "tables");
-foreach(findTables($_REQUEST) as $table => $vals){
-	$cp =& new coopPage('income');
+
+$cp =& new coopPage();
+$cp->pageTop();
+confessArray($cp->findTables($_REQUEST), "tables");
+foreach($cp->findTables($_REQUEST) as $table => $vals){
+	$cp->setup('income');
+//	print_r($cp);
 	// OK copy my dispatcher logic over now
-	if($vals['action'] == 'list'){
+	if($_SESSION[$table]['action'] == 'list'){
 		print $cp->listTable();
 	} else {
 		print $cp->detailForm($vals['id']);
