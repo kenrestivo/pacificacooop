@@ -524,6 +524,7 @@ logIn($vars)
 	$states = array(
 		unknown => array (
 					func => "unknownState",
+					wanted => array ( "uid", "pwd", "confirm"), //XXX token?
 					description => "Indeterminate state."
 					),
 		needlogin => array (
@@ -591,8 +592,8 @@ logIn($vars)
 
 	$savedauth = $_SESSION['auth'];
 
-	confessArray($vars, "login(vars)");
-	confessArray($savedauth, "login(savedauth)");
+	//confessArray($vars, "login(vars)");
+	//confessArray($savedauth, "login(savedauth)");
 	
 	$auth = changeState($vars['auth'], $states, 
 		$savedauth['state'] ? $savedauth['state'] : 'unknown',
@@ -611,7 +612,7 @@ logIn($vars)
 		$auth['state'] == 'unknown';
 	}
 
-	confessArray($auth, "login(auth)");
+	//confessArray($auth, "login(auth)");
 	
 	/* start the pachinko machine. 
 		no way out unless user input needed, or success */
