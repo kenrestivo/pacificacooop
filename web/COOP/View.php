@@ -203,7 +203,14 @@ class coopView extends CoopObject
 				}
 			}
 
-			$res[] = $this->recordButtons($row);
+			//XXX hack! i'm only gonna bother with record buttons if familyid
+			if(!in_array('family_id', 
+						array_keys(get_object_vars($this->obj))))
+			{
+				$row['family_id'] = 0;
+			}
+				$res[] = $this->recordButtons($row);
+			
 
 
 			// the Simple Version. useful for debuggin'
