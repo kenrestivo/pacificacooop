@@ -23,4 +23,7 @@ class Users extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $select_display_field = 'name';
+	var $fieldLabels = array ('name' => 'User Name', 
+							'family_id' => 'Co-Op Family');
 }

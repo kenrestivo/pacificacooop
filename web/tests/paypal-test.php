@@ -28,6 +28,8 @@ print "<HTML>
 
 $pv = $_POST ? $_POST : $_GET;
 
+//DB_DataObject::debugLevel(5);
+
 if (!isset ($pv['table'])){
 	$form = new HTML_QuickForm('gettable', 'get');
 	$grp[] =& HTML_QuickForm::createElement(
@@ -53,7 +55,6 @@ if($pv['action'] == 'detail'){
 		$obj->get ($pv['id']);
 	}
 
-echo $_SERVER['PHP_SELF'] . "<br>";
 
 //print_r($obj);
 
@@ -64,7 +65,7 @@ echo $_SERVER['PHP_SELF'] . "<br>";
 	if($form->validate ()){
 		$res = $form->process (array ($build, 'processForm'), false);
 		if ($res){
-			$obj->debug();
+			$obj->debug('processed successfully', 'detailform', 0);
 		 	$action = $form->getElement('action');
 			$action->setValue('list');
 		}
@@ -97,7 +98,7 @@ $obj->find();
 
 $tab =& new HTML_Table();
 
-
+$hdr = 0;
 while ($obj->fetch()){
 	$ar = array_values($obj->toArray());
 	array_push($ar, 
@@ -105,7 +106,10 @@ while ($obj->fetch()){
 						Edit</a><br>',
    		  $_SERVER['PHP_SELF'], $obj->$primaryKey, $table));
 	//yay! i updated my config.php, and now $obj->$titlefield works!
-	
+
+	if($hdr++ < 1){
+		$tab->addRow(array_keys($obj->toArray()));
+	}
 	$tab->addRow($ar);
 
 	//print_r($obj->toArray());

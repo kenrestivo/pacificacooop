@@ -6,6 +6,8 @@ require_once 'DB/DataObject.php';
 
 class Packages extends DB_DataObject 
 {
+	var $textFields = array ('package_description');
+
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
@@ -30,4 +32,5 @@ class Packages extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
 }

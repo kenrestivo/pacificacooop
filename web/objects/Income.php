@@ -29,4 +29,7 @@ class Income extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	
+	//should work, but is ignored?
+	var $dateFields = array ('bookkeeper_date', 'cleared_date');
 }

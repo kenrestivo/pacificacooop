@@ -113,15 +113,15 @@ function confessVars()
 ###############
 function confessArray($fields, $message)
 {
-	print "<plaintext>";
+	print "<pre>";
 	print "DEBUG $message\n";
 	if(is_array($fields)){
-		print_r($fields);
+		htmlentities(print_r($fields, true));
 		reset($fields);
 	} else {
 		print "um... <$fields> is not an array\n";
 	}
-	print "</plaintext>";
+	print "</pre>";
 } #END CONFESSARRAY
 
 

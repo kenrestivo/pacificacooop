@@ -10,6 +10,7 @@ foreach($config as $class=>$values) {
     $options = $values;
 }
 
+// to hack around dbobject trashing my settings
 $_DB_DATAOBJECT_FORMBUILDER['CONFIG'] = $config['Db_DataOject_FormBuilder'];
 
 ?>
