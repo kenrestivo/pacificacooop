@@ -11,7 +11,7 @@ class Accounting_paypal extends DB_DataObject
 
     var $__table = 'accounting_paypal';               // table name
     var $uid;                             // int(20)  not_null primary_key auto_increment
-    var $confirm_date;                    // timestamp(14)  not_null multiple_key unsigned zerofill timestamp
+    var $confirm_date;                    // timestamp(19)  not_null multiple_key unsigned zerofill binary timestamp
     var $item_name;                       // string(130)  not_null
     var $receiver_email;                  // string(125)  multiple_key
     var $item_number;                     // string(130)  not_null

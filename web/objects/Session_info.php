@@ -12,8 +12,8 @@ class Session_info extends DB_DataObject
     var $__table = 'session_info';                    // table name
     var $session_id;                      // string(32)  not_null primary_key unique_key
     var $ip_addr;                         // string(20)  
-    var $entered;                         // datetime(19)  
-    var $updated;                         // timestamp(14)  not_null unsigned zerofill timestamp
+    var $entered;                         // datetime(19)  binary
+    var $updated;                         // timestamp(19)  not_null unsigned zerofill binary timestamp
     var $user_id;                         // int(32)  
     var $vars;                            // blob(65535)  blob binary
 

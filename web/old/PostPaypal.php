@@ -113,7 +113,7 @@ class PostPaypal
             $obj->txn_id = $this->paypal_obj->txn_id;
 
             //print_r($obj);
-            //$obj->debugLevel(5);
+            //$obj->debugLevel(2);
             //don't dupe. XXX this is dumb. what do i do about refunds?
 			$numrows = $obj->find() ; 
             //print "NUM $numrows";
@@ -160,7 +160,7 @@ class PostPaypal
 	function postLead()
 		{
 		
-			$obj =& $this->factoryWrapper('invitation_rsvps');
+			$obj =& $this->factoryWrapper('leads_income_join');
 
             //don't dupe. XXX this is dumb. what do i do about refunds?
             $obj->income_id = $this->income_id;

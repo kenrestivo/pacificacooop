@@ -13,7 +13,7 @@ class Enhancement_hours extends DB_DataObject
     var $enhancement_hour_id;             // int(32)  not_null primary_key unique_key auto_increment
     var $parent_id;                       // int(32)  
     var $enhancement_project_id;          // int(32)  not_null
-    var $work_date;                       // date(10)  
+    var $work_date;                       // date(10)  binary
     var $hours;                           // real(6)  
     var $school_year;                     // string(50)  
 

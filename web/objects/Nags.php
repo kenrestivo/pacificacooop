@@ -15,7 +15,7 @@ class Nags extends DB_DataObject
     var $method_of_contact;               // string(11)  enum
     var $family_id;                       // int(32)  
     var $user_id;                         // int(32)  
-    var $done;                            // datetime(19)  
+    var $done;                            // datetime(19)  binary
     var $school_year;                     // string(50)  
 
     /* ZE2 compatibility trick*/

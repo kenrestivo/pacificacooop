@@ -12,13 +12,13 @@ class Income extends DB_DataObject
     var $__table = 'income';                          // table name
     var $income_id;                       // int(32)  not_null primary_key unique_key auto_increment
     var $check_number;                    // string(255)  
-    var $check_date;                      // date(10)  
+    var $check_date;                      // date(10)  binary
     var $payer;                           // string(255)  
     var $account_number;                  // int(32)  
     var $payment_amount;                  // real(11)  
     var $note;                            // string(255)  
-    var $bookkeeper_date;                 // date(10)  
-    var $cleared_date;                    // date(10)  
+    var $bookkeeper_date;                 // date(10)  binary
+    var $cleared_date;                    // date(10)  binary
     var $school_year;                     // string(50)  
     var $txn_id;                          // string(20)  not_null
     var $thank_you_id;                    // int(32)  

@@ -16,7 +16,7 @@ class Drivers_licenses extends DB_DataObject
     var $middle_name;                     // string(255)  
     var $state;                           // string(40)  
     var $license_number;                  // string(100)  
-    var $expiration_date;                 // date(10)  
+    var $expiration_date;                 // date(10)  binary
     var $parent_id;                       // int(32)  
 
     /* ZE2 compatibility trick*/

@@ -11,7 +11,8 @@ class Thank_you extends DB_DataObject
 
     var $__table = 'thank_you';                       // table name
     var $thank_you_id;                    // int(32)  not_null primary_key unique_key auto_increment
-    var $date_sent;                       // date(10)  
+    var $date_printed;                    // date(10)  binary
+    var $date_sent;                       // date(10)  binary
     var $family_id;                       // int(32)  
     var $method;                          // string(7)  enum
 

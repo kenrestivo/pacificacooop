@@ -26,7 +26,7 @@ class Leads extends DB_DataObject
     var $relation;                        // string(8)  enum
     var $source;                          // string(10)  enum
     var $family_id;                       // int(32)  
-    var $do_not_contact;                  // date(10)  
+    var $do_not_contact;                  // date(10)  binary
     var $school_year;                     // string(50)  
     var $source_id;                       // int(32)  
     var $fax;                             // string(255)  

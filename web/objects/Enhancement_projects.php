@@ -13,7 +13,7 @@ class Enhancement_projects extends DB_DataObject
     var $enhancement_project_id;          // int(32)  not_null primary_key unique_key auto_increment
     var $project_name;                    // string(255)  
     var $project_description;             // blob(16777215)  blob
-    var $project_complete;                // date(10)  
+    var $project_complete;                // date(10)  binary
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

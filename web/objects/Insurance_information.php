@@ -15,13 +15,13 @@ class Insurance_information extends DB_DataObject
     var $first_name;                      // string(255)  
     var $middle_name;                     // string(255)  
     var $policy_number;                   // string(255)  
-    var $policy_expiration_date;          // date(10)  
+    var $policy_expiration_date;          // date(10)  binary
     var $companyname;                     // string(255)  
     var $naic;                            // int(5)  
     var $parent_id;                       // int(32)  
     var $audit_user_id;                   // int(32)  
-    var $entered;                         // datetime(19)  
-    var $updated;                         // timestamp(14)  not_null unsigned zerofill timestamp
+    var $entered;                         // datetime(19)  binary
+    var $updated;                         // timestamp(19)  not_null unsigned zerofill binary timestamp
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

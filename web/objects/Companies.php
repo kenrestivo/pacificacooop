@@ -22,7 +22,7 @@ class Companies extends DB_DataObject
     var $fax;                             // string(255)  
     var $email_address;                   // string(255)  
     var $territory_id;                    // int(32)  
-    var $do_not_contact;                  // datetime(19)  
+    var $do_not_contact;                  // datetime(19)  binary
     var $flyer_ok;                        // string(7)  enum
     var $family_id;                       // int(32)  
     var $first_name;                      // string(255)  

@@ -14,7 +14,7 @@ class In_kind_donations extends DB_DataObject
     var $item_description;                // blob(16777215)  blob
     var $quantity;                        // int(5)  
     var $item_value;                      // real(11)  
-    var $date_received;                   // date(10)  
+    var $date_received;                   // date(10)  binary
     var $school_year;                     // string(50)  
     var $thank_you_id;                    // int(32)  
 

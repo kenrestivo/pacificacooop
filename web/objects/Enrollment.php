@@ -14,8 +14,8 @@ class Enrollment extends DB_DataObject
     var $kid_id;                          // int(32)  
     var $school_year;                     // string(50)  
     var $am_pm_session;                   // string(2)  enum
-    var $start_date;                      // date(10)  
-    var $dropout_date;                    // date(10)  
+    var $start_date;                      // date(10)  binary
+    var $dropout_date;                    // date(10)  binary
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

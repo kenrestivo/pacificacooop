@@ -12,7 +12,7 @@ class Flyer_deliveries extends DB_DataObject
     var $__table = 'flyer_deliveries';                // table name
     var $flyer_delivery_id;               // int(32)  not_null primary_key unique_key auto_increment
     var $flyer_type;                      // string(255)  
-    var $delivered_date;                  // date(10)  
+    var $delivered_date;                  // date(10)  binary
     var $family_id;                       // int(32)  
     var $company_id;                      // int(32)  
     var $school_year;                     // string(50)  
