@@ -37,7 +37,8 @@
 					"replace into audit_trail 
 							(table_name, index_id, audit_user_id, updated) 
 					  select '%s', %s, audit_user_id, %s 
-						from %s where %s is not null"
+						from %s where %s is not null
+							and audit_user_id is not null"
 					  (car tabinfo) (cadr tabinfo) col 
 					  (car tabinfo) col)))
 			  '("entered" "updated")))
