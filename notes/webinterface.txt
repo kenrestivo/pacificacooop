@@ -348,6 +348,8 @@ contact management
 	contact table DONE
 		first,last
 		companyid (join)
+	contact-to-auction join table (like fajoin) DONE
+		to handle any donations of hard goods
 	territory table  DONE
 		description (crespi, rockaway, etc)
 	territory-family (persistence!) join table
@@ -358,8 +360,6 @@ contact management
 		note (longtext)
 	contact-to-income join table
 		to handle any stray non-categorized donations. ugly but will need this.
-	contact-to-auction join table (like fajoin) DONE
-		to handle any donations of hard goods
 
 raffle tickets: this is join to income, basically
 	raffle_tickets
@@ -445,6 +445,8 @@ money:
 		generic business lead (join contacts table)
 		ad (join ad table), 
 		one of various forfeit fees (join familyid)
+	MUST i keep track from money table, WHERE these were joined to?
+		or, must the display code go fishing around for all of them?
 	handling
 		aha! an "apply payment to" field WHICH IS REQUIRED!
 			it pops up the relevant "apply" sub-screen.

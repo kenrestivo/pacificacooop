@@ -469,9 +469,6 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					$_SERVER['PHP_SELF']);
-	if($auth){ //hey, it could happen...
-		thruAuth($auth);
-	}
 	print "<table border=1>";
 	//user popup (or display) stuff
 	print "<tr>";
@@ -508,6 +505,15 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	print "</tr>";
 
 	print "</table>";
+
+	/* NOTE! thruAuth MUST be here at the bottom of the form! 
+		if i put it at the top of the form, then SID is set for some reason
+		(GODDAMNED PHP SESSION MAGIC!) and i end up passing cookie auths as vars.
+		VERY stupid, very unnecessary, very bug-causing.
+	*/
+	if($auth){ 
+		thruAuth($auth);
+	}
 
 	printf("<INPUT TYPE=submit NAME='login' VALUE='%s'>",
 		$type == 'confirm' || $type == 'both' ? 'Save New Password' : 'Log In');
@@ -1084,8 +1090,10 @@ function
 thruAuth($auth)
 {
 	$_SESSION['auth'] = $auth;
-	printf("<INPUT TYPE=hidden NAME='%s' VALUE='%s'>\n",
-		'coop',  session_id());
+	if(SID){
+		printf("<INPUT TYPE=hidden NAME='%s' VALUE='%s'>\n",
+			'coop',  session_id());
+	}
 }/* END THRUAUTH  */
 
 
