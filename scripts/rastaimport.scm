@@ -36,7 +36,8 @@
 ;;;;;;;;;;;;;;; functions for updating the database
 ;; easy version:  (string-join (cdr (string-tokenize long-parent)))
 (define (split-first-last long-parent)
-  (let* ((name-list (string-tokenize long-parent))
+  (let* ((name-list (string-tokenize
+					 (string-delete long-parent (char-set #\*)))
 		 (middle-index (list-index
 					   (lambda (x) (or (equal? x "Ann")
 									   (equal? x "Jo")))
@@ -52,7 +53,7 @@
   (let* ((long-parent (rasta-find column-to-check line header))
 		 (split-name (split-first-last long-parent))
 		 (type (if (equal? column-to-check "Mom Name *") "Mom" "Dad"))
-		 (worker (string-index long-parent (char-set #\*)))
+		 (worker (if (string-index long-parent (char-set #\*)) "Yes" "No"))
 		 (parents (simplesql-query *dbh*
 						(sprintf #f "
 				select parentsid, last, first, worker, ptype familyid
@@ -74,7 +75,7 @@
 							last = '%s' ,
 							first = '%s' ,
 							worker = '%s',
-							ptype = '%s'
+							ptype = '%s',
 							familyid = %d "
 									   (cdr split-name)
 									   (car split-name)
@@ -117,7 +118,8 @@
   (check-for-new-kid line header)
   (check-for-new-enrollment line header)
   (map (lambda (col)
-		 (check-for-new-parent line header col))
+		 (if (rasta-find col line header) ; handle single parents
+			 (check-for-new-parent line header col)))
 	   '("Mom Name *" "Dad/Partner *")))
 
 ;; TODO: prompt user instead! pick amongst them
