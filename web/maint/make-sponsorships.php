@@ -112,6 +112,9 @@ switch($_REQUEST['action']){
 	 break;
 	 
  default:
+	 $atd->school_year = findSchoolYear();
+	 print $atd->simpleTable();
+		 
 
 	 break;
 }

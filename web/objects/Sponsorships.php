@@ -25,4 +25,23 @@ class Sponsorships extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_enumFields = array ('entry_type');
+	var $fb_formHeaderText =  'Springfest Sponsorships';
+	var $fb_linkDisplayFields = array('company_id', 'lead_id',
+									  'school_year');
+	var $fb_fieldLabels = array (
+		'company_id' => 'Company Name',
+		'lead_id' => 'Invitee Name',
+		'sponsorship_type_id' => 'Sponsorship Package',
+		'entry_type' => 'Entry Control',
+		'school_year' => 'School Year'
+		);
+	
+	var $fb_fieldsToRender = array (
+		'company_id' ,
+		'lead_id' ,
+		'sponsorship_type_id', 
+		'entry_type',
+		'school_year' 
+		);
 }

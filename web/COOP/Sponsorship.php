@@ -60,6 +60,7 @@ class Sponsorship
 			//$sp->obj->debugLevel(2);
 			$sp->obj->school_year = $this->schoolYear;
 			$sp->obj->$idname = $id;
+			//NOTE: do *not* search for typeid! i must match ones that changed!
 			$found =$sp->obj->find(); 
 			if($found){
 				$sp->obj->fetch();
