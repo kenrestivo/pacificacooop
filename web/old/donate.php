@@ -39,7 +39,7 @@ function ads()
 		"Business Card ($%s)" => 30
 		);
 
-	$form = new  paypalForm(  'Springfest Program Ad',  'adform', 1, 
+	$form = new  paypalForm(  'Springfest Program Ad',  'adform', 
 							  $_REQUEST['source']);
 	$form->addElement($form->buildSelect('amount', $prices_raw));
 	$form->addElement('submit', NULL, 'Buy Ad');
@@ -59,7 +59,7 @@ function sponsor()
 		"Friend ($%s)" => 150,
 		);
 
-	$form = new paypalForm( 'Springfest Sponsorship', 'sponsorfrm', 1,
+	$form = new paypalForm( 'Springfest Sponsorship', 'sponsorfrm',
 							$_REQUEST['source']);
 	$form->addElement($form->buildSelect('amount', $prices_raw));
 	$form->addElement('submit', NULL, 
@@ -73,7 +73,7 @@ function sponsor()
 	
 function donation()
 {
-	$form = new paypalForm('Springfest Cash Donation', 'donatefrm', 1,
+	$form = new paypalForm('Springfest Cash Donation', 'donatefrm', 
 						   $_REQUEST['source']);
 	$form->addElement("text", "amount", "Donate amount:",
 											 array('value' => "$100", 
@@ -88,7 +88,7 @@ function donation()
 function tickets()
 {	
 	 
-	$form = new paypalForm('Springfest Event Tickets', 'ticketfrm', 1,
+	$form = new paypalForm('Springfest Event Tickets', 'ticketfrm', 
 						   $_REQUEST['source']);
 	$form->removeElement('quantity');
 	$form->addElement("hidden", "undefined_quantity", "1");

@@ -116,8 +116,10 @@ class CoopMenu extends HTML_Menu
 				break;
 			}
 			//confessObj($this , "menures");
-				$res = $this->renderer->toHTML();
-				return $res;
+			$res .= '<div class="menu">';
+			$res .= $this->renderer->toHTML();
+			$res .= '</div><!-- end menu class -->';
+			return $res;
 		}
 
 	function callbacksToMenu($everything)

@@ -28,7 +28,8 @@ function sponsors(&$cp)
 	setlocale(LC_MONETARY, 'en_US'); // for money_format
 
 // now a word from our sponsors
-	$res .= "<p><b>With many thanks to our generous sponsors:</b></p>";
+	$res .= '<div class="sponsor">';
+	$res .= "<p><b>Thanks to our generous sponsors:</b></p>";
 	$tab =& new HTML_Table();
 //TODO: a weird merge of all solicitation and leads, by sponsor level
 // get sponsor levels, then do the search for each
@@ -42,7 +43,7 @@ function sponsors(&$cp)
 		
 		
 		$co =& new CoopObject(&$cp, 'companies', &$nothing);
-		$found = $co->obj->query(sprintf("
+		$co->obj->query(sprintf("
 select company_name,
         sum(inc.payment_amount) as cash_donations
 from companies
@@ -63,8 +64,8 @@ order by company_name
 										 $sp->obj->sponsorship_price,
 										 $previous));
 		$previous = $sp->obj->sponsorship_price;
-		// because query() doesn't return a count!
-		$hack = '';					
+
+		$sponsors = ''; // because HTML sucks
 		while($co->obj->fetch()){
 			if($co->obj->url > ''){
 				$thing = sprintf('<a href="%s">%s</a>', 
@@ -73,19 +74,21 @@ order by company_name
 			} else {
 				$thing = $co->obj->company_name;
 			}
-			$hack .= sprintf("<li>%s</li>", $thing);
+			$sponsors .= sprintf("<li>%s</li>", $thing);
 		}
-		
-		if($hack){
+		if($co->obj->N){
 			$res .= sprintf(
-				'<p><b>%s Contributors (%s and above)</b></p><ul>%s</ul>', 
+				'<ul><p><b>%s Contributors (%s and above)</b></p>%s</ul>', 
 				$sp->obj->sponsorship_name,
 				money_format('$%.0i', $sp->obj->sponsorship_price),
-				$hack);
+				$sponsors);
 		}
+
+
 		
 	}
 	
+	$res .= "</div><!-- end sponsor -->";
 	return $res;
 } // end sponsors
 
