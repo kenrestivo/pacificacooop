@@ -44,6 +44,7 @@ create table coop.kids(
     first varchar(255),
     phone varchar(20),
 	email varchar(255),
+	familyid int(32),
     primary key (kidsid)
 );
 
@@ -68,15 +69,14 @@ create table coop.parents(
     parentsid int(32) not null auto_increment,
     parentslast varchar(255),
     parentsfirst varchar(255),
+	familyid int(32),
     primary key (parentsid)
 );
 
 -- glue table for many-to-many: kids and parents
-create table coop.kpglue (
-    kpglueid int(32) not null auto_increment,
-	kidsid int(32),
-	parensid int(32),
-    primary key (kpglueid)
+create table coop.families (
+    familyid int(32) not null auto_increment,
+    primary key (familyid)
 );
 
 -- the user/passwords used by the web view page AND my update tool..
