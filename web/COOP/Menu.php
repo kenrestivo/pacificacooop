@@ -186,8 +186,7 @@ class CoopMenu extends HTML_Menu
 
 			$tab->addRow(array(
 							 sprintf("<h3>Welcome %s!</h3>", $u['username']),
-	
-
+							 mainMenuForm(),
 							 $this->page->selfURL("Log Out", 
 												  'action=logout')));
 			
