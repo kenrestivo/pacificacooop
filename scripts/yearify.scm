@@ -32,6 +32,17 @@
 			 "springfest_attendees"
 			 "territories"))
 
+;; make sure i don't have any idle school_years
+(for-each (lambda (table)
+			(safe-sql *dbh*
+					  (sprintf #f "
+				update %s set school_year = \"2003-2004\" 
+						where school_year is null" table)))
+		  (map
+		   (lambda (x) (vector-ref x 0))
+		   (simplesql-query *dbh* "show tables")))
+
+
 (simplesql-close *dbh*)
 
 
