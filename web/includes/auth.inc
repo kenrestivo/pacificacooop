@@ -422,7 +422,13 @@ logIn($vars)
 	$auth = $vars['cancel'] ? "" : $vars['auth'];
 
 
-	// vital information for each state.
+	/* vital information for each state.
+		func = callback function for this state
+		required = mandatory arguments
+		wanted = optional arguments
+		terminus = if we reach this state, exit the state machine
+		description = some debug/explanatory text. not used right now
+	*/
 	$states = array(
 		unknown => array (
 					func => "unknownState",
@@ -436,7 +442,7 @@ logIn($vars)
 		loggedout => array (
 					func => "loggedOutState",
 					wanted => array ( "uid"),
-					description => "Forcibly and deliberately loogged out"
+					description => "Forcibly and deliberately logged out"
 					),
 		nullpass => array (
 					func => "nullPassState",
@@ -519,7 +525,7 @@ logIn($vars)
 		// dispatch the appropriate action for this state, and collect result
 		$func = $states[$state]['func'];
 		if($func){
-			// we want the func. gotta have the func. y'all...
+			// we want the func. gotta have the func. yowwww...
 			$auth = $func($auth, $states);
 		}
 	} while(!$states[$state]['terminus']);
@@ -755,7 +761,7 @@ nullPassState($auth, $states)
 		loginForm($newauth, 'both', 'hide', 
 			sprintf("<h3>Welcome %s!</h3>
 				<p>This must be your first time using the new 
-				secure login version of the site. <br>
+				password-protected version of the site. <br>
 				Please choose a new password that you will 
 				use for this site from now on, and type it in here.</p>", 
 				$uinfo['username']));

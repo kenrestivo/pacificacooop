@@ -35,6 +35,8 @@
 
 	$auth = logIn($pv);
 
+	print "<hr>\n";
+
 	//confessArray($auth, "index.php. login() returns with");
 	error_log("   ");
 
@@ -45,16 +47,15 @@
 	print "<p>This is the first day of the rest of your life!</p>";
 
 /*
-	show friendlyHappyWelcome from 10names
-	show parents and kids in this family, 
-		and some roster information: what session (AM/PM), etc.
-	menu of choices
-		call auth.inc:checkAuthLevel() before displaying each choice
-		- enter 10names 
-		- enter 3x5 cards 
-		- edit roster information (phone, email, name spelling, etc)
-		- show insurance information
-		- enter checks (if authorised for "money" realm)
+	printf("<FORM METHOD=POST ACTION='%s'>", 
+					$_SERVER['PHP_SELF']);
+
+	Enter/Edit SpringFest Invitation Contacts
+	printf("<INPUT TYPE=submit NAME='login' VALUE='%s'>",);
+	Enter/Edit SpringFest Auction Donation Items
+	Edit Roster Information
+	View Insurance Information
+	//printf("<a href='money.php%s'>Enter checks</a><br>\n";
 */
 
 	done();
