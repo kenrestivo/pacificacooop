@@ -17,7 +17,6 @@
 	  (invoke wtc 'assertTextPresent "</html>")
 	  (invoke wtc 'assertFormPresent )
 	  (invoke wtc 'assertSubmitButtonPresent "login")
-b
 	  (invoke wtc 'selectOption "auth[uid]" "Restivo Family")
 	  (invoke wtc 'assertSubmitButtonPresent "login")
 	  (invoke wtc 'submit "login")

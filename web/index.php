@@ -38,6 +38,7 @@
 	require_once("flyer_delivery.inc");
 	require_once("nag.inc");
 	require_once("indulgences.inc");
+	require_once("invitation_cash.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -73,10 +74,11 @@
 
 	//and heeere they are!
 	$menu = array($auctioncallbacks, 
-				$invitationcallbacks, $incomecallbacks, $pkgcheckincallbacks,  
-				$solicit_company_callbacks, $solicit_auction_callbacks,
-				$solicit_cash_callbacks, 
-				$raffle_location_callbacks, $raffle_income_callbacks, 
+				  $invitationcallbacks, $invitation_cash_callbacks,
+				  $incomecallbacks, $pkgcheckincallbacks,  
+				  $solicit_company_callbacks, $solicit_auction_callbacks,
+				  $solicit_cash_callbacks, 
+				  $raffle_location_callbacks, $raffle_income_callbacks, 
 				  $flyer_company_callbacks,  $flyer_delivery_callbacks ,
 				  $nag_callbacks, $indulgence_callbacks
 		);
