@@ -191,11 +191,11 @@ class coopPage
 				 }
 			 }
 			 if($inside){
- 				 $res .= sprintf("%s?%s%s",
+ 				 $res .= htmlentities(sprintf("%s?%s%s",
 								$base, $inside,
-								SID ? "&" . SID  : "");
+								SID ? "&" . SID  : ""));
 			 } else {
-				 $res .= $base .  SID ? "?" . SID  : "";
+				 $res .= htmlentities($base .  SID ? "?" . SID  : "");
 			 }
 			 if($value){
 				 if($popup){

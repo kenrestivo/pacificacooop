@@ -31,8 +31,8 @@ require_once("HTML/Table.php");
 # saves ken's wrists from carpool tunnel syndrome. 
 # i hate html
 ##############
-function tdArray($arr, $align="align='left'", $font = "") {
-	print "\n<tr valign='top' $align>\n";
+function tdArray($arr, $align='align="left"', $font = "") {
+	printf('<tr valign="top" %s>',$align);
     while ( list( $key, $val ) = each($arr)) {
 		printf("\t<td>%s</td>\n", $val);
     }
@@ -47,7 +47,8 @@ function tdArray($arr, $align="align='left'", $font = "") {
 # i hate html
 ##############
 function thArray($arr, $align='align="left"') {
-	print '<tr valign="top" bgcolor="#aabbff" $align>';
+	printf('<tr valign="top" bgcolor="#aabbff" %s>', 
+		   $align);
     while ( list( $key, $val ) = each($arr)) {
 		print "<th>$val</th>";
     }
@@ -155,7 +156,7 @@ function done()
 	*/
 	print "</div><!-- end footer div -->"; // closes out bottom div
 	
-	print"</div><!-- end page div --></body></html> ";
+	print"</body></html> ";
 	session_write_close();		// redundant?
 	exit;
 } #END DONE
