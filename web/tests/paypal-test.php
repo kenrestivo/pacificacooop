@@ -58,7 +58,8 @@ class coopPage
 
 			confessArray($_REQUEST, "test REQUEST");
 			confessArray($_SESSION, "test SESSION");
-
+			confessArray($_SERVER, "test SERVER");
+			
 ///
 			warnDev();
 
@@ -76,6 +77,28 @@ class coopPage
 			topNavigation($this->auth,  getUser($this->auth['uid']));
 
 		}
+
+
+ 
+	function engine(){
+		$tabarr = $this->findTables($_REQUEST);
+		confessArray($tabarr, "tables");
+		foreach($tabarr as $table => $vals){
+			$this->setup($table);
+				//	print_r($cp);
+			// OK copy my dispatcher logic over now
+			switch($_SESSION[$table]['action']){
+			case 'list':
+				print $this->listTable();
+				break;
+			case 'detail':
+				print $this->detailForm($vals['id']);
+				break;
+			}
+		}
+
+	} /// end engine
+
 
 ////utility, not inside of class
 // XXX thsi function, how do you say in your country? it SUCKS.
@@ -136,7 +159,7 @@ class coopPage
 	function detailForm($id = false )
 		{
 	
-			print_r($this);
+			//print_r($this);
 			$id = $id ? $id : $_SESSION[$this->table]['id'];
 			$this->obj->get($id);
 			$this->build =& DB_DataObject_FormBuilder::create ($this->obj);
@@ -144,6 +167,8 @@ class coopPage
 			$form->addElement('html', thruAuth($this->auth, 1));
 			$this->build->useForm($form);
 			$form =& $this->build->getForm();
+			$form->freeze();
+			//print_r($form);
 			if($form->validate ()){
 				$res = $form->process (array 
 									   (&$this->build, 'processForm'), 
@@ -182,6 +207,7 @@ class coopPage
 			$pager_parms = array (
 				'mode' => 'Sliding',
 				'perPage' => 10,
+				'urlVar' => $this->table . '[pageID]',
 				'delta' => 2,
 				'itemData' => $pager_item_data
 				);
@@ -198,13 +224,19 @@ class coopPage
 			return $res;
 		}
 
-	function linkStuff()
+	function showCrosslink($id)
 		{
-			$this->obj->get(1);
-			$this->obj->find();
-			$dosdv = $this->build->getDataObjectSelectDisplayValue(
-				&$this->obj);
-			print "DOSDV $dosdv\n";
+			$myobj = $this->obj;
+			$build =& DB_DataObject_FormBuilder::create (
+				$myobj);
+			$form =& $build->getForm();
+			$form->freeze();
+			//print_r($form);
+			$myobj->get($id);
+			$myobj->find();
+			$dosdv = 
+				$build->getDataObjectSelectDisplayValue(&$obj);
+			return $dosdv;
 		}
 
 
@@ -216,8 +248,9 @@ class coopPage
 			if (is_array ($keys)){
 				$primaryKey = $keys[0];
 			}
-
-
+			
+		//	$this->showCrosslink(1);
+			
 			$tab =& new HTML_Table();
 
 			$pagertext = $this->calcPager();	
@@ -228,9 +261,6 @@ class coopPage
 			// now the table
 			$hdr = 0;
 			while ($this->obj->fetch()){
-				$this->build =& DB_DataObject_FormBuilder::create (
-					$this->obj);
-
 				$ar = array_merge(
 					sprintf('<a href="%s?%s[action]=detail&%s[id]=%s">
 						Edit</a><br>',
@@ -251,11 +281,15 @@ class coopPage
 			}
 
 	
-			//$this->linkStuff();
 
-				
+
+				// this may not actually belong here
 			$res .= sprintf(
 				'<p><a href="%s?%s[action]=detail">Add new</a></p>', 
+				$_SERVER['PHP_SELF'], $this->table) ;
+
+			$res .= sprintf(
+				'<p><a href="%s?%s[action]=done">Close</a></p>', 
 				$_SERVER['PHP_SELF'], $this->table) ;
 
 			$tab->altRowAttributes(1, "bgcolor=#CCCCC", "bgcolor=white");
@@ -268,6 +302,8 @@ class coopPage
 			return $res;
 		}
 
+	
+
 } // END CLASS
 
 
@@ -277,18 +313,7 @@ class coopPage
 
 $cp =& new coopPage();
 $cp->pageTop();
-confessArray($cp->findTables($_REQUEST), "tables");
-foreach($cp->findTables($_REQUEST) as $table => $vals){
-	$cp->setup($table);
-//	print_r($cp);
-	// OK copy my dispatcher logic over now
-	if($_SESSION[$table]['action'] == 'list'){
-		print $cp->listTable();
-	} else {
-		print $cp->detailForm($vals['id']);
-	}
-}
-
+$cp->engine();
 
 done();
 

@@ -2,7 +2,6 @@
 
 //$Id$
 
-require_once('Config.php');		// do i really need this??
 
 $config = parse_ini_file('coop-dbobj.ini',TRUE);
 foreach($config as $class=>$values) {

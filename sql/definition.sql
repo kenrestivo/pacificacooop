@@ -119,9 +119,10 @@ CREATE TABLE companies (
   fax varchar(255) default NULL,
   email_address varchar(255) default NULL,
   territory_id int(32) default NULL,
-  familyid int(32) default NULL,
+  family_id int(32) default NULL,
   do_not_contact datetime default NULL,
   flyer_ok enum('Unknown','Yes','No') default NULL,
+  lead_id int(32) ,
     PRIMARY KEY (company_id)
 ) ;
 
@@ -358,6 +359,7 @@ CREATE TABLE leads (
   relation enum('Relative','Friend','Coworker','Alumni','Other') default NULL,
   source_id int(32) default NULL,
   family_id int(32) default NULL,
+  territory_id int(32) default NULL,
   do_not_contact date default NULL,
   PRIMARY KEY  (lead_id),
 ) ;

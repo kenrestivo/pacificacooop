@@ -22,4 +22,6 @@ class Families_income_join extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_fieldLabels = array ('income_id' => "Check", 
+								 'family_id' => "Co-op Family");
 }
