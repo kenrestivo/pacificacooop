@@ -84,6 +84,7 @@ class PostPaypal
             
             // ok let's go now
             $this->parseCustom();
+
 			if($this->postIncome()){
 				// i hate this dispatching code.
                 if($this->family_id){ 
@@ -124,6 +125,11 @@ class PostPaypal
                 return 0;   
             }
 
+			if($this->paypal_obj->txn_id == '0'){
+				//confessObj($this, 'this has no txn_id?');
+				return 0;
+			}
+
 			foreach (array('txn_id','check_number') as $key => $val){ 
 				$obj->$val = $this->paypal_obj->txn_id;
 			}
@@ -142,7 +148,7 @@ class PostPaypal
            
             $obj->insert();
             $this->income_id = $this->lastInsertID(&$obj); 
-            return 1;
+            return $this->income_id; // just in case
 	}
 
 	function postFamily()
@@ -191,21 +197,23 @@ class PostPaypal
 		
 			
 			$ty =& $this->factoryWrapper('thank_you');
+			//$ty->debugLevel(2);
 			$ty->date_sent = date('Y-m-d');
 			$ty->method = 'WebPage';
 			$ty->insert(); // save the giblets
-			$tyid = $ty->lastInsertID(&$ty);
+			$tyid = $this->lastInsertID(&$ty);
 			
 
 			// link it in. *sigh* tedious.
 			$inc =& $this->factoryWrapper('income');
             $inc->income_id = $this->income_id;
-            if(!$obj->find(true)){
+            if(!$inc->find(true)){
                 user_error("the income was saved, but i didn't find it. Bad.",
 						   E_USER_ERROR);
             }
+			$old = $inc;
 			$inc->thank_you_id = $tyid;
-			$inc->update();
+			$inc->update($old);
 			    
 	}
 

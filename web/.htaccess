@@ -7,3 +7,7 @@ AddCharset iso-8859-1 .php .inc .html
   Order allow,deny
   Deny from all
 </Files>
+
+# just for testing
+#RewriteEngine on
+#RewriteRule ^RSVP$ tests/sane-donate.php
