@@ -1,4 +1,5 @@
 <?php 
+
 //$Id$
 
 require_once("first.inc");
@@ -26,24 +27,25 @@ print "<HTML>
 	";
 
 
-$pv = $_POST ? $_POST : $_GET;
 
 //DB_DataObject::debugLevel(5);
 
 confessArray($_REQUEST, "test REQUEST");
-confessArray($pv, "test gv");
 
-if (!isset ($pv['table'])){
+
 	$form = new HTML_QuickForm('gettable', 'get');
 	$grp[] =& HTML_QuickForm::createElement(
 		'text', 'table', 'Browse table:');
 	$grp[] =& HTML_QuickForm::createElement('submit', null, 'Send');
 	$form->addGroup($grp, NULL, 'Browse table:');
 	$form->display();
+	print "<hr>";
+
+if (!isset ($_REQUEST['table'])){
 	done();
 }
 
-$table = $pv['table'];
+$table = $_REQUEST['table'];
 
 $obj = DB_DataObject::factory ($table);
 if (PEAR::isError($obj)){
@@ -52,10 +54,10 @@ if (PEAR::isError($obj)){
 
 
 ////////////// the detail form
-if($pv['action'] == 'detail'){
+if($_REQUEST['action'] == 'detail'){
 
-	if (isset ($pv['id'])){
-		$obj->get ($pv['id']);
+	if (isset ($_REQUEST['id'])){
+		$obj->get ($_REQUEST['id']);
 	}
 
 
@@ -73,7 +75,6 @@ if($pv['action'] == 'detail'){
 		$res = $form->process (array (&$build, 'processForm'), false);
 		if ($res){
 			$obj->debug('processed successfully', 'detailform', 0);
-			//try refresh method??
 			header(sprintf('Location: %s?action=list&table=%s', 
 						   $_SERVER['PHP_SELF'], $table));
 		}
@@ -81,7 +82,7 @@ if($pv['action'] == 'detail'){
 	}
 
 	$form->display();
- 
+	
 	done();
 }
 
