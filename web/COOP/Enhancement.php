@@ -122,7 +122,7 @@ class Enhancement
             $co->obj->selectAdd(
                 "date_format(event_date, '%Y-%m-%d') as date_formatted");
             $co->obj->find(true);
-            $this->cutoffDatesArray['fall'] = $co->obj->event_date;
+            $this->cutoffDatesArray['fall'] = $co->obj->date_formatted;
             
             //spring cutoff
             $co = new CoopObject(&$this->cp, 'calendar_events', &$top);
