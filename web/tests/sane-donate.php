@@ -4,6 +4,7 @@
 
 chdir("../");                   // XXX only for "test" dir hack!
 require_once('CoopPage.php');
+require_once('CoopObject.php');
 require_once('HTML/QuickForm.php');
 require_once('paypal.php');
 
@@ -33,7 +34,18 @@ $form = new HTML_QuickForm( 'Springfest RSVP', 'rsvpform');
 $form->addElement('text', 'ticket_quantity', 'Number of tickets: ');
 
 //popup for sponsor levels: grab from dbdo
-$form->addElement('select', 'sponsorship_type', 'Donation Amount', &$nothing);
+$spon =& new CoopObject(&$cp, 'sponsorship_types', &$nothing);
+$spon->obj->school_year = '2004-2005';
+$spon->obj->orderBy('sponsorship_price desc');
+$spon->obj->find();
+while($spon->obj->fetch()){
+	$stypes[$spon->obj->sponsorship_price] = 
+		$spon->obj->sponsorship_name ;
+}
+//confessArray($stypes, 'stypes');
+
+$form->addElement('select', 'sponsor_amount', 'Sponsorship Level', 
+				  $stypes);
 
 // add Other... and dynamically add OTHER box based on its presence
 $form->addElement('text', 'other_amount', 'Other');
