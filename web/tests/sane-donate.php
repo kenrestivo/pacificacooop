@@ -58,9 +58,13 @@ function donateDispatcher(&$cp, $action = false)
 		if(!$found){
 			printf("<p>I'm sorry, there is no such code as %d. You may have mistyped or the code on your invitation may not be legible.</p>",
 				   $_REQUEST['response_code']);
-			print $cp->selfURL("Please try again.", 
-							   array($_REQUEST['response_code'],
-									 'action' => 'getcode'));
+			// nice idea, but fux0red
+			//$_SESSION['response_code'] = NULL;
+			//$_REQUEST['response_code'] = NULL;
+			//donateDispatcher(&$cp, 'getcode');
+ 			print $cp->selfURL("Please try again.", 
+ 							   array($_REQUEST['response_code'],
+ 									 'action' => 'getcode'));
 			break;
 		}
 		// ripped from thankyou, mostly. should abstract it out!
@@ -69,7 +73,8 @@ function donateDispatcher(&$cp, $action = false)
 										   $top->obj->last_name
 									));
 
-		foreach(array('title', 'company_name', 'address1', 'address2') 
+		// note: it's company in leads, company_name in companies. fock.
+		foreach(array('title', 'company', 'address1', 'address2') 
 				as $var)
 		{
 			if($top->obj->$var){
@@ -96,13 +101,21 @@ function donateDispatcher(&$cp, $action = false)
 		//NOTE whatever calls this must set "leadid"
 		$ppf =& new PayPalForm();
 		$form =& $ppf->buildRSVP(&$cp);
-		
-		print $form->toHTML();
+		// make sure dispatcher brings me back here for validation. duh.
+		$form->addElement('hidden', 'action', 'newrsvp');
+		if($form->validate()){
+			//$form->freeze();
+			//print $form->toHTML();
+			donateDispatcher(&$cp, 'confirmrsvp');
+		} else {
+			print $form->toHTML();
+		}
 		break;
 		
 	case 'confirmrsvp':
-		// XXX will i use process() here instead?
+		// the setup to call the proper paypal form
 		// something must set SOURCE
+		print "confirm";
 		break;
 		
 	default:

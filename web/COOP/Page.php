@@ -74,7 +74,7 @@ class coopPage
 			
 			
 			$this->confessArray($_REQUEST, "test REQUEST");
-			$this->confessArray($_SESSION, "test SESSION");
+			$this->confessArray($_SESSION, "test SESSION (prior to request being processed)");
 			$this->confessArray($_SERVER, "test SERVER", 2);
 			
 			
