@@ -360,23 +360,27 @@ logIn($auth)
 					description => "User is logged in"
 					)
 	);
-
-	fwrite(STDERR, "logIn(): entering %s\n",
-		$states[$auth['state']]['description']);
-
 	
-	// sanity check the struct passed in
-	while (list($key, $val) = each($states[$auth['state']['required'])){
-		if(!$auth[$val]){
-			fwrite(STDERR, "ERROR! $val required for state. logging out\n");
-			$auth['state'] = 'loggedout'; // force it outta here
+	do {
+
+		fwrite(STDERR, "logIn(): entering %s\n",
+			$states[$auth['state']]['description']);
+
+		
+		// sanity check the struct passed in
+		while (list($key, $val) = each($states[$auth['state']['required'])){
+			if(!$auth[$val]){
+				fwrite(STDERR, "ERROR! $val required for state. logging out\n");
+				$auth['state'] = 'loggedout'; // force it outta here
+			}
 		}
-	}
+		reset($auth);
 
-	// dispatch the appropriate action for this state, and collect result
-	return($states[$auth['state']]['func']($auth));
-	// TODO: or, do i do() while; looking for some flag in the auth?
+		// dispatch the appropriate action for this state, and collect result
+		$newauth = $states[$auth['state']]['func']($auth);
+	} while (/* TODO some test! */ );
 
+	return($newauth);
 
 }/* END LOGIN  */
 
