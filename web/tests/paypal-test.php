@@ -156,7 +156,7 @@ class coopPage
 			//print "<hr>";
 		}
 
-	function selfURL($value, $inside = false)
+	function selfURL($value = false, $inside = false)
 		{
 			$base = $_SERVER['PHP_SELF'];
 			 if(($pos = strpos($base, '?')) !== false) {
@@ -173,8 +173,9 @@ class coopPage
 			 } else {
 				 $res .= $base .  SID ? "?" . SID  : "";
 			 }
-
-			 $res .= sprintf('">%s</a></p>', $value);
+			 if($value){
+				 $res .= sprintf('">%s</a></p>', $value);
+			 }
 			 return $res;
 		}
 
@@ -189,7 +190,7 @@ class coopPage
 			$form->addElement('html', thruAuth($this->auth, 1));
 			$this->build->useForm($form);
 			$form =& $this->build->getForm();
-			$form->freeze();
+			//$form->freeze();
 			//print_r($form);
 			if($form->validate ()){
 				$res = $form->process (array 
