@@ -449,7 +449,7 @@ create table enhancement_hours (
     parentsid int(32),
     enhancement_project_id int(32) not null,  -- join
     work_date date,
-    hours int(5),
+    hours decimal(4,2),
     primary key (enhancement_hour_id)
 );
 
