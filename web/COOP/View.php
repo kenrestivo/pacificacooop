@@ -39,6 +39,14 @@ class coopView extends CoopObject
 	var $legacyPerms; 			// cache of permissions for this page ($p)
 	//var $legacyFields;  //YAGNI. i hope
 
+	function createLegacy($callbacks, $perms)
+		{
+			// TODO calculate if not provided
+			$this->legacyPerms = $perms;
+				// TODO guess if not provided?
+			$this->legacyCallbacks = $callbacks; 
+		}
+
 	function getLinks()
 		{
 			

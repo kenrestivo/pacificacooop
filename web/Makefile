@@ -98,10 +98,10 @@ sync-live: commit-live download-live
 sync-dev: download-dev
 
 diff-live:
-	(cd $(PLAYGROUND); cvs diff -r livesite -r HEAD > $(LIVEHERE).temp.diff )
+	(cd $(PLAYGROUND); cvs diff -kk -r livesite -r HEAD > $(LIVEHERE).temp.diff )
 
 diff-dev:
-	(cd $(PLAYGROUND); cvs diff -r dev_online -r HEAD > $(DEVHERE).temp.diff )
+	(cd $(PLAYGROUND); cvs diff -kk -r dev_online -r HEAD > $(DEVHERE).temp.diff )
 
 tags:
 	etags *
