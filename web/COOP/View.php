@@ -34,7 +34,7 @@ class coopView extends CoopObject
 {
 	var $backlinks;				// list of links that are linked FROM here
 	var $forwardLinks;
-
+	var $parentSummary; 		// miserable hack. summary of top parent object
 
 	function getLinks()
 		{
@@ -63,7 +63,7 @@ class coopView extends CoopObject
 		}
 	
 	// formats object is current in this object, um, as a table
-	function simpleTable($summary = false)
+	function simpleTable()
 		{
 			$found = $this->obj->find();
 
@@ -204,11 +204,11 @@ class coopView extends CoopObject
 			$tab->addRow($res, 'bgcolor=#9999cc', 'TH'); 
 		}
 
-	function tableTitle($summary = false)
+	function tableTitle()
 		{
 			$res = sprintf("<hr><h2>%s %s</h2>", 
 						   $this->obj->kr_longTitle ? $this->obj->kr_longTitle : $this->table,
-						   $summary ? "for " . $summary : "");
+						   $this->parentSummary ? "for " . $this->parentSummary : "");
 														
 			return $res;
 		}
