@@ -33,6 +33,9 @@ class IPN
 			// read the post from PayPal system and add 'cmd'
 			$req = 'cmd=_notify-validate';
 
+            $url = $_POST['test_ipn'] ? 'www.sandbox.paypal.com' :
+                'www.paypal.com';
+
 			foreach ($_POST as $key => $value) {
 				$value = urlencode(stripslashes($value));
 				$req .= "&$key=$value";
@@ -42,7 +45,7 @@ class IPN
 			$header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
 			$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
 			$header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
-			$fp = fsockopen ('www.paypal.com', 80, $errno, $errstr, 30);
+			$fp = fsockopen ($url, 80, $errno, $errstr, 30);
 
 			if (!$fp) {
 				// HTTP ERROR
