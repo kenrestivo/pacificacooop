@@ -207,3 +207,15 @@ carrie will try to get the labels printed with the unique id
 	treckeme perhaps? carol eggimann?
 
 notes re lead distribution
+
+------
+Thu Feb 19 2004 08:28:43 AM
+
+donations received from LEADS will be entered by danielle AND ann edminister
+	so... the check-entering WILL need to dispatch properly!!
+
+-----------
+Thu Feb 19 2004 05:37:25 PM
+
+nag only shows those who needs to be nagged, at least by default
+	privs: only for carrie
