@@ -5,7 +5,7 @@
 chdir("../");                   // XXX only for "test" dir hack!
 require_once("utils.inc");
 require_once('CoopPage.php');
-require_once('CoopMenu.php');
+require_once('CoopView.php');
 
 $debug = 1;
 
@@ -14,10 +14,16 @@ $debug = 1;
 
 
 
-$cp =& new coopPage($debug);
+$cp = new coopPage( $debug);
 $cp->pageTop();
 
-done();
+
+
+$view =& new CoopView(&$cp, 'companies');
+$view->obj->find();
+print $view->simpleTable();
+
+done ();
 
 ////KEEP EVERTHANG BELOW
 

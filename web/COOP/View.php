@@ -26,7 +26,7 @@ require_once("HTML/Table.php");
 require_once 'HTML/QuickForm.php';
 require_once('DB/DataObject/FormBuilder.php');
 require_once('Pager/Pager.php');
-
+require_once('object-config.php');
 
 //////////////////////////////////////////
 /////////////////////// COOP VIEW CLASS
@@ -39,17 +39,17 @@ class coopView
 	var $pager_start;
 	var $table;
 
-	function CoopView (&$page, $table = false )
+	function CoopView (&$page, $table )
 		{
 
 			$this->page = $page;
-			$this->table = $table ? $table : $_SESSION['toptable'];
+			$this->table = $table ;
 			
 			$this->obj =& DB_DataObject::factory ($this->table); // & instead?
 			if (PEAR::isError($obj)){
 				die ($obj->getMessage ());
 			}
-//			print_r($this->obj);
+			confessObj($this->obj, "object for $this->table");
 		
 		}
  
@@ -138,7 +138,15 @@ class coopView
 			return $res;
 		}
 	
-
+	// takes whatever object is current in this object, and formats it, um, as a table
+	function simpleTable()
+		{
+			$tab =& new HTML_Table();
+			while($this->obj->fetch()){
+				$tab->addRow(array_values($this->obj->toArray()));
+			}
+			return $tab->toHTML();
+		}
 	
 
 } // END COOP VIEW CLASS
