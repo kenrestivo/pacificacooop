@@ -388,8 +388,8 @@ create table nag_indulgences(
     nag_indulgence_id int(32) not null unique auto_increment,
 	note varchar(255), 
 	granted_date date,
-	indulgence_type enum ('Everything', 'Family Auctions', 'Raffle Fee', 
-						'Solicitation Auctions' ),
+	indulgence_type enum ('Everything', 'Invitations', 'Family Auctions', 
+					'Raffle Fee', 'Solicitation Auctions' ),
 	familyid int(32), 
     primary key (nag_indulgence_id)
 );
