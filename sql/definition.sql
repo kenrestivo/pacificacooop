@@ -146,7 +146,8 @@ create table coop.nags (
     nagsid int(32) not null auto_increment,
 	why enum ('Insurance', 'Springfest', 'Other'),
 	how enum ('Email', 'Phone', 'CommsFolder', 'InPerson'),
-    parentsid int(32),
+    familyid int(32),
+    naguid int(32,
 	done datetime,
 	primary key (nagsid)
 );
@@ -183,6 +184,7 @@ create table coop.figlue (
 );
 
 -- glue table for many-to-many: leads to income
+--- TODO: need separate one for businesses? or same one?
 create table coop.liglue (
     liglueid int(32) not null auto_increment,
 	incid int(32),
