@@ -92,7 +92,7 @@ class coopView extends CoopObject
 					return false;
 				}
 			}
-			$tab =& new HTML_Table();
+			$tab = new HTML_Table(' bgcolor="#ffffff"');	
 		
 			$tab->addRow($this->makeHeader(), 
 						 'bgcolor=#aabbff align=left', 'TH'); 
@@ -105,9 +105,9 @@ class coopView extends CoopObject
 			
 			$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
 								   'bgcolor="#ccccff"');
-			$res .= $this->tableTitle();
-			$res .= $tab->toHTML();
-			return $res;
+
+			
+			return $this->tableTitle($tab->toHTML());
 
 		}
 
@@ -129,10 +129,8 @@ class coopView extends CoopObject
 			
 			}
 
-			$res .= $this->tableTitle();
-			$res .= $tab->toHTML();
 			
-			return $res;
+			return $this->tableTitle($tab->toHTML());
 	
 		}
 
@@ -269,14 +267,18 @@ class coopView extends CoopObject
 			return ucwords($this->table);
 		}
 
-	function tableTitle()
+	function tableTitle($contents)
 		{
-			$res = sprintf("<hr><h2>%s %.50s</h2>", 
-						   $this->title(),
-						   $this->parentCO ? 
-						   "for " . $this->parentCO->getSummary() : "");
-														
-			return $res;
+			$title = sprintf("%s %.50s", 
+							 $this->title(),
+							 $this->parentCO ? 
+							 "for " . $this->parentCO->getSummary() : "");
+		
+			$toptab = new HTML_Table(' bgcolor="#aa99ff" cellpadding="0" cellspacing="0"');
+			$toptab->addRow(array($title, $this->actionButtons()), 'align="center"', "TH");
+			$toptab->addRow(array($contents), 'colspan="2"');
+			
+			return $toptab->toHTML();
 		}
 
 	function oneLineTable($find= 1)
