@@ -141,6 +141,7 @@ http://www.pacificacoop.org/
 
 			//un-arrayify the ones that are arrays
 			// and format them html-like
+			//confessArray($this->address_array, 'addr');
 			$subst['ADDRESS'] = implode('<br>', $this->address_array);
 			$subst['ITEMS'] = implode(count($this->items_array) > 2 ?
 											', ' : " and ", 
@@ -254,6 +255,8 @@ http://www.pacificacoop.org/
 			
 			//sanity czech
 			if(!$this->email){
+				$this->cp->mailError('no email address? huh?', 
+									 print_r($this, true));
 				user_error(
 					"thankyou::sendEmail(): no email address for $this->name!",
 						   E_USER_ERROR);
@@ -320,8 +323,13 @@ http://www.pacificacoop.org/
 	// XXX ugly hack. i'm passing in the type of save, as the arg $save
 	// which really should just be a true/false flag. bah.
 	// the right thing to do is to separate finding, substituting, and saving
+			// returns true when it saves and/or finds
 	function findThanksNeeded($pk, $id, $save = false)
 		{
+
+			// clear out some items in case i re-use objects
+			$this->address_array = array(); 
+			$this->items_array = array(); 
 
 			// if i'm going to save objects, don't createlegacy them.
 			// save MY view objects, not the DBDO objects,
@@ -331,15 +339,19 @@ http://www.pacificacoop.org/
 			
 			// XXX BUG! save assumes there really *are* thankyous needed
 			// do NOT use this anywhere that you're not sure of that.
-	
-				if($save){
+				/// the trick is to call findThanksNeeded *twice*
+				/// once with $save = false, and again to actually save.
 
+				if($save){
+					
 					// first make sure i actually have stuff to save first!
 					$safety = new ThankYou(&$this->cp);
 					$safety->findThanksNeeded($pk, $id, false);
 					if(count($safety->items_array) < 1){
-						//it's been done before....
-						return;
+						$this->cp->mailError('Find is out of sync', 
+											 print_r($this, true));
+						//this find is out of sync with the one in show
+						return false;
 					}
 
 					// save a new thankyou, and cache ists insertid	
@@ -351,7 +363,7 @@ http://www.pacificacoop.org/
 					$co->obj->insert();
 					$this->thank_you_id = $co->lastInsertID();
 					// do audit AFTER last insertid above!
-					$co->saveAudit(false);
+					$co->saveAudit(true);
 				}
 				
 				// COMPANY
@@ -361,6 +373,11 @@ http://www.pacificacoop.org/
 			$co->obj->find(true);
 
 			// format company
+			if($co->obj->first_name || $co->obj->last_name){
+				$this->name = sprintf('%s %s', $co->obj->first_name, 
+									  $co->obj->last_name);
+			}
+
 			foreach(array('company_name', 'address1', 'address2') as $var){
 				if($co->obj->$var){
 					$this->address_array[] = $co->obj->$var;
@@ -370,10 +387,9 @@ http://www.pacificacoop.org/
 											 $co->obj->city,
 											 $co->obj->state,
 											 $co->obj->zip);		
-			if($co->obj->first_name || $co->obj->last_name){
-				$this->name = sprintf('%s %s', $co->obj->first_name, 
-									  $co->obj->last_name);
-			}
+			$this->email = $co->obj->email_address;
+
+			//confessArray($this->address_array, 'addrarray- co');
 			//INCOME
 			//find income
 			$co = new CoopObject(&$this->cp, 'companies_income_join', &$top);
@@ -458,6 +474,12 @@ http://www.pacificacoop.org/
 	
 			// ugh. go get the soliciting parent
 			$this->guessParents($soliciting_families);
+
+			if(!count($this->items_array)){
+				return false;
+			}
+			
+			return true;
 		}
 
 
@@ -485,7 +507,7 @@ http://www.pacificacoop.org/
 			if(!array_sum($company_id_array)){
 				$this->cp->mailError('EMPTY thank you note found',
 									 print_r($this, true));
-				user_error("no company_id's in array! this shouldn't happen",
+				user_error(sprintf("no company_id's in array for thankyouid %d! this means you have a corrupted database. stop immediately.", $this->thank_you_id),
 						   E_USER_ERROR);
 			}
 			foreach(array_unique($company_id_array) as $cid){
@@ -583,12 +605,19 @@ http://www.pacificacoop.org/
 				$company_guess_hack[] =$sf->obj->company_id;
 			}
 
+			if(!count($this->items_array)){
+				$this->cp->mailError('EMPTY thank you note', 
+									 print_r($this, true));
+				return false;
+			}
 		
 			// ugh. go get the soliciting parent
 			$this->guessParents($soliciting_families);
 
 			//  COMPANIES BROKEN! have to guess from income or inkind. bah. 
 			$this->guessCompany($company_guess_hack);
+
+			return true;
 		}
 
 	function repairOrphaned()
@@ -621,7 +650,7 @@ http://www.pacificacoop.org/
 				$mistake_summary .= print_r($this->cp, true);
 				
 				// now send it
-				$this->cp->mailError("ORPHANED thank you note found",
+				$this->cp->mailError("Thank you note found whose thank_you_id points to no records in the db..",
 									 $mistake_summary);
 			}
 		} // END REPAIRORPHANS	

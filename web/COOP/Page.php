@@ -189,51 +189,72 @@ class coopPage
 				$base = $_SERVER['PHP_SELF'];
 			}
 			 if(($pos = strpos($base, '?')) !== false) {
-                $base = substr($base, 0, $pos);
-            }
+				 $base = substr($base, 0, $pos);
+			 }
 			 if($value){
 				 $res .= '<p><a href="';
-				 if($popup){
-					 $res .= "javascript:popUp('";
-				 }
 			 }
-			 if($inside){
-				 if(is_array($inside)){
-					 foreach($inside as $var => $val){
-						 $pairs[] = sprintf('%s=%s', $var, 
-											htmlentities($val));
-					 }
-					 if(SID){
-						 $pairs[] = SID;
-					 }
-					 $inside = implode('&', $pairs);
-				 } 
-				 // NOTE i can't call htmlentities on string $insides
-				 // because i don't want to fuck up the &'s
-				 $res .=sprintf("%s?%s%s",
-								$base, $inside,
-								SID ? "&" . SID  : "");
-			 } else {
-				 $res .= htmlentities($base .  SID ? "?" . SID  : "");
+
+			 if(!$popup){
+				 $res .= $this->formatURLVars($base, $inside);
 			 }
+
 			 if($value){
+				 $res .= '" ';
 				 if($popup){
-					 $res .= "')";
+					 $res .= sprintf('onClick="popUp(\'%s\')"',
+									 $this->formatURLVars($base, $inside));
 				 }
-				 $res .= sprintf('">%s</a></p>', $value);
+				 $res .= sprintf('>%s</a></p>', 
+								 $value);
 			 }
 			 return $res;
 		}
 
+
+	function formatURLVars($base, $inside = false)
+		{
+			
+			if($inside){
+				if(is_array($inside)){
+					foreach($inside as $var => $val){
+						$pairs[] = sprintf('%s=%s', $var, 
+										   htmlentities($val));
+					}
+					if(SID){
+						$pairs[] = SID;
+					}
+					$inside = implode('&', $pairs);
+				} 
+				// NOTE i can't call htmlentities on string $insides
+				// because i don't want to fuck up the &'s
+				$res .= sprintf("%s?%s%s",
+							   $base, $inside,
+							   SID ? "&" . SID  : "");
+			} else {
+				$res .= htmlentities($base .  SID ? "?" . SID  : "");
+			}
+	
+			return $res;
+		}
+
+
 	function mailError($subject, $body)
 		{
+
+			$body .= sprintf("--- BACKTRACE--\n%s", 
+							 print_r(debug_backtrace(), true));
+
+
 			// TODO: blow away the global from legacy, use var
+
+
 			global $coop_sendto;
 			$to =  $coop_sendto['email_address'];
 			
 			$headers['From']    = 'bugreport@pacificacoop.org';
 			$headers['To']      = 	$to;
-			$headers['Subject'] = 'ORPHANED thank-you notes found';
+			$headers['Subject'] = $subject;
 			
 			$mail_object =& Mail::factory('smtp', $params);
 			

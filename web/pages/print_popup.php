@@ -76,18 +76,29 @@ $u = $cp->userStruct; // createlegacy keeps this for me
 $fs = inputToFieldStruct($_REQUEST['entry0'], $fields);
 //confessArray($fs, "fs");
 
+
 $ty =& new ThankYou(&$cp);
 $ty->repairOrphaned();
+
+
+//confessArray($_REQUEST, 'REQ');
 
 switch($_REQUEST['subaction']){
  case 'reprint':
 	$tid = $fs['thank_you_id']['def'];
+	$ty =& new ThankYou(&$cp);
 	 $ty->recoverExisting($tid);
 	 $ty->substitute();
 	 print $ty->toHTML();
 	 break;
  case 'print':
-	$fs['family_id']['def'] = $u['family_id'];
+	 $fs['family_id']['def'] = $u['family_id']; // hack, but it works
+	 $ty =& new ThankYou(&$cp);
+	 if(!$ty->findThanksNeeded($_REQUEST['pk'], $_REQUEST['id'])){
+		 print "<p>This thank-you has already been entered. 
+			Close this window and check 'View/Edit' in the other window.</p>";
+		 break;
+	 }
 	 $ty->findThanksNeeded($_REQUEST['pk'], $_REQUEST['id'], 'Letter');
 	 $ty->substitute();
 	 print $ty->toHTML();

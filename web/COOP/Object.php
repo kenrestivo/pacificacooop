@@ -236,6 +236,8 @@ class coopObject
 			
 			// one more sanity czech
 			if(!$aud->obj->index_id){
+				$this->page->mailError('NULL audit trail attempt', 
+									   print_r($this, true));
 				user_error("something very bad happened when saving audit trail. index id can't be null.",
 						   E_USER_ERROR);
 			}
