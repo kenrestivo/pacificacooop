@@ -144,7 +144,7 @@ http://www.pacificacoop.org/
 			$subst['FROM'] = sprintf('<br><br><br>%s', $this->from);
 			$subst['ORDINAL'] = sprintf('<sup>%s</sup>', $this->ordinal);
 
-			
+
 	  			//confessObj($this, 'this');
 			foreach(array_keys($subst) as $key){
 				$from[] = sprintf('[:%s:]', $key);
@@ -228,6 +228,17 @@ http://www.pacificacoop.org/
 			$subst['ITEMS'] = implode(count($this->items_array) > 2 ? 
 											', ' : ' and ', 
 											$this->items_array);
+
+			/// DEAR IN THE HEADLIGHTS HACK!
+			user_error(sprintf("[%s] is name", $this->name), E_USER_NOTICE);
+			if(!trim($this->name)){
+				user_error("$this->name is not name. yanking dear", 
+						   E_USER_NOTICE);
+ 				//yank the line beginning with 'Dear'
+				// remove it from the template!
+				$this->template = preg_replace('/\nDear.+?\n/', "\n\n", 
+											   $this->template);
+			}
 
 			return $subst;
 		}
@@ -335,6 +346,14 @@ http://www.pacificacoop.org/
 					$co->obj->method = $save; /// HACK!
 					$co->obj->insert();
 					$this->thank_you_id = $co->lastInsertID();
+					
+					// the audit trail dude
+					// TODO copy/paste this later into my framework
+					$aud =& new CoopView(&$this->cp, 'audit_trail', &$top);
+					$aud->obj->table_name = $co->obj->__table; // or whatever
+					$aud->obj->index_id = $this->thank_you_id;
+					$aud->obj->audit_user_id = $this->cp->auth['uid'];
+					$aud->obj->insert();
 				}
 				
 				// COMPANY
@@ -353,9 +372,10 @@ http://www.pacificacoop.org/
 											 $co->obj->city,
 											 $co->obj->state,
 											 $co->obj->zip);		
-			$this->name = sprintf('%s %s', $co->obj->first_name, 
-								  $co->obj->last_name);
-
+			if($co->obj->first_name || $co->obj->last_name){
+				$this->name = sprintf('%s %s', $co->obj->first_name, 
+									  $co->obj->last_name);
+			}
 			//INCOME
 			//find income
 			$co = new CoopObject(&$this->cp, 'companies_income_join', &$top);
@@ -460,13 +480,21 @@ http://www.pacificacoop.org/
 
 		}
 
+	// only returns the FIRST company found
 	function guessCompany($company_id_array)
 		{
+
+			if(!array_sum($company_id_array)){
+				user_error("no company_id's in array! this shouldn't happen",
+						   E_USER_ERROR);
+			}
 			foreach(array_unique($company_id_array) as $cid){
 				$co =& new CoopObject(&$this->cp, 'companies', 
 									   &$top);
 				$co->obj->company_id = $cid;
-				$co->obj->find(true);
+				if($co->obj->find(true)){
+					break;
+				}
 			}
 
 			foreach(array('company_name', 'address1', 'address2') as $var){
@@ -502,13 +530,14 @@ http://www.pacificacoop.org/
 			//INCOME
 			$real = new CoopView(&$this->cp, 'income', &$co);
 			$real->obj->thank_you_id = $this->thank_you_id;
+			$save =  $real->obj; // need to cache it b4 we search
 			$found = $real->obj->find();
 			while($real->obj->fetch()){
 				$cashtotal += $real->obj->payment_amount;
 				// OMG. this is so fucking ugly, i can't describe it
 				$sf =& new CoopObject(&$this->cp , 
 									  'companies_income_join', &$real);
-				$sf->obj->joinAdd($real->obj);
+				$sf->obj->joinAdd($save);
 				$sf->obj->find(true);
 				$soliciting_families[]= $sf->obj->family_id;
 				$company_guess_hack[] =$sf->obj->company_id;
@@ -522,6 +551,7 @@ http://www.pacificacoop.org/
 			$real = new CoopView(&$this->cp, 'auction_donation_items', 
 								 &$co);
 			$real->obj->thank_you_id = $this->thank_you_id;
+			$save =  $real->obj; // need to cache it b4 we search
 			$found = $real->obj->find();
 			while($real->obj->fetch()){
 				$this->items_array[] = sprintf("%s (total value $%01.02f)",
@@ -529,7 +559,7 @@ http://www.pacificacoop.org/
 											   $real->obj->item_value);
 				$sf =& new CoopObject(&$this->cp , 
 									  'companies_auction_join', &$real);
-				$sf->obj->joinAdd($real->obj);
+				$sf->obj->joinAdd($save);
 				$sf->obj->find(true);
 				$soliciting_families[]= $sf->obj->family_id;
 				$company_guess_hack[] =$sf->obj->company_id;
@@ -539,6 +569,7 @@ http://www.pacificacoop.org/
 			$real = new CoopView(&$this->cp, 'in_kind_donations', 
 								 &$co);
 			$real->obj->thank_you_id = $this->thank_you_id;
+			$save =  $real->obj; // need to cache it b4 we search
 			$real->obj->find();
 			while($real->obj->fetch()){
 				$this->items_array[] = sprintf("%s total value $%01.02f",
@@ -546,7 +577,7 @@ http://www.pacificacoop.org/
 											   $real->obj->item_value);
 				$sf =& new CoopObject(&$this->cp , 
 									  'companies_in_kind_join', &$real);
-				$sf->obj->joinAdd($real->obj);
+				$sf->obj->joinAdd($save);
 				$sf->obj->find(true);
 				$soliciting_families[]= $sf->obj->family_id;
 				$company_guess_hack[] =$sf->obj->company_id;

@@ -64,6 +64,10 @@ while($top->obj->fetch()){
 		$join = new CoopObject(&$cp, 'companies_in_kind_join', &$top);
 		$join->obj->in_kind_donation_id = $id;
 		$join->obj->company_id = $co->obj->company_id;
+
+		if(!($id && $co->obj->company_id)){
+			user_error("cowardly refusing to enter non-null companyid and/or inkind id", E_USER_ERROR);
+		}
 		// insert the join
 		$join->obj->insert();
 		
