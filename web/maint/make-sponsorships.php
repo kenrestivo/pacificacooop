@@ -112,7 +112,10 @@ switch($_REQUEST['action']){
 	 break;
 	 
  default:
+	 $co =& new CoopObject(&$cp, 'sponsorship_types', &$atd);
+	 $atd->obj->joinAdd($co->obj);
 	 $atd->school_year = findSchoolYear();
+	 $atd->obj->orderBy('sponsorship_price desc');
 	 print $atd->simpleTable();
 		 
 

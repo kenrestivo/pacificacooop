@@ -97,36 +97,30 @@ class Sponsorship
 	// checks activity for this entity, and returns sponsorlevel
 	function calculateSponsorshipType($id, $idname)
 		{
-			// TODO check company/lead here, like in thankyou
-			$hack = array(
-				'company_id' => array(
-					'table' => 'companies',
-					'join' => 'companies_income_join'
-					),
-				'lead_id' => array(
-					'table' => 'leads',
-					'join' => 'leads_income_join'
-					));
+			$hack = array('company_id' => 'findSolicitSponsors',
+						  'lead_id' => 'findLeadSponsors');
+			return $this->$hack[$idname]($id);
+		}
 
+
+	function findSolicitSponsors($id)
+		{
 			// i curse the very day that i agreed to do this goddamned project
-			$co =& new CoopObject(&$this->cp, $hack[$idname]['table'], 
-								  &$nothing);
+			$co =& new CoopObject(&$this->cp, 'companies', &$nothing);
 			//$co->obj->debugLevel(2);
 			$co->obj->query(sprintf("
     select  sum(payment_amount) as payment_amount
-     from %s as cinj
+     from companies_income_join as cinj
      left join income 
               on cinj.income_id = 
                 income.income_id
         where school_year = '%s'
-				and cinj.%s = %d
-        group by cinj.%s",
-									$hack[$idname]['join'],
-									$this->schoolYear, 
-									$idname, $id, $idname));
+				and cinj.company_id = %d
+        group by cinj.company_id",
+									$this->schoolYear,  $id));
 			$co->obj->fetch(); // there can be, only one
 				
-			if($co->obj->payment_amount){
+			if($co->obj->payment_amount > 0){
 				// there's money there, check its sponsorship level
 				foreach($this->sponsorTypes as $typeid => $amt){
 					if($co->obj->payment_amount >= $amt){
@@ -137,20 +131,78 @@ class Sponsorship
 
 			// there's no money,  no dice
 			return false;
+			
+
+		}
+
+
+	function findLeadSponsors($id)
+		{
+			// i curse the very day that i agreed to do this goddamned project
+			$co =& new CoopObject(&$this->cp, 'leads', &$nothing);
+			//$co->obj->debugLevel(2);
+			$query = sprintf("select leads.lead_id,
+        coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0) 
+				as payment_amount
+from leads
+left join 
+    (select lead_id, sum(payment_amount) as total
+     from leads_income_join as linj
+     left join income 
+              on linj.income_id = 
+                income.income_id
+        where income.school_year = '%s'
+        group by linj.lead_id) 
+    as inc
+        on leads.lead_id = inc.lead_id
+left join 
+    (select lead_id, sum(payment_amount) as total
+     from tickets
+     left join income 
+              on tickets.income_id = 
+                income.income_id
+        where income.school_year = '%s'
+        group by tickets.lead_id) 
+    as tic
+        on tic.lead_id = leads.lead_id
+group by leads.lead_id
+having payment_amount > 0 and leads.lead_id = %d
+order by payment_amount desc
+        ",
+							 $this->schoolYear, $this->schoolYear, $id);
+
+			$co->obj->query($query);
+
+		$co->obj->fetch(); // there can be, only one
+				
+			if($co->obj->payment_amount){
+				//print "GOT ONE $id " . $co->obj->payment_amount;
+				// there's money there, check its sponsorship level
+				foreach($this->sponsorTypes as $typeid => $amt){
+					if($co->obj->payment_amount >= $amt){
+						return $typeid;
+					}
+				}
+			} 
+
+			// there's no money,  no dice
+			return false;
+
+
 		}
 
 
 	function getSponsorTypes()
 		{
-				$sp =& new CoopObject(&$this->cp, 'sponsorship_types', 
-									  &$nothing);
-				$sp->obj->school_year = $this->schoolYear;
-				$sp->obj->orderBy('sponsorship_price desc');
-				$sp->obj->find();
-				while($sp->obj->fetch()){
-					$this->sponsorTypes[$sp->obj->sponsorship_type_id] = 
-						$sp->obj->sponsorship_price;
-				}
+			$sp =& new CoopObject(&$this->cp, 'sponsorship_types', 
+								  &$nothing);
+			$sp->obj->school_year = $this->schoolYear;
+			$sp->obj->orderBy('sponsorship_price desc');
+			$sp->obj->find();
+			while($sp->obj->fetch()){
+				$this->sponsorTypes[$sp->obj->sponsorship_type_id] = 
+					$sp->obj->sponsorship_price;
+			}
 		}
 
 
