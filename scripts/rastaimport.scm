@@ -9,6 +9,9 @@
 			 (ice-9 slib))
 (require 'printf)
 
+(write-line "XXX fix the worker thing, it doesn't work!")
+generate error here
+
 (define *rasta* (make-hash-table 3))
 
 (define *school-year* "2004-2005")		; should prolly calculate this too

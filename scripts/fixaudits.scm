@@ -3,6 +3,7 @@
 ;; (load "/mnt/kens/ki/proj/coop/scripts/fixaudits.scm")
 
 (use-modules (ice-9 slib)
+			 (kenlib)
 			 (database simplesql))
 (require 'printf)
 
