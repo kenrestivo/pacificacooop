@@ -21,7 +21,6 @@ require_once("first.inc");
 require_once("shared.inc");
 require_once("auth.inc");
 
-require_once("roster.inc");
 require_once("members.inc");
 require_once("everything.inc");
 require_once("CoopPage.php");
@@ -97,8 +96,6 @@ while ( list( $key, $val ) = each($everything)) {
 */
 
 print "\n</table>\n\n";
-
-familyDetail($u['family_id']);
 
 
 ///////////////////////
