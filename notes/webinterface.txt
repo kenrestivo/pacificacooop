@@ -330,6 +330,7 @@ for future reference: a php/sql forum/groupware package
 	for agenda items, documents, attachments, schedules, reminders, comments
 	to keep history of the project
 	much like BayForums we used at bay!
+	phpgroupware is a debian package
 
 --------
 next phase gui/schema
