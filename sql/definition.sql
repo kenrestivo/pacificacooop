@@ -140,6 +140,16 @@ create table coop.leads (
 	primary key (leadsid)
 );
 	
+-- table to keep record of who, why, how, when i have nagged
+create table coop.nags (
+    nagsid int(32) not null auto_increment,
+	why enum ('Insurance', 'Springfest', 'Other'),
+	how enum ('Email', 'Phone', 'CommsFolder', 'InPerson'),
+    parentsid int(32),
+	done datetime,
+	primary key (nagsid)
+);
+
 
 -- the user/passwords used by the web view page AND my update tool..
 grant select, update, insert, delete on coop.* to input@'%' 
