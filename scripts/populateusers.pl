@@ -133,6 +133,10 @@ addDefaultPrivs()
 
 	#NOW, add the privs
 	foreach $arref (@$defref){
+		if($opt_v){
+			printf("\tsurfing through privs: %d %d %s\n", 
+				$$arref[0], $$arref[1], $$arref[2]);
+		}
 		#gotta check first that they don't already exist!
 		$rquery = sprintf("select count(privid) as counter from privs 
 					where userid = %d and realm = '%s'", $uid, $$arref[2]
@@ -157,7 +161,7 @@ addDefaultPrivs()
 			$query = sprintf("
 				update privs set grouplevel = %d, userlevel = %d 
 				where userid = %d, realm = '%s' ", 
-				 $$arref[0], $$arref[1], $uid, $arref[2]);
+				 $$arref[0], $$arref[1], $uid, $$arref[2]);
 		} else {
 			$query = sprintf("insert into privs set 
 					userid = %d, grouplevel = %d, 
@@ -187,6 +191,11 @@ addUser()
 
 
 	print "adding <$name> into users\n";
+	if($opt_v){
+		if(!$name || !$familyid){
+			print "addUser() missing data: famid <$familyid> name <$name>. must be teachers?\n";
+		}
+	}
 
 	#ok, add the users
 	#gotta check first that they don't already exist!
