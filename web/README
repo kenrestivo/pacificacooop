@@ -76,8 +76,14 @@ auth
 			can delete records for the realm
 		'ACCESS_ADMIN', 800);
 			can change privileges for users relating to this realm
-	the $auth , $u and $p structs
+	$auth struct
 		TODO document me
+	$p struct
+		TODO document me
+	$u struct: returned by getUser():
+		username
+		familyname
+		familyid
 	each field can have its own perms. field perms are a LIMIT
 		if the user/group has at LEAST the field's perm levels, 
 			it can do that action
