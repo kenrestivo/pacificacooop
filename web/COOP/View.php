@@ -137,16 +137,37 @@ class coopView
 			return $this->pk;
 	}
 
+
 	//  inspired by formbuilder's getdataobjctselectdisplayvalue (whew!)
-	function checkLinks(&$obj, $val)
+	function checkLinkField(&$obj, $key, $val)
 		{
-			// no links? see ya.
-			if(!isset($obj->fb_linkDisplayFields)){
+			// only if i have linkfields in the dataobj
+			$ldfs = $obj->fb_linkDisplayFields;
+			if(!$ldfs){
 				return $val;
 			}
 			
+			// and only if, um, the links.ini agrees that they are there
 			$links = $obj->links();
-			$this->page->confessArray($links, "links for  $this->table");
+			if(!$links){
+				return $val;
+			}
+			$this->page->confessArray($links, "links for $this->table");
+
+			if(!$links[$key]){
+				return $val;
+			}
+
+			//ok, we have run the fucking gauntlet here.
+			confessObj($obj, 
+					   "obj with links for $key of $val");
+			$subobj = $obj->getLink($key); // XXX naw, not key, dumbass.
+			confessObj($subobj, "subobj for $key");
+
+			foreach($ldfs as $linkfield){
+				$val .= $linkfield;
+			}
+
 			return $val;
 		}
 
@@ -155,8 +176,8 @@ class coopView
 			
 			foreach($this->obj->toArray() as $key => $val){
 				// this is where the fun begins.
-				$val = $this->checkLinks(&$this->obj, $val);
-				$res[] = $val;
+				$res[] = $this->checkLinkField(&$this->obj, $key, $val);
+
 			}
 
 			// the Simple Version. useful for debuggin'
