@@ -145,5 +145,11 @@ class Leads extends DB_DataObject
 
 			return $el;
 		}
-	
+
+	function fb_linkConstraints()
+		{
+			$this->school_year = findSchoolYear(); 
+			$this->whereAdd("do_not_contact is null or do_not_contact< '2000-01-01'");
+
+		}	
 }
