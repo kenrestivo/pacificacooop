@@ -6,41 +6,46 @@
 			 (database simplesql))
 (require 'printf)
 
+
+
+;;;;;;;; old-definition schema-processing stuff
 (define *main-schema* '()) ;; this is an aLIST of ACONS'es
-(define *current-table* "") ;; there has to be a more schemey way 
-(define *tables* '()) ;; hack. need to handle tables last.
+(define *current-table* "") ;; there has to be a more schemey way
 
-
-;;;;;;;; definition-processing stuff
+;; setter
 (define (add-primary-key table line)
   (add-sub-alist *main-schema* table "primary key"
 				 (unparen (caddr line))) )
 
-;; utility
+;; accessor
 (define (get-primary-key table schema)
   (assoc-ref (assoc table schema) "primary key"))
-	  
+
+;; accessor
 (define (get-definition col table schema)
   (assoc-ref (assoc table schema) col))
 
-;; if it is a COLUMN, i'll want to do:
-(define (add-column! table line)
+;; setter: if it is a COLUMN, i'll want to do:
+(define (save-schema-column! table line)
   ;; NOTE! must combine before yanking ,'s!
   (set! *main-schema* (add-sub-alist *main-schema* table 
 						  (car line)
+						  ;; note, the line is what gets fed IN to regexp
 						  (regexp-substitute/global #f  ",$"
 											(join-strings (cdr line))
 											'pre 'post)) ))
-	;; clean sql definition line
+;; utility: clean sql definition line
 (define (clean-line line)
   (map (lambda (y)
 		 (regexp-substitute/global #f  "[ \t]" y  'pre 'post)) 
 	   (delete "" line)))
 
+;; utility
 (define (unparen string)
   (regexp-substitute/global #f  "[\\(\\)]" string 'pre 'post))
   
 
+;; distpatch to the proper setter
 (define (process-def! line)
   (cond ((and (equal? (car line) "create")
 			 (equal? (cadr line) "table"))
@@ -49,16 +54,16 @@
 		((and (equal? (car line) "primary")
 			  (equal? (cadr line) "key"))
 		 (add-primary-key *current-table* line))
-		(else (add-column! *current-table* line))))
+		(else (save-schama-column! *current-table* line))))
 
 
-;; make sure it is a valid line
+;; utliity: discard any -- comment lines
 (define (valid-def-line l)
   (if (and 
 	   (> (length l) 1)
 	   (not (equal? (car l) "--"))) #t #f))
 
-;; for loading the proper schema file
+;; main, kind of: for loading the proper schema file
 (define (load-definition! deffile)
   (set! *main-schema* '())
   (let ((p (open-input-file deffile) ) )
@@ -71,7 +76,13 @@
 	(close p) ))	
 
 ;;;;;;;;;;;;; pcns_schema-processing stuff
+;; TODO: add tables to the change-alist. if data isn't a pair, it's a table
+(define *tables* '()) ;; hack. need to handle tables last.
+(define *change-alist* '())
 
+
+;; find and change any columns which use this primary key!
+;; TODO replace table/old/new with that alist
 (define (fix-primary-key key-table old-col new-col schema)
   (for-each
    (lambda (linked-table)
@@ -86,8 +97,25 @@
 			   ))
 	 schema))
 
+;; setter: the change-alist
+(define (save-rename-column items schema)
+  (let* ((sp (string-split (car items) #\.))
+		 (new (string-split (cadr items) #\.))
+		 (table (car sp))
+		 (old-col (cadr sp))
+		 (new-col (cadr new))
+		 (long-def (assoc-ref (assoc-ref schema (car sp)) (cadr sp)))
+		 )
+	(if long-def
+		(set! *change-alist*
+			  (add-sub-alist *change-alist* table old-col new-col))	
+		;; TODO: be smart and check first if it is already changed
+		(printf "IGNORING: rename spec  %s:%s is NOT in schema, can't change to %s\n" table old-col new-col) ;; it's a bogus line? huh?
+		)
+	))
 
-(define (rename-column items schema)
+;; make this the func for actually MAKING changes
+(define (do-something-with-this items schema)
   (let* ((sp (string-split (car items) #\.))
 		 (new (string-split (cadr items) #\.))
 		 (table (car sp))
@@ -112,18 +140,19 @@
 
 ;;i have to save these up, because i have to handle join keys first 
 (define (save-table! items)
-  (set! *tables* (append *tables* (list items))))
+  (set! *tables* (append *tables* (list items)))) ; list of list here!
 
 ;; simple dispatcher, using cute scheme-ism
 ;; in the file, tables don't have .'s in them, columns do.
+;; item is (oldtable.oldcol oldtable.newcol) ... thanks matt :-/
 (define (process-change items)
   (if (string-index (car items) #\.)
-	  (rename-column items *main-schema*)
+	  (save-rename-column items *main-schema*)
 	  (save-table! items)))
 
 
 ;;; this is basically MAIN, though the load-definition must occur first
-(define (fix-schema fixfile)
+(define (load-changes fixfile)
   (let ((p (open-input-file fixfile) ) )
 	(begin 
 	  (do ((line (read-line p) (read-line p)))
@@ -135,6 +164,11 @@
 		 (string-split line #\space)))
 	  (close p) )))
 
+;; this is the engine which actually does the work
+(define (fix-schema change-alist change-tables schema-alist)
+  (for-each rename-column change-alist)
+  (for-each rename-table change-tables)		; finally, follow up with tables
+  )
 
 ;;;;;;;;;;;;;;;
 ;; main
@@ -143,8 +177,9 @@
 				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-fake.conf")))
 
 (load-definition! "/mnt/kens/ki/proj/coop/sql/olddefinition.sql")
-(fix-schema "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
-(for-each rename-table *tables*)			; finally, follow up with tables
+(load-changes "/mnt/kens/ki/proj/coop/sql/pcns_schema.txt")
+
+(fix-schema *change-alist* *tables* *main-schema*)
 
 (simplesql-close *dbh*)
 
