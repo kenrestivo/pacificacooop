@@ -2,13 +2,14 @@ notes on web interface
 $Id$
 
 main page (with no POST/GET fields)
-	popup for choosing family (java auto-submit, and official SUBMIT button too)
+	popup for choosing family  DONE
+		(java auto-submit, and official SUBMIT button too)
 
 main page (with family POST/GET'ed)
 	show family information
-		parents, kids, session
-	show number of names, and how many to go until 10 (duh)
-	show the actual names entered so far
+		parents, kids, session, um... not needed for this
+	show number of names, and how many to go until 10 (duh) DONE
+	show the actual names entered so far DONE
 	entry form
 		pick up the parentid from the top (the popup should be inside the form)
 		table of 10 entry fields
@@ -39,13 +40,13 @@ admin page
 OK, CODE!
 
 10names code
-	drawing the popup
+	drawing the popup DONE
 		query all families. doy.
 		if there's an id in POSTVARS, use that one as default. otherwise, CHOOSE
-	drawing the basic parent and kids info
+	drawing the basic parent and kids info DONE
 		tested tables: col for parents, col for kids
 		simple query: into table
-	drawing the names-to-date info
+	drawing the names-to-date info DONE
 		simple query, again.
 	drawing the web form
 		name the fields in a loop: name1, name2, addr1, addr2
@@ -57,18 +58,18 @@ OK, CODE!
 				(even though arrays in php SUCK!)
 			all required fields are there, valid data, etc.
 			name hasn't already been entered? (by whom?)
-		bitching people out if the data is mis-entered
+		complain if the data is mis-entered
 			re-display the webform again!
 				pre-populated with whatever was entered
 				and red comments showing what is wrong/missing
-			accept the GOOD ones, ONLY bitch out and redisplay the bad ones!
+			accept the GOOD ones, ONLY whine and redisplay the bad ones!
 		display the main page again, for this familyid.
 
 admin code
 	drawing the chooser (as above and in reprots.txt)
 	draw the report
 
-arch
+file layout DONE
 	like 5mins
 	common folder
 		.dbfuncs.inc/php

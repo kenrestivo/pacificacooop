@@ -120,6 +120,7 @@ create table coop.families (
 -- you'll know WHICH springfest by comparing the 'entered' date
 create table coop.leads (
     leadsid int(32) not null auto_increment,
+	title varchar(255),
 	last varchar(255),
 	first varchar(255),
 	company varchar(255),
@@ -129,7 +130,7 @@ create table coop.leads (
 	zip varchar(255),
 	country varchar(255),
 	phone varchar(255),
-	relation enum ('Relative','Friend', 'Coworker', 'Alumnus', 'Other'),
+	relation enum ('Relative','Friend', 'Coworker', 'Alumni', 'Other'),
 	source enum ('Springfest', 'Other'),
     familyid int(32),
 	entered datetime,
