@@ -36,7 +36,11 @@
 	user_error(sprintf("main(): LOGGED IN AS username [%s], familyname [%s], uid %d familyid %d sid [%s]", 
 		$u['username'], $u['familyname'], $auth['uid'], $u['familyid'], SID), 
 		E_USER_NOTICE);
+
 	topNavigation($auth, $u);
+
+	printf("\n<a href='index.php?%s'>test session-enabled link</a>\n", SID);
+
 	done();
 
 
