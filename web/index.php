@@ -86,6 +86,9 @@
 		#show them what they've already got, don pardo
 		nameSummary($id);
 
+		#uncomment for debugging, to show all records
+		#nameTable($id);
+
 		print "<P>Enter more names here.
 					You may enter less than 10 if you wish, then 
 					come back later and enter more if you like.
