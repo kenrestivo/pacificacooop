@@ -454,7 +454,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					$_SERVER['PHP_SELF']);
 	if($auth){ //hey, it could happen...
-		thruAuth();
+		thruAuth($auth);
 	}
 	print "<table border=1>";
 	//user popup (or display) stuff
@@ -513,19 +513,6 @@ function
 logIn($vars)
 {
 	//confessArray($vars, 'logIn($vars) called with');
-
-	$auth = $vars['auth']; //duh!
-	
-	if($_SESSION['auth']){
-		user_error("logIn: grabbing previous auth from session!", 
-			E_USER_NOTICE);
-		$auth =  $_SESSION['auth'];
-	}
- 
-	//force us to drop all previous state if 'cancel' button pressed!
-	if($vars['logout']){
-		$auth['state'] = 'loggedout';
-	}
 
 	/* vital information for each state.
 		func = callback function for this state
@@ -602,6 +589,20 @@ logIn($vars)
 					)
 	);
 
+	$savedauth = $_SESSION['auth'];
+
+	confessArray($vars, "login(vars)");
+	confessArray($savedauth, "login(savedauth)");
+	
+	$auth = changeState($vars['auth'], $states, 
+		$savedauth['state'] ? $savedauth['state'] : 'unknown',
+		1, $savedauth);
+ 
+	//force us to drop all previous state if 'cancel' button pressed!
+	if($vars['logout']){
+		$auth['state'] = 'loggedout';
+	}
+
 	// deal with nothing passed in
 	if(!$auth){
 		$auth = array( state => 'unknown' );
@@ -610,6 +611,7 @@ logIn($vars)
 		$auth['state'] == 'unknown';
 	}
 
+	confessArray($auth, "login(auth)");
 	
 	/* start the pachinko machine. 
 		no way out unless user input needed, or success */
@@ -692,13 +694,21 @@ sanityCheck($auth, $states)
 	returns: a copy of the struct with changes as above
 ******************/
 function
-changeState($auth, $states, $newstate, $wanted)
+changeState($auth, $states, $newstate, $wanted = 0, $savedauth = NULL)
 {
 	$newauth = array( state => $newstate );
 
 	if($states[$newstate]['required']){
 		while (list($key, $val) = each($states[$newstate]['required'])){
-			if($auth[$val]){
+			if($savedauth && $savedauth[$val]){
+				user_error(sprintf("changeState: keeping saved auth value %s for %s field %s", 
+					$savedauth[$val], "required", $val), 
+						E_USER_NOTICE);
+				$newauth[$val] = $savedauth[$val];
+			} else if($auth[$val]){
+				user_error(sprintf("changeState: keeping passed auth value %s for %s field %s", 
+					$auth[$val],  "required" , $val), 
+						E_USER_NOTICE);
 				$newauth[$val] = $auth[$val];
 			}
 		}
@@ -706,14 +716,23 @@ changeState($auth, $states, $newstate, $wanted)
 
 	if($wanted && $states[$newstate]['wanted']){
 		while (list($key, $val) = each($states[$newstate]['wanted'])){
-			if($auth[$val]){
+			if($savedauth && $savedauth[$val]){
+				user_error(sprintf("changeState: keeping saved auth value %s for %s field %s", 
+					$savedauth[$val], "wanted", $val), 
+						E_USER_NOTICE);
+				$newauth[$val] = $savedauth[$val];
+			} else if($auth[$val]){
+				user_error(sprintf("changeState: keeping passed auth value %s for %s field %s", 
+					$savedauth[$val], "required", $val), 
+						E_USER_NOTICE);
 				$newauth[$val] = $auth[$val];
 			}
 		}
 	}
 
 	//clean up the mess we made
-	reset($auth);
+	$auth && reset($auth);
+	$savedauth && reset($savedauth);
 	reset($states);
 
 	return $newauth;
@@ -851,7 +870,7 @@ needLoginState($auth, $states)
 	loginForm(changeState($auth, $states, 'checklogin', 1),
 		'password', 
 		$auth['uid'] ? 'hide' : 'show', 
-		"$olduser Please log in");
+		"Please log in");
 
 	return changeState($auth, $states, 'needinput', 1);
 	
@@ -1030,8 +1049,9 @@ loggedInState($auth, $states)
 	outputs: session id as invisible fields!
 ******************/
 function
-thruAuth()
+thruAuth($auth)
 {
+	$_SESSION['auth'] = $auth;
 	printf("<INPUT TYPE=hidden NAME='%s' VALUE='%s'>\n",
 		'coop',  session_id());
 }/* END THRUAUTH  */

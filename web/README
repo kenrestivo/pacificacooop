@@ -77,7 +77,11 @@ auth
 		'ACCESS_ADMIN', 800);
 			can change privileges for users relating to this realm
 	$auth struct
-		TODO document me
+		uid: the userid. duh
+		pwd: the password supplied by the user. 
+		confirm: the confirm password supplied by the user
+		token: a hash of the md5 hash of the password, and the uid
+		state: what state of auth they are in
 	$p struct
 		TODO document me
 	$u struct: returned by getUser():

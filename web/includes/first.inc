@@ -65,7 +65,8 @@ mysql_select_db($dbname) or die ("can't use $dbname! ack!\n");
 setupErrors();
 sessionSetup();
 
-user_error("first.inc: everything should be set up", E_USER_NOTICE);	
+user_error(sprintf("first.inc: everything should be set up for session <%s> auth <%s>",
+		session_id(), $_SESSION['auth']['state']), E_USER_NOTICE);	
 
 // end of main code
 
@@ -164,7 +165,9 @@ errorHandler($errno, $msg, $filename, $linenum, $vars)
 function
 sessionSetup()
 {
-    // Stop adding SID to URLs
+	user_error("sessionSetup(): setting up session", E_USER_NOTICE);
+
+    // Stop adding SID to URLs. annoying and not all ISPs allow it
     ini_set('session.use_trans_sid', 0);
 
     // How to store data
@@ -173,7 +176,7 @@ sessionSetup()
     // cookies suck.
     ini_set('session.use_cookies', 0);
 
-    // Name of our cookie
+    // Name of our var TODO: make this a constant! use it EVERWHERE!
     ini_set('session.name', 'coop');
 
     // Garbage collection
@@ -192,7 +195,6 @@ sessionSetup()
                              "GCsess");
 	session_start();
 
-	user_error("session has been set up", E_USER_NOTICE);
 
     return true;
 } /* END SESSIONSETUP */
@@ -245,6 +247,9 @@ readSess($sessid)
 	while($row = mysql_fetch_array($listq)){
 		$vars = $row['vars'];
 	}
+	/* user_error("readSess: read session [$sessid]: vars [$vars]", 
+		E_USER_NOTICE);
+	*/
 	return($vars);
 }/* END READSESS */
 
