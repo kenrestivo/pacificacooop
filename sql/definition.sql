@@ -407,6 +407,7 @@ CREATE TABLE packages (
   starting_bid decimal(9,2) default NULL,
   bid_increment decimal(9,2) default NULL,
   package_value decimal(9,2) default NULL,
+  wish_list enum('No','Yes') default 'Yes',
   item_type enum('Unknown','Actual Item','Gift Certificate') default NULL,
   school_year varchar(50) default NULL,
   PRIMARY KEY  (package_id),
@@ -712,6 +713,17 @@ CREATE TABLE sponsorship_types (
     sponsorship_price decimal(9,2) default NULL,
     school_year varchar(50) default NULL,
     PRIMARY KEY (sponsorship_type_id)
+) ;
+
+CREATE TABLE solicitation_calls (
+  solicitation_call_id int(32) NOT NULL unique auto_increment,
+    method_of_contact enum('None', 'Email','Phone','InPerson') default NULL,
+  company_id int(32) default NULL,
+  call_note longtext,
+  family_id int(32) default NULL,
+  done datetime default NULL,
+    school_year varchar(50) default NULL,
+  PRIMARY KEY  (solicitation_call_id)
 ) ;
 
 
