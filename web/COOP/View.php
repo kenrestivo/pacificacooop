@@ -35,7 +35,6 @@ class coopView extends CoopObject
 	var $backlinks;				// list of links that are linked FROM here
 	var $forwardLinks;
 	
-	var $schoolYearify = 1; 	// edit only this years' records
 
 	var $legacyCallbacks;			// hack for old callbacks
 	var $legacyPerms; 			// cache of permissions for this page ($p)
@@ -97,7 +96,7 @@ class coopView extends CoopObject
 					return false;
 				}
 			}
-			$tab = new HTML_Table(' bgcolor="#ffffff"');	
+			$tab = new HTML_Table('  bgcolor="#ffffff"');	
 		
 			$tab->addRow($this->makeHeader(), 
 						 'bgcolor=#aabbff align=left', 'TH'); 
@@ -279,7 +278,7 @@ class coopView extends CoopObject
 							 $this->parentCO ? 
 							 "for " . $this->parentCO->getSummary() : "");
 		
-			$toptab = new HTML_Table(' bgcolor="#aa99ff" cellpadding="0" cellspacing="0"');
+			$toptab = new HTML_Table('bgcolor="#aa99ff" cellpadding="0" cellspacing="0"');
 			$toptab->addRow(array($title, $this->actionButtons()), 'align="center"', "TH");
 			$toptab->addRow(array($contents), 'colspan="2"');
 			
@@ -328,8 +327,8 @@ class coopView extends CoopObject
 		{
  		 	return recordButtons($row, $this->legacyCallbacks, 
  								 $this->legacyPerms, 
- 								 $this->page->userStruct, "",
-								 $this->schoolYearify);
+ 								 $this->page->userStruct, 
+								 "");
 			
 		}
 
