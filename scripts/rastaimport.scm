@@ -49,6 +49,7 @@
 
 ;; check for each parent column
 ;; TODO check for last-name changes, and fix them
+;; this is an utter and complete clusterfuck. even lisp can't help me
 (define (check-for-new-parent line header column-to-check)
   (let* ((long-parent (rasta-find column-to-check line header))
 		 (split-name (split-first-last long-parent))
@@ -57,15 +58,17 @@
 		 (parents (simplesql-query *dbh*
 						(sprintf #f "
 				select parentsid, last, first, worker, ptype familyid
-						from parents left join families using (familyid)
+						from parents
 					where (soundex(first) = soundex('%s')
-						or first like \"%%%s%%\")
+									or first like \"%%%s%%\"
+									or ptype = '%s')
 						and (soundex(last) = soundex('%s')
-								or families.phone like \"%s\") "
+								or familyid = %d) "
 								 (car split-name)
 								 (car split-name)
+								 type
 								 (cdr split-name)
-								 (rasta-find "Phone" line header)
+								 (check-for-new-family line header)	; phone
 								 ))))
 
 		  (if (>  (length parents) 1)
