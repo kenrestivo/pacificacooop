@@ -99,26 +99,40 @@ class coopObject
 			return $this->backlinks;
 		}
 
-	//  inspired by formbuilder's getdataobjctselectdisplayvalue (whew!)
-	function checkLinkField(&$obj, $key, $val)
+	function isLinkField(&$obj, $key)
 		{
-		
-			
 			// and only if, um, the links.ini agrees that they are there
 			$links = $obj->links();
 			if(!$links){
 				//print "no links for $this->table $key $val<br>";
-				return $val;
+				return false;
 			}
 			$this->page->confessArray($links, 
 									  "checkLInkField(): links for $this->table");
 
 			if(!$links[$key]){
-				return $val;
+				return false;
 			}
 			
-			if(!$obj->$key){
+			
+			return true;
+
+		}
+
+
+	//  inspired by formbuilder's getdataobjctselectdisplayvalue (whew!)
+	function checkLinkField(&$obj, $key, $val)
+		{
+		
+			if(!$this->isLinkField($obj, $key)){
+				//user_error("$this->table $key is not a linkfield", 
+				//		E_USER_NOTICE);
 				return $val;
+			}
+
+			// don't bother with blanks either
+			if(!$obj->$key){
+				return false;
 			}
 
 			//ok, we have run the fucking gauntlet here.
@@ -129,6 +143,8 @@ class coopObject
 	//confessObj($subobj, "checkLInkFild() subobj $subobj->__table for $key of $val");
 
 
+			// remember, subobj does NOT have a concatlinkfields method
+			// so i am keepign the method here and passing the subobj
 			return $this->concatLinkFields(&$subobj);
 		}
 

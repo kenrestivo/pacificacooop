@@ -86,6 +86,12 @@ class coopForm extends CoopObject
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function build($id)
 		{
+			$id = (int)$id;
+
+			if(!$id){
+				user_error("$id is not an integer homey", E_USER_ERROR);
+			}
+
 			$form =& new HTML_QuickForm('editform');
 			
 
@@ -93,13 +99,20 @@ class coopForm extends CoopObject
 
 			//confessObj($this, 'atd');
 			foreach($this->obj->toArray() as $key => $val){
-				$el =& $form->addElement(
-					$key == $this->pk ? 'hidden' : 'text', 
-					$key);
+				if($this->isLinkField(&$this->obj, $key)){
+					$el =& $form->addElement('select', $key, false, 
+											 $this->selectOptions($key));
+				} else {
+					$el =& $form->addElement(
+						$key == $this->pk ? 'hidden' : 'text', 
+						$key);
+				}
+				//print $key . "->" .$this->obj->fb_fieldLabels[$key] . "<br>";
 				$el->setLabel($this->obj->fb_fieldLabels[$key] ? 
 							  $this->obj->fb_fieldLabels[$key] : $key);
-				$clf = $this->checkLinkField(&$this->obj, $key, $val);
-				$el->setValue($clf);
+
+
+				$el->setValue($val);
 			}
 
 			if($sid = thruAuthCore($this->page->auth)){
@@ -114,6 +127,28 @@ class coopForm extends CoopObject
 
 			return $form;
 		}
+
+	function selectOptions($key)
+		{
+
+			// i ALWAYS want a choose one. always. screw FB.
+			$options[] = "CHOOSE ONE";
+			//confessObj($this, 'this');
+			$link = explode(':', $this->forwardLinks[$key]);
+			$sub =& new CoopObject(&$this->page, $link[0], &$this);
+			$sub->obj->orderBy(implode(', ', 
+									   $sub->obj->fb_linkDisplayFields));
+			$sub->obj->find();
+			while($sub->obj->fetch()){
+				$options[(string)$sub->obj->$link[1]] = 
+					$this->concatLinkFields(&$sub->obj);
+			}
+
+			//TODO: try grabbing the dbresult object instead?
+			//confessArray($options, 'oopts');
+			return $options;
+		}
+
 
 	function process($vars)
 		{
@@ -156,7 +191,7 @@ class coopForm extends CoopObject
 	function update(&$old)
 		{
 			
-			$old->get($vars[$this->pk]);
+			//XXX not needed? $old->get($vars[$this->pk]);
 			if(!$old->find(true)){
 				user_error("save couldn't get its pk", E_USER_ERROR);
 			}
