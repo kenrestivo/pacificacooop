@@ -14,7 +14,7 @@ require_once('TicketWizard.php');
 PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'confessObj');
 
 
-$debug = 0;
+$debug = 2;
 
 //MAIN
 //$_SESSION['toptable'] 
