@@ -21,8 +21,8 @@
 			 (lambda x (printf "caught error on [%s]\n" query) (pp x)))))
 
 (define (add-new-column table column-name definition default)
-  (doit (sprintf #f "alter table %s add column %s" table column-name definition))
-  (doit (sprintf #f "update  %s set %s = '%s'" column-name default)))
+  (doit (sprintf #f "alter table %s add column %s %s" table column-name definition))
+  (doit (sprintf #f "update %s set %s = '%s'" table column-name default)))
 
 ;;;;;;;;;;;;;;;
 ;; main
@@ -33,11 +33,10 @@
 				 "territories"))
 
 (for-each  (lambda (table)
-			 (add-new-column table "school_year" "varchar(50)" "2003-2004")
-			 tables)) 
+			 (add-new-column table "school_year" "varchar(50)" "2003-2004"))
+			 tables)
 
 (simplesql-close dbh)
 
 
-this_is_a_test "this_is another_one" now what
 ;; EOF
