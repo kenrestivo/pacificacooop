@@ -144,9 +144,8 @@ function done()
 {
 	global $coop_sendto;
 
-	print "</div>";				// closes out main div. a hack.
-	print '<div><hr>';
-//	print '<div id="footer"><hr>';
+	print "</div> <!-- rightcol div end -->";	
+	print '<div id="footer"><hr>';
 	printf("<p>If anything on this site appears to be not working properly, 
 			email <a href='mailto:%s'>%s</a> or call %s at %s</p>",
 			$coop_sendto['email_address'], $coop_sendto['email_address'], 
@@ -154,9 +153,9 @@ function done()
 	/* AUUGH! testcasetool is case sensitive, and for some reason apache
 		lowers the case of my tags only when checkloing was used. weird.
 	*/
-	print "</div>"; // closes out bottom div
+	print "</div> <!-- end footer div -->"; // closes out bottom div
 	
-	print"</body> </html> ";
+	print"</div><!-- end page div --> </body></html> ";
 	session_write_close();		// redundant?
 	exit;
 } #END DONE
@@ -310,6 +309,7 @@ ken_array_fill($start, $count, $val)
 	simple hack for showing status reports
     inputs: title string to display, the query string, 
             whether to show dollar signs, and whether to show grand total
+		returns: the html
 **********************/
 function
 showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
@@ -366,7 +366,7 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 	$toptab->addRow(array($title), 'align="center"', "TH");
 	$toptab->addRow(array($tab->toHTML()));
 
-	print $toptab->toHTML();
+	return $toptab->toHTML();
 
 } /* END SHOWRAWQUERY */
 

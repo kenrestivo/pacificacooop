@@ -37,7 +37,9 @@ print '<HTML>
 
 		<BODY>
 
-		<h2>Pacifica Co-Op Nursery School Data Entry</h2>
+		<div id="page">
+		<div id="header">
+				<h2>Pacifica Co-Op Nursery School Data Entry</h2>
 	';
 
 warnDev();
@@ -60,17 +62,17 @@ $menu->createLegacy(&$cp);
 $u = $cp->userStruct; // cached by createlegacy
 
 print $menu->topNavigation();
-print "\n<hr>\n";
+print "\n<hr></div> <!-- end header div -->\n";
 //confessObj($menu, 'menu');
 
 
 
 //confessObj($menu, "menuonb");
-print '<div id="leftcol" width="15%" float="left">';
+print '<div id="leftcol">';
 print $menu->kenRender();
-print '</div>';
+print '</div><!-- end leftcol div -->';
 
-print '<div id="rightCol" margin-left="17%">';
+print '<div id="rightCol">';
 print "<p>Please choose an action:</p>";
 
 print "\n\n<table border=0>\n";
@@ -98,11 +100,11 @@ while ( list( $key, $val ) = each($everything)) {
 print "\n</table>\n\n";
 
 familyDetail($u['family_id']);
-print "</div>";
+
 
 ///////////////////////
 
-
+// NOTE! i don't end rightcol div, since done does that for me
 done();
 
 /// DO NOT DELETE
