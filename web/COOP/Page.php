@@ -83,9 +83,9 @@ class coopPage
 				<h2>Pacifica Co-Op Nursery School Data Entry</h2>
 				';
 
-			confessArray($_REQUEST, "test REQUEST");
-			confessArray($_SESSION, "test SESSION");
-			confessArray($_SERVER, "test SERVER");
+// 			confessArray($_REQUEST, "test REQUEST");
+// 			confessArray($_SESSION, "test SESSION");
+// 			confessArray($_SERVER, "test SERVER");
 			
 ///
 			warnDev();
@@ -102,7 +102,6 @@ class coopPage
 			}
 
 
-			topNavigation($this->auth,  getUser($this->auth['uid']));
 
 		}
 

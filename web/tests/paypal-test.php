@@ -10,14 +10,15 @@ $cp->pageTop();
 
 $menu =& new CoopMenu;
 $menu->createLegacy(&$cp);
-confessObj($menu, "menuonb");
+print $menu->topNavigation();
+
+//confessObj($menu, "menuonb");
 print $menu->toHTML();
 
 
 	
 $menu->forceCurrentURL('10names.php');
-$menu->setMenuType('urhere');
-$menu->show();
+print $menu->get('urhere');
 
 
 

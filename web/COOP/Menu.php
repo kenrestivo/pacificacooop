@@ -39,10 +39,11 @@ class CoopMenu extends HTML_Menu
 			$heirmenu = array(
 				array(
 					'title' => 'Enhancement',
-					'sub' => $this->callbacksToMenu($members)),
+					'sub' => $this->callbacksToMenu($members, 
+													$this->coop_page)),
 				array(
 					'title' => 'Springfest',
-					'sub' => $this->nestByRealm($sf, $this->$coop_page)));
+					'sub' => $this->nestByRealm($sf, $this->coop_page)));
 
 
 			$this->setMenu($heirmenu);
@@ -63,12 +64,16 @@ class CoopMenu extends HTML_Menu
 	function callbacksToMenu($everything)
 		{
 			foreach($everything as $key => $cbs){
-				$menustruct[] = array(
-					'title' => $cbs['description'],
-					'url' => $cbs['page']);
+				$res[$key]['title'] = 
+					$cbs['description'];						
+				if(checkMenuLevel($this->page->auth, 
+								  getUser($this->page->auth['uid']), 
+								  $cbs, $cbs['fields'])== 0){
+					$res[$key]['url'] = $cbs['page'];
+						}
 			}
 			//confessArray($menustruct, 'menustruct');
-			return $menustruct; 
+			return $res; 
 		}
 
 	function getMoney($ie)
@@ -118,20 +123,25 @@ class CoopMenu extends HTML_Menu
 	function topNavigation()
 		{
 
-			$res  .= "\n\n<table  width='100%' border=0>";
-			/* trying to build a user interface out of html 
-		is like trying to build a bookshelf out of mashed potatoes. 
-		(apologies to jamie zawinski)
-			*/
-			$res.=  "\n<tr>\n"; 
-			$res .= sprintf("\t<td><h3>Welcome %s!</h3></td>\n", $this->page->auth['username']);
-			$res .=  "\t<td>";
-// XXX TODO			logoutForm();
+			$u = getUser($this->page->auth['uid']);	// ugh.
+
+
+			$tab =& new HTML_Table;
+
+			$tab->addRow(array(
+							 sprintf("<h3>Welcome %s!</h3>", $u['username']),
+	
+
+							 $this->page->selfURL("Log Out", 
+												  'action=logout')));
 			
-			// UR here!
-			$menu->setMenuType('urhere');
-			$menu->show();		//  XXX this is fucked.
- 			$res .= "</td>\n</tr>\n</table>\n\n";
+			
+						 
+			$res .= $tab->toHTML();
+			if(count($this->getPath()) > 1){
+				$res .= $this->get('urhere');	
+			}
+//			confessArray($this->getPath(), "getpath");
 			return $res;
 		}
 	
