@@ -85,12 +85,17 @@ class PostPaypal
             // ok let's go now
             $this->parseCustom();
 			if($this->postIncome()){
-                $this->family_id && $this->postFamily(); 
-                $this->lead_id && $this->postLead(); 
+				// i hate this dispatching code.
+                if($this->family_id){ 
+					$this->postFamily(); 
+					return;		// no thankyous for family
+				}
+                if($this->lead_id){
+					$this->postLead(); 
+				}
+				$this->postThankYou();
             }
             //print_r($this);
-
-			$this->postThankYou();
 		}
 
     function lastInsertID($obj)
