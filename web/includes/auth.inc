@@ -268,7 +268,7 @@ getUser($uid)
 {
 
 	if($uid < 1){
-		fwrite(STDERR, "ERROR! no uid\n");
+		error_log("ERROR! no uid", 0);
 		exit(1);
 	}
 
@@ -282,13 +282,12 @@ getUser($uid)
 	$listq = mysql_query($query);
 	$err = mysql_error();
 	if($err){
-		fwrite(STDERR, "getUser(): [SECRET]: $err\n");
+		error_log("getUser(): [SECRET]: $err", 0);
 	}
 				
 	// sanity czech
 	if (mysql_num_rows($result) < 1) {
-		fwritef(STDERR< "getUser(): ERROR! no name for family with uid %d?\n",
-			$uid);
+		error_log("getUser(): ERROR! no name for family with uid $uid?", 0);
 		return 0;
 	}
 
@@ -388,7 +387,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 function
 logIn($auth)
 {
-	confessArray($auth, 'logIn()');
+	confessArray($auth, 'logIn($auth) called with');
 
 	$states = array(
 		loggedout => array (
@@ -432,26 +431,38 @@ logIn($auth)
 					)
 	);
 
+	// deal with nothing passed in
+	if(!$auth['state']){
+		$auth['state'] == 'loggedout';
+	}
+	if(!$auth){
+		$auth = array( state => 'loggedout' );
+	}
+
 	
 	/* start the pachinko machine. 
 		no way out unless user input needed, or success */
 	do {
 
+
 		$state = $auth['state'];
-		fwrite(STDERR, "logIn(): entering %s\n",
-			$states[$state]['description']);
+		error_log("logIn(): entering" . $states[$state]['description'], 0);
 
 		
 		// sanity check the struct passed in
-		while (list($key, $val) = each($states[$state]['required'])){
-			if(!$auth[$val]){
-				fwrite(STDERR, "ERROR! $val required for state. logging out\n");
-				$auth['state'] = 'loggedout'; // force it outta here
-				$state = $auth['state']; // XXX hack!
+		// TODO: turn this into a proper state!!
+		if ($states[$state]['required']){
+			while (list($key, $val) = each($states[$state]['required'])){
+				if(!$auth[$val]){
+					error_log("ERROR! $val required for state. logging out", 0);
+					$auth['state'] = 'loggedout'; // force it outta here
+					$state = $auth['state']; // XXX hack!
+				}
 			}
+			reset($auth);
 		}
-		reset($auth);
 
+		confessArray($auth, "login()");
 		// dispatch the appropriate action for this state, and collect result
 		$auth = $states[$state]['func']($auth);
 	} while ($auth['state'] != "needinput");
@@ -522,7 +533,7 @@ loggedOutState($auth)
 		}
 	} 
 
-	fwrite(STDERR, "loggedOutState(): unhandled state! an endless loop?\n");
+	error_log("loggedOutState(): unhandled state! an endless loop?", 0);
 	return $newauth;
 	
 }/* END LOGGEDOUTSTATE */
