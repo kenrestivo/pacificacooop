@@ -25,4 +25,21 @@ class Enhancement_hours extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+    var $fb_fieldsToRender = array (
+        'parent_id', 'enhancement_project_id', 'work_date', 'hours'
+        );
+	var $kr_longTitle =  'Enhancement Hours';
+	var $fb_linkDisplayFields = array('work_date', 'hours');
+	var $fb_fieldLabels = array (
+        'enhancement_hour_id' => 'Unique ID',
+        'parent_id' => 'Parent',
+        'enhancement_project_id' => 'Project',
+        'work_date' => 'Date Worked',
+        'hours' => 'Hours Worked',
+        'school_year'=> 'School Year'
+        );
+
+
+
 }

@@ -58,7 +58,7 @@ class Enhancement
             $this->cp =& $cp;
             $this->familyID = $familyID;
 			// guess it and cache it
-			$this->schoolYear = findSchoolYear($schoolYear);
+            $this->schoolYear = $schoolYear ? $schoolYear : findSchoolYear();
             $this->loadCutoffs(); // do i really want this here?
 		}
 
