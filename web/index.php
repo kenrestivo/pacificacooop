@@ -29,9 +29,10 @@
 		<h2>Pacifica Co-Op Nursery School</h2>
 	";
 
-	logIn($HTTP_POST_VARS['auth']);
-	displayLogin($HTTP_POST_VARS['auth']);
+	$auth = logIn($HTTP_POST_VARS['auth']);
 
+	print "logIn() returns with:";
+	confessArray($auth, "afterlogin");
 
 	print "</BODY> </HTML>"
 

@@ -166,13 +166,47 @@ checkToken($uid, $token)
 		return 1; // MUST supply both.
 	}
 
+	$storedpass = getPass($uid);
+	if(!$storedpass){
+		return 1; // no such user
+	}
+
 	// seemple
-	if($token == generateToken($uid, getPass($uid))){
+	if($token == generateToken($uid, $storedpass)){
 		return 0;
 	}	
 	
 	return 1;
 }/* END CHECKTOKEN */
+
+
+/******************
+	CHECKPASS
+	check that the token is valid for this uid
+	inputs: uid, token
+	returns: token if ok, 0 if failure
+******************/
+function
+checkPass($uid, $clearpass)
+{
+	if(!($uid && $clearpass)){
+		return 0; // MUST supply both.
+	}
+
+	$storedpass = getPass($uid);
+	if(!$storedpass){
+		return 0; // no such user
+	}
+
+	// passwords are stored as HASHES in database, remember?
+	$md5pass = strtolower(md5($clearpass));
+
+	if($storedpass == $md5pass)){
+		return generateToken($uid, $md5pass);
+	}	
+	
+	return 0;
+}/* END CHECKPASS */
 
 
 /******************
@@ -227,7 +261,7 @@ checkAuthLevel($auth)
 /******************
 	GETUSER
 	inputs: uid
-	returns: returns the human name of who they are logged in 
+	returns: returns the human name of who they are logged in, or 0 if none!
 ******************/
 function
 getUser($uid)
@@ -253,9 +287,9 @@ getUser($uid)
 				
 	// sanity czech
 	if (mysql_num_rows($result) < 1) {
-		printf("getUser(): ERROR! no name for family with uid %d?\n",
+		fwritef(STDERR< "getUser(): ERROR! no name for family with uid %d?\n",
 			$uid);
-		return;
+		return 0;
 	}
 
 	while($row = mysql_fetch_assoc($listq)){
@@ -302,7 +336,7 @@ function loginPopup($uid)
 	LOGIN
 	the state machine
 		only returns if it either needs more user input or is finished!
-		if it needs more user input, the caller wants to done()
+		if it returns without state == 'loggedin', caller wants to done()
 	inputs: an auth struct
 	outputs: status/error messages as needed
 	returns: the auth struct with necessary changes
@@ -332,6 +366,11 @@ logIn($auth)
 					required => array ( "uid"),
 					description => "No such user"
 					),
+		needconfirm => array (
+					func => "needConfirmState",
+					required => array ( "uid", "pwd"),
+					description => "Need new password confirmed"
+					),
 		confirmwrong => array (
 					func => "confirmWrongState",
 					required => array ( "uid", "pwd", "confirm"),
@@ -349,7 +388,8 @@ logIn($auth)
 					)
 	);
 	
-	// start the pachinko machine. no way out unless user input needed, or success
+	/* start the pachinko machine. 
+		no way out unless user input needed, or success */
 	do {
 
 		fwrite(STDERR, "logIn(): entering %s\n",
@@ -380,8 +420,12 @@ logIn($auth)
 	inputs: auth struct, type(password, confirm, both), and user(show, hide)
 ******************/
 function
-loginForm($auth, $type == 'password', $user == 'show')
+loginForm($auth, $type == 'password', $user == 'show', $statusline)
 {
+
+	// say hi.
+	print "<p>$statusline</p>";
+
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 					$_SERVER['PHP_SELF']);
 	thruAuth($auth);
@@ -395,13 +439,17 @@ loginForm($auth, $type == 'password', $user == 'show')
 
 	//password stuff
 	if($type == 'password' || $type == 'both'){
-		print "Enter password: \n";
+		if($auth['state'] == 'needconfirm'){
+			print "Please choose a new password and type it here: \n";
+		} else {
+			print "Enter password: \n";
+		}
 		print "<INPUT TYPE=password NAME='auth[pwd]'>";
 	}
 
 	//confirm stuff
 	if($type == 'confirm' || $type == 'both'){
-		print "Re-type your password: \n";
+		print "Please re-type your password to confirm it: \n";
 		print "<INPUT TYPE=password NAME='auth[confirm]'>";
 	}
 
@@ -419,22 +467,61 @@ loginForm($auth, $type == 'password', $user == 'show')
 function
 loggedOutState($auth)
 {
-	/*
-		if token/uid and they check out
-			DONE state loggedin!
-		if no pass (and no uid)
-			state loggedout
-			show an entry form (prepop with uid if given)
-			loginForm($auth, 'password', 'show');
-			DONE state needinput
-		if uid isn't real
-			DONE state nouser
-		if password is null
-			DONE state nullpass
-		if md5 of password is same as getpass()
-			gen token
-			DONE state loggedin!
-	*/
+	$newauth = array(
+			uid => $auth['uid'],
+			state => 'loggedout'
+	);
+
+	// check for valid token
+	if($auth['uid'] && $auth['token']){
+		if(checkToken($auth['uid'], $auth['token'])){
+			return $newauth;
+		}
+		// wow! i'm logged in! pass token thru now that we know it's good.
+		$newauth['token'] = $auth['token'];
+		$newauth['state'] = 'loggedin'; 
+		return $newauth;
+	}
+
+	// no pass, no uid, no dice!
+	if(!($auth['uid'] && $auth['pwd'])){
+		loginForm($newauth, 'password', 'show', "Please log in.");
+		$newauth['state'] = 'needinput'; 
+		return $newauth;
+	}
+
+	//check that uid is valid
+	if($auth['uid'] && !getUser($auth['uid'])){
+		loginForm($newauth, 'password', 'show', "No such user. Please log in.");
+		$newauth['state'] = 'needinput'; 
+		return $newauth;
+	}
+	
+	// if there's no password stored for this user
+	if($auth['uid'] && !getPass($auth['uid'])){
+		loginForm($newauth, 'both', 'show', 
+			"Welcome! Please choose a new password here");
+		$newauth['state'] = 'needinput'; 
+		return $newauth;
+	}
+
+	// ok, they supplied a password. now... let's check it.
+	if($auth['pwd']){
+		$token = checkPass($auth['uid'], $auth['pwd']);
+		if($token){
+			//hooray!! the password is correct!
+			$newauth['token'] = $token;
+			$newauth['state'] = 'loggedin'; 
+			return $newauth;
+		} else {
+			//incorrect password. let the pachinko machine handle it
+			$newauth['state'] = 'wrongpass'; 
+			return $newauth;
+		}
+	} 
+
+	fwrite(STDERR, "loggedOutState(): unhandled state! an endless loop?\n");
+	return $newauth;
 	
 }/* END LOGGEDOUTSTATE */
 
@@ -446,17 +533,56 @@ loggedOutState($auth)
 function
 nullPassState($auth)
 {
-	 /* inputs password/uid
-		pseudo:
-			if passes don't match
-				DONE state confirmwrong
-			if pass is inecure
-				DONE state insecurepass
-			save pass, pass thru token
-			DONE state loggedin!
-	*/
+	$newauth = array(
+			uid => $auth['uid'],
+			state => 'loggedout'
+	);
+
+	//no confirmation password. need one
+	if(!$auth['confirm']){
+		$newauth['state'] = 'needconfirm'; 
+		return $newauth;
+	}
+
+	// passes don't match
+	// TODO: use a hash in pwd, so i'm not passing the pwd around!
+	if($auth['pwd'] != $auth['confirm']){
+		$newauth['state'] = 'confirmwrong'; 
+		return $newauth;
+	}
+
+	// insecure, weak password
+	if(weakPass($auth['pwd'])){ // NOTE this assumes a cleartext pwd!!
+		$newauth['state'] = 'insecurepass'; 
+		return $newauth;
+	}
+
+	// wow! we made it! a good password! let's save it, shall we?
+	$newauth['token'] = savePass($auth['uid'], $auth['pwd']);
+	$newauth['state'] = 'loggedin';
+	return $newauth;
 
 }/* END NULLPASSSTATE */
+
+
+
+/******************
+	NEEDCONFIRMSTATE
+	loginForm($newauth, 'confirm', 'hide');
+******************/
+function
+needConfirmState($auth)
+{
+	$newauth = array(
+			uid => $auth['uid'],
+			state => "loggedout" // explicitly set it
+	);
+	$newauth['state'] = "loggedout";
+	loginForm($newauth, 'both', 'hide', 
+			"Please type in the SAME password again, just to make sure.");
+	$newauth['state'] = "needinput";
+	return $newauth;
+}/* END NEEDCONFIRMSTATE */
 
 
 
@@ -472,8 +598,8 @@ wrongPassState($auth)
 			state => "loggedout" // explicitly set it
 	);
 
-	print "<p>Bad password. Try again.</p>\n";
-	loginForm($newauth, 'password', 'hide');
+	print ;
+	loginForm($newauth, 'password', 'hide', "Bad password. Try again." );
 
 	$newauth['state'] = "needinput";
 	return $newauth;
@@ -491,8 +617,7 @@ noUserState($auth)
 			state => "loggedout" // explicitly set it
 	);
 	
-	print "<p>No such user. Try again.</p>\n";
-	loginForm($newauth, 'password', 'show');
+	loginForm($newauth, 'password', 'show', "No such user. Try again.");
 
 	$newauth['state'] = "needinput";
 	return $newauth;
@@ -511,8 +636,12 @@ confirmWrongState($auth)
 			state => "loggedout" // explicitly set it
 	);
 	$newauth['state'] = "loggedout";
-	print "<p>Passwords do not match. Please try again.</p>\n";
-	loginForm($newauth, 'both', 'hide');
+	loginForm($newauth, 'both', 'hide',
+		"Passwords do not match. Please try again." );
+
+	$newauth['state'] = "needinput";
+	return $newauth;
+	
 }/* END CONFIRMWRONGSTATE */
 
 
@@ -527,8 +656,9 @@ insecurePassState($auth)
 			uid => $auth['uid'],
 			state => "loggedout" // explicitly set it
 	);
-	print "<p>Password needs to be at least x letters. Please try again.</p>\n";
-	loginForm($newauth, 'both', 'hide');
+	loginForm($newauth, 'both', 'hide',
+			"Weak password, please make it at least x letters. 
+						Please try again.");
 
 	$newauth['state'] = "needinput";
 }/* END INSECUREPASSSTATE */
@@ -570,6 +700,20 @@ thruAuth($auth, $struct = 'auth')
 		}
 	}
 }/* END THRUAUTH  */
+
+
+
+/******************
+	WEAKPASS
+	inputs: a cleartext password
+	returns: 0 if ok, 1 if bad
+	TODO code up some regexp's here
+******************/
+function
+weakPass($clearpass)
+{
+	return 0;
+}/* END WEAKPASS */
 
 
 
