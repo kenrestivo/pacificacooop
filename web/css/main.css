@@ -8,13 +8,13 @@ p,table,li,h1,h2,h3
 .menutext
 {
 
-  font-size: 8px;
+  font-size: 9px;
 
 }
 
 p,li,th,td
 {
-  font-size: 8px;
+  font-size: 9px;
 
 }
 /*/*/a{}
@@ -72,14 +72,12 @@ div.box {
 
 
 #leftCol {
-  width: 15%;
+  width: 25ex;
 	background-color:  #ffcc99;
   float: left;
+	margin-right: 1em;
 }
 
-#rightCol {
-  margin-left: 17%;
-}
 
 input, textarea, select {
   border: solid 1px black;
@@ -90,7 +88,7 @@ input[type="submit"] {
   cursor: hand;
 }
 
-footer {  }
+footer {float: left;  }
 
 TABLE { 
   margin-top: .5em;
