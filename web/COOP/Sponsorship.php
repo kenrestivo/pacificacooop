@@ -1,3 +1,4 @@
+
 <?php 
 
 //$Id$
@@ -32,13 +33,108 @@ require_once('DB/DataObject/Cast.php');
 class Sponsorships
 {
 	var $cp ;  // alias to coop page object
-
-	function Sponsorships(&$cp)
+	var $sponsorTypes = array(); // cache of sponsortypes for this year
+	var $schoolYear; // cache of schoolyear
+	
+	function Sponsorships(&$cp, $schoolyear = false)
 		{
 			if(!is_object($cp)){
 				PEAR::raiseError('must pass coop object in', 888);
 			}
 			$this->cp = $cp;
+			$this->schoolYear = $schoolyear ? $schoolyear : findSchoolYear();
+			$this->getSponsorTypes();
+		}
+		
+
+
+		// updates or enters their sponsorships
+	function updateSponsorships($id, $idname)
+		{
+			$typeid= $this->calculateSponsorship($id, $idname);
+
+			//anything already there?
+			$sp =& new CoopObject(&$cp, 'sponsorships', &$nothing);
+			$sp->obj->school_year = $this->schoolYear;
+			$sp->obj->$idname = $id;
+			if($sp->obj->find(true)){
+				// if there's no manual override there, change it to match calc
+				if($sp->obj->entry_type == 'Automatic'){
+					if($typeid){
+						$sp->obj->sponsorship_type_id = $typeid;
+						$sp->obj->update();
+					} else {
+						// or delete it if they don't quailfy anymore
+						$sp->obj->delete();
+					}
+				}
+				return;
+			}
+							
+			// otherwise save a new one
+			$sp =& new CoopObject(&$cp, 'sponsorships', &$nothing);
+			$sp->obj->school_year = $this->schoolYear;
+			$sp->obj->$idname = $id;
+			$sp->obj->sponsorship_type_id = $typeid;
+			$sp->obj->insert();
+		}
+	
+	// checks activity for this entity, and returns sponsorlevel
+	function calculateSponsorshipType($id, $idname)
+		{
+			// TODO check company/lead here, like in thankyou
+			$hack = array(
+				'company_id' => array(
+					'table' => 'companies',
+					'join' => 'companies_income_join'
+					),
+				'lead_id' => array(
+					'table' => 'leads',
+					'join' => 'leads_income_join'
+					));
+
+			// i curse the very day that i agreed to do this goddamned project
+			$co =& new CoopObject(&$cp, $hack[$idname]['table'], &$nothing);
+			$co->obj->debug(2);
+			$co->obj->query(sprintf("
+    select  sum(payment_amount) as payment_amount
+     from %s as cinj
+     left join income 
+              on cinj.income_id = 
+                income.income_id
+        where school_year = '%s'
+				and %s.%s = %d
+        group by cinj.%s",
+									$hack[$idname]['join'],
+									$this->schoolYear, 
+									$hack[$idname]['join'],
+									$idname, $id, $idname));
+			$co->obj->fetch(); // there can be, only one
+				
+			if($co->obj->payment_amount){
+				// there's money there, check its sponsorship level
+				foreach($this->sponsorTypes as $typeid => $amt){
+					if($co->obj->payment_amount >= $amt){
+						return $typeid;
+					}
+				}
+			} 
+
+			// there's no money,  no dice
+			return false;
+		}
+
+
+	function getSponsorTypes()
+		{
+				$sp =& new CoopObject(&$cp, 'sponsorship_types', &$nothing);
+				$sp->obj->school_year = $this->schoolYear;
+				$sp->obj->orderBy('sponsorship_price desc');
+				$sp->obj->find();
+				while($sp->obj->fetch()){
+					$this->sponsorTypes[$sp->obj->sponsorship_type_id] = 
+						$sp->obj->sponsorship_price;
+				}
 		}
 
 
