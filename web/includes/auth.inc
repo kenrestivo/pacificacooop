@@ -100,7 +100,7 @@ getPass($uid)
 {
 	// sanitny check
 	if($uid < 1){
-		user_error("getPass(): ERROR! $uid < 1",E_USER_ERROR);
+		user_error("getPass(): ERROR! $uid < 1",E_USER_WARNING);
 		exit(1);
 	}
 
@@ -346,7 +346,7 @@ getUser($uid)
 {
 
 	if($uid < 1){
-		user_error("getUser(): ERROR! no uid", E_USER_ERROR);
+		user_error("getUser(): ERROR! no uid", E_USER_WARNING);
 		exit(1);
 	}
 

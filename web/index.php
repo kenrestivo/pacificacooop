@@ -46,9 +46,8 @@
 	if($auth['state'] != 'loggedin'){
 		done();
 	}
-	familyDetail($u['familyid']);
 	
-	print "<p>Please choose an action</p>";
+	print "<p>Please choose an action:</p>";
 
 	print "<table border=1>";
 	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
@@ -82,6 +81,7 @@
 
 	print "</table>";
 
+	familyDetail($u['familyid']);
 
 	done();
 ?>
