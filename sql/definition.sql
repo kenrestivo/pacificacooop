@@ -383,6 +383,17 @@ create table flyer_deliveries(
     primary key (flyer_delivery_id)
 );
 
+-- indulgence table
+create table nag_indulgences(
+    nag_indulgence_id int(32) not null unique auto_increment,
+	note varchar(255), 
+	granted_date date,
+	indulgence_type enum ('Everything', 'Family Auctions', 'Raffle Fee', 
+						'Solicitation Auctions' ),
+	familyid int(32), 
+    primary key (nag_indulgence_id)
+);
+
 -- the user/passwords used by the web view page AND my update tool..
 -- these MUST be done manually for db's not named coop!!
 --TODO: i have to grant all to myself on this db! duh.
