@@ -81,8 +81,19 @@ class PostPaypal
 			if($this->postIncome()){
                 $this->postFamily(); // TODO: handle leads/companies too
             }
-            print_r($this);
+            //print_r($this);
 		}
+
+    function lastInsertID($obj)
+        {
+            $db =& $obj->getDatabaseConnection();
+
+            $data =& $db->getOne('select last_insert_id()');
+            if (DB::isError($data)) {
+                die($data->getMessage());
+            }
+            return $data;
+        }
 
 	function postIncome()
 		{
@@ -91,9 +102,8 @@ class PostPaypal
             $obj->txn_id = $this->paypal_obj->txn_id;
 
             //print_r($obj);
-            $obj->debugLevel(5);
+            //$obj->debugLevel(5);
             //don't dupe. XXX this is dumb. what do i do about refunds?
-            $obj->whereAdd(sprintf("txn_id = '%s'", $obj->txn_id));
 			$numrows = $obj->find() ; 
             //print "NUM $numrows";
             if($numrows > 0){
@@ -114,7 +124,9 @@ class PostPaypal
             $obj->school_year = findSchoolYear();
 			$obj->account_number = $this->account_number;
             //print_r($this);
-            $this->income_id = $obj->insert();
+           
+            $obj->insert();
+            $this->income_id = $this->lastInsertID(&$obj); 
             return 1;
 	}
 
