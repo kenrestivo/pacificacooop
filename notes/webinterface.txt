@@ -29,27 +29,39 @@ admin page
 		(all families, families with less than 10 names)
 		by date
 			default next milestone from today
+		detailed (all names) or summary (default)
 	table of families, and how many names have been entered so far
 		um, by certain dates?
 		only the delinquent ones?
 		and, with email and phone and am/pm (heh) for the springfest cops to use
 
+---------------
+OK, CODE!
 
 10names code
 	drawing the popup
-	drawing the basic parent info
+		query all families. doy.
+		if there's an id in POSTVARS, use that one as default. otherwise, CHOOSE ONE
+	drawing the basic parent and kids info
+		tested tables: col for parents, col for kids
+		simple query: into table
 	drawing the names-to-date info
+		simple query, again.
 	drawing the web form
+		name the fields in a loop: name1, name2, addr1, addr2
+		invis field with parentid: because there'll be no popup on this page
 	handling the submission of the web form
 		checking data
 			everything into an array?
-			all required fields are there
+			HTTPPOST them all, dump them in an array (even though arrays in php SUCK!)
+			all required fields are there, valid data, etc.
 			name hasn't already been entered? (by whom?)
 		bitching people out if the data is mis-entered
-			re-display the popup/parentinfo/webform again!
+			re-display the webform again!
 				pre-populated with whatever was entered
 				and red comments showing what is wrong/missing
 			accept the GOOD ones, ONLY bitch out and redisplay the bad ones!
+		display the main page again, for this familyid.
 
 admin code
 	drawing the chooser
@@ -69,6 +81,16 @@ arch
 		.dbname (for testing)
 	index.php
 		the basic page display
+			if no familyid, 
+				draw the chooser,
+				done
+			else if there is form stuff (how to tell?)
+				do the datachecking	
+			else draw 
+				the basic parentid,kids, names
+				and the form!
+			
+			
 		header/footer stuff
 	10names.php
 		specifics to this thing
@@ -85,6 +107,7 @@ texts
 	choose the name of your family (child's last name)
 	you have entered x names so far. you have x days left to enter x more names!
 		or.. congratulations! you have already entered your 10 names!
+	add more names
 		
 
 misc
