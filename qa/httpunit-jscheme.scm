@@ -71,16 +71,19 @@
 
   )
 
-(define (visit-all-links wtc family)
+(define (visit-all-links wtc family url)
+  (let ((gtc (invoke wtc 'getTestContext))) ;; the junit object
+	(invoke gtc 'setBaseUrl url))
   (get-to-main-page wtc family)
   (let ((links (vector->list (invoke (get-response wtc) 'getLinks)) ))
 	(for-each
 	 (lambda (link)
 	   (let ((url (invoke link 'getURLString)))
 		 ;; test here for email
-		 (invoke link 'click) (write-line (string-append
-										   (invoke link 'asText) " > "
-										   url))
+		 (write-line (string-append
+					  (invoke link 'asText) " > "
+					  url))
+		 (invoke link 'click)
 		 (invoke wtc 'assertTextPresent "</html>")
 		 ;;(validate-html wtc)
 		 ))
@@ -100,10 +103,10 @@
 	))
 
 ;; a silly driver around visit-all-links
-(define (many-visit-hack wtc)
+(define (many-visit-hack wtc url)
   (for-each (lambda (family)
 			  (write-line (string-append ".....checking " family))
-			  (visit-all-links wtc (string-append family " Family")))
+			  (visit-all-links wtc (string-append family " Family" url)))
 			'("Cooke" "Bartlett" "Restivo" "Walker")))
 
 ;;EOF
