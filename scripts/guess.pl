@@ -44,45 +44,54 @@ sub fixem {
 	while ($ritemref = $rqueryobj->fetchrow_hashref){
 		%ritem = %$ritemref;
 
-		$lostid = $ritem{$tab . "id"};
-		$lostlast = $ritem{'last'};
-		$lostfirst = $ritem{'first'};
-		$lostmiddle = $ritem{'middle'};
-
-		print "found id $lostid: $lostlast, $lostfirst $lostmiddle\n"; #DEBUG
-
-		
-		#count how many last/first matches
-		$where = "where last like \"\%$lostlast\%\" and first like \"\%$lostfirst\%\" ";
-		#NOTE! $where is used often, DO NOT just stuff the string in the checkcount()!
-		$fcount = &checkcount($where);
-		if($fcount < 1){
-			#if 0; count last-only matches
-			print "NO match for $lostlast, $lostfirst $lostmiddle\n";
-			$where = "where last like \"\%$lostlast\%\"";
-			$fcount = &checkcount($where);
-		}
-
-		if($fcount == 1){
-			#if 1; just do it
-			&useonly($tab, $where, $lostid);
-			next;
-		}
-
-		if($fcount > 1){
-			#if > 1; multichoose
-			print "multiple choice for $lostlast, $lostfirst $lostmiddle:\n";
-			&choosemulti($tab, $where, $lostid);
-			next;
-		}
-
-		if($fcount < 1){
-			print "NO match for $lostlast AT ALL\n";
-		}
+		&checkformatches($tab, 
+				$ritem{$tab . "id"}, 
+				$ritem{'last'}, 
+				$ritem{'first'}, 
+				$ritem{'middle'});
 
 	} # end while
 } #end sub
 
+
+sub checkformatches {
+	my $tab = shift;
+	my $lostid = shift;
+	my $lostlast = shift;
+	my $lostfirst = shift;
+	my $lostmiddle = shift;
+
+	print "found id $lostid: $lostlast, $lostfirst $lostmiddle\n"; #DEBUG
+	
+	#count how many last/first matches
+	my $where = "where last like \"\%$lostlast\%\" and first like \"\%$lostfirst\%\" ";
+	#NOTE! $where is used often, DO NOT just stuff the string in the checkcount()!
+	my $fcount = &checkcount($where);
+	if($fcount < 1){
+		#if 0; count last-only matches
+		print "NO match for $lostlast, $lostfirst $lostmiddle\n";
+		$where = "where last like \"\%$lostlast\%\"";
+		$fcount = &checkcount($where);
+	}
+
+	if($fcount == 1){
+		#if 1; just do it
+		&useonly($tab, $where, $lostid);
+		return;
+	}
+
+	if($fcount > 1){
+		#if > 1; multichoose
+		print "multiple choice for $lostlast, $lostfirst $lostmiddle:\n";
+		&choosemulti($tab, $where, $lostid);
+		return;
+	}
+
+	if($fcount < 1){
+		print "NO match for $lostlast AT ALL\n";
+	}
+
+}
 sub checkcount {
 	my $where = shift;
 	my $fquery = "select count(parentsid) as howmany from parents $where";
@@ -156,3 +165,5 @@ sub replace {
 	print "doing <$squery>\n";
 	#print STDERR $dbh->do($squery) . "\n";
 }
+
+#EOF
