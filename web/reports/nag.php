@@ -106,13 +106,14 @@
 		$generalindulgence = checkIndulgences($row['familyid'], 'general');
 
 		#don't print this row if it's already complete, or indulgence granted
+		//check out them parentheses! glad i've been learning lisp.
 		if ($nagonlychecked && 
-			$generalindulgence || 
+			($generalindulgence || 
 			((($tennamespaid['amount'] >= 50) || $tennamesdone || 
 					$tennamespaid['indulgences']) && 
 				($quiltpaid['amount'] >=45 || $quiltpaid['indulgences']) && 
 				($auction['total'] >= 50 || $auction['indulgences']) && 
-				!$delivery['undelivered'] || $delivery['indulgences']))
+				!$delivery['undelivered'] || $delivery['indulgences'])))
 		{
 			continue;
 		}
@@ -203,26 +204,27 @@ function checkPayments($familyid, $type)
 			where inc.acctnum = $acctnum
 				and families.familyid = $familyid
 		";
-		#print "DEBUG <$query>";
-		$list = mysql_query($query);
-		
-		$err = mysql_error();
-		if($err){
-			user_error("[$query] errored with $err", E_USER_ERROR);
-		}
+	#print "DEBUG <$query>";
+	$list = mysql_query($query);
 
-		$i = 0;
-		while($row = mysql_fetch_array($list))
-		{
-			$total['amount'] += $row['amount'];
-			$total['notes'] .= sprintf("%s%s",
-					$i ? "<br>" : "",
-					$row['note']
-					);
-			$row['note'] && $i++;
-		}
+	$err = mysql_error();
+	if($err){
+		user_error("[$query] errored with $err", E_USER_ERROR);
+	}
 
-		return $total;
+	$i = 0;
+	while($row = mysql_fetch_array($list))
+	{
+		$total['amount'] += $row['amount'];
+		$total['notes'] .= sprintf("%s%s",
+				$i ? "<br>" : "",
+				$row['note']
+				);
+		$row['note'] && $i++;
+	}
+
+	$total['indulgences'] = checkIndulgences($familyid,  $type);
+	return $total;
 
 } #END CHECKPAYMENTS
 
@@ -266,9 +268,9 @@ checkAuction($familyid)
 	// check if they paid in any forfiet fees!
 	$tmp = checkPayments($familyid, 'auction'); //returns array.
 	$result['forfeit'] = $tmp['amount'];
+	$result['indulgences'] = $tmp['indulgences'];
 	$result['total'] +=  $result['forfeit'];
 	
-	$result['indulgences'] = checkIndulgences($familyid,  'auction');
 
 	return $result;
 }/* END CHECKAUCTION */
@@ -362,6 +364,7 @@ checkIndulgences($familyid, $uglytype)
 	//XXX yet another hacky-hack
 	$mapping = array (
 			'general' => 'Everything', 
+			'10names' => 'Invitations', 
 			'auction' => 'Family Auctions', 
 			'quilt' => 'Raffle Fee', 
 			'solicitauction' => 'Solicitation Auctions'
