@@ -58,19 +58,20 @@ class coopPage
 
 
 	// NOTE! prints directly to screen, doesn't return output!
-	function header()
+	function header($title = 'Data Entry', 
+					$heading = 'Pacifica Co-Op Nursery School Data Entry')
 		{
 			global $metalinks; // from first.inc. bah.
 			printf('<HTML lang="en">
 		<HEAD> %s
-			<TITLE>Data Entry</TITLE>
+			<TITLE>%s</TITLE>
 		</HEAD>
 
 		<BODY>
 
 		<div id="header">
-				<h2>Pacifica Co-Op Nursery School Data Entry</h2>',
-				   $metalinks);
+				<h2>%s</h2>',
+				   $metalinks, $title, $heading);
 			
 			
 			$this->confessArray($_REQUEST, "test REQUEST");
