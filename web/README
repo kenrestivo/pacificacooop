@@ -12,138 +12,24 @@ the fieldstruct
 	a fieldstruct is a VIEW of data.
 		not analogous to a table, or even necessarily a privilge realm
 	all its possible members and all possible values of each of its members!
-$invitationfields = array(
-	"familyid" => array (
-				required => 1,
-				dupeignore => 1,
-				table => "leads" ,
-				linkfield => "name" ,
-				linktable => "families" ,
-				adminonly => 1,
-				display => "Co-Op Family",
-				callback =>	"popupUtil"
-				),
-	"salut" => array (
-				len => 25,
-				size => 20,
-				table => "leads" ,
-				dupeignore => 1,
-				display => "Ms. Mr. Dr." 
-				),
-	"first" => array (
-				size => 50,
-				table => "leads" ,
-				display => "First Name(s)" 
-				),
- 	"last" => array (
-				required => 1,
-				table => "leads" ,
-				display => "Last Name" 
-				),
- 	"title" => array(
-				table => "leads" ,
-				dupeignore => 1,
-				display => "Title" 
-				),
- 	"company" => array(
-				table => "leads" ,
-				dupeignore => 1,
-				display => "Company" 
-				),
- 	"addr" =>array (
-				required => 1,
-				table => "leads" ,
-				size => 50,
-				display => "Address" 
-				),
- 	"addrcont" => array(
-				table => "leads" ,
-				dupeignore => 1,
-				display => "Address2" 
-				),
- 	"city" =>array (
-				required => 1,
-				table => "leads" ,
-				display => "City" ,
-				size => 15 ,
-				def => "Pacifica"
-				),
- 	"state" =>array (
-				required => 1,
-				table => "leads" ,
-				display => "State" ,
-				size => 5 ,
-				def => "CA"
-				),
- 	"zip" =>array (
-				required => 1,
-				table => "leads" ,
-				display => "Zip/PC" ,
-				size => 8,
-				def => "94044"
-				),
- 	"country" =>array (
-				required => 1,
-				table => "leads" ,
-				display => "Country" ,
-				size => 10,
-				def => "USA"
-				),
- 	"relation" =>array (
-				required => 1,
-				dupeignore => 1,
-				table => "leads" ,
-				display => "Relation" ,
-				def => "CHOOSE ONE",
-				choices => array (
-						'Relative','Friend', 'Coworker', 'Alumni', 'Other'),
-				),
- 	"source" => array(
-				required => 1,
-				table => "leads" ,
-				invisible => 1,
-				def => "Springfest" 
-				),
-	"leadsid" => array ( // MUST put the invisible index in here.
-				table => "leads" ,
-				invisible => 1
-				)
- 	"userid" => array(
-				required => 1,
-				adminonly => 1,
-				table => "users" ,
-				linkfield => "name" ,
-				linktable => "users" ,
-				callback =>	"popupUtil",
-				display => "User Name",
-				),
- 	"realm" => array(
-				table => "privs" ,
-				required => 1,
-				callback =>	"groupPopup",
-				display => "Area of the website"
-				),
- 	"userlevel" => array(
-				table => "privs" ,
-				required => 1,
-				callback =>	"privPopup",
-				viewcallback =>	"privTranslation",
-				display => "Permissions level for user's OWN data"
-				),
- 	"grouplevel" => array(
-				table => "privs" ,
-				required => 1,
-				callback =>	"privPopup",
-				viewcallback =>	"privTranslation",
-				display => "Permissions level for ALL user's data"
-				),
- 	"privid" => array(
-				required => 1,
-				invisible => 1,
-				table => "privs" 
-				)
-);
-);
+		adminonly
+		callback
+		choices
+		def
+		display
+		dupeignore
+		duplicates
+		invisible
+		len
+		lines
+		linkfield
+		linktable
+		required
+		size
+		table
+		type
+		viewcallback
+
 
 
 auth
