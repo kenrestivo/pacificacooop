@@ -135,4 +135,10 @@ select  inc.incid, inc.checknum, inc.payer, coa.description, inc.amount,
 		left join families on families.familyid = figlue.familyid
 	order by inc.checkdate desc
 
+-- query for deleting/updating session stuff
+select * from keglue 
+	left join kids on keglue.kidsid = kids.kidsid 
+	left join families on kids.familyid = families.familyid 
+	where families.name like "%hearne%";
+
 --- EOF

@@ -148,6 +148,7 @@ security: http auth
 			link to parents, for further auth
 			password (md5)
 			are users ALWAYS gonna be parents? add password to parents table?
+				if so, i can add the password to the parents table?
 			and username/uid. hmm. 
 		a userprivs table (many to many to users and areas)
 			various mysql-esque booleans with privs
