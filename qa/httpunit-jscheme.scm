@@ -81,19 +81,20 @@
 	 (lambda (link)
 	   (let* ((url (invoke link 'getURLString))
 			  (link-text (invoke link 'asText))
-			 (save-port (open-output-file
-						 (string-append "/mnt/kens/ki/proj/coop/qa/reports/"
-						  (number->string run-number) family
-						  (string-replace url  #\/ #\-)
-						  ))))
+; 			 (save-port (open-output-file
+; 						 (string-append "/mnt/kens/ki/proj/coop/qa/reports/"
+; 						  (number->string run-number) family
+; 						  (string-replace url  #\/ #\-)
+; 						  )))
+			 )
 		 ;; TODO: test here for email instead of skipping at end
 		 (write-line (string-append 
 					  link-text " > "
 					  url))
 		 (invoke link 'click)
 		 ;; save the raw html i got, so i can see what puked!
-		 (display (dump-page wtc) save-port)
-		 (close-output-port save-port)
+; 		 (display (dump-page wtc) save-port)
+; 		 (close-output-port save-port)
 		 (invoke wtc 'assertTextPresent "</html>")
 		 
 		 ;;(validate-html wtc)
