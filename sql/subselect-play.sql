@@ -140,3 +140,27 @@ union all
               on cikj.in_kind_donation_id = 
                 ikd.in_kind_donation_id
  
+-- with groups
+select company_name,
+        auct.item_value as auction_donations,
+        iks.item_value as in_kind_donations
+from companies
+left join 
+    (select  item_value, company_id
+     from companies_auction_join  as caj
+     left join auction_donation_items  as adi
+              on caj.auction_donation_item_id = 
+                adi.auction_donation_item_id
+        group by caj.company_id) 
+    as auct
+        on auct.company_id = companies.company_id
+left join 
+    (select  item_value, company_id
+     from companies_in_kind_join as cikj
+     left join in_kind_donations as ikd
+              on cikj.in_kind_donation_id = 
+                ikd.in_kind_donation_id
+        group by cikj.company_id) 
+    as iks
+        on iks.company_id = companies.company_id
+where companies.company_id = 82;
