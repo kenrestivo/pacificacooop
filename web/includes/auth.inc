@@ -212,6 +212,27 @@ checkPass($uid, $clearpass)
 
 
 /******************
+	QUICKLEVELCHECK
+	inputs: targetlevel, targetfamilyid, perms struct(from getAuthLevel), 
+		userstruct (from getUser)
+	return 0 if ok, 1 if no good
+******************/
+function
+quickLevelCheck($targetlevel, $targetfamilyid, $permstruct, $userstruct)
+{
+		if(($permstruct['userlevel'] >= $targetlevel  && 
+			$targetfamilyid == $userstruct['familyid']) || 
+			$permstruct['grouplevel'] >= $targetlevel) 
+		{
+			return 0;
+		}
+
+	return 1;
+}/* END QUICKLEVELCHECK */
+
+
+
+/******************
 	CHEKAUTHLEVEL
 	the highest-level function for checking authorisation
 		yes/no = A(auth, family to compare to, realm, level i need, [group i need])
