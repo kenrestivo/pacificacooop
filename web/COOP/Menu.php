@@ -130,32 +130,32 @@ class CoopMenu extends HTML_Menu
 			return $res; 
 		}
 
-	function getMoney($ie)
-		{
-			foreach($ie as $page => $cbs){
-				if($cbs['maintable'] == 'income'){
-					$moneymenu[] = array(
-						'title' => $cbs['shortdesc'],
-						// TODO the permissions checking!
-						'url' => sprintf('%s%s', $cbs['page'], 
-										 SID ? "?" .SID :""));
-				}
-				confessArray($moneymenu, 'moneymenu');
-				return $moneymenu;
-			}
-		}
+// 	function getMoney($ie)
+// 		{
+// 			foreach($ie as $page => $cbs){
+// 				if($cbs['maintable'] == 'income'){
+// 					$moneymenu[] = array(
+// 						'title' => $cbs['shortdesc'],
+// 						// TODO the permissions checking!
+// 						'url' => sprintf('%s%s', $cbs['page'], 
+// 										 SID ? "?" .SID :""));
+// 				}
+// 				confessArray($moneymenu, 'moneymenu');
+// 				return $moneymenu;
+// 			}
+// 		}
 
-	function getRealms($ie)
-		{
-			foreach($ie as $key => $cbs){
-				$realms[] = substr($cbs['realm'], 0, 7);
+// 	function getRealms($ie)
+// 		{
+// 			foreach($ie as $key => $cbs){
+// 				$realms[] = substr($cbs['realm'], 0, 7);
 				
-			}
-			$realms = array_unique($realms);
-			asort($realms);
-			confessArray($realms, "realmsort");
-			return $realms;
-		}
+// 			}
+// 			$realms = array_unique($realms);
+// 			asort($realms);
+// 			confessArray($realms, "realmsort");
+// 			return $realms;
+// 		}
 
 	function nestByRealm($ie)
 		{
@@ -204,7 +204,7 @@ class CoopMenu extends HTML_Menu
 			return $res;
 		}
 	
-
+    // just for testing. not actually used in real code
 	function create(&$page)
 		{		
 			$this->page =& $page;
