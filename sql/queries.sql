@@ -734,4 +734,28 @@ group by coa.account_number
 having Donations >0 or Ticket_Purchases > 0
 order by Donations desc, Ticket_purchases desc;
 
+
+-- income summary by family
+select sum(payment_amount) as total
+from income
+    left join leads_income_join as licj
+        on licj.income_id = income.income_id
+where licj.lead_id in
+        (select lead_id 
+        from invitations
+        where invitations.family_id = 56 and school_year = '2004-2005')	
+	and income.school_year = '2004-2005';
+
+-- ticket summary by family
+select sum(payment_amount) as total
+from income
+    left join tickets
+        on tickets.income_id = income.income_id
+where tickets.lead_id in
+        (select lead_id 
+        from invitations
+        where invitations.family_id = 56 and school_year = '2004-2005')	
+	and income.school_year = '2004-2005';
+
+
 --- EOF
