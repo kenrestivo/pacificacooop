@@ -323,6 +323,8 @@ sub checkNewKids(){
 
 	if($cnt){
 		print "DEBUG: yes, this kid is in the db\n";
+		#TODO check its attendance! and add/change its attendance here!
+		#	i.e. move it from AM to PM
 		return $ritem{'kidsid'};
 	} 
 	
@@ -383,7 +385,7 @@ sub checkChanges(){
 sub deleteReverse(){
 	my $ws = shift;
 	my $session = shift;
-	my ($rquery , $rqueryobj , $ritemref) ;
+	my ($rquery , $rqueryobj , $ritemref, $query) ;
 	my ($row, $maxrow, $col, $maxcol, $vr, $start, $end, $cnt) ;
 	my %ritem;
 	#this one goes through the logic BACKWARDSS!
@@ -391,7 +393,7 @@ sub deleteReverse(){
 	# then iterates through the sheet looking for them
 
 	$rquery = "
-		select kids.first, kids.last, enrol.semester, enrol.sess
+		select kids.first, kids.last, kids.kidsid, enrol.semester, enrol.sess
 			from attendance
 			left join enrol on attendance.enrolid = enrol.enrolid
 			left join kids on kids.kidsid = attendance.kidsid
@@ -457,6 +459,22 @@ sub deleteReverse(){
 			printf("DEBUG %s %s has been dropped OR moved from $session !\n",
 				$ritem{'first'}, $ritem{'last'} );
 			#TODO check 'sess' versus $session and deduce that they moved!
+			#	HANDLE THIS RIGHT! do i drop them here and then add them later?
+			$query = sprintf("update attendance set 
+					dropout = now() 
+					where kidsid = %d
+			",
+				#XXX i have horribly hacked this to 
+				#	HARD CODE for 2003-2004 session!
+				#	this MUST be fixed before the end of the school year!
+				$ritem{'kidsid'}, $session eq 'AM' ? 1 : 2
+			);
+			print "DEBUG doing <$query>\n";
+			unless ($opt_t){
+				print STDERR $dbh->do($query) . "\n";
+				return $dbh->{'mysql_insertid'};
+			}
+
 
 		} elsif ($cnt > 1){
 			#error! we have TWO matches??!
