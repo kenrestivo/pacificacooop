@@ -64,22 +64,35 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	$licref = &getlicenseinfo($id);
 
 	if($$insref{'exp'} && $$insref{'exp'} < $checkdate){
-		$badness .= "\tins ",  
-			strftime('%m/%d/%Y', localtime($$insref{'exp'})) ,
-			" company ", $$insref{'companyname'}, 
-			" policy ", $$insref{'policynum'}, " \n";
+		$badness .= "\tins ";
+		$badness .=	strftime('%m/%d/%Y', localtime($$insref{'exp'})) ;
+		$badness .=	" company ";
+		$badness .=  $$insref{'companyname'};
+		$badness .= " policy "; 
+		$badness .= $$insref{'policynum'}; 
+		$badness .= " \n";
 	}
 
 	if($$licref{'exp'} && $$licref{'exp'} < $checkdate){
-		$badness .= "\tlic ",  
-				strftime('%m/%d/%Y', localtime($$insref{'exp'})) ,
-				" driver ", $$licref{'first'}, " ", $$licref{'middle'}, " ", 
-				$$licref{'last'}, " \n";
+		$badness .= "\tlic ";
+		$badness .=   strftime('%m/%d/%Y', localtime($$licref{'exp'})) ;
+		$badness .= " driver ";
+		$badness .=  $$licref{'first'};
+		$badness .=  " ";
+		$badness .=  $$licref{'middle'};
+		$badness .=  " ";
+		$badness .=  $$licref{'last'};
+		$badness .=  " \n";
 	}
 
 	if($badness){
-		$badness .= "family ", $$famref{'name'}, " " , $$famref{'phone'}, 
-			" ", $$famref{'email'},  " \n";
+		$badness .= "family "; 
+		$badness .= $$famref{'name'}; 
+		$badness .= " " ; 
+		$badness .= $$famref{'phone'};
+		$badness .= " "; 
+		$badness .= $$famref{'email'};  
+		$badness .= " \n";
 	}
 
 	print $badness;
