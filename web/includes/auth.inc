@@ -47,7 +47,7 @@ $accessnames = array(
 		100 => array('Summarize', 'summary'),
 		200 => array('View', 'view'),
 		500 => array('Edit', 'edit'),
-		600 => array('Add', 'add'),
+		600 => array('Create', 'add'),
 		700 => array('Delete', 'confirmdelete'),
 		800 => array('Administer permissions for', NULL)
 );
@@ -398,6 +398,7 @@ accessLevelString($privnum, $callbacks)
 		//handle 0 as special case
 		return $accessnames[$privnum][0];
 	}
+	//TODO: this sucks, php weenie. use impode() instead.
 	while (list($key, $val) = each($accessnames)){
 		//print "[$key] ";
 		if(	$key <= $privnum && 
