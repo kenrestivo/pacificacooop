@@ -120,7 +120,7 @@ getPass($uid)
 		//printf("debug %s\n", $row['name']);
 	}
 
-	if (mysql_num_rows($result) > 0) {
+	if (mysql_num_rows($listq) > 0) {
 		if($row['password']){
 			print "DEBUG got one for $uid\n";
 			return($row['password']); //success!
@@ -249,7 +249,7 @@ checkAuthLevel($auth)
 		print "checkAuthLevel(): [SECRET]: $err\n";
 	}
 				
-	if (mysql_num_rows($result) > 0) {
+	if (mysql_num_rows($listq) > 0) {
 		return 0;
 	}                  
 
@@ -261,7 +261,9 @@ checkAuthLevel($auth)
 /******************
 	GETUSER
 	inputs: uid
-	returns: returns the human name of who they are logged in, or 0 if none!
+	returns: returns the human name of who they are logged in, 
+			and the familyid and familyname if there is one
+		or 0 if none!
 ******************/
 function
 getUser($uid)
@@ -274,7 +276,8 @@ getUser($uid)
 
 	// the query
 	$query = sprintf("
-		SELECT family.name 
+		SELECT users.name as username, families.name as familyname, 
+				users.familyid
 			FROM users 
 			left join families on families.familyid = users.familyid
 			WHERE users.userid = %d ",
@@ -282,20 +285,21 @@ getUser($uid)
 	$listq = mysql_query($query);
 	$err = mysql_error();
 	if($err){
-		error_log("getUser(): [SECRET]: $err", 0);
+		error_log("getUser(): [$query]: $err", 0);
 	}
 				
 	// sanity czech
-	if (mysql_num_rows($result) < 1) {
-		error_log("getUser(): ERROR! no name for family with uid $uid?", 0);
+	if (mysql_num_rows($listq) < 1) {
+		error_log(
+			"getUser(): ERROR [$query]! no name for family with uid $uid?", 0);
 		return 0;
 	}
 
 	while($row = mysql_fetch_assoc($listq)){
-		$name = $row['name']; 
+		$savedrow = array_reverse($row); //XXX hack around mysql
 	}
 
-	return $name;
+	return $savedrow;
 
 }/* END GETUSER */
 
@@ -347,15 +351,16 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	thruAuth($auth);
 	//user popup (or display) stuff
 	if($user == 'show'){
-		print "Choose user name: \n";
-		loginPopup($auth);
+		print "Select user name: \n";
+		loginPopup($auth['uid']);
 	} else {
-		printf("For %s\n", getUser($auth['uid']));
+		$u = getUser($auth['uid']);
+		printf("For %s\n", $u['username']);
 	}
 
 	//password stuff
 	if($type == 'password' || $type == 'both'){
-		if($auth['state'] == 'needconfirm'){
+		if($type == 'both'){ //XXX hack. i can't pass the REAL state thru.
 			print "Please choose a new password and type it here: \n";
 		} else {
 			print "Enter password: \n";
@@ -370,7 +375,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	}
 
 	printf("<INPUT TYPE=submit NAME='login' VALUE='LogIn'>");
-	printf("<INPUT TYPE=cancel NAME='cancel' VALUE='Cancel'>");
+	printf("<INPUT TYPE=submit NAME='cancel' VALUE='Cancel'>");
     print "</FORM>";
 }/* END LOGINFORM */
 
@@ -387,7 +392,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 function
 logIn($auth)
 {
-	confessArray($auth, 'logIn($auth) called with');
+	//confessArray($auth, 'logIn($auth) called with');
 
 	$states = array(
 		loggedout => array (
@@ -396,7 +401,7 @@ logIn($auth)
 					),
 		nullpass => array (
 					func => "nullPassState",
-					required => array ( "uid", "pwd"),
+					required => array ( "uid"),
 					description => "User has no password in database"
 					),
 		wrongpass => array (
@@ -446,7 +451,7 @@ logIn($auth)
 
 
 		$state = $auth['state'];
-		error_log("logIn(): entering" . $states[$state]['description'], 0);
+		error_log("logIn(): in $state", 0);
 
 		
 		// sanity check the struct passed in
@@ -462,7 +467,9 @@ logIn($auth)
 			reset($auth);
 		}
 
-		confessArray($auth, "login()");
+		/* confessArray($auth, sprintf("login() calling %s() with", 
+				$states[$state]['func'] )); 
+		*/
 		// dispatch the appropriate action for this state, and collect result
 		$auth = $states[$state]['func']($auth);
 	} while ($auth['state'] != "needinput");
@@ -476,18 +483,26 @@ logIn($auth)
 /******************
 	LOGGEDOUTSTATE
 	the REAL main loop.
+	this is yet a THIRD mini-state machine. 
+	TODO: consider moving this out to login(), 
+		and letting this just handle loggedout!
 ******************/
 function
 loggedOutState($auth)
 {
 	$newauth = array(
-			uid => $auth['uid'],
 			state => 'loggedout'
 	);
 
+	//confessArray($newauth, "loggedoutstate");
+
 	// check for valid token
 	if($auth['uid'] && $auth['token']){
+		error_log("loggedOutState(): uid and token present", 0);
+		$newauth['uid'] = $auth['uid'];
 		if(checkToken($auth['uid'], $auth['token'])){
+			error_log("loggedOutState(): bad token", 0);
+			$newauth['state'] = 'loggedout'; 
 			return $newauth;
 		}
 		// wow! i'm logged in! pass token thru now that we know it's good.
@@ -496,42 +511,53 @@ loggedOutState($auth)
 		return $newauth;
 	}
 
-	// no pass, no uid, no dice!
-	if(!($auth['uid'] && $auth['pwd'])){
-		loginForm($newauth, 'password', 'show', "Please log in.");
-		$newauth['state'] = 'needinput'; 
-		return $newauth;
-	}
-
 	//check that uid is valid
 	if($auth['uid'] && !getUser($auth['uid'])){
+		error_log(
+			sprintf("loggedOutState(): uid %d present, but user not in db", 
+				$auth['uid'])
+		, 0);
 		loginForm($newauth, 'password', 'show', "No such user. Please log in.");
-		$newauth['state'] = 'needinput'; 
-		return $newauth;
-	}
-	
-	// if there's no password stored for this user
-	if($auth['uid'] && !getPass($auth['uid'])){
-		loginForm($newauth, 'both', 'show', 
-			"Welcome! Please choose a new password here");
 		$newauth['state'] = 'needinput'; 
 		return $newauth;
 	}
 
 	// ok, they supplied a password. now... let's check it.
 	if($auth['pwd']){
+		error_log("loggedOutState(): pwd provided", 0);
 		$token = checkPass($auth['uid'], $auth['pwd']);
 		if($token){
+			error_log("loggedOutState(): password matches!", 0);
 			//hooray!! the password is correct!
 			$newauth['token'] = $token;
 			$newauth['state'] = 'loggedin'; 
 			return $newauth;
 		} else {
+			error_log("loggedOutState(): password does not match", 0);
 			//incorrect password. let the pachinko machine handle it
 			$newauth['state'] = 'wrongpass'; 
 			return $newauth;
 		}
 	} 
+	
+	// if there's no password stored for this user
+	if($auth['uid'] && !getPass($auth['uid'])){
+		error_log(
+			sprintf("loggedOutState(): uid %d in db, but null password", 
+				$auth['uid']) , 
+			0);
+		$newauth['uid'] = $auth['uid']; 
+		$newauth['state'] = 'nullpass'; 
+		return $newauth;
+	}
+
+	// no pass, no uid, no dice!
+	if(!($auth['uid'] && $auth['pwd'])){
+		error_log("loggedOutState(): no uid, no pwd", 0);
+		loginForm($newauth, 'password', 'show', "Please log in.");
+		$newauth['state'] = 'needinput'; 
+		return $newauth;
+	}
 
 	error_log("loggedOutState(): unhandled state! an endless loop?", 0);
 	return $newauth;
@@ -548,8 +574,21 @@ nullPassState($auth)
 {
 	$newauth = array(
 			uid => $auth['uid'],
-			state => 'loggedout'
+			state => 'nullpass'
 	);
+
+	if(!$auth['pwd']){
+		$uinfo = getUser($auth['uid']);
+		loginForm($newauth, 'both', 'hide', 
+			sprintf("Welcome %s! 
+				This must be your first time using the new 
+				secure login version of the site. 
+				Please choose a new password that you will 
+				use for this site from now on, and type it in here.", 
+				$uinfo['username']));
+		$newauth['state'] = 'needinput'; 
+		return $newauth;
+	}
 
 	//no confirmation password. need one
 	if(!$auth['confirm']){
@@ -588,7 +627,7 @@ needConfirmState($auth)
 {
 	$newauth = array(
 			uid => $auth['uid'],
-			state => "loggedout" // explicitly set it
+			state => "needconfirm" // explicitly set it
 	);
 	$newauth['state'] = "loggedout";
 	loginForm($newauth, 'both', 'hide', 
