@@ -324,7 +324,7 @@ insert into ticket_type set
 
 insert into ticket_type set
             ticket_type_id = 2,
-            description = "Included with package",
+            description = "Included with Donation",
             paid_flag = 1;
 
 insert into ticket_type set
@@ -339,7 +339,7 @@ insert into ticket_type set
 
 insert into ticket_type set
             ticket_type_id = 5,
-            description = "Freebie",
+            description = "Comp/Freebie",
             paid_flag = 0;
 
 insert into ticket_type set

@@ -35,6 +35,7 @@ class Ticket_type extends DB_DataObject
 				$this->whereAdd(sprintf('paid_flag = %d',
 										$paid == 'no' ? 0 : 1 ));
 			}
+			$this->orderBy('description');
 			$this->find();
 			while($this->fetch()){
 				$opts[$this->ticket_type_id] = 
