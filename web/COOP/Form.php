@@ -105,6 +105,7 @@ class coopForm extends CoopObject
 		}
 
 
+	// this is called by quickform
 	function process($vars)
 		{
 			
@@ -121,7 +122,9 @@ class coopForm extends CoopObject
 			} else {
 				$this->insert();
 			}
-			//saveAudit($this->table, $id, $page->auth['uid']);
+
+			saveAudit($this->table, $this->obj->{$this->pk}, 
+					  $this->page->auth['uid']);
 					
 			return true;
 		}
