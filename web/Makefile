@@ -27,11 +27,6 @@ XCLUDE='*dbhost*'
 
 
 
-#XXX this is so borken
-# the excludes do NOT work
-# it utterly fucks up the permissions
-# don't use it.
-
 all::
 
 
