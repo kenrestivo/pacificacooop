@@ -6,14 +6,11 @@
 			 (database simplesql))
 (require 'printf)
 
-(define *dbh* (apply simplesql-open "mysql"
-				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf")))
 
 
-
-(define all-realms
+(define (get-all-realms dbh)
   (map (lambda (x) (vector-ref x 0))
-	 (simplesql-query *dbh* "
+	   (simplesql-query dbh "
 		select realm from user_privileges group by realm order by realm")))
 
 
@@ -52,16 +49,25 @@
 								   user-id realm group-level user-level))
 		  (last-insert-id *dbh*)))))
 
+(define (get-user-id dbh name)
+  (last-item (simplesql-query dbh (sprintf #f "
+				select user_id from users where name like \"%%%s%%\" "
+								name))))
 
 ;;; ok, now do it!
-(for-each (lambda (user-id)
-			(for-each (lambda (realm)
-						(change-privs *dbh* user-id realm 800 800))
-					  springfest-realms))
-		  '(8 68))
+(define (springfest-gods)
+  (let ((dbh (apply simplesql-open "mysql"
+					(read-conf "/mnt/kens/ki/proj/coop/sql/db-input.conf"))))
+	(for-each (lambda (user-id)
+				(for-each (lambda (realm)
+							(change-privs dbh user-id realm 800 800))
+						  springfest-realms))
+			  (map (lambda (x) (get-user-id dbh x))
+				   '("vreeland" "cooke")))
+	(simplesql-close dbh)))
 
 
-(simplesql-close *dbh*)
+
 
 
 ;; EOF
