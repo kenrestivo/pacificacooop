@@ -885,7 +885,7 @@ loggedOutState($auth, $states)
 		$olduser = sprintf("User '%s' logged out.", $uinfo['username']);
 	}
 
-	//destroy th session here!! read docs.
+	//DO NOT destroy th session here!! just wipe auth. read docs.
 	$auth['uid']  = 0;
 	$_SESSION['auth'] = NULL;
 
