@@ -599,7 +599,7 @@ logIn($vars)
 		1, $savedauth);
  
 	//force us to drop all previous state if 'cancel' button pressed!
-	if($vars['logout']){
+	if($vars['logout'] || $vars['action'] == 'logout'){
 		$auth['state'] = 'loggedout';
 	}
 
