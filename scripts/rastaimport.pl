@@ -437,6 +437,7 @@ sub checkNewKids()
 	",
 		#XXX i have horribly hacked this to HARD CODE for 2003-2004 session!
 		#	this MUST be fixed before the end of the school year!
+		#		i.e. "1" and "2" are SPECIFIC to this calendar year. DON'T DO IT!
 		$kidsid, $session eq 'AM' ? 1 : 2
 	);
 	if($opt_v){
@@ -452,13 +453,85 @@ sub checkNewKids()
 	
 } #END CHECKNEWKIDS
 
+
 #######################
 #	CHECKCHANGES
 #######################
 sub checkChanges(){
 	#search in db. compare all relevant fields
 	#issue updates if needed
-	#XXX should i call the newkids, etc here?
+	#the DANGER is that there is no uniqueid to compare against... trouble.
+	#ASSUMPTION: newkids has already been called, as have deletes!
+	my $rowref = shift;
+	my $session = shift;
+	my ($rquery , $rqueryobj , $ritemref, $query) ;
+	my %ritem;
+	my $cnt = 0;
+
+	$rquery = sprintf("
+		select kids.first, kids.last, kids.kidsid, kids.familyid, 
+				enrol.semester, enrol.sess, attendance.dropout
+			from attendance
+				left join enrol on attendance.enrolid = enrol.enrolid
+				left join kids on kids.kidsid = attendance.kidsid
+			where enrol.semester = '2003-2004'  
+				and last like \"%%%s%%\" and first like \"%%%s%%\"
+	",
+			$session, $$rowref[0], $$rowref[3]
+	);
+
+	if($opt_v){
+		print "DEBUG doing <$rquery>\n"; #debug only
+	}
+	$rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
+	$rqueryobj->execute() or die "couldn't execute $!\n";
+
+	while ($ritemref = $rqueryobj->fetchrow_hashref){
+		%ritem = %$ritemref; #allocate this, so it persists
+		$cnt++;
+	}
+	if ($cnt > 1){
+		printf("ERROR! %s %s in same session with same name twice!\n",
+			$ritem{'first'}, $ritem{'last'}
+		);
+	} elsif($cnt == 1){
+		if($opt_v){
+			print "DEBUG: yes, this kid is in the db\n";
+		}
+
+		#compare/change:
+		#	attendance.enrolid/dropout
+		#		ok, we found the kid. compare its current session/dropout status	
+		#		and update it (change session, undrop if they're back) if needed
+		if( $session eq $ritem{'sess'} || $ritem{'dropout'} ){
+			#TODO change the session, and undrop them (they ARE enrolled)
+			#	ugh.. deal with semester (i.e. 2003-2004)
+			if($opt_v){
+				printf ("DEBUG: %s %s was dropped out. un-dropping them\n",
+					$ritem{'first'}, $ritem{'last'}
+				);
+			}
+		}
+		#XXX this query is brain-dead. fix it.
+		if( $session ne $ritem{'sess'} || !$ritem{'dropout'} ){
+			#TODO gurf
+			#	ugh.. deal with semester (i.e. 2003-2004)
+			if($opt_v){
+				printf ("DEBUG: %s %s wasn't enrolled in this session. adding them\n",
+					$ritem{'first'}, $ritem{'last'}
+				);
+			}
+		}
+
+
+		#	family.phone
+		
+
+		#	parents.email, parents.worker
+
+	}
+
+
 } #END CHECKCHANGES
 
 
