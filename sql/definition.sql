@@ -14,7 +14,7 @@ create table coop.ins(
     vidnum varchar(17),
     expires date,
     companyname varchar(255),
-    naic int(20),
+    naic int(5),
     primary key (insid)
 );
 
