@@ -21,8 +21,11 @@
 NFSNRSYNC=/nfsn/bin/rsync 
 NFSNUSR=ken
 NFSNHOST=phx3.nearlyfreespeech.net
-NFSNPATH=/nfsn/content/paccoop/htdocs/sf
-HERE=../livesite/
+NFSNDOCROOT=/nfsn/content/paccoop/htdocs
+NFSNLIVEPATH=$(NFSNDOCROOT)/sf/
+LIVEHERE=../livesite/
+NFSNDEVPATH=$(NFSNDOCROOT)/sf-dev/
+DEVHERE=../web/
 XCLUDE='*dbhost*' 
 
 
@@ -30,23 +33,39 @@ XCLUDE='*dbhost*'
 all::
 
 
-upload::
+upload-live::
 	rsync -e ssh \
 		--rsync-path=$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
-		$(HERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNPATH)
+		$(LIVEHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNLIVEPATH)
 
-download::
+download-live::
 	rsync -e ssh \
 		--rsync-path=$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude '*.sql' \
-		$(NFSNUSR)@$(NFSNHOST):$(NFSNPATH)/ $(HERE)
+		$(NFSNUSR)@$(NFSNHOST):$(NFSNLIVEPATH)/ $(LIVEHERE)
 
-commit:
-	cvs commit -m "syncing"
+upload-dev::
+	rsync -e ssh \
+		--rsync-path=$(NFSNRSYNC) -avxWcC  \
+		--exclude $(XCLUDE) \
+		$(DEVHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)
 
-sync: commit download
+download-dev::
+	rsync -e ssh \
+		--rsync-path=$(NFSNRSYNC) -avxWcC  \
+		--exclude $(XCLUDE) \
+		--exclude '*.sql' \
+		$(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)/ $(DEVHERE)
+
+commit-live:
+	(cd $(LIVEPATH); cvs commit -m "syncing")
+
+commit-dev:
+	(cd $(DEVPATH); cvs commit -m "syncing")
+
+sync-live: commit-live download-live
 	
 
 
