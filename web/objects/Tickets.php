@@ -41,4 +41,7 @@ class Tickets extends DB_DataObject
 	var $fb_formHeaderText = "Springfest Event Tickets";
 
 	var $fb_linkDisplayFields = array('lead_id', 'income_id');
+
+	var $fb_requiredFields = array('ticket_type_id', 'ticket_quantity');
+
 }

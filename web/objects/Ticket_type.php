@@ -29,6 +29,7 @@ class Ticket_type extends DB_DataObject
 
 	function getTypes($paid = 'both')
 		{
+//			$opts[''] = 'None';
 
 			if($paid != 'both'){
 				$this->whereAdd(sprintf('paid_flag = %d',
@@ -36,7 +37,10 @@ class Ticket_type extends DB_DataObject
 			}
 			$this->find();
 			while($this->fetch()){
-				$opts[$this->ticket_type_id] = $this->description;
+				$opts[$this->ticket_type_id] = 
+					sprintf("%s (%s)",
+							$this->description,
+							$this->paid_flag ? "Payment Required" : "Free");
 			}
 			return $opts;
 		}
