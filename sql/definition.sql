@@ -277,6 +277,7 @@ create table companies (
 	fax varchar(255),
 	email varchar(255),
 	territory_id int(32),
+	familyid int(32), -- meaning this IS a family!!
 	do_not_contact datetime,
 	flyer_ok enum ('Unknown', 'Yes', 'No'),
 	primary key (company_id)
@@ -416,6 +417,7 @@ create table packages (
 	package_number varchar(20), 
 	package_title varchar(255), 
 	package_description longtext,
+	donated_by_text varchar(255), 
     package_value decimal(9,2),
 	item_type enum ('Product', 'Service'),
     primary key (package_id)
