@@ -68,14 +68,16 @@
 	print "<tr>\n";
 	print "\t<td><em><u>Family Name</u></em></td>\n";
 	print "\t<td align='center'><em><u>Leads Submitted</u></em></td>\n";
-	print "\t<td align='center'><em><u>Amount Paid</u></em></td>\n";
+	print "\t<td align='center'><em><u>Forfeit Paid</u></em></td>\n";
+	print "\t<td align='center'><em><u>Quilt Fee Paid</u></em></td>\n";
 	print "\t<td align='center'><em><u>Session</u></em></td>\n";
 	print "\t<td align='center'><em><u>Phone</u></em></td>\n";
 	print "</tr>\n";
 	
 	while($row = mysql_fetch_array($list))
 	{
-		$paid = checkPayments($row['familyid']);
+		$tennamespaid = checkPayments($row['familyid'], 1);
+		$quiltpaid = checkPayments($row['familyid'], 2);
 
 		#don't print this row if it's already paid up
 		if($unpaidchecked && $paid > 0)
@@ -86,9 +88,9 @@
 		print "</td><td align='center'>";
 		print $row[cntlead];
 		print "</td><td align='center'>";
-		if($paid){
-			printf("$%01.2f", checkPayments($row['familyid']));
-		}
+		$tennamespaid && printf("$%01.2f", $tennamespaid);
+		print "</td><td align='center'>";
+		$quiltpaid && printf("$%01.2f", $quiltpaid);
 		print "</td><td align='center'>";
 		print $row[sess];
 		print "</td><td align='center'>";
@@ -107,7 +109,7 @@
 #	inputs: familyid
 #	returns: total amount
 #############################
-function checkPayments($familyid)
+function checkPayments($familyid, $acctnum)
 {
 
 	$query = "
@@ -115,7 +117,7 @@ function checkPayments($familyid)
 			from families
 				left join figlue on families.familyid = figlue.familyid
 				left join inc on figlue.incid = inc.incid
-			where (inc.acctnum = 1 or inc.acctnum = 2)
+			where inc.acctnum = $acctnum
 				and families.familyid = $familyid
 			group by families.familyid
 		";
