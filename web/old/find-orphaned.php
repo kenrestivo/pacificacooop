@@ -29,8 +29,11 @@ $cp = new coopPage( $debug);
 $cp->pageTop();
 //$cp->createLegacy($cp->auth);
 
-$atd = new CoopView(&$cp, 'income', $none);
-$atd->recordActions = array('details' => 'Details');
+$targetTable = 'income';
+
+$atd = new CoopView(&$cp, $targetTable, $none);
+$atd->recordActions = array('details' => 'Details',
+							'edit' => 'Edit');
 $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
 print $menu->topNavigation();
@@ -40,30 +43,9 @@ print "<p>Springfest Orphaned Income</p>";
 print $cp->selfURL('View');
 
 
-// cheap dispatcher
-//confessArray($_REQUEST,'req');
-switch($_REQUEST['action']){
- 
- case 'details':
-	$top = new CoopView(&$cp, 'income', &$nothing);
-	//print "CHECKING $table<br>";
-	$top->obj->$mi = $cid;
-	$top->createLegacy($callbacks);
-	print $top->horizTable();
-
-	// standard audit trail, for all details
-	$aud =& new CoopView(&$cp, 'audit_trail', &$top);
-	$aud->obj->table_name = $callbacks['maintable'];
-	$aud->obj->index_id = $cid;
-	$aud->obj->orderBy('updated desc');
-	print $aud->simpleTable();
-
-	 break;
-	 
-
-//// DEFAULT (VIEW) //////
- default:
-	 print "<p>The following income entries are broken! They do not have anything associated with them</p>";
+function viewHack(&$cp, &$atd)
+{
+	 print "<p>The following entries are broken! They do not have anything associated with them</p>";
 	 //confessArray($atd->backlinks, 'backlinks');
 	 foreach($atd->backlinks as $table => $id){
 		 $joins[] = sprintf("left join %s on %s.%s = %s.%s",
@@ -81,8 +63,66 @@ switch($_REQUEST['action']){
 					  implode(' and ', $whereadd));
 	 //print $query;
 	 $atd->obj->query($query);
-	 print $atd->simpleTable(false);
+// 	 while($atd->obj->fetch()){
+// 		 confessObj($atd->obj, 'atdobj');
+// 	 }
+	 return $atd->simpleTable(false);
 
+}
+
+
+// cheap dispatcher
+//confessArray($_REQUEST,'req');
+switch($_REQUEST['action']){
+
+//////// EDIT //////////
+ case 'edit':
+	 $atdf = new CoopForm(&$cp, $targetTable, $none); // NOT the coopView above!
+
+	 
+	 $atdf->build($_REQUEST);
+
+
+	 // ugly assthrus for my cheap dispatcher
+	 $atdf->form->addElement('hidden', 'action', 'edit'); 
+
+	 $atdf->legacyPassThru();
+
+	 $atdf->addRequiredFields();
+	 
+
+	 if ($atdf->form->validate()) {
+		 print "saving...";
+		 print $atdf->form->process(array(&$atdf, 'process'));
+		 // gah, now display it again. they may want to make other changes!
+		 print viewHack(&$cp, &$atd);
+	 } else {
+		 print $atdf->form->toHTML();
+	 }
+	 break;
+
+
+////// DETAILS ///// 
+ case 'details':
+	$top = new CoopView(&$cp, $targetTable, &$nothing);
+	//print "CHECKING $table<br>";
+	$top->obj->{$top->pk} = $_REQUEST[$top->pk];
+	$top->obj->find(true);		//  XXX aack! need this for summary
+	print $top->horizTable();
+
+	// standard audit trail, for all details
+	$aud =& new CoopView(&$cp, 'audit_trail', &$top);
+	$aud->obj->table_name = $callbacks['maintable'];
+	$aud->obj->index_id = $cid;
+	$aud->obj->orderBy('updated desc');
+	print $aud->simpleTable();
+	
+	 break;
+	 
+
+//// DEFAULT (VIEW) //////
+ default:
+	 print viewHack(&$cp, &$atd);
 	 break;
 }
 
