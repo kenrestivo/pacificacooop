@@ -21,25 +21,31 @@
 
 use strict;
 use Spreadsheet::ParseExcel;
-my $oExcel = new Spreadsheet::ParseExcel;
+my $xls = new Spreadsheet::ParseExcel;
 
 #1.1 Normal Excel97
-my $oBook = $oExcel->Parse('Excel/Test97.xls');
-my($iR, $iC, $oWkS, $oWkC);
-print "FILE  :", $oBook->{File} , "\n";
-print "COUNT :", $oBook->{SheetCount} , "\n";
-print "AUTHOR:", $oBook->{Author} , "\n";
-for(my $iSheet=0; $iSheet < $oBook->{SheetCount} ; $iSheet++) {
-																					$oWkS = $oBook->{Worksheet}[$iSheet];
-	print "--------- SHEET:", $oWkS->{Name}, "\n";
-	for(my $iR = $oWkS->{MinRow} ;
-	defined $oWkS->{MaxRow} && $iR <= $oWkS->{MaxRow} ; $iR++) {
-		for(my $iC = $oWkS->{MinCol} ;
-			defined $oWkS->{MaxCol} && $iC <= $oWkS->{MaxCol} 
-			; $iC++) 
+my $bk = $xls->Parse('../imports/PM.xls');
+
+my($row, $col, $wk, $cell);
+print "FILE  :", $bk->{File} , "\n";
+print "COUNT :", $bk->{SheetCount} , "\n";
+print "AUTHOR:", $bk->{Author} , "\n";
+
+for(my $sh=0; $sh < $bk->{SheetCount} ; $sh++) {
+																					$wk = $bk->{Worksheet}[$sh];
+	print "--------- SHEET:", $wk->{Name}, "\n";
+
+	for(my $row = $wk->{MinRow} ;
+		defined $wk->{MaxRow} && $row <= $wk->{MaxRow} ; 
+		$row++) 
+	{
+		print "ROW $row -------\n";
+		for(my $col = $wk->{MinCol} ;
+			defined $wk->{MaxCol} && $col <= $wk->{MaxCol} 
+			; $col++) 
 		{
-			$oWkC = $oWkS->{Cells}[$iR][$iC];
-			print "( $iR , $iC ) =>", $oWkC->Value, "\n" if($oWkC);
+			$cell = $wk->{Cells}[$row][$col];
+			print "( $row , $col ) =>", $cell->Value, "\n" if($cell);
 		}
 	}
 }
