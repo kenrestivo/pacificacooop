@@ -94,8 +94,15 @@
 		 (result (post-url "http://fred/w3c-markup-validator/check"
 			  (list (list "uploaded_file" html) '("ss" "1")))))
 	;; TODO: check it for <h2 id="result" class="valid">
+	;; cheap substring? why not.
+	;; or figure out how to inject html into a response and then parse it
 	;; and save it if it's not present
 	))
 
+;; a silly driver around visit-all-links
+(define (many-visit-hack wtc)
+  (for-each (lambda (family)
+			(visit-all-links wtc (string-append family " Family")))
+		  '("Cooke" "Bartlett" "Restivo" "Walker")))
 
 ;;EOF
