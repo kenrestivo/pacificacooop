@@ -29,74 +29,74 @@ print "<h2>Totals</h2>";
 
 /* familid's in 
        raffle_income_join
-       figlue
+       families_income_join
        companies
  */
 showRawQuery("Total ALL income from ALL sources", 
-  "select coa.description, 
-	   sum(if(figlue.family_id>0 || companies.family_id>0,inc.amount,0)) 
+  "select chart_of_accounts.description, 
+	   sum(if(families_income_join.family_id>0 || companies.family_id>0,income.payment_amount,0)) 
 			as Member_Paid ,
-	   sum(if(figlue.family_id>0 || companies.family_id>0,0,inc.amount)) 
+	   sum(if(families_income_join.family_id>0 || companies.family_id>0,0,income.payment_amount)) 
 			as Non_Member_Paid ,
-	   sum(amount)  as Total 
-		from inc 
-			   left join coa on inc.account_number = coa.account_number 
-			   left join figlue on inc.income_id = figlue.income_id
+	   sum(payment_amount)  as Total 
+		from income 
+			   left join chart_of_accounts on income.account_number = chart_of_accounts.account_number 
+			   left join families_income_join on income.income_id = families_income_join.income_id
 			   left join raffle_income_join 
-					   on inc.income_id = raffle_income_join.income_id
+					   on income.income_id = raffle_income_join.income_id
 			   left join invitation_rsvps 
-					   on inc.income_id = invitation_rsvps.income_id
+					   on income.income_id = invitation_rsvps.income_id
 			   left join companies_income_join
-					   on inc.income_id = companies_income_join.income_id
+					   on income.income_id = companies_income_join.income_id
 					left join companies 
 						on companies.company_id = 
 							companies_income_join.company_id
-		group by inc.account_number order by total desc", 1
+		group by income.account_number order by total desc", 1
 );
 
 print "<h2>Reconciliation</h2>";
 
 showRawQuery("Total ALL income by reconciliation status", 
-  "select coa.description, 
-	   sum(if(inc.cleared_date>0,0,inc.amount)) 
+  "select chart_of_accounts.description, 
+	   sum(if(income.cleared_date>0,0,income.payment_amount)) 
 			as not_cleared_yet ,
-	   sum(if(inc.cleared_date>0,inc.amount,0)) 
+	   sum(if(income.cleared_date>0,income.payment_amount,0)) 
 			as cleared ,
-	   sum(amount)  as total 
-		from inc 
-			   left join coa on inc.account_number = coa.account_number 
-			   left join figlue on inc.income_id = figlue.income_id
+	   sum(payment_amount)  as total 
+		from income 
+			   left join chart_of_accounts on income.account_number = chart_of_accounts.account_number 
+			   left join families_income_join on income.income_id = families_income_join.income_id
 			   left join raffle_income_join 
-					   on inc.income_id = raffle_income_join.income_id
+					   on income.income_id = raffle_income_join.income_id
 			   left join invitation_rsvps 
-					   on inc.income_id = invitation_rsvps.income_id
+					   on income.income_id = invitation_rsvps.income_id
 			   left join companies_income_join
-					   on inc.income_id = companies_income_join.income_id
+					   on income.income_id = companies_income_join.income_id
 					left join companies 
 						on companies.company_id = 
 							companies_income_join.company_id
-		group by inc.account_number order by total desc", 1
+		group by income.account_number order by total desc", 1
 );
 
 
 print "<h2>Solicitation</h2>";
 
 showRawQuery("Income from Solicitation", 
-	 "select coa.description, 
-		   sum(if(companies.family_id>0,inc.amount,0)) 
+	 "select chart_of_accounts.description, 
+		   sum(if(companies.family_id>0,income.payment_amount,0)) 
 				as Member_Paid ,
-		   sum(if(companies.family_id>0,0,inc.amount)) 
+		   sum(if(companies.family_id>0,0,income.payment_amount)) 
 				as Non_Member_Paid ,
-			sum(amount)  as Total 
-		from inc 
+			sum(payment_amount)  as Total 
+		from income 
 			left join companies_income_join 
-				on companies_income_join.income_id = inc.income_id 
+				on companies_income_join.income_id = income.income_id 
 					left join companies 
 						on companies.company_id = 
 							companies_income_join.company_id
-			left join coa on inc.account_number = coa.account_number 
+			left join chart_of_accounts on income.account_number = chart_of_accounts.account_number 
 		where companies_income_join.company_id is not null 
-		group by inc.account_number order by total desc" , 1
+		group by income.account_number order by total desc" , 1
 	);
 
 print "<h2>Invitations</h2>";
@@ -112,26 +112,26 @@ showRawQuery("Invitation Counts",
 	);
 
 showRawQuery("Income from Invitations", 
-	 "select coa.description, 
-			sum(if(leads.family_id>0,0,amount)) as Alumni_List ,
-			sum(if(leads.family_id>0,amount,0)) as Family_Supplied ,
-			sum(amount)  as Total 
-		from inc 
+	 "select chart_of_accounts.description, 
+			sum(if(leads.family_id>0,0,payment_amount)) as Alumni_List ,
+			sum(if(leads.family_id>0,payment_amount,0)) as Family_Supplied ,
+			sum(payment_amount)  as Total 
+		from income 
 			left join invitation_rsvps 
-				on invitation_rsvps.income_id = inc.income_id 
+				on invitation_rsvps.income_id = income.income_id 
 				left join leads on leads.lead_id = invitation_rsvps.lead_id
-			left join coa on inc.account_number = coa.account_number 
+			left join chart_of_accounts on income.account_number = chart_of_accounts.account_number 
 		where invitation_rsvps.lead_id is not null 
-		group by inc.account_number order by total desc" ,1
+		group by income.account_number order by total desc" ,1
 	);
 
 showRawQuery("Income by Relationship", 
 	"select  leads.relation,
-			sum(if(leads.family_id>0,0,inc.amount)) as Alumni_List ,
-			sum(if(leads.family_id>0,inc.item_value,0)) as Family_Supplied ,
-			 sum(inc.item_value)  as Total 
+			sum(if(leads.family_id>0,0,income.payment_amount)) as Alumni_List ,
+			sum(if(leads.family_id>0,income.item_value,0)) as Family_Supplied ,
+			 sum(income.item_value)  as Total 
 		from invitation_rsvps
-			left join inc on invitation_rsvps.income_id = inc.income_id
+			left join income on invitation_rsvps.income_id = income.income_id
 				left join leads on leads.lead_id = invitation_rsvps.lead_id
 		where invitation_rsvps.lead_id is not null 
 		group by leads.relation
