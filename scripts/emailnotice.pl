@@ -29,7 +29,7 @@ use strict 'refs';
 
 
 #opt processing
-getopts('vaesrd:n:') or &usage();
+getopts('vaesrd:n:m:') or &usage();
 
 #arggh
 if($opt_d){
@@ -41,8 +41,12 @@ if($opt_d){
 	#$checkdate = time();
 }
 
-print "checking against $opt_d date $checkdate which is ", 
-		strftime('%m/%d/%Y', localtime($checkdate)), "\n";
+$opt_m =~ tr/a-z/A-Z/;
+printf("Checking expiration against %s for %s session%s\n", 
+		strftime('%m/%d/%Y', localtime($checkdate)), 
+		$opt_m ? $opt_m : "BOTH",
+		$opt_m ? "" : "s"
+);
 
 
 
@@ -80,9 +84,11 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 		#TODO maybe take a filename on command line, to output the report
 		#XXX this feels really "hacky". but... i'm to tired to do it right.
 		# if it has an email, and option e is specified, then skip
-		unless($opt_e && $massivearref->[0]->{'parref'}->{'email'}){
-			print &fieldTripReport($famref, $insarref, $massivearref, 
-					$checkdate, $opt_a ? 0 : 1);
+		if(!$opt_m || &getampm($id) =~ /$opt_m/i) {
+			unless($opt_e && $massivearref->[0]->{'parref'}->{'email'}){
+				print &fieldTripReport($famref, $insarref, $massivearref, 
+						$checkdate, $opt_a ? 0 : 1);
+			}
 		}
 	} else {
 		&emailReminder($famref, $insarref, $massivearref, 
@@ -532,9 +538,11 @@ sub fieldTripReport()
 			if($licref->{'exp'}){
 				if($onlyexpired ? $licref->{'exp'} < $checkdate : 1){
 					$badness .= sprintf(
-							"\t- License %s %s Driver's Name: %s %s %s \n",
+							"\t- License %s %s (%s)%s Driver: %s %s %s \n",
 							$licref->{'exp'} < $checkdate  ? "EXPIRED" : "",
 							strftime('%m/%d/%Y', localtime($licref->{'exp'})) ,
+							$licref->{'state'},
+							$licref->{'licensenum'},
 							$licref->{'first'},
 							$licref->{'middle'},
 							$licref->{'last'}
@@ -597,7 +605,44 @@ sub usage()
     print STDERR "\t-e skip email-able parents in report\n";
     print STDERR "\t-e include ALL parents, not just expireds!\n";
     print STDERR "\t-r report mode (email mode is default) \n";
+    print STDERR "\t-m session (am or pm, default BOTH) \n";
 	exit 1;
 }
+
+######################
+#	GETAMPM
+#	returns the am/pm status for this family
+######################
+sub getampm()
+{
+	my $famid = shift;
+	my $item;
+	my $itemref;
+	my $query;
+	my $sess;
+
+	#get array of working parent(s)
+	$query = "
+		select enrol.sess 
+			from kids 
+				left join keglue on keglue.kidsid = kids.kidsid 
+				left join enrol on enrol.enrolid = keglue.enrolid
+			where kids.familyid = $famid
+			group by enrol.sess
+	";
+
+
+	$opt_v && print "getampm(): doing <$query>\n"; #debug only
+	$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
+	$queryobj->execute() or die "couldn't execute $!\n";
+
+
+	while ($itemref = $queryobj->fetchrow_hashref){
+		$sess = $itemref->{'sess'};
+	} # end while
+
+	return $sess;
+
+}  #END GETAMPM
 
 #EOF
