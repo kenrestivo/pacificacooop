@@ -426,7 +426,16 @@ accessLevelString($privnum, $callbacks)
 ******************/
 function loginPopup($uid)
 {
-	print "<select name='auth[uid]' SINGLE>\n";
+	// the dreaded javascript in here!
+	print "<script language=javascript>
+			function submitForm() {
+				document.forms[0].submit(); 
+				return(true); 
+			} 
+			</script>";
+
+	print "<select name='auth[uid]' SINGLE 
+				onchange='javascript:submitForm()'>\n";
 	print "<option value='0'>CHOOSE ONE</option>\n";
 
 	#DO THE QUERY
