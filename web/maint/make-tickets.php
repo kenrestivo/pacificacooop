@@ -55,7 +55,8 @@ $user = $p['user_level'] >= $level ? 1 : 0;
 // 	done();
 // }
 
-print $cp->selfURL('Make Family Tickets', array('action' => 'maketickets'));
+print $cp->selfURL('Make Family Tickets', 
+				   array('action' => 'makefamilytickets'));
 print $cp->selfURL('Make Paddles for all tickets', 
 				   array('action' => 'makepaddles'));
 
@@ -63,8 +64,8 @@ print $cp->selfURL('Make Paddles for all tickets',
 //confessArray($_REQUEST,'req');
 switch($_REQUEST['action']){
 
-	//// MAKE TICKETS
- case 'maketickets':
+	//// MAKE FAMILY TICKETS
+ case 'makefamilytickets':
 	 $fam =& new CoopObject(&$cp, 'families', &$none);
 	 // note: account_number = 2 is quilt/food fee. you get a ticket if you drop.
 	 $fam->obj->query("
@@ -89,18 +90,32 @@ order by families.name;
 	 //look for tickets entry this year. none there? add 2 tickets.
 	 while($fam->obj->fetch()){
 		 $tic =& new CoopObject(&$cp, 'tickets', &$none);
-		 $tic->obj->{$fam->pk} = $fam->obj->{$fam->pk};
+		 $tic->obj->{$fam->pk} = $fam->obj->{$fam->pk};	// THIS fam
 		 $sav = $tic->obj;
 		 if($tic->obj->find() < 1){
-			 $sav->ticket_quantity = 2;
+			 // check for fee paid!!
+			 $finj = new CoopObject(&$cp, 'families_income_join', &$top);
+			 $finj->obj->{$fam->pk} = $fam->obj->{$fam->pk};	// THIS fam
+			 $inc = new CoopObject(&$cp, 'income', &$finj);
+			 $inc->account_number = 2; // food-quilt fee
+			 $inc->school_year = $sy;
+			 $inc->joinAdd($finj->obj);
+			 $found = $inc->find();
+			 $tq = $found > 0 ? 2 : 1;
+			 $sav->ticket_quantity = $tq;
 			 $sav->ticket_type_id = 3; // member ticket
 			 $sav->school_year = $sy;
 			 //XXX if i move this to the object, yank the printf!
-			 printf("<br>Inserting 2 tickets for %s family...", 
-					$fam->obj->name);
+			 printf("<br>Inserting %d tickets for %s family...", 
+					$tq, $fam->obj->name);
 			 $sav->insert();
+			 $added++;
 		 }
 	 }
+	 if(!$added){
+		 print "<br>Done. No new families or new payments of fees. No 'free' tickets need to be added. If that seems wrong, make sure the new families have been added, or that their Quilt/Surfboard fees have been paid and entered.<br>";
+	 }
+	 
 	 break;
 
 //////MAKE PADDLES
