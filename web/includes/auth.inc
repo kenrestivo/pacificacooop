@@ -423,7 +423,7 @@ logoutForm()
 {
 
 	printf("<FORM METHOD=POST ACTION='%s'>", 
-					$_SERVER['PHP_SELF']);
+					"index.php"); //force it to go back to index
 	printf("<INPUT TYPE=submit NAME='logout' VALUE='Log Out'>");
     print "</FORM>";
 }/* END LOGOUTFORM */
