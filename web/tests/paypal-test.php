@@ -45,7 +45,7 @@ function getMoney($ie)
 function getRealms($ie)
 {
 	foreach($ie as $key => $cbs){
-		$realms[] = $cbs['realm'];
+		$realms[] = substr($cbs['realm'], 0, 7);
 				
 	}
 	$realms = array_unique($realms);
@@ -56,10 +56,10 @@ confessArray($realms, "realmsort");
 
 function nestByRealm($ie, $realms)
 {
-	foreach($realms as $k => $realm){
-		$res[$realm]['title'] = $realm;
+	foreach($realms as $realm => $description){
+		$res[$realm]['title'] = $description;
 		foreach($ie as $key => $cbs){
-			if($cbs['realm'] == $realm){
+			if(strncmp($cbs['realm'], $realm, 7) == 0){
 				$res[$realm]['sub'][$key] = array(
 					'title' => $cbs['description'],
 					'url' => $cbs['page']);
@@ -79,6 +79,19 @@ include('members.inc');
 $members = indexEverything($everything);
 
 
+$realmmap = array( 
+	'auction' => 'Auctions',
+	'flyers' => 'Flyers',
+	'invitations' => 'Invitations',
+	'money' => 'Family Fees',
+	'nag' => 'Reminders',
+	'packaging' => 'Packaging',
+	'raffle' => 'Raffles',
+	'solicit' => 'Solicitation',
+	'tickets' => 'Tickets'
+
+);
+
 
 
 $heirmenu = array(
@@ -87,7 +100,7 @@ $heirmenu = array(
 		'sub' => callbacksToMenu($members)),
 	array(
 		'title' => 'Springfest',
-		'sub' => nestByRealm($sf, getRealms($sf))));
+		'sub' => nestByRealm($sf, $realmmap)));
 	
 //confessArray($sf, "sf");
 
@@ -98,8 +111,9 @@ print $renderer->toHtml();
 
 confessArray(nestByRealm($sf, getRealms($sf)), "nestedbyrealm");
 	
-//$menu->setMenuType('urhere');
-//$menu->show();
+$menu->forceCurrentURL('10names.php');
+$menu->setMenuType('urhere');
+$menu->show();
 
 
 
