@@ -184,6 +184,9 @@ class coopForm extends CoopObject
 
 	function insert()
 		{
+			if($this->page->debug > 1){
+				$this->obj->debugLevel(2);
+			}
 			$this->obj->insert();
 			$this->saveAudit(true);
 		}
