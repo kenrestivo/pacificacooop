@@ -5,5 +5,5 @@
 for i in `ls *.fixed`; do
  	FOO=`echo "$i" | sed -e "s/\.fixed//"`
 	 echo "moving $i to $FOO"
-	mv "$i" $FOO"
+	mv "$i" "$FOO"
 done
