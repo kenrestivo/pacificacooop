@@ -8,12 +8,6 @@ Capturing someone surfing is very helpful. Capturing someone surfing RANDOMLY is
 
 Here's what I'm thinking in terms of organising the task:
 
-each operation
-	add
-	view
-	edit
-	delete
-
 each slice/view
 	login
 	10names
@@ -28,6 +22,12 @@ each slice/view
 	raffles-locations
 	... more to come
 	
+each operation
+	add
+	view
+	edit
+	delete
+
 each user type
 	privileged
 		and variations thereof!
@@ -42,6 +42,7 @@ each type of input
 	cancel
 
 contents of responses
+	did it make it all the way through (i.e. to the /html tag?)
 	was the result page the expected response? 
 	did it show the user an error?
 	any Error/Warning messages from PHP?
@@ -50,8 +51,3 @@ contents of responses
 
 Big task. Right now I'm probably going to start writing cases for the new stuff: solicitation, raffles, packaging.  Any thoughts on how to prioritise this? Want to split it up and take a portion yourself? The thing is really quite pleasant to use.
 
--ken
--- 
----------------
-The world's most affordable web hosting.
-http://www.nearlyfreespeech.net
