@@ -38,9 +38,9 @@
 
 	$auth = logIn($pv);
 
+	print "<hr>\n";
 	$u = getUser($auth['uid']);
 
-	print "<hr>\n";
 
 
 	if($auth['state'] != 'loggedin'){
@@ -56,7 +56,6 @@
 		i can't resist abstracting it out into a libraray function. 
 		so... guess what's gonna be next here 
 	*/
-
 	//auction items
 	print "<tr>";
 	$p = getAuthLevel($auth, 'auction');
