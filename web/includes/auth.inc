@@ -385,17 +385,21 @@ getUser($uid)
 /******************
 	ACCESSLEVELSTRING
 	returns a text description of user permissions for this realm and userlevel
-	inputs: perms struct, and a realm name
+	inputs: privilege number
 	returns: text showing what the perms are in english
 ******************/
 function
-accessLevelString($p, $pfield, $realm)
+accessLevelString($privnum)
 {
 	global $accessnames;
 	$i = 0;
+	if(!$privnum){
+		//handle 0 as special case
+		return $accessnames[$privnum];
+	}
 	while (list($key, $val) = each($accessnames)){
 		//print "[$key] ";
-		if($key <= $p[$pfield] && $key > 0){
+		if($key <= $privnum && $key > 0){
 			$result .= sprintf("%s%s",  $i ? ", " : "", $accessnames[$key]);
 			$i++;
 		}
@@ -1069,7 +1073,7 @@ displayAuth($p, $u, $realm, $pretty)
 		printf("for the %s Family. </h3>
 				(You are authorized to %s the %s Family's %s).\n", 
 			$u['familyname'], 
-			accessLevelString($p, 'userlevel', $realm),
+			accessLevelString($p['userlevel']),
 			$u['familyname'],
 			$pretty);
 	} else {
@@ -1077,7 +1081,7 @@ displayAuth($p, $u, $realm, $pretty)
 				(%s is authorized to %s the %s
 				for ALL families).</h3>",
 			$u['username'],
-			accessLevelString($p, 'grouplevel', $realm),
+			accessLevelString($p['grouplevel']),
 			$pretty);
 	}
 
