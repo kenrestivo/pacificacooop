@@ -327,10 +327,11 @@ CREATE TABLE insurance_information (
 -- Table structure for table `invitation_rsvps`
 --
 
-CREATE TABLE invitation_rsvps (
+CREATE TABLE tickets (
   invitation_rsvps_id int(32) NOT NULL unique auto_increment,
   income_id int(32) default NULL,
   ticket_quantity int(5) default NULL,
+  family_id int(32) default NULL,
   lead_id int(32) default NULL,
   company_id int(32) default NULL,
  ticket_type enum('Paid for','Included with package', 'Member','VIP','Freebie','Other') default NULL,
@@ -824,6 +825,14 @@ CREATE TABLE auction_purchases (
     PRIMARY KEY  (auction_purchase_id)
 ) ;
 
+
+CREATE TABLE leads_income_join (
+  leads_income_join_id int(32) NOT NULL unique auto_increment,
+  income_id int(32) default NULL,
+  lead_id int(32) default NULL,
+  PRIMARY KEY  (leads_income_join_id)
+) ;
+    
 
 
 
