@@ -221,7 +221,7 @@ function
 quickLevelCheck($targetlevel, $targetfamilyid, $permstruct, $userstruct)
 {
 		if(($permstruct['user_level'] >= $targetlevel  && 
-			$targetfamilyid == $userstruct['familyid']) || 
+			$targetfamilyid == $userstruct['family_id']) || 
 			$permstruct['group_level'] >= $targetlevel) 
 		{
 			return 0;
