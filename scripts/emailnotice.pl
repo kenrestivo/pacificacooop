@@ -99,7 +99,7 @@ sub getworkers()
 {
 	my $famid = shift;
 	my @results;
-	my %item;
+	my $item;
 	my $itemref;
 	my $query;
 
@@ -119,14 +119,14 @@ sub getworkers()
 
 
 	while ($itemref = $queryobj->fetchrow_hashref){
-		%item = %$itemref; #store a local copy, because mysql will blow it away!
-		push(@results, \%item); #yes, that's right, a referene
+		$item = &itemhack($itemref); #store a local copy, because mysql will blow it away!
 		if($opt_v){
 			printf("getworkers(): famid %d parent %s %s pid %d\n",
 				$famid,
-				$item{'last'}, $item{'first'},
-				$item{'parentsid'});
+				$item->{'last'}, $item->{'first'},
+				$item->{'parentsid'});
 		}
+		push(@results, $item); #yes, that's right, a referene
 	} # end while
 
 	$opt_v && printf("getworkers(): returning %d workers\n", scalar @results);
@@ -135,6 +135,13 @@ sub getworkers()
 
 }  #END GETWORKERS
 
+
+sub itemhack()
+{
+	my $itemref = shift;
+	my %item = %$itemref;
+	return \%item;
+}
 
 ###############################################################
 #	GETLICENSEINFO
@@ -154,10 +161,11 @@ sub getlicenseinfo()
 	my $queryobj;
 	my $itemref;
 	my @results;
-	my %item;
+	my $item;
 	my $query;
 	my $pars;
 	my %everthang;
+	my %tmp;
 	my @total;
 
 	#TODO perhaps heirarchal hashen. this glumps all parents together in one array.
@@ -165,7 +173,7 @@ sub getlicenseinfo()
 		$pid = $pars->{'parentsid'};
 		$query = "
 			select unix_timestamp(max(lic.expires)) as exp, 
-				lic.last, lic.first, lic.middle, lic.state
+				lic.last, lic.first, lic.middle, lic.state, lic.licensenum
 			from lic 
 				where lic.parentsid = $pid
 			group by lic.parentsid
@@ -173,10 +181,20 @@ sub getlicenseinfo()
 		$opt_v && print "getlicenseinfo(): doing <$query>\n"; #debug only
 		$queryobj = $dbh->prepare($query) or die "can't prepare <$query>\n";
 		$queryobj->execute() or die "couldn't execute $!\n";
+		$opt_v && printf("getlicenseinfo(): checking licenses for  %s %s <%d>\n", 
+				$pars->{'first'}, $pars->{'last'}, $pid
+				);
 
 		while ($itemref = $queryobj->fetchrow_hashref){
-			%item = %$itemref; #store a local copy, because mysql will blow it away!
-			push(@results, \%item); #yes, that's right, a referene
+			$item = &itemhack($itemref); #store a local copy, because mysql will blow it away!
+			push(@results, $item); #yes, that's right, a referene
+			if($opt_v){
+				printf("getlicenseinfo(): returned exp %s for %s %s num %s\n",
+					$item->{'exp'},
+					$item->{'first'}, $item->{'last'},
+					$item->{'licensenum'}
+				);
+			}
 		} # end while
 
 		#this is so bizarre
@@ -184,7 +202,7 @@ sub getlicenseinfo()
 					scalar @total);
 		$everthang{'licarref'} = \@results;
 		$everthang{'parref'} = $pars;
-		push(@total, \%everthang); #yes, that's right, a referene
+		push(@total, &itemhack(\%everthang)); #yes, that's right, a referene
 	}
 
 	$opt_v && printf("getlicenseinfo(): returning %d total\n", 
@@ -204,7 +222,7 @@ sub getinsuranceinfo()
 	my $famid = shift;
 	my $queryobj;
 	my $itemref;
-	my %item;
+	my $item;
 	my @results;
 	my $query = "
 		select unix_timestamp(max(ins.expires)) as exp, parents.familyid, 
@@ -221,14 +239,14 @@ sub getinsuranceinfo()
 	$queryobj->execute() or die "couldn't execute $!\n";
 
 	while ($itemref = $queryobj->fetchrow_hashref){
-		%item = %$itemref; #store a local copy, because mysql will blow it away!
+		$item = &itemhack($itemref); #store a local copy, because mysql will blow it away!
 		if($opt_v){
 			printf("getinsuranceinfo(): famid: %s %s %s exp %s %s\n", 
-				$famid, $item{'last'}, $item{'first'}, 
-				strftime('%m/%d/%Y', localtime($item{'exp'})),
-				$item{'policynum'});
+				$famid, $item->{'last'}, $item->{'first'}, 
+				strftime('%m/%d/%Y', localtime($item->{'exp'})),
+				$item->{'policynum'});
 		}
-		push(@results, \%item); #yes, that's right, a referene
+		push(@results, $item); #yes, that's right, a referene
 	} # end while
 
 	$opt_v && printf("getinsuranceinfo(): returning %d items\n", scalar @results);
