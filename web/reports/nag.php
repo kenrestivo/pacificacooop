@@ -1,13 +1,3 @@
-<HTML>
-<HEAD>
-	<TITLE>Springfest Reminder List</TITLE>
-</HEAD>
-
-<BODY>
-
-<h2>Pacifica Co-Op Nursery School</h2>
-<h2>Springfest Leads Summary</h2>
-
 <?php
 	# $Id$
 
@@ -30,6 +20,17 @@
 	require_once("first.inc");
 	require_once("shared.inc");
 
+	print "
+		<HTML>
+		<HEAD>
+			<TITLE>Springfest Reminder List</TITLE>
+		</HEAD>
+
+		<BODY>
+
+		<h2>Pacifica Co-Op Nursery School</h2>
+		<h2>Springfest Leads Summary</h2>
+	";
 	#useful for form debugging. 
 	#some host's security policies tend to break globals. use this to check.
 	#confessVars();
