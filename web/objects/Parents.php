@@ -27,7 +27,13 @@ class Parents extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_linkDisplayFields = array('last_name','first_name');
-	var $fb_fieldLabels = array ('last_name' => 'Last Name');
+	var $fb_fieldLabels = array (
+		'last_name' => 'Last Name',
+		'first_name' => 'First Name',
+		'type' => 'Parent Type',
+		'worker' => 'Main worker'
+		);
 	var $fb_linkOrderFields = array ('last_name', 'first_name');
 	var $fb_enumFields = array ('type', 'worker');
+	var $fb_fieldsToRender = array ('last_name', 'first_name', 'type', 'worker');
 }

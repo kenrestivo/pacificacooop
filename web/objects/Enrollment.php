@@ -26,5 +26,13 @@ class Enrollment extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_enumFields = array ('am_pm_session');
+	var $fb_fieldLabels = array(
+		'kid_id' => 'Student',
+		'school_year' => 'School Year',
+		'am_pm_session' => "Session",
+		'start_date' => 'Start Date',
+		'dropout_date' => "Drop Date"
+		);
+//	var $fb_fieldsToRender = array('school_year', 'am_pm_session', 'start_date', 'dropout_date');
 
 }

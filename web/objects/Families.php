@@ -25,7 +25,12 @@ class Families extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_linkDisplayFields = array('name');
-	var $fb_fieldLabels = array ('name' => 'Family Name');
+	var $fb_fieldLabels = array (
+		'name' => 'Family Name',
+		'phone' => 'Phone Number',
+		'address1' => 'Address',
+		'email' => 'Email Address'
+		);
 	//var $fb_crossLinks = array(array('table' => 'families_income_join',
 	//'fromField' => 'family_id', 'toField' => 'income_id'));
 }

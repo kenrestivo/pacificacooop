@@ -25,4 +25,11 @@ class Nag_indulgences extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_fieldLabels = array (
+		'note' => "Reason",
+		'granted_date' => 'Date Granted',
+		'indulgence_type' => 'Type',
+		'family_id' => 'Co-Op Family',
+		'school_year' => 'School Year'
+		);
 }
