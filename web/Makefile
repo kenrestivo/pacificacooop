@@ -18,10 +18,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-#NFSNRSYNC="--rsync-path=/nfsn/bin/rsync"
+NFSNRSYNC="--rsync-path=/usr/local/bin/rsync"
 NFSNUSR=ken
 NFSNHOST=dev.phx.nearlyfreespeech.net
-NFSNDOCROOT=/nfsn/content/paccoop/htdocs
+NFSNDOCROOT=/f1/content/paccoop/htdocs
 NFSNLIVEPATH=$(NFSNDOCROOT)/sf/
 LIVEHERE=../livesite/
 IMAGEHERE=../images/
