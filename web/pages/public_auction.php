@@ -21,6 +21,7 @@ require_once("shared.inc");
 require_once("CoopObject.php");
 require_once("HTML/Table.php");
 
+PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
 
 function sponsors(&$cp)
