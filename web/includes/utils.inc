@@ -169,10 +169,10 @@ function
 warnDev()
 {
 	if(preg_match("/dev/", $_SERVER['PHP_SELF'])){
-		print "<p><font color='#ff0000'>NOTE! THIS IS THE DEV SITE! 
-				THIS IS NOT LIVE DATA, THIS IS ONLY FOR TESTING.</font>
-				<br>If you want the live site, use the 'members' link, 
-				NOT 'members-dev'. Thanks.</p>";
+		print '<div id="warning"><p><strong>NOTE! THIS IS THE DEV SITE! 
+				THIS IS NOT LIVE DATA, THIS IS ONLY FOR TESTING.</strong>
+				<br>If you want the live site, use the "members" link, 
+				NOT "members-dev". Thanks.</p></div>';
 	}
 	
 }/* END WARNDEV */
