@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 #$Id$
-#fixes last names
+#gathers the expired or blank licenses, and prints them, optionally emailing them
 
 # Copyright (C) 2003  ken restivo <ken@restivo.org>
 #
@@ -63,36 +63,43 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	$insref = &getinsuranceinfo($id);
 	$licref = &getlicenseinfo($id);
 
-	if($$insref{'exp'} && $$insref{'exp'} < $checkdate){
-		$badness .= "\tins ";
-		$badness .=	strftime('%m/%d/%Y', localtime($$insref{'exp'})) ;
-		$badness .=	" company ";
-		$badness .=  $$insref{'companyname'};
-		$badness .= " policy "; 
-		$badness .= $$insref{'policynum'}; 
-		$badness .= " \n";
+	if($$insref{'exp'} ){
+		if($$insref{'exp'} < $checkdate){
+			$badness .= "\tins ";
+			$badness .=	strftime('%m/%d/%Y', localtime($$insref{'exp'})) ;
+			$badness .=	" company ";
+			$badness .=  $$insref{'companyname'};
+			$badness .= " policy "; 
+			$badness .= $$insref{'policynum'}; 
+			$badness .= " \n";
+		}
+	} else {
+		$badness .= "\tno insurance\n";
 	}
 
-	if($$licref{'exp'} && $$licref{'exp'} < $checkdate){
-		$badness .= "\tlic ";
-		$badness .=   strftime('%m/%d/%Y', localtime($$licref{'exp'})) ;
-		$badness .= " driver ";
-		$badness .=  $$licref{'first'};
-		$badness .=  " ";
-		$badness .=  $$licref{'middle'};
-		$badness .=  " ";
-		$badness .=  $$licref{'last'};
-		$badness .=  " \n";
+	if($$licref{'exp'}) {
+		if($$licref{'exp'} < $checkdate){
+			$badness .= "\tlic ";
+			$badness .=   strftime('%m/%d/%Y', localtime($$licref{'exp'})) ;
+			$badness .= " driver ";
+			$badness .=  $$licref{'first'};
+			$badness .=  " ";
+			$badness .=  $$licref{'middle'};
+			$badness .=  " ";
+			$badness .=  $$licref{'last'};
+			$badness .=  " \n";
+		}
+	} else {
+		$badness .= "\tno drivers license\n";
 	}
 
 	if($badness){
-		$badness .= "family "; 
 		$badness .= $$famref{'name'}; 
 		$badness .= " " ; 
 		$badness .= $$famref{'phone'};
 		$badness .= " "; 
 		$badness .= $$famref{'email'};  
-		$badness .= " \n";
+		$badness .= "\n---------\n";
 	}
 
 	print $badness;
