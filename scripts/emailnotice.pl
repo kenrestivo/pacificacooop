@@ -47,7 +47,7 @@ $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
 #approximate list of families
 $rquery = "
 	select families.name, families.familyid, families.phone,
-			parents.email, parents.last, parents.first
+			parents.email, parents.last, parents.first, parents.parentsid
 		from families 
 			left join parents on parents.familyid = families.familyid
 		where parents.worker = 'Yes'
@@ -70,13 +70,13 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	#	i.e. BOTH their drivers licenses must be up to date.
 
 	# the report of people i need to call or write a note to!
-	#if(!$famref->{'email'}){
-	#	print &fieldTripReport($famref, $insref, $licref, $checkdate, 1);
-	#}
-	if($famref->{'email'}){
-		&emailReminder($famref, $insref, $licref, $checkdate, 1);
-
+	if(!$famref->{'email'}){
+		print &fieldTripReport($famref, $insref, $licref, $checkdate, 1);
 	}
+	#if($famref->{'email'}){
+	#	&emailReminder($famref, $insref, $licref, $checkdate, 1);
+
+	#}
 
 } # end while
 
@@ -260,7 +260,9 @@ sub emailReminder()
 						Message => $m,
 					);
 			#SEND!
+			#XXX aaack! BOTH of these want getopts (or gtk) for safety
 			sendmail(%mail) or die $Mail::Sendmail::error;
+			&updateNags($famref->{'parentsid'});
 			printf("result: <%s>\n", $Mail::Sendmail::log);
 		}
 		return 1;
@@ -357,5 +359,30 @@ sub fieldTripReport()
 		return "";
 	}
 } # END FIELDTRIPREPORT
+
+######################
+#	UPDATENAGS
+#	inputs:
+#	outputs: a tabular style report
+######################
+sub updateNags()
+{
+	my $pid = shift;
+
+	print "noting that we nagged them via email already\n";
+
+	#why enum ('Insurance', 'Springfest', 'Other'),
+	#how enum ('Email', 'Phone', 'CommsFolder', 'InPerson'),
+    #parentsid int(32),
+	#done datetime,
+
+	$query = sprintf("insert into nags set 
+				parentsid = '%s', why = 'Insurance', how = 'Email',
+				done = now() ", $pid
+			);
+	#print "DEBUG doing <$query>\n";
+	print STDERR $dbh->do($query) . "\n";
+
+} #END UPDATENAGS
 
 #EOF
