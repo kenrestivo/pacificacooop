@@ -83,8 +83,8 @@ savePass($uid, $clearpass)
 	}
 
 	//user_error("saving $uid, $hash, [$query]", o);
-	print "Your new password is saved! <br>
-			You'll need to use this new password from now on 
+	print "Your new password has been saved! <br>
+			You'll need to use your new password from now on 
 			whenever you access this site. <br>
 			Please make sure to remember it.\n";
 	
