@@ -264,7 +264,7 @@ writeSess($sessid, $vars)
 
 	//TODO replace is WRONG. use update... and handle INSERT if new.
 	$query = sprintf("replace into session_info 
-			set vars = '%s' , session_id = '%s', user_id = %d, ip_addr = %s",
+			set vars = '%s' , session_id = '%s', user_id = %d, ip_addr = '%s'",
 			 mysql_escape_string($vars), $sessid, $auth['uid'], $ip);
 	if(mysql_query($query)){
 		$rows = mysql_affected_rows();
