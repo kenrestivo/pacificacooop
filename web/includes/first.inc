@@ -232,6 +232,12 @@ closeSess()
 function
 readSess($sessid)
 {
+
+	if($sessid == ""){
+		user_error("readSess: called with null session id!!", 
+			E_USER_WARNING);
+		return("");
+	}
 	user_error("readSess: reading session id for [$sessid]", 
 		E_USER_NOTICE);
 
@@ -265,9 +271,9 @@ function
 writeSess($sessid, $vars)
 {
 	if(!($vars && $sessid)){
-		user_error("writeSess: empty session [$sessid]  vars [$vars]", 
-			E_USER_NOTICE);
-		return false;
+		user_error("writeSess: empty vars [$vars] or sessionid [$sessid]", 
+			E_USER_WARNING);
+		return(false);
 	}
 
 	user_error("writeSess: writing session [$sessid] vars [$vars]", 
