@@ -109,9 +109,9 @@ select families.name, enrol.sess
 
 -- the excel export report
 select leads.leadsid  as responsecode
-		,leads.last    
-		,leads.first  
 		,leads.salut 
+		,leads.first  
+		,leads.last    
 		,leads.title
 		,leads.company 
 		,leads.addr   
@@ -120,11 +120,19 @@ select leads.leadsid  as responsecode
 		,leads.state 
 		,leads.zip  
 		,leads.country
-		,leads.relation 
 		,date_format(leads.entered, '%m/%d/%Y %T') as entered
 		,families.name as familyname
 	from leads
 		left join families on leads.familyid = families.familyid
 	order by leads.last, leads.first
+
+-- detailed list of payments
+select  inc.incid, inc.checknum, inc.payer, coa.description, inc.amount,  
+		families.name
+	from inc
+		left join coa on coa.acctnum = inc.acctnum
+		left join figlue on figlue.incid = inc.incid
+		left join families on families.familyid = figlue.familyid
+	order by inc.checkdate desc
 
 --- EOF

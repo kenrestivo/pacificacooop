@@ -172,10 +172,6 @@ security: http auth
 	http auth "login", and a token that gets passed around!
 		let's try it as a function, on the money page. no login, no dice.
 		footer: a "logged in as" and/or "log out" on every page!
-		i want to do auth ONCE, then pass SOMETHING around../
-			but WHAT?
-				have a look at nfsn.com
-				have a look at pedanticnuke
 	ah, at some time, an interface for managing user privs!
 
 
@@ -196,5 +192,9 @@ Basically, it'll be something similar to your report,
 		if it sees "edit", call the save function with a (new) arg, 
 			so that it knows that we're changing not saving, 
 			and can conditionally use "update" in the SQL query instead of "insert", 
-	ah shit. i either need multiple forms to call, or, have a smart form
+				DONE
+	i either need multiple forms to call, or, have a smart form
 		that knows whether it's being called to edit, delete, etc
+			where is this now?
+
+
