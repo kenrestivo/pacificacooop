@@ -32,7 +32,13 @@ class PostPaypal
 	var $leads_id;
 	var $account_number;
 	var $company_id;
+    var $income_id;
 	var $uid;
+	var $paypal_obj;
+	var $key_mapping = array( 'fid' => 'family_id',
+							  'coa' => 'account_number',
+							  'lid' => 'lead_id',
+							  'cid' => 'company_id');
 
 	function factoryWrapper($tablename) 
 		{
@@ -49,44 +55,72 @@ class PostPaypal
 	function parseCustom($custom)
 		{
 			// split out all :'s
-			// save them into var's
+			$pairs = explode(":", $custom);
+			foreach ($pair as $nothing =>$pair){
+				preg_match('/(\w+)(\d+)/', $pair, $matches);
+				$index = $matches[1];
+				$value = $matches[2];
+				$longname = $this->key_mapping[$index];
+				// save them into var's
+				$this->$longname = $value;
+			}
 		}
 
 	// actually saves a paypal transaction as an income item
+	//this is the main engine
 	function postTransaction($uid)
 		{
 			$this->uid = $uid;
-
+			$this->paypal_obj->get($this->uid);
+			$this->parseCustom();
+			$this->postIncome();
+            $this->postFamily(); // TODO: handle leads/companies too
 		}
 
 	function postIncome()
 		{
-			$paypalobj = $this->factoryWrapper('accounting_paypal');
+			$this->paypal_obj = $this->factoryWrapper('accounting_paypal');
 			$incobj = $this->factoryWrapper('income');
-			$paypalobj->get($this->uid);
 
             //don't dupe. XXX this is dumb. what do i do about refunds?
-            $incobj->txn_id = $paypalobj->txn_id;
+            $incobj->txn_id = $this->paypal_obj->txn_id;
             if($incobj->find()){
                 return;   
             }
 
 			foreach (array('txn_id','check_number') as $key => $val){ 
-				$incobj->$val = $paypalobj->txn_id;
+				$incobj->$val = $this->paypal_obj->txn_id;
 			}
 			foreach (array('bookkeeper_date','cleared_date') as $key => $val){ 
-				$incobj->$val = $paypalobj->confirm_date;
+				$incobj->$val = $this->paypal_obj->confirm_date;
 			}
 			$incobj->payer = sprintf("%s %s", 
-                                     $paypalobj->first_name, 
-                                     $paypalobj->last_name);
+                                     $this->paypal_obj->first_name, 
+                                     $this->paypal_obj->last_name);
 
-            $incobj->amount = $paypalobj->payment_gross;
+            $incobj->amount = $this->paypal_obj->payment_gross;
             $incobj->school_year = findSchoolYear();
+			$incobj->account_number = $this->account_number;
+			$this->income_id = $incobj->insert();
+	}
+
+	function postFamily()
+		{
+		
+			$obj = $this->factoryWrapper('families_income_join');
+
+            //don't dupe. XXX this is dumb. what do i do about refunds?
+            $obj->income_id = $this->income_id;
+            if($obj->find()){
+                return;   
+            }
+
+            $obj->family_id = $this->family_id;
+            $obj->insert(); // save the giblets?
 	}
 
 
-} /// END PAYPAL CLASS
+} /// END POSTPAYPAL CLASS
 
 
 
