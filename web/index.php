@@ -20,6 +20,7 @@
 	require_once("auth.inc");
 	require_once("auctionfuncs.inc");
 	require_once("financefuncts.inc");
+	require_once("roster.inc");
 
 	print "<HTML>
 		<HEAD>
@@ -44,6 +45,7 @@
 	if($auth['state'] != 'loggedin'){
 		done();
 	}
+	familyDetail($u['familyid']);
 	
 	print "<p>Please choose an action</p>";
 
