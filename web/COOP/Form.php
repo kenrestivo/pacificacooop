@@ -93,10 +93,9 @@ class coopForm extends CoopObject
 
 			//confessObj($this, 'atd');
 			foreach($this->obj->toArray() as $key => $val){
-				if($key == $this->pk){
-					continue;
-				}
-				$el =& $form->addElement('text', $key);
+				$el =& $form->addElement(
+					$key == $this->pk ? 'hidden' : 'text', 
+					$key);
 				$el->setLabel($this->obj->fb_fieldLabels[$key] ? 
 							  $this->obj->fb_fieldLabels[$key] : $key);
 				$clf = $this->checkLinkField(&$this->obj, $key, $val);
@@ -111,16 +110,43 @@ class coopForm extends CoopObject
 			$form->addElement('hidden', 'action', 'process');
 			$form->addElement('submit', null, 'Save');
 
+			$form->applyFilter('__ALL__', 'trim');
+
 			return $form;
 		}
 
-	function save($vars)
+	function process($vars)
 		{
+			
+			//$this->obj->debugLevel(2);
+			$old = $this->obj; // copy, not ref!
+			
+			// hack around nulls
+			foreach($vars as $key => $val){
+				// i'm duplicating saveok here, basically
+				
+				if($val){
+					$cleanvars[$key] = $val;
+				}
+			}
 
-
+			$this->obj->setFrom($cleanvars);
+		
+			if($vars[$this->pk]){
+				$old->get($vars[$this->pk]);
+				if(!$old->find(true)){
+					user_error("save couldn't get its pk", E_USER_ERROR);
+				}
+				
+				$this->obj->update($old);
+			} else {
+				user_error("new not implemented yet", E_USER_ERROR);
+			}
 			//saveAudit($this->table, $id, $page->auth['uid']);
 					
+			return true;
 		}
+
 
 
 } // END COOP FORM CLASS
