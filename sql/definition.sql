@@ -168,6 +168,7 @@ create table coop.inc (
 	payer varchar(255),
     acctnum int(32),
     amount decimal(9,2),
+	note varchar(255),
 	primary key (incid)
 );
 

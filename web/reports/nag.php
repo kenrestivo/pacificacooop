@@ -129,6 +129,8 @@
 function checkPayments($familyid, $acctnum)
 {
 
+	#TODO: how to get ALL the notes, for ALL the incomes?
+	#		is there a way to sum strings?
 	$query = "
 		select families.familyid, sum(inc.amount) as total
 			from families
