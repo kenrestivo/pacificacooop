@@ -34,7 +34,6 @@
 	  (invoke wtc 'assertFormElementPresent "auth[pwd]")
 
 	  (invoke wtc 'setFormElement "auth[pwd]" "tester")
-	  (invoke wtc 'setFormElement "auth[pwd]" "tester")
 	  (invoke wtc 'submit "login")
 	  )))
 
@@ -60,6 +59,37 @@
 	  (invoke (invoke wtc 'getDialog)
 					  'getResponse))))
 
-;;(define tab ((invoke (get-response wtc) 'getTableStartingWith "Description")) 'asText)
+;; go as far as you can, so far.
+(define get-to-main-page 
+  (lambda(wtc)
+	(begin
+	  (choose-family wtc)
+	  (enter-password wtc)
+	  (main-page-ok wtc))))
 
+;; like foreach, cycles through a vector vec, doing procedure.
+;; if use-number, pass the procedure the vector's index
+;; instead of the vector's object
+(define for-each-vector (lambda (procedure vec use-number)
+	(do 
+		;;variable, init, step (basically, a let)
+		( (i 1 (+ 1 i)))
+		;;test, expression
+		( (>= i (vector-length vec)))
+		;; command
+		(procedure (if use-number i (vector-ref vec i))))))
+
+
+;; holder for things i'm still experimenting with.
+(define misc-shit
+  (lambda(wtc)
+	(begin
+	  ;; tab stuff
+	  (define tabs (invoke (get-response wtc) 'getTables))
+	  ;; link stuff
+	  (define links (invoke (get-response wtc) 'getLinks))
+	  (for-each-vector (lambda(v) (pp (invoke v 'getParameterNames)))
+					   links  #f)
+
+	  )))
 ;;EOF
