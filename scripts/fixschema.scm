@@ -85,14 +85,14 @@
 
 ;; find and change any columns which use this primary key!
 ;; TODO replace table/old/new with that alist
-(define (fix-primary-key key-table old-col new-col schema)
+(define (fix-primary-key dbh key-table old-col new-col schema)
   (for-each
    (lambda (linked-table)
 										; only if this is a primary key!
 	 (if (and (equal? (get-primary-key key-table schema) old-col)
 			  (assoc-ref linked-table old-col) ; it exists in this table
 			  (not (equal? (car linked-table) key-table))) ; i'm not primary
-		 (safe-sql *dbh* (sprintf #f "alter table %s change column %s %s %s"
+		 (safe-sql dbh (sprintf #f "alter table %s change column %s %s %s"
 						(car linked-table) old-col new-col
 						; get the definition from the actual subtable
 						(get-definition old-col (car linked-table) schema)))
@@ -113,7 +113,7 @@
 
 ;; make this the func for actually MAKING changes
 ;; change-line should be (table old-col new-col)
-(define (rename-column change-line schema)
+(define (rename-column dbh change-line schema)
   (let* (
 		 (old-table (car change-line))
 		 (old-col (cadr change-line))
@@ -122,9 +122,9 @@
 		 )
 	(if long-def
 		(begin 
-		  (safe-sql *dbh* (sprintf #f "alter table %s change column %s %s %s"
+		  (safe-sql dbh (sprintf #f "alter table %s change column %s %s %s"
 						 old-table old-col new-col long-def))
-		  (fix-primary-key old-table old-col new-col schema) )
+		  (fix-primary-key dbh old-table old-col new-col schema) )
 		;; TODO: be smart and check first if it is already changed
 		(printf "IGNORING: rename %s:%s is NOT in schema, can't change to %s\n"
 				old-table old-col new-col) ;; it's a bogus line? huh?
@@ -132,8 +132,8 @@
 	))
 
 ;;; the easy one: tables.
-(define (rename-table items)
-  (safe-sql *dbh* (sprintf #f "rename table %s to %s"
+(define (rename-table dbh items)
+  (safe-sql dbh (sprintf #f "rename table %s to %s"
 				 (car items) (cadr items))))
 
 ;;i have to save these up, because i have to handle join keys first 
@@ -164,11 +164,12 @@
 	  (close p) )))
 
 ;; this is the engine which actually does the work
-(define (fix-schema change-alist change-tables schema-alist)
+(define (fix-schema dbh change-alist change-tables schema-alist)
   (for-each (lambda (x)
-			  (rename-column x schema-alist))
+			  (rename-column dbh x schema-alist))
 			(flatten-change-alist change-alist))
-  (for-each rename-table change-tables))	; finally, follow up with tables
+  (for-each (lambda (x) (rename-table dbh x))
+			change-tables))	; finally, follow up with tables
   
 
 ;; changes a heirarchal alist into a flat (table old-col new-col) list
@@ -209,12 +210,24 @@
 
 
 ;; comment out or module-out the below, so i can load file w/o them
-(define *dbh* (apply simplesql-open "mysql"
-				   (read-conf "/mnt/kens/ki/proj/coop/sql/db-fake.conf")))
+(define (do-database-changes)
+  (let ((dbh (apply simplesql-open "mysql"
+					(read-conf "/mnt/kens/ki/proj/coop/sql/db-fake.conf"))))
+	
+	(fix-schema dbh *change-alist* *tables* *main-schema*)
+	
+	(simplesql-close dbh)))
 
-(fix-schema *change-alist* *tables* *main-schema*)
+;; note: load fixstyle.scm first, or work out the module stuff
+(define (load-code-changes)
+  (load-dict-list (clean-change-alist *change-alist*))
+  (set! results-list '())
+  (foreach (lambda (dir) (file-read (plain-files dir)))
+									'("/mnt/kens/ki/proj/coop/web"
+									  "/mnt/kens/ki/proj/coop/scripts"))
+  )
 
-(simplesql-close *dbh*)
+ 
 
 ;; EOF
 
