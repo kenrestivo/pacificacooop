@@ -36,8 +36,6 @@ print "checking against $in date $checkdate which is ",
 		strftime('%m/%d/%Y', localtime($checkdate)), "\n";
 
 
-exit 0;
-
 #basic login and housekeeping stuff
 $dbh = DBI->connect("DBI:mysql:coop:bc", "input", "test" )
     or die "can't connect to database $!\n";
@@ -54,17 +52,38 @@ $rquery = "
 ";
 
 
-print "doing <$rquery>\n"; #XXX debug only
+#print "doing <$rquery>\n"; #XXX debug only
 $rqueryobj = $dbh->prepare($rquery) or die "can't prepare <$rquery>\n";
 $rqueryobj->execute() or die "couldn't execute $!\n";
 
-while ($ritemref = $rqueryobj->fetchrow_hashref){
-	%ritem = %$ritemref;
-	$id = $ritem{'familyid'};
-	print "family ", $ritem{'name'}, " " , $ritem{'phone'}, 
-		" ", $ritem{'email'},  " \n";
-	&getlicenseinfo($id);
-	&getinsuranceinfo($id);
+while ($famref = $rqueryobj->fetchrow_hashref){
+	$id = $$famref{'familyid'};
+	$badness = "";
+
+	$insref = &getinsuranceinfo($id);
+	$licref = &getlicenseinfo($id);
+
+	if($$insref{'exp'} && $$insref{'exp'} < $checkdate){
+		$badness .= "\tins ",  
+			strftime('%m/%d/%Y', localtime($$insref{'exp'})) ,
+			" company ", $$insref{'companyname'}, 
+			" policy ", $$insref{'policynum'}, " \n";
+	}
+
+	if($$licref{'exp'} && $$licref{'exp'} < $checkdate){
+		$badness .= "\tlic ",  
+				strftime('%m/%d/%Y', localtime($$insref{'exp'})) ,
+				" driver ", $$licref{'first'}, " ", $$licref{'middle'}, " ", 
+				$$licref{'last'}, " \n";
+	}
+
+	if($badness){
+		$badness .= "family ", $$famref{'name'}, " " , $$famref{'phone'}, 
+			" ", $$famref{'email'},  " \n";
+	}
+
+	print $badness;
+
 
 } # end while
 
@@ -92,11 +111,7 @@ sub getlicenseinfo()
 	$queryobj->execute() or die "couldn't execute $!\n";
 
 	while ($itemref = $queryobj->fetchrow_hashref){
-		%item = %$itemref;
-		print "\tlic ", $item{'exp'}, 
-				" driver ", $item{'first'}, " ", $item{'middle'}, " ", 
-				$item{'last'}, " \n";
-
+		%item = %$itemref; #store a local copy, because mysql will blow it away!
 	} # end while
 
 	if($queryobj->rows() > 1){
@@ -128,11 +143,7 @@ sub getinsuranceinfo()
 	$queryobj->execute() or die "couldn't execute $!\n";
 
 	while ($itemref = $queryobj->fetchrow_hashref){
-		%item = %$itemref;
-		print "\tins ", $item{'exp'}, 
-			" company ", $item{'companyname'}, 
-			" policy ", $item{'policynum'}, " \n";
-
+		%item = %$itemref; #store a local copy, because mysql will blow it away!
 	} # end while
 
 	if($queryobj->rows() > 1){
