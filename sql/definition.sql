@@ -34,6 +34,7 @@ CREATE TABLE auction_donation_items (
   date_received date default NULL,
   location_in_garage varchar(255) default NULL,
   item_type enum('Unknown','Actual Item','Gift Certificate') default NULL,
+  committed enum('No','Yes') default 'No',
   package_id int(32) default NULL,
   school_year varchar(50) default NULL,
   PRIMARY KEY  (auction_donation_item_id),
@@ -409,8 +410,7 @@ CREATE TABLE packages (
   starting_bid decimal(9,2) default NULL,
   bid_increment decimal(9,2) default NULL,
   package_value decimal(9,2) default NULL,
-  wish_list enum('No','Yes') default 'Yes',
-  item_type enum('Unknown','Actual Item','Gift Certificate') default NULL,
+   item_type enum('Unknown','Actual Item','Gift Certificate') default NULL,
   school_year varchar(50) default NULL,
   PRIMARY KEY  (package_id),
 ) ;
@@ -693,7 +693,10 @@ CREATE TABLE ads (
     artwork_provided enum('Unknown','Yes','No') default NULL,
     school_year varchar(50) default NULL,
     ad_size_id int(32) NOT NULL ,
+	  artwork_received date default NULL,
 	lead_id int(32) default NULL,
+	company_id int(32) default NULL,
+  family_id int(32) default NULL,
     income_id int(32) default NULL,
     PRIMARY KEY (ad_id)
 ) ;
@@ -726,6 +729,20 @@ CREATE TABLE solicitation_calls (
   done datetime default NULL,
     school_year varchar(50) default NULL,
   PRIMARY KEY  (solicitation_call_id)
+) ;
+
+
+--- BOGUS not using this
+CREATE TABLE wishlist_items (
+  wishlist_item_id int(32) NOT NULL unique auto_increment,
+  wishlist_description longtext,
+  priority int(5) default NULL,
+  quantity int(5) default NULL,
+  date_received date default NULL,
+  family_id int(32) default NULL,
+  package_id int(32) default NULL,
+  school_year varchar(50) default NULL,
+  PRIMARY KEY  (wishlist_item_id)
 ) ;
 
 
