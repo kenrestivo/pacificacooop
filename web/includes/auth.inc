@@ -326,10 +326,40 @@ function
 logIn($auth)
 {
 
-	confessArray($auth, "login");
+	confessArray($auth, "logIn()");
 
+	//first login, no password entered
+	loginPopup($auth['uid']); 
+	print "Enter password: \n";
+	print "<INPUT TYPE=password NAME='auth[pwd]'>";
+
+
+}/* END LOGIN  */
+
+
+
+/******************
+	JUNK
+******************/
+function
+junk()
+{
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 			$_SERVER['PHP_SELF']);
+
+	print "<INPUT TYPE=submit NAME='login' VALUE='LogIn'>";
+    print "</FORM>";
+}/* END JUNK */
+
+
+
+/******************
+	ENTERNEWPASS
+	lets the user create and confirm a new password
+******************/
+function
+enterNewPass($auth)
+{
 
 	switch($auth['action']){
 		case 'new':
@@ -345,7 +375,9 @@ logIn($auth)
 			break;
 		case 'confirm':
 			//TODO: inputs: uid, action, token(hashed), confirmpass
-			if($auth['$token'] == generateToken($auth['uid'], $auth['confirm'])){
+			if($auth['$token'] == 
+					generateToken($auth['uid'], $auth['confirm']))
+			{
 				if(getPass($auth['uid']) == 0){
 					return savePass($auth['uid'], $auth['pwd']);
 				}
@@ -360,11 +392,8 @@ logIn($auth)
 			break;
 	}
 
-	print "<INPUT TYPE=submit NAME='login' VALUE='LogIn'>";
-    print "</FORM>";
 
-
-}/* END LOGIN  */
+}/* END  ENTERNEWPASS */
 
 
 

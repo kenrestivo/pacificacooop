@@ -242,7 +242,12 @@ auth.inc: the library functions
 				outputs: entry box form!
 						userpopup (uid selected?)
 						password field
-					next action(invis): new
+					if no password in database
+						next action(invis): new
+					else next action(invis): login
+			login:
+				inputs: clearpass, uid
+				outputs: if 
 			new: 
 				inputs: clearpass, uid, action
 				outputs: confirmation entry box
@@ -292,3 +297,11 @@ admin.php: administrative tasks
 	if checkAuthLevel() is ok, 
 		call newPass()
 	in future, there may be other admin tasks. when so, put up menu of them here
+
+ok.. STATE MACHINE!
+	has no password
+	has a password entered
+	not logged in
+	logged in
+	unconfirmed new password	
+	detour over!
