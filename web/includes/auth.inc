@@ -99,11 +99,11 @@ getPass($uid)
 	// sanity check
 	if($uid < 1){
 		print "getPass(): ERROR! $uid < 1\n";
-		exit 1;
+		exit(1);
 	}
 
 	// the query
-	$query = sprintf("SELECT * FROM users WHERE userid = %d --",
+	$query = sprintf("SELECT * FROM users WHERE userid = %d ",
 				$uid );
 	$listq = mysql_query($query);
 	$err = mysql_error();
@@ -182,12 +182,12 @@ checkAuthLevel($auth)
 	$realm = $auth['realm'];
 	$level = $auth['level'];
 
-	if(!($uid && $realm && $token && $level){
+	if(!($uid && $realm && $token && $level)){
 		print "checkAuthLevel(): ERROR not enough info\n";
 		return 1;
 	}
 
-	if(($err = checkToken($uid, $token) > 0){
+	if(($err = checkToken($uid, $token)) > 0){
 		return $err;
 	}
 
@@ -237,7 +237,7 @@ displayLogin($uid, $token)
 	}
 
 	// reflexively check the token first
-	if(($err = checkToken($uid, $token) > 0){
+	if(($err = checkToken($uid, $token)) > 0){
 		print "displayLogin(): bad login!\n";
 		return;
 	}
@@ -337,14 +337,16 @@ logIn($auth)
 
 	//ok! no password or token passed in, so throw up a login screen
 
-	$oldpwhash = getPass($uid);		
+	if($uid){
+		$oldpwhash = getPass($uid);		
+	}
 
+	print "<p>Please log in:</p>";
 	print "<table border='0'>";
-	print "<tr><td>Please log in:</td></tr>";
 	#print "DEBUG: $id";
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 			$_SERVER['PHP_SELF']);
-	print "<tr><td>Your child's last name:</td>";
+	print "<tr><td>Your child's last name:</td><td>";
 	loginPopup($uid); 
 	print "</td></tr>";
 	if($oldpwhash){
@@ -357,12 +359,12 @@ logIn($auth)
 	print "<td><INPUT TYPE=password NAME='auth[pwd]'></td>";
 	print "</tr>"; // html sucks
 
-	if($oldpwhash){
+	if(!$oldpwhash){
 		// confirmation for new user
-		print "<tr><td>Please type your new password again to confirm:</td>";
+		print "<tr><td>Type your new password again to confirm:</td>";
 		print "<td><INPUT TYPE=password NAME='auth[confirm]'></td></tr>";
 	}
-	print "<tr><td>INPUT TYPE=submit NAME='login' VALUE='LogIn'></td></tr>";
+	print "<tr><td><INPUT TYPE=submit NAME='login' VALUE='LogIn'></td></tr>";
     print "</FORM>";
 	print "</table>";
 
@@ -398,7 +400,7 @@ newPass($uid, $newclearpass, $newconfirm, $oldtoken)
 		if($oldpwhash < 0){
 			// intruder alert! 
 			print "newPass(): ERROR! no such user\n";
-			exit 1;
+			exit(1);
 		}
 		//there's already a password in there! they must authorized to change
 		if(checkToken($uid, $oldtoken)){
@@ -407,7 +409,7 @@ newPass($uid, $newclearpass, $newconfirm, $oldtoken)
 		}
 	} 
 
-	if(passStandard($newclearpass){
+	if(passStandard($newclearpass)){
 		// sucky password, dude. try again.
 		return 0;
 	}

@@ -29,7 +29,7 @@
 		<h2>Pacifica Co-Op Nursery School</h2>
 	";
 
-	login();
+	logIn($HTTP_POST_VARS['auth']);
 
 
 	print "</BODY> </HTML>"
