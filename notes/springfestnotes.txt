@@ -167,3 +167,21 @@ solicitation screen, first cut
 
 auction attendee, number
 amount
+
+-----
+2004-01-20
+
+add to  packaging: pardini, listmann, grogan
+
+show DATE FORMAT (i.e. copy from financefuncs)
+
+instructions
+	url
+	log in as yourself
+	do not close window!
+	log out please
+
+bug fixen! family name not number in display in packaging thing
+
+password: check with husband/wife... or check CAPS LOCK key too
+

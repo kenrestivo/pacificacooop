@@ -939,7 +939,7 @@ wrongPassState($auth, $states)
 
 	loginForm(changeState($auth, $states, 'needlogin', 1),
 		'password', 'hide', 
-		"Incorrect password. Please try again." );
+		"<font color='#ff0000'>Incorrect password</font>. Please try again. Remember to check your CAPS LOCK key. Also, your husband, wife, or partner may already have entered a password for you. You may want to ask them." );
 
 	return changeState($auth, $states, 'needinput', 1);
 }/* END  WRONGPASSSTATE */
