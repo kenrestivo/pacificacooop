@@ -4,7 +4,7 @@
 
 PWD=$(shell pwd)
 
-all: slo
+all::
 
 slo:
 	sloccount --addlangall \

@@ -219,3 +219,25 @@ Thu Feb 19 2004 05:37:25 PM
 
 nag only shows those who needs to be nagged, at least by default
 	privs: only for carrie
+
+
+-------------
+Wed Mar 03 2004 11:05:49 AM
+
+need to generate bid sheets and gift certs in pdf format, programmatically
+	bob pardini 415-561-6126, fax 415-561-2525
+	robert_pardini@grove.com
+	
+also import silent auctions
+	
+
+---------------
+march 2 2004
+
+greeter's report/form:
+	one line for each PADDLE
+	fields
+		name
+		addr/city/state/zip
+		coalesce(amount, source = family, event = vip status)
+		# tickets

@@ -231,7 +231,7 @@ create table auction (
     amount decimal(9,2),
 	date_received date,
 	location_in_garage varchar(255),
-	item_type enum ('Product', 'Service'),
+	item_type enum ('Unknown', 'Actual Item', 'Gift Certificate'),
     package_id int(32),
     primary key (auctionid)
 );
@@ -413,13 +413,15 @@ create table springfest_attendees (
 -- packages.
 create table packages (
     package_id int(32) not null unique auto_increment,
-	package_type enum ('Silent', 'Live'),
+	package_type enum ('Unknown', 'Live', 'Silent', 'Balloon', 'Ignore'),
 	package_number varchar(20), 
 	package_title varchar(255), 
 	package_description longtext,
 	donated_by_text varchar(255), 
+    starting_bid decimal(9,2),
+    bid_increment decimal(9,2),
     package_value decimal(9,2),
-	item_type enum ('Actual Item', 'Gift Certificate'),
+	item_type enum ('Unknown', 'Actual Item', 'Gift Certificate'),
     primary key (package_id)
 );
 

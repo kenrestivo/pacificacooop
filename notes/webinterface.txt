@@ -681,6 +681,14 @@ i will have to deal with SORTING
 
 
 now... the multi-level views
+	a simple back-stack array2? saved in $_SESSION?
+		page, args, description
+			where args are whatever is needed to get it back where it was.
+			i.e. the edit stuff.
+		if they were EDITING, then you MUST save what they were editing!!
+			i.e. in $_SESSION. 
+	in order to allow bouncing around, you MUST save edit fields, i.e. a form.
+		or, can i use back button? and trust the browser?
 	will need BACK-STACK in $_SESSION! to keep track of the flipping around, 
 		and main menu is getting too crowded-- i can whack stuff from it now.
 		a backstack SESSION array. 
@@ -754,6 +762,7 @@ but... SOMEONE is going to have to be the main link!
 		checks->company, checks->ads->company
 			UGH! dual-link!
 	or, do you pick company, then it pops up ONLY those ads relevant?
+		yeah, you'll need to do it both ways, ultimately.
 
 -------
 add, new, etc
@@ -768,3 +777,60 @@ add, new, etc
 		watch out for user confusion! you don't want them deleting to remove!
 			maybe a remove button instead? i dunno. think about this.
 		
+
+----------
+pdf stuff
+	i will need the font file. 
+		i prefer type1 fonts if possible
+		ideally if you can remove unnecessary characters, to make it smaller too
+	can't have images larger than 8mb. keep them small!
+	Remove transparency or save your image in 16 colors (4 bits per pixel) or more.
+	For JPEG, all flavors are allowed:
+		* gray scales
+		* true colors (24 bits)
+		* CMYK (32 bits) 
+
+	For PNG, are allowed:
+		* gray scales on at most 8 bits (256 levels)
+		* indexed colors
+		* true colors (24 bits) 
+
+	but are not supported:
+		* Interlacing
+		* Alpha channel 
+
+
+------
+fix REPORTS
+	an everything.inc file
+		all the requires, 
+		and an array with all the callbacks
+	move the report stuff to a callback in each individual .inc file
+		check $admin in that callback!
+	create a new "management summary" report that grabs all that.
+
+------------------
+
+decide how to deal with multiSAVES!
+	paddles and/or tickets.
+	insert DOUBLE on joins! VERY fucked up.
+	in other words, you'll need to save N glue's for each new!
+		this is horrifically fucked up. HOW shall i handle it?
+
+paddles are NOT tickets: need a way to enter TICKET number and PADDLE number
+
+dispatches MAY get simpler if i have multi-joins
+	i just need a page with ENTRY, versus a page with popup or response code
+
+mailing list re-think
+	events table? like indulgences. this FEELS best: dates
+	mailing sent
+	do not contact
+	attended event? or, in attendance table? where do we flag?
+	put them on the list... if they weren't OK to contact already.
+
+how to handle sources?
+	attached to PEOPLE or to EVENTS!??
+	i.e. event is "showed up". source is... nothing
+	event is "responded to ad". source is... where?
+	each THING will have a source. it is the only way.

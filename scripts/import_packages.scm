@@ -1,8 +1,13 @@
 ;; $Id$
 ;; squile script to convert unassigned auctions into their own packages
 
+;; LAUNCH (load "/mnt/kens/ki/proj/coop/scripts/import_packages.scm")
+
 (use-modules (ice-9 slib))
 (require 'pretty-print)
+
+;; TODO make that a proper library!
+(load "/mnt/kens/ki/is/scheme/lib/kenlib.scm")
 
 ;; unassigned-auctions
 (define (unassigned-auctions cid)
@@ -12,34 +17,17 @@
 				where (package_id is null or package_id < 1)
 					and date_received > '0000-00-00'"))
 
-;;;; last-insert-id
-(define (last-insert-id cid)
-  (vector-ref
-	(vector-ref
-	 (sql-query cid "select last_insert_id()") 1) 0))
-
-;;;; for-each-vector
-(define for-each-vector
-  (lambda (procedure vec use-number)
-	(do 
-		;;variable, init, step (basically, a let)
-		( (i 1 (+ 1 i)))
-		;;test, expression
-		( (>= i (vector-length vec)))
-	  ;; command
-	  (procedure (if use-number i (vector-ref vec i))))))
-
 ;;; new-package
-(define new-package
-  (lambda (cid auctionvec)
-	(begin
+(define (add-new-package cid auctionvec)
 	  ;;; XXX finish me
-	  )))
+	 nil)
 
+;;;;;;;;;;;;;;;;;;;;
 ;;;; MAIN
 
+;; startup
 (define cid (sql-create "coop"  "bc" "input" "test"))
 
-
+(sql-query cid "select packages.* from packages left join auction using (package_id) where auction.package_id is null")
 
 ;; EOF
