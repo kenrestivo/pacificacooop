@@ -369,6 +369,7 @@ create table companies_income_join (
     companies_income_join_id int(32) not null unique auto_increment,
 	incid int(32),
 	company_id int(32),
+	familyid int(32), -- i HATE this.
     primary key (companies_income_join_id)
 );
 

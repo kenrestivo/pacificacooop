@@ -10,16 +10,17 @@ Here's what I'm thinking in terms of organising the task:
 
 each slice/view
 	login SIMPLE DONE
-	10names
-	auction
+	10names -started
+	auction -started
 	money
-	packaging-inventory
+	packaging-inventory -started
 	packaging-management
-	solicitation-companies
-	solicitation-auctions
+	solicitation-companies -started
+	solicitation-auctions -started
+	solicitation-money
 	solicitation-territories
-	raffles-cashreceipts
-	raffles-locations
+	raffles-cashreceipts -started
+	raffles-locations -started
 	... more to come
 	
 each operation
