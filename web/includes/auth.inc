@@ -426,7 +426,11 @@ accessLevelString($privnum, $callbacks)
 ******************/
 function loginPopup($uid)
 {
-	// the dreaded javascript in here!
+	/* the dreaded javascript in here!
+		YES i know this a duplication of what's in shared.inc	
+			but, i don't want to get into weird circular includes.
+		shared.inc isn't presently included here, but the converse *is* true
+	 */
 	print "<script language=javascript>
 			function submitForm() {
 				document.forms[0].submit(); 
