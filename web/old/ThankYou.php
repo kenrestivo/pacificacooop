@@ -49,6 +49,7 @@ class ThankYou
 			   // name of solicitor
 	var $email; // EMAIL: email address
 	var $thank_you_id; // cache of the unique id for this thankyounote
+	var $check_reconcile;  // stupid flag to avoid checking reconciliation
 
 	//TODO: put this in a file, and fopen it, or in a DB blob!
 	// if i put in in a db, schoolyearify them, and grab this years or latest
@@ -398,8 +399,8 @@ http://www.pacificacoop.org/
 			$real->obj->school_year = $sy;
 			$real->obj->orderBy('school_year desc');
 			$real->obj->joinadd($co->obj);
-			$real->obj->whereAdd('(thank_you_id is null or thank_you_id < 1)
-								and cleared_date > "2000-01-01" ');
+			$real->obj->whereAdd(sprintf('(thank_you_id is null or thank_you_id < 1) %s',
+										 $this->check_reconcile ?  ' and cleared_date > "2000-01-01" ' : ' ' ));
 			$found = $real->obj->find();
 			
 			//format income
