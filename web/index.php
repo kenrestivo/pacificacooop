@@ -52,6 +52,13 @@ if(!$id){
 	#show a family's info
 	happyFriendlyHello($id);
 
+	#TODO : get the cutoff date from the database, 
+	#so it someone can change it next year without having to edit this code
+	print "	Every family must provide the names of 10 people who 
+			should be invited to attend or donate to Springfest. 
+			These can be family, friends, business associates, etc. 
+			They will be sent formal invitations on behalf of the School. 
+			You must enter at least 10 names by 11/04/2003<br>";
 	#show them what they've already got, don pardo
 	nameSummary($id);
 
@@ -60,6 +67,9 @@ if(!$id){
 		showNames($id);
 	}
 
+	print "<br>Enter more names here. 
+				Remember to click 'Save Names' 
+				at the bottom of this screen when you are done!\n";
 	#and give them a form to enter data
 	tenNamesForm($id);
 
