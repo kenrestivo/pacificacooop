@@ -30,11 +30,12 @@ require_once('utils.inc');
 /////////////////////// THANKYOU CLASS
 class Enhancement
 {
+    var $cp; // cache reference to page object
 	var $schoolYear; // cache of this year's, um, year.
     var $cutoffDatesArray; // cache fall, spring
 
 	// month number, array of fall hours and spring hours
-	var startDates = array(
+	var $startDates = array(
 		9 => array(4,4),
 		10 => array(3,4),
 		11 => array(2,4),
@@ -48,8 +49,9 @@ class Enhancement
 
 
 
-	function Enhancement ($schoolYear = false)
+	function Enhancement (&$cp, $schoolYear = false)
 		{
+            $this->cp =& $cp;
 			// guess it and cache it
 			$this->schoolYear = findSchoolYear($schoolYear);
             $this->loadCutoffs(); // do i really want this here?
@@ -66,18 +68,19 @@ class Enhancement
 
     // date in sql fmt, pleeze YYYY-MM-DD
     // returns array(fall, spring) hours owed based on this start date
-    function getHoursOwed($date)
+    function getHoursOwed($startdate)
         {
             // much simpler than perl regexps!
-            list($year, $month, $day) = explode('-', $date);
+            list($year, $month, $day) = explode('-', $startdate);
 
             // condom
             if(!($year && $month && $day)){
                 user_error("Enhancement::getHoursOwed($date) bad date",
                            E_USER_ERROR);
             }
-
-            return $this->startDates[$month];
+            
+            $res = $this->startDates[(int)$month];
+            return $res;
         }
 
     
@@ -86,17 +89,19 @@ class Enhancement
         {
             /// let's start by finding out start/drop date
 
-            $enrol = new CoopObject(&$cp, 'enrollment', &$view);
+            $enrol = new CoopObject(&$this->cp, 'enrollment', &$view);
             $enrol->obj->query(sprintf(
-                'select min(start_date) as start, max(dropout_date) as drop
+                'select min(start_date) as startdate, 
+                        max(dropout_date) as dropdate
                         from enrollment
-                                left join kids using (kids_id)
+                                left join kids using (kid_id)
                         where enrollment.school_year = "%s" 
                                 and kids.family_id = %d ',
                 $this->schoolYear, $familyID));
             $enrol->obj->fetch();
             
-            $res = array($enrol->obj->start, $enrol->obj->drop);
+            $res = array('start' => $enrol->obj->startdate, 
+                         'drop' => $enrol->obj->dropdate);
             return $res;
 
         }
@@ -106,14 +111,14 @@ class Enhancement
     function loadCutoffs()
         {
             //fall cutoff
-            $co = new CoopObject(&$cp, 'calendar_events', &$top);
+            $co = new CoopObject(&$this->cp, 'calendar_events', &$top);
             $co->obj->school_year = $this->schoolYear;
             $co->obj->event_id = 5; // hard coded fall cutoff
             $co->obj->find(true);
             $this->cutoffDatesArray['fall'] = $co->obj->event_date;
             
             //spring cutoff
-            $co = new CoopObject(&$cp, 'calendar_events', &$top);
+            $co = new CoopObject(&$this->cp, 'calendar_events', &$top);
             $co->obj->school_year = $this->schoolYear;
             $co->obj->event_id = 6; // hard coded fall cutoff
             $co->obj->find(true);
@@ -122,20 +127,36 @@ class Enhancement
 
 
     // returns array(fall, spring) hours completed
-    function getHoursCompleted()
+    function getHoursCompleted($familyID)
         {
-            foreach(array('fall', 'spring') as $semester){
-                $co = new CoopObject(&$cp, 'enhancement_hours', &$top);
-                $co->obj->query(sprintf(
-                                    'select sum(hours) as total 
+   
+            $co = new CoopObject(&$this->cp, 'enhancement_hours', &$top);
+            $co->obj->query(sprintf(
+                                'select sum(hours) as total 
                         from enhancement_hours 
                                 left join parents using (parent_id)
-                        where school_year = "%s" and work_date <= "%s" ',
-                                    $this->schoolYear,
-                                    $this->cutoffDate[$semester]));
-                $co->obj->fetch();
-                $res[$semester] = $co->obj->total;
-            }
+                        where school_year = "%s" and family_id = %d 
+                                and work_date <= "%s" ',
+                                $this->schoolYear, $familyID,
+                                $this->cutoffDatesArray['fall']));
+            $co->obj->fetch();
+            $res['fall'] = $co->obj->total;
+   
+            // note spring shouldn't include fall hours. auugh.
+            $co = new CoopObject(&$this->cp, 'enhancement_hours', &$top);
+            $co->obj->query(sprintf(
+                                'select sum(hours) as total 
+                        from enhancement_hours 
+                                left join parents using (parent_id)
+                        where school_year = "%s" and family_id = %d 
+                                and work_date <= "%s" 
+                                and work_date > "%s"',
+                                $this->schoolYear, $familyID,
+                                $this->cutoffDatesArray['spring'],
+                                $this->cutoffDatesArray['fall']));
+            $co->obj->fetch();
+            $res['spring'] = $co->obj->total;
+   
             return $res;
         }
 
@@ -158,7 +179,9 @@ class Enhancement
             }
             
             $datun = $this->sqlToUnix($date);
-            $cutoffsun = array_map('sqlToUnix', $this->cutoffDatesArray);
+            foreach($this->cutoffDatesArray as $key=>$val){
+                $cutoffsun[$key] = $this->sqlToUnix($val);
+            }
             
             foreach(array('fall', 'spring') as $semester){
                 if($datun < $cutoffsun[$semester]){
