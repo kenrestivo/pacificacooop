@@ -29,9 +29,6 @@ require_once('object-config.php');
 /////////////////////// COOP VIEW CLASS
 class coopView extends CoopObject
 {
-	var $backlinks;				// list of links that are linked FROM here
-	var $forwardLinks;
-	
 
 	var $legacyCallbacks;			// hack for old callbacks
 	var $legacyPerms; 			// cache of permissions for this page ($p)
@@ -57,32 +54,6 @@ class coopView extends CoopObject
 	
 		}
 
-	function getLinks()
-		{
-			
-//			confessObj($this, "view");
-			global $_DB_DATAOBJECT;
-			//confessObj($_DB_DATAOBJECT, "getLinks() dataobject");
-			$tab =  $this->obj->tableName(); // XXX dup with $this->table
-			$links =& $_DB_DATAOBJECT['LINKS'][$this->obj->database()];
-			$this->forwardLinks = $links[$tab];
-			$this->page->confessArray($links, 
-									  "getLinks: links for $this->table");
-			foreach($links as $maintable => $mainlinks){
-				foreach ($mainlinks as $nearcol => $farline){
-					// split up farline and chzech it
-					list($fartable, $farcol) = explode(':', $farline);
-					if($fartable == $tab){
-						$res[$maintable] = $nearcol;
-					}
-				}
-			}
-			$this->backlinks = $res;
-			$this->page->confessArray($res,
-									  "getLinks() backlinks for $this->table");
-			return $this->backlinks;
-		}
-	
 	// formats object is current in this object, um, as a table
 	function simpletable($find= 1)
 		{
@@ -223,7 +194,7 @@ class coopView extends CoopObject
 
 	function toArray()
 		{
-			
+						
 			$row = $this->obj->toArray();
 			foreach($row as $key => $val){
 				// this is where the fun begins.

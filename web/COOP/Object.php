@@ -58,7 +58,7 @@ class coopObject
 			//confessObj($this->obj, "CONSTRUCTOR object for $this->table");
 
 			$this->getPK(); // must this be after find? rather constructor.
-				
+			$this->getLinks();
 		}
  
 
@@ -70,22 +70,25 @@ class coopObject
 			return $this->pk;
 	}
 
+	// different from the object's getlinks! this one gets my backlinks
 	function getLinks()
 		{
 			
 //			confessObj($this, "view");
 			global $_DB_DATAOBJECT;
 			//confessObj($_DB_DATAOBJECT, "getLinks() dataobject");
-			$tab =  $this->obj->tableName(); // XXX dup with $this->table
 			$links =& $_DB_DATAOBJECT['LINKS'][$this->obj->database()];
-			$this->forwardLinks = $links[$tab];
+
 			$this->page->confessArray($links, 
 									  "getLinks: links for $this->table");
+
+			$this->forwardLinks = $links[$this->table];
+
 			foreach($links as $maintable => $mainlinks){
 				foreach ($mainlinks as $nearcol => $farline){
 					// split up farline and chzech it
 					list($fartable, $farcol) = explode(':', $farline);
-					if($fartable == $tab){
+					if($fartable == $this->table){
 						$res[$maintable] = $nearcol;
 					}
 				}
