@@ -21,10 +21,10 @@
     global $_SERVER;
 
 	#XXX hack
-	$cutoffdate = "11/04/2003";
-	$auctioncutoff = "12/18/2003";
-	$solicitcutoff = "02/14/2004";
-	$packagingcutoff = "02/14/2004";
+	$cutoffdate = "11/02/2004";
+	$auctioncutoff = "12/18/2004";
+	$solicitcutoff = "02/14/2005";
+	$packagingcutoff = "02/14/2005";
 
 ?>
 

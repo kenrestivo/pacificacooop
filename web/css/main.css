@@ -1,0 +1,10 @@
+p,table,li,h1,h2,h3
+{
+font-family: verdana, arial, 'sans serif'; 
+}
+
+
+p,li,th,td
+{
+font-size: 75%;
+}

@@ -19,7 +19,7 @@
 
 	require_once("first.inc");
 	require_once("shared.inc");
-		require_once("auth.inc");
+	require_once("auth.inc");
 
 	require_once("roster.inc");
 
