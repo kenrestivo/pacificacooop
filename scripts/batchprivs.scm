@@ -7,12 +7,7 @@
 (require 'printf)
 
 
-
-(define (get-all-realms dbh)
-  (map (lambda (x) (vector-ref x 0))
-	   (simplesql-query dbh "
-		select realm from user_privileges group by realm order by realm")))
-
+;;;;;;;;;;; globs
 
 
 (define springfest-realms
@@ -28,6 +23,13 @@
   "solicitation"
   "solicit_money"
   "tickets"))
+
+;;;;;;;;;;;;; funcs
+
+(define (get-all-realms dbh)
+  (map (lambda (x) (vector-ref x 0))
+	   (simplesql-query dbh "
+		select realm from user_privileges group by realm order by realm")))
 
 
 (define (change-privs dbh user-id realm group-level user-level)
