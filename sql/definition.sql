@@ -36,7 +36,7 @@ create table coop.ins(
     primary key (insid)
 );
 
--- TODO: this is future. i can't handle it now, it's too goddamned complex
+-- TODO: this is future. 
 -- insureds information, (many-to-many parents to insurance)
 -- create table coop.insureds(
 --     insureds int(32) not null auto_increment,
@@ -105,7 +105,7 @@ create table coop.parents(
     primary key (parentsid)
 );
 
--- glue table for many-to-many: kids and parents
+-- main table for many-to-many: kids and parents
 create table coop.families (
     familyid int(32) not null auto_increment,
 	name varchar(255),
