@@ -32,7 +32,7 @@ class coopObject
 	var $obj;					// ref to db dataobject for this view
 	var $page;					// reference to the cooppage
 	var $table;					// convenience: the table the $this->obj is
-	var $pk;					// the primary key. convenience, really.
+	var $pk;					// name of primary key. convenience, really.
 	var $recurseLevel;			// level, if i'm linked from somewhere
 	var $parentCO;				// reference. "parent" is reserved word
 	var $backlinks;				// list of links that are linked FROM here
@@ -166,6 +166,19 @@ class coopObject
 			return $this->concatLinkFields(&$this->obj);
 				
 		}
+
+    function lastInsertID()
+        {
+            $db =& $this->obj->getDatabaseConnection();
+
+            $data =& $db->getOne('select last_insert_id()');
+            if (DB::isError($data)) {
+                die($data->getMessage());
+            }
+            return $data;
+        }
+
+
 
 } // END COOP OBJECT CLASS
 

@@ -288,16 +288,33 @@ http://www.pacificacoop.org/
 	
 		}
 
-	function findThanksNeeded($pk, $id)
+	// XXX ugly hack. i'm passing in the type of save, as the arg $save
+	// which really should just be a true/false flag. bah.
+	// the right thing to do is to separate finding, substituting, and saving
+	function findThanksNeeded($pk, $id, $save = false)
 		{
-
+			
 			// if i'm going to save objects, don't createlegacy them.
 			// save MY view objects, not the DBDO objects,
 			// so that i can createlegacy them later if needed.
-
+			
 			$sy = findSchoolYear();
+			
+			// XXX BUG! save assumes there really *are* thankyous needed
+			// do NOT use this anywhere that you're not sure of that.
+	
+				if($save){
+						//TODO: save a new thankyou, and cache ists insertid	
+					$co = new CoopObject(&$this->cp, 
+										 'thank_you', &$nothing);
+					$co->obj->date_sent = date('Y-m-d');
+					$co->obj->family_id = $this->cp->userStruct['family_id'];
+					$co->obj->method = $save; /// HACK!
+					$co->obj->insert();
+					$this->thank_you_id = $co->lastInsertID();
+				}
 
-			// COMPANY
+				// COMPANY
 			// find company
 			$co = new CoopView(&$this->cp, 'companies', &$top);
 			$co->obj->$pk = $id;
@@ -332,6 +349,11 @@ http://www.pacificacoop.org/
 			while($real->obj->fetch()){
 				$cashtotal += $real->obj->payment_amount;
 				$soliciting_families[]= $real->obj->family_id;
+				if($save){
+					$tmp = $real->obj;
+					$real->obj->thank_you_id = $this->thank_you_id;
+					$real->obj->update($tmp);
+				}
 			}
 			if($found){
 				$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
@@ -359,6 +381,11 @@ http://www.pacificacoop.org/
 											   $real->obj->item_description,
 											   $real->obj->item_value);
 				$soliciting_families[]= $real->obj->family_id;
+				if($save){
+					$tmp = $real->obj;
+					$real->obj->thank_you_id = $this->thank_you_id;
+					$real->obj->update($tmp);
+				}
 				
 			}
 
@@ -383,6 +410,11 @@ http://www.pacificacoop.org/
 											   $real->obj->item_description,
 											   $real->obj->item_value);
 				$soliciting_families[]= $real->obj->family_id;
+				if($save){
+					$tmp = $real->obj;
+					$real->obj->thank_you_id = $this->thank_you_id;
+					$real->obj->update($tmp);
+				}
 			}
 	
 			// ugh. go get the soliciting parent
@@ -437,8 +469,14 @@ http://www.pacificacoop.org/
 
 			$this->thank_you_id = $tid;
 
-			// TODO insert date of THANK YOU, not today's date
+			// TODO recover date of THANK YOU, not today's date
+			$ty = new CoopObject(&$this->cp, 'thank_you', &$nothing);
+			$ty->obj->thank_you_id = $this->thank_you_id;
+			$ty->obj->selectAdd(
+				"DATE_FORMAT(date_sent,'%W, %M %e, %Y') as date_sent_fmt ");
 
+			$ty->obj->find(true);
+			$this->date = $ty->obj->date_sent_fmt;
 
 			//INCOME
 			$real = new CoopView(&$this->cp, 'income', &$co);
