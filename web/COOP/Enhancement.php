@@ -27,13 +27,16 @@ require_once('utils.inc');
 
 
 //////////////////////////////////////////
-/////////////////////// THANKYOU CLASS
+/////////////////////// ENHANCEMENT CLASS
 class Enhancement
 {
     var $cp; // cache reference to page object
 	var $schoolYear; // cache of this year's, um, year.
     var $cutoffDatesArray; // cache fall, spring
     var $familyID; // cache of familyID
+    var $startdrop; //cache: array of start adn drop dates
+    var $owed; // cache of array (fall,spring) owed hours
+    var $completed; //cache of actualhours completed array(fall, spring)
 
 	// month number, array of fall hours and spring hours
 	var $startDates = array(
@@ -81,8 +84,8 @@ class Enhancement
                            E_USER_ERROR);
             }
             
-            $res = $this->startDates[(int)$month];
-            return $res;
+            $this->owed = $this->startDates[(int)$month];
+            return $this->owed;
         }
 
     
@@ -102,9 +105,9 @@ class Enhancement
                 $this->schoolYear, $this->familyID));
             $enrol->obj->fetch();
             
-            $res = array('start' => $enrol->obj->startdate, 
+            $this->startdrop = array('start' => $enrol->obj->startdate, 
                          'drop' => $enrol->obj->dropdate);
-            return $res;
+            return $this->startdrop;
 
         }
 
@@ -158,8 +161,9 @@ class Enhancement
                                 $this->cutoffDatesArray['fall']));
             $co->obj->fetch();
             $res['spring'] = $co->obj->total;
-   
-            return $res;
+            
+            $this->completed = $res;
+            return $this->completed;
         }
 
     function sqlToUnix($sqldate)
@@ -204,22 +208,26 @@ class Enhancement
             ///print "sem= $semester<br>";
             //confessObj($this);
             
-            $startdrop = $this->getStartDropDate();
-            //confessArray($startdrop, 'stardrop');
+            $this->getStartDropDate();
+            //confessArray($this->startdrop, 'stardrop');
             
-            $owed = $this->getHoursOwed($startdrop['start']);
+            $this->getHoursOwed($this->startdrop['start']);
             //print "owed $owed<br>";
-            //confessArray($owed, 'owed');
+            //confessArray($this->owed, 'owed');
             
-            $completed = $this->getHoursCompleted($this->familyID);
-            //confessArray($completed, 'completed');
+            $this->getHoursCompleted($this->familyID);
+            //confessArray($this->completed, 'completed');
+            
+            //confessObj($this, 'enhancement');
             
             if($semester == 'fall'){
-                return $completed[$semester];
+                return $this->completed[$semester];
             }
             if($semester == 'spring'){
-                return $completed['fall'] - $owed['fall'] 
-                    + $completed[$semester];
+                $total = $this->completed['fall'] - $this->owed['fall'] 
+                    + $this->completed[$semester];
+                $total = $total > 0 ? $total : 0; // clamp!
+                return $total;
             }
             
             user_error("Enhancement::realHoursDone($semester): bad semester",
