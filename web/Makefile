@@ -48,7 +48,7 @@ download::
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNPATH)/ $(HERE)
 
 commit:
-	cvs commit
+	cvs commit -m "syncing"
 
 sync: commit download
 	
