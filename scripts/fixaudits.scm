@@ -16,7 +16,6 @@
   ("inc" "incid")
   ("kids" "kidsid")
   ("lic" "licid")
-  ("nag_indulgences" "nag_indulgence_id")
   ("nags" "nagsid")
   ("parents" "parentsid")
   ("privs" "privid")
