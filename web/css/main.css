@@ -142,19 +142,21 @@ p.letter{
  }
 
 #toplogo{  
-	position: absolute; 
-	top: 0.00in; 
-	left: 3.51in;
+	display: none;
+	position: center; 
 }
 
 #mainletter{ 
-	position: absolute; 
-	top: 2in; 
-	left: 1in;
 	width: 6in;
-
+	border: 1pt;
+	border-color: black;
  }
 
 #email{ 
 	width: 50%;
  }
+
+#horiztable { 
+
+ }
+

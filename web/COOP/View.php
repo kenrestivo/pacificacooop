@@ -32,6 +32,7 @@ class coopView extends CoopObject
 
 	var $legacyCallbacks;			// hack for old callbacks
 	var $legacyPerms; 			// cache of permissions for this page ($p)
+	var $extraRecordButtons;  // HACK for non-standard actions, i.e. thankyous
 	//var $legacyFields;  //YAGNI. i hope
 
 	function createLegacy($callbacks)
@@ -100,8 +101,10 @@ class coopView extends CoopObject
 				$tab->addCol($this->toArray(),'bgcolor="#cccccc"' );
 			
 			}
+			if($this->extraRecordButtons){
+				$tab->addRow(array("", $this->extraRecordButtons));
+			}
 
-			
 			return $this->tableTitle($tab->toHTML());
 	
 		}
@@ -251,13 +254,16 @@ class coopView extends CoopObject
 
 	function tableTitle($contents)
 		{
+			//TODO: use DIV's instead of tables for this.
 			$title = sprintf("%s %.50s", 
 							 $this->title(),
 							 $this->parentCO ? 
 							 "for " . $this->parentCO->getSummary() : "");
 		
-			$toptab = new HTML_Table('bgcolor="#aa99ff" cellpadding="0" cellspacing="0"');
-			$toptab->addRow(array($title, $this->actionButtons()), 'align="center"', "TH");
+			$toptab = new HTML_Table(
+				'bgcolor="#aa99ff" cellpadding="0" cellspacing="0"');
+			$toptab->addRow(array($title, $this->actionButtons()), 
+							'align="center"', "TH");
 			$toptab->addRow(array($contents), 'colspan="2"');
 			
 			return $toptab->toHTML();
@@ -306,11 +312,11 @@ class coopView extends CoopObject
 	// because i might need hidden fields that toarray would remove!
 	function recordButtons(&$row)
 		{
- 		 	return recordButtons($row, $this->legacyCallbacks, 
+ 		 	$res .= recordButtons($row, $this->legacyCallbacks, 
  								 $this->legacyPerms, 
  								 $this->page->userStruct, 
 								 "");
-			
+			return $res;
 		}
 
 
@@ -324,12 +330,14 @@ class coopView extends CoopObject
 // 				$admin = $this->legacyPerms['group_level'] >= ACCESS_ADD ? 1 : 0;
 // 				$showview = $this->legacyCallbacks['count']($u['family_id'], $callbacks, $fields) + $admin;
 // 			}
-			return actionButtonsCore($this->page->auth, 
+			$res .= actionButtonsCore($this->page->auth, 
 									 $this->legacyPerms, 
 									 $this->page->userStruct, 
 									 $this->page->userStruct['family_id'], 
 									 $this->legacyCallbacks, 
 									 $showview,  1);
+
+			return $res;
 		}
 
 	// note, this is not very well-used, but it will be.  i'll replace

@@ -240,6 +240,7 @@ http://www.pacificacoop.org/
 					   $this->toText());
 				return;
 			}
+			return;
 
 			$from = $this->from ? $this->from :
 					    'Pacifica Co-Op Nursery School ';
@@ -255,10 +256,13 @@ http://www.pacificacoop.org/
 
 			$mail_object =& Mail::factory('smtp', $params);
 
+			$body = $this->toText();
 			$mail_object->send($this->email, 
 							   $headers, 
-							   $this->toText());
+							   $body);
 
+			return sprintf('<p>EMAIL SENT!</p><pre>%s</pre>',$body);
+						   
 		}
 
 	// grab the REQUEST values from paypal, and put them in here
