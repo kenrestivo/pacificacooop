@@ -378,6 +378,7 @@ ad insertion
 		description (varchar)
 		size? or use above?
 		price
+		school_year
 	do an income join table. really.	
 	ad table
 		contactid (join)
@@ -412,9 +413,8 @@ sponsorship form
 		sessionid (join) -- these will change year to year!
 		sponsortype
 		incomeid(join) -- to handle payment... or join if many payments!
-		userid, entered, updated(timestamp)
 	do an income join table. really.	
-	sponsortype table
+	sponsortype type table
 		description
 		price
 		contents (fields? field?)
@@ -427,6 +427,7 @@ sponsorship form
 		ad (join to adsize table)
 		tickets quantity? join to tickettype table?
 		banner (champions? individual? join to bannertype table?)
+		school_year
 		anything else?
 
 banners

@@ -13,9 +13,8 @@ class Families extends DB_DataObject
     var $family_id;                       // int(32)  not_null primary_key unique_key auto_increment
     var $name;                            // string(255)  
     var $phone;                           // string(20)  
-    var $address;                         // string(255)  
-    var $email;                           // string(255)  
     var $address1;                        // string(255)  
+    var $email;                           // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

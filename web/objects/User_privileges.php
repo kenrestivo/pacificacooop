@@ -25,6 +25,22 @@ class User_privileges extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $fieldLabels = array ('name' => 'User Name', 
+	
+	var $fb_fieldLabels = array ('name' => 'User Name', 
 							'family_id' => 'Co-Op Family');
+
+	// from docs. very kewl
+	function preGenerateForm() {
+		require_once("auth.inc");
+		global $accessnames;
+		foreach ($accessnames as $details => $priv){
+			$privmap[$priv] = $descr[0];
+		}
+		$foo = HTML_QuickForm::createElement('select', 'user_level', 
+										  $this->getFieldLabel('user_level'),
+										  $privmap);
+		$this->preDefElements['user_level'] = array (&$foo);
+			
+	}		
+	
 }

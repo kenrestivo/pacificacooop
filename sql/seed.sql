@@ -193,4 +193,22 @@ insert into enhancement_projects set
             enhancement_project_id = 4,
             project_name = "Teacher Substitute";
 
+
+insert into enhancement_projects set
+            enhancement_project_id = 4,
+            project_name = "Teacher Substitute";
+
+---- sources
+insert into sources  set
+            source_id = 1,
+            description = "Springfest 10-names entry";
+
+insert into sources  set
+            source_id = 2,
+            description = "Old Alumni List";
+
+insert into sources  set
+            source_id = 3,
+            description = "Misc Advertising";
+
 -- EOF

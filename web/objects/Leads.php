@@ -27,6 +27,8 @@ class Leads extends DB_DataObject
     var $source;                          // string(10)  enum
     var $family_id;                       // int(32)  
     var $do_not_contact;                  // date(10)  
+    var $school_year;                     // string(50)  
+    var $source_id;                       // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -41,4 +43,5 @@ class Leads extends DB_DataObject
 									'address1', 'address2', 'city', 'state',
 									'zip', 'country', 'phone');
 	var $fb_enumFields = array ('relation', 'source'); // make this a link
+	var $fb_linkDisplayFields = array ('last_name', 'first_name', 'address1');
 }

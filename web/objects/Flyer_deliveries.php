@@ -15,6 +15,7 @@ class Flyer_deliveries extends DB_DataObject
     var $delivered_date;                  // date(10)  
     var $family_id;                       // int(32)  
     var $company_id;                      // int(32)  
+    var $school_year;                     // string(50)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

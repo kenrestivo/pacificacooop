@@ -148,6 +148,9 @@ $obj->find();					// new find with limit.
 // now the table
 $hdr = 0;
 while ($obj->fetch()){
+	$build =& DB_DataObject_FormBuilder::create ($obj);
+	$dosdv = $build->getDataObjectSelectDisplayValue(&$obj);
+//	print "DOSDV $dosdv\n";
 	$ar = array_merge(sprintf('<a href="%s?action=detail&id=%s&table=%s">
 						Edit</a><br>',
 							  $_SERVER['PHP_SELF'], 

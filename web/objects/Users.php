@@ -34,9 +34,11 @@ class Users extends DB_DataObject
 		$this->fb_preDefElements['password'] = 
 			HTML_QuickForm::createElement('password', 'password', 
 										  'Password');
-	}
+		
+}
 	
 	function preProcessForm(&$data) {
+//		confessArray($data, "preproecessdata");
 		if(isset($data['password'])) {
 			if($data['password'] != $this->password) {
 				$data['password'] = md5($data['password']);

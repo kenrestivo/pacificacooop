@@ -122,7 +122,7 @@ CREATE TABLE companies (
   familyid int(32) default NULL,
   do_not_contact datetime default NULL,
   flyer_ok enum('Unknown','Yes','No') default NULL,
-	PRIMARY KEY (company_id)
+    PRIMARY KEY (company_id)
 ) ;
 
 --
@@ -237,8 +237,8 @@ CREATE TABLE families (
   family_id int(32) NOT NULL unique auto_increment,
   name varchar(255) default NULL,  -- XXX dumb! make this family_name!
   phone varchar(20) default NULL,
-	address1 varchar(255) default NULL,
-	email varchar (255) default NULL,
+    address1 varchar(255) default NULL,
+    email varchar (255) default NULL,
   PRIMARY KEY  (family_id),
 ) ;
 
@@ -332,7 +332,7 @@ CREATE TABLE kids (
   kid_id int(32) NOT NULL unique auto_increment,
   last_name varchar(255) default NULL,
   first_name varchar(255) default NULL,
-	date_of_birth date default NULL, 
+    date_of_birth date default NULL, 
  family_id int(32) default NULL,
   PRIMARY KEY  (kid_id),
 ) ;
@@ -370,7 +370,8 @@ CREATE TABLE nag_indulgences (
   nag_indulgence_id int(32) NOT NULL unique auto_increment,
   note varchar(255) default NULL,
   granted_date date default NULL,
-  indulgence_type enum('Everything','Invitations','Family Auctions','Quilt Fee','Solicitation Auctions') default NULL,
+  indulgence_type enum('Everything','Invitations','Family Auctions',
+    'Quilt Fee','Solicitation Auctions') default NULL,
   family_id int(32) default NULL,
   PRIMARY KEY  (nag_indulgence_id),
 ) ;
@@ -395,7 +396,8 @@ CREATE TABLE nags (
 
 CREATE TABLE packages (
   package_id int(32) NOT NULL unique auto_increment,
-  package_type enum('Unknown','Live','Silent','Balloon','Ignore','Flat Fee') default NULL,
+  package_type enum('Unknown','Live','Silent','Balloon','Ignore','Flat Fee') 
+    default NULL,
   package_number varchar(20) default NULL,
   package_title varchar(255) default NULL,
   package_description longtext,
@@ -432,7 +434,7 @@ CREATE TABLE raffle_income_join (
   raffle_location_id int(32) default NULL,
   familyid int(32) default NULL,
   income_id int(32) default NULL,
-  PRIMARY KEY  (raffle_income_join_id),
+  PRIMARY KEY  (raffle_income_join_id)
 ) ;
 
 --
@@ -445,7 +447,7 @@ CREATE TABLE raffle_locations (
   start_date date default NULL,
   end_date date default NULL,
   description varchar(255) default NULL,
-  PRIMARY KEY  (raffle_location_id),
+  PRIMARY KEY  (raffle_location_id)
 ) ;
 
 --
@@ -459,7 +461,7 @@ CREATE TABLE session_info (
   updated timestamp(14) NOT NULL,
   user_id int(32) default NULL,
   vars blob,
-  PRIMARY KEY  (session_id),
+  PRIMARY KEY  (session_id)
 ) ;
 
 --
@@ -469,7 +471,7 @@ CREATE TABLE session_info (
 CREATE TABLE sources (
   source_id int(32) NOT NULL unique auto_increment,
   description varchar(255) default NULL,
-  PRIMARY KEY  (source_id),
+   PRIMARY KEY  (source_id)
 ) ;
 
 --
@@ -557,13 +559,13 @@ CREATE TABLE vehicles (
 -- people table
 
 CREATE TABLE people (
- 	 people_id int(32) NOT NULL unique auto_increment,
- 	 first_name varchar(255) default NULL,
- 	 last_name varchar(255) default NULL,
- 	 title varchar(255) default NULL,  
-	salutation varchar(50) default NULL,  
- 	 email_address varchar(255) default NULL,  
-	PRIMARY KEY  (people_id),
+     people_id int(32) NOT NULL unique auto_increment,
+     first_name varchar(255) default NULL,
+     last_name varchar(255) default NULL,
+     title varchar(255) default NULL,  
+    salutation varchar(50) default NULL,  
+     email_address varchar(255) default NULL,  
+    PRIMARY KEY  (people_id),
 ) ;
 
 
@@ -578,7 +580,7 @@ CREATE TABLE sites (
   zip varchar(255) default NULL,
   country varchar(255) default NULL,
   phone varchar(255) default NULL,
- 	fax varchar(255) default NULL,
+    fax varchar(255) default NULL,
    PRIMARY KEY  (site_id),
 ) ;
 
@@ -590,7 +592,7 @@ CREATE TABLE organisations (
   company_name varchar(255) default NULL,
   URL varchar(255) default NULL,
   flyer_ok enum('Unknown','Yes','No') default NULL,
-	PRIMARY KEY (organisation_id)
+    PRIMARY KEY (organisation_id)
 ) ;
 
 -- invitations table
@@ -601,7 +603,7 @@ CREATE TABLE invitations (
   school_year varchar(50) default NULL,
   family_id int(32) default NULL,
   relation enum('Relative','Friend','Coworker','Alumni','Other') 
-		default NULL,
+        default NULL,
     PRIMARY KEY (invitation_id)
 ) ;
 
@@ -668,3 +670,46 @@ CREATE TABLE accounting_paypal (
     KEY receiver_email (receiver_email),
     KEY confirm_date (confirm_date)
 );
+
+
+CREATE TABLE ad_sizes (
+    ad_size_id int(32) NOT NULL unique auto_increment,
+    ad_size_description varchar(255) default NULL,
+    ad_price decimal(9,2) default NULL,
+    school_year varchar(50) default NULL,
+    PRIMARY KEY (ad_size_id)
+) ;
+
+
+CREATE TABLE ads (
+    ad_id int(32) NOT NULL unique auto_increment,
+    ad_size_description varchar(255) default NULL,
+    ad_copy longtext default NULL,
+    artwork_provided enum('Unknown','Yes','No') default NULL,
+    school_year varchar(50) default NULL,
+    ad_size_id int(32) NOT NULL ,
+    income_id int(32) default NULL,
+    PRIMARY KEY (ad_id)
+) ;
+
+
+CREATE TABLE tickets (
+  ticket_id int(32) NOT NULL unique auto_increment,
+  income_id int(32) default NULL,
+  ticket_quantity int(5) default NULL,
+  lead_id int(32) default NULL,
+  PRIMARY KEY  (ticket_id)
+) ;
+
+
+CREATE TABLE sponsorship_types (
+    sponsorship_type_id int(32) NOT NULL unique auto_increment,
+    sponsorship_name varchar(50) not NULL,
+    sponsorship_description varchar(255) default NULL, 
+    sponsorship_price decimal(9,2) default NULL,
+    school_year varchar(50) default NULL,
+    PRIMARY KEY (sponsorship_type_id)
+) ;
+
+
+-- EOF

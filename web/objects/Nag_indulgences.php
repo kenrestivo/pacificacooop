@@ -15,6 +15,7 @@ class Nag_indulgences extends DB_DataObject
     var $granted_date;                    // date(10)  
     var $indulgence_type;                 // string(21)  enum
     var $family_id;                       // int(32)  
+    var $school_year;                     // string(50)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
