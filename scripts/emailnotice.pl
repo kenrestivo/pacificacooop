@@ -62,7 +62,9 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 	$insref = &getinsuranceinfo($id);
 	$licref = &getlicenseinfo($id);
 
-	print &fieldTripReport($famref, $insref, $licref, $checkdate, 1);
+	if($famref->{'email'}){
+		print &fieldTripReport($famref, $insref, $licref, $checkdate, 1);
+	}
 
 } # end while
 
@@ -70,6 +72,8 @@ while ($famref = $rqueryobj->fetchrow_hashref){
 $dbh->disconnect or die "couldnt' disconnect from dtatbase $!\n";
 
 ########### END OF MAIN CODE
+
+
 
 ######################
 #	GETLICENSEINFO
@@ -103,6 +107,8 @@ sub getlicenseinfo()
 	return \%item;
 }# END GETLICENSEINFO
 
+
+
 ######################
 #	GETINSURANCEINFO
 ######################
@@ -131,12 +137,13 @@ sub getinsuranceinfo()
 	} # end while
 
 	if($queryobj->rows() > 1){
-		print STDERR "\tERROR! more than one row returned for ins on <$famid>\n";
+		print STDERR "\tERROR! multiple rows returned for ins on <$famid>\n";
 	}
 
 	return \%item;
 
 } #END GETINSURANCEINFO
+
 
 
 ######################
@@ -153,7 +160,7 @@ sub emailreminder()
 	print "Regulations require us to have a copy of a valid driver's license and current auto insurance on file. It appears this has to be current in order for you to be allowed to drive your child on any field trips. The next field trip is scheduled for the end of October, so, now is a good time to get all this paperwork up-to-date.\n\n";
 	print "If you could please place a copy of your current insurance card (the one that you keep in your car) into my communications folder, that would be great.\n\n";
 	print "Again, sorry for the impersonal email. Please feel free to call me at 650-355-1317 with any questions.\n\nThanks!\n\n-ken";
-}
+} #END EMAILREMINDER
 
 
 ######################
