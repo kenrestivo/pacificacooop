@@ -89,7 +89,9 @@ class PostPaypal
             }
             //print_r($this);
 			// TODO: send a thank-you note, and save status from postpaypal
-			// AAAGH! the parsing of paypal to thankyou is in thankyou.pp
+			// NOTE: this isn're really necessary,
+			// since they see the thank-you anyway
+			// BUT: i need to record that they saw the thank-you anyway
 
 		}
 

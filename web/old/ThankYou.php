@@ -253,6 +253,33 @@ http://www.pacificacoop.org/
 
 		}
 
+	// grab the REQUEST values from paypal, and put them in here
+	// DOES THIS BELONG HERE!!?? or does it belong in parsepaypal?
+	// it sucks being an OOP idiot.
+	function parsePaypal()
+		{
+				//calculate all the crap we will need
+			$this->items_array = array(sprintf("$%.2f via credit card", 
+											   $_REQUEST['payment_gross']));
+			$this->name = sprintf("%s %s", $_REQUEST['first_name'], 
+								  $_REQUEST['last_name']); 
+			$this->address_array = array($_REQUEST['address_street'], 
+									   sprintf("%s, %s %s", 
+											   $_REQUEST['address_city'],
+											   $_REQUEST['address_state'],
+											   $_REQUEST['address_zip']),
+									   $_REQUEST['address_country']);
+			$this->email = $_REQUEST['payer_email'];
+
+			preg_match('/^(\d{4})(\d{2})(\d{2}).*/', 
+					   $_REQUEST['confirm_date'], $matches);
+				//print_r($matches);
+			$this->date = date('l, F j, Y',
+							 mktime(0,0,0,
+									$matches[2], $matches[3], $matches[1]));
+	
+		}
+
 } // END THANK YOU CLASS
 
 
