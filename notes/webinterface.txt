@@ -331,59 +331,54 @@ for future reference: a php/sql forum/groupware package
 	to keep history of the project
 	much like BayForums we used at bay!
 
-solicitation notes
-	flyer posting. many years, many flyers, many-to-many table. 
-	glue to auction table!
-	just like money: auction items can come from families, or businesses!
-	track/auth by comittee member?
-		can enter from other areas
-	cash donations too?
-		yes.
-	buy an ad! size, and amount
-		can get some in
-	note field... i.e. a call history log (left message, etc.)?
-		call back/left message
-	not interested, DO NOT CONTACT, want that info in there
-	due date! 
-		what about due date for the donations? do they have one?
-			by febrary 1st-- for business
-		10TH for solicitation meeting: MUST HAVE UI UP!
-	4 actions:
-		donate an item for the auction
-		buy an ad
-		be a sponsor (cash)
-		let us put up a flyer
-	tables
-		flyers
-			to track which are actually PUT up there!
-		glue table for donations (alglue?)
-		ad insertions
-			link to income table!
-		sponsors
-			link to income table!!
-		web links (automated would be GREAT!)
+--------
+next phase gui/schema
 
-ad insertion 
-	contact table (same as for solicitation)
+contact management
+	contact table (for solicitation)
 		company
 		contact first,last
 		address, city, state,zip
 		phone, fax, email
-		areaid (link)
-	category table (crespi, rockaway, etc)
+		territoryid (link)
+		user? entered/updated?
+		dead contact flag/date: do not contact. essentially, obsolete date.
+		possibly link or glue to familyid? for members, alumni?
+			links or glue to a particular family??
+	territory table (crespi, rockaway, etc)
 		hmm. alumnae? member? or... track that elsewise?
+	contactnotes table
+		contactid
+		entered/updated (don't allow updates! it's history, it stays)
+		note (longtext)
+	contact-to-income glue table
+		to handle any stray non-categorized donations. DANGEROUS but will need this.
+
+ad insertion 
 	ad table
 		contactid (link)
 		sessionid (link)
 		adsizeid (link)
 		ad copy (longtext)
-		artwork flag?
+		artwork_provided flag?
 		possibly pdf/word/something artwork itself? (blob)
-		linkid (link to link glue table. heh. link.)
-		payment? link to money?? hmm...
+			i'd rather have a filenameid. so it gets cached!
+		weblinkid (link to weblink glue table. heh. link.)
+		payment? link to money?? hmm... or glue??
+		user? entered/updated?
 	adsize table
-		size
+		description (varchar)
+		size? or use above?
 		price
+
+web links stuff
+	link table
+		displaytext
+		url
+		logo(jpeg, blob). or filename
+	linkTYPE table?
+		kind of link?
+
 
 sponsorship form
 	sponsorship table
@@ -391,34 +386,92 @@ sponsorship form
 		sessionid (link)
 		sponsortype
 		payment? (link to a glue table?)
+		user? entered/updated?
+		obsoletedate (so...they can be removed from active w/o killing history!)
 	sponsortype table
 		description
 		price
-		contents
-			link
+		contents (fields? field?)
+			(like privs, one for each? or vertical columns?)
+				i.e. will some user later on want to ADD to these, w/o changing code?
+				or will it necessarily involve code changes?
+			link (to linktype table?)
 			logo
-			ad (size)
-			tickets (quantity)
-			banner (champions? individual?)
+			ad (link to adsize table)
+			tickets quantity? link to tickettype table?
+			banner (champions? individual? link to bannertype table?)
+			anything else?
 
-web links
-	link table
-		displaytext
-		url
-		logo(jpeg, blob)
+banners
+	type?
+	price?
 
-misc problems
-	may need a 'key' field in struct
-		to identify what glues a substruct to its parent
-	auugh! how to handle the sponsorship package contents?
-		link from each individual thing?
-		so, when i calculate ads, do i check sponsors? or are ads populated?
-	how to handle money? links to business? or link to THING they paid for?
-		or lots of money glue tables? THINK THIS THROUGH!
-		particularly interesting in the case of sponsorship packages!
-	dual-direction links
-		ads and sponsors can and should dual-link from contacts
-			from ads screen, need to select/add/edit contacts
-			from contacts screen, need to view/edit/add ads and sponsors
-			
+tickets!!!
+	what to do here?
 
+sub-view gui handling
+	will probably need to have multiple structs, and a field to choose them
+	possibly different callbacks too, 
+		so state machine may become part of fieldstruct
+	viewOne() shows many lines for ONE unit, on whatever key field it needs
+		so... it'll show all the subsummaries under this one
+		i.e. familyid, contactid, adid, flyerid, insid, licid, etc.
+		stuff in this function MAY eventually get moved to struct
+			at which point it'll be a generic viewOne()
+		so it can show other things.
+			i.e. it can be included and called from elsewhere
+	viewMany() funct selects all and then shows all lines
+		each line, instead of edit/delete, has View (viewone) foreach
+			new deduced state: viewone
+			it MUST somehow know which fieldstruct to use, too
+		if there's only one for this family (or it doesn't have rights)
+			go straight to the viewonly for only that one
+	disptcher change: either dispatcher must know which struct
+		for view, viewone, edit, delete, etc... for ALL
+		what if it's in the struct?
+			confusing: what if different entries w/different sturcts?
+				i.e. edit, what the fuck do you show?
+	do you encode the substructs in the struct?
+		i.e. so showreprt can generate views programatically?
+		and, so it can  be included from elsewhere!
+		including: means it can be passed around
+		linking: means it MAY not be so easy to pass it around... collisions, etc
+			DECIDE THIS NOW!
+	examples:
+		insurance
+			view: if !$admin, call viewOne for this familyid
+				else, show all with summary line, and VIEW(DETAIL?) button
+			viewone for FAMILY/LINE (what to call this?)
+				show parent info (summary viewonly)
+				show summary line for insurance, 
+					with EDIT/DELETE button(if priv)
+				show summary line for license 
+					with EDIT/DELETE button(if priv)
+		solicitation
+			view: all your contacts, or ALL contacts if $admin.
+			4 actions:
+				donate an item for the auction
+				buy an ad
+				be a sponsor (cash)
+				let us put up a flyer
+		money:
+			interesting problem!! how to deal with lead checks?
+			could be linked to 
+				an invitation, 
+				a business lead, 
+				an ad, 
+				a donation
+			handling
+				pop-up in case of business lead, since inputter won't know
+					ad-id? must it link to that?
+						nice if it had prices too... to verify check amount
+					raw cash donation is easy: just link to business lead
+				leadid in case of invitation. 
+					possibly with pop-up?
+				and... tickets? what of tickets?
+					ASK CARRIE!
+			will need a special-case checkEntry function, i'm certain
+				to handle all the different weirdo cases
+				callback?
+				
+		

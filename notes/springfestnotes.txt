@@ -119,4 +119,23 @@ three different types of revenue to track
 		or, if an RSVP, response code, which is the leadid 
 			(future, for RSVP cards: not right now)
 		
-	
+-------------------------	
+12/01/2003
+
+solicitation notes
+	flyer posting. many years, many flyers, many-to-many table. 
+	glue to auction table!
+	just like money: auction items can come from families, or businesses!
+	track/auth by comittee member?
+		can enter from other areas
+	cash donations too?
+		yes.
+	buy an ad! size, and amount
+		can get some in
+	note field... i.e. a call history log (left message, etc.)?
+		call back/left message
+	not interested, DO NOT CONTACT, want that info in there
+	due date! 
+		what about due date for the donations? do they have one?
+			by febrary 1st-- for business
+		10TH for solicitation meeting: MUST HAVE UI UP!
