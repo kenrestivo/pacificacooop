@@ -82,7 +82,8 @@
     while ( list( $key, $val ) = each($menu)) {
 		user_error(sprintf("main(): showing row for %s", $val['description']),
 			E_USER_NOTICE);
-		showMenuRow($auth, $u, $val);
+		// hack around the $callbacks not yet including fields, which it SHOULD
+		showMenuRow($auth, $u, $val, ${$val['fields']});
 	}
 	
 	/* package management

@@ -76,8 +76,9 @@ sync-live: commit-live download-live
 
 #TODO do a cvs update after downloading?
 sync-dev: download-dev
-	
 
+tags:
+	etags *
 
 #EOF
 
