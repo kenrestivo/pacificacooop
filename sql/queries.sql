@@ -995,10 +995,18 @@ select families.*
 from families
     left join kids on families.family_id = kids.family_id 
     left join enrollment on kids.kid_id = enrollment.kid_id
+    left join families_income_join 
+        on families_income_join.family_id = families.family_id
+    left join income on 
+        families_income_join.income_id = income.income_id
 where enrollment.school_year = '2004-2005'
-    and (enrollment.dropout_date < '2000-01-01'
-        or enrollment.dropout_date is null)
+    and ((enrollment.dropout_date < '2000-01-01'
+            or enrollment.dropout_date is null)
+        or (account_number = 2 and payment_amount > 0 
+            and income.school_year = '2004-2005'))
 group by families.family_id
 order by families.name;
+
+
 
 --- EOF

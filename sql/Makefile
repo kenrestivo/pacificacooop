@@ -81,7 +81,7 @@ backup-live::
 	$(MAKE) backup DBUSER=$(BKUSER) DBHOST=127.0.0.1 DBPORT=$(FARPORT) PW=$(BKPW)
 
 ssh-tunnel::
-	ssh -n -f -N -L$(FARPORT):$(REALDB):3306 ken@c1.phx.nearlyfreespeech.net
+	ssh -n -f -N -L$(FARPORT):$(REALDB):3306 ken@dev.phx.nearlyfreespeech.net
 
 diagram:
 	autodia.pl -l DBI -i "mysql:$(DB):$(DBHOST)" -U$(BKUSER) -P$(BKPW) -o schema.dia
