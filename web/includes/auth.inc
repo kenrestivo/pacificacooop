@@ -235,15 +235,11 @@ checkAuthLevel($auth)
 function
 displayLogin($auth)
 {
-	$uid = $auth['uid'];
-	$pwd = $auth['pwd'];
-	$confirm = $auth['confirm'];
-	$token = $auth['token'];
 
 	confessArray($auth, "displaylogin");
 	
 	// well, they're not.
-	if(!($uid && $token)){
+	if(!($auth['uid'] && $auth['token'])){
 		printf("You are NOT logged in. <a href='%s'>Login here</a>",
 			//XXX should this be menu.php?
 			$_SERVER['PHP_SELF']);
@@ -251,7 +247,7 @@ displayLogin($auth)
 	}
 
 	// reflexively check the token first
-	if(($err = checkToken($uid, $token)) > 0){
+	if(($err = checkToken($auth['uid'], $auth['token'])) > 0){
 		print "displayLogin(): bad login!\n";
 		return;
 	}
@@ -262,7 +258,7 @@ displayLogin($auth)
 			FROM users 
 			left join families on families.familyid = users.familyid
 			WHERE users.userid = %d --",
-				$uid );
+				$auth['uid'] );
 	$listq = mysql_query($query);
 	$err = mysql_error();
 	if($err){
@@ -272,7 +268,8 @@ displayLogin($auth)
 				
 	// sanity czech
 	if (mysql_num_rows($result) < 1) {
-		print "displayLogin(): ERROR! no name for family with uid $uid?\n";
+		printf("displayLogin(): ERROR! no name for family with uid %d?\n",
+			$auth['uid']);
 		return;
 	}
 
@@ -298,9 +295,7 @@ displayLogin($auth)
 ******************/
 function loginPopup($uid)
 {
-	printf("<select name='auth[uid]' SINGLE>\n",
-		$entrynum, $fname
-	);
+	print "<select name='auth[uid]' SINGLE>\n";
 	print "<option value='0'>CHOOSE ONE</option>\n";
 
 	#DO THE QUERY
@@ -330,40 +325,35 @@ function loginPopup($uid)
 function
 logIn($auth)
 {
-	$uid = $auth['uid'];
-	$pwd = $auth['pwd'];
-	$confirm = $auth['confirm'];
-	$token = $auth['token'];
-	$action = $auth['action'];
 
 	confessArray($auth, "login");
 
 	printf("<FORM METHOD=POST ACTION='%s'>", 
 			$_SERVER['PHP_SELF']);
 
-	switch($action){
+	switch($auth['action']){
 		case 'new':
 			// TODO: inputs: clearpass, uid, action
 			print "Confirm password: \n";
 			print "<INPUT TYPE=password NAME='auth[confirm]'>";
 			thruAuth( array(
-						'token' => generateToken($uid, $pwd) ,
-						'uid' => $uid ,
+						'token' => generateToken($auth['uid'], $auth['$pwd']) ,
+						'uid' => $auth['uid'] ,
 						'action' => 'confirm'
 					)
 			);
 			break;
 		case 'confirm':
 			//TODO: inputs: uid, action, token(hashed), confirmpass
-			if($token == generateToken($uid, $confirm)){
-				if(getPass($uid) == 0){
-					return savePass($uid, $pwd);
+			if($auth['$token'] == generateToken($auth['uid'], $auth['confirm'])){
+				if(getPass($auth['uid']) == 0){
+					return savePass($auth['uid'], $auth['pwd']);
 				}
 			}
 			break;
 		default:
 			//first login, no password entered
-			loginPopup($uid); 
+			loginPopup($auth['uid']); 
 			print "Enter password: \n";
 			print "<INPUT TYPE=password NAME='auth[pwd]'>";
 			//	TODO: if uid, include confirmation box too!
@@ -378,45 +368,10 @@ logIn($auth)
 
 
 
-/******************
-	UIJUNK
-******************/
-function
-uiJunk()
-{
-
-	print "<p>Please log in:</p>";
-	print "<table border='0'>";
-	printf("<FORM METHOD=POST ACTION='%s'>", 
-			$_SERVER['PHP_SELF']);
-	print "<tr><td>Your child's last name:</td><td>";
-	loginPopup($uid); 
-	print "</td></tr>";
-
-		print "<tr><td>Your password:</td>";
-		print "<tr><td>Please make up a NEW password for yourself 
-					and type it here:</td>";
-
-	print "<td><INPUT TYPE=password NAME='auth[pwd]'></td>";
-	print "</tr>"; // html sucks
-
-		print "<tr><td>Type your new password again to confirm:</td>";
-		print "<td><INPUT TYPE=password NAME='auth[confirm]'></td></tr>";
-		print "<INPUT TYPE=hidden NAME='auth[action]' VALUE='confirm'>";
-
-	print "<tr><td><INPUT TYPE=submit NAME='login' VALUE='LogIn'></td></tr>";
-    print "</FORM>";
-	print "</table>";
-
-	return 0;
-}/* END UIJUNK */
-
-
-
-
 
 /******************
 	PASSSTANDARD
+	TODO: check that password is good enough, smart enough, and people like it
 	returns: 0 if ok, 1 if bad
 ******************/
 function
