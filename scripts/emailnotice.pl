@@ -101,7 +101,8 @@ sub getlicenseinfo()
 			lic.last, lic.first, lic.middle, lic.state
 		from lic 
 			left join parents on lic.parentsid = parents.parentsid 
-		where parents.worker= 'Yes' and parents.familyid = $famid
+		where parents.worker= 'Yes' 
+			and parents.familyid = $famid
 		group by parents.parentsid
 		order by exp asc";
 	#print "doing <$query>\n"; #XXX debug only
@@ -146,10 +147,14 @@ sub getinsuranceinfo()
 
 	while ($itemref = $queryobj->fetchrow_hashref){
 		%item = %$itemref; #store a local copy, because mysql will blow it away!
+		#printf("DEBUG famid: %s %s %s exp %s %s\n", 
+		#	$famid, $item{'last'}, $item{'first'}, 
+		#	strftime('%m/%d/%Y', localtime($item{'exp'})),
+		#	$item{'policynum'});
 	} # end while
 
 	if($queryobj->rows() > 1){
-		print STDERR "\tERROR! multiple rows returned for ins on <$famid>\n";
+		print STDERR "\tWARNING! multiple rows returned for ins on <$famid>\n";
 	}
 
 	return \%item;
