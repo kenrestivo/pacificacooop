@@ -22,6 +22,8 @@
 **********************/
 
 
+require_once("HTML/Table.php");
+
 ###############
 # TDARRAY
 # inputs: an array
@@ -312,9 +314,14 @@ ken_array_fill($start, $count, $val)
 function
 showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 {
-	print "<h3>$title</h3>";
+
+
 	$listq = mysql_query($q);
-	print "<table border='0'>";
+	
+	$toptab = new HTML_Table(' bgcolor="#aa99ff" cellpadding="0" cellspacing="0"');
+
+	$tab = new HTML_Table(' bgcolor="#ffffff"');	
+
 	$i = 0;
 	$err = mysql_error();
 	if($err){
@@ -327,7 +334,7 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 				$headers[] = $key;
 				$grand[] = 0;
 			}
-			thArray($headers);
+			$tab->addRow($headers, ' bgcolor="#aabbff"', "TH");
 			reset($row);
 			$i++;
 		}
@@ -340,7 +347,8 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 			}
 			$grand[$i++] += $val;
 		}
-		tdArray($tdrow, "");
+		$tab->addRow($tdrow);
+	
 	}
 	$s = count($headers);
 	//confessArray($headers, "headers($s)");
@@ -348,9 +356,18 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 	if($dogt){
 		$grand[0] = 'GRAND TOTAL'; // always 0!
 		//confessArray($grand, "grand($s)");
-		tdArray($grand);
+		$tab->addRow($grand,'bgcolor="#aa99ff"' );
 	}
-	print "</table>";
+
+	$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
+								   'bgcolor="#ccccff"');
+
+
+	$toptab->addRow(array($title), 'align="center"', "TH");
+	$toptab->addRow(array($tab->toHTML()));
+
+	print $toptab->toHTML();
+
 } /* END SHOWRAWQUERY */
 
 
