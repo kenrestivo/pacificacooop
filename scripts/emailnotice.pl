@@ -569,7 +569,7 @@ sub emailReminder()
 	my $licexp = 0; #flag
 	my $skip = 0;
 
-	$badness .= "Hello! My job this year at the Pacifica Co-Op Nursery School is to keep track of the automobile insurance and driver's license information for the school.\n\n";
+	$badness .= "Hello! My job this year at the Co-Op is to keep track of the automobile insurance and driver's license information for the school.\n\n";
 
 
 	#insurance
