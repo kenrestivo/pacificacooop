@@ -1,3 +1,8 @@
+
+
+
+
+
 ;;; $Id$
 ;; add schoolyear to columns
 ;; (load "/mnt/kens/ki/proj/coop/scripts/yearify.scm")
@@ -9,21 +14,17 @@
 (define dbh (apply simplesql-open "mysql"
 				   (read-conf "/mnt/kens/ki/proj/coop/sql/db.conf")))
 
+;; silly little diagnostic, WITH safety valve
 (define *debug-flag* #t)
-
-;; silly little diagnostic
-(define (doit query)
+(define (doit dbh query)
   (if *debug-flag*
 	  (pp query)
 	  (catch #t
 			 (lambda ()
 			   (simplesql-query dbh query) )
-			 (lambda x (printf "caught error on [%s]\n" query) (pp x)))))
+			 (lambda x (printf "caught error on [%s]\n" query) (pp x) #f))))
 
-(define (add-new-column table column-name definition default)
-  (doit (sprintf #f "alter table %s add column %s %s"
-				 table column-name definition))
-  (doit (sprintf #f "update %s set %s = '%s'" table column-name default)))
+
 
 ;;;;;;;;;;;;;;;
 ;; main
