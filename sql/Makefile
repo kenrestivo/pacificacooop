@@ -31,6 +31,7 @@ DBUSER=ken
 REALDB=pacsql.db
 FARPORT=2299
 BKPW=test
+PW=test
 BKUSER=input
 
 all::
@@ -77,7 +78,7 @@ backup: backup-defs backup-data
 backup-local: backup
 
 backup-live::
-	$(MAKE) backup DBUSER=$(BKUSR) DBHOST=127.0.0.1 DBPORT=$(FARPORT) PW=$(BKPW)
+	$(MAKE) backup DBUSER=$(BKUSER) DBHOST=127.0.0.1 DBPORT=$(FARPORT) PW=$(BKPW)
 
 ssh-tunnel::
 	ssh -n -f -N -L$(FARPORT):$(REALDB):3306 ken@phx1.nearlyfreespeech.net
