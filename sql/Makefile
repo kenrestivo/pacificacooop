@@ -30,6 +30,7 @@ DBPORT=3306
 DBUSER=ken
 REALDB=pacsql.db
 FARPORT=2299
+BKPW=test
 
 all::
 	@echo "not so fast... get specific"
@@ -52,7 +53,7 @@ backup-defs::
 		--database $(DB) \
 		--lock-tables \
 		--no-data \
-		-h $(DBHOST) -P $(DBPORT) -u $(DBUSER) -p > $(DEFFILE)
+		-h $(DBHOST) -P $(DBPORT) -u $(DBUSER) -p $(PW)> $(DEFFILE)
 	bzip2 -f $(DEFFILE)
 
 backup-data:
@@ -65,7 +66,7 @@ backup-data:
 		--no-create-db \
 		--no-create-info \
 		--quick \
-		-h $(DBHOST) -P $(DBPORT) -u $(DBUSER) -p > $(DATAFILE)
+		-h $(DBHOST) -P $(DBPORT) -u $(DBUSER) -p $(PW)> $(DATAFILE)
 	bzip2 -f $(DATAFILE)
 
 backup: backup-defs backup-data
@@ -75,7 +76,7 @@ backup: backup-defs backup-data
 backup-local: backup
 
 backup-live::
-	$(MAKE) backup DBUSER=input DBHOST=127.0.0.1 DBPORT=$(FARPORT)
+	$(MAKE) backup DBUSER=input DBHOST=127.0.0.1 DBPORT=$(FARPORT) PW=$(BKPW)
 
 ssh-tunnel::
 	ssh -n -f -N -L$(FARPORT):$(REALDB):3306 ken@phx5.nearlyfreespeech.net
