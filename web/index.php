@@ -63,7 +63,7 @@
 
 	//auction items
 	showMenuRow($auth, $u, 'Springfest Auction Donation Items', 
-		'nameSummary', 'auction', 'auction.php');
+		'auctionSummary', 'auction', 'auction.php');
 	
 	//invitations
 	showMenuRow($auth, $u, 'Springfest Invitation Contacts', 
@@ -81,7 +81,10 @@
 	showMenuRow($auth, $u, 'Calendar of Events', 
 		'calSummary', 'calendar', 'calendar.php');
 
-	/* admin */
+	/* admin 
+	XXX can't use standard showMenuRow? 
+		it uses FAMILYID, but admin wants USERID
+	*/
 	showMenuRow($auth, $u, 'User Administration', 
 		'adminSummary', 'user', 'admin.php');
 
