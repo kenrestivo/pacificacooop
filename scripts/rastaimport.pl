@@ -139,6 +139,7 @@ sub checkChanges(){
 sub iterateSheets()
 {
 	my $wb = shift;
+	my $session = shift;
 	my($ws, $sh);
 
 	print "FILE  :", $wb->{File} , "\n";
@@ -152,9 +153,9 @@ sub iterateSheets()
 		if($ws->{'Name'} !~ /Schedule/){
 			next;
 		}
-		&iterateRows($ws, \&checkDeletes, \&checkHeaders);
-		&iterateRows($ws, \&checkNewKids);
-		&iterateRows($ws, \&checkChanges);
+		&iterateRows($ws, $session, \&checkDeletes, \&checkHeaders);
+		&iterateRows($ws, $session, \&checkNewKids);
+		&iterateRows($ws, $session, \&checkChanges);
 
 	} 
 
@@ -224,6 +225,7 @@ sub extractRow()
 sub iterateRows()
 {
 	my $ws = shift;
+	my $session = shift;
 	my $checkCb = shift;
 	my $headerCb = shift;
 	my $start = 0;
@@ -260,7 +262,7 @@ sub iterateRows()
 				printf("ROW $row ------- from %d to %d cols\n", $col, $maxcol);
 
 				if($checkCb){
-					&$checkCb(&extractRow($ws, $row, $col, $maxcol));
+					&$checkCb(&extractRow($ws, $row, $col, $maxcol), $session);
 				}
 			}
 		}
@@ -277,8 +279,13 @@ sub main()
 {
 
 	my $xls = new Spreadsheet::ParseExcel;
-	my $wb = $xls->Parse('../imports/PM.xls');
-	&iterateSheets($wb);
+	my $wb ;
+
+	$wb = $xls->Parse('../imports/PM.xls');
+	&iterateSheets($wb, 'PM');
+
+	#$wb = $xls->Parse('../imports/AM.xls');
+	#&iterateSheets($wb, 'AM');
 
 } #END MAIN
 
