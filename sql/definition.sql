@@ -496,6 +496,7 @@ CREATE TABLE sources (
 
 CREATE TABLE springfest_attendees (
   springfest_attendee_id int(32) NOT NULL unique auto_increment,
+  paddle_number int(32) default NULL,
   invitation_rsvps_id int(32) default NULL,
   lead_id int(32) default NULL,
   company_id int(32) default NULL,

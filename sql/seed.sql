@@ -21,58 +21,62 @@
 use coop;
 
 -- accounts
-insert into coa set
-            acctnum = 1,
+insert into chart_of_accounts set
+            account_number = 1,
             join_to_table = "families",
             description = "SpringFest 10-names forfeit fee";
 
 
-insert into coa set
-            acctnum = 2,
+insert into chart_of_accounts set
+            account_number = 2,
             join_to_table = "families",
             description = "SpringFest food/quilt fee";
 
-insert into coa set
-            acctnum = 3,
+insert into chart_of_accounts set
+            account_number = 3,
             join_to_table = "families",
             description = "SpringFest auction item forfeit fee";
 
-insert into coa set
-            acctnum = 4,
+insert into chart_of_accounts set
+            account_number = 4,
             join_to_table = "families",
             description = "SpringFest Misc Family Cash donation";
 
-insert into coa set
-            acctnum = 5,
+insert into chart_of_accounts set
+            account_number = 5,
             join_to_table = "companies",
             description = "SpringFest Program Ad Insertion";
 
-insert into coa set
-            acctnum = 6,
+insert into chart_of_accounts set
+            account_number = 6,
             join_to_table = "leads,companies",
             description = "SpringFest Ticket Purchase";
 
-insert into coa set
-            acctnum = 7,
+insert into chart_of_accounts set
+            account_number = 7,
             join_to_table = "companies,leads",
             description = "SpringFest Sponsorship Package";
 
-insert into coa set
-            acctnum = 8,
+insert into chart_of_accounts set
+            account_number = 8,
             join_to_table = "raffle_locations",
             description = "SpringFest Raffle Ticket Sales";
 
-insert into coa set
-            acctnum = 9,
+insert into chart_of_accounts set
+            account_number = 9,
             join_to_table = "companies",
             description = "SpringFest Misc Solicitation Cash Donation";
 
 
-insert into coa set
-            acctnum = 10,
+insert into chart_of_accounts set
+            account_number = 10,
             join_to_table = "leads",
             description = "SpringFest Misc Invitations Cash Donation";
 
+insert into chart_of_accounts set
+            account_number = 11,
+            join_to_table = "auction_purchases",
+            description = "SpringFest Auction Package Purchases";
 
 -- groups
 insert into groups set
