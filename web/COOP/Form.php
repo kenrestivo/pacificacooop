@@ -31,7 +31,7 @@ require_once('DB/DataObject/Cast.php');
 class coopForm extends CoopObject
 {
 	var $form;  // cache of generated form
-
+	var $id; // cache of last inserted id
 
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function build($id = false)
@@ -126,7 +126,10 @@ class coopForm extends CoopObject
 	function process($vars)
 		{
 			
-			$this->page->confessArray($vars, 'vars', 2);
+			$this->page->confessArray($vars, 
+									  sprintf('CoopForm::process(vars): %s', 
+											  $this->table), 
+									  2);
 	
 			$old = $this->obj; // copy, not ref!
 			
@@ -168,16 +171,19 @@ class coopForm extends CoopObject
 				user_error("save couldn't get its pk", E_USER_ERROR);
 			}
 
-			if($this->page->debug > 1){
-				confessObj($old, 'OLD data');
-				confessObj($this->obj, 'NEW data');
+			if($this->page->debug > 2){
 				$this->obj->debugLevel(2);
 			}
+			if($this->page->debug > 3){
+				confessObj($old, 'OLD data');
+				confessObj($this->obj, 'NEW data');
+			}
 			$this->obj->update($old);
+			$this->id = $this->lastInsertID();
 		
 			$this->saveAudit(false);
 		
-			return $this->obj->{$this->pk};
+			return $this->id;
 		}
 
 
@@ -187,7 +193,9 @@ class coopForm extends CoopObject
 				$this->obj->debugLevel(2);
 			}
 			$this->obj->insert();
+			$this->id = $this->lastInsertID();
 			$this->saveAudit(true);
+			return $this->id;
 		}
 
 	function getEnumOptions($key)
@@ -208,9 +216,16 @@ class coopForm extends CoopObject
 			return $doubleopt;
 		}
 
-	function populateDefaults()
+	function passVarsThrough($varnames, $vars)
 		{
-			
+			foreach($varnames as $varname){
+				if($this->form->elementExists($varname)){
+					$el =& $this->form->getElement($varname);
+					$el->setValue($vars[$varname]);
+				} else {
+					$this->form->addElement('hidden', $varname, $vars[$varname]);
+				}
+			}
 
 		}
 

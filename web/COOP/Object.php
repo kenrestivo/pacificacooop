@@ -220,6 +220,11 @@ class coopObject
 
 	function saveAudit($insert = true)
 		{
+			// don't save audits for joins dude
+			if(ereg("_join", $this->table)){
+				return;
+			}
+			
 			// the audit trail dude
 			// TODO copy/paste this later into my framework
 			$aud =& new CoopObject(&$this->page, 'audit_trail', &$top);
