@@ -25,7 +25,7 @@ $cutoffdate = "11/02/2004";
 $auctioncutoff = "12/18/2004";
 $solicitcutoff = "02/14/2005";
 $packagingcutoff = "02/14/2005";
-$paypal_debug = 1;
+$paypal_debug = 0;
 
 ?>
 
