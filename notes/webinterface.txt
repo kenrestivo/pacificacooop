@@ -341,18 +341,20 @@ contact management
 		address, city, state,zip
 		phone, fax, email
 		territoryid (link)
-		user? entered/updated?
+		user entered/updated?
 		dead contact flag/date: do not contact. essentially, obsolete date.
-		possibly link or glue to familyid? for members, alumni?
-			links or glue to a particular family??
-	territory table (crespi, rockaway, etc)
-		hmm. alumnae? member? or... track that elsewise?
+		userid, entered, updated
+	territory table 
+		description (crespi, rockaway, etc)
+		hmm. alumnae/member familyid? or... track that elsewise?
+	territory-user (or family?) glue table
+		include sessionid! this'll change year-to-year!
 	contactnotes table
 		contactid
 		entered/updated (don't allow updates! it's history, it stays)
 		note (longtext)
 	contact-to-income glue table
-		to handle any stray non-categorized donations. DANGEROUS but will need this.
+		to handle any stray non-categorized donations. ugly but will need this.
 
 ad insertion 
 	ad table
@@ -361,11 +363,10 @@ ad insertion
 		adsizeid (link)
 		ad copy (longtext)
 		artwork_provided flag?
-		possibly pdf/word/something artwork itself? (blob)
-			i'd rather have a filenameid. so it gets cached!
+		fileid(link) -- for artwork submitted
 		weblinkid (link to weblink glue table. heh. link.)
-		payment? link to money?? hmm... or glue??
-		user? entered/updated?
+		incomeid(link) -- to handle payment... or glue if many payments!
+		userid, enteredupdated?
 	adsize table
 		description (varchar)
 		size? or use above?
@@ -374,26 +375,32 @@ ad insertion
 web links stuff
 	link table
 		displaytext
+		fileid(link)
 		url
-		logo(jpeg, blob). or filename
+		incomeid(link)? will people PAY for these alone?
 	linkTYPE table?
 		kind of link?
 
+filenames table (for various uploads!)
+	logo(jpeg, blob). or filename
+	possibly pdf/word/something artwork itself? (blob)
+		i'd rather have a filenameid. so it gets cached!
+	
 
 sponsorship form
 	sponsorship table
 		contactid (link)
-		sessionid (link)
+		sessionid (link) -- these will change year to year!
 		sponsortype
-		payment? (link to a glue table?)
-		user? entered/updated?
-		obsoletedate (so...they can be removed from active w/o killing history!)
+		incomeid(link) -- to handle payment... or glue if many payments!
+		userid, entered, updated(timestamp)
 	sponsortype table
 		description
 		price
 		contents (fields? field?)
 			(like privs, one for each? or vertical columns?)
-				i.e. will some user later on want to ADD to these, w/o changing code?
+				i.e. will some user later on want to ADD to these, 
+				w/o changing code?
 				or will it necessarily involve code changes?
 			link (to linktype table?)
 			logo
@@ -401,9 +408,6 @@ sponsorship form
 			tickets quantity? link to tickettype table?
 			banner (champions? individual? link to bannertype table?)
 			anything else?
-	gui notes for sponsorship:
-		only show the non-obsoleted ones
-		in the various others, you'll need to left join sponsorships to look for 'em
 
 banners
 	type?
@@ -456,7 +460,7 @@ sub-view gui handling
 		MANY-TO-MANY: they'll have to go through a different screen. 	
 			can i add it?
 		where do add buttons go?
-			in the top-level? in teh viewOne? in viewMany?
+			in the top-level? in teh viewOne? in viewMany? using addButtons()?
 	examples:
 		insurance:
 			view: if !$admin, call viewOne for this familyid
@@ -464,7 +468,7 @@ sub-view gui handling
 			add: no top-level add, but sub-level adds for each
 				i.e. add,edit/delete's like in viewone!
 			viewone for FAMILY/LINE (what to call this?)
-				show parent info (summary viewonly)
+				show parent info (summary viewonly, edit if rasta privs!)
 				show summary line for insurance, 
 					with EDIT/DELETE button(if priv)
 				show summary line for license 
@@ -481,15 +485,18 @@ sub-view gui handling
 					add,view/edit/delete flyer
 		roster:
 		auction(split):
-			view: all your auctions
+			view: all your auctions (or all auctions if $admin)
+			viewOne(): view that auction, and any sub-structs
+					i.e. additional families!
 
 
 money:
 	add to coa table?
 		linktable?
 		linkidfield?
+		linkSTRUCT??!
 		or... keep this in struct?
-	interesting problem!! how to deal with various checks?
+			could get ugly if there are multiple nested joins?
 	could be linked to 
 		ticket  (link ticket table, and glue to an invitation?!), 
 		generic business lead (link contacts table)
@@ -499,8 +506,6 @@ money:
 		aha! an "apply payment to" field WHICH IS REQUIRED!
 			it pops up the relevant "apply" sub-screen.
 				can add new one or apply to existing one.
-			ah! need to add field to coa!
-				which is: which table/key it links to!!
 			which basically throws up various options depending on popup
 				this is a special case tho!!
 		pop-up in case of business lead, since inputter won't know
@@ -512,7 +517,6 @@ money:
 		leadid in case of invitation. 
 			possibly with pop-up?
 		and... tickets? what of tickets?
-			ASK CARRIE!
 	will need a special-case checkEntry function, i'm certain
 		to handle all the different weirdo cases
 		callback?
@@ -520,3 +524,13 @@ money:
 		i.e. you'll have to "apply payments"
 		
 
+report notes: these are getting hairy
+	ad/flyer/link/etc will need to left join sponsorship packages (and session?)
+	money will need to left join almost everything: 
+		it is at least the center of springfest!
+		any tracking of revenue back to families will be HAIRY!
+			through any revenue-generating thing, back to family and/or user.
+	
+
+year-to-year things
+	populate the sponsorship packages? or... do it automatically?
