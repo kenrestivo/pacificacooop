@@ -42,11 +42,12 @@
 									   (equal? x "Jo")))
 					   name-list)))
 	(if (false-if-exception (< 0 middle-index))
-		(list (string-join (safe-list-head name-list (+ 1 middle-index)))
+		(cons (string-join (safe-list-head name-list (+ 1 middle-index)))
 			  (string-join (list-tail name-list  (+ 1 middle-index))))
-		(list (car name-list) (string-join (cdr name-list))))))
+		(cons (car name-list) (string-join (cdr name-list))))))
 
 ;; check for each parent column
+;; TODO check for last-name changes, and fix them
 (define (check-for-new-parent line header column-to-check)
   (let* ((long-parent (rasta-find column-to-check line header))
 		 (split-name (split-first-last long-parent))
@@ -55,16 +56,18 @@
 		 (parents (simplesql-query *dbh*
 						(sprintf #f "
 				select parentsid, last, first, worker, ptype familyid
-						from parents
+						from parents left join families using (familyid)
 					where (soundex(first) = soundex('%s')
 						or first like \"%%%s%%\")
-						and soundex(last) = soundex('%s') "
+						and (soundex(last) = soundex('%s')
+								or families.phone like \"%s\") "
 								 (car split-name)
 								 (car split-name)
 								 (cdr split-name)
+								 (rasta-find "Phone" line header)
 								 ))))
 
-		  (if (>  (length kids) 1)
+		  (if (>  (length parents) 1)
 			  (db-ref-last (choose-duplicates parents) "parentsid") ; got it!
 			  (safe-sql *dbh* (sprintf #f "
 				insert into parents set 
