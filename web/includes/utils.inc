@@ -44,8 +44,8 @@ function tdArray($arr, $align="align='left'", $font = "") {
 # saves ken's wrists from carpool tunnel syndrome. 
 # i hate html
 ##############
-function thArray($arr, $align="align='left'") {
-	print "\n<tr valign='top' $align>\n";
+function thArray($arr, $align='align="left"') {
+	print '<tr valign="top" bgcolor="#aabbff" $align>';
     while ( list( $key, $val ) = each($arr)) {
 		print "<th>$val</th>";
     }
