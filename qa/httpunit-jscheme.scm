@@ -74,7 +74,7 @@
 (define (visit-all-links wtc family url)
   (let ((gtc (invoke wtc 'getTestContext))) ;; the junit object
 	(invoke gtc 'setBaseUrl url))
-  (get-to-main-page wtc family)
+  (get-to-main-page wtc (string-append family " Family"))
   (let ((links (vector->list (invoke (get-response wtc) 'getLinks)) )
 		(run-number (random 1000)))
 	(for-each
@@ -83,19 +83,19 @@
 			  (link-text (invoke link 'asText))
 			 (save-port (open-output-file
 						 (string-append "/mnt/kens/ki/proj/coop/qa/reports/"
-						  (number->string run-number)
-						  family
+						  (number->string run-number) family
 						  (string-replace url  #\/ #\-)
 						  ))))
-		 ;; test here for email
+		 ;; TODO: test here for email instead of skipping at end
 		 (write-line (string-append 
 					  link-text " > "
 					  url))
 		 (invoke link 'click)
-		 (invoke wtc 'assertTextPresent "</html>")
-		 ;; save the raw html i got
+		 ;; save the raw html i got, so i can see what puked!
 		 (display (dump-page wtc) save-port)
 		 (close-output-port save-port)
+		 (invoke wtc 'assertTextPresent "</html>")
+		 
 		 ;;(validate-html wtc)
 		 ))
 		 ;; skip main menu (first two) and email (last)
@@ -117,7 +117,7 @@
 (define (many-visit-hack wtc url)
   (for-each (lambda (family)
 			  (write-line (string-append ".....checking " family))
-			  (visit-all-links wtc (string-append family " Family" url)))
+			  (visit-all-links wtc family))
 			'("Cooke" "Bartlett" "Restivo" "Walker")))
 
 ;;EOF
