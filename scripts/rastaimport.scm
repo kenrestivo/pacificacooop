@@ -85,8 +85,10 @@
 		(safe-sql *dbh* (sprintf #f "
 						insert into families set 
 								name = '%s',
+								address = '%s',
 								phone = '%s'"
 								 (rasta-find "Last Name" line header)
+								 (rasta-find "Address" line header)
 								 (rasta-find "Phone" line header)
 								 )))))
 
@@ -109,9 +111,12 @@
 				insert into kids set 
 							last = '%s' ,
 							first = '%s' ,
+							date_of_birth = %s,
 							familyid = %d "
 									   (rasta-find "Last Name" line header)
 									   (rasta-find "Child" line header)
+									   (human-to-sql-date
+										(rasta-find "DOB" line header))
 									   (check-for-new-family line header))))))
 
 ;;;;;;;;;; functions for navigating through the rasta structure (accessors?)
