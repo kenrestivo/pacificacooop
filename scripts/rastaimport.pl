@@ -24,24 +24,26 @@ use Spreadsheet::ParseExcel;
 my $xls = new Spreadsheet::ParseExcel;
 
 #1.1 Normal Excel97
-my $bk = $xls->Parse('../imports/PM.xls');
+my $wb = $xls->Parse('../imports/PM.xls');
 
-my($row, $col, $wk, $cell, $sh);
-print "FILE  :", $bk->{File} , "\n";
-print "COUNT :", $bk->{SheetCount} , "\n";
-print "AUTHOR:", $bk->{Author} , "\n";
+my($row, $col, $ws, $cell, $sh);
+print "FILE  :", $wb->{File} , "\n";
+print "COUNT :", $wb->{SheetCount} , "\n";
+print "AUTHOR:", $wb->{Author} , "\n";
 
-for($sh=0; $sh < $bk->{SheetCount} ; $sh++) {
-																					$wk = $bk->{Worksheet}[$sh];
-	print "--------- SHEET:", $wk->{Name}, "\n";
+for($sh=0; $sh < $wb->{SheetCount} ; $sh++) {
+																					$ws = $wb->{Worksheet}[$sh];
+	print "--------- SHEET:", $ws->{Name}, "\n";
 
-	$row = $wk->{MinRow} ;
-	while(defined $wk->{MaxRow} && $row <= $wk->{MaxRow}){
+	$row = $ws->{MinRow} ;
+	while(defined $ws->{MaxRow} && $row <= $ws->{MaxRow}){
 		print "ROW $row -------\n";
-		$col = $wk->{MinCol} ;
-		while(defined $wk->{MaxCol} && $col <= $wk->{MaxCol}){
-			$cell = $wk->{Cells}[$row][$col];
-			print "( $row , $col ) =>", $cell->Value, "\n" if($cell);
+		$col = $ws->{MinCol} ;
+		while(defined $ws->{MaxCol} && $col <= $ws->{MaxCol}){
+			$cell = $ws->{Cells}[$row][$col];
+			if($cell){
+				printf("( $row , $col ) => %s\n", $cell->Value) ;
+			}
 			$col++;
 		}
 		$row++;
