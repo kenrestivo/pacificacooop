@@ -49,6 +49,7 @@ class ThankYou
 			   // name of solicitor
 	var $email; // EMAIL: email address
 	var $thank_you_id; // cache of the unique id for this thankyounote
+	var $entityHack; // cache of array of entity and id
 	var $check_reconcile;  // stupid flag to avoid checking reconciliation
 
 	//TODO: put this in a file, and fopen it, or in a DB blob!
@@ -482,14 +483,17 @@ http://www.pacificacoop.org/
 			
 			return true;
 		}
-
-
-	// takes array of familyid's, and fills in this->from with the parents
+	
+	
+	// takes array of familyid's, and fills in thisfrom with the parents
 	function guessParents($family_id_array)
 		{
-				foreach(array_unique($family_id_array) as $fam){
+			if(!array_sum($family_id_array)){
+				return false;
+			}
+			foreach(array_unique($family_id_array) as $fam){
 				$par =& new CoopObject(&$this->cp, 'parents', 
-								 &$top);
+									   &$top);
 				$par->obj->family_id = $fam;
 				$par->obj->type = 'Mom';
 				$par->obj->find(true);
@@ -498,28 +502,26 @@ http://www.pacificacoop.org/
 											 $par->obj->last_name);
 			}
 			$this->from = implode(", ", $solicit_parents);
-
+			return true;
 		}
-
+	
 	// only returns the FIRST company found
+	// returns false if none found
 	function guessCompany($company_id_array)
 		{
-
+			
 			if(!array_sum($company_id_array)){
-				$this->cp->mailError('EMPTY thank you note found',
-									 print_r($this, true));
-				user_error(sprintf("no company_id's in array for thankyouid %d! this means you have a corrupted database. stop immediately.", $this->thank_you_id),
-						   E_USER_ERROR);
+				return false;
 			}
 			foreach(array_unique($company_id_array) as $cid){
 				$co =& new CoopObject(&$this->cp, 'companies', 
 									   &$top);
 				$co->obj->company_id = $cid;
 				if($co->obj->find(true)){
+					$this->entityHack = array('companies' => $cid);
 					break;
 				}
 			}
-
 			foreach(array('company_name', 'address1', 'address2') as $var){
 				if($co->obj->$var){
 					$this->address_array[] = $co->obj->$var;
@@ -531,6 +533,40 @@ http://www.pacificacoop.org/
 											 $co->obj->zip);		
 			$this->name = sprintf('%s %s', $co->obj->first_name, 
 								  $co->obj->last_name);
+			return true;
+		}
+
+	// only returns the FIRST lead found
+	// returns false if none found
+	function guessLead($lead_id_array)
+		{
+			
+			if(!array_sum($lead_id_array)){
+				return false;
+			}
+			foreach(array_unique($lead_id_array) as $cid){
+				$co =& new CoopObject(&$this->cp, 'leads', 
+									   &$top);
+				$co->obj->lead_id = $cid;
+				if($co->obj->find(true)){
+					$this->entityHack = array('leads' => $cid);
+					break;
+				}
+			}
+			//confessObj($co->obj, 'obj');
+
+			foreach(array('company', 'address1', 'address2') as $var){
+				if($co->obj->$var){
+					$this->address_array[] = $co->obj->$var;
+				}
+			}
+			$this->address_array[] = sprintf("%s %s, %s", 
+											 $co->obj->city,
+											 $co->obj->state,
+											 $co->obj->zip);		
+			$this->name = sprintf('%s %s', $co->obj->first_name, 
+								  $co->obj->last_name);
+			return true;
 		}
 
 	// populates a thank-you note with what's already in that note.
@@ -540,6 +576,9 @@ http://www.pacificacoop.org/
 		{
 
 			$this->thank_you_id = $tid;
+			$company_guess_hack = array();
+			$family_guess_hack = array();
+			$lead_guess_hack = array();
 
 			// TODO recover date of THANK YOU, not today's date
 			$ty = new CoopObject(&$this->cp, 'thank_you', &$nothing);
@@ -565,9 +604,18 @@ http://www.pacificacoop.org/
 				$soliciting_families[]= $sf->obj->family_id;
 				$company_guess_hack[] =$sf->obj->company_id;
 
-				//TODO: check leads_income *and* tickets
-				// and a leads_guess_hack, i suppose
+				//check leads_income *and* tickets
+				$sf =& new CoopObject(&$this->cp , 
+									  'leads_income_join', &$real);
+				$sf->obj->joinAdd($save);
+				$sf->obj->find(true);
+				$lead_guess_hack[]= $sf->obj->lead_id;
 
+				$sf =& new CoopObject(&$this->cp , 
+									  'tickets', &$real);
+				$sf->obj->joinAdd($save);
+				$sf->obj->find(true);
+				$lead_guess_hack[]= $sf->obj->lead_id;
 
 			}
 			if($found){
@@ -617,11 +665,14 @@ http://www.pacificacoop.org/
 				return false;
 			}
 		
-			// ugh. go get the soliciting parent
-			$this->guessParents($soliciting_families);
 
 			//  COMPANIES BROKEN! have to guess from income or inkind. bah. 
-			$this->guessCompany($company_guess_hack);
+			if($this->guessCompany($company_guess_hack)){
+				// ugh. go get the soliciting parent
+				$this->guessParents($soliciting_families);
+			} else if($this->guessLead($lead_guess_hack)){
+				//$this->fromFamily();
+			}
 
 			return true;
 		}
