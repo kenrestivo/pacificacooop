@@ -68,7 +68,7 @@ callbacks struct
 		each containing :
 			the index that is common to the joins
 			the left table
-			the right table
+			the right table (or, if empty, the 'maintable' is used!)
 	input callback: used by processoneentry to redisplay user-error entries
 	dupecheck callback: used by processoneentry to dupecheck b4 saving
 	realsave callback: used by processoneentry to REALLY save the thing!
