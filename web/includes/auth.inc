@@ -398,7 +398,7 @@ accessLevelString($privnum, $callbacks)
 		//handle 0 as special case
 		return $accessnames[$privnum][0];
 	}
-	//TODO: this sucks, php weenie. use impode() instead.
+	//this is more complex than a simple implode() ;-)
 	while (list($key, $val) = each($accessnames)){
 		//print "[$key] ";
 		if(	$key <= $privnum && 
