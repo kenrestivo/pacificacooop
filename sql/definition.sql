@@ -496,7 +496,7 @@ CREATE TABLE sources (
 
 CREATE TABLE springfest_attendees (
   springfest_attendee_id int(32) NOT NULL unique auto_increment,
-  ticket_id int(32) default NULL,
+  invitation_rsvps_id int(32) default NULL,
   lead_id int(32) default NULL,
   company_id int(32) default NULL,
   parent_id int(32) default NULL,
@@ -716,6 +716,7 @@ CREATE TABLE ads (
 ) ;
 
 
+--- UNUSED! we use invitation_rsvps for this
 CREATE TABLE tickets (
   ticket_id int(32) NOT NULL unique auto_increment,
   income_id int(32) default NULL,
@@ -812,9 +813,10 @@ CREATE TABLE thank_you_templates (
    PRIMARY KEY  (thank_you_template_id)
 ) ;
 
-
+-- note: i don't link back to leads/etc because attendee does that
 CREATE TABLE auction_purchases (
   auction_purchase_id int(32) NOT NULL unique auto_increment,
+  springfest_attendee_id int(32) default NULL,
   package_id int(32) default NULL,
   package_sale_price decimal(9,2) default NULL,
   income_id int(32) default NULL,
