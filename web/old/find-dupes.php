@@ -38,7 +38,7 @@ while($co->obj->fetch()){
 	$sub->obj->find();
 
 	while($sub->obj->fetch()){
-		// don't do expensive simipar_text if it's already a dupe
+		// don't do expensive similar_text if it's already a dupe
 		if(!is_array($dupefound) || 
 		   !in_array($co->obj->{$co->pk}, $dupefound))
 		{	

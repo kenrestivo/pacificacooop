@@ -60,7 +60,6 @@ class Families extends DB_DataObject
 
 		}
 
-
-
+		var $fb_linkNewValue = 1;
 
 }

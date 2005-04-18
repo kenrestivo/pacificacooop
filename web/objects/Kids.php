@@ -32,5 +32,7 @@ class Kids extends DB_DataObject
 		'first_name' => "First Name",
 		'date_of_birth' => 'Birthday'
 	);
-	var $fb_fieldsToRender = array ('last_name', 'first_name', 'date_of_birth');
+	//XXX TEMP! var $fb_fieldsToRender = array ('last_name', 'first_name', 'date_of_birth');
+	var $fb_linkNewValue = 1;
+
 }

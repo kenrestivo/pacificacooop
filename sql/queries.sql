@@ -1052,7 +1052,8 @@ order by ticket_purchaser;
 
 
 -- super fucking nasty paddle report
-select springfest_attendees.paddle_number, ticket_summary.vip_flag,
+select springfest_attendees.springfest_attendee_id, 
+springfest_attendees.paddle_number, ticket_summary.vip_flag,
 coalesce(leads.first_name, companies.first_name, parents.first_name) 
         as first_name,
 coalesce(leads.last_name, companies.last_name, parents.last_name) as last_name,
@@ -1065,7 +1066,8 @@ coalesce(leads.zip, companies.zip) as zip,
 coalesce(leads.phone, companies.phone, families.phone) as phone,
 coalesce(leads.email_address, companies.email_address, families.email) as email_address,
 ticket_summary.ticket_purchaser,
-income.payment_amount
+truncate(income.payment_amount / ticket_summary.ticket_quantity,2) as payment_amount,
+coalesce(springfest_attendees.ticket_id, springfest_attendees.lead_id, springfest_attendees.parent_id, springfest_attendees.company_id) as empty_hack
 from springfest_attendees
 left join leads on springfest_attendees.lead_id = leads.lead_id
 left join companies on springfest_attendees.company_id = companies.company_id
@@ -1073,7 +1075,7 @@ left join parents on springfest_attendees.parent_id = parents.parent_id
 left join families on parents.family_id = families.family_id
 left join
 (select tickets.ticket_id, tickets.vip_flag, tickets.income_id, 
-    tickets.school_year,
+    tickets.school_year, tickets.ticket_quantity,
     concat_ws(' ', coalesce(leads.first_name, companies.first_name) ,
     coalesce(leads.last_name, companies.last_name, 
         concat(families.name, ' Family')),
@@ -1085,7 +1087,10 @@ left join
     coalesce(leads.zip, companies.zip),
     coalesce(leads.phone, companies.phone, families.phone),
     coalesce(leads.email_address, companies.email_address, families.email)) 
-        as ticket_purchaser
+        as ticket_purchaser,
+    coalesce(leads.first_name, companies.first_name) as first,
+    coalesce(leads.last_name, companies.last_name, 
+        concat(families.name, ' Family')) as last
     from tickets
     left join leads on tickets.lead_id = leads.lead_id
     left join companies on tickets.company_id = companies.company_id
@@ -1093,7 +1098,11 @@ left join
 ) as ticket_summary 
     on ticket_summary.ticket_id = springfest_attendees.ticket_id
 left join income on ticket_summary.income_id = income.income_id
-order by last_name, first_name;
+where springfest_attendees.school_year = '2004-2005'
+order by 
+empty_hack desc,
+coalesce(leads.last_name, companies.last_name, parents.last_name, ticket_summary.last),
+coalesce(leads.first_name, companies.first_name, parents.first_name, ticket_summary.first);
 
 --- copy the companies to leads, so they're there
 -- this will be critical once i yank companies.
@@ -1103,5 +1112,13 @@ insert into leads (first_name, last_name, salutation, title, company,
 select first_name, last_name, salutation, title, company_name, address1, 
     address2, city, state, zip, country, phone, company_id , do_not_contact, 9
 from companies;
+
+
+---shit
+select springfest_attendee_id, coalesce(springfest_attendees.ticket_id, springfest_attendees.lead_id, springfest_attendees.parent_id, springfest_attendees.company_id) as empty_hack 
+from springfest_attendees 
+where school_year = '2004-2005' 
+order by empty_hack desc, springfest_attendee_id asc;
+
 
 --- EOF

@@ -40,6 +40,7 @@ class Springfest_attendees extends DB_DataObject
 		'parent_id' => 'Parent',
 		'entry_type' => 'Entry Control',
 		'temp_name' => 'HACK temporary name',
+		'attended' => 'Attended',
 		'school_year' => 'School Year'
 		);
 	var $fb_enumFields = array ('entry_type');
@@ -47,7 +48,8 @@ class Springfest_attendees extends DB_DataObject
 									'ticket_id');
 	var $fb_formHeaderText =  'Springfest Attendees';
 	var $fb_fieldsToRender = array ('paddle_number' , 'ticket_id' , 
-									'lead_id' , 'company_id', 'parent_id' 
+									'lead_id' , 'company_id', 'parent_id',
+									'attended'
 		);
 	
 	//the paddle number

@@ -5,8 +5,10 @@
 chdir("../");                   // XXX only for "test" dir hack!
 require_once('CoopPage.php');
 require_once('CoopView.php');
+require_once('CoopMenu.php');
 require_once('CoopForm.php');
 require_once('HTML/Table.php');
+require_once('DB/DataObject/FormBuilder.php');
 
 
 
@@ -22,29 +24,53 @@ $cp = new coopPage( $debug);
 $cp->pageTop();
 
 
+$atd = new CoopView(&$cp, 'enrollment', $none);
+$atd->recordActions = array('edit' => "Edit",
+							'details' => "Details");
+
+$menu =& new CoopMenu();
+$menu->page =& $cp;				// XXX hack!
+print $menu->topNavigation();
+
+print "<p>Springfest Sponsorships</p>";
 
 print $cp->selfURL('refresh me goddammit');
 
-// cheap dispatcher
-confessArray($_REQUEST,'req');
-switch($_REQUEST['action']){
- case 'edit':
- case 'process':
 
-	 $obj =& DB_DataObject::factory('ads');
-	 $fb = DB_DataObject_FormBuilder::create(&$obj);
-	 $form = $fb->getForm();
-	 if($form->process(array(&$fb, 'processForm'), false)){
-		 $form->freeze();
-	 }
-	 echo $form->toHTML();
-	 break;
- default:
-	 $atd = new CoopView(&$cp, 'springfest_attendees', $none);
-	 print $atd->simpleTable();
-	break;
+function viewHack(&$cp, &$atd)
+{
+	 $co =& new CoopObject(&$cp, 'enrollment', &$atd);
+	 $atd->obj->school_year = findSchoolYear();
+	 return $atd->simpleTable();
+			
 }
 
+// cheap dispatcher
+//confessArray($_REQUEST,'req');
+switch($_REQUEST['action']){
+ 
+	 
+//// EDIT AND NEW //////
+ case 'new':
+ case 'edit':
+	 $fb = DB_DataObject_FormBuilder::create(&$atd->obj);
+	 $form = $fb->getForm();
+	 if ($form->validate()) {
+		 print "saving...";
+		 print $form->process(array(&$fb, 'processForm'));
+		 // gah, now display it again. they may want to make other changes!
+		 print viewHack(&$cp, &$atd);
+	 } else {
+		 print $form->toHTML();
+	 }
+	 break;
+
+//// DEFAULT (VIEW) //////
+ default:
+	 print viewHack(&$cp, &$atd);
+
+	 break;
+}
 
 
 done ();
@@ -54,6 +80,6 @@ done ();
 ?>
 
 
-<!-- END TEST -->
+<!-- END FBTEST -->
 
 

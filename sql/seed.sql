@@ -134,6 +134,13 @@ insert into events set
             notes = "Each family must complete their spring enhancement hours before this date"
 ;
 
+insert into events set
+            event_id = 7,
+            realm = 'nag',
+            description = "Springfest",
+            url = 'public_auction.php',
+            notes = "The date of this year's Springfest event"
+;
 
 -- calendar items for this first online year. TEMP!
 insert into calendar_events set
@@ -164,6 +171,12 @@ insert into calendar_events set
             event_id = 6,
             school_year = '2004-2005',
             event_date = "2005-06-30"
+;
+
+insert into calendar_events set
+            event_id = 7,
+            school_year = '2004-2005',
+            event_date = "2005-03-19"
 ;
 
 -- the territories

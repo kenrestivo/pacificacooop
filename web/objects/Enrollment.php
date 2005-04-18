@@ -38,5 +38,6 @@ class Enrollment extends DB_DataObject
                                    'start_date', 
                                    'dropout_date');
 	var $fb_linkDisplayFields = array('school_year', 'am_pm_session');
+	var $fb_linkNewValue = 1;
 
 }
