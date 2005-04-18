@@ -43,7 +43,7 @@ class Springfest_attendees extends DB_DataObject
 		'attended' => 'Attended',
 		'school_year' => 'School Year'
 		);
-	var $fb_enumFields = array ('entry_type');
+	var $fb_enumFields = array ('entry_type', 'attended');
 	var $fb_selectAddEmpty = array ('lead_id', 'parent_id', 'company_id',
 									'ticket_id');
 	var $fb_formHeaderText =  'Springfest Attendees';
