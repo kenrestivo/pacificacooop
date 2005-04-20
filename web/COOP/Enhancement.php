@@ -213,14 +213,16 @@ class Enhancement
             //confessObj($this);
             
             $this->getStartDropDate();
-            //confessArray($this->startdrop, 'stardrop');
+            $this->cp->confessArray($this->startdrop, 
+									'stardrop '. $this->familyID, 5);
             
             $this->getHoursOwed($this->startdrop['start']);
             //print "owed $owed<br>";
-            //confessArray($this->owed, 'owed');
+            $this->cp->confessArray($this->owed, 'owed '. $this->familyID, 5);
             
             $this->getHoursCompleted($this->familyID);
-            //confessArray($this->completed, 'completed');
+            $this->cp->confessArray($this->completed, 
+									'completed '. $this->familyID, 5);
             
             //confessObj($this, 'enhancement');
             
@@ -228,9 +230,10 @@ class Enhancement
                 return $this->completed['fall'];
             }
             if($semester == 'spring'){
-                $total = $this->completed['fall'] 
-					- $this->owed['fall'] 
-                    + $this->completed['spring'];
+				// NOTE: extra bonus hours in fall carry over, deficits don't
+				$extra = $this->completed['fall'] - $this->owed['fall'];
+				$extra = $extra > 0 ? $extra : 0; // clamp *here*!
+                $total = $extra + $this->completed['spring'];
                 $total = $total > 0 ? $total : 0; // clamp!
                 return $total;
             }
