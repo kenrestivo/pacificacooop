@@ -77,7 +77,11 @@ class coopForm extends CoopObject
 			$this->addCrossLinks($vars);
 
 			// finally, sumbit it!
-			$this->form->addElement('submit', 'savebutton', 'Save');
+			if(!isset($this->obj->fb_createSubmit) ||
+			   $this->obj->fb_createSubmit > 0)
+			{
+				$this->form->addElement('submit', 'savebutton', 'Save');
+			}
 
 			$this->form->applyFilter('__ALL__', 'trim');
 
@@ -230,6 +234,9 @@ class coopForm extends CoopObject
 			// hack around nulls
 			foreach($vars as $key => $val){
 				
+				// XXX is this the right place to strip off the prefix?
+
+				// TODO: check perms
 				// i will be duplicating saveok here, basically
 								
 
@@ -249,7 +256,6 @@ class coopForm extends CoopObject
 	
 	function update(&$old)
 		{
-			
 			if(!$old->find(true)){
 				PEAR::raiseError("save couldn't get its pk. did something else change the record in between editing and saving?", 888);
 			}

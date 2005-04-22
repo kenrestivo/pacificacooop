@@ -25,7 +25,9 @@
 	global $dbuser ;
 	global $dbpwd ;
 	global $dbhost ;
+		global $debug;
 
+		$debug = 2;
 	$dbuser = "springfest";
 	$dbpwd = "92xPi9";
 	$dbhost =  "bc";
