@@ -1,0 +1,33 @@
+what's there now
+	enhancement hours (complete)
+	springfest (nearly complete)
+	roster (skeleton)
+
+what's coming
+	job descriptions
+	parent ed attendance
+	calendar
+	blog
+	insurance
+
+
+skills needed for 2005-2006
+	design
+	graphics
+	more marketing/sales stuff
+	sell the school!
+
+skills needed for 2006-2007
+	php/PEAR
+	mysql
+	programming
+
+what you got
+	Total Physical Source Lines of Code (SLOC)                = 26,790
+	Development Effort Estimate, Person-Years (Person-Months) = 6.32 (75.78)
+
+"free software" movement (linux): the world's largest co-op
+	GPL licensing 
+	i own the copyright
+	PCNS is licensed to modify, publish, or sell it
+		any buyers are also licensed to do the same
