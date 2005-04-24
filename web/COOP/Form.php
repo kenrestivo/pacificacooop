@@ -39,7 +39,7 @@ class coopForm extends CoopObject
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function build($vars = false)
 		{
-			$this->id = (int)$vars[$this->pk];
+			$this->id = (int)$vars[$this->prependTable($this->pk)];
 			if($this->id > 0){
 				$this->obj->get($this->id);
 			} else {
@@ -102,11 +102,16 @@ class coopForm extends CoopObject
 				// let vars override
 				$val = isset($vars[$key]) ? $vars[$key] : $dbval;
 
+
+				// deal with tablenamign these thigns
+				$fullkey = $this->prependTable($key);
+
+				
 				if(!$this->isPermittedField($key)){
 					// the hidden thing. i think  i need to do hidden here
 					if(is_array($this->obj->fb_requiredFields) && 
 					   in_array($key, $this->obj->fb_requiredFields)){
-						$this->form->addElement('hidden', $key, $val);
+						$this->form->addElement('hidden', $fullkey, $val);
 					}
 					continue;
 				}
@@ -115,27 +120,28 @@ class coopForm extends CoopObject
 				   in_array($key, array_keys($this->obj->fb_preDefElements))){
 					$el =& $this->obj->fb_preDefElements[$key];
 					$this->form->addElement(&$el);
+					$el->setName($fullkey); 
 				} else if($this->isLinkField(&$this->obj, $key)){
-					$el =& $this->form->addElement('select', $key, false, 
+					$el =& $this->form->addElement('select', $fullkey, false, 
 											 $this->selectOptions($key));
 				} else if(is_array($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{
-					$el =& $this->form->addElement('textarea', $key, false, 
+					$el =& $this->form->addElement('textarea', $fullkey, false, 
 											 array('rows' => 4, 
 												   'cols' => 30 ));
 				} else if(is_array($this->obj->fb_enumFields) &&
 						  in_array($key, $this->obj->fb_enumFields))
 				{
-					$el =& $this->form->addElement('select', $key, false, 
+					$el =& $this->form->addElement('select', $fullkey, false, 
 											 $this->getEnumOptions($key));
 				} else if(is_array($this->obj->fb_booleanFields) &&
 						  in_array($key, $this->obj->fb_booleanFields))
 				{
-					$el =& $this->form->addElement('advcheckbox', $key);
+					$el =& $this->form->addElement('advcheckbox', $fullkey);
 				} else if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
-					$el =& $this->form->addElement('customdatebox', $key);
-					$this->form->addRule($key, 
+					$el =& $this->form->addElement('customdatebox', $fullkey);
+					$this->form->addRule($fullkey, 
 								   'Date must be in format MM/DD/YYYY', 
 								   'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
 					$val && $val = sql_to_human_date($val);
@@ -145,9 +151,10 @@ class coopForm extends CoopObject
 					// XXX this is broken. i need to deal with fb_hidePrimaryKey
 					$el =& $this->form->addElement(
 						$key == $this->pk ? 'hidden' : 'text', 
-						$key);
+						$fullkey);
 				}
 				//print $key . "->" .$this->obj->fb_fieldLabels[$key] . "<br>";
+				// TODO: uppercase this thing, replace _ with spaces
 				$el->setLabel($this->obj->fb_fieldLabels[$key] ? 
 							  $this->obj->fb_fieldLabels[$key] : $key);
 				
@@ -214,7 +221,7 @@ class coopForm extends CoopObject
 			$this->obj->setFrom($this->scrubForSave($vars));
 
 			// better way to guess?
-			if($vars[$this->pk]){		
+			if($vars[$this->prependTable($this->pk)]){		
 				$this->update($old);
 			} else {
 				$this->insert();
@@ -232,9 +239,15 @@ class coopForm extends CoopObject
 		{
 			$this->_tableDef = $this->obj->table();
 			// hack around nulls
-			foreach($vars as $key => $val){
+			foreach($vars as $fullkey => $val){
 				
 				// XXX is this the right place to strip off the prefix?
+				list($table, $key) = explode('-', $fullkey);
+
+				// i only want the ones for this table dude
+				if($table != $this->table){
+					continue;
+				}
 
 				// TODO: check perms
 				// i will be duplicating saveok here, basically
@@ -336,7 +349,7 @@ class coopForm extends CoopObject
 				foreach($this->obj->fb_requiredFields as $fieldname){
 // 					user_error("CoopForm::addRequiredFields($fieldname)", 
 // 							   E_USER_NOTICE);
-					$this->form->addRule($fieldname, 
+					$this->form->addRule($this->prependTable($fieldname), 
 										 "$key mustn't be empty.", 'required');
 				}
 			}
@@ -499,14 +512,14 @@ class coopForm extends CoopObject
 		{
 			// ugly assthrus for my old-style dispatcher
 			// XXX these conflict with the new dispatcher!
-			$this->form->addElement('hidden', $this->pk, 
+			$this->form->addElement('hidden', $this->prependTable($this->pk), 
 									$this->obj->{$this->pk}); 
 
 		}
 	
 	function dupeCheck($vars)
 		{
-			if($vars[$this->pk] > 0){
+			if($vars[$this->prependTable($this->pk)] > 0){
 				return true;	// i'm editing. no dupecheck on edit.
 			}
 
@@ -518,7 +531,11 @@ class coopForm extends CoopObject
 			$foo->whereAdd();
 			$this->page->debug > 2 && $foo->debugLevel(2);
 			$ov = array_keys(get_object_vars($foo));
-			foreach($vars as $key => $var){
+			foreach($vars as $fullkey => $var){
+				list($table, $key) = explode('-', $fullkey);
+				if($table != $this->table){
+					continue;
+				}
 				// XXX hack, cough, gaaack.
 				if(in_array($key, $ov) && $key != $this->pk && $var){
 					if(!is_numeric($var)){
@@ -530,7 +547,11 @@ class coopForm extends CoopObject
 			}
 			//confessObj($foo, 'foo');
 			if($foo->find(true)){
-				foreach($vars as $key => $val){
+				foreach($vars as $fullkey => $val){
+					list($table, $key) = explode('-', $fullkey);
+					if($table != $this->table){
+						continue;
+					}
 					if($val == $foo->$key){
 						$duples[$key] = 'Duplicate entry.';
 					}
@@ -546,7 +567,8 @@ class coopForm extends CoopObject
 		{
 			$ov = array_keys(get_object_vars($this->obj));
  			foreach($ov as $key){
- 				unset($_REQUEST[$key]);
+				$fullkey = $this->prependTable($key);
+ 				unset($_REQUEST[$fullkey]);
  			}
 			// i have to hack qf tracksumbit here.
 			// otherwise it puts old data back!
@@ -557,8 +579,14 @@ class coopForm extends CoopObject
 				return;
 			}
 			foreach($this->obj->fb_crossLinks as $la){
-				unset($_REQUEST[$la['toField']]);
+				unset($_REQUEST[$this->prependTable($la['toField'])]);
 			}
+		}
+
+	// prepends the name fo this table to a field, returns the new long name
+	function prependTable($col)
+		{
+			return sprintf('%s-%s', $this->table , $col);
 		}
 
 

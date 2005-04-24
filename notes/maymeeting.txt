@@ -1,15 +1,20 @@
-what's there now
+may meeting
+
+what's available now
 	enhancement hours (complete)
 	springfest (nearly complete)
-	roster (skeleton)
+	roster (partial)
 
-what's coming
-	job descriptions
+available before end of year
 	parent ed attendance
-	calendar
+	job descriptions
 	blog
 	insurance
+	calendar
 
+projects i will complete b4 end of next year
+	database "normalisation" (major fixes)
+	user-friendly adminstration screens
 
 skills needed for 2005-2006
 	design

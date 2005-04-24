@@ -14,7 +14,7 @@
 		   $res .= $this->_getTabs();
 		   $res .= $this->_getJs();
 		   $res .= '<input' . $this->_getAttrString($this->_attributes) . ' />';
-		   // TODO: only show this if the field is empty!
+		   //  only show this if the field is empty!
 		   if(!$this->getValue()){
 			   $res .= sprintf(
 			   "&nbsp;<input type=\"button\" onClick=\"{$this->_jsPrefix}todaysDate(this.form.elements['%s'])\" value=\"Today\" />", 

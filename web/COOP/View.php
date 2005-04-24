@@ -252,6 +252,7 @@ class coopView extends CoopObject
 					if($this->obj->fb_fieldLabels[$key]){
 						$res[] = $this->obj->fb_fieldLabels[$key];
 					} else {
+						// TODO: uppercase this thing, replace _ with spaces
 						$res[] = $key;
 					}
 				}
