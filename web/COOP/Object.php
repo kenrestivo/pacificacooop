@@ -329,6 +329,12 @@ class coopObject
 			return $this->lastInsertID();
 		}
 
+	// prepends the name fo this table to a field, returns the new long name
+	// used in coopview and in coopform, for all non-legacy new-style pages
+	function prependTable($col)
+		{
+			return sprintf('%s-%s', $this->table , $col);
+		}
 
 } // END COOP OBJECT CLASS
 
