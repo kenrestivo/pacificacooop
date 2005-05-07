@@ -26,6 +26,7 @@ require_once 'HTML/QuickForm.php';
 require_once('object-config.php');
 require_once('DB/DataObject/Cast.php');
 require_once('lib/advmultselect.php');
+require_once('lib/customselect.php');
 require_once('lib/customdatebox.php');
 
 //////////////////////////////////////////
@@ -122,8 +123,9 @@ class coopForm extends CoopObject
 					$this->form->addElement(&$el);
 					$el->setName($fullkey); 
 				} else if($this->isLinkField(&$this->obj, $key)){
-					$el =& $this->form->addElement('select', $fullkey, false, 
-											 $this->selectOptions($key));
+					$el =& $this->form->addElement('customselect', 
+												   $fullkey, false, 
+												   $this->selectOptions($key));
 				} else if(is_array($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{
@@ -217,6 +219,13 @@ class coopForm extends CoopObject
 	
 			$old = $this->obj; // copy, not ref!
 			
+
+			/// process recursive subtables
+			if(is_array($vars[$this->prependTable('subtables')])){
+				//TODO process them now
+				PEAR::raiseError("OK i gat yer subtables. now finish coding it, fool.", 777);
+			}
+
 		
 			$this->obj->setFrom($this->scrubForSave($vars));
 
