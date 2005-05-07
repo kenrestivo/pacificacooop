@@ -9,9 +9,11 @@
 	   function toHtml()
 		   {
 			   $res .= parent::toHTML();
+			   list($table, $field) = explode('-', $this->getName());
+
 			   $res .= sprintf(
-				   "&nbsp;<input type=\"button\" onClick=\"{$this->_jsPrefix}showNew(this.form.elements['%s'])\" value=\"New\" />", 
-			   $this->getName());
+				   "&nbsp;<input type=\"button\" onClick=\"{$this->_jsPrefix}showNew(this.form.elements['%s'])\"  name=\"%s-subtables[%s]\" value=\"&lt;&lt; Add New\" />", 
+			   $this->getName(), $table, $field);
 
 			   return $res;
 		   }
