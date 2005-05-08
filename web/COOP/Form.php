@@ -94,6 +94,8 @@ class coopForm extends CoopObject
 	// yes this is easily as ugly as my old shared.inc, or FB. oh well.
 	function addAndFillVars($vars)
 		{
+			$st = $vars[$this->prependTable('subtables')];
+
 			$frozen = array();
 			//confessObj($this, 'coopForm::build($id) found');
 			foreach($this->obj->toArray() as $key => $dbval){
@@ -122,10 +124,18 @@ class coopForm extends CoopObject
 					$el =& $this->obj->fb_preDefElements[$key];
 					$this->form->addElement(&$el);
 					$el->setName($fullkey); 
-				} else if($this->isLinkField(&$this->obj, $key)){
-					$el =& $this->form->addElement('customselect', 
-												   $fullkey, false, 
-												   $this->selectOptions($key));
+				} else if($this->isLinkField(&$this->obj, $key)) {
+					// check that we don't want NEW here
+					if(isset($st[$key])){
+						$this->addSubtable($key);
+						continue;
+					} else {
+						$el =& $this->form->addElement(
+							'customselect', 
+							$fullkey, false, 
+							$this->selectOptions($key));
+						
+					}
 				} else if(is_array($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{
@@ -221,7 +231,8 @@ class coopForm extends CoopObject
 			
 
 			/// process recursive subtables
-			if(is_array($vars[$this->prependTable('subtables')])){
+			$st = $vars[$this->prependTable('subtables')];
+			if(is_array($st)){
 				//TODO process them now
 				PEAR::raiseError("OK i gat yer subtables. now finish coding it, fool.", 777);
 			}
@@ -597,6 +608,44 @@ class coopForm extends CoopObject
 		{
 			return sprintf('%s-%s', $this->table , $col);
 		}
+
+	function validate()
+		{
+
+			$vals =& $this->form->getSubmitValues();
+			$st= $vals[$this->prependTable('subtables')];
+			if(is_array($st)){
+				print "i got subbies TODO: show and validate them";
+				return false;
+			}
+			
+			return $this->form->validate();
+		}
+
+	function addSubTable($field)
+		{
+			list($table, $farid) = explode(':', $this->forwardLinks[$field]);
+			
+			// ok, build the stinking thing
+			$sub = new CoopForm(&$this->page, $table, &$this); 
+			$sub->obj->fb_createSubmit = false;
+			$sub->build(); // XXX rename, then add REQUEST back in
+			$sub->addRequiredFields();
+			$inside = sprintf("<div>%s</div>", 
+							  preg_replace('!</?form[^>]*?>!i', '',
+										   $sub->form->toHTML()));
+			$fake =& $this->form->addElement('static',	
+											 $sub->prependTable($sub->pk), 
+											 false);
+			$fake->setValue($inside);
+			// basically, pass this thru, but with 'built', not ADD NEW
+			$this->form->addElement('hidden', 
+									sprintf("%s-subtables[%s]",
+											$atd->table, 'leads'),
+									'built');
+			
+		}
+
 
 
 } // END COOP FORM CLASS
