@@ -621,10 +621,10 @@ class coopForm extends CoopObject
 					print "DEBUG validating $key $val (table $table) for $this->table";
 					$res &= $this->subtables[$table]->form->validate();
 				}
-				return false;
 			}
 			
 			$res &= $this->form->validate();
+			$res  || print "DEBUG something didn't validate";
 			return  $res;
 		}
 
@@ -639,8 +639,10 @@ class coopForm extends CoopObject
 			// ok, build the stinking thing
 			$sub = new CoopForm(&$this->page, $table, &$this); 
 			$sub->obj->fb_createSubmit = false;
-			$sub->build(); // XXX rename, then add REQUEST back in
+			$sub->build($_REQUEST); // request necessary to get submitted vals
 			$sub->addRequiredFields();
+			//grab the values submitted!
+			
 			$inside = sprintf("<div>%s</div>", 
 							  preg_replace('!</?form[^>]*?>!i', '',
 										   $sub->form->toHTML()));
