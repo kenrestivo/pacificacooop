@@ -36,6 +36,7 @@ class coopForm extends CoopObject
 	var $form;  // cache of generated form
 	var $id; // cache of last inserted id
 	var $_tableDef; //  cached table stuff
+	var $subtables = array(); // cached subtable coopforms, indexed by table
 
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function build($vars = false)
@@ -615,17 +616,25 @@ class coopForm extends CoopObject
 			$vals =& $this->form->getSubmitValues();
 			$st= $vals[$this->prependTable('subtables')];
 			if(is_array($st)){
-				print "XXXX i got subbies TODO: show and validate them";
-				//TODO ok, DO THIS!
+				foreach($st as $key => $val){
+					list($table, $farid) = explode(':', $this->forwardLinks[$key]);
+					print "DEBUG checking $key $val (table $table) for $this->table";
+					$res &= $this->subtables[$table]->form->validate();
+				}
 				return false;
 			}
 			
-			return $this->form->validate();
+			$res &= $this->form->validate();
+			return  $res;
 		}
 
-	function addSubTable($field)
+	// the gettable means i'm sending it a KEYNAME not a tablename
+	// and i've got to look up the table
+	function addSubTable($field, $table = false)
 		{
-			list($table, $farid) = explode(':', $this->forwardLinks[$field]);
+			if(!$table){
+				list($table, $farid) = explode(':', $this->forwardLinks[$field]);
+			} 
 			
 			// ok, build the stinking thing
 			$sub = new CoopForm(&$this->page, $table, &$this); 
@@ -642,9 +651,10 @@ class coopForm extends CoopObject
 			// basically, pass this thru, but with 'built', not ADD NEW
 			$this->form->addElement('hidden', 
 									sprintf("%s-subtables[%s]",
-											$this->table, 'leads'),
+											$this->table, $sub->table),
 									'built');
 			
+			$this->subtables[$table] =& $sub; // cache it
 		}
 
 
