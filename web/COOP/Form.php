@@ -100,15 +100,14 @@ class coopForm extends CoopObject
 			$frozen = array();
 			//confessObj($this, 'coopForm::build($id) found');
 			foreach($this->obj->toArray() as $key => $dbval){
+				// deal with tablenamign these thigns
+				$fullkey = $this->prependTable($key);
+
 				// if it's a new entry, fill from vars!
 				// this is a clusterfuck because i'm using setValue.
 				// otherwise, quickform would do this for me. *sigh*
 				// let vars override
-				$val = isset($vars[$key]) ? $vars[$key] : $dbval;
-
-
-				// deal with tablenamign these thigns
-				$fullkey = $this->prependTable($key);
+				$val = isset($vars[$fullkey]) ? $vars[$fullkey] : $dbval;
 
 				
 				if(!$this->isPermittedField($key)){
