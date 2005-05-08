@@ -615,7 +615,8 @@ class coopForm extends CoopObject
 			$vals =& $this->form->getSubmitValues();
 			$st= $vals[$this->prependTable('subtables')];
 			if(is_array($st)){
-				print "i got subbies TODO: show and validate them";
+				print "XXXX i got subbies TODO: show and validate them";
+				//TODO ok, DO THIS!
 				return false;
 			}
 			
@@ -641,7 +642,7 @@ class coopForm extends CoopObject
 			// basically, pass this thru, but with 'built', not ADD NEW
 			$this->form->addElement('hidden', 
 									sprintf("%s-subtables[%s]",
-											$atd->table, 'leads'),
+											$this->table, 'leads'),
 									'built');
 			
 		}
