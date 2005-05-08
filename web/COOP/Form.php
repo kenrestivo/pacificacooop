@@ -618,7 +618,7 @@ class coopForm extends CoopObject
 			if(is_array($st)){
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', $this->forwardLinks[$key]);
-					print "DEBUG checking $key $val (table $table) for $this->table";
+					print "DEBUG validating $key $val (table $table) for $this->table";
 					$res &= $this->subtables[$table]->form->validate();
 				}
 				return false;
@@ -651,7 +651,7 @@ class coopForm extends CoopObject
 			// basically, pass this thru, but with 'built', not ADD NEW
 			$this->form->addElement('hidden', 
 									sprintf("%s-subtables[%s]",
-											$this->table, $sub->table),
+											$this->table, $sub->pk),
 									'built');
 			
 			$this->subtables[$table] =& $sub; // cache it
