@@ -236,7 +236,8 @@ class coopForm extends CoopObject
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
-					print "DEBUG processing $key $val (table $table) for $this->table";
+					$this->page->debug > 1 &&
+						print "<br>DEBUG processing $key $val (table $table) for $this->table";
 					$sub =& $this->subtables[$table]; // subobject cache
 					$sub->form->process(array(&$sub, 'process'));
 					$vars[$this->prependTable($key)] = $sub->id; // yay!!!
@@ -381,7 +382,9 @@ class coopForm extends CoopObject
 					if(!isset($vars[$this->prependTable('subtables')][$fieldname])){
 						$this->form->addRule($this->prependTable($fieldname), 
 											 "$key mustn't be empty.", 'required');
-						user_error("$key is required in $this->table", E_USER_NOTICE);
+ 						$this->page->debug > 1 &&
+							user_error("$fieldname is required in $this->table", 
+ 								   E_USER_NOTICE);
 					}
 				}
 			}
@@ -630,10 +633,12 @@ class coopForm extends CoopObject
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
-					print "DEBUG validating $key $val (table $table) for $this->table";
+					$this->page->debug > 1 &&
+						print "<br>DEBUG validating $key $val (table $table) for $this->table";
 					$temp = $this->subtables[$table]->form->validate();
-					$temp  || print "DEBUG $table didn't validate";
-
+					if($this->page->debug > 1 && $temp){
+						print "<br>DEBUG $table didn't validate";
+					}
 					$res += $temp;
 					$count++;
 
@@ -644,11 +649,14 @@ class coopForm extends CoopObject
 			}
 			
 			$temp  = $this->form->validate();
-			$temp || print "DEBUG $this->table didn't validate";
+			if($this->page->debug > 1 && $temp){
+				print "<br>DEBUG $table didn't validate";
+			}
 			$res += $temp;
 			$count++;
 			
-			printf("DEBUG damm bool [%d/%d]", $res, $count);
+			$this->page->debug > 1 && 
+				printf("<br>DEBUG damm bool [%d/%d]", $res, $count);
 
 			return  $res == $count ? true : false;
 		}
