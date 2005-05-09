@@ -635,7 +635,7 @@ class coopForm extends CoopObject
 												   $this->forwardLinks[$key]);
 					$this->page->debug > 1 &&
 						print "<br>DEBUG validating $key $val (table $table) for $this->table";
-					$temp = $this->subtables[$table]->form->validate();
+					$temp = $this->subtables[$table]->validate();
 					if($this->page->debug > 1 && $temp < 1){
 						print "<br>DEBUG $table didn't validate";
 					}
