@@ -394,6 +394,9 @@ class coopForm extends CoopObject
 	function setDefaults()
 		{
 			if(!is_array($this->obj->fb_defaults)){
+				$this->form->setDefaults(
+					array($this->prependTable('school_year') => 
+						  findSchoolYear()));
 				return;
 			}
 
@@ -635,9 +638,11 @@ class coopForm extends CoopObject
 												   $this->forwardLinks[$key]);
 					$this->page->debug > 1 &&
 						print "<br>DEBUG validating $key $val (table $table) for $this->table";
-					$temp = $this->subtables[$table]->validate();
-					if($this->page->debug > 1 && $temp < 1){
+					$temp = $this->subtables[$table]->validate(); // OBJECT!
+					if($this->page->debug > 1 && $temp == false){
 						print "<br>DEBUG $table didn't validate";
+// 						confessObj($this->subtables[$table]->form, 
+// 								   $table . ' form');
 					}
 					$res += $temp;
 					$count++;
@@ -648,9 +653,10 @@ class coopForm extends CoopObject
 				}
 			}
 			
-			$temp  = $this->form->validate();
-			if($this->page->debug > 1 && $temp < 1){
-				print "<br>DEBUG $table didn't validate";
+			$temp  = $this->form->validate(); // FORM!
+			if($this->page->debug > 1 && $temp == false){
+				print "<br>DEBUG $this->table didn't validate";
+				//confessObj($this->form, $this->table . ' form');
 			}
 			$res += $temp;
 			$count++;
