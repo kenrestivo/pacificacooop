@@ -37,6 +37,8 @@ class Enrollment extends DB_DataObject
                                    'kid_id',
                                    'start_date', 
                                    'dropout_date');
+	var $fb_requiredFields  = array('school_year', 'am_pm_session', 
+									'start_date', 'kid_id');
 	var $fb_linkDisplayFields = array('school_year', 'am_pm_session');
 	var $fb_linkNewValue = 1;
 
