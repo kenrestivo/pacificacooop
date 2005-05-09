@@ -616,9 +616,12 @@ class coopForm extends CoopObject
 			$st= $vals[$this->prependTable('subtables')];
 			if(is_array($st)){
 				foreach($st as $key => $val){
-					list($table, $farid) = explode(':', $this->forwardLinks[$key]);
+					list($table, $farid) = explode(':', 
+												   $this->forwardLinks[$key]);
 					print "DEBUG validating $key $val (table $table) for $this->table";
 					$res &= $this->subtables[$table]->form->validate();
+					// i have to refresh the thing, now that it's been validated
+					$this->addSubTable($key, $table, true);
 				}
 			}
 			
@@ -629,33 +632,45 @@ class coopForm extends CoopObject
 
 	// the gettable means i'm sending it a KEYNAME not a tablename
 	// and i've got to look up the table
-	function addSubTable($field, $table = false)
+	// all this formpresent shit sucks, but i don't know any other way
+	function addSubTable($field, $table = false, $formpresent = false)
 		{
 			if(!$table){
 				list($table, $farid) = explode(':', $this->forwardLinks[$field]);
 			} 
 			
 			// ok, build the stinking thing
-			$sub = new CoopForm(&$this->page, $table, &$this); 
-			$sub->obj->fb_createSubmit = false;
-			$sub->build($_REQUEST); // request necessary to get submitted vals
-			$sub->addRequiredFields();
-			//grab the values submitted!
-			
+			if(!$formpresent){
+				$sub = new CoopForm(&$this->page, $table, &$this); 
+				$sub->obj->fb_createSubmit = false;
+				$sub->build($_REQUEST); // request necessary to get submitted vals
+				$sub->addRequiredFields();
+				$this->subtables[$table] =& $sub; // cache it
+			} else {
+				$sub =& $this->subtables[$table];
+			}
+
 			$inside = sprintf("<div>%s</div>", 
 							  preg_replace('!</?form[^>]*?>!i', '',
 										   $sub->form->toHTML()));
-			$fake =& $this->form->addElement('static',	
-											 $sub->prependTable($sub->pk), 
-											 false);
+			if(!$formpresent){
+				$fake =& $this->form->addElement('static',	
+												 $sub->prependTable($sub->pk), 
+												 false);
+			} else {
+				$fake =& $this->form->getElement($sub->prependTable($sub->pk));
+			}
 			$fake->setValue($inside);
+
+			if(!$formpresent){
 			// basically, pass this thru, but with 'built', not ADD NEW
 			$this->form->addElement('hidden', 
 									sprintf("%s-subtables[%s]",
 											$this->table, $sub->pk),
 									'built');
+			}
 			
-			$this->subtables[$table] =& $sub; // cache it
+
 		}
 
 
