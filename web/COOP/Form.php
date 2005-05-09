@@ -369,8 +369,14 @@ class coopForm extends CoopObject
 				foreach($this->obj->fb_requiredFields as $fieldname){
 // 					user_error("CoopForm::addRequiredFields($fieldname)", 
 // 							   E_USER_NOTICE);
-					$this->form->addRule($this->prependTable($fieldname), 
-										 "$key mustn't be empty.", 'required');
+				
+					// exempt subfields
+					$vars = $this->form->getSubmitValues();
+					if(!isset($vars[$this->prependTable('subtables')][$fieldname])){
+						$this->form->addRule($this->prependTable($fieldname), 
+											 "$key mustn't be empty.", 'required');
+						user_error("$key is required in $this->table", E_USER_NOTICE);
+					}
 				}
 			}
 		}
@@ -619,15 +625,26 @@ class coopForm extends CoopObject
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
 					print "DEBUG validating $key $val (table $table) for $this->table";
-					$res &= $this->subtables[$table]->form->validate();
+					$temp = $this->subtables[$table]->form->validate();
+					$temp  || print "DEBUG $table didn't validate";
+
+					$res += $temp;
+					$count++;
+
 					// i have to refresh the thing, now that it's been validated
+					// it has already been added the first time, in ->build()
 					$this->addSubTable($key, $table, true);
 				}
 			}
 			
-			$res &= $this->form->validate();
-			$res  || print "DEBUG something didn't validate";
-			return  $res;
+			$temp  = $this->form->validate();
+			$temp || print "DEBUG $this->table didn't validate";
+			$res += $temp;
+			$count++;
+			
+			printf("DEBUG damm bool [%d/%d]", $res, $count);
+
+			return  $res == $count ? true : false;
 		}
 
 	// the gettable means i'm sending it a KEYNAME not a tablename
@@ -657,10 +674,11 @@ class coopForm extends CoopObject
 				$fake =& $this->form->addElement('static',	
 												 $sub->prependTable($sub->pk), 
 												 false);
-			} else {
+			} else { 
 				$fake =& $this->form->getElement($sub->prependTable($sub->pk));
 			}
 			$fake->setValue($inside);
+
 
 			if(!$formpresent){
 			// basically, pass this thru, but with 'built', not ADD NEW
