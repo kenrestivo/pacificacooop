@@ -230,11 +230,17 @@ class coopForm extends CoopObject
 			$old = $this->obj; // copy, not ref!
 			
 
-			/// process recursive subtables
+			/// process recursive subtables FIRST
 			$st = $vars[$this->prependTable('subtables')];
 			if(is_array($st)){
-				//TODO process them now
-				PEAR::raiseError("OK i gat yer subtables. now finish coding it, fool.", 777);
+				foreach($st as $key => $val){
+					list($table, $farid) = explode(':', 
+												   $this->forwardLinks[$key]);
+					print "DEBUG processing $key $val (table $table) for $this->table";
+					$sub =& $this->subtables[$table]; // subobject cache
+					$sub->form->process(array(&$sub, 'process'));
+					$vars[$this->prependTable($key)] = $sub->id; // yay!!!
+				}
 			}
 
 		
