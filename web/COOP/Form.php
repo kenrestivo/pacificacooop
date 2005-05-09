@@ -636,7 +636,7 @@ class coopForm extends CoopObject
 					$this->page->debug > 1 &&
 						print "<br>DEBUG validating $key $val (table $table) for $this->table";
 					$temp = $this->subtables[$table]->form->validate();
-					if($this->page->debug > 1 && $temp){
+					if($this->page->debug > 1 && $temp < 1){
 						print "<br>DEBUG $table didn't validate";
 					}
 					$res += $temp;
@@ -649,14 +649,15 @@ class coopForm extends CoopObject
 			}
 			
 			$temp  = $this->form->validate();
-			if($this->page->debug > 1 && $temp){
+			if($this->page->debug > 1 && $temp < 1){
 				print "<br>DEBUG $table didn't validate";
 			}
 			$res += $temp;
 			$count++;
 			
 			$this->page->debug > 1 && 
-				printf("<br>DEBUG damm bool [%d/%d]", $res, $count);
+				printf("<br>DEBUG %s cumulative validation [%d/%d]", 
+					   $this->table, $res, $count);
 
 			return  $res == $count ? true : false;
 		}
