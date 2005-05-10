@@ -1,4 +1,3 @@
-#$Id$
 #makefiel for web stuff. mostly syncing things.
 
 # Copyright (C) 2003  ken restivo <ken@restivo.org>
@@ -20,7 +19,7 @@
 
 NFSNRSYNC="--rsync-path=/usr/local/bin/rsync"
 NFSNUSR=ken
-NFSNHOST=dev.phx.nearlyfreespeech.net
+NFSNHOST=localnfsn
 NFSNDOCROOT=/f1/content/paccoop/htdocs
 NFSNLIVEPATH=$(NFSNDOCROOT)/sf/
 LIVEHERE=../livesite/
@@ -41,7 +40,7 @@ help::
 
 upload-live::
 	-rm $(LIVEHERE)/.\#*
-	rsync -e ssh \
+	rsync -e "ssh -p 6666" \
 		$(NFSNRSYNC) \
 		-avxWcC  \
 		--exclude $(XCLUDE) \
@@ -49,7 +48,7 @@ upload-live::
 		$(LIVEHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNLIVEPATH)
 
 download-live::
-	rsync -e ssh \
+	rsync -e "ssh -p 6666" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
@@ -58,14 +57,14 @@ download-live::
 
 upload-dev:: 
 	-rm $(DEVHERE)/.\#*
-	rsync -e ssh \
+	rsync -e "ssh -p 6666" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
 		$(DEVHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)
 
 download-dev::
-	rsync -e ssh \
+	rsync -e "ssh -p 6666" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
@@ -74,14 +73,14 @@ download-dev::
 
 upload-head:: 
 	-rm $(DEVHERE)/.\#*
-	rsync -e ssh \
+	rsync -e "ssh -p 6666" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
 		$(PLAYGROUND) $(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)
 
 download-head::
-	rsync -e ssh \
+	rsync -e "ssh -p 6666" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
@@ -90,7 +89,7 @@ download-head::
 
 upload-images::
 	-rm $(IMAGEHERE)/.\#*
-	rsync -e ssh \
+	rsync -e "ssh -p 6666" \
 		$(NFSNRSYNC) \
 		-avxWcC  \
 		--exclude $(XCLUDE) \
