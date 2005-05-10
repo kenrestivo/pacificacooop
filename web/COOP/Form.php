@@ -132,8 +132,11 @@ class coopForm extends CoopObject
 						$this->addSubtable($key);
 						continue;
 					} else {
+						$type = (!is_array($this->obj->fb_addNewLinkFields) ||
+							in_array($key, $this->obj->fb_addNewLinkFields)) 
+							? 'customselect' : 'select';
 						$el =& $this->form->addElement(
-							'customselect', 
+							$type, 
 							$fullkey, false, 
 							$this->selectOptions($key));
 						
@@ -648,8 +651,8 @@ class coopForm extends CoopObject
 					$temp = $this->subtables[$table]->validate(); // OBJECT!
 					if($this->page->debug > 1 && $temp == false){
 						print "<br>DEBUG $table didn't validate";
-// 						confessObj($this->subtables[$table]->form, 
-// 								   $table . ' form');
+						confessArray($this->subtables[$table]->form->_errors, 
+									 $table . ' form errors!', 3);
 					}
 					$res += $temp;
 					$count++;

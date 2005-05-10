@@ -38,7 +38,6 @@ print $cp->selfURL('Add New Parent', array('action' => 'new'));
 
 function viewHack(&$cp, &$atd)
 {
-	 $co =& new CoopObject(&$cp, 'parents', &$atd);
 	 $atd->obj->school_year = findSchoolYear();
 	 return $atd->simpleTable();
 			

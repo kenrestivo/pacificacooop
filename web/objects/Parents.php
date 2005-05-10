@@ -30,6 +30,7 @@ class Parents extends DB_DataObject
 	var $fb_fieldLabels = array (
 		'last_name' => 'Last Name',
 		'first_name' => 'First Name',
+		'family_id' => 'Co-Op Family',
 		'type' => 'Parent Type',
 		'worker' => 'Main worker'
 		);

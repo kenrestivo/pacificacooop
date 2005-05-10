@@ -19,6 +19,7 @@ class Springfest_attendees extends DB_DataObject
     var $temp_name;                       // string(255)  
     var $school_year;                     // string(50)  
     var $entry_type;                      // string(9)  enum
+    var $attended;                        // string(7)  enum
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

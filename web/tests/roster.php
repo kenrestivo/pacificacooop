@@ -38,8 +38,10 @@ print $cp->selfURL('Add New Student', array('action' => 'new'));
 
 function viewHack(&$cp, &$atd)
 {
-	 $co =& new CoopObject(&$cp, 'enrollment', &$atd);
 	 $atd->obj->school_year = findSchoolYear();
+	 $foo =& new CoopObject(&$cp, 'kids', &$atd);
+	 $atd->obj->joinAdd($foo->obj);
+	 $atd->obj->orderBy('enrollment.am_pm_session, kids.last_name, kids.first_name');
 	 return $atd->simpleTable();
 			
 }
