@@ -35,6 +35,6 @@ class Kids extends DB_DataObject
 	);
 	var $fb_requiredFields  = array('last_name', 'first_name', 'family_id');
 	//XXX TEMP! var $fb_fieldsToRender = array ('last_name', 'first_name', 'date_of_birth');
-	var $fb_linkNewValue = 1;
+
 
 }

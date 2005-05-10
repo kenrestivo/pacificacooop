@@ -33,6 +33,7 @@ print $menu->topNavigation();
 print "<p>Roster Hack</p>";
 
 print $cp->selfURL('refresh me goddammit');
+print $cp->selfURL('Add New Student', array('action' => 'new'));
 
 
 function viewHack(&$cp, &$atd)
@@ -53,6 +54,8 @@ switch($_REQUEST['action']){
  case 'edit':
 	 $atdf = new CoopForm(&$cp, 'enrollment', $none); // NOT the coopView above!
 
+	 $atdf->overrides['families']['fb_linkConstraints'] = 0;
+
 	 $atdf->build($_REQUEST);
 
 
@@ -72,6 +75,8 @@ switch($_REQUEST['action']){
 	 } else {
 		 print $atdf->form->toHTML();
 	 }
+
+	 //confessArray($_DB_DATAOBJECT_FORMBUILDER, 'dbdofb');
 	 break;
 
 //// DEFAULT (VIEW) //////
@@ -89,6 +94,6 @@ done ();
 ?>
 
 
-<!-- END FBTEST -->
+<!-- END ROSTERTEST -->
 
 

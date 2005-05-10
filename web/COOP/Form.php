@@ -38,6 +38,8 @@ class coopForm extends CoopObject
 	var $_tableDef; //  cached table stuff
 	var $subtables = array(); // cached subtable coopforms, indexed by table
 
+
+
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function build($vars = false)
 		{
@@ -191,15 +193,19 @@ class coopForm extends CoopObject
 	function selectOptions($key)
 		{
 
-			// i ALWAYS want a choose one. always. screw FB.
+			// i ALWAYS want a choose onez. always. screw FB.
 			$options[] = "-- CHOOSE ONE --";
 			//confessObj($this, 'this');
 			$link = explode(':', $this->forwardLinks[$key]);
 			$sub =& new CoopObject(&$this->page, $link[0], &$this);
-			if(is_callable(array($sub->obj, 'fb_linkConstraints'))){
-				$sub->obj->fb_linkConstraints();
-			} else {
-				$sub->defaultConstraints();
+
+			$top =& $this->findTop(); // need this for overrides
+			if(!isset($top->overrides[$sub->table]['fb_linkConstraints'])){ 
+				if(is_callable(array($sub->obj, 'fb_linkConstraints'))){
+					$sub->obj->fb_linkConstraints();
+				} else {
+					$sub->defaultConstraints();
+				}
 			}
 			//TODO add linkorderfields
 			foreach($sub->obj->fb_linkDisplayFields as $field){
@@ -381,7 +387,8 @@ class coopForm extends CoopObject
 					$vars = $this->form->getSubmitValues();
 					if(!isset($vars[$this->prependTable('subtables')][$fieldname])){
 						$this->form->addRule($this->prependTable($fieldname), 
-											 "$key mustn't be empty.", 'required');
+											 "$key mustn't be empty.", 
+											 'required');
  						$this->page->debug > 1 &&
 							user_error("$fieldname is required in $this->table", 
  								   E_USER_NOTICE);
@@ -522,7 +529,7 @@ class coopForm extends CoopObject
 				$optkeys = array_keys($options);
 				foreach($incl as $key ){
 					if(!in_array($key, $optkeys)){
-						$far = new CoopObject(&$this->page, $ft, $this);
+						$far = new CoopObject(&$this->page, $ft, &$this);
 						$far->obj->$tf = $key;
 						$far->obj->find(true);
 						$options[$key] = 

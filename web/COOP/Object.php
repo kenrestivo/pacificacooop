@@ -37,6 +37,7 @@ class coopObject
 	var $parentCO;				// reference. "parent" is reserved word
 	var $backlinks;				// list of links that are linked FROM here
 	var $forwardLinks;
+	var $overrides = array(); 	// ugly way to customise sub-tables
 
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
 		{
@@ -61,6 +62,9 @@ class coopObject
 
 			$this->setPK(); // must this be after find? rather constructor.
 			$this->getLinks();
+
+			$this->readConf();
+
 		}
  
 
@@ -178,7 +182,7 @@ class coopObject
 		}
 
 	// returns the IMMEDIATE parent, not including joins
-	function getParent()
+	function &getParent()
 		{
 			// XXX hack to skip over jointables. ugly, but it works.
 			if(preg_match('/_join/', $this->parentCO->table, $matches)){
@@ -215,7 +219,7 @@ class coopObject
         }
 
 	// recurses through parents, until it finds the top!
-	function findTop()
+	function &findTop()
 		{
 			if($this->parentCO){
 				return $this->parentCO->findTop();
@@ -335,6 +339,28 @@ class coopObject
 		{
 			return sprintf('%s-%s', $this->table , $col);
 		}
+
+
+	// lifted from FB. i need some of this stuff.
+	function readConf()
+		{
+			$vars = get_object_vars($this->obj);
+			if (isset($GLOBALS['_DB_DATAOBJECT_FORMBUILDER']['CONFIG'])) {
+				//read all config options into member vars
+				foreach ($GLOBALS['_DB_DATAOBJECT_FORMBUILDER']['CONFIG'] 
+						 as $key => $value) 
+				{
+					$fbkey = "fb_$key";	// loathe FormBuilder
+					if (in_array($key, $vars) && !isset($this->obj->$fbkey)) {
+						$this->page->debug > 3 &&
+							print "<br>DEBUG CoopObject::readConf $this->table $fbkey being set to $value";
+						$this->obj->$fbkey = $value;
+					}
+				}
+			}
+			
+		}
+
 
 } // END COOP OBJECT CLASS
 

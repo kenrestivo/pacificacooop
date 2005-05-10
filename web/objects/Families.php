@@ -33,8 +33,9 @@ class Families extends DB_DataObject
 		);
 	var $fb_requiredFields = array ('name', 'phone', 'address1');
 	//var $fb_crossLinks = array(array('table' => 'families_income_join',
-	//'fromField' => 'family_id', 'toField' => 'income_id'));
-
+	//'fromField' => 'family_id', 'toField' => 'income_id'
+	var $fb_linkNewValue = 1;
+	
 	function fb_linkConstraints()
 		{
 			// ugly, but consisent. only shows families for this year
@@ -61,6 +62,7 @@ class Families extends DB_DataObject
 
 		}
 
-		var $fb_linkNewValue = 1;
+
+
 
 }
