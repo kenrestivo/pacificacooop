@@ -63,7 +63,14 @@ class coopObject
 			$this->setPK(); // must this be after find? rather constructor.
 			$this->getLinks();
 
-			$this->readConf();
+			// the globals
+			$this->readConf(&$GLOBALS['_DB_DATAOBJECT_FORMBUILDER']['CONFIG']);
+
+			// read the overrides now
+			$top =& $this->findTop();
+			//$this->page->confessArray($top->overrides[$this->table], 'wtf', 4);
+			// i clobber here.
+			$this->readConf(&$top->overrides[$this->table], true, false);
 
 		}
  
@@ -342,16 +349,17 @@ class coopObject
 
 
 	// lifted from FB. i need some of this stuff.
-	function readConf()
+	function readConf(&$array, $clobber = false, $fbify = true)
 		{
 			$vars = get_object_vars($this->obj);
-			if (isset($GLOBALS['_DB_DATAOBJECT_FORMBUILDER']['CONFIG'])) {
+			if (is_array($array)) {
 				//read all config options into member vars
-				foreach ($GLOBALS['_DB_DATAOBJECT_FORMBUILDER']['CONFIG'] 
-						 as $key => $value) 
-				{
-					$fbkey = "fb_$key";	// loathe FormBuilder
-					if (in_array($key, $vars) && !isset($this->obj->$fbkey)) {
+				foreach ($array as $key => $value) {
+					//  loathe FormBuilder
+					$fbkey = $fbify  ?  "fb_$key" : $key;	
+					if ((in_array($key, $vars) && !isset($this->obj->$fbkey)) ||
+						$clobber) 
+					{
 						$this->page->debug > 3 &&
 							print "<br>DEBUG CoopObject::readConf $this->table $fbkey being set to $value";
 						$this->obj->$fbkey = $value;

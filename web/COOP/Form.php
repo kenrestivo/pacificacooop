@@ -43,11 +43,12 @@ class coopForm extends CoopObject
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function build($vars = false)
 		{
+			$this->page->confessArray($vars, "$this->table build vars", 3);
 			$this->id = (int)$vars[$this->prependTable($this->pk)];
 			if($this->id > 0){
 				$this->obj->get($this->id);
 			} else {
-				user_error("coopForm::build($this->id) called with no id, assuming NEW", 
+				user_error("coopForm::build($this->table $this->id) called with no id, assuming NEW", 
 						   E_USER_NOTICE);
 			}
 			$formname = sprintf('edit_%s', $this->table);
@@ -403,6 +404,7 @@ class coopForm extends CoopObject
 
 	function setDefaults()
 		{
+
 			if(!is_array($this->obj->fb_defaults)){
 				$this->form->setDefaults(
 					array($this->prependTable('school_year') => 
@@ -410,7 +412,11 @@ class coopForm extends CoopObject
 				return;
 			}
 
-			$this->form->setDefaults($this->obj->fb_defaults);
+			// gah. have to prepend table here
+			foreach($this->obj->fb_defaults as $key => $val){
+				$prepended[$this->prependTable($key)] = $val;
+			}
+			$this->form->setDefaults($prepended);
 		}
 
 	function processCrossLinks($vars)
