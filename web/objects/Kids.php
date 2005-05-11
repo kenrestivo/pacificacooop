@@ -33,6 +33,8 @@ class Kids extends DB_DataObject
 		'first_name' => "First Name",
 		'date_of_birth' => 'Birthday'
 	);
+	var $fb_fieldsToRender = array('last_name' , 'family_id' , 
+								   'first_name', 'date_of_birth');
 	var $fb_requiredFields  = array('last_name', 'first_name', 'family_id');
 	//XXX TEMP! var $fb_fieldsToRender = array ('last_name', 'first_name', 'date_of_birth');
 

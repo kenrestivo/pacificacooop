@@ -35,6 +35,7 @@ class Families extends DB_DataObject
 	//var $fb_crossLinks = array(array('table' => 'families_income_join',
 	//'fromField' => 'family_id', 'toField' => 'income_id'
 	var $fb_linkNewValue = 1;
+	var $fb_fieldsToRender = array ('name', 'phone', 'address1', 'email');
 	
 	function fb_linkConstraints()
 		{
