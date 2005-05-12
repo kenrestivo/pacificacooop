@@ -28,6 +28,7 @@ require_once('DB/DataObject/Cast.php');
 require_once('lib/advmultselect.php');
 require_once('lib/customselect.php');
 require_once('lib/customdatebox.php');
+require_once('lib/customrequired.php');
 
 //////////////////////////////////////////
 /////////////////////// COOP FORM CLASS
@@ -385,8 +386,8 @@ class coopForm extends CoopObject
 			if(is_array($this->obj->fb_requiredFields)){
 
 				$this->form->registerRule('customrequired', 
-										  'callback', 'customrequired',
-										  'CoopForm');
+										  'callback', 'validate',
+										  'CustomRequired');
 
 				foreach($this->obj->fb_requiredFields as $fieldname){
 // 					user_error("CoopForm::addRequiredFields($fieldname)", 
@@ -732,15 +733,6 @@ class coopForm extends CoopObject
 			}
 			
 
-		}
-
-	//TODO: figurea out how to subclass required here
-	function customrequired($val, $options = null)
-		{
-			if($val == '' || (is_numeric($val) && $val < 1)){
-				return false;
-			}
-			return true;
 		}
 
 
