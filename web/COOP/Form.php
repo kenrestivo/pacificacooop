@@ -383,6 +383,11 @@ class coopForm extends CoopObject
 	function addRequiredFields()
 		{
 			if(is_array($this->obj->fb_requiredFields)){
+
+				$this->form->registerRule('customrequired', 
+										  'callback', 'customrequired',
+										  'CoopForm');
+
 				foreach($this->obj->fb_requiredFields as $fieldname){
 // 					user_error("CoopForm::addRequiredFields($fieldname)", 
 // 							   E_USER_NOTICE);
@@ -392,7 +397,8 @@ class coopForm extends CoopObject
 					if(!isset($vars[$this->prependTable('subtables')][$fieldname])){
 						$this->form->addRule($this->prependTable($fieldname), 
 											 "$key mustn't be empty.", 
-											 'required');
+											 'customrequired');
+											 
  						$this->page->debug > 1 &&
 							user_error("$fieldname is required in $this->table", 
  								   E_USER_NOTICE);
@@ -726,6 +732,15 @@ class coopForm extends CoopObject
 			}
 			
 
+		}
+
+	//TODO: figurea out how to subclass required here
+	function customrequired($val, $options = null)
+		{
+			if($val == '' || (is_numeric($val) && $val < 1)){
+				return false;
+			}
+			return true;
 		}
 
 
