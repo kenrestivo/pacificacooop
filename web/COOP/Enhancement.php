@@ -80,6 +80,7 @@ class Enhancement
 
             // condom
             if(!($year && $month && $day)){
+				PEAR::raiseError('bad date passed in', 999);
                 user_error("Enhancement::getHoursOwed($date) bad date",
                            E_USER_ERROR);
             }

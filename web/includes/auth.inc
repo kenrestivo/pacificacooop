@@ -447,9 +447,10 @@ function loginPopup($uid)
 	$listq = mysql_query(" select * from users 
 						left join kids on users.family_id = kids.family_id 
 						left join enrollment on kids.kid_id = enrollment.kid_id
-						where enrollment.school_year = '$sy'
+						where (enrollment.school_year = '$sy'
 							and (enrollment.dropout_date < '2000-01-01'
 							or enrollment.dropout_date is null)
+							or  users.family_id < 1)
 			  			group by user_id
 								order by name");
 	$err = mysql_error();

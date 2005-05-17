@@ -45,7 +45,7 @@ class CustomRequired extends HTML_QuickForm_Rule_Required
 
     function getValidationScript($options = null)
     {
-        return array('', "{jsVar} == ''");
+        return array('', "{jsVar} == '' || {jsVar} < 1");
     } // end func getValidationScript
 
 } // end class HTML_QuickForm_Rule_Required

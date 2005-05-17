@@ -228,7 +228,9 @@ class coopObject
 	// recurses through parents, until it finds the top!
 	function &findTop()
 		{
-			if($this->parentCO){
+			if($this->parentCO && 
+			   in_array('findTop', get_class_methods($this->parentCO)))
+			{
 				return $this->parentCO->findTop();
 			}
 			return($this);
