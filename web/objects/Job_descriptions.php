@@ -15,7 +15,8 @@ class Job_descriptions extends DB_DataObject
     var $long_description;                // blob(16777215)  blob
     var $family_type;                     // string(9)  enum
     var $board_position;                  // string(3)  enum
-    var $tuition_type;                    // string(11)  enum
+    var $free_tuition_days;               // int(3)  
+    var $free_tuition_months;             // int(3)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -30,16 +31,17 @@ class Job_descriptions extends DB_DataObject
 	var $fb_fieldsToRender = array(
 		'summary',
 		'board_position',
-		'tuition_type'
+		'free_tuition_days',
+		'free_tuition_months'
 		);
 	var $fb_fieldLabels = array (
 		'summary' => "Name of Position",
 		'long_description' => "Job Description",
 		'board_position' => "Board-level position?",
-		'tuition_type' => "Tuition Type"
+		'free_tuition_days' => "Days of Free Tuition",
+		'free_tuition_months' => "Months of Free Tuition Days"
 		);
 	var $fb_textFields = array('long_description');
-	var $fb_enumFields = array ('tuition_type',
-								'board_position');
+	var $fb_enumFields = array ('board_position');
 
 }

@@ -845,7 +845,8 @@ CREATE TABLE job_descriptions (
   long_description longtext,
     family_type enum('New', 'Returning') default 'New',
     board_position enum('No', 'Yes') default 'No',
-  tuition_type enum('Family Pays', 'Half-Price', 'School Pays') default 'Family Pays',
+  free_tuition_days int(3),
+	free_tuition_months int(3),
      PRIMARY KEY  (job_description_id)
 ) ;
 
