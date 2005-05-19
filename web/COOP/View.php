@@ -219,7 +219,9 @@ class coopView extends CoopObject
 						$res[] = sprintf('<a href="%s">%s</a>',
 										 $this->page->fixURL($val), $val);
 					} else {
-						$res[] = $this->checkLinkField(&$this->obj, $key, $val);
+						$res[] = nl2br(htmlspecialchars(
+										   $this->checkLinkField(&$this->obj, 
+																 $key, $val)));
 					}
 				}
 			}

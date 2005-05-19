@@ -56,7 +56,6 @@ switch($_REQUEST['action']){
  case 'edit':
 	 $atdf = new CoopForm(&$cp, 'enrollment', $none); // NOT the coopView above!
 
-	 $atdf->overrides['families']['fb_linkConstraints'] = 0;
 
 	 $atdf->build($_REQUEST);
 
