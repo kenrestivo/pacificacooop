@@ -38,7 +38,7 @@ class Job_descriptions extends DB_DataObject
 		'summary' => "Name of Position",
 		'long_description' => "Job Description",
 		'board_position' => "Board-level position?",
-		'free_tuition_days' => "Days of Free Tuition",
+		'free_tuition_days' => "Days Per Week of Free Tuition",
 		'free_tuition_months' => "Months of Free Tuition Days"
 		);
 	var $fb_textFields = array('long_description');

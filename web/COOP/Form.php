@@ -101,6 +101,11 @@ class coopForm extends CoopObject
 		{
 			$st = $vars[$this->prependTable('subtables')];
 
+			// need these for un-html'ing
+			$trans_tbl = get_html_translation_table (HTML_ENTITIES);
+			$trans_tbl = array_flip ($trans_tbl);       
+
+
 			$frozen = array();
 			//confessObj($this, 'coopForm::build($id) found');
 			foreach($this->obj->toArray() as $key => $dbval){
@@ -111,7 +116,15 @@ class coopForm extends CoopObject
 				// this is a clusterfuck because i'm using setValue.
 				// otherwise, quickform would do this for me. *sigh*
 				// let vars override
-				$val = isset($vars[$fullkey]) ? $vars[$fullkey] : $dbval;
+				if(isset($vars[$fullkey])){ 
+					// setting from USER INPUT
+					// what does QF do to pre-process?
+					$val = strtr($vars[$fullkey], $trans_tbl);  
+				} else {
+					// setting from SQL DATABASE VALUES
+					// the key question is: what does QF do b4 displaying?
+					$val = $dbval;
+				}
 
 				
 				if(!$this->isPermittedField($key)){
@@ -276,6 +289,8 @@ class coopForm extends CoopObject
 	function scrubForSave($vars)
 		{
 			$this->_tableDef = $this->obj->table();
+
+
 			// hack around nulls
 			foreach($vars as $fullkey => $val){
 				
@@ -290,13 +305,20 @@ class coopForm extends CoopObject
 				// TODO: check perms
 				// i will be duplicating saveok here, basically
 								
+				//TODO: escape currency chars, as per shared.inc
+								
+				$this->page->debug > 2 && 
+					printf("CoopForm::scrubForSave(%s) %d chars<br>", 
+						   $fullkey, strlen($val));
 
 				if($val == ''){ 
 					$cleanvars[$key] = DB_DataObject_Cast::sql('NULL') ;
 				} else if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
 					$cleanvars[$key] = human_to_sql_date($val);
 				} else {
-					$cleanvars[$key] = $val;
+					///i don't need to escape here, i don't think
+ 					$cleanvars[$key] = $val;
+
 				}
 
 			}
@@ -736,6 +758,7 @@ class coopForm extends CoopObject
 		}
 
 
+	
 
 } // END COOP FORM CLASS
 
