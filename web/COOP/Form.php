@@ -42,7 +42,7 @@ class coopForm extends CoopObject
 
 
 	// i got disgusted with FB. fuck that. i roll my own here.
-	function build($vars = false)
+	function &build($vars = false)
 		{
 			$this->page->confessArray($vars, "$this->table build vars", 3);
 			$this->id = (int)$vars[$this->prependTable($this->pk)];
@@ -461,6 +461,7 @@ class coopForm extends CoopObject
 			// for everything in crosslinks, 
 			foreach($this->obj->fb_crossLinks as $la){
 				$tf = $la['toField'];
+				$longtf = $this->prependTable($tf);
 				$mt = $la['table'];
 				$ft = $la['toTable'];
 				$nk = $this->backlinks[$mt];
@@ -468,10 +469,10 @@ class coopForm extends CoopObject
 					PEAR::raiseError('your crosslinks spec sucks', 777);
 				}
 				
- 				if(!isset($vars[$tf])){
+ 				if(!isset($vars[$longtf])){
 					// XXX this scares me. if i forget to include these...
 					// then they get wiped out of the db? that seems wrong to me.
-					$vars[$tf] = array();
+					$vars[$longtf] = array();
  					//continue;
  				}
 
@@ -483,9 +484,9 @@ class coopForm extends CoopObject
 				$indb = $this->checkCrossLinks($mt,$ft);
 				$this->page->confessArray($indb, 
 										  'CoopForm::processCrossLinks(indb)');
-				$toSave = array_diff($vars[$tf], $indb);
-				if(count($vars[$tf]) < count($indb)){
-					$toDelete = array_diff($indb, $vars[$tf]);
+				$toSave = array_diff($vars[$longtf], $indb);
+				if(count($vars[$longtf]) < count($indb)){
+					$toDelete = array_diff($indb, $vars[$longtf]);
 				}
 				$this->page->confessArray($toSave, 
 										  'CoopForm::processsCrossLinks(save)', 
@@ -529,6 +530,7 @@ class coopForm extends CoopObject
 
 			foreach($this->obj->fb_crossLinks as $la){
 				$tf = $la['toField'];
+				$longtf = $this->prependTable($tf);
 				$mt = $la['table'];
 				$ft = $la['toTable'];
 				$nk = $this->backlinks[$mt];
@@ -555,8 +557,8 @@ class coopForm extends CoopObject
 				
 	
 				$this->obj->{$this->pk} = $this->id; // for checkcrosslinks
-				if(isset($vars[$tf])){
-					$incl = $vars[$tf];
+				if(isset($vars[$longtf])){
+					$incl = $vars[$longtf];
 				} else {
 					$incl = $this->checkCrossLinks($mt, $ft);
 				}
@@ -578,7 +580,7 @@ class coopForm extends CoopObject
 				
 				// jeebus. all this, just to get to here.
 				$el =& $this->form->addElement('advmultselect', 
-										$tf,
+										$longtf,
 										$far->title(),
 										$options);
  				$el->setValue($this->isSubmitted ? $_REQUEST[$tf] : $incl);
