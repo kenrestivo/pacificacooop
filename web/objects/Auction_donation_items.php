@@ -99,17 +99,19 @@ class Auction_donation_items extends DB_DataObject
 				$donatedby = $co->obj->company_name;
 			}
 			
-			
+			$prefix = 'packages-';
 			foreach(array(
-						'package_type' => 'Silent',
-						'item_type' => $this->item_type,
-						'package_description' => $this->item_description,
-						'donated_by_text' => $donatedby,
-						'package_value' => $this->item_value,
-						'bid_increment' => ceil($this->item_value / 10),
-						'starting_bid' => ceil($this->item_value /2),
-						'school_year' => $this->school_year,
-						'auction_donation_item_id[]' => 
+						$prefix . 'package_type' => 'Silent',
+						$prefix . 'item_type' => $this->item_type,
+						$prefix . 'package_description' => 
+						$this->item_description,
+						$prefix . 'donated_by_text' => $donatedby,
+						$prefix . 'package_value' => $this->item_value,
+						$prefix . 'bid_increment' => 
+						ceil($this->item_value / 10),
+						$prefix . 'starting_bid' => ceil($this->item_value /2),
+						$prefix . 'school_year' => $this->school_year,
+						$prefix . 'auction_donation_item_id[]' => 
 						$this->auction_donation_item_id,
 						'action' => 'add' // need this for legacy form
 						) as $key => $val)
