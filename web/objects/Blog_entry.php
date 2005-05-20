@@ -38,5 +38,5 @@ class Blog_entry extends DB_DataObject
 								   'show_on_public_page');
 	var $fb_formHeaderText =  'Breaking News';
 	var $fb_textFields = array('body');
-
+	var $fb_requiredFields = array('family_id', 'short_title', 'body');
 }

@@ -16,6 +16,7 @@
 // | Authors: Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
+// modified by ken restivo <ken@restivo.org> 2005
 // $Id$
 
 require_once('HTML/QuickForm/Rule/Required.php');
@@ -48,5 +49,5 @@ class CustomRequired extends HTML_QuickForm_Rule_Required
         return array('', "{jsVar} == '' || {jsVar} < 1");
     } // end func getValidationScript
 
-} // end class HTML_QuickForm_Rule_Required
+} // end class CustomRequired
 ?>

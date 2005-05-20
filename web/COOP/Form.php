@@ -198,7 +198,7 @@ class coopForm extends CoopObject
  							!in_array($key, 
  									  $this->obj->fb_userEditableFields))
 				{
-					$frozen[] = $key;
+					$frozen[] = $fullkey;
 				}
 
 			}
@@ -473,7 +473,7 @@ class coopForm extends CoopObject
 					// XXX this scares me. if i forget to include these...
 					// then they get wiped out of the db? that seems wrong to me.
 					$vars[$longtf] = array();
- 					//continue;
+					//continue;  // XXX WTF? why was i continuing!!? debug?
  				}
 
 				//print "mt $mt tf $tf ft $ft nk $nk";
@@ -503,6 +503,7 @@ class coopForm extends CoopObject
 						$mid =& new CoopObject(&$this->page, $mt, &$this);
 						$mid->obj->$tf = $saveme;
 						$mid->obj->$nk = $this->id;
+						// TODO: handle schoolyear/other vars here?
 						$mid->obj->insert();
 					}
 				}
@@ -513,6 +514,7 @@ class coopForm extends CoopObject
 						$mid =& new CoopObject(&$this->page, $mt, &$this);
 						$mid->obj->$tf = $killme;
 						$mid->obj->$nk = $this->id;
+						// TODO: handle schoolyear/other vars here?
 						$mid->obj->limit(1);
 						$mid->obj->delete();
 					}
