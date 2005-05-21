@@ -13,7 +13,7 @@ require_once 'HTML/QuickForm/Action.php';
 
 
 
-$debug = 0;
+//$debug = 0;
 
 //MAIN
 //$_SESSION['toptable'] 
@@ -87,12 +87,17 @@ switch($_REQUEST['action']){
 														'show_on_public_page');
  
 	
-				 $atdf->obj->fb_createSubmit = false;
+				 $atdf->obj->fb_createSubmit = false; // important!
 
 				 $atdf->useForm(&$this);
 
 				 $atdf->build($_REQUEST);
+				 
 
+				 // XXX gah, hack around the hokey
+				 $this->CoopForm =& $atdf;
+
+				 //confessObj($this->controller, 'thiscontroller');
 
 				 // ugly assthrus for my cheap dispatcher
 				 $atdf->form->addElement('hidden', 'action', 'edit'); 
@@ -120,9 +125,9 @@ switch($_REQUEST['action']){
 	 {
 		 function perform(&$page, $actionName)
 			 {
-				 echo "Submit successful!<br>\n<pre>\n";
-				 var_dump($page->exportValues());
-				 echo "\n</pre>\n";
+				 //confessObj($page, 'pager');
+				 //XXX this only sends the current page's vars through, no?
+				 print $page->process(array(&$page->CoopForm, 'process'));
 			 }
 	 }
 
