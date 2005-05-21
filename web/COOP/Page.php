@@ -101,7 +101,10 @@ class coopPage
 
 			$this->confessArray($this->auth, 'auth -- post login');
 
-			if($this->auth['state'] != 'loggedin'){
+			if($this->auth['state'] == 'loggedin'){
+				// pretty sure i need this here, in case i'm not using legacy
+				$this->userStruct =  getUser($this->auth['uid']);
+			} else{
 				done();
 			}
 
