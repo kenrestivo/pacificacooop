@@ -353,6 +353,7 @@ getUser($uid)
 {
 
 	if($uid < 1){
+		PEAR::raiseError('ERROR! called with no uid', 666);
 		user_error("getUser(): ERROR! called with no uid", E_USER_ERROR);
 		return(0); // actually, it will error out
 	}
