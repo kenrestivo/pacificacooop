@@ -54,38 +54,6 @@ switch($_REQUEST['action']){
  case 'new':
  case 'edit':
 	 
-	 class SecondPage extends HTML_QuickForm_Page
-	 {
-		 function buildForm()
-			 {
-				 $this->_formBuilt = true;
-				 
-
-				 $this->addElement('header',     null, 
-								   'Controller example 2: a simple form');
-				 $this->addElement('text',       'moreText', 
-								   'Please enter MORE:', 
-								   array('size'=>20, 'maxlength'=>50));
-				 
-				 $this->addElement('submit',     $this->getButtonName('next'), 
-								   'Send');
-				 
-				 $this->applyFilter('moreText', 'trim');
-				 $this->addRule('moreText', 'Pretty please!', 'required');
-
-				 // XXX only for simple with no coopform! build() does it.
-				 //confessObj($this->controller->cp, 'cp');
- 				 if($sid = thruAuthCore($this->controller->cp->auth)){
- 					 $this->addElement('hidden', 'coop', $sid); 
- 				 }
-
-				 // still a sub-element of my cheap dispatcher!
-				 $this->addElement('hidden', 'action', 'edit'); 
-
-				 $this->setDefaultAction('next');
-			 }
-	 }
-
 	 class SimplePage extends HTML_QuickForm_Page
 	 {
 		 function buildForm()
@@ -117,6 +85,43 @@ switch($_REQUEST['action']){
 				 $this->setDefaultAction('next');
 			 }
 	 }
+
+	 class SecondPage extends HTML_QuickForm_Page
+	 {
+		 function buildForm()
+			 {
+				 $this->_formBuilt = true;
+				 
+
+				 $this->addElement('header',     null, 
+								   'Controller example 2: a simple form');
+				 $this->addElement('text',       'moreText', 
+								   'Please enter MORE:', 
+								   array('size'=>20, 'maxlength'=>50));
+				 
+
+				 $nav[] =& $this->createElement(
+					 'submit',   $this->getButtonName('back'), '<< Back');
+				 $nav[] =& $this->createElement(
+					 'submit',   $this->getButtonName('next'), 'Finish');
+				 $this->addGroup($nav, null, '', '&nbsp;', false);
+				 
+				 $this->applyFilter('moreText', 'trim');
+				 $this->addRule('moreText', 'Pretty please!', 'required');
+
+				 // XXX only for simple with no coopform! build() does it.
+				 //confessObj($this->controller->cp, 'cp');
+ 				 if($sid = thruAuthCore($this->controller->cp->auth)){
+ 					 $this->addElement('hidden', 'coop', $sid); 
+ 				 }
+
+				 // still a sub-element of my cheap dispatcher!
+				 $this->addElement('hidden', 'action', 'edit'); 
+
+				 $this->setDefaultAction('next');
+			 }
+	 }
+
 
 
 	 class ActionProcess extends HTML_QuickForm_Action
