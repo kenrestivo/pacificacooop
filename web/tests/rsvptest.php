@@ -33,7 +33,6 @@ print "<p>RSVP Test</p>";
 
 print $cp->selfURL('View Tickets');
 print $cp->selfURL('Add New Ticket', array('action' => 'new'));
-print $cp->selfURL('FUBAR', array('action' => 'fubar'));
 
 
 function viewHack(&$cp)
@@ -72,55 +71,80 @@ switch($_REQUEST['action']){
  case 'new':
  case 'edit':
 	 
- // i dislike instantiating classes inside conditional code, but, oh well.
+	 class SimplePage extends HTML_QuickForm_Page
+	 {
+		 function buildForm()
+			 {
+				 $this->_formBuilt = true;
+				 
+				 $atdf = new CoopForm(&$this->controller->cp, 'blog_entry', 
+									  $none); // NOT the coopView above!
+
+				 $atdf->obj->fb_addNewLinkFields = array();	// don't let 'em add new fams
+
+				 $atdf->obj->fb_fieldsToRender = array( 'short_title', 'body', 
+														'show_on_members_page', 
+														'show_on_public_page');
+ 
+	
+				 $atdf->obj->fb_createSubmit = false;
+
+				 $atdf->useForm(&$this);
+
+				 $atdf->build($_REQUEST);
+
+
+				 // ugly assthrus for my cheap dispatcher
+				 $atdf->form->addElement('hidden', 'action', 'edit'); 
+
+				 $atdf->legacyPassThru();
+
+				 $atdf->addRequiredFields();
+
+				 $atdf->setDefaults();
+
+				 // still a sub-element of my cheap dispatcher!
+				 $this->addElement('hidden', 'action', 'edit'); 
+
+				 $this->setDefaultAction('submit');
+
+				 // Bind the button to the 'submit' action
+				 $this->addElement('submit',     
+								   $this->getButtonName('submit'), 'Send');
+
+			 }
+	 }
+
 
 	 class ActionProcess extends HTML_QuickForm_Action
 	 {
 		 function perform(&$page, $actionName)
 			 {
-				 echo '<h1>Hello, ' . htmlspecialchars($page->exportValue('name')) . '!</h1>';
-				 PEAR::raiseError("i'm here and i'm processing, dammit", 111);
+				 echo "Submit successful!<br>\n<pre>\n";
+				 var_dump($page->exportValues());
+				 echo "\n</pre>\n";
 			 }
 	 }
 
-
-     class FormBuilderPage extends HTML_QuickForm_Page {
-        function buildForm() {
-          $this->_formBuilt = true;
-		  $tick =& new CoopForm(&$this->controller->cp, 'tickets', &$nothing);
-          $tick->obj->fb_createSubmit = false;
-          $tick->useForm($this);
-          $tick->build(); 
-		  // ugly assthrus for my cheap dispatcher
-		  $tick->form->addElement('hidden', 'action', 'fubar'); // XXX!!!
-		  
-		  $tick->legacyPassThru();
-		  
-		  $tick->addRequiredFields();
-	 
-          $this->addElement('submit', $this->getButtonName('next'), 'Next >>');
-          //$this->addElement('submit', $this->getButtonName('send'), 'Save');
-        }
-      }
+	 $page =& new SimplePage('page1');
 
 
-      $cont =& new HTML_QuickForm_Controller('FBController');
-	  $cont->cp =& $cp;
+	 // This is the action we should always define ourselves
+	 $page->addAction('process', new ActionProcess());
 
-	  $testpage =  new FormBuilderPage('FBPage');
-	  $testpage->addAction('process', new ActionProcess());
+	 $controller =& new HTML_QuickForm_Controller('simpleForm');
+	 $controller->cp =& $cp; // DO THIS FIRST!!
+	 $controller->addPage($page);
+	 $controller->run();
 
-      $cont->addPage(&$testpage);
-
-      $cont->run();				// prints to screen
 
 
 	 break;
 
 //// DEFAULT (VIEW) //////
  default:
-	 print viewHack(&$cp);
-	 //print "nothing";
+	 //print viewHack(&$cp);
+	 print "nothing";
 	 break;
 }
 
