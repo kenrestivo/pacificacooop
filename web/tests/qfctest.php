@@ -7,9 +7,9 @@ require_once('CoopPage.php');
 require_once('CoopView.php');
 require_once('CoopForm.php');
 require_once('CoopMenu.php');
+require_once('lib/qfc_custom.php');
 require_once 'HTML/QuickForm/Controller.php';
 require_once 'HTML/QuickForm/Action.php';
-require_once 'HTML/QuickForm/Action/Jump.php';
 
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
@@ -44,38 +44,6 @@ function viewHack(&$cp, &$atd)
 	print 'nothing';
 	// return $atd->simpleTable();
 			
-}
-
-
-class JumpSucks extends HTML_QuickForm_Action_Jump
-{
-	function perform(&$page, $actionName)
-		{
-			// ok, this is a cut-and-paste from action_jump,
-			// but does display not location
-
-			//print "jumpy jump [$actionName]";
-			//confessObj($page, 'the page receiving the jump');
-
-			// check whether the page is valid before trying to go to it
-			if ($page->controller->isModal()) {
-				// we check whether *all* pages up to current are valid
-				// if there is an invalid page we go to it, instead of the
-				// requested one
-				$pageName = $page->getAttribute('id');
-				if (!$page->controller->isValid($pageName)) {
-					$pageName = $page->controller->findInvalid();
-				}
-				$current =& $page->controller->getPage($pageName);
-
-			} else {
-				$current =& $page;
-			}
-
-			// ok, now call display on  $current!
-			$current->handle('display');
-		}
-
 }
 
 
@@ -173,7 +141,7 @@ switch($_REQUEST['action']){
 	 $controller->addAction('process', new ActionProcess());
 
 	 // self-explanatory
-	 $controller->addAction('jump', new JumpSucks());
+	 $controller->addAction('jump', new JumpDisplay());
 
 	 $controller->run();
 
