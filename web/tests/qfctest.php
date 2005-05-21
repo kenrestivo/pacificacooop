@@ -61,10 +61,14 @@ switch($_REQUEST['action']){
 				 $this->_formBuilt = true;
 				 
 
-				 $this->addElement('header',     null, 'Controller example 1: a simple form');
-				 $this->addElement('text',       'tstText', 'Please enter something:', array('size'=>20, 'maxlength'=>50));
+				 $this->addElement('header',     null, 
+								   'Controller example 1: a simple form');
+				 $this->addElement('text',       'tstText', 
+								   'Please enter something:', 
+								   array('size'=>20, 'maxlength'=>50));
 				 // Bind the button to the 'submit' action
-				 $this->addElement('submit',     $this->getButtonName('submit'), 'Send');
+				 $this->addElement('submit',     $this->getButtonName('next'), 
+								   'Send');
 				 
 				 $this->applyFilter('tstText', 'trim');
 				 $this->addRule('tstText', 'Pretty please!', 'required');
@@ -78,7 +82,7 @@ switch($_REQUEST['action']){
 				 // still a sub-element of my cheap dispatcher!
 				 $this->addElement('hidden', 'action', 'edit'); 
 
-				 $this->setDefaultAction('submit');
+				 $this->setDefaultAction('next');
 			 }
 	 }
 
