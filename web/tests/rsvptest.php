@@ -9,10 +9,11 @@ require_once('CoopMenu.php');
 require_once('CoopForm.php');
 require_once('HTML/Table.php');
 require_once 'HTML/QuickForm/Controller.php';
+require_once 'HTML/QuickForm/Action.php';
 
 
 
-$debug = 2;
+$debug = 0;
 
 //MAIN
 //$_SESSION['toptable'] 
@@ -32,6 +33,7 @@ print "<p>RSVP Test</p>";
 
 print $cp->selfURL('View Tickets');
 print $cp->selfURL('Add New Ticket', array('action' => 'new'));
+print $cp->selfURL('FUBAR', array('action' => 'fubar'));
 
 
 function viewHack(&$cp)
@@ -69,19 +71,47 @@ switch($_REQUEST['action']){
 //// EDIT AND NEW //////
  case 'new':
  case 'edit':
+	 
+ // i dislike instantiating classes inside conditional code, but, oh well.
+
+	 class ActionProcess extends HTML_QuickForm_Action
+	 {
+		 function perform(&$page, $actionName)
+			 {
+				 echo '<h1>Hello, ' . htmlspecialchars($page->exportValue('name')) . '!</h1>';
+				 PEAR::raiseError("i'm here and i'm processing, dammit", 111);
+			 }
+	 }
+
+
      class FormBuilderPage extends HTML_QuickForm_Page {
         function buildForm() {
           $this->_formBuilt = true;
-		  $tick =& new CoopForm(&$this->controller->page, 'tickets', &$nothing);
+		  $tick =& new CoopForm(&$this->controller->cp, 'tickets', &$nothing);
           $tick->obj->fb_createSubmit = false;
           $tick->useForm($this);
           $tick->build(); 
+		  // ugly assthrus for my cheap dispatcher
+		  $tick->form->addElement('hidden', 'action', 'fubar'); // XXX!!!
+		  
+		  $tick->legacyPassThru();
+		  
+		  $tick->addRequiredFields();
+	 
           $this->addElement('submit', $this->getButtonName('next'), 'Next >>');
+          //$this->addElement('submit', $this->getButtonName('send'), 'Save');
         }
       }
+
+
       $cont =& new HTML_QuickForm_Controller('FBController');
-	  $cont->page =& $cp;
-      $cont->addPage(new FormBuilderPage('FBPage'));
+	  $cont->cp =& $cp;
+
+	  $testpage =  new FormBuilderPage('FBPage');
+	  $testpage->addAction('process', new ActionProcess());
+
+      $cont->addPage(&$testpage);
+
       $cont->run();				// prints to screen
 
 
@@ -90,7 +120,7 @@ switch($_REQUEST['action']){
 //// DEFAULT (VIEW) //////
  default:
 	 print viewHack(&$cp);
-
+	 //print "nothing";
 	 break;
 }
 
