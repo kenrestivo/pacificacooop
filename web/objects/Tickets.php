@@ -48,6 +48,8 @@ class Tickets extends DB_DataObject
 
 	var $fb_requiredFields = array('ticket_type_id', 'ticket_quantity');
 
+	var $fb_enumFields = array('vip_flag');
+
 	function updatePaddles(&$page)
 		{
 

@@ -125,9 +125,13 @@ switch($_REQUEST['action']){
 	 {
 		 function perform(&$page, $actionName)
 			 {
-				 //confessObj($page, 'pager');
+				 //confessObj($this, 'action');
 				 //XXX this only sends the current page's vars through, no?
 				 print $page->process(array(&$page->CoopForm, 'process'));
+
+				 ///XXX do i do this here??!
+				 ///if there's one process for each form?
+				 $page->controller->container(true);
 			 }
 	 }
 

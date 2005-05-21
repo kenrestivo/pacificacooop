@@ -74,6 +74,7 @@ switch($_REQUEST['action']){
  				 if($sid = thruAuthCore($this->controller->cp->auth)){
  					 $this->addElement('hidden', 'coop', $sid); 
  				 }
+
 				 // still a sub-element of my cheap dispatcher!
 				 $this->addElement('hidden', 'action', 'edit'); 
 
@@ -99,12 +100,15 @@ switch($_REQUEST['action']){
 //	 $page->addAction('display', new HTML_QuickForm_Action_Display());
 //	 $page->addAction('submit', new HTML_QuickForm_Action_Submit());
 
-// This is the action we should always define ourselves
-	 $page->addAction('process', new ActionProcess());
 
 	 $controller =& new HTML_QuickForm_Controller('simpleForm');
 	 $controller->cp =& $cp; // DO THIS FIRST!!
 	 $controller->addPage($page);
+
+
+	 // This is the action we should always define ourselves
+	 $controller->addAction('process', new ActionProcess());
+
 	 $controller->run();
 
 	 break;
