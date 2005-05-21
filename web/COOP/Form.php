@@ -53,9 +53,10 @@ class coopForm extends CoopObject
 						   E_USER_NOTICE);
 			}
 			$formname = sprintf('edit_%s', $this->table);
-			$this->form =& new HTML_QuickForm($formname, false, false, false, 
-										false, true);
-			
+			if(!$this->form){	// deal with QFC
+				$this->form =& new HTML_QuickForm($formname, false, false, 
+												  false, false, true);
+			}
 			$this->form->addElement('header', $formname, 
 							  $this->obj->fb_formHeaderText ?
 							  $this->obj->fb_formHeaderText : 
@@ -408,7 +409,7 @@ class coopForm extends CoopObject
 			if(is_array($this->obj->fb_requiredFields)){
 
 				$this->form->registerRule('customrequired', 
-										  'callback', 'validate',
+										  'callback', 'validate', 
 										  'CustomRequired');
 
 				foreach($this->obj->fb_requiredFields as $fieldname){
@@ -421,23 +422,33 @@ class coopForm extends CoopObject
 						$this->form->addRule($this->prependTable($fieldname), 
 											 "$key mustn't be empty.", 
 											 'customrequired');
-											 
+						// XXX hack around quickform braindeadedness
+						$this->form->_required[] = 
+							$this->prependTable($fieldname);
+ 
  						$this->page->debug > 1 &&
 							user_error("$fieldname is required in $this->table", 
  								   E_USER_NOTICE);
 					}
 				}
 			}
+			//confessObj($this->form, 'ahc');
 		}
 
-
+	
+	// XXX i don't like this. i need to set in object, not in form
+	// but where? if i'm populating from db, i don't want to clobber with this!
+	// maybe do like my fb_ stuff? if it's set, ignore it?
 	function setDefaults()
 		{
+			$this->page->debug > 2 && confessObj($this->page, 'coop page');
 
 			if(!is_array($this->obj->fb_defaults)){
 				$this->form->setDefaults(
 					array($this->prependTable('school_year') => 
-						  findSchoolYear()));
+						  findSchoolYear(),
+						  $this->prependTable('family_id') => 
+						   $this->page->userStruct['family_id']));
 				return;
 			}
 
@@ -761,6 +772,11 @@ class coopForm extends CoopObject
 
 		}
 
+	//FB API compatibility
+	function useForm(&$form)
+		{
+			$this->form =& $form;
+		}
 
 	
 
