@@ -113,18 +113,22 @@ function confessVars()
 # outputs: the details of the array passed in through POST/GET
 # vital sanity-saver when debugging forms that don't work
 ###############
-function confessArray($fields, $message)
+function confessArray($fields, $message, $return = false)
 {
-	print "<pre>";
-	print "DEBUG $message\n";
-//print_r( debug_backtrace());
+	$res .= "<pre>";
+	$res .= "DEBUG $message\n";
+//$res .=_r( debug_backtrace());
 	if(is_array($fields)){
-		print htmlentities(print_r($fields, true));
+		$res .= htmlentities(print_r($fields, true));
 		reset($fields);
 	} else {
-		print "um... <$fields> is not an array\n";
+		$res .= "um... <$fields> is not an array\n";
 	}
-	print "</pre>";
+	$res .= "</pre>";
+
+$return || print $res;
+
+return $res;
 } #END CONFESSARRAY
 
 function confessBacktrace()

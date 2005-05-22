@@ -8,8 +8,8 @@ require_once('CoopView.php');
 require_once('CoopMenu.php');
 require_once('CoopForm.php');
 require_once('HTML/Table.php');
+require_once('CoopController.php');
 require_once('lib/qfc_custom.php');
-require_once('HTML/QuickForm/Controller.php');
 require_once('HTML/QuickForm/Action.php');
 require_once 'HTML/QuickForm/Action/Direct.php';
 
@@ -34,10 +34,7 @@ class GetCode extends HTML_QuickForm_Page
 				$this->addElement('hidden', 'coop', $sid); 
 			}
 
-			$this->setDefaultAction('next');
-
-			 $this->addElement('submit',   
-							   $this->getButtonName('next'), 'Next >>');
+			$this->controller->addNav(&$this);
 
 			 //validation stuff
 			$this->applyFilter('__ALL__', 'trim');
@@ -76,19 +73,14 @@ class GetBranchData extends HTML_QuickForm_Page
 			$this->_formBuilt = true;
 				 
 
-			$nav[] =& $this->createElement(
-				'submit',   $this->getButtonName('back'), '<< Back');
-			$nav[] =& $this->createElement(
-				'submit',   $this->getButtonName('next'), 'Finish');
-			$this->addGroup($nav, null, '', '&nbsp;', false);
-				 
+			$this->controller->addNav(&$this);
+
 			// XXX only for simple with no coopform! build() does it.
 			//confessObj($this->controller->cp, 'cp');
 			if($sid = thruAuthCore($this->controller->cp->auth)){
 				$this->addElement('hidden', 'coop', $sid); 
 			}
 
-			$this->setDefaultAction('next');
 		}
 }
 
@@ -126,7 +118,7 @@ $cp->buffer($menu->topNavigation());
 $cp->buffer("<p>RSVPs</p>");
 
 
-$controller =& new HTML_QuickForm_Controller('RSVPs');
+$controller =& new CoopController('RSVPs');
 $controller->cp =& $cp; // DO THIS FIRST!!
 
 
