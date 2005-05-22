@@ -83,6 +83,7 @@ switch($_REQUEST['action']){
 				 $this->addElement('hidden', 'action', 'edit'); 
 
 				 $this->setDefaultAction('next');
+				 //PEAR::raiseError('how did i get here?', 555);
 			 }
 	 }
 
@@ -138,6 +139,7 @@ switch($_REQUEST['action']){
 	 $controller =& new HTML_QuickForm_Controller('simpleForm');
 	 $controller->cp =& $cp; // DO THIS FIRST!!
 
+
 	 $controller->addPage(new SimplePage('page1'));
 	 $controller->addPage(new SecondPage('page2'));
 
@@ -159,7 +161,7 @@ switch($_REQUEST['action']){
 }
 
 
-
+//$cp->confessArray($_SESSION, 'session at end of page', 3);
 done ();
 
 ////KEEP EVERTHANG BELOW
