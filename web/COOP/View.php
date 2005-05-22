@@ -347,8 +347,8 @@ class coopView extends CoopObject
 					$res .= $this->page->selfURL(
 						$title, 
 						array( 
-							'action' => $action,
-							'table' => $this->table,
+							'action' => $action, // XXX my temp hack
+							//'_qf_default' => 'edit:display', // QFC:getActionName
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}
 							));
