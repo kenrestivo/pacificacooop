@@ -144,7 +144,10 @@ class coopPage
 				return;
 			}
 			$res =& confessArray($array, $message, $buffer);
-
+			if($buffer){
+				$this->buffer($res);
+			}
+		   
 			return $res;
 		}
 
