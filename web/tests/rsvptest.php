@@ -81,8 +81,6 @@ class Common extends HTML_QuickForm_Page
 			$this->_formBuilt = true;
 
 
-
-
 			$this->addElement('header', 'rsvpheader',
 							  'Enter information from RSVP card:');
 			// ticket quantity box NOTE: use "invoice" when sumbitting to paypal
@@ -135,16 +133,26 @@ class Payment extends HTML_QuickForm_Page
 		{
 			$this->_formBuilt = true;
 
+			$atdf = new CoopForm(&$this->controller->cp, 'tickets', 
+								 $none); // NOT the coopView above!
 
+			$atdf->obj->fb_createSubmit = false; // important!
+
+			$atdf->useForm(&$this);
+
+			$atdf->build($_REQUEST);
+				 
+
+			// XXX gah, hack around the hokey
+			$this->CoopForm =& $atdf;
+
+			$atdf->legacyPassThru();
+
+			$atdf->addRequiredFields();
+
+			$atdf->setDefaults();
 
 			$this->controller->addNav(&$this);
-
-			// XXX only for simple with no coopform! build() does it.
-			//confessObj($this->controller->cp, 'cp');
-			if($sid = thruAuthCore($this->controller->cp->auth)){
-				$this->addElement('hidden', 'coop', $sid); 
-			}
-
 
 
 		}
