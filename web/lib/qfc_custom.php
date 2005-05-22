@@ -1,9 +1,9 @@
-
-   <?php
+<?php
 
    // $Id$
 
 require_once 'HTML/QuickForm/Action/Jump.php';
+require_once 'HTML/QuickForm/Action/Display.php';
 
 class JumpDisplay  extends HTML_QuickForm_Action_Jump
 {
@@ -12,7 +12,9 @@ class JumpDisplay  extends HTML_QuickForm_Action_Jump
 			// ok, this is a cut-and-paste from action_jump,
 			// but does display not location
 
-			//print "jumpy jump [$actionName]";
+			//$this->controller->cp->debug > 1 && 
+			print "DEBUG jump [$actionName] for " . $page->getAttribute('id');
+
 			//confessObj($page, 'the page receiving the jump');
 
 			// check whether the page is valid before trying to go to it
@@ -30,13 +32,29 @@ class JumpDisplay  extends HTML_QuickForm_Action_Jump
 				$current =& $page;
 			}
 
-			// ok, now call display on  $current!
-			$current->handle('display');
+			// stupid desperate hacks that don't fix anything
+			//$data     =& $page->controller->container();
+			//$current->_formBuilt = false;
+			
+ 			// ok, now call display on  $current!
+			return $current->handle('display');
 		}
 
 }
 
+class CustomDisplay extends HTML_QuickForm_Action_Display
+{
+	function _renderForm(&$page)
+		{
+			global  $hack;
+			print $hack;
+			print parent::_renderForm($page);
 
+		}
+
+
+
+}
 
 
 

@@ -30,7 +30,7 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 //DB_DataObject::debugLevel(2);
 
 $cp = new coopPage( $debug);
-$cp->pageTop();
+print $cp->pageTop();
 //$cp->createLegacy($cp->auth);
 
 $atd = new CoopView(&$cp, 'sponsorships', $none);

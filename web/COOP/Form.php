@@ -785,6 +785,3 @@ class coopForm extends CoopObject
 ////KEEP EVERTHANG BELOW
 
 ?>
-<!-- END COOP FORM -->
-
-

@@ -64,7 +64,8 @@ class coopPage
 					$heading = 'Pacifica Co-Op Nursery School Data Entry')
 		{
 			global $metalinks; // from first.inc. bah.
-			printf('<HTML lang="en">
+			global $doctype; // from first.inc. bah.
+			printf('%s <HTML lang="en">
 		<HEAD> %s
 			<TITLE>%s</TITLE>
 		</HEAD>
@@ -73,7 +74,7 @@ class coopPage
 
 		<div id="header">
 				<h2>%s</h2>',
-				   $metalinks, $title, $heading);
+				   $doctype, $metalinks, $title, $heading);
 			
 			
 			$this->debugCrap();
@@ -95,6 +96,7 @@ class coopPage
  
 	function pageTop()
 		{
+			ob_start();
 			$this->header();
 		
 			$this->auth = logIn($_REQUEST);
@@ -105,9 +107,15 @@ class coopPage
 				// pretty sure i need this here, in case i'm not using legacy
 				$this->userStruct =  getUser($this->auth['uid']);
 			} else{
+				// show the login, then be done with this
+				ob_end_flush();
 				done();
 			}
 
+			$output = ob_get_clean();
+			ob_end_flush();
+
+			return $output;
 
 
 		}
@@ -314,6 +322,3 @@ class coopPage
 ////KEEP EVERTHANG BELOW
 
 ?>
-<!-- END COOP PAGE -->
-
-

@@ -19,7 +19,7 @@ require_once('CoopForm.php');
 //DB_DataObject::debugLevel(2);
 
 $cp = new coopPage( $debug);
-$cp->pageTop();
+print $cp->pageTop();
 
 print $cp->selfURL('refresh (for testing)');
 

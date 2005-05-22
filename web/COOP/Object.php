@@ -378,6 +378,3 @@ class coopObject
 ////KEEP EVERTHANG BELOW
 
 ?>
-<!-- END COOP OBJECT -->
-
-

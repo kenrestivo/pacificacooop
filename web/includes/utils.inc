@@ -1,11 +1,10 @@
-<!-- $Id$ -->
 <?php
 
 /*******************
 	utilities used by auth and shared, which contain no object-specific stuff
 
-  Copyright (C) 2003,2004  ken restivo <ken@restivo.org>
- 
+  Copyright (C) 2003-2005  ken restivo <ken@restivo.org>
+#<!-- $Id$ --> 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -561,7 +560,3 @@ function todaysDate(datefield) {
 
 //EOF!!!  DON'T DELETE PAST HERE, I NEED THAT STUFF
 ?>
-<!-- END UTILS -->
-
-
-

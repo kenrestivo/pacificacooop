@@ -30,7 +30,7 @@ require_once("everything.inc");
 
 
 $cp =& new CoopPage();
-$cp->pageTop();
+print $cp->pageTop();
 $menu =& new CoopMenu;
 $menu->createLegacy(&$cp);
 

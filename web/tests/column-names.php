@@ -17,7 +17,7 @@ $debug = 1;
 //$_SESSION['toptable'] 
 
 $cp =& new CoopPage(1);
-$cp->pageTop();
+print $cp->pageTop();
 
 $menu =& new CoopMenu;
 $menu->createLegacy(&$cp);

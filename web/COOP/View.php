@@ -408,6 +408,3 @@ class coopView extends CoopObject
 ////KEEP EVERTHANG BELOW
 
 ?>
-<!-- END COOP VIEW -->
-
-

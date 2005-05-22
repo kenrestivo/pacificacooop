@@ -21,7 +21,7 @@ $debug = 0;
 //DB_DataObject::debugLevel(2);
 
 $cp = new coopPage( $debug);
-$cp->pageTop();
+print $cp->pageTop();
 
 
 $atd = new CoopView(&$cp, 'enrollment', $none);

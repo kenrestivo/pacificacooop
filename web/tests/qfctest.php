@@ -22,18 +22,18 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 //DB_DataObject::debugLevel(2);
 
 $cp = new coopPage( $debug);
-$cp->pageTop();
+$hack .= $cp->pageTop();
 
 
 $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
-print $menu->topNavigation();
+$hack .= $menu->topNavigation();
 
-print "<p>QFC test</p>";
+$hack .= "<p>QFC test</p>";
 
 
-print $cp->selfURL('View');
-print $cp->selfURL('Create New', array('action' => 'new'));
+$hack .= $cp->selfURL('View');
+$hack .=  $cp->selfURL('Create New', array('action' => 'new'));
 				   
 $atd = new CoopView(&$cp, 'job_descriptions', $none);
 $atd->recordActions = array('edit' => "Edit",
@@ -59,7 +59,6 @@ switch($_REQUEST['action']){
 		 function buildForm()
 			 {
 				 $this->_formBuilt = true;
-				 
 
 				 $this->addElement('header',     null, 
 								   'Controller example 1: a simple form');
@@ -93,7 +92,6 @@ switch($_REQUEST['action']){
 			 {
 				 $this->_formBuilt = true;
 				 
-
 				 $this->addElement('header',     null, 
 								   'Controller example 2: a simple form');
 				 $this->addElement('text',       'moreText', 
@@ -148,7 +146,8 @@ switch($_REQUEST['action']){
 	 $controller->addAction('process', new ActionProcess());
 
 	 // self-explanatory
-	 $controller->addAction('jump', new JumpDisplay());
+	 $controller->addAction('display', new CustomDisplay());
+	 //$controller->addAction('jump', new JumpDisplay());
 
 	 $controller->run();
 
@@ -156,6 +155,7 @@ switch($_REQUEST['action']){
 
 //// DEFAULT (VIEW) //////
  default:
+	 print $hack;
 	 print viewHack(&$cp, &$atd);
 	 break;
 }

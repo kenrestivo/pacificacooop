@@ -21,7 +21,7 @@ require_once 'HTML/QuickForm/Action.php';
 //DB_DataObject::debugLevel(2);
 
 $cp = new coopPage( $debug);
-$cp->pageTop();
+print $cp->pageTop();
 
 
 

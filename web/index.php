@@ -28,7 +28,7 @@ require_once("CoopMenu.php");
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT); //  before page exists.
 
-printf('<HTML lang="en">
+printf('%s <HTML lang="en">
 		<HEAD> %s
 			<TITLE>Data Entry</TITLE>
 		</HEAD>
@@ -37,7 +37,7 @@ printf('<HTML lang="en">
 
 		<div id="header">
 				<h2>Pacifica Co-Op Nursery School Data Entry</h2>',
-	   $metalinks);
+	   $doctype, $metalinks);
 
 warnDev();
 

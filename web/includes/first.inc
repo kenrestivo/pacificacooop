@@ -37,14 +37,15 @@ user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
                    session_id(), $_SESSION['auth']['state']), E_USER_NOTICE);	
 
  // global with meta tags and stylesheets
- $metalinks = '<meta http-equiv="content-type" 
+ $metalinks = '
+<meta http-equiv="content-type" 
  				content="text/html; charset=iso-8859-1">
 				<link rel="stylesheet" href="main.css" title="main" 
 					  	>';
+$doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">';
 
 // end of main code
 
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">

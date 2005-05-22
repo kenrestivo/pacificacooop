@@ -12,7 +12,7 @@ $debug = 0;
 
 
 $cp = new coopPage( $debug);
-$cp->pageTop();
+print $cp->pageTop();
 
 
 $doit = $_REQUEST['do_it'];

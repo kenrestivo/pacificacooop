@@ -1,8 +1,7 @@
-<!-- $Id$ -->
 <?php
 
 #	functions specific to auth
-
+#<!-- $Id$ -->
 #  Copyright (C) 2003,2004  ken restivo <ken@restivo.org>
 #
 #  some stuff lifted from
@@ -1259,4 +1258,3 @@ checkSessionId($auth)
 #note bin2hex... do i need it?
 
 ?>
-<!-- END AUTH -->
