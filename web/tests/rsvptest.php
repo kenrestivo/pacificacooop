@@ -13,10 +13,18 @@ require_once('lib/qfc_custom.php');
 require_once('HTML/QuickForm/Action.php');
 require_once 'HTML/QuickForm/Action/Direct.php';
 
-	 
+
+// TODO: move this to some library somewhere	 
+function stripNonNumeric($val)
+{
+	//print "HEY [$val]";
+	$res = preg_replace('/\D/', '', $val);
+	//print "HO [$res]";
+	return $res;
+}
 
 	 
-class GetCode extends HTML_QuickForm_Page
+class RSVPCode extends HTML_QuickForm_Page
 {
 
 	function buildForm()
@@ -66,12 +74,39 @@ class GetCode extends HTML_QuickForm_Page
 } // END GETCODE CLASS
 
 
-class GetBranchData extends HTML_QuickForm_Page
+class Common extends HTML_QuickForm_Page
 {
 	function buildForm()
 		{
 			$this->_formBuilt = true;
+
+
+
+
+			$this->addElement('header', 'rsvpheader',
+							  'Enter information from RSVP card:');
+			// ticket quantity box NOTE: use "invoice" when sumbitting to paypal
+			$this->addElement('text', 
+							  'ticket_quantity', 
+							  'Number of tickets', 
+							  'size="4"');
+			//confessArray($tick, 'tick');
+			$this->addElement('select', 'vip_flag', "VIP?", 
+							  array('No' => 'No', 
+									'Yes' => 'Yes'));
+
+			$this->setDefaults(array('payment_amount' => '$',
+									 'school_year' => findSchoolYear(),
+									 'ticket_type_id' => 1)); // paid for
 				 
+
+			// TODO: the ticket type box, whatever that is. see ticketwiz
+			
+			$this->addElement('text', 'payment_amount', 
+							  'Donation amount:',
+							  'size="4"');
+
+
 
 			$this->controller->addNav(&$this);
 
@@ -80,6 +115,37 @@ class GetBranchData extends HTML_QuickForm_Page
 			if($sid = thruAuthCore($this->controller->cp->auth)){
 				$this->addElement('hidden', 'coop', $sid); 
 			}
+
+			// validation stuff
+
+			$this->applyFilter('__ALL__', 'trim');
+			$this->addRule('ticket_quantity',
+							   'Must be all numbers, no letters or spaces.', 
+							   'numeric', 'client');
+				
+			$this->applyFilter('payment_amount', 'stripNonNumeric');
+
+
+		}
+}
+
+class Payment extends HTML_QuickForm_Page
+{
+	function buildForm()
+		{
+			$this->_formBuilt = true;
+
+
+
+			$this->controller->addNav(&$this);
+
+			// XXX only for simple with no coopform! build() does it.
+			//confessObj($this->controller->cp, 'cp');
+			if($sid = thruAuthCore($this->controller->cp->auth)){
+				$this->addElement('hidden', 'coop', $sid); 
+			}
+
+
 
 		}
 }
@@ -97,7 +163,8 @@ class ActionProcess extends HTML_QuickForm_Action
 				 
 			//clean up after yourself, and bring me back to top!
 			$page->controller->container(true);
-			$view =& $page->controller->getPage('view');
+			//TODO: function to get FIRST page
+			$view =& $page->controller->getPage('getCode');
 
 			print $view->handle('display');
 		}
@@ -122,8 +189,9 @@ $controller =& new CoopController('RSVPs');
 $controller->cp =& $cp; // DO THIS FIRST!!
 
 
-$controller->addPage(new GetCode('getCode'));
-$controller->addPage(new GetBranchData('getBranchData'));
+$controller->addPage(new RSVPCode('rsvpcode'));
+$controller->addPage(new Common ('common'));
+$controller->addPage(new Payment('payment'));
 
 
 // This is the action we should always define ourselves
