@@ -137,9 +137,24 @@ class Payment extends HTML_QuickForm_Page
 								 $none); // NOT the coopView above!
 
 			$atdf->obj->fb_createSubmit = false; // important!
-
+			$this->CoopForm =& $atdf; // ALSO IMPORTANT!
+			
 			$atdf->useForm(&$this);
 
+			$atdf->obj->fb_fieldsToRender = array('income_id', 
+												  'ticket_type_id',
+												  // XXX temporary
+												  //'lead_id',
+												  //'ticket_quantity',
+												  'vip_flag');
+
+			$atdf->overrides['income']['fb_addNewLinkFields'] = array();
+			
+			$atdf->obj->fb_addNewLinkFields = array('income_id');
+
+			// only here, and only so it'll be hidden
+			array_push($atdf->obj->fb_requiredFields, 'lead_id');
+			
 			$atdf->build($_REQUEST);
 				 
 
@@ -149,6 +164,15 @@ class Payment extends HTML_QuickForm_Page
 			$atdf->legacyPassThru();
 
 			$atdf->addRequiredFields();
+
+			//pass thru's
+			$data =& $this->controller->container();
+
+			$atdf->obj->fb_defaults['ticket_quantity'] =  
+				$data['values']['common']['ticket_quantity'];
+			$atdf->obj->fb_defaults['lead_id'] = 
+						$data['values']['rsvpcode']['lead_id'];
+			$this->controller->cp->confessArray($data, 'damned data', 1, true);
 
 			$atdf->setDefaults();
 

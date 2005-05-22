@@ -46,7 +46,8 @@ class Tickets extends DB_DataObject
 
 	var $fb_linkDisplayFields = array('lead_id', 'income_id');
 
-	var $fb_requiredFields = array('ticket_type_id', 'ticket_quantity');
+	var $fb_requiredFields = array('ticket_type_id', 'school_year', 
+								   'ticket_quantity');
 
 	var $fb_enumFields = array('vip_flag');
 
