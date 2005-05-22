@@ -46,8 +46,7 @@ class CustomDisplay extends HTML_QuickForm_Action_Display
 {
 	function _renderForm(&$page)
 		{
-			global  $hack;
-			print $hack;
+			print $page->controller->cp->bufferedOutput;
 			print parent::_renderForm($page);
 
 		}

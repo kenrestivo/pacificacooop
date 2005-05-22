@@ -43,6 +43,7 @@ class coopPage
 	var $debug;
 	var $indexed_all; 			// legacy stuff. ALL of the callbacks
 	var $userStruct;				// cache of legacy info ($u)
+	var $bufferedOutput;			// to store buffered output, for QFC
 	
 	function coopPage($debug = false)
 		{

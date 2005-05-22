@@ -22,18 +22,18 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 //DB_DataObject::debugLevel(2);
 
 $cp = new coopPage( $debug);
-$hack .= $cp->pageTop();
+$cp->bufferedOutput .= $cp->pageTop();
 
 
 $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
-$hack .= $menu->topNavigation();
+$cp->bufferedOutput .= $menu->topNavigation();
 
-$hack .= "<p>QFC test</p>";
+$cp->bufferedOutput .= "<p>QFC test</p>";
 
 
-$hack .= $cp->selfURL('View');
-$hack .=  $cp->selfURL('Create New', array('action' => 'new'));
+$cp->bufferedOutput .= $cp->selfURL('View');
+$cp->bufferedOutput .=  $cp->selfURL('Create New', array('action' => 'new'));
 				   
 $atd = new CoopView(&$cp, 'job_descriptions', $none);
 $atd->recordActions = array('edit' => "Edit",
@@ -155,7 +155,7 @@ switch($_REQUEST['action']){
 
 //// DEFAULT (VIEW) //////
  default:
-	 print $hack;
+	 print $cp->bufferedOutput;
 	 print viewHack(&$cp, &$atd);
 	 break;
 }
