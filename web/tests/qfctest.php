@@ -8,8 +8,8 @@ require_once('CoopView.php');
 require_once('CoopForm.php');
 require_once('CoopMenu.php');
 require_once('lib/qfc_custom.php');
-require_once 'HTML/QuickForm/Controller.php';
-require_once 'HTML/QuickForm/Action.php';
+require_once('HTML/QuickForm/Controller.php');
+require_once('HTML/QuickForm/Action.php');
 
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
@@ -22,18 +22,18 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 //DB_DataObject::debugLevel(2);
 
 $cp = new coopPage( $debug);
-$cp->bufferedOutput .= $cp->pageTop();
+$cp->buffer($cp->pageTop());
 
 
 $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
-$cp->bufferedOutput .= $menu->topNavigation();
+$cp->buffer($menu->topNavigation());
 
-$cp->bufferedOutput .= "<p>QFC test</p>";
+$cp->buffer("<p>QFC test</p>");
 
 
-$cp->bufferedOutput .= $cp->selfURL('View');
-$cp->bufferedOutput .=  $cp->selfURL('Create New', array('action' => 'new'));
+$cp->buffer($cp->selfURL('View'));
+$cp->buffer($cp->selfURL('Create New', array('action' => 'new')));
 				   
 $atd = new CoopView(&$cp, 'job_descriptions', $none);
 $atd->recordActions = array('edit' => "Edit",
@@ -46,6 +46,12 @@ function viewHack(&$cp, &$atd)
 			
 }
 
+// XXX nasty!
+if($_REQUEST['action']){
+	$_SESSION['actionhack'] = $_REQUEST['action'];
+} else {
+	$_REQUEST['action'] =	$_SESSION['actionhack'];
+}
 
 // cheap dispatcher
 //confessArray($_REQUEST,'req');
@@ -127,10 +133,16 @@ switch($_REQUEST['action']){
 	 {
 		 function perform(&$page, $actionName)
 			 {
+				 print $page->controller->cp->flushBuffer();
 				 echo "Submit successful!<br>\n<pre>\n";
 				 confessObj($page->controller, 'yay');
 				 echo "\n</pre>\n";
+				 
+				 //clean up after yourself!
+				 $page->controller->container(true);
+				 unset($_SESSION['actionhack']);
 			 }
+
 	 }
 
 
@@ -155,7 +167,7 @@ switch($_REQUEST['action']){
 
 //// DEFAULT (VIEW) //////
  default:
-	 print $cp->bufferedOutput;
+	 print $cp->flushBuffer();
 	 print viewHack(&$cp, &$atd);
 	 break;
 }

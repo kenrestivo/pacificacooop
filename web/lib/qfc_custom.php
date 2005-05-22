@@ -46,7 +46,8 @@ class CustomDisplay extends HTML_QuickForm_Action_Display
 {
 	function _renderForm(&$page)
 		{
-			print $page->controller->cp->bufferedOutput;
+			// i hate this. but, should only be one display/page anyway
+			print $page->controller->cp->flushBuffer();
 			print parent::_renderForm($page);
 
 		}

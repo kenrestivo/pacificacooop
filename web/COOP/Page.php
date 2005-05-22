@@ -316,6 +316,25 @@ class coopPage
 		}
 
 
+	// ugly hacks to deal with QFC
+	function buffer($html, $additive = true)
+		{
+			if($additive){
+				$this->bufferedOutput .= $html;
+			} else {
+				$this->bufferedOutput = $html;
+			}
+		}
+
+	function flushBuffer($clean = true)
+		{
+			$res = $this->bufferedOutput;
+			if($clean){
+				unset($this->bufferedOutput);
+			}
+			return $res;
+		}
+
 
 } // END COOP PAGE CLASS
 
