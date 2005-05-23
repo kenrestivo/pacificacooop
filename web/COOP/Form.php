@@ -213,6 +213,7 @@ class coopForm extends CoopObject
 		{
 
 			// i ALWAYS want a choose onez. always. screw FB.
+			//TODO: use the globals! fb has one
 			$options[] = "-- CHOOSE ONE --";
 			//confessObj($this, 'this');
 			$link = explode(':', $this->forwardLinks[$key]);
@@ -386,7 +387,7 @@ class coopForm extends CoopObject
 			return $doubleopt;
 		}
 
-	/// XXX THIS SUCKS> it's only used in RSVP. remove later.
+	/// XXX THIS SUCKS> it's only used in old RSVP. remove later.
 	function passVarsThrough($varnames, $vars)
 		{
 			//XXX ack! this overrides what's there. should it?
@@ -740,12 +741,14 @@ class coopForm extends CoopObject
 			// ok, build the stinking thing
 			if(!$formpresent){
 				$sub = new CoopForm(&$this->page, $table, &$this); 
+				$this->page->printDebug("created subtable $table from parent $this->table", 2);
 				$sub->obj->fb_createSubmit = false;
 				$sub->build($_REQUEST); // request necessary to get submitted vals
 				$sub->addRequiredFields();
 				$this->subtables[$table] =& $sub; // cache it
 			} else {
 				$sub =& $this->subtables[$table];
+				$this->page->printDebug("HEY!! $sub->table already exists under $this->table", 2);
 			}
 
 			$inside = sprintf("<div>%s</div>", 

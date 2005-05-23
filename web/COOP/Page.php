@@ -138,7 +138,7 @@ class coopPage
 			return $indexed_everything;
 		} 
 
-	function confessArray($array, $message, $level = 1, $buffer = false)
+	function confessArray($array, $message, $level = 1, $buffer = true)
 		{
 			if($this->debug < $level){
 				return;
@@ -338,6 +338,19 @@ class coopPage
 				unset($this->bufferedOutput);
 			}
 			return $res;
+		}
+
+	function printDebug($string, $level, $buffered = true)
+		{
+			if($level < $this->debug){
+				return;
+			}
+
+			if($buffered){
+				$this->buffer("DEBUG $string");
+			} else {
+				print "DEBUG $string";
+			}
 		}
 
 

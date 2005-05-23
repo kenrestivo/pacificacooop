@@ -68,7 +68,8 @@ class coopObject
 
 			// read the overrides now
 			$top =& $this->findTop();
-			//$this->page->confessArray($top->overrides[$this->table], 'wtf', 4);
+			$this->page->confessArray($top->overrides[$this->table], 
+									  "processing overrides for $this->table, top is $top->table", 3);
 			// i clobber here.
 			$this->readConf(&$top->overrides[$this->table], true, false);
 

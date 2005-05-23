@@ -156,16 +156,6 @@ class Payment extends HTML_QuickForm_Page
 			// only here, and only so it'll be hidden
 			array_push($atdf->obj->fb_requiredFields, 'lead_id', 'vip_flag');
 			
-			$atdf->build($_REQUEST);
-				 
-
-			// XXX gah, hack around the hokey
-			$this->CoopForm =& $atdf;
-
-			$atdf->legacyPassThru();
-
-			$atdf->addRequiredFields();
-
 			//pass thru's
 			$data =& $this->controller->container();
 
@@ -181,6 +171,21 @@ class Payment extends HTML_QuickForm_Page
 
 			$atdf->overrides['income']['fb_defaults']['payment_amount'] =  
 				$data['values']['common']['payment_amount'];
+
+			$atdf->overrides['income']['fb_addNewLinkFields'] = array();
+			$atdf->overrides['income']['fb_fieldsToRender'] = 
+				array('check_number', 'check_date', 'payer', 
+					  'account_number', 'note', 'bookkeeper_date');
+			
+			$atdf->build($_REQUEST);
+				 
+
+			// XXX gah, hack around the hokey
+			$this->CoopForm =& $atdf;
+
+			$atdf->legacyPassThru();
+
+			$atdf->addRequiredFields();
 
 			$atdf->setDefaults();
 
@@ -204,7 +209,7 @@ class ActionProcess extends HTML_QuickForm_Action
 			//clean up after yourself, and bring me back to top!
 			$page->controller->container(true);
 			//TODO: function to get FIRST page
-			$view =& $page->controller->getPage('getCode');
+			$view =& $page->controller->getPage('rsvpcode');
 
 			print $view->handle('display');
 		}
@@ -217,6 +222,7 @@ class ActionProcess extends HTML_QuickForm_Action
 $cp = new coopPage( $debug);
 $cp->buffer($cp->pageTop());
 
+//$cp->debug = 3;					//  XXX remove!
 
 $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
