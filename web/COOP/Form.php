@@ -44,6 +44,7 @@ class coopForm extends CoopObject
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function &build($vars = false)
 		{
+			$this->page->printDebug("HEY HEY yeah yeah", 1);
 			$this->page->confessArray($vars, "$this->table build vars", 3);
 			$this->id = (int)$vars[$this->prependTable($this->pk)];
 			if($this->id > 0){
@@ -690,7 +691,6 @@ class coopForm extends CoopObject
 
 	function validate()
 		{
-
 			$vals =& $this->form->getSubmitValues();
 			$st= $vals[$this->prependTable('subtables')];
 			if(is_array($st)){
@@ -698,7 +698,11 @@ class coopForm extends CoopObject
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
 					$this->page->debug > 1 &&
-						print "<br>DEBUG validating $key $val (table $table) for $this->table";
+						print "<br>DEBUG validating $key $val (subtable $table) of $this->table";
+					
+					if(!is_object($this->subtables[$table])){
+						PEAR::raiseError("subtable object wasn't created", 888);
+					}
 					$temp = $this->subtables[$table]->validate(); // OBJECT!
 					if($this->page->debug > 1 && $temp == false){
 						print "<br>DEBUG $table didn't validate";
@@ -714,14 +718,18 @@ class coopForm extends CoopObject
 				}
 			}
 			
-			$temp  = $this->form->validate(); // FORM!
-			if($this->page->debug > 1 && $temp == false){
-				print "<br>DEBUG $this->table didn't validate";
-				//confessObj($this->form, $this->table . ' form');
-			}
-			$res += $temp;
-			$count++;
-			
+			// NOTE CoopForm is for QFC. i must stop recursion if i'm there
+			if(!is_object($this->form->CoopForm)){
+				$temp  = $this->form->validate(); // FORM!
+				
+				if($this->page->debug > 1 && $temp == false){
+					print "<br>DEBUG $this->table didn't validate";
+					//confessObj($this->form, $this->table . ' form');
+				}
+				$res += $temp;
+				$count++;
+			}			
+
 			$this->page->debug > 1 && 
 				printf("<br>DEBUG %s cumulative validation [%d/%d]", 
 					   $this->table, $res, $count);
@@ -741,14 +749,14 @@ class coopForm extends CoopObject
 			// ok, build the stinking thing
 			if(!$formpresent){
 				$sub = new CoopForm(&$this->page, $table, &$this); 
-				$this->page->printDebug("created subtable $table from parent $this->table", 2);
+				$this->page->printDebug("created subtable $table from parent $this->table", 1);
 				$sub->obj->fb_createSubmit = false;
 				$sub->build($_REQUEST); // request necessary to get submitted vals
 				$sub->addRequiredFields();
 				$this->subtables[$table] =& $sub; // cache it
 			} else {
 				$sub =& $this->subtables[$table];
-				$this->page->printDebug("HEY!! $sub->table already exists under $this->table", 2);
+				$this->page->printDebug("HEY!! $sub->table already exists under $this->table", 1);
 			}
 
 			$inside = sprintf("<div>%s</div>", 

@@ -193,6 +193,32 @@ class Payment extends HTML_QuickForm_Page
 
 
 		}
+
+	function validate()
+		{
+
+			if(is_object($this->CoopForm)){
+				$res += $this->CoopForm->validate();
+				$count++;
+
+			}
+
+			$res += parent::validate();
+			$count++;
+
+			return $res == 2 ? true : false;
+		}
+
+
+    function Payment($formName, $method = 'post', $target = '_self', 
+					 $attributes = null)
+    {
+		// MUST tracksubmit, or BAAAAD things happen
+        $this->HTML_QuickForm($formName, $method, '', $target, $attributes, 
+							  true);
+		
+	}
+
 }
 
 
@@ -230,6 +256,8 @@ $cp->buffer($menu->topNavigation());
 
 $cp->buffer("<p>RSVPs</p>");
 
+$cp->printDebug("HEY HEY yeah yeah", 1);
+
 
 $controller =& new CoopController('RSVPs');
 $controller->cp =& $cp; // DO THIS FIRST!!
@@ -249,8 +277,7 @@ $controller->addAction('display', new CustomDisplay());
 
 $controller->run();
 
-
-
+print $cp->flushBuffer();
 
 done ();
 

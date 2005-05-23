@@ -40,7 +40,7 @@ function confessObj($obj, $text)
 class coopPage
 {
 	var $auth;
-	var $debug;
+	var $debug;					// debug level. used for printf's
 	var $indexed_all; 			// legacy stuff. ALL of the callbacks
 	var $userStruct;				// cache of legacy info ($u)
 	var $bufferedOutput;			// to store buffered output, for QFC
@@ -348,9 +348,11 @@ class coopPage
 
 			if($buffered){
 				$this->buffer("DEBUG $string");
-			} else {
-				print "DEBUG $string";
-			}
+				return;
+			} 
+
+			print "DEBUG $string";
+
 		}
 
 
