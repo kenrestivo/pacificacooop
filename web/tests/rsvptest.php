@@ -146,14 +146,15 @@ class Payment extends HTML_QuickForm_Page
 												  // XXX temporary
 												  //'lead_id',
 												  //'ticket_quantity',
-												  'vip_flag');
+												  //'vip_flag'
+				);
 
 			$atdf->overrides['income']['fb_addNewLinkFields'] = array();
 			
 			$atdf->obj->fb_addNewLinkFields = array('income_id');
 
 			// only here, and only so it'll be hidden
-			array_push($atdf->obj->fb_requiredFields, 'lead_id');
+			array_push($atdf->obj->fb_requiredFields, 'lead_id', 'vip_flag');
 			
 			$atdf->build($_REQUEST);
 				 
@@ -168,11 +169,18 @@ class Payment extends HTML_QuickForm_Page
 			//pass thru's
 			$data =& $this->controller->container();
 
-			$atdf->obj->fb_defaults['ticket_quantity'] =  
-				$data['values']['common']['ticket_quantity'];
+
 			$atdf->obj->fb_defaults['lead_id'] = 
 						$data['values']['rsvpcode']['lead_id'];
-			$this->controller->cp->confessArray($data, 'damned data', 1, true);
+
+			$atdf->obj->fb_defaults['ticket_quantity'] =  
+				$data['values']['common']['ticket_quantity'];
+			
+			$atdf->obj->fb_defaults['vip_flag'] =  
+				$data['values']['common']['vip_flag'];
+
+			$atdf->overrides['income']['fb_defaults']['payment_amount'] =  
+				$data['values']['common']['payment_amount'];
 
 			$atdf->setDefaults();
 
