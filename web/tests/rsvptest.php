@@ -143,24 +143,21 @@ class Payment extends HTML_QuickForm_Page
 
 			$atdf->obj->fb_fieldsToRender = array('income_id', 
 												  'ticket_type_id',
-												  // XXX temporary
-												  //'lead_id',
-												  //'ticket_quantity',
-												  //'vip_flag'
 				);
 
 			$atdf->overrides['income']['fb_addNewLinkFields'] = array();
 			$atdf->overrides['income']['fb_fieldsToRender'] = 
-				array('payment_amount');
+				array('check_number', 'check_date', 'payer', 'payment_amount',
+					  'account_number', 'note', 'bookkeeper_date');
 			
 			$atdf->obj->fb_addNewLinkFields = array('income_id');
 
 			// only here, and only so it'll be hidden
-			array_push($atdf->obj->fb_requiredFields, 'lead_id', 'vip_flag');
+			array_push($atdf->obj->fb_requiredFields, 
+					   'lead_id', 'ticket_quantity', 'vip_flag');
 			
 			//pass thru's
 			$data =& $this->controller->container();
-
 
 			$atdf->obj->fb_defaults['lead_id'] = 
 						$data['values']['rsvpcode']['lead_id'];
@@ -174,11 +171,6 @@ class Payment extends HTML_QuickForm_Page
 			$atdf->overrides['income']['fb_defaults']['payment_amount'] =  
 				$data['values']['common']['payment_amount'];
 
-			$atdf->overrides['income']['fb_addNewLinkFields'] = array();
-			$atdf->overrides['income']['fb_fieldsToRender'] = 
-				array('check_number', 'check_date', 'payer', 
-					  'account_number', 'note', 'bookkeeper_date');
-			
 			$atdf->build($_REQUEST);
 				 
 
