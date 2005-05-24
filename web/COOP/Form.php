@@ -682,7 +682,9 @@ class coopForm extends CoopObject
 			return sprintf('%s-%s', $this->table , $col);
 		}
 
-	function validate()
+	// set subforms_only if you are using QFC and ONLY want to validate subforms
+	// not the mainform
+	function validate($subforms_only = false)
 		{
 			$vals =& $this->form->getSubmitValues();
 			$st= $vals[$this->prependTable('subtables')];
@@ -710,7 +712,7 @@ class coopForm extends CoopObject
 			}
 			
 			// NOTE CoopForm is for QFC. i must stop recursion if i'm there
-			if(!is_object($this->form->CoopForm)){
+			if(!$subforms_only){
 				$temp  = $this->form->validate(); // FORM!
 				
 				if($this->page->debug > 1 && $temp == false){

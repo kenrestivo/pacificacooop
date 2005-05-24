@@ -198,10 +198,22 @@ class Payment extends HTML_QuickForm_Page
 		{
 
 			if(is_object($this->CoopForm)){
-				$res += $this->CoopForm->validate();
+				// MUST send true arg to validate, or it recurses endlessly!
+				$res += $this->CoopForm->validate(true);
 				$count++;
-
+				
+				// XXX HACK to only validate submitted subforms
+				// when using server-side expanding of subforms
+				$st = $this->getSubmitValue(
+					$this->CoopForm->prependTable('subtables'));
+				foreach($st as $table => $val){
+					if(strstr($val, 'Add New')){
+						return $res;
+					}
+				}
 			}
+
+
 
 			$res += parent::validate();
 			$count++;
