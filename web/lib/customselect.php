@@ -17,7 +17,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			$vals =& $this->CoopForm->form->getSubmitValues();
 
 			//confessObj($this->CoopForm->form, 'wfa');
-			$this->CoopForm->page->confessArray($vals, 'values submitted', 1);
+			$this->CoopForm->page->confessArray(
+				$vals, "customselect $table $field values", 4);
 
 
 			// find out what subforms have been requested with ADD NEW

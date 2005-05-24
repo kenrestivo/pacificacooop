@@ -172,6 +172,7 @@ function done()
 	
 	print"</body></html> ";
 	session_write_close();		// redundant?
+	ob_end_flush();
 	exit;
 } #END DONE
 

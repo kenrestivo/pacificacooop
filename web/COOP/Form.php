@@ -693,7 +693,7 @@ class coopForm extends CoopObject
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
 					$this->page->debug > 1 &&
-						print "<br>DEBUG validating $key $val (subtable $table) of $this->table";
+						print "<br>DEBUG validating $key [$val] table $table (subtable of $this->table)";
 					
 					$this->addSubTable($key, $table);
 					if(!is_object($this->subtables[$table])){

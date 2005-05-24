@@ -51,6 +51,8 @@ class coopObject
 			$this->recurseLevel = $level;
 			$this->parentCO = $parentCO;
 			
+			$this->page->printDebug("CoopObject: instantiating $table from parent $parentCO->table", 3);
+
  			$this->obj = DB_DataObject::factory($this->table); // & instead?
   			if (PEAR::isError($this->obj)){
 				$this->page->kensPEARErrorHandler(&$this->obj);
@@ -229,8 +231,8 @@ class coopObject
 	// recurses through parents, until it finds the top!
 	function &findTop()
 		{
-			if($this->parentCO && 
-			   in_array('findTop', get_class_methods($this->parentCO)))
+			if(is_object($this->parentCO) && 
+			   is_a($this->parentCO, 'CoopObject'))
 			{
 				return $this->parentCO->findTop();
 			}

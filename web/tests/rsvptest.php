@@ -150,6 +150,8 @@ class Payment extends HTML_QuickForm_Page
 				);
 
 			$atdf->overrides['income']['fb_addNewLinkFields'] = array();
+			$atdf->overrides['income']['fb_fieldsToRender'] = 
+				array('payment_amount');
 			
 			$atdf->obj->fb_addNewLinkFields = array('income_id');
 
