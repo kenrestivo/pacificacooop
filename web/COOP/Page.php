@@ -340,18 +340,18 @@ class coopPage
 			return $res;
 		}
 
-	function printDebug($string, $level, $buffered = true)
+	function printDebug($string, $level, $buffered = false)
 		{
 			if($level < $this->debug){
 				return;
 			}
 
 			if($buffered){
-				$this->buffer("DEBUG $string");
+				$this->buffer("<p>DEBUG $string</p>");
 				return;
 			} 
 
-			print "DEBUG $string";
+			print "<p>DEBUG $string</p>";
 
 		}
 
