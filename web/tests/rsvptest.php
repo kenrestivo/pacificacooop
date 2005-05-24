@@ -245,18 +245,17 @@ class ActionProcess extends HTML_QuickForm_Action
 
 ///////// MAIN
 
-$cp = new coopPage( $debug);
+//$debug = 0;
+
+$cp = new coopPage($debug);
 $cp->buffer($cp->pageTop());
 
-//$cp->debug = 3;					//  XXX remove!
 
 $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
 $cp->buffer($menu->topNavigation());
 
 $cp->buffer("<p>RSVPs</p>");
-
-$cp->printDebug("HEY HEY yeah yeah", 1);
 
 
 $controller =& new CoopController('RSVPs');

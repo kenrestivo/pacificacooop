@@ -138,7 +138,7 @@ class coopPage
 			return $indexed_everything;
 		} 
 
-	function confessArray($array, $message, $level = 1, $buffer = true)
+	function confessArray($array, $message, $level = 1, $buffer = false)
 		{
 			if($this->debug < $level){
 				return;

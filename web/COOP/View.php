@@ -134,6 +134,7 @@ class coopView extends CoopObject
 	
 		}
 
+	// XXX this is cruft, not used anywhere. remove it
 	function addSubTables(&$tab, $links)
 		{
 			$debug = 1;
