@@ -14,18 +14,15 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			//confessObj($this, 'the customselect');
 			list($table, $field) = explode('-', $this->getName());
 
-			// XXX NOTE i am using getsubmit, not export! QFC!
-			$vars =& $this->CoopForm->form->getSubmitValues();
-
+			// used in a few places
 			$qfname = sprintf("%s-subtables-%s", $table, $field);
 
-			//confessObj($this->CoopForm->form, 'wfa');
-			$this->CoopForm->page->confessArray(
-				$vars, "customselect $table $field values", 4);
-
 			// find out what subforms have been requested iwith ADD NEW
+			// NOTE MUST use submit for return trips!
+			// because this hidden is NOT part of $this
+			$vars =& $this->CoopForm->form->getSubmitValues();
 			if(isset($vars[$qfname])){  
-				// XXX how to get the form?
+				// NOTE i'm already at tohtml, so the coopform cache is useless
 				$sub =& $this->CoopForm->addSubtable($field);
 
 				// so that it stays expanded ;-)

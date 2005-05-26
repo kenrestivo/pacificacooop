@@ -151,7 +151,7 @@ class coopForm extends CoopObject
 						$type, 
 						$fullkey, false, 
 						$this->selectOptions($key));
-					$el->CoopForm =& $this; // save cache
+					$el->CoopForm =& $this; // save cache for customselect
 				} else if(is_array($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{

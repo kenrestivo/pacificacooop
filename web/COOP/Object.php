@@ -366,7 +366,8 @@ class coopObject
 						$clobber) 
 					{
 						$this->page->printDebug(
-							 "CoopObject::readConf $this->table $fbkey being set to $value", 3);
+							 "CoopObject::readConf $this->table $fbkey being set to $value", 
+							 4);
 						$this->obj->$fbkey = $value;
 					}
 				}
