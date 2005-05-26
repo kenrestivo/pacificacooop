@@ -175,7 +175,8 @@ class Payment extends CoopQuickForm_Page
 			$atdf->overrides['income']['fb_defaults']['payment_amount'] =  
 				$data['values']['common']['payment_amount'];
 
-			$atdf->build($_REQUEST);
+			$atdf->build($this->controller->exportValues(
+							 $this->attributes['id']));
 				 
 
 			// XXX gah, hack around the hokey

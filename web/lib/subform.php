@@ -25,6 +25,8 @@ class HTML_QuickForm_SubForm extends HTML_QuickForm_static {
         if ($form !== null) {
             $this->setForm($form);
         }
+		//confessObj($this, 'subform');
+		//return it?? use parent::?
         HTML_QuickForm_static::HTML_QuickForm_static($name, $label);
     }
 
@@ -47,6 +49,7 @@ class HTML_QuickForm_SubForm extends HTML_QuickForm_static {
      */
     function toHtml()
     {
+		// ugly way to reset al this, since it's cloned
         if (isset($this->_renderer)) {
             $this->_renderer->_html =
                 $this->_renderer->_hiddenHtml =
@@ -57,6 +60,7 @@ class HTML_QuickForm_SubForm extends HTML_QuickForm_static {
         } else {
             $this->_renderer = clone(HTML_QuickFor::default_Renderer());
         }
+		// clever. do this in the template instead of on the final result
         $this->_renderer->setFormTemplate(
 			preg_replace('!</?form[^>]*>!', '',
 						 $this->_renderer->_formTemplate));

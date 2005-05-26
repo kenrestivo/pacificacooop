@@ -44,8 +44,7 @@ class CoopQuickForm_Page extends HTML_QuickForm_Page
 				
 				// XXX HACK to only validate submitted subforms
 				// when using server-side expanding of subforms
-				$st = $this->getSubmitValue(
-					$this->CoopForm->prependTable('subtables'));
+				$st = $this->CoopForm->getSubtables();
 				foreach($st as $table => $val){
 					if(strstr($val, 'Add New')){
 						return $res;
@@ -68,8 +67,8 @@ class CoopQuickForm_Page extends HTML_QuickForm_Page
 			
 			//PEAR::raiseError("how did i get here?", 999);
 
-			confessObj($this, 'exportvalues wtf');
-
+			//confessObj($this, 'exportvalues wtf');
+			
 			if(count($this->CoopForm->subtables)){
 				$this->CoopForm->page->confessArray($this->CoopForm->subtables, 
 													"$this->CoopForm->table subbies", 
@@ -82,7 +81,7 @@ class CoopQuickForm_Page extends HTML_QuickForm_Page
 			$res = array_merge($res, parent::exportValues($elementlist));
 
 			$this->CoopForm->page->confessArray($res, 
-									  sprintf("exportValues results %s %s",
+									  sprintf("exportValues results %s",
 											  $this->CoopForm->table),
 									  2);
 			return $res;

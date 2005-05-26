@@ -29,6 +29,7 @@ require_once('lib/advmultselect.php');
 require_once('lib/customselect.php');
 require_once('lib/customdatebox.php');
 require_once('lib/customrequired.php');
+require_once('lib/subform.php');
 
 //////////////////////////////////////////
 /////////////////////// COOP FORM CLASS
@@ -147,11 +148,25 @@ class coopForm extends CoopObject
 					$type = (!is_array($this->obj->fb_addNewLinkFields) ||
 							 in_array($key, $this->obj->fb_addNewLinkFields)) 
 						? 'customselect' : 'select';
-					$el =& $this->form->addElement(
-						$type, 
-						$fullkey, false, 
-						$this->selectOptions($key));
-					$el->CoopForm =& $this; // save cache for customselect
+					// i'm doing the dispatch here. prolly not a great idea
+					$subname =sprintf('%s-subtables-%s', $this->table, $key); 
+					if($vars[$subname]){
+						$sub =& $this->addSubtable($key); //XXX do it globally instead?
+						$el =& $this->form->addElement('subForm', 
+													   sprintf("%s-%s-subform",
+															   $this->table,
+															   $this->key), 
+													   false,
+													   &$sub->form);
+						// so it comes back around
+						$this->form->addElement('hidden',$subname, 'pass-thru');
+					} else {
+						$el =& $this->form->addElement(
+							$type, 
+							$fullkey, false, 
+							$this->selectOptions($key));
+					}
+
 				} else if(is_array($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{

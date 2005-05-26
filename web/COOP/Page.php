@@ -47,11 +47,10 @@ function dump($data)
 	static $fp;
 	if(!$fp){
 		$fp = fopen($fname, 'w');
-		fwrite($fp, sprintf("<p>%s %s via %s . debug level %d</p>",
+		fwrite($fp, sprintf("<p>%s %s via %s .</p>",
 							$_SERVER['REQUEST_URI'], 
 							$_SERVER['REQUEST_METHOD'], 
-							$_SERVER['HTTP_REFERER'],
-							$this->debug));
+							$_SERVER['HTTP_REFERER']));
 	}
 	fwrite($fp, $data);
 }
@@ -71,6 +70,7 @@ class coopPage
 			$this->debug = $debug;
 			PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 
 								   array(&$this, 'kensPEARErrorHandler'));
+			$this->debug && dump("debug level $this->debug");
 		}
 
 	// for use with the old, non-object-oriented, homegrown auth/dispatcher
