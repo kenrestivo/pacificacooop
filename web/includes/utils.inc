@@ -171,8 +171,8 @@ function done()
 	print "</div><!-- end footer div -->"; // closes out bottom div
 	
 	print"</body></html> ";
-	session_write_close();		// redundant?
 	ob_end_flush();
+	session_write_close();		// redundant?
 	exit;
 } #END DONE
 

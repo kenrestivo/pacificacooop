@@ -127,12 +127,16 @@ class Common extends HTML_QuickForm_Page
 		}
 }
 
-class Payment extends HTML_QuickForm_Page
+class Payment extends CoopQuickForm_Page
 {
+
 	function buildForm()
 		{
 			$this->_formBuilt = true;
 
+			//print "building form";
+			//PEAR::raiseError("how did i get here?", 999);
+			
 			$atdf = new CoopForm(&$this->controller->cp, 'tickets', 
 								 $none); // NOT the coopView above!
 
@@ -188,43 +192,6 @@ class Payment extends HTML_QuickForm_Page
 
 		}
 
-	function validate()
-		{
-
-			if(is_object($this->CoopForm)){
-				// MUST send true arg to validate, or it recurses endlessly!
-				$res += $this->CoopForm->validate(true);
-				$count++;
-				
-				// XXX HACK to only validate submitted subforms
-				// when using server-side expanding of subforms
-				$st = $this->getSubmitValue(
-					$this->CoopForm->prependTable('subtables'));
-				foreach($st as $table => $val){
-					if(strstr($val, 'Add New')){
-						return $res;
-					}
-				}
-			}
-
-
-
-			$res += parent::validate();
-			$count++;
-
-			return $res == 2 ? true : false;
-		}
-
-
-    function Payment($formName, $method = 'post', $target = '_self', 
-					 $attributes = null)
-    {
-		// MUST tracksubmit, or BAAAAD things happen
-        $this->HTML_QuickForm($formName, $method, '', $target, $attributes, 
-							  true);
-		
-	}
-
 }
 
 
@@ -251,7 +218,7 @@ class ActionProcess extends HTML_QuickForm_Action
 
 ///////// MAIN
 
-//$debug = 0;
+$debug = 3;
 
 $cp = new coopPage($debug);
 $cp->buffer($cp->pageTop());
@@ -281,6 +248,10 @@ $controller->addAction('display', new CustomDisplay());
 
 
 $controller->run();
+
+// NOTE! jumps happen in run(),
+// so any output from anything before jumps won't get printed.
+// i hate jumps.
 
 print $cp->flushBuffer();
 

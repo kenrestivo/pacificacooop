@@ -26,13 +26,33 @@ require_once("auth.inc");
 require_once('Mail.php');
 
 
-function confessObj($obj, $text)
+function confessObj($obj, $text, $outofband = true)
 {
 
-    print"<pre>\n======== $text ============\n";
-    print htmlentities(print_r($obj, 1));
-    print "</pre>";
- 
+    $res = sprintf("<pre>\n======== $text ============\n%s</pre>",
+				   htmlentities(print_r($obj, 1)));
+
+	if($outofband){
+		dump($$res);
+	} else {
+		print $res;
+	}
+}
+
+function dump($data)
+{
+	// the getcwd is kind of redundant
+	$fname = sprintf("%s/logs/%s-debug.html", 
+					 getcwd(), mt_rand());
+	static $fp;
+	if(!$fp){
+		$fp = fopen($fname, 'w');
+		fwrite($fp, sprintf("<p>%s %s via %s</p>",
+							$_SERVER['REQUEST_URI'], 
+							$_SERVER['REQUEST_METHOD'], 
+							$_SERVER['HTTP_REFERER']));
+	}
+	fwrite($fp, $data);
 }
 
 //////////////////////////////////////////
@@ -109,7 +129,6 @@ class coopPage
 				$this->userStruct =  getUser($this->auth['uid']);
 			} else{
 				// show the login, then be done with this
-				ob_end_flush();
 				done();
 			}
 
@@ -138,17 +157,16 @@ class coopPage
 			return $indexed_everything;
 		} 
 
-	function confessArray($array, $message, $level = 1, $buffer = true)
+	function confessArray($array, $message, $level = 1, $outofband = true)
 		{
 			if($this->debug < $level){
 				return;
 			}
-			$res =& confessArray($array, $message, $buffer);
-			if($buffer){
-				$this->buffer($res);
-			}
-		   
-			return $res;
+			// NOTE no need to print confessarray, $outofband tells it to
+			$res = confessArray($array, $message, $outofband);
+			if($outofband){
+				dump(&$res);
+			} 
 		}
 
 
@@ -335,19 +353,25 @@ class coopPage
 		{
 			$res = $this->bufferedOutput;
 			if($clean){
+				ob_end_flush();
 				unset($this->bufferedOutput);
 			}
+			dump("flushing buffered output");
 			return $res;
 		}
 
-	function printDebug($string, $level, $buffered = true)
+	function printDebug($string, $level, $outofband = true)
 		{
 			if($level < $this->debug){
 				return;
 			}
 
-			if($buffered){
-				$this->buffer("<p>DEBUG $string</p>");
+			if($outofband){
+				$foo = "<p>DEBUG ";
+				$bar = "</p>";
+				dump($foo);
+				dump($string);
+				dump($bar);
 				return;
 			} 
 

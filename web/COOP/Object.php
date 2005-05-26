@@ -51,7 +51,7 @@ class coopObject
 			$this->recurseLevel = $level;
 			$this->parentCO = $parentCO;
 			
-			$this->page->printDebug("CoopObject: instantiating $table from parent $parentCO->table", 3);
+			$this->page->printDebug("CoopObject: instantiating $table from $parentCO->table", 3);
 
  			$this->obj = DB_DataObject::factory($this->table); // & instead?
   			if (PEAR::isError($this->obj)){
@@ -365,8 +365,8 @@ class coopObject
 					if ((in_array($key, $vars) && !isset($this->obj->$fbkey)) ||
 						$clobber) 
 					{
-						$this->page->debug > 3 &&
-							print "<br>DEBUG CoopObject::readConf $this->table $fbkey being set to $value";
+						$this->page->printDebug(
+							 "CoopObject::readConf $this->table $fbkey being set to $value", 3);
 						$this->obj->$fbkey = $value;
 					}
 				}

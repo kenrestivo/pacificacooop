@@ -44,7 +44,8 @@ class coopForm extends CoopObject
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function &build($vars = false)
 		{
-			$this->page->confessArray($vars, "$this->table build vars", 3);
+			$this->page->confessArray($vars, "BUILDING $this->table with vars", 
+									  3);
 			$this->id = (int)$vars[$this->prependTable($this->pk)];
 			if($this->id > 0){
 				$this->obj->get($this->id);
@@ -53,7 +54,7 @@ class coopForm extends CoopObject
 						   E_USER_NOTICE);
 			}
 			$formname = sprintf('edit_%s', $this->table);
-			if(!$this->form){	// deal with QFC
+			if(!is_object($this->form)){	// deal with QFC
 				$this->form =& new HTML_QuickForm($formname, false, false, 
 												  false, false, true);
 			}
@@ -256,8 +257,7 @@ class coopForm extends CoopObject
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
-					$this->page->debug > 1 &&
-						print "<br>DEBUG processing $key $val (table $table) for $this->table";
+						$this->page->printDebug("<br>DEBUG processing $key $val (table $table) for $this->table", 1);
 					$sub =& $this->subtables[$table]; // subobject cache
 					$sub->form->process(array(&$sub, 'process'));
 					$vars[$this->prependTable($key)] = $sub->id; // yay!!!
@@ -303,10 +303,10 @@ class coopForm extends CoopObject
 								
 				//TODO: escape currency chars, as per shared.inc
 								
-				$this->page->debug > 2 && 
-					printf("CoopForm::scrubForSave(%s) %d chars<br>", 
-						   $fullkey, strlen($val));
-
+				$this->page->printDebug(
+					sprintf("CoopForm::scrubForSave(%s) %d chars<br>", 
+						   $fullkey, strlen($val)), 2);
+				
 				if($val == ''){ 
 					$cleanvars[$key] = DB_DataObject_Cast::sql('NULL') ;
 				} else if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
@@ -692,8 +692,7 @@ class coopForm extends CoopObject
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
-					$this->page->debug > 1 &&
-						print "<br>DEBUG validating $key [$val] table $table (subtable of $this->table)";
+						$this->page->printDebug("<br>DEBUG validating $key [$val] table $table (subtable of $this->table)", 1);
 					
 					$this->addSubTable($key, $table);
 					if(!is_object($this->subtables[$table])){
@@ -701,8 +700,8 @@ class coopForm extends CoopObject
 						PEAR::raiseError("subtable object wasn't created", 888);
 					}
 					$temp = $this->subtables[$table]->validate(); // OBJECT!
-					if($this->page->debug > 1 && $temp == false){
-						print "<br>DEBUG $table didn't validate";
+					if($temp == false){
+						$this->page->printDebug("<br>DEBUG $table didn't validate", 1);
 						confessArray($this->subtables[$table]->form->_errors, 
 									 $table . ' form errors!', 3);
 					}
@@ -715,17 +714,17 @@ class coopForm extends CoopObject
 			if(!$subforms_only){
 				$temp  = $this->form->validate(); // FORM!
 				
-				if($this->page->debug > 1 && $temp == false){
-					print "<br>DEBUG $this->table didn't validate";
+				if($temp == false){
+					$this->page->printDebug("<br>DEBUG $this->table didn't validate", 1);
 					//confessObj($this->form, $this->table . ' form');
 				}
 				$res += $temp;
 				$count++;
 			}			
 
-			$this->page->debug > 1 && 
-				printf("<br>DEBUG %s cumulative validation [%d/%d]", 
-					   $this->table, $res, $count);
+			$this->page->printDebug(
+				sprintf("<br>DEBUG %s cumulative validation [%d/%d]", 
+						$this->table, $res, $count), 1);
 
 			return  $res == $count ? true : false;
 		}
@@ -741,10 +740,10 @@ class coopForm extends CoopObject
 			
 			// ok, build the stinking thing
 			if(is_object($sub =& $this->subtables[$table])){
-				$this->page->printDebug("$sub->table already exists under $this->table, not creating", 2);
+				$this->page->printDebug("subtable $sub->table already exists under $this->table, not creating", 2);
 			} else {
 				$sub =& new CoopForm(&$this->page, $table, &$this); 
-				$this->page->printDebug("created subtable $table from parent $this->table", 2);
+				$this->page->printDebug("created subtable $table from $this->table", 2);
 				$sub->obj->fb_createSubmit = false;
 				$sub->build($_REQUEST); // request necessary to get submitted vals
 				$sub->addRequiredFields();

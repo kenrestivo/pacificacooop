@@ -27,7 +27,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
 
 			// show the subform if requsted by client
-			if(isset($st[$field])){
+			if(1 /*isset($st[$field])*/ ){  // XXX! hey! i'm wedging it open!
 				// XXX how to get the form?
 				$sub =& $this->CoopForm->addSubtable($field);
 
