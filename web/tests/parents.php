@@ -11,7 +11,7 @@ require_once('HTML/Table.php');
 
 
 
-$debug = 2;
+//$debug = 2;
 
 //MAIN
 //$_SESSION['toptable'] 

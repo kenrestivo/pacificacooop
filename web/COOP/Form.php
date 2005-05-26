@@ -252,8 +252,7 @@ class coopForm extends CoopObject
 			
 
 			/// process recursive subtables FIRST
-			$st = $vars[$this->prependTable('subtables')];
-			if(is_array($st)){
+			if(is_array($st = $this->getSubtables($vars))){
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
@@ -412,8 +411,8 @@ class coopForm extends CoopObject
 // 							   E_USER_NOTICE);
 				
 					// exempt subfields
-					$vars = $this->form->getSubmitValues();
-					if(!isset($vars[$this->prependTable('subtables')][$fieldname])){
+					$st = $this->getSubtables();
+					if(!isset($st[$fieldname])){
 						$this->form->addRule($this->prependTable($fieldname), 
 											 "$key mustn't be empty.", 
 											 'customrequired');
@@ -686,13 +685,11 @@ class coopForm extends CoopObject
 	// not the mainform
 	function validate($subforms_only = false)
 		{
-			$vals =& $this->form->getSubmitValues();
-			$st= $vals[$this->prependTable('subtables')];
-			if(is_array($st)){
+			if(is_array($st = $this->getSubtables())){
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
-						$this->page->printDebug("<br>DEBUG validating $key [$val] table $table (subtable of $this->table)", 1);
+						$this->page->printDebug("validating $key [$val] table $table (subtable of $this->table)", 1);
 					
 					$this->addSubTable($key, $table);
 					if(!is_object($this->subtables[$table])){
@@ -701,7 +698,7 @@ class coopForm extends CoopObject
 					}
 					$temp = $this->subtables[$table]->validate(); // OBJECT!
 					if($temp == false){
-						$this->page->printDebug("<br>DEBUG $table didn't validate", 1);
+						$this->page->printDebug("$table didn't validate", 1);
 						confessArray($this->subtables[$table]->form->_errors, 
 									 $table . ' form errors!', 3);
 					}
@@ -715,7 +712,7 @@ class coopForm extends CoopObject
 				$temp  = $this->form->validate(); // FORM!
 				
 				if($temp == false){
-					$this->page->printDebug("<br>DEBUG $this->table didn't validate", 1);
+					$this->page->printDebug("$this->table didn't validate", 1);
 					//confessObj($this->form, $this->table . ' form');
 				}
 				$res += $temp;
@@ -723,7 +720,7 @@ class coopForm extends CoopObject
 			}			
 
 			$this->page->printDebug(
-				sprintf("<br>DEBUG %s cumulative validation [%d/%d]", 
+				sprintf("%s cumulative validation [%d/%d]", 
 						$this->table, $res, $count), 1);
 
 			return  $res == $count ? true : false;
@@ -761,6 +758,20 @@ class coopForm extends CoopObject
 			$this->form =& $form;
 		}
 
+	//returns array of subtables, culled  from vars or getsubmitvars
+	function getSubtables($vars = null)
+		{
+			if(!is_array($vars)){
+				$vars = $this->form->getSubmitValues();
+			}
+			$search = sprintf("/%s-subtables-(.+)/", $this->table);
+			foreach($vars as $key => $val){
+				if(preg_match($search, $key, $matches)){
+					$st[$matches[1]] = $val;
+				}
+			}
+			return $st;
+		}
 	
 
 } // END COOP FORM CLASS

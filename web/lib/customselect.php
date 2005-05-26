@@ -14,28 +14,25 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			//confessObj($this, 'the customselect');
 			list($table, $field) = explode('-', $this->getName());
 
-			$vals =& $this->CoopForm->form->getSubmitValues();
+			// XXX NOTE i am using getsubmit, not export! QFC!
+			$vars =& $this->CoopForm->form->getSubmitValues();
+
+			$qfname = sprintf("%s-subtables-%s", $table, $field);
 
 			//confessObj($this->CoopForm->form, 'wfa');
 			$this->CoopForm->page->confessArray(
-				$vals, "customselect $table $field values", 4);
+				$vars, "customselect $table $field values", 4);
 
-
-			// find out what subforms have been requested with ADD NEW
-			$st = $vals[sprintf('%s-subtables', $table)];
-
-
-
-			// show the subform if requsted by client
-			if(1 /*isset($st[$field])*/ ){  // XXX! hey! i'm wedging it open!
+			// find out what subforms have been requested iwith ADD NEW
+			if(isset($vars[$qfname])){  
 				// XXX how to get the form?
 				$sub =& $this->CoopForm->addSubtable($field);
 
 				// so that it stays expanded ;-)
-				$sub->form->addElement(
-					'hidden', 
-					sprintf('%s-subtables[%s]', $table, $field),
-					'pass-through');
+				// MUST add it to subform!
+				// by the time i'm at toHTML(), it's too late for top form
+				$sub->form->addElement('hidden', 
+												  $qfname, 'pass-through');
 
 				//GOTTA do this shit here! can't just $sub->form->toHTML()!
 				require_once('HTML/QuickForm/Renderer/Default.php');
@@ -53,8 +50,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 				//TODO: add the _js stuff for showNew()!
 				$res .= parent::toHTML();
 				$res .= sprintf(
-					"&nbsp;<input type=\"submit\" onClick=\"{$this->_jsPrefix}showNew(this.form.elements['%s'])\"  name=\"%s-subtables[%s]\" value=\"&lt;&lt; Add New\" />", 
-					$this->getName(), $table, $field);
+					"&nbsp;<input type=\"submit\" onClick=\"{$this->_jsPrefix}showNew(this.form.elements['%s'])\"  name=\"%s\" value=\"&lt;&lt; Add New\" />", 
+					$this->getName(), $qfname);
 				
 			}
 
