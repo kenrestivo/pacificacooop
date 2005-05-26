@@ -1,5 +1,8 @@
 <?php
 
+// $Id$
+// Copyright 2005 Justin Patrin
+
 
 require_once('HTML/QuickForm/static.php');
 
