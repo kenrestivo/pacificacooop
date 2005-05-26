@@ -33,7 +33,7 @@ function confessObj($obj, $text, $outofband = true)
 				   htmlentities(print_r($obj, 1)));
 
 	if($outofband){
-		dump($$res);
+		dump($res);
 	} else {
 		print $res;
 	}
