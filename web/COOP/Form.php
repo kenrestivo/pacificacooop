@@ -150,21 +150,29 @@ class coopForm extends CoopObject
 						? 'customselect' : 'select';
 					// i'm doing the dispatch here. prolly not a great idea
 					$subname =sprintf('%s-subtables-%s', $this->table, $key); 
+					//$vars['tickets-subtables-income_id'] = "foo"; //XXX temp hack!!
 					if($vars[$subname]){
-						$sub =& $this->addSubtable($key); //XXX do it globally instead?
+						/// THE FORM
+						//XXX do it globally instead?
+						$sub =& $this->addSubtable($key); 
 						$el =& $this->form->addElement('subForm', 
 													   sprintf("%s-%s-subform",
 															   $this->table,
-															   $this->key), 
+															   $key), 
 													   false,
 													   &$sub->form);
 						// so it comes back around
-						$this->form->addElement('hidden',$subname, 'pass-thru');
+						$this->form->addElement('hidden', $subname, 
+												'pass-thru');
 					} else {
+						/// THE SELECT BOX
 						$el =& $this->form->addElement(
 							$type, 
 							$fullkey, false, 
 							$this->selectOptions($key));
+						// XXX ugly. do this right, not using $type
+						is_a($el, 'HTML_QuickForm_customselect')  &&
+							$el->reallyCreate(&$this->form);
 					}
 
 				} else if(is_array($this->obj->fb_textFields) &&
