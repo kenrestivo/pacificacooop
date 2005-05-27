@@ -25,6 +25,11 @@ class HTML_QuickForm_SubForm extends HTML_QuickForm_static {
         if ($form !== null) {
             $this->setForm($form);
         }
+
+// 		user_error("subform: [$name] [$label] [$options] [$attributes] [$form]", 
+// 				   E_USER_NOTICE);
+
+
 		//confessObj($this, 'subform');
 		//return it?? use parent::?
         HTML_QuickForm_static::HTML_QuickForm_static($name, $label);
@@ -175,7 +180,7 @@ optional forms.
 
 if (class_exists('HTML_QuickForm')) {
     HTML_QuickForm::registerElementType('subForm', 
-										'HTML/QuickForm/SubForm.php',
+										'lib/subform.php',
 										'HTML_QuickForm_SubForm');
 }
 
