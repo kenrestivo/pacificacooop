@@ -71,7 +71,7 @@ class CoopQuickForm_Page extends HTML_QuickForm_Page
 			
 			if(count($this->CoopForm->subtables)){
 				$this->CoopForm->page->confessArray($this->CoopForm->subtables, 
-													"$this->CoopForm->table subbies", 
+													"exporting subtables of $this->CoopForm->table", 
 													2);
 				foreach($this->CoopForm->subtables as $table => $sub){
 					$res = array_merge($res, $sub->form->exportValues());
@@ -81,7 +81,7 @@ class CoopQuickForm_Page extends HTML_QuickForm_Page
 			$res = array_merge($res, parent::exportValues($elementlist));
 
 			$this->CoopForm->page->confessArray($res, 
-									  sprintf("exportValues results %s",
+									  sprintf("exportValues results for %s",
 											  $this->CoopForm->table),
 									  2);
 			return $res;

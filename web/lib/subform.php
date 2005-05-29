@@ -54,6 +54,8 @@ class HTML_QuickForm_SubForm extends HTML_QuickForm_static {
      */
     function toHtml()
     {
+		//$this->_parentForm->CoopForm->page->printDebug("subform::tohtml() yes i am here", 666);
+
 		// ugly way to reset al this, since it's cloned
         if (isset($this->_renderer)) {
             $this->_renderer->_html =
@@ -120,10 +122,11 @@ optional forms.
 
     function checkSubFormRules($values)
     {
-        if ((!isset($this->_preValidationCallback)
-             || !is_callable($this->_preValidationCallback)
-             || call_user_func($this->_preValidationCallback, $values))
-            && !$this->_subForm->validate()) {
+         if ((!isset($this->_preValidationCallback)
+              || !is_callable($this->_preValidationCallback)
+              || call_user_func($this->_preValidationCallback, $values)) &&
+			 !$this->_subForm->validate()) 
+		{
             return array($this->getName() => 'Please fix the errors below');
         } else {
             return true;

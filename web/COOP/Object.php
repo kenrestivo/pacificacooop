@@ -117,10 +117,10 @@ class coopObject
 			return $this->backlinks;
 		}
 
-	function isLinkField(&$obj, $key)
+	function isLinkField($key)
 		{
 			// and only if, um, the links.ini agrees that they are there
-			$links = $obj->links();
+			$links = $this->obj->links();
 			if(!$links){
 				//print "no links for $this->table $key $val<br>";
 				return false;

@@ -143,38 +143,8 @@ class coopForm extends CoopObject
 					$el =& $this->obj->fb_preDefElements[$key];
 					$this->form->addElement(&$el);
 					$el->setName($fullkey); 
-				} else if($this->isLinkField(&$this->obj, $key)) {
-					// check that we really want a link first
-					$type = (!is_array($this->obj->fb_addNewLinkFields) ||
-							 in_array($key, $this->obj->fb_addNewLinkFields)) 
-						? 'customselect' : 'select';
-					// i'm doing the dispatch here. prolly not a great idea
-					$subname =sprintf('%s-subtables-%s', $this->table, $key); 
-					//$vars['tickets-subtables-income_id'] = "foo"; //XXX temp hack!!
-					if($vars[$subname]){
-						/// THE FORM
-						//XXX do it globally instead?
-						$sub =& $this->addSubtable($key); 
-						$el =& $this->form->addElement('subForm', 
-													   sprintf("%s-%s-subform",
-															   $this->table,
-															   $key), 
-													   false,
-													   &$sub->form);
-						// so it comes back around
-						$this->form->addElement('hidden', $subname, 
-												'pass-thru');
-					} else {
-						/// THE SELECT BOX
-						$el =& $this->form->addElement(
-							$type, 
-							$fullkey, false, 
-							$this->selectOptions($key));
-						// XXX ugly. do this right, not using $type
-						is_a($el, 'HTML_QuickForm_customselect')  &&
-							$el->reallyCreate(&$this->form);
-					}
-
+				} else if($this->isLinkField($key)) {
+					$el =& $this->selectSubformCombo($vars, $key, $fullkey);
 				} else if(is_array($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{
@@ -424,29 +394,42 @@ class coopForm extends CoopObject
 	function addRequiredFields()
 		{
 			if(is_array($this->obj->fb_requiredFields)){
-
+				
 				$this->form->registerRule('customrequired', 
 										  'callback', 'validate', 
 										  'CustomRequired');
-
-				foreach($this->obj->fb_requiredFields as $fieldname){
-// 					user_error("CoopForm::addRequiredFields($fieldname)", 
-// 							   E_USER_NOTICE);
 				
-					// exempt subfields
-					$st = $this->getSubtables();
-					if(!isset($st[$fieldname])){
-						$this->form->addRule($this->prependTable($fieldname), 
-											 "$key mustn't be empty.", 
-											 'customrequired');
-						// XXX hack around quickform braindeadedness
-						$this->form->_required[] = 
-							$this->prependTable($fieldname);
- 
- 						$this->page->debug > 1 &&
-							user_error("$fieldname is required in $this->table", 
- 								   E_USER_NOTICE);
+				$this->page->confessArray($this->obj->fb_addNewLinkFields, 
+										  "linknewfields in requiredfields", 4);
+				foreach($this->obj->fb_requiredFields as $fieldname){
+					// skip subfields. i do that in selectsubformcombo
+					if($this->isLinkField($fieldname)){
+						//gnu style braces, in futile attempt at readability
+						if(!is_array($this->obj->fb_addNewLinkFields))
+						{
+							// all fields are links by default
+							continue;
+						} else if (in_array($fieldname, 
+											$this->obj->fb_addNewLinkFields)) 
+						{
+							user_error("HEY skipping rule for $fieldname", 
+									   E_USER_NOTICE);
+							continue;
+						}
 					}
+
+
+					$this->form->addRule($this->prependTable($fieldname), 
+										 "$key mustn't be empty.", 
+										 'customrequired');
+					// XXX hack around quickform braindeadedness
+					$this->form->_required[] = 
+						$this->prependTable($fieldname);
+					
+					$this->page->debug > 1 &&
+						user_error("$fieldname is required in $this->table", 
+								   E_USER_NOTICE);
+					
 				}
 			}
 			//confessObj($this->form, 'ahc');
@@ -796,6 +779,33 @@ class coopForm extends CoopObject
 			return $st;
 		}
 	
+function &selectSubformCombo($vars, $key, $fullkey)
+		{
+			// check that we really want a link first
+			// TODO: this will involve some privilege stuff too
+			$type = (!is_array($this->obj->fb_addNewLinkFields) ||
+					 in_array($key, $this->obj->fb_addNewLinkFields)) 
+				? 'customselect' : 'select';
+
+			/// THE SELECT BOX
+			$select =& HTML_QuickForm::createElement(
+				$type, 
+				$fullkey, false, 
+				$this->selectOptions($key));
+
+			if($type == 'customselect'){
+				// MAKE SUBFORM
+
+				// MAKE GROUP
+				$group = HTML_QuickForm::createElement(
+					'group', $fullkey . "-group", false,
+					array($select), '<br/>', false);
+				
+				return $this->form->addElement(&$group);
+			}
+			return $this->form->addElement(&$select);
+		}
+
 
 } // END COOP FORM CLASS
 
