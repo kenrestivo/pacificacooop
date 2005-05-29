@@ -795,11 +795,16 @@ function &selectSubformCombo($vars, $key, $fullkey)
 
 			if($type == 'customselect'){
 				// MAKE SUBFORM
+				$sub =& $this->addSubTable($key);
+				$subform =& HTML_QuickForm::createElement(
+					'subform', 
+					sprintf('%s-%s-subform', $this->table, $key), 
+					false, $sub->form);
 
 				// MAKE GROUP
 				$group = HTML_QuickForm::createElement(
 					'group', $fullkey . "-group", false,
-					array($select), '<br/>', false);
+					array($select, $subform), '<br/>', false);
 				
 				return $this->form->addElement(&$group);
 			}
