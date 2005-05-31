@@ -56,7 +56,7 @@ function showHideDiv(div, state)
   }
 }
 
-function toggleSubForm(field, table) 
+function toggleSubform(field, table) 
 {
    select = "div-" + table + "-" + field;
    passthru = table + "-subtables-" + field;
