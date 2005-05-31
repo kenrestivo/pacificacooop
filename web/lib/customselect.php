@@ -16,17 +16,16 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			// sprintf, however, i understand
 			list($table, $field) = explode('-', $this->getName());
 			
-			return sprintf('%s<div class="%s" id="div-%s">%s</div>&nbsp;
+			return sprintf('%s %s<div class="%s" id="div-%s">&nbsp;
 				<a href="javascript:void();" id="%s-toggle"
-					onClick="toggleSubform(\'%s\',\'%s\')">%s %s</a>',
+					onClick="toggleSubform(\'%s\',\'%s\')">Add New %s &gt;&gt;</a></div>',
 						   $this->_getJs(),
+						   parent::toHTML(), // the actual {element}!
 						   '',	// TODO: check hidden here
 						   $this->getName(),
-						   parent::toHTML(), // the actual {element}!
 						   $this->getName(),
 						   $field,
 						   $table,
-						   'Add New', // TODO: select existing
 						   ''/* TODO: fetch the grouplabel */ );
 		}
 

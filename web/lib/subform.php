@@ -72,9 +72,18 @@ class HTML_QuickForm_SubForm extends HTML_QuickForm_static {
 			preg_replace('!</?form[^>]*>!', '',
 						 $this->_renderer->_formTemplate));
         $this->_subForm->accept($this->_renderer);
-        return sprintf('<div id="%s" class="%s">%s</div>', 
+
+		list($table,  $field, $crap) = explode('-', $this->getName());
+        return sprintf('<div id="%s" class="%s">
+				<a href="javascript:void();" id="%s-%s-toggle"
+	   onClick="toggleSubform(\'%s\',\'%s\')">&lt;&lt; Select Existing %s</a>%s</div>', 
 					   $this->getName(),
 					   'hidden',
+					   $field,
+					   $table,
+					   $field,
+					   $table,
+					   '', 		// TODO: group label
 					   $this->_renderer->toHtml());
     }
 
