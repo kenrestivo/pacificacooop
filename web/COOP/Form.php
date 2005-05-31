@@ -245,7 +245,7 @@ class coopForm extends CoopObject
 			
 
 			/// process recursive subtables FIRST
-			if(is_array($st = $this->getSubtables($vars))){
+			if(is_array($st = $this->requestedSubtables($vars))){
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
@@ -402,21 +402,21 @@ class coopForm extends CoopObject
 				$this->page->confessArray($this->obj->fb_addNewLinkFields, 
 										  "linknewfields in requiredfields", 4);
 				foreach($this->obj->fb_requiredFields as $fieldname){
-					// skip subfields. i do that in selectsubformcombo
-					if($this->isLinkField($fieldname)){
-						//gnu style braces, in futile attempt at readability
-						if(!is_array($this->obj->fb_addNewLinkFields))
-						{
-							// all fields are links by default
-							continue;
-						} else if (in_array($fieldname, 
-											$this->obj->fb_addNewLinkFields)) 
-						{
-							user_error("HEY skipping rule for $fieldname", 
-									   E_USER_NOTICE);
-							continue;
-						}
-					}
+					// skip subfields. XXX cruft. do that in selectsubformcombo
+// 					if($this->isLinkField($fieldname)){
+// 						//gnu style braces, in futile attempt at readability
+// 						if(!is_array($this->obj->fb_addNewLinkFields))
+// 						{
+// 							// all fields are links by default
+// 							continue;
+// 						} else if (in_array($fieldname, 
+// 											$this->obj->fb_addNewLinkFields)) 
+// 						{
+// 							user_error("HEY skipping rule for $fieldname", 
+// 									   E_USER_NOTICE);
+// 							continue;
+// 						}
+// 					}
 
 
 					$this->form->addRule($this->prependTable($fieldname), 
@@ -691,7 +691,7 @@ class coopForm extends CoopObject
 	// not the mainform
 	function validate($subforms_only = false)
 		{
-			if(is_array($st = $this->getSubtables())){
+			if(is_array($st = $this->requestedSubtables())){
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
@@ -743,14 +743,19 @@ class coopForm extends CoopObject
 			
 			// ok, build the stinking thing
 			if(is_object($sub =& $this->subtables[$table])){
-				$this->page->printDebug("subtable $sub->table already exists under $this->table, not creating", 2);
+				$this->page->printDebug(
+					"subtable $sub->table already exists under $this->table, not creating", 2);
 			} else {
 				$sub =& new CoopForm(&$this->page, $table, &$this); 
-				$this->page->printDebug("created subtable $table from $this->table", 2);
+				$this->page->printDebug(
+					"created subtable $table from $this->table", 2);
 				$sub->obj->fb_createSubmit = false;
 				$sub->build($_REQUEST); // request necessary to get submitted vals
 				$sub->addRequiredFields();
 				$sub->setDefaults();
+				
+				//TODO: add the id to the renderor!
+				
 				$this->subtables[$table] =& $sub; // cache it
 			} 
 
@@ -765,14 +770,15 @@ class coopForm extends CoopObject
 		}
 
 	//returns array of subtables, culled  from vars or getsubmitvars
-	function getSubtables($vars = null)
+	function requestedSubtables($vars = null)
 		{
 			if(!is_array($vars)){
 				$vars = $this->form->getSubmitValues();
 			}
 			$search = sprintf("/%s-subtables-(.+)/", $this->table);
 			foreach($vars as $key => $val){
-				if(preg_match($search, $key, $matches)){
+				// it only gets added iff $val is set, js sets it to 0
+				if(preg_match($search, $key, $matches) && $val){
 					$st[$matches[1]] = $val;
 				}
 			}
@@ -788,24 +794,42 @@ function &selectSubformCombo($vars, $key, $fullkey)
 				? 'customselect' : 'select';
 
 			/// THE SELECT BOX
-			$select =& HTML_QuickForm::createElement(
+ 			$select =& HTML_QuickForm::createElement(
 				$type, 
 				$fullkey, false, 
 				$this->selectOptions($key));
 
 			if($type == 'customselect'){
+
 				// MAKE SUBFORM
+				$subformname = sprintf('%s-%s-subform', $this->table, $key);
 				$sub =& $this->addSubTable($key);
 				$subform =& HTML_QuickForm::createElement(
 					'subform', 
-					sprintf('%s-%s-subform', $this->table, $key), 
-					false, $sub->form);
+					$subformname,
+					array('id' => $subformname, 
+						  'class' => 'hidden'), 
+					$sub->form);
+
+				// THE HIDDEN
+				$hiddenname = sprintf('%s-subtables-%s',
+									  $this->table, $key);
+				$hidden =& HTML_QuickForm::createElement(
+					'hidden', $hiddenname,
+					$vars[$hiddenname] ? $vars[$hiddenname] : 0,
+					array('id' => $hiddenname)); // getelementbyid
+				
 
 				// MAKE GROUP
 				$group = HTML_QuickForm::createElement(
 					'group', $fullkey . "-group", false,
-					array($select, $subform), '<br/>', false);
+					array($select, $subform, $hidden), '<br/>', false);
 				
+				// THE RULES
+				// yank from requiredfields at top level
+				unset($this->obj->fb_requiredFields[$key]);
+				//TODO: add group rules
+
 				return $this->form->addElement(&$group);
 			}
 			return $this->form->addElement(&$select);

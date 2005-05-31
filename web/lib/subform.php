@@ -72,7 +72,10 @@ class HTML_QuickForm_SubForm extends HTML_QuickForm_static {
 			preg_replace('!</?form[^>]*>!', '',
 						 $this->_renderer->_formTemplate));
         $this->_subForm->accept($this->_renderer);
-        return $this->_renderer->toHtml();
+        return sprintf('<div id="%s" class="%s">%s</div>', 
+					   $this->getName(),
+					   'hidden',
+					   $this->_renderer->toHtml());
     }
 
     function freeze()

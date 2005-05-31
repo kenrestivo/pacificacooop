@@ -188,6 +188,13 @@ p.error {
 	padding-right: 0;
  }
 
+ .hidden {
+   overflow: hidden;
+   visibility: hidden;
+   display: none;
+ }
+
+
 @media print { 	
 	#header { display:none }	
 	#footer { display:none }	

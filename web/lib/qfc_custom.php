@@ -44,10 +44,11 @@ class CoopQuickForm_Page extends HTML_QuickForm_Page
 				
 				// XXX HACK to only validate submitted subforms
 				// when using server-side expanding of subforms
-				$st = $this->CoopForm->getSubtables();
-				foreach($st as $table => $val){
-					if(strstr($val, 'Add New')){
-						return $res;
+				if(is_array($st = $this->CoopForm->requestedSubtables())){
+					foreach($st as $table => $val){
+						if(strstr($val, 'Add New')){
+							return $res;
+						}
 					}
 				}
 			}
