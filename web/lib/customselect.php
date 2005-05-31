@@ -17,8 +17,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			list($table, $field) = explode('-', $this->getName());
 			
 			return sprintf('%s<div class="%s" id="div-%s">%s</div>&nbsp;
-				<input type="button" id="%s-toggle"
-					onClick="toggleSubform(\'%s\',\'%s\')" value="%s %s" />',
+				<a href="javascript:void();" id="%s-toggle"
+					onClick="toggleSubform(\'%s\',\'%s\')">%s %s</a>',
 						   $this->_getJs(),
 						   '',	// TODO: check hidden here
 						   $this->getName(),
