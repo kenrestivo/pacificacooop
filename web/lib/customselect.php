@@ -17,12 +17,13 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			list($table, $field) = explode('-', $this->getName());
 			
 			return sprintf('%s<div class="%s" id="div-%s">%s</div>&nbsp;
-				<a href="javascript:void();" 
-					onclick="toggleSubform(\'%s\',\'%s\')">%s %s</a>',
+				<input type="button" id="%s-toggle"
+					onClick="toggleSubform(\'%s\',\'%s\')" value="%s %s" />',
 						   $this->_getJs(),
 						   '',	// TODO: check hidden here
 						   $this->getName(),
 						   parent::toHTML(), // the actual {element}!
+						   $this->getName(),
 						   $field,
 						   $table,
 						   'Add New', // TODO: select existing
@@ -60,13 +61,16 @@ function toggleSubForm(field, table)
    select = "div-" + table + "-" + field;
    passthru = table + "-subtables-" + field;
    subform = table + "-" + field + "-subform";
+   toggle = table + "-" + field + "-toggle";
    if(document.getElementById(select).className == "hidden") {
 	 showHideDiv(document.getElementById(select), 1);
 	 showHideDiv(document.getElementById(subform), 0);
+     document.getElementById(toggle).value = "Add New";
      document.getElementById(passthru).value = "1";
    } else {
 	 showHideDiv(document.getElementById(select), 0);
 	 showHideDiv(document.getElementById(subform), 1);
+     document.getElementById(toggle).value = "Select Existing";
      document.getElementById(passthru).value = "0";
    }
 }
