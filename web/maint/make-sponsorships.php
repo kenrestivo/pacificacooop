@@ -45,11 +45,11 @@ print $cp->selfURL('View Sponsorships');
  print $cp->selfURL('Find Needed', array('action' => 'findneeded'));
  print $cp->selfURL('Add Needed', array('action' => 'addneeded'));
 
-//confessObj($cp, 'cp');
-$level = ACCESS_EDIT;
-$p = getAuthLevel($cp->auth, 'solicit_money');
-$admin = $p['group_level'] >= $level ? 1 : 0;
-$user = $p['user_level'] >= $level ? 1 : 0;
+if(!checkAuthLevel($cp->auth, 0, 'solicit_money', ACCESS_EDIT, 
+				   $cp->userStruct)){
+ 	print "You don't have permissions to do this. Sorry.";
+ 	done();
+}
 
 // TODO put this back after i push it live
 // if($admin + $user < 1){

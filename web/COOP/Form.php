@@ -439,24 +439,26 @@ class coopForm extends CoopObject
 	// XXX i don't like this. i need to set in object, not in form
 	// but where? if i'm populating from db, i don't want to clobber with this!
 	// maybe do like my fb_ stuff? if it's set, ignore it?
-	function setDefaults()
+	function &setDefaults()
 		{
 			$this->page->debug > 2 && confessObj($this->page, 'coop page');
-
-			if(!is_array($this->obj->fb_defaults)){
-				$this->form->setDefaults(
-					array($this->prependTable('school_year') => 
-						  findSchoolYear(),
-						  $this->prependTable('family_id') => 
-						   $this->page->userStruct['family_id']));
-				return;
-			}
-
+			
+			// start out with DEFAULT defaults, dammit
+			$prepended =
+				array($this->prependTable('school_year') => 
+					  findSchoolYear(),
+					  $this->prependTable('family_id') => 
+					  $this->page->userStruct['family_id']);
+			
 			// gah. have to prepend table here
+			// these obviously override the default defaults above
 			foreach($this->obj->fb_defaults as $key => $val){
 				$prepended[$this->prependTable($key)] = $val;
 			}
+
 			$this->form->setDefaults($prepended);
+
+			return $prepended;
 		}
 
 	function processCrossLinks($vars)

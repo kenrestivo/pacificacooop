@@ -233,20 +233,20 @@ quickLevelCheck($targetlevel, $targetfamilyid, $permstruct, $userstruct)
 
 
 /******************
-	CHEKAUTHLEVEL
+	CHECKAUTHLEVEL
 	the highest-level function for checking authorisation
 		yes/no = A(auth, family to compare to, realm, level i need, [group i need])
 			check the familyid match, the level in the db, and return whatever
 	inputs: auth, family to compare to, realm, level i need, [later, group ]
-	returns: 0 if ok, 1 if error
+	returns: true if ok, false if error
 ******************/
 function
-checkAuthLevel($auth, $targetfamilyid, $targetrealm, $targetlevel)
+checkAuthLevel($auth, $targetfamilyid, $targetrealm, $targetlevel, $u = null)
 {
-	$level = aggregateLevel($auth, $targetfamilyid, $targetrealm);
+	$level = aggregateLevel($auth, $targetfamilyid, $targetrealm, $u);
 
-	return $targetlevel >= $level ? 0 : 1;
-}/* END CHEKAUTHLEVEL */
+	return $targetlevel <= $level ? true : false;
+}/* END CHECKAUTHLEVEL */
 
 
 
@@ -260,10 +260,10 @@ checkAuthLevel($auth, $targetfamilyid, $targetrealm, $targetlevel)
 	returns: max level for this action
 ******************/
 function
-aggregateLevel($auth, $targetfamilyid, $targetrealm)
+aggregateLevel($auth, $targetfamilyid, $targetrealm, $u = null)
 {
 	$perms = getAuthLevel($auth, $targetrealm);
-	$u = getUser($auth['uid']);
+	is_array($u) || $u = getUser($auth['uid']);
 	if(!$perms || !$u){
 		return 0; //pass through the nothing.
 	}
@@ -274,7 +274,8 @@ aggregateLevel($auth, $targetfamilyid, $targetrealm)
 	}
 	
 	//i want to know the higher of the two.
-	return $user_level > $perms['group_level'] ? $user_level : $perms['group_level'];
+	return $user_level > $perms['group_level'] ? $user_level : 
+		$perms['group_level'];
 	
 }/* END AGGREGATELEVEL */
 

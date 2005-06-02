@@ -63,6 +63,7 @@ $cp =& new CoopPage();
 $cp->createLegacy($auth);
 
 
+//XXX fix this! do it the new way with checkauthlevel()
 //will need these to verify actions
 $realm = $callbacks['realm'];
 $p = getAuthLevel($auth, $realm);

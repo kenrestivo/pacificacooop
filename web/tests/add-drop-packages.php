@@ -42,15 +42,10 @@ print "<p>Springfest Package Add/Remove Test</p>";
 
 print $cp->selfURL('Refresh');
 
-//confessObj($cp, 'cp');
-$level = ACCESS_EDIT;
-$p = getAuthLevel($cp->auth, 'packaging');
-$admin = $p['group_level'] >= $level ? 1 : 0;
-$user = $p['user_level'] >= $level ? 1 : 0;
-
-if($admin + $user < 1){
-	print "You don't have permissions to do this. Sorry.";
-	done();
+if(!checkAuthLevel($cp->auth, 0, 'packaging', ACCESS_EDIT, 
+				   $cp->userStruct)){
+ 	print "You don't have permissions to do this. Sorry.";
+ 	done();
 }
 
 
