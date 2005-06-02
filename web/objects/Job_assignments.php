@@ -1,0 +1,26 @@
+<?php
+/**
+ * Table Definition for job_assignments
+ */
+require_once 'DB/DataObject.php';
+
+class Job_assignments extends DB_DataObject 
+{
+    ###START_AUTOCODE
+    /* the code below is auto generated do not remove the above tag */
+
+    var $__table = 'job_assignments';                 // table name
+    var $job_assignment_id;               // int(32)  not_null primary_key unique_key auto_increment
+    var $job_description_id;              // int(32)  
+    var $school_year;                     // string(50)  
+    var $family_id;                       // int(32)  
+
+    /* ZE2 compatibility trick*/
+    function __clone() { return $this;}
+
+    /* Static get */
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Job_assignments',$k,$v); }
+
+    /* the code above is auto generated do not remove the tag below */
+    ###END_AUTOCODE
+}
