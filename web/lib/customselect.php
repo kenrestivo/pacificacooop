@@ -40,20 +40,6 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
                $js .= sprintf('
 /* begin javascript for HTML_QuickForm_customselect */
-function showHideDiv(div, state)
-{
-  if(state > 0){
-    div.style.visibility = "visible";
-    div.style.display = "block";
-    div.style.overflow = "auto";
-    div.className = "";
-  } else {
-    div.style.display = "none";
-    div.style.overflow = "hidden";
-    div.style.visibility = "hidden";
-    div.className = "hidden";
-  }
-}
 
 function toggleSubform(field, table) 
 {
@@ -61,12 +47,12 @@ function toggleSubform(field, table)
    passthru = document.getElementById(table + "-subtables-" + field);
    subform = document.getElementById(table + "-" + field + "-subform");
    if(select.className == "hidden") {
-	 showHideDiv(select, 1);
-	 showHideDiv(subform, 0);
+	 select.className = "";
+	 subform.className = "hidden";
      passthru.value = "1";
    } else {
-	 showHideDiv(select, 0);
-	 showHideDiv(subform, 1);
+	 select.className = "hidden";
+	 subform.className = "";
      passthru.value = "0";
 	 
    }
