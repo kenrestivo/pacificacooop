@@ -74,11 +74,11 @@ class HTML_QuickForm_SubForm extends HTML_QuickForm_static {
         $this->_subForm->accept($this->_renderer);
 
 		list($table,  $field, $crap) = explode('-', $this->getName());
-        return sprintf('<div id="%s" class="%s">
+        return sprintf('<div class="%s" id="%s">
 				<a href="javascript:void();" id="%s-%s-toggle"
 	   onClick="toggleSubform(\'%s\',\'%s\')">&lt;&lt; Select Existing %s</a>%s</div>', 
+					   'hidden', // TODO: check passthru!
 					   $this->getName(),
-					   'hidden',
 					   $field,
 					   $table,
 					   $field,

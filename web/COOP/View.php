@@ -221,8 +221,7 @@ class coopView extends CoopObject
 										 $this->page->fixURL($val), $val);
 					} else {
 						$res[] = nl2br(htmlspecialchars(
-										   $this->checkLinkField(&$this->obj, 
-																 $key, $val)));
+										   $this->checkLinkField($key, $val)));
 					}
 				}
 			}

@@ -119,6 +119,7 @@ class coopObject
 
 	function isLinkField($key)
 		{
+
 			// and only if, um, the links.ini agrees that they are there
 			$links = $this->obj->links();
 			if(!$links){
@@ -139,17 +140,17 @@ class coopObject
 
 
 	//  inspired by formbuilder's getdataobjctselectdisplayvalue (whew!)
-	function checkLinkField(&$obj, $key, $val)
+	function checkLinkField($key, $val)
 		{
 		
-			if(!$this->isLinkField($obj, $key)){
+			if(!$this->isLinkField($key)){
 				//user_error("$this->table $key is not a linkfield", 
 				//		E_USER_NOTICE);
 				return $val;
 			}
 
 			// don't bother with blanks either
-			if(!$obj->$key){
+			if(!$this->obj->$key){
 				return false;
 			}
 
@@ -157,7 +158,7 @@ class coopObject
 			//confessObj($obj, 
 //					   "checkLinkField() from $this->table: obj with links for $key of $val");
 
-			$subobj = $obj->getLink($key); 
+			$subobj = $this->obj->getLink($key); 
 	//confessObj($subobj, "checkLInkFild() subobj $subobj->__table for $key of $val");
 
 
