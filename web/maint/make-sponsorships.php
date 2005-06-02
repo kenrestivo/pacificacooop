@@ -41,15 +41,16 @@ print $menu->topNavigation();
 
 print "<p>Springfest Sponsors Needed</p>";
 
-print $cp->selfURL('View Sponsorships');
- print $cp->selfURL('Find Needed', array('action' => 'findneeded'));
- print $cp->selfURL('Add Needed', array('action' => 'addneeded'));
-
 if(!checkAuthLevel($cp->auth, 0, 'solicit_money', ACCESS_EDIT, 
 				   $cp->userStruct)){
  	print "You don't have permissions to do this. Sorry.";
  	done();
 }
+
+print $cp->selfURL('View Sponsorships');
+ print $cp->selfURL('Find Needed', array('action' => 'findneeded'));
+ print $cp->selfURL('Add Needed', array('action' => 'addneeded'));
+
 
 // TODO put this back after i push it live
 // if($admin + $user < 1){

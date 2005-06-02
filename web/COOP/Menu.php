@@ -48,6 +48,7 @@ class CoopMenu extends HTML_Menu
 		);
 	var $other_realms = array(
 		'roster' => 'Membership',
+		'jobs' => 'Jobs',
 		'enhancement' => 'Enhancement'
 		);
 
@@ -180,6 +181,7 @@ class CoopMenu extends HTML_Menu
 			foreach($realm_map as $realm => $description){
 				$res[$realm]['title'] = $description;
 				foreach($ie as $key => $cbs){
+					// this substring thing is a nasty, awful hack
 					if(strncmp($cbs['realm'], $realm, 7) == 0){
 						$res[$realm]['sub'][$key]['title'] = 
 							$cbs['shortdesc'];

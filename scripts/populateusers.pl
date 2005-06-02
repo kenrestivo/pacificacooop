@@ -64,6 +64,7 @@ use constant _ACCESS_ADMIN => 800;
 	[ _ACCESS_NONE, _ACCESS_VIEW, "money" ],
 	[ _ACCESS_NONE, _ACCESS_VIEW, "insurance" ],
 	[ _ACCESS_VIEW, _ACCESS_EDIT, "roster" ],
+	[ _ACCESS_VIEW, _ACCESS_EDIT, "jobs" ],
 	[ _ACCESS_NONE, _ACCESS_VIEW, "user" ],
 	[ _ACCESS_NONE, _ACCESS_VIEW, "enhancement" ]
 );
@@ -74,6 +75,7 @@ use constant _ACCESS_ADMIN => 800;
 	[ _ACCESS_NONE, _ACCESS_VIEW, "money" ],
 	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "auction" ],
 	[ _ACCESS_DELETE, _ACCESS_EDIT, "insurance" ],
+	[ _ACCESS_VIEW, _ACCESS_VIEW, "jobs" ],
 	[ _ACCESS_VIEW, _ACCESS_VIEW, "enhancement" ],
 	[ _ACCESS_NONE, _ACCESS_VIEW, "user" ]
 );
