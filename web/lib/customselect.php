@@ -57,10 +57,14 @@ function toggleSubform(field, table)
 	 subform.className = "hidden";
 	 addnew.className = "";
      passthru.value = "0";
+     select.options[0].text = "-- CHOOSE ONE --";
+     select.disabled = false;
    } else {
 	 subform.className = "";
 	 addnew.className = "hidden";
      passthru.value = "1";
+     select.options[0].text = "Enter New Below >>";
+     select.disabled = true;
    }
 }
 /* end javascript for HTML_QuickForm_customselect */

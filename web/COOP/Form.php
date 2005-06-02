@@ -797,7 +797,8 @@ function &selectSubformCombo($vars, $key, $fullkey)
  			$select =& HTML_QuickForm::createElement(
 				$type, 
 				$fullkey, false, 
-				$this->selectOptions($key));
+				$this->selectOptions($key),
+				array('id' => $fullkey));
 
 			if($type == 'customselect'){
 
@@ -808,7 +809,7 @@ function &selectSubformCombo($vars, $key, $fullkey)
 					'subform', 
 					$subformname,
 					array('id' => $subformname, 
-						  'class' => 'hidden'), 
+						  'class' => 'hidden'), // XXX hidden here???
 					$sub->form);
 
 				// THE HIDDEN
