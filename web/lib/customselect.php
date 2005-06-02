@@ -57,20 +57,18 @@ function showHideDiv(div, state)
 
 function toggleSubform(field, table) 
 {
-   select = "div-" + table + "-" + field;
-   passthru = table + "-subtables-" + field;
-   subform = table + "-" + field + "-subform";
-   toggle = table + "-" + field + "-toggle";
-   if(document.getElementById(select).className == "hidden") {
-	 showHideDiv(document.getElementById(select), 1);
-	 showHideDiv(document.getElementById(subform), 0);
-     document.getElementById(toggle).value = "Add New";
-     document.getElementById(passthru).value = "1";
+   select = document.getElementById("div-" + table + "-" + field);
+   passthru = document.getElementById(table + "-subtables-" + field);
+   subform = document.getElementById(table + "-" + field + "-subform");
+   if(select.className == "hidden") {
+	 showHideDiv(select, 1);
+	 showHideDiv(subform, 0);
+     passthru.value = "1";
    } else {
-	 showHideDiv(document.getElementById(select), 0);
-	 showHideDiv(document.getElementById(subform), 1);
-     document.getElementById(toggle).value = "Select Existing";
-     document.getElementById(passthru).value = "0";
+	 showHideDiv(select, 0);
+	 showHideDiv(subform, 1);
+     passthru.value = "0";
+	 
    }
 }
 /* end javascript for HTML_QuickForm_customselect */
