@@ -851,12 +851,12 @@ CREATE TABLE job_descriptions (
 ) ;
 
 
-CREATE TABLE job_descriptions_families_join (
-  job_descriptions_families_join_id int(32) NOT NULL unique auto_increment,
+CREATE TABLE job_assignments (
+  job_assignment_id int(32) NOT NULL unique auto_increment,
   job_description_id int(32) default NULL,
   school_year varchar(50) default NULL,
   family_id int(32) default NULL,
-  PRIMARY KEY  (job_descriptions_families_join_id)
+  PRIMARY KEY  (job_assignment_id)
 ) ;
 
 CREATE TABLE auction_packages_join (
