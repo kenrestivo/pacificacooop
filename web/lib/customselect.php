@@ -16,12 +16,17 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			// sprintf, however, i understand
 			list($table, $field) = explode('-', $this->getName());
 			
+			// TODO: don't use request, do $this->_parentForm->getSubmitValues()
+			if($_REQUEST[sprintf('%s-subtables-%s',$table, $field)]){
+				$hidden = 'hidden';
+			}
+			
 			return sprintf('%s %s<div class="%s" id="div-%s">&nbsp;
 				<a href="javascript:void();" id="%s-toggle"
 					onClick="toggleSubform(\'%s\',\'%s\')">Add New %s &gt;&gt;</a></div>',
 						   $this->_getJs(),
 						   parent::toHTML(), // the actual {element}!
-						   '',	// TODO: check hidden here
+						   $hidden,	
 						   $this->getName(),
 						   $this->getName(),
 						   $field,
@@ -43,18 +48,19 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
 function toggleSubform(field, table) 
 {
-   select = document.getElementById("div-" + table + "-" + field);
+   addnew = document.getElementById("div-" + table + "-" + field);
+   select = document.getElementById(table + "-" + field);
    passthru = document.getElementById(table + "-subtables-" + field);
    subform = document.getElementById(table + "-" + field + "-subform");
-   if(select.className == "hidden") {
-	 select.className = "";
+   select.value = 0;
+   if(passthru.value != "0") {
 	 subform.className = "hidden";
-     passthru.value = "1";
-   } else {
-	 select.className = "hidden";
-	 subform.className = "";
+	 addnew.className = "";
      passthru.value = "0";
-	 
+   } else {
+	 subform.className = "";
+	 addnew.className = "hidden";
+     passthru.value = "1";
    }
 }
 /* end javascript for HTML_QuickForm_customselect */
