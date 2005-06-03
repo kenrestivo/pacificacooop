@@ -25,6 +25,7 @@ class Job_assignments extends DB_DataObject
     ###END_AUTOCODE
 
 	var $fb_formHeaderText =  'Job Assignments';
+	var $fb_linkDisplayFields =  array('family_id');
 	var $fb_fieldLabels = array (
 		'job_description_id' => 'Job Description',
 		'school_year' => 'School Year',

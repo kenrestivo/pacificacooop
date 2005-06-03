@@ -166,6 +166,8 @@ class coopForm extends CoopObject
 								   'Date must be in format MM/DD/YYYY', 
 								   'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
 					$val && $val = sql_to_human_date($val);
+				} else if($key == 'school_year'){ // special case for schoolyear
+					$el =& $this->schoolYearPopup();
 				} else {
 					//i ALWAYS hide primary key. it's hardcoded here.
 					// note this is different from FB behaviour.
@@ -827,9 +829,44 @@ function &selectSubformCombo($vars, $key, $fullkey)
 				return $this->form->addElement(&$group);
 			}
 			
-			//TODO: deal with required fields rules!!
+			if($this->obj->fb_requiredFields[$key]){
+				//TODO: deal with required fields rules!!
+			}
 			
 			return $this->form->addElement(&$select);
+		}
+
+function &schoolYearPopup()
+		{
+
+			$tmp =& new CoopObject(&$this->page, $this->table, &$nohing);
+			$tmp->obj->query(
+				sprintf(
+					'select distinct school_year from %s order by school_year', 
+						$this->table));
+			while($tmp->obj->fetch()){
+				$schoolyears[$tmp->obj->school_year] = $tmp->obj->school_year;
+			}
+
+			// add the defaults of this year and next year too
+			$thisyear = findSchoolYear();
+			$nextyear = findSchoolYear(0,1,1);
+			foreach (array($thisyear, $nextyear) as $year){
+				if(!in_array($year, array_keys($schoolyears))){
+					$schoolyears[$year] = $year;
+				}
+			}
+			
+ 			$el =& $this->form->addElement(
+				'select', 
+				$this->prependTable('school_year'), 
+				false, 
+				$schoolyears);
+
+			//TODO: add js to dynamically tweek the familyid
+			// i.e. to constrain it to only this year's? complicated
+
+			return $el;
 		}
 
 
