@@ -403,21 +403,10 @@ class coopForm extends CoopObject
 										  "linknewfields in requiredfields", 4);
 				foreach($this->obj->fb_requiredFields as $fieldname){
 					// skip subfields. XXX cruft. do that in selectsubformcombo
-// 					if($this->isLinkField($fieldname)){
-// 						//gnu style braces, in futile attempt at readability
-// 						if(!is_array($this->obj->fb_addNewLinkFields))
-// 						{
-// 							// all fields are links by default
-// 							continue;
-// 						} else if (in_array($fieldname, 
-// 											$this->obj->fb_addNewLinkFields)) 
-// 						{
-// 							user_error("HEY skipping rule for $fieldname", 
-// 									   E_USER_NOTICE);
-// 							continue;
-// 						}
-// 					}
 
+					if($this->isLinkField($fieldname)){
+						continue;
+					}
 
 					$this->form->addRule($this->prependTable($fieldname), 
 										 "$key mustn't be empty.", 
@@ -452,8 +441,10 @@ class coopForm extends CoopObject
 			
 			// gah. have to prepend table here
 			// these obviously override the default defaults above
-			foreach($this->obj->fb_defaults as $key => $val){
-				$prepended[$this->prependTable($key)] = $val;
+			if(is_array($this->obj->fb_defaults)){
+				foreach($this->obj->fb_defaults as $key => $val){
+					$prepended[$this->prependTable($key)] = $val;
+				}
 			}
 
 			$this->form->setDefaults($prepended);
@@ -835,6 +826,9 @@ function &selectSubformCombo($vars, $key, $fullkey)
 
 				return $this->form->addElement(&$group);
 			}
+			
+			//TODO: deal with required fields rules!!
+			
 			return $this->form->addElement(&$select);
 		}
 
