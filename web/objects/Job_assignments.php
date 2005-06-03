@@ -35,5 +35,8 @@ class Job_assignments extends DB_DataObject
 								   'school_year',
 								   'family_id');
 
+	var $fb_fieldsToRender = array('job_description_id', 
+								   'school_year',
+								   'family_id');
 
 }
