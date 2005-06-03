@@ -77,8 +77,9 @@ class HTML_QuickForm_SubForm extends HTML_QuickForm_static {
 
 		$vals =& $this->_parentForm->getSubmitValues();
 		
-		if(!$vals[sprintf('%s-subtables-%s', $table, $field)]){
-			$hidden = 'hidden';
+		$hidden = 'hidden';		// by default, we hide it
+		if($vals[sprintf('%s-subtables-%s', $table, $field)]){
+			$hidden = '';
 		}
 
         return sprintf('<div class="%s" id="%s">

@@ -796,6 +796,7 @@ function &selectSubformCombo($vars, $key, $fullkey)
 				array('id' => $fullkey));
 
 			if($type == 'customselect'){
+				$select->_parentForm =& $this->form;
 
 				// MAKE SUBFORM
 				$subformname = sprintf('%s-%s-subform', $this->table, $key);

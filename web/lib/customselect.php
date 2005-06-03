@@ -6,8 +6,7 @@ require_once('HTML/QuickForm/select.php');
 class HTML_QuickForm_customselect extends HTML_QuickForm_select
 {
 
-	//TODO: add js... loook at example somewhere?
-
+	var $_parentForm;			// cache
 
 	function toHtml()
 		{
@@ -16,10 +15,12 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			// sprintf, however, i understand
 			list($table, $field) = explode('-', $this->getName());
 			
-			// TODO: don't use request, do $this->_parentForm->getSubmitValues()
-			if($_REQUEST[sprintf('%s-subtables-%s',$table, $field)]){
+			$values = $this->_parentForm->getSubmitValues();
+			if($values[sprintf('%s-subtables-%s',$table, $field)]){
 				$hidden = 'hidden';
+				$this->_options[0]['text'] = "Enter New Below >>";
 			}
+			//confessObj($this, 'selectthing');
 			
 			return sprintf('%s %s<div class="%s" id="div-%s">&nbsp;
 				<a href="javascript:void();" id="%s-toggle"
