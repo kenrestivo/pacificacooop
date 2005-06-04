@@ -67,7 +67,7 @@ switch($_REQUEST['action']){
 	 $atdf->addRequiredFields();
 
 	 
-	 if ($atdf->validate()) {
+	 if ($atdf->form->validate()) {
 		 print "saving...";
 		 print $atdf->form->process(array(&$atdf, 'process'));
 		 // gah, now display it again. they may want to make other changes!

@@ -157,7 +157,7 @@ function done()
 	print '<div id="footer"><hr>';
     print '<p>
       <a href="http://validator.w3.org/check/referer"><img
-          src="http://www.w3.org/Icons/valid-xhtml10"
+          src="http://www.w3.org/Icons/valid-xhtml10" name="validator"
           alt="Valid XHTML 1.0!" height="31" width="88" border="0" /></a>
     ';
     ///note teh tag closing. it's an html validator bug waiting to happen ;-)

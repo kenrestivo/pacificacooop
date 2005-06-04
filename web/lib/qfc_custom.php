@@ -34,32 +34,6 @@ class CoopQuickForm_Page extends HTML_QuickForm_Page
 		
 	}
 
-	function validate()
-		{
-
-			if(is_object($this->CoopForm)){
-				// MUST send true arg to validate, or it recurses endlessly!
-				$res += $this->CoopForm->validate(true);
-				$count++;
-				
-				// XXX HACK to only validate submitted subforms
-				// when using server-side expanding of subforms
-				if(is_array($st = $this->CoopForm->requestedSubtables())){
-					foreach($st as $table => $val){
-						if(strstr($val, 'Add New')){
-							return $res;
-						}
-					}
-				}
-			}
-
-
-
-			$res += parent::validate();
-			$count++;
-
-			return $res == 2 ? true : false;
-		}
 
 	function exportValues($elementlist = null)
 		{

@@ -142,6 +142,10 @@ optional forms.
 
     function checkSubFormRules($values)
     {
+		//this conditional ought to be taken out and shot
+		//basically, if there's no callback,
+		//or if there is and it returns false, then return an error
+		//XXX what sucks about this is that it will *always* validate if no cb!
          if ((!isset($this->_preValidationCallback)
               || !is_callable($this->_preValidationCallback)
               || call_user_func($this->_preValidationCallback, $values)) &&

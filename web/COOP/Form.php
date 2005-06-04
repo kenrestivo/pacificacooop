@@ -406,9 +406,6 @@ class coopForm extends CoopObject
 				foreach($this->obj->fb_requiredFields as $fieldname){
 					// skip subfields. XXX cruft. do that in selectsubformcombo
 
-					if($this->isLinkField($fieldname)){
-						continue;
-					}
 
 					$this->form->addRule($this->prependTable($fieldname), 
 										 "$key mustn't be empty.", 
@@ -686,45 +683,11 @@ class coopForm extends CoopObject
 	// not the mainform
 	function validate($subforms_only = false)
 		{
-			if(is_array($st = $this->requestedSubtables())){
-				foreach($st as $key => $val){
-					list($table, $farid) = explode(':', 
-												   $this->forwardLinks[$key]);
-						$this->page->printDebug("validating $key [$val] table $table (subtable of $this->table)", 1);
-					
-					$this->addSubTable($key, $table);
-					if(!is_object($this->subtables[$table])){
-						// XXX redundant check, but wtf
-						PEAR::raiseError("subtable object wasn't created", 888);
-					}
-					$temp = $this->subtables[$table]->validate(); // OBJECT!
-					if($temp == false){
-						$this->page->printDebug("$table didn't validate", 1);
-						confessArray($this->subtables[$table]->form->_errors, 
-									 $table . ' form errors!', 3);
-					}
-					$res += $temp;
-					$count++;
-				}
-			}
+
+			user_error("Warning: my wacky validate called, not form validate",
+					   E_USER_WARNING);
 			
-			// NOTE CoopForm is for QFC. i must stop recursion if i'm there
-			if(!$subforms_only){
-				$temp  = $this->form->validate(); // FORM!
-				
-				if($temp == false){
-					$this->page->printDebug("$this->table didn't validate", 1);
-					//confessObj($this->form, $this->table . ' form');
-				}
-				$res += $temp;
-				$count++;
-			}			
-
-			$this->page->printDebug(
-				sprintf("%s cumulative validation [%d/%d]", 
-						$this->table, $res, $count), 1);
-
-			return  $res == $count ? true : false;
+			return  $this->form->validate();
 		}
 
 	// the gettable means i'm sending it a KEYNAME not a tablename
@@ -818,21 +781,36 @@ function &selectSubformCombo($vars, $key, $fullkey)
 				
 
 				// MAKE GROUP
-				$group = HTML_QuickForm::createElement(
+				$group =& $this->form->addElement(
 					'group', $fullkey . "-group", false,
 					array($select, $subform, $hidden), '<br/>', false);
 				
-				// THE RULES
-				// yank from requiredfields at top level
-				unset($this->obj->fb_requiredFields[$key]);
-				//TODO: add group rules
 
-				return $this->form->addElement(&$group);
+				// THE RULES
+				if($this->obj->fb_requiredFields[$key]){
+					// yank from requiredfields at top level
+					unset($this->obj->fb_requiredFields[$key]);
+
+					$this->form->addGroupRule(
+						$group->getName(),
+						array($fullkey => array(
+								  "$key mustn't be empty", 'customrequired'
+								  )));
+
+					$this->form->addRule($group->getName(),
+										 "$key mustn't be empty",
+										 'customrequired'
+										 );
+					$this->form->_required[] = $group->getName();
+
+					//TODO: deal with required fields rules!!
+					//TODO: add group rules
+				}
+
+
+				return $group;
 			}
 			
-			if($this->obj->fb_requiredFields[$key]){
-				//TODO: deal with required fields rules!!
-			}
 			
 			return $this->form->addElement(&$select);
 		}
