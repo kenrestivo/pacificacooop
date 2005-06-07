@@ -40,6 +40,7 @@ class ThankYou
 	var $name; // NAME: address of who it gets sent to
 	var $address_array; // ADDRESS: multiple line array, the address
 	var $items_array; // ITEMS: multiple line array, list of things they donated
+	var $value_received_array; 	// value of things received
 	var $iteration; // ITERATION: the number of springfests so far.
 					// system calculates this for you.
 	var $ordinal; // ORDINAL: st/nd/rd, etc. system calculates this.
@@ -63,15 +64,13 @@ class ThankYou
 
 Dear [:NAME:],
 
-We would like to thank you for your donation of [:ITEMS:] to our [:ITERATION:][:ORDINAL:] Annual Springfest [:YEAR:] Wine Tasting and Auction. Your contribution is greatly appreciated.
+As our school year draws to a close, we would like to be sure to thank you for your kind donation of [:ITEMS:]. 
 
-Your donation helps fund scholarship programs and improvements to our school.
+[:VALUERECEIVED:].
 
-For [:YEARS:] years, the Pacifica Co-op Nursery School has provided an enriching experience for both children and parents of our community. The Co-op's program enables parents to work together with a highly qualified staff to encourage physical, social, and emotional growth. The theme-based curriculum creates continuous opportunities for our children to enhance their self-esteem and strong sense of regard for others.
+Because of the support of our community this year, we were able to raise the amount of money needed to make the necessary repairs and improvements to our nursery school.  For [:YEARS:] years, the Pacifica Co-op Nursery School has provided an enriching experience for both children and parents of our community. 
 
-The Pacifica Co-op Nursery School is a non-profit, parent participation program. We rely on the assistance of the community in conjunction with friends and family to meet our ever-increasing budget. Again, we thank you for considering the Pacifica Co-op Nursery School a deserving place to offer your community support.
-
-For your tax donation records, our tax-exempt I.D number is 94-1527749.
+The Pacifica Co-op Nursery School is a non-profit, parent participation program.  We rely on the assistance of the community in conjunction with friends and family to meet our ever-increasing budget.  Again, we thank you for considering the Pacifica Co-op Nursery School a deserving place to offer your community support.
 
 \"An investment in our children is an investment in our community.\"
 
@@ -80,11 +79,10 @@ Sincerely,
 
 [:FROM:]
 
-P.S.	The Internal Revenue Code requires us to acknowledge our tax-deductible contribution in writing and to confirm that we provided no goods or services in consideration for your gift.  The Pacifica Co-op Nursery School is a 501(c)(3) non-profit organization (Tax ID # 94-1527749).  Please keep this acknowledgement with your tax records.
-
 Pacifica Co-op Nursery School 
-548 Carmel Avenue Pacifica, Ca 94044 
-650 355-3272 http://www.pacificacoop.org/
+Incorporated as \"Pacifica Nursery School, Inc.\"
+A 501(c)(3) non-profit organization
+Tax ID # 94-1527749 
 ";
 
 	function ThankYou(&$cp)
@@ -219,7 +217,7 @@ Pacifica Co-op Nursery School
 			return $text;
 		}
 
-	// does it in EMAIL/TXT format by default! override these to do html
+	// this renderd EMAIL/TXT format by default! override these to do html
 	function varsToArray()
 		{
 			$subst['DATE']  = $this->date ; 
@@ -235,6 +233,15 @@ Pacifica Co-op Nursery School
 			$subst['ITEMS'] = implode(count($this->items_array) > 2 ? 
 											', ' : ' and ', 
 											$this->items_array);
+			if(count($this->value_received_array)){
+				$subst['VALUERECEIVED'] = "In exchange for your contribution, we gave you ";
+				$subst['VALUERECEIVED'] .= implode(
+					count($this->value_received_array) > 2 ?
+					', ' : " and ", 
+					$this->value_received_array);
+			} else {
+				$subst['VALUERECEIVED'] = "For tax purposes, no goods or services were provided in exchange for your contribution";
+			}
 
 			/// DEAR IN THE HEADLIGHTS HACK!
 			user_error(sprintf("[%s] is name", $this->name), E_USER_NOTICE);
@@ -454,9 +461,8 @@ Pacifica Co-op Nursery School
 
 			// format auction
 			while($real->obj->fetch()){
-				$this->items_array[] = sprintf("%s (total value $%01.02f)",
-											   $real->obj->item_description,
-											   $real->obj->item_value);
+				$this->items_array[] = $real->obj->item_description;
+										
 				$soliciting_families[]= $real->obj->family_id;
 				if($save){
 					$tmp = $real->obj;
@@ -482,9 +488,8 @@ Pacifica Co-op Nursery School
 
 			//format in-kind
 			while($real->obj->fetch()){
-				$this->items_array[] = sprintf("%s total value $%01.02f",
-											   $real->obj->item_description,
-											   $real->obj->item_value);
+				$this->items_array[] = $real->obj->item_description;
+										
 				$soliciting_families[]= $real->obj->family_id;
 				if($save){
 					$tmp = $real->obj;
@@ -499,6 +504,9 @@ Pacifica Co-op Nursery School
 			if(!count($this->items_array)){
 				return false;
 			}
+
+			$this->getValueReceived($pk, $id, $sy);
+
 			
 			return true;
 		}
@@ -622,6 +630,9 @@ Pacifica Co-op Nursery School
 			if(!count($this->items_array)){
 				return false;
 			}
+
+			$this->getValueReceived($pk, $id, $sy);
+
 			
 			return true;
 		}
@@ -674,7 +685,7 @@ Pacifica Co-op Nursery School
 											 $co->obj->zip);		
 			$this->name = sprintf('%s %s', $co->obj->first_name, 
 								  $co->obj->last_name);
-			return true;
+			return $co->obj->{$co->pk};
 		}
 
 	// only returns the FIRST lead found
@@ -707,7 +718,7 @@ Pacifica Co-op Nursery School
 											 $co->obj->zip);		
 			$this->name = sprintf('%s %s', $co->obj->first_name, 
 								  $co->obj->last_name);
-			return true;
+			return $co->obj->{$co->pk};
 		}
 
 	// populates a thank-you note with what's already in that note.
@@ -760,8 +771,6 @@ Pacifica Co-op Nursery School
 				$ticketfound = $sf->obj->find(true);
 				if($ticketfound){
 					$lead_guess_hack[]= $sf->obj->lead_id;
-					$this->items_array[] = sprintf('%d tickets to Springfest',
-											   $sf->obj->ticket_quantity);
 				}
 			}
 			if($found){
@@ -776,9 +785,8 @@ Pacifica Co-op Nursery School
 			$save =  $real->obj; // need to cache it b4 we search
 			$found = $real->obj->find();
 			while($real->obj->fetch()){
-				$this->items_array[] = sprintf("%s (total value $%01.02f)",
-											   $real->obj->item_description,
-											   $real->obj->item_value);
+				$this->items_array[] = $real->obj->item_description;
+										
 				$sf =& new CoopObject(&$this->cp , 
 									  'companies_auction_join', &$real);
 				$sf->obj->joinAdd($save);
@@ -794,9 +802,7 @@ Pacifica Co-op Nursery School
 			$save =  $real->obj; // need to cache it b4 we search
 			$real->obj->find();
 			while($real->obj->fetch()){
-				$this->items_array[] = sprintf("%s total value $%01.02f",
-											   $real->obj->item_description,
-											   $real->obj->item_value);
+				$this->items_array[] = $real->obj->item_description;
 				$sf =& new CoopObject(&$this->cp , 
 									  'companies_in_kind_join', &$real);
 				$sf->obj->joinAdd($save);
@@ -813,12 +819,16 @@ Pacifica Co-op Nursery School
 		
 
 			//  COMPANIES BROKEN! have to guess from income or inkind. bah. 
-			if($this->guessCompany($company_guess_hack)){
+			if($id = $this->guessCompany($company_guess_hack)){
 				// ugh. go get the soliciting parent
 				$this->guessParents($soliciting_families);
-			} else if($this->guessLead($lead_guess_hack)){
+				$pk = 'company_id';
+			} else if($id = $this->guessLead($lead_guess_hack)){
 				//$this->fromFamily();
+				$pk = 'lead_id';
 			}
+
+			$this->getValueReceived($pk, $id);
 
 			return true;
 		}
@@ -867,6 +877,61 @@ Pacifica Co-op Nursery School
 	  }
 	  
 		} // END REPAIRORPHANS	
+
+
+	function getValueReceived($pk, $id, $sy = NULL)
+		{
+			$sy || $sy = findSchoolYear();
+
+			//VALUE RECEIVED
+			//find ads
+			$co = new CoopObject(&$this->cp, 'ads', 
+								 &$top);
+			$co->obj->$pk = $id;
+			$real = new CoopView(&$this->cp, 'ad_sizes', 
+								 &$co);
+			$real->obj->joinadd($co->obj);
+			$found = $real->obj->find();
+
+			while($real->obj->fetch()){
+				$this->value_received_array[] = sprintf(
+					"a %s ad valued at $%01.02f",
+					$real->obj->ad_size_description,
+					$real->obj->ad_price);
+			}
+
+
+			//find tickets
+			$co = new CoopObject(&$this->cp, 'tickets', 
+								 &$top);
+			$co->obj->$pk = $id;
+			$co->obj->school_year = $sy;
+			$real = new CoopView(&$this->cp, 'ticket_type', 
+								 &$co);
+			$real->obj->joinadd($co->obj);
+			$real->obj->find();
+
+			while($real->obj->fetch()){
+				$pad = new CoopObject(&$this->cp, 'springfest_attendees',
+									  &$top);
+// 				$pad->obj->query(
+// 					sprintf(
+// 						"select count(springfest_attendees) as count
+// 								from %s
+// 								where %s = %d and school_year = '%s'
+// 								and attended = 'Yes'",
+// 						$pad->table, $pad->pk, $real->obj->{$pad->pk}));
+
+
+				$this->value_received_array[] = sprintf(
+					"%s tickets to the Springfest event valued altogether at $%01.02f",
+					$real->obj->ticket_quantity,
+					$real->obj->ticket_quantity * 25); // XXX HARDCODED TICKETPRICE!
+			}
+
+
+		} // end getvaluereceived()
+
 
 } // END THANK YOU CLASS
 
