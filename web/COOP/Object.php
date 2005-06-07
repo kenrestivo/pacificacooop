@@ -121,15 +121,14 @@ class coopObject
 		{
 
 			// and only if, um, the links.ini agrees that they are there
-			$links = $this->obj->links();
-			if(!$links){
+			if(!$this->forwardLinks){
 				//print "no links for $this->table $key $val<br>";
 				return false;
 			}
 			$this->page->confessArray($links, 
-									  "checkLInkField(): links for $this->table", 4);
+									  "isLInkField(): links for $this->table", 4);
 
-			if(!$links[$key]){
+			if(!$this->forwardLinks[$key]){
 				return false;
 			}
 			
@@ -144,8 +143,8 @@ class coopObject
 		{
 		
 			if(!$this->isLinkField($key)){
-				//user_error("$this->table $key is not a linkfield", 
-				//		E_USER_NOTICE);
+				$this->page->printDebug("$this->table $key is not a linkfield",
+										4);
 				return $val;
 			}
 
