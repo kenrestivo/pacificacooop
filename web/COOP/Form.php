@@ -29,6 +29,7 @@ require_once('lib/advmultselect.php');
 require_once('lib/customselect.php');
 require_once('lib/customdatebox.php');
 require_once('lib/customrequired.php');
+require_once('lib/customgroup.php');
 require_once('lib/subform.php');
 
 //////////////////////////////////////////

@@ -332,6 +332,32 @@ insert into sponsorship_types set
 	sponsorship_price = 150,
     school_year = '2004-2005';
 
+insert into sponsorship_types set
+	sponsorship_type_id = 5,
+	sponsorship_name = 'Angel',
+	sponsorship_price = 1000,
+    school_year = '2003-2004';
+
+insert into sponsorship_types set
+	sponsorship_type_id = 6,
+	sponsorship_name = 'Champion',
+	sponsorship_price = 500,
+    school_year = '2003-2004';
+
+
+insert into sponsorship_types set
+	sponsorship_type_id = 7,
+	sponsorship_name = 'Patron',
+	sponsorship_price = 250,
+    school_year = '2003-2004';
+
+
+insert into sponsorship_types set
+	sponsorship_type_id = 8,
+	sponsorship_name = 'Friend',
+	sponsorship_price = 150,
+    school_year = '2003-2004';
+
 
 -- tickets
 insert into ticket_type set
