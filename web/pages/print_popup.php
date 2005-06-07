@@ -59,7 +59,11 @@ if($auth['state'] != 'loggedin'){
 	done();
 }
 
-$cp =& new CoopPage();
+global $debug;
+
+//$debug = 0;
+
+$cp =& new CoopPage($debug);
 $cp->createLegacy($auth);
 
 
@@ -107,7 +111,8 @@ switch($_REQUEST['subaction']){
 	 break;
 }
 
-
+$cp->flushBuffer();
+ob_end_flush();
 print "</body></html>";
 
 ?>

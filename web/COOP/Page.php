@@ -60,7 +60,7 @@ function dump($data)
 class coopPage
 {
 	var $auth;
-	var $debug;					// debug level. used for printf's
+	var $debug = 0;					// debug level. used for printf's
 	var $indexed_all; 			// legacy stuff. ALL of the callbacks
 	var $userStruct;				// cache of legacy info ($u)
 	var $bufferedOutput;			// to store buffered output, for QFC
@@ -70,7 +70,7 @@ class coopPage
 			$this->debug = $debug;
 			PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 
 								   array(&$this, 'kensPEARErrorHandler'));
-			$this->debug && dump("debug level $this->debug");
+			dump("debug level $this->debug");
 		}
 
 	// for use with the old, non-object-oriented, homegrown auth/dispatcher

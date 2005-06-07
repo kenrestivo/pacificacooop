@@ -23,35 +23,9 @@ print $cp->pageTop();
 
 print $cp->selfURL('refresh (for testing)');
 
-$fam =& new CoopForm(&$cp, 'families', &$nothing);
-$fam->build();
-$fam->legacyPassThru();
-$fam->addRequiredFields();
-print $fam->form->toHTML();
-
-$par1 =& new CoopForm(&$cp, 'parents', &$fam);
-$par1->build();
-$par1->legacyPassThru();
-$par1->addRequiredFields();
-print $par1->form->toHTML();
-
-$par2 =& new CoopForm(&$cp, 'parents', &$fam);
-$par2->build();
-$par2->legacyPassThru();
-$par2->addRequiredFields();
-print $par2->form->toHTML();
-
-$kid =& new CoopForm(&$cp, 'kids', &$fam);
-$kid->build();
-$kid->legacyPassThru();
-$kid->addRequiredFields();
-print $kid->form->toHTML();
-
-$enrol =& new CoopForm(&$cp, 'enrollment', &$kid);
-$enrol->build();
-$enrol->legacyPassThru();
-$enrol->addRequiredFields();
-print $enrol->form->toHTML();
+$fam =& new CoopObject(&$cp, 'leads', &$nothing);
+$fam->obj->query('select * from leads where lead_id = 333');
+confessObj($fam->obj, 'famobj');
 
 done ();
 

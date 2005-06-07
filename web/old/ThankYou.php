@@ -441,7 +441,9 @@ Tax ID # 94-1527749
 				}
 			}
 			if($found){
-				$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
+				$this->items_array[] = sprintf(
+					"$%01.02f cash for our Springfest fundraiser", 
+					$cashtotal);
 			}
 				
 
@@ -916,6 +918,8 @@ Tax ID # 94-1527749
 			while($real->obj->fetch()){
 				$pad = new CoopObject(&$this->cp, 'springfest_attendees',
 									  &$top);
+
+//		XXX TODO: finish this!! it shows all tickets so far
 // 				$pad->obj->query(
 // 					sprintf(
 // 						"select count(springfest_attendees) as count

@@ -29,17 +29,17 @@ require_once('HTML/QuickForm/group.php');
 class HTML_QuickForm_customgroup extends HTML_QuickForm_group
 {
 
-    function toHtml()
-    {
-		return "test test test, customgroup is working now. look here.";
-        include_once('HTML/QuickForm/Renderer/Default.php');
-        $renderer =& new HTML_QuickForm_Renderer_Default();
-        $renderer->setElementTemplate('<div style="direction: rtl">{element}</div>');
-        $this->accept($renderer);
-
-		return $renderer->toHtml();
-    } //end func toHtml
-
+    function HTML_QuickForm_customgroup($elementName=null, $elementLabel=null, 
+										$elements=null, $separator=null, 
+										$appendName = true)
+		{
+			//user_error("customgroup constructor called", E_USER_NOTICE);
+			return HTML_QuickForm_group::HTML_QuickForm_group(
+				$elementName, $elementLabel, 
+				$elements, $separator, 
+				$appendName);
+			
+		}
 
 } // end class Customgroup
 

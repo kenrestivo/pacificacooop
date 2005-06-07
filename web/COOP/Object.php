@@ -46,7 +46,7 @@ class coopObject
 								 666);
 			}
 
-			$this->page = $page;
+			$this->page =& $page;
 			$this->table = $table ;
 			$this->recurseLevel = $level;
 			$this->parentCO = $parentCO;
@@ -99,14 +99,16 @@ class coopObject
 									  "getLinks: links for $this->table",
 									  4);
 
-			$this->forwardLinks = $links[$this->table];
+			$this->forwardLinks =& $links[$this->table];
 
 			foreach($links as $maintable => $mainlinks){
-				foreach ($mainlinks as $nearcol => $farline){
-					// split up farline and chzech it
-					list($fartable, $farcol) = explode(':', $farline);
-					if($fartable == $this->table){
-						$res[$maintable] = $nearcol;
+				if(count($mainlinks)){
+					foreach ($mainlinks as $nearcol => $farline){
+						// split up farline and chzech it
+						list($fartable, $farcol) = explode(':', $farline);
+						if($fartable == $this->table){
+							$res[$maintable] = $nearcol;
+						}
 					}
 				}
 			}
@@ -366,7 +368,7 @@ class coopObject
 						$clobber) 
 					{
 						$this->page->printDebug(
-							 "CoopObject::readConf $this->table $fbkey being set to $value", 
+							 "$this->table $fbkey being set to $value", 
 							 4);
 						$this->obj->$fbkey = $value;
 					}

@@ -163,6 +163,7 @@ class Payment extends CoopQuickForm_Page
 			//pass thru's
 			$data =& $this->controller->container();
 
+			//TODO: do this in a much saner way, using some function
 			$atdf->obj->fb_defaults['lead_id'] = 
 						$data['values']['rsvpcode']['lead_id'];
 
@@ -175,6 +176,7 @@ class Payment extends CoopQuickForm_Page
 			$atdf->overrides['income']['fb_defaults']['payment_amount'] =  
 				$data['values']['common']['payment_amount'];
 
+			// must export to get SESSION data, do NOT use REQUEST!
 			$atdf->build($this->controller->exportValues(
 							 $this->attributes['id']));
 				 
@@ -205,7 +207,9 @@ class ActionProcess extends HTML_QuickForm_Action
 			echo "Submit successful!<br>\n<pre>\n";
 			confessObj($page->controller, 'yay');
 			echo "\n</pre>\n";
-				 
+
+			//TODO: ok, this is where it all happens! do it!
+
 			//clean up after yourself, and bring me back to top!
 			$page->controller->container(true);
 			//TODO: function to get FIRST page
@@ -219,7 +223,7 @@ class ActionProcess extends HTML_QuickForm_Action
 
 ///////// MAIN
 
-$debug = 3;
+//$debug = 3;
 
 $cp = new coopPage($debug);
 $cp->buffer($cp->pageTop());

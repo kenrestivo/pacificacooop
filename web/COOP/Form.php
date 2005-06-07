@@ -782,8 +782,9 @@ function &selectSubformCombo($vars, $key, $fullkey)
 
 				// MAKE GROUP
 				$group =& $this->form->addElement(
-					'group', $fullkey . "-group", false,
-					array($select, $subform, $hidden), '<br/>', false);
+					'customgroup', $fullkey . "-group", false,
+					array($select, $subform, $hidden), '<br/>', false,
+					"fubar");
 				
 
 				// THE RULES
