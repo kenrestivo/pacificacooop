@@ -882,16 +882,18 @@ Tax ID # 94-1527749
 	function getValueReceived($pk, $id, $sy = NULL)
 		{
 			$sy || $sy = findSchoolYear();
+			$this->value_received_array = array(); // clear it! save!
 
 			//VALUE RECEIVED
 			//find ads
 			$co = new CoopObject(&$this->cp, 'ads', 
 								 &$top);
 			$co->obj->$pk = $id;
+			$co->obj->school_year = $sy;
 			$real = new CoopView(&$this->cp, 'ad_sizes', 
 								 &$co);
 			$real->obj->joinadd($co->obj);
-			$found = $real->obj->find();
+			$real->obj->find();
 
 			while($real->obj->fetch()){
 				$this->value_received_array[] = sprintf(
