@@ -52,6 +52,14 @@ print $cp->selfURL('View Sponsorships');
  print $cp->selfURL('Add Needed', array('action' => 'addneeded'));
 
 
+//$sy = '2003-2004';
+$sy = findSchoolYear();
+
+
+//TODO: merge this with sponsorships page?
+//		or, is this a one-off i'll never need again?
+
+
 // TODO put this back after i push it live
 // if($admin + $user < 1){
 //  	print "You don't have permissions to do this. Sorry.";
@@ -59,11 +67,11 @@ print $cp->selfURL('View Sponsorships');
 // }
 
 
-function viewHack(&$cp, &$atd)
+function viewHack(&$cp, &$atd, $sy)
 {
 	 $co =& new CoopObject(&$cp, 'sponsorship_types', &$atd);
 	 $atd->obj->joinAdd($co->obj);
-	 $atd->school_year = findSchoolYear();
+	 $atd->obj->school_year = $sy;
 	 $atd->obj->orderBy('sponsorship_price desc');
 	 return $atd->simpleTable();
 			
@@ -77,7 +85,7 @@ switch($_REQUEST['action']){
 //// FIND NEEDED /////
  case 'findneeded':
 	 print "<p>This could take a while. Calculating sponsors needed.</p>";
-	 $sp = new Sponsorship(&$cp);
+	 $sp = new Sponsorship(&$cp, $sy);
 	 foreach(array('companies', 'leads') as $tab){
 		 //print $tab;
 		 $co =& new CoopObject(&$cp, $tab, &$nothing);
@@ -101,7 +109,7 @@ switch($_REQUEST['action']){
 //// ADD NEEDED /////////
  case 'addneeded':
 	 print "<p>This could take a very, very, very long time. Please be patient.</p>";
-	 $sp = new Sponsorship(&$cp);
+	 $sp = new Sponsorship(&$cp, $sy);
 	 foreach(array('companies', 'leads') as $tab){
 		 //print $tab;
 		 $co =& new CoopObject(&$cp, $tab, &$nothing);
@@ -130,7 +138,7 @@ switch($_REQUEST['action']){
 
 //// DEFAULT (VIEW) //////
  default:
-	 print viewHack(&$cp, &$atd);
+	 print viewHack(&$cp, &$atd, $sy);
 
 	 break;
 }
