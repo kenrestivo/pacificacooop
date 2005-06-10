@@ -923,14 +923,15 @@ Tax ID # 94-1527749
 				// just the tip
 				$pad->obj->{$co->pk} = $co->obj->{$co->pk};
 				$pad->obj->school_year = $sy;
-				$found = $pad->obj->find();
+				$found += $pad->obj->find();
 
-				if($found){
-					$this->value_received_array[] = sprintf(
-						"%s tickets to the Springfest event valued altogether at $%01.02f",
-						$found,
-						$found * 25); // XXX HARDCODED TICKETPRICE!
-				}
+			}
+			// afterwards, in case they did multiple ticket purchases
+			if($found){
+				$this->value_received_array[] = sprintf(
+					"%s tickets to the Springfest event valued altogether at $%01.02f",
+					$found,
+					$found * 25); // XXX HARDCODED TICKETPRICE!
 			}
 
 
