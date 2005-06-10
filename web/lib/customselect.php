@@ -15,7 +15,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			// sprintf, however, i understand
 			list($table, $field) = explode('-', $this->getName());
 			
-			$values = $this->_parentForm->getSubmitValues();
+			$values = $this->_parentForm->exportValues();
 			if($values[sprintf('%s-subtables-%s',$table, $field)]){
 				$hidden = 'hidden';
 				$this->_options[0]['text'] = "Enter New Below >>";

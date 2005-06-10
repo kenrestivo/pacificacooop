@@ -732,7 +732,7 @@ class coopForm extends CoopObject
 	function requestedSubtables($vars = null)
 		{
 			if(!is_array($vars)){
-				$vars = $this->form->getSubmitValues();
+				$vars = $this->form->exportValues();
 			}
 			$search = sprintf("/%s-subtables-(.+)/", $this->table);
 			foreach($vars as $key => $val){
@@ -766,7 +766,7 @@ function &selectSubformCombo($vars, $key, $fullkey)
 				$subformname = sprintf('%s-%s-subform', $this->table, $key);
 				$sub =& $this->addSubTable($key);
 				$subform =& HTML_QuickForm::createElement(
-					'subform', 
+					'customsubform', 
 					$subformname,
 					array('id' => $subformname, 
 						  'class' => 'hidden'), // XXX hidden here???

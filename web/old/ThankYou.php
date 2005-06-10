@@ -627,7 +627,8 @@ Tax ID # 94-1527749
 
 
 			if($found){
-				$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
+				$this->items_array[] = sprintf("$%01.02f cash for our Springfest fundraiser", 
+											   $cashtotal);
 			}
 					
 
@@ -778,7 +779,8 @@ Tax ID # 94-1527749
 				}
 			}
 			if($found){
-				$this->items_array[] = sprintf("$%01.02f cash", $cashtotal);
+				$this->items_array[] = sprintf("$%01.02f cash for our Springfest fundraiser", 
+											   $cashtotal);
 			}
 				
 
@@ -912,29 +914,23 @@ Tax ID # 94-1527749
 								 &$top);
 			$co->obj->$pk = $id;
 			$co->obj->school_year = $sy;
-			$real = new CoopView(&$this->cp, 'ticket_type', 
-								 &$co);
-			$real->obj->joinadd($co->obj);
-			$real->obj->find();
+			$co->obj->find();
 
-			while($real->obj->fetch()){
+			while($co->obj->fetch()){
 				$pad = new CoopObject(&$this->cp, 'springfest_attendees',
 									  &$top);
 
-//		XXX TODO: finish this!! it shows all tickets so far
-// 				$pad->obj->query(
-// 					sprintf(
-// 						"select count(springfest_attendees) as count
-// 								from %s
-// 								where %s = %d and school_year = '%s'
-// 								and attended = 'Yes'",
-// 						$pad->table, $pad->pk, $real->obj->{$pad->pk}));
+				// just the tip
+				$pad->obj->{$co->pk} = $co->obj->{$co->pk};
+				$pad->obj->school_year = $sy;
+				$found = $pad->obj->find();
 
-
-				$this->value_received_array[] = sprintf(
-					"%s tickets to the Springfest event valued altogether at $%01.02f",
-					$real->obj->ticket_quantity,
-					$real->obj->ticket_quantity * 25); // XXX HARDCODED TICKETPRICE!
+				if($found){
+					$this->value_received_array[] = sprintf(
+						"%s tickets to the Springfest event valued altogether at $%01.02f",
+						$found,
+						$found * 25); // XXX HARDCODED TICKETPRICE!
+				}
 			}
 
 
@@ -948,5 +944,4 @@ Tax ID # 94-1527749
 
 ?>
 <!-- END THANKYOUCLASS -->
-
 

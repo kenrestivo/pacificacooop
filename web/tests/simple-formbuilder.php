@@ -53,7 +53,7 @@ switch($_REQUEST['action']){
 //// EDIT AND NEW //////
  case 'new':
  case 'edit':
-	 $fb = DB_DataObject_FormBuilder::create(&$atd->obj);
+	 $fb =& DB_DataObject_FormBuilder::create(&$atd->obj);
 	 $form = $fb->getForm();
 	 if ($form->validate()) {
 		 print "saving...";

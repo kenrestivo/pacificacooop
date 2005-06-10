@@ -14,13 +14,13 @@ __clone(); } return $r; }');
     }
 }
 
-class HTML_QuickForm_SubForm extends HTML_QuickForm_static {
+class HTML_QuickForm_customSubForm extends HTML_QuickForm_static {
     var $_subForm;
     var $_parentForm;
     var $_name;
     var $_preValidationCallback;
 
-    function HTML_QuickForm_SubForm($name=null, $label=null, $form=null)
+    function HTML_QuickForm_customSubForm($name=null, $label=null, $form=null)
     {
         if ($form !== null) {
             $this->setForm($form);
@@ -75,7 +75,7 @@ class HTML_QuickForm_SubForm extends HTML_QuickForm_static {
 
 		list($table,  $field, $crap) = explode('-', $this->getName());
 
-		$vals =& $this->_parentForm->getSubmitValues();
+		$vals =& $this->_parentForm->exportValues();
 		
 		$hidden = 'hidden';		// by default, we hide it
 		if($vals[sprintf('%s-subtables-%s', $table, $field)]){
@@ -206,9 +206,9 @@ optional forms.
 }
 
 if (class_exists('HTML_QuickForm')) {
-    HTML_QuickForm::registerElementType('subForm', 
+    HTML_QuickForm::registerElementType('customSubForm', 
 										'lib/subform.php',
-										'HTML_QuickForm_SubForm');
+										'HTML_QuickForm_customSubForm');
 }
 
 ?>
