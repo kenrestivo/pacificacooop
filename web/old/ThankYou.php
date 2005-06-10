@@ -923,6 +923,7 @@ Tax ID # 94-1527749
 				// just the tip
 				$pad->obj->{$co->pk} = $co->obj->{$co->pk};
 				$pad->obj->school_year = $sy;
+				$pad->obj->attended = 'Yes'; 
 				$found += $pad->obj->find();
 
 			}
