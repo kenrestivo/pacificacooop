@@ -562,8 +562,10 @@ Tax ID # 94-1527749
 
 			// format lead
 			if($co->obj->first_name || $co->obj->last_name){
-				$this->name = sprintf('%s %s', $co->obj->first_name, 
-									  $co->obj->last_name);
+				$this->name = implode(' ', array(
+									  $co->obj->salutation, 
+									  $co->obj->first_name, 
+									  $co->obj->last_name));
 			}
 
 			foreach(array('company', 'address1', 'address2') as $var){
