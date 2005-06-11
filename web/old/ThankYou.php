@@ -507,7 +507,8 @@ Tax ID # 94-1527749
 				return false;
 			}
 
-			$this->getValueReceived($pk, $id, $sy);
+			//TODO: check that value < cashrecived, or auction/in-kind?
+			$value = $this->getValueReceived($pk, $id, $sy);
 
 			
 			return true;
@@ -524,6 +525,8 @@ Tax ID # 94-1527749
 			// save MY view objects, not the DBDO objects,
 			// so that i can createlegacy them later if needed.
 			
+			// XXX this is crazy. doing findschoolyear on EVERY one?
+			// make it a damned arg
 			$sy = findSchoolYear();
 			
 			// XXX BUG! save assumes there really *are* thankyous needed
@@ -610,8 +613,10 @@ Tax ID # 94-1527749
 			$real->obj->school_year = $sy;
 			$real->obj->orderBy('income.school_year desc');
 			$real->obj->joinadd($co->obj);
-			$real->obj->whereAdd(sprintf('(thank_you_id is null or thank_you_id < 1) %s',
-										 $this->check_reconcile ?  ' and cleared_date > "2000-01-01" ' : ' ' ));
+			$real->obj->whereAdd(
+				sprintf(
+					'(thank_you_id is null or thank_you_id < 1) %s',
+					$this->check_reconcile ?  ' and cleared_date > "2000-01-01" ' : ' ' ));
 			$found += $real->obj->find();
 			
 			//format income
@@ -627,8 +632,9 @@ Tax ID # 94-1527749
 
 
 			if($found){
-				$this->items_array[] = sprintf("$%01.02f cash for our Springfest fundraiser", 
-											   $cashtotal);
+				$this->items_array[] = sprintf(
+					"$%01.02f cash for our Springfest fundraiser", 
+					$cashtotal);
 			}
 					
 
@@ -636,7 +642,13 @@ Tax ID # 94-1527749
 				return false;
 			}
 
-			$this->getValueReceived($pk, $id, $sy);
+			$value = $this->getValueReceived($pk, $id, $sy);
+			
+			// ok, whack the ticket-only people
+			if($value >= $cashtotal){
+				$this->items_array = array(); // XXX HACK!
+				return false;
+			}
 
 			
 			return true;
@@ -929,12 +941,13 @@ Tax ID # 94-1527749
 			}
 			// afterwards, in case they did multiple ticket purchases
 			if($found){
+				$valuereceived = $found * 25; // XXX HARDCODED TICKETPRICE!
 				$this->value_received_array[] = sprintf(
 					"%s tickets to the Springfest event valued altogether at $%01.02f",
-					$found,
-					$found * 25); // XXX HARDCODED TICKETPRICE!
-			}
+					$found, $valuereceived);
 
+			}
+			return $valuereceived;
 
 		} // end getvaluereceived()
 
