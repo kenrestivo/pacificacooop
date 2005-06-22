@@ -166,7 +166,7 @@ Tax ID # 94-1527749
 			//hack for the "tagline" at the bottom. 
 			// if it starts with a " and ends with a ",  bolditalic
 			$text = preg_replace('/&quot;(.+?)&quot;/', 
-								 '<strong><i>&quot;$1&quot;</i></strong>;', 
+								 '<strong><i>&quot;$1&quot;</i></strong>', 
 								 $text);
 			
 			return $text;
@@ -411,7 +411,7 @@ Tax ID # 94-1527749
 					$this->address_array[] = $co->obj->$var;
 				}
 			}
-			$this->address_array[] = sprintf("%s %s, %s", 
+			$this->address_array[] = sprintf("%s, %s %s", 
 											 $co->obj->city,
 											 $co->obj->state,
 											 $co->obj->zip);		
