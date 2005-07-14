@@ -29,6 +29,7 @@ require_once('object-config.php');
 /////////////////////// COOP VIEW CLASS
 class coopView extends CoopObject
 {
+
 	var $legacyCallbacks;			// hack for old callbacks
 	var $permissions; 				//  new perms structure
 	var $recordActions; 		// array of actions for new recordbuttons
@@ -63,14 +64,9 @@ class coopView extends CoopObject
 	// formats object is current in this object, um, as a table
 	function simpletable($find= true)
 		{
-			if($find){
-				$found = $this->obj->find();
-			} else {
-				$found = $this->obj->N;
-			}
-				
-			if($found < 1){
-				return false;
+			// NOTE. this object's find, not the DBDO find
+			if(!$this->find($find)){
+				return;
 			}
 			$tab = new HTML_Table('  bgcolor="#ffffff"');	
 		
@@ -94,16 +90,14 @@ class coopView extends CoopObject
 
 		}
 
-	function horizTable($find = 1)
+	function horizTable($find = true)
 		{
-			if($find){
-				$found = $this->obj->find();
-				
-				if($found < 1){
-					return false;
-				}
+			// NOTE. this object's find, not the DBDO find
+			if(!$this->find($find)){
+				return;
 			}
-						$tab =& new HTML_Table();
+
+			$tab =& new HTML_Table();
 			$tab->addCol($this->makeHeader(), 
 						 'align=right', 'TH');
 
@@ -118,6 +112,17 @@ class coopView extends CoopObject
 			return $this->tableTitle($tab->toHTML());
 	
 		}
+	
+	function find($find)
+		{
+			if($find){
+				$found = $this->obj->find();
+			} else {
+				$found = $this->obj->N;
+			}
+			return $found;
+		}
+
 
 	function insertIntoRow(&$tab, $text)
 		{
@@ -135,7 +140,6 @@ class coopView extends CoopObject
 	
 		}
 
-	// XXX this is cruft, not used anywhere. remove it
 	function addSubTables(&$tab, $links)
 		{
 			$debug = 1;
@@ -220,14 +224,10 @@ class coopView extends CoopObject
 					{
 						$res[] = sprintf('<a href="%s">%s</a>',
 										 $this->page->fixURL($val), $val);
-					} else if(is_array($this->obj->fb_displayFormat) &&
-						in_array($key, $this->obj->fb_displayFormat)) 
-					{
-						$res[] = sprintf($this->obj->fb_displayFormat[$key],
-										 $val;
 					} else {
 						$res[] = nl2br(htmlspecialchars(
-										   $this->checkLinkField($key, $val)));
+										   $this->checkLinkField(&$this->obj, 
+																 $key, $val)));
 					}
 				}
 			}
@@ -353,8 +353,8 @@ class coopView extends CoopObject
 					$res .= $this->page->selfURL(
 						$title, 
 						array( 
-							'action' => $action, // XXX my temp hack
-							//'_qf_default' => 'edit:display', // QFC:getActionName
+							'action' => $action,
+							'table' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}
 							));
@@ -414,3 +414,6 @@ class coopView extends CoopObject
 ////KEEP EVERTHANG BELOW
 
 ?>
+<!-- END COOP VIEW -->
+
+
