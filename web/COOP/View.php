@@ -29,7 +29,6 @@ require_once('object-config.php');
 /////////////////////// COOP VIEW CLASS
 class coopView extends CoopObject
 {
-
 	var $legacyCallbacks;			// hack for old callbacks
 	var $permissions; 				//  new perms structure
 	var $recordActions; 		// array of actions for new recordbuttons
@@ -66,10 +65,12 @@ class coopView extends CoopObject
 		{
 			if($find){
 				$found = $this->obj->find();
+			} else {
+				$found = $this->obj->N;
+			}
 				
-				if($found < 1){
-					return false;
-				}
+			if($found < 1){
+				return false;
 			}
 			$tab = new HTML_Table('  bgcolor="#ffffff"');	
 		
@@ -219,6 +220,11 @@ class coopView extends CoopObject
 					{
 						$res[] = sprintf('<a href="%s">%s</a>',
 										 $this->page->fixURL($val), $val);
+					} else if(is_array($this->obj->fb_displayFormat) &&
+						in_array($key, $this->obj->fb_displayFormat)) 
+					{
+						$res[] = sprintf($this->obj->fb_displayFormat[$key],
+										 $val;
 					} else {
 						$res[] = nl2br(htmlspecialchars(
 										   $this->checkLinkField($key, $val)));
