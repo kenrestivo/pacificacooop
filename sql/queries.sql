@@ -1120,5 +1120,36 @@ from springfest_attendees
 where school_year = '2004-2005' 
 order by empty_hack desc, springfest_attendee_id asc;
 
+-- who bought the foul things
+select
+packages.package_number,
+packages.package_title,
+springfest_attendees.paddle_number,
+coalesce(leads.first_name, companies.first_name, parents.first_name) 
+        as first_name,
+coalesce(leads.last_name, companies.last_name, parents.last_name) as last_name,
+coalesce(leads.company, companies.company_name) as company_name,
+coalesce(leads.address1, companies.address1, families.address1) as address1,
+coalesce(leads.address2, companies.address2) as address2,
+coalesce(leads.city, companies.city) as city,
+coalesce(leads.state, companies.state) as state,
+coalesce(leads.zip, companies.zip) as zip,
+coalesce(leads.phone, companies.phone, families.phone) as phone,
+coalesce(leads.email_address, companies.email_address, families.email) as email_address,
+packages.starting_bid,
+auction_purchases.package_sale_price
+from packages
+left join  auction_purchases on auction_purchases.package_id = 
+      packages.package_id
+left join springfest_attendees on springfest_attendees.springfest_attendee_id =
+      auction_purchases.springfest_attendee_id
+left join leads on springfest_attendees.lead_id = leads.lead_id
+left join companies on springfest_attendees.company_id = companies.company_id
+left join parents on springfest_attendees.parent_id = parents.parent_id
+left join families on parents.family_id = families.family_id
+where auction_purchases.package_sale_price > 1 
+and packages.school_year = '2004-2005'
+order by packages.package_number
+
 
 --- EOF
