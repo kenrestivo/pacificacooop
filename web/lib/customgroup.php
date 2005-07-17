@@ -1,5 +1,5 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
+
 // +----------------------------------------------------------------------+
 // | PHP version 4.0                                                      |
 // +----------------------------------------------------------------------+
@@ -29,17 +29,71 @@ require_once('HTML/QuickForm/group.php');
 class HTML_QuickForm_customgroup extends HTML_QuickForm_group
 {
 
-    function HTML_QuickForm_customgroup($elementName=null, $elementLabel=null, 
-										$elements=null, $separator=null, 
-										$appendName = true)
+    function HTML_QuickForm_customgroup($elementName=null, $elementLabel=null,
+										$selectboxelement)
 		{
 			//user_error("customgroup constructor called", E_USER_NOTICE);
+			$elements[] =& $selectboxelement;
+			
 			return HTML_QuickForm_group::HTML_QuickForm_group(
-				$elementName, $elementLabel, 
-				$elements, $separator, 
-				$appendName);
+				$elementName, $elementLabel, $elements, "<br>");
 			
 		}
+
+/*
+
+				$select->_parentForm =& $this->form;
+
+				// MAKE SUBFORM
+				$subformname = sprintf('%s-%s-subform', $this->table, $key);
+				$sub =& $this->addSubTable($key);
+				$subform =& HTML_QuickForm::createElement(
+					'customsubform', 
+					$subformname,
+					array('id' => $subformname, 
+						  'class' => 'hidden'), // XXX hidden here???
+					$sub->form);
+
+				// THE HIDDEN
+				$hiddenname = sprintf('%s-subtables-%s',
+									  $this->table, $key);
+				$hidden =& HTML_QuickForm::createElement(
+					'hidden', $hiddenname,
+					$vars[$hiddenname] ? $vars[$hiddenname] : 0,
+					array('id' => $hiddenname)); // getelementbyid
+				
+
+				// MAKE GROUP
+				$group =& $this->form->addElement(
+					'customgroup', $fullkey . "-group", false,
+					array($select, $subform, $hidden), '<br/>', false,
+					"fubar");
+				
+
+				// THE RULES
+				if($this->obj->fb_requiredFields[$key]){
+					// yank from requiredfields at top level
+					unset($this->obj->fb_requiredFields[$key]);
+
+					$this->form->addGroupRule(
+						$group->getName(),
+						array($fullkey => array(
+								  "$key mustn't be empty", 'customrequired'
+								  )));
+
+					$this->form->addRule($group->getName(),
+										 "$key mustn't be empty",
+										 'customrequired'
+										 );
+					$this->form->_required[] = $group->getName();
+
+					//TODO: deal with required fields rules!!
+					//TODO: add group rules
+				}
+
+
+*/
+
 
 } // end class Customgroup
 

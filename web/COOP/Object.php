@@ -87,6 +87,7 @@ class coopObject
 	}
 
 	// different from the object's getlinks! this one gets my backlinks
+	// it's totally different, so i can ignore problems with DBDO::getLinks
 	function getLinks()
 		{
 			
@@ -282,6 +283,8 @@ class coopObject
 				return false;
 			}
 			//we don't show if not in fieldstorender
+			//NOTE: it could not be in the db itself,
+			//but if it's in fieldstorender, then we show it anyway
 			if($this->obj->fb_fieldsToRender && 
 			   !in_array($key, $this->obj->fb_fieldsToRender)){
 				//confessArray($this->obj->fb_fieldsToRender, "$key is NOT in:");

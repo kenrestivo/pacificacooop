@@ -39,6 +39,6 @@ class Auction_purchases extends DB_DataObject
 		'package_sale_price'
 		);
 	var $fb_formHeaderText =  'Springfest Auction Purchases';
-
+	var $fb_displayFormat = array('package_sale_price' => '$%0.02f');
 
 }

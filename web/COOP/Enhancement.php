@@ -65,10 +65,7 @@ class Enhancement
 
     // TODO: a much more complex function that gets the enrollment
     // for a familyID and gets the start date and then calcs this
-    // TODO: i will also have to deal with DROP DATE!
-    /// BAH!! i also have to calculate these for each semester!
-    /// because of the carryovers!
-
+ 
 
 
     // date in sql fmt, pleeze YYYY-MM-DD
@@ -182,7 +179,7 @@ class Enhancement
             return mktime(0,0,0,$month, $day, $year);
         }
 
-    // so. fucking. ugly.
+    // so. fucking. ugly. i use unix dates to make the math easier.
     function guessSemester($date = false)
         {
             if(!$date){
@@ -199,8 +196,7 @@ class Enhancement
                     return $semester;
                 }
             }
-            user_error("Enhancement::guessSemester($date): couldn't guess!",
-                       E_USER_ERROR);
+			PEAR::raiseError("couldn't guess $date in $this->schoolYear",666);
         }
 
     // a very common funtion. summarises the REAL hours for this family

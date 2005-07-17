@@ -476,7 +476,23 @@ findSchoolYear($date = 0, $guess = 1, $increment = 0)
 	}
 
 
-	//TODO: look up the year in the db
+	//look up the year in the db, based on cutoff dates
+	$query = sprintf("select school_year, event_date from calendar_events 
+				where event_id = 6 and '%s' <= event_date 
+				order by event_date asc limit 1",
+					 $date);
+	$listq = mysql_query($query);
+	$err = mysql_error();
+	if($err){
+		PEAR::raiseError("dead query", 555);
+	}
+	
+	// got one? use it.
+	if (mysql_num_rows($listq)) {
+		$row = mysql_fetch_assoc($listq);
+		return $row['school_year'];
+	}
+									
 
 	//ok, nothing there, so guess
 	if($guess){

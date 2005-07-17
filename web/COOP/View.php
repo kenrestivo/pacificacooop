@@ -219,6 +219,10 @@ class coopView extends CoopObject
 						$res[] = timestamp_db_php($val);
 					} else if ($table[$key] &  DB_DATAOBJECT_DATE){
 						$res[] = sql_to_human_date($val);
+					} else if(is_array($this->obj->fb_displayFormat) &&
+						in_array($key, $this->obj->fb_displayFormat)) 
+					{
+						$res[] = sprintf($this->obj->fb_displayFormat, $val);
 					} else if(is_array($this->obj->fb_URLFields) &&
 						in_array($key, $this->obj->fb_URLFields)) 
 					{
