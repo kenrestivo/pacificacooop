@@ -16,9 +16,11 @@ class RastaImport:
     f=None
     r=None
     fname=''
+    session=''
 
-    def __init__ (self, filename, type):
+    def __init__ (self, filename, session):
         self.fname=filename
+        self.session=session
         self.setup()
         self.getKeys()
 
@@ -55,13 +57,16 @@ class RastaImport:
 
     def loadLine(self):
         #ooh, i like python
-        return dict(zip(self.keys,map(self.cleanInput, self.r.next()))) 
-        
+        l=dict(zip(self.keys,map(self.cleanInput, self.r.next())))
+    	l.update({'session':self.session})
+        return l
 
 ###### MAIN
 if __name__ == '__main__':
-    R=RastaImport("AMRoste05-06.csv", 'AM')
-    R.loadLine()
+    AM=RastaImport("/mnt/kens/ki/proj/coop/imports/AMRoste05-06.csv", 'AM')
+    PM=RastaImport("/mnt/kens/ki/proj/coop/imports/PMRoster05-06.csv", 'PM')
+	#AM.loadLine()
+
 
 
 ##wow cool! though don't need now with dicts!
