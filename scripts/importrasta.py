@@ -18,7 +18,7 @@ class RastaImport:
 
     def setup(self):
         #file open
-        self.f=open("/mnt/kens/ki/proj/coop/imports/AMRoste05-06.csv" , "r")
+    	self.f=open("/mnt/kens/ki/proj/coop/imports/AMRoste05-06.csv" , "r")
         self.r=csv.reader(self.f,dialect='excel')
         print "Loaded file."
 
