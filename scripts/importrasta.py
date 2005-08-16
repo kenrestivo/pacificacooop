@@ -4,8 +4,8 @@
 
 import os
 import csv
-import MySQLdb
-mdb=MySQLdb                             # loathe CapNames
+#import MySQLdb
+#mdb=MySQLdb                             # loathe CapNames
 
 
 
@@ -15,10 +15,16 @@ class RastaImport:
     keys=[]
     f=None
     r=None
+    fname=''
+
+    def __init__ (self, filename, type):
+        self.fname=filename
+        self.setup()
+        self.getKeys()
 
     def setup(self):
         #file open
-    	self.f=open("/mnt/kens/ki/proj/coop/imports/AMRoste05-06.csv" , "r")
+        self.f=open(self.fname, "r")
         self.r=csv.reader(self.f,dialect='excel')
         print "Loaded file."
 
@@ -47,14 +53,15 @@ class RastaImport:
          #YAY! got the keys
          self.keys=l
 
+    def loadLine(self):
+        #ooh, i like python
+        return dict(zip(self.keys,map(self.cleanInput, self.r.next()))) 
+        
 
 ###### MAIN
 if __name__ == '__main__':
-    R=RastaImport()
-    R.setup()
-    R.getKeys()
-    #ooh, i like python
-    dict(zip(R.keys,map(R.cleanInput, R.r.next())))
+    R=RastaImport("AMRoste05-06.csv", 'AM')
+    R.loadLine()
 
 
 ##wow cool! though don't need now with dicts!
