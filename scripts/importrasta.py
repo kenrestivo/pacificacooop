@@ -25,6 +25,7 @@ class RastaImport:
         self.getKeys()
 
     def setup(self):
+        """Loads the file, basically"""
         #file open
         self.f=open(self.fname, "r")
         self.r=csv.reader(self.f,dialect='excel')
@@ -35,20 +36,21 @@ class RastaImport:
         #           host='bc', cursorclass=mdb.cursors.DictCursor) 
         #c=conn.cursor()
 
-    def cleanInput(self,x):
+    def _cleanInput(self,x):
+        """Utility method to clean up input"""
         return x.replace('*','').strip()
 
 
     def getKeys(self):
          """loop through looking for the keys and the beginning of the rasta"""
          self.f.seek(0)                               # just ot be sure
-         while map(self.cleanInput, self.r.next()).count('') < 10 :
+         while map(self._cleanInput, self.r.next()).count('') < 10 :
                  print "Skipping header line..."
 
          ##skipping blanks
          while True:
                  print "Skipping BLANK line..."
-                 l=map(self.cleanInput, self.r.next())
+                 l=map(self._cleanInput, self.r.next())
                  if l.count('') < 10:
                          break
 
@@ -56,8 +58,9 @@ class RastaImport:
          self.keys=l
 
     def loadLine(self):
+        """Iterator method, basically. Produces cleaned-up line"""
         #ooh, i like python
-        l=dict(zip(self.keys,map(self.cleanInput, self.r.next())))
+        l=dict(zip(self.keys,map(self._cleanInput, self.r.next())))
     	l.update({'session':self.session})
         return l
 
