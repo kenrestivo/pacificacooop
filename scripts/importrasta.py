@@ -8,6 +8,10 @@ import csv
 f=open("/mnt/kens/ki/proj/coop/imports/AMRoste05-06.csv" , "r")
 r=csv.reader(f,dialect='excel')
 
+#ooh, i like python
+dict(zip(keys,[i.strip() for i in r.next()]))
 
-l=r.next()
-[i.strip() for i in l]
+
+
+##wow cool!
+#[p.split() for p in l[1:3]]
