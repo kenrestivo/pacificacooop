@@ -897,7 +897,7 @@ gui stuff
 					how do i know which struct to display?
 					how do i know which to RETURN to!??!
 					and how does it know what to display from vars vs db?
-	showUsers() screen is gonna be interesting
+	showUsers() perms screen is gonna be interesting
 		username
 			user <tab> realm1 <tab> realm2 <tab> realm3 
 			group <tab> realm1 <tab> realm2 <tab> realm3 

@@ -99,8 +99,8 @@
 
 
 (define (update-2004-2005)
-  (let ((dbh (apply simplesql-open "mysql"
-					(read-conf "/mnt/kens/ki/proj/coop/sql/db-kens.conf"))))
+  (let ((dbh (apply simplesql-open 'mysql
+					(read-conf "/mnt/kens/ki/proj/coop/sql/db-ken.conf"))))
 	;; now the solicitation
 	 (solicits dbh
 			   '("depriest" "refino" "kaitz" "solano" "mrad" "gaffney" "bauer"))

@@ -179,6 +179,18 @@ insert into calendar_events set
             event_date = "2005-03-19"
 ;
 
+insert into calendar_events set
+            event_id = 5,
+            school_year = '2005-2006',
+            event_date = "2005-12-31"
+;
+
+insert into calendar_events set
+            event_id = 6,
+            school_year = '2005-2006',
+            event_date = "2006-06-30"
+;
+
 -- the territories
 insert into territories set
             territory_id = 1,
