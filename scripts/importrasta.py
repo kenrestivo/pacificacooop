@@ -21,7 +21,7 @@ def cleanInput(x):
      return x.replace('*','').strip()
 
 
-##loop through looking for empty lines, followd by keys
+##loop through looking for the keys and the beginning of the rasta
 f.seek(0)                               # just ot be sure
 while map(cleanInput, r.next()).count('') < 10 :
         print "Skipping header line..."
@@ -40,7 +40,7 @@ while True:
 keys=l
 
 #ooh, i like python
-dict(zip(keys,[i.replace('*','').strip() for i in r.next()]))
+dict(zip(keys,[cleanInput(i) for i in r.next()]))
 
 
 
