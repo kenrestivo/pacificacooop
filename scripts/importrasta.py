@@ -45,10 +45,8 @@ class RastaImport:
         keys=l
 
         l=[dict(zip(keys,map(self._cleanInput, x))) for x in self.r]
-        for x in l: x.update({'session': self.session})
+        for x in l: x.update({'session': self.session}) # ahck. side-effect
         return l
-
-
 
 
     def _cleanInput(self,x):
@@ -61,7 +59,8 @@ class RastaImport:
 if __name__ == '__main__':
     AM=RastaImport("/mnt/kens/ki/proj/coop/imports/AMRoster05-06.csv", 'AM')
     PM=RastaImport("/mnt/kens/ki/proj/coop/imports/PMRoster05-06.csv", 'PM')
-
+	l.extend(AM.get())
+	l.extend(PM.get())
 
 ##wow cool! though don't need now with dicts!
 #[p.split() for p in l[1:3]]
