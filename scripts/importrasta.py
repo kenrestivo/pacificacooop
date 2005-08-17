@@ -12,19 +12,19 @@ l=[]                                    # the completed am/pm minimarket
 ## do i *really* need an object here? or is encapsualtion in import ok?
 ## ah, ok. one rastaimport for each of am/pm
 class RastaImport:
-    keys=[]
-    f=None
     r=None
-    fname=''
+    f=None
     session=''
+
+
 
     def __init__ (self, filename, session):
         """Loads the file, basically. 
             loop through looking for the keys and the beginning of the rasta"""
-        self.fname=filename
+        fname=filename
         self.session=session
 
-        self.f=open(self.fname, "r")
+        self.f=open(fname, "r")
         self.r=csv.reader(self.f,dialect='excel')
         print "Loaded file."
 
@@ -42,9 +42,9 @@ class RastaImport:
                 break
 
         #YAY! got the keys
-        self.keys=l
+        keys=l
 
-       	l=[dict(zip(self.keys,map(self._cleanInput, x))) for x in self.r]
+        l=[dict(zip(keys,map(self._cleanInput, x))) for x in self.r]
         for x in l: x.update({'session': self.session})
         return l
 
@@ -71,5 +71,5 @@ if __name__ == '__main__':
         #conn=mdb.connect(user='input', passwd='test', db='coop', 
         #           host='bc', cursorclass=mdb.cursors.DictCursor) 
         #c=conn.cursor()
-        
-            #l.update({'session':self.session}) 
+
+            #l.update({'session':session}) 
