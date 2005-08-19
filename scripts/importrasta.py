@@ -50,7 +50,12 @@ class RastaImport:
         #YAY! got the keys
         keys=l
 
-        l=[dict(zip(keys,map(self._cleanInput, x))) for x in self.r]
+
+        #the massive filter
+        l=[y for y in [dict(zip(keys,map(self._cleanInput, x))) for x in self.r]
+           if y.get('Mom Name') and y.get('Dad/Partner')]
+
+        
         for x in l:
             x.update({'session': self.session}) # ahck. side-effect
             mom=x.get('Mom Name').split()
