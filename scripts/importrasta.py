@@ -8,10 +8,11 @@ the databse with its spiffy new contents"""
 
 import os
 import csv
+from datetime import date
 #import MySQLdb
 #mdb=MySQLdb                             # loathe CapNames
 
-l=[]                                    # the completed am/pm minimarket
+rasta=[]                                    # the completed am/pm minimarket
 
 ## do i *really* need an object here? or is encapsualtion in import ok?
 ## ah, ok. one rastaimport for each of am/pm
@@ -55,9 +56,10 @@ class RastaImport:
         l=[y for y in [dict(zip(keys,map(self._cleanInput, x))) for x in self.r]
            if y.get('Mom Name') and y.get('Dad/Partner')]
 
-        
+        #super butt-ugly with cheese
         for x in l:
             x.update({'session': self.session}) # ahck. side-effect
+            x.update({'DOB': self._dateFix(x.get('DOB'))})
             mom=x.get('Mom Name').split()
             dad=x.get('Dad/Partner').split()
             x.update({'mom_first': str.join(" ", mom[0:-1])})
@@ -71,21 +73,30 @@ class RastaImport:
         """Utility method to clean up input record"""
         return x.replace('*','').strip()
 
+    def _dateFix(self, d):
+        if d.count('/') > 1:
+            return d
+        else:
+            return date.fromordinal(
+                int(d)+
+                date.toordinal(date(1900,1,1))).strftime("%m/%d/%y")
+
+####END of rastaimport class
+
+def process(am_file, pm_file):
+    """Takes AM, PM files, builds objects for them, and loads them"""
+    AM=RastaImport(am_file, 'AM')
+    PM=RastaImport(pm_file, 'PM')
+    rasta.extend(AM.get())
+    rasta.extend(PM.get())
 
 
 ###### MAIN
 if __name__ == '__main__':
     #TODO: use argv. this is sillie
-    AM=RastaImport("/mnt/kens/ki/proj/coop/imports/AMRoster05-06.csv", 'AM')
-    PM=RastaImport("/mnt/kens/ki/proj/coop/imports/PMRoster05-06.csv", 'PM')
-    l.extend(AM.get())
-    l.extend(PM.get())
+    process("/mnt/kens/ki/proj/coop/imports/AMRoster05-06.csv", 
+            "/mnt/kens/ki/proj/coop/imports/PMRoster05-06.csv")
 
-##wow cool! though don't need now with dicts!
-#[p.split() for p in l[1:3]]
-
-#moms=[i.get('Mom Name') for i in l]
-#[str.join(" ", m.split()[0:-1]) for m in moms]
 
 
 
@@ -94,4 +105,3 @@ if __name__ == '__main__':
 #           host='bc', cursorclass=mdb.cursors.DictCursor) 
 #c=conn.cursor()
 
-#l.update({'session':session}) 
