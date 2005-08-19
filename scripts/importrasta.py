@@ -2,6 +2,10 @@
 
 #$Id$
 
+"""Imports the rasta in the old Excel/CSV format, and updates
+the databse with its spiffy new contents"""
+
+
 import os
 import csv
 #import MySQLdb
@@ -35,6 +39,8 @@ class RastaImport:
             print "Skipping header line..."
 
         ##skipping blanks
+        ##TODO: it'd be nice to make this a one-liner to find the first
+        ##non-blank line and make it the key.
         while True:
             print "Skipping BLANK line..."
             l=map(self._cleanInput, self.r.next())
@@ -45,7 +51,14 @@ class RastaImport:
         keys=l
 
         l=[dict(zip(keys,map(self._cleanInput, x))) for x in self.r]
-        for x in l: x.update({'session': self.session}) # ahck. side-effect
+        for x in l:
+            x.update({'session': self.session}) # ahck. side-effect
+            mom=x.get('Mom Name').split()
+            dad=x.get('Dad/Partner').split()
+            x.update({'mom_first': str.join(" ", mom[0:-1])})
+            x.update({'mom_last': mom[-1]})
+            x.update({'dad_first': str.join(" ", dad[0:-1])})
+            x.update({'dad_last': dad[-1]})
         return l
 
 
@@ -57,18 +70,23 @@ class RastaImport:
 
 ###### MAIN
 if __name__ == '__main__':
+    #TODO: use argv. this is sillie
     AM=RastaImport("/mnt/kens/ki/proj/coop/imports/AMRoster05-06.csv", 'AM')
     PM=RastaImport("/mnt/kens/ki/proj/coop/imports/PMRoster05-06.csv", 'PM')
-	l.extend(AM.get())
-	l.extend(PM.get())
+    l.extend(AM.get())
+    l.extend(PM.get())
 
 ##wow cool! though don't need now with dicts!
 #[p.split() for p in l[1:3]]
 
+#moms=[i.get('Mom Name') for i in l]
+#[str.join(" ", m.split()[0:-1]) for m in moms]
 
-        #db open
-        #conn=mdb.connect(user='input', passwd='test', db='coop', 
-        #           host='bc', cursorclass=mdb.cursors.DictCursor) 
-        #c=conn.cursor()
 
-            #l.update({'session':session}) 
+
+#db open
+#conn=mdb.connect(user='input', passwd='test', db='coop', 
+#           host='bc', cursorclass=mdb.cursors.DictCursor) 
+#c=conn.cursor()
+
+#l.update({'session':session}) 
