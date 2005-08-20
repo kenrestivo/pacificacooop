@@ -9,8 +9,8 @@ the databse with its spiffy new contents"""
 import os
 import csv
 from datetime import date
-#import MySQLdb
-#mdb=MySQLdb                             # loathe CapNames
+import MySQLdb
+mdb=MySQLdb  # loathe CapNames
 
 rasta=[]                                    # the completed am/pm minimarket
 
@@ -25,7 +25,7 @@ class RastaImport:
 
     def __init__ (self, filename, session):
         """Loads the file, basically. 
-            loop through looking for the keys and the beginning of the rasta"""
+            Loop through looking for the keys and the beginning of the rasta"""
         fname=filename
         self.session=session
 
@@ -53,19 +53,20 @@ class RastaImport:
 
 
         #the massive filter
+        #i use get here because y['thing'] throws an exeption if not there
         l=[y for y in [dict(zip(keys,map(self._cleanInput, x))) for x in self.r]
            if y.get('Mom Name') and y.get('Dad/Partner')]
 
         #super butt-ugly with cheese
         for x in l:
-            x.update({'session': self.session}) # ahck. side-effect
-            x.update({'DOB': self._dateFix(x.get('DOB'))})
-            mom=x.get('Mom Name').split()
-            dad=x.get('Dad/Partner').split()
-            x.update({'mom_first': str.join(" ", mom[0:-1])})
-            x.update({'mom_last': mom[-1]})
-            x.update({'dad_first': str.join(" ", dad[0:-1])})
-            x.update({'dad_last': dad[-1]})
+            x['session'] = self.session 
+            x['DOB'] =self._dateFix(x['DOB'])
+            mom=x['Mom Name'].split()
+            dad=x['Dad/Partner'].split()
+            x['mom_first'] = str.join(" ", mom[0:-1])
+            x['mom_last'] = mom[-1]
+            x['dad_first'] = str.join(" ", dad[0:-1])
+            x['dad_last'] = dad[-1]
         return l
 
 
@@ -74,6 +75,8 @@ class RastaImport:
         return x.replace('*','').strip()
 
     def _dateFix(self, d):
+        """Deal with Excel dates, which sometimes come up unformatted
+        as integers"""
         if d.count('/') > 1:
             return d
         else:
@@ -83,7 +86,7 @@ class RastaImport:
 
 ####END of rastaimport class
 
-def process(am_file, pm_file):
+def load(am_file, pm_file):
     """Takes AM, PM files, builds objects for them, and loads them"""
     AM=RastaImport(am_file, 'AM')
     PM=RastaImport(pm_file, 'PM')
@@ -91,17 +94,28 @@ def process(am_file, pm_file):
     rasta.extend(PM.get())
 
 
+
+
+
 ###### MAIN
 if __name__ == '__main__':
     #TODO: use argv. this is sillie
-    process("/mnt/kens/ki/proj/coop/imports/AMRoster05-06.csv", 
+    load("/mnt/kens/ki/proj/coop/imports/AMRoster05-06.csv", 
             "/mnt/kens/ki/proj/coop/imports/PMRoster05-06.csv")
 
 
+def getFamilyID(rec):
+    c.execute("""select * from families where phone like '%%%s%%'
+    and name like '%%%s%%' """ % (rec['Phone'], rec['Last Name']))
+    r=c.fetchall()
+    if c.rowcount < 1: raise NoneFound
+    if c.rowcount > 1: raise TooManyFound
+    return r[0]['family_id']
 
 
 #db open
-#conn=mdb.connect(user='input', passwd='test', db='coop', 
-#           host='bc', cursorclass=mdb.cursors.DictCursor) 
-#c=conn.cursor()
+conn=mdb.connect(user='input', passwd='test', db='coop',
+                 host='localhost', cursorclass=mdb.cursors.DictCursor) 
+c=conn.cursor()
 
+#c.execute('select * from kids where phone like "%%%s%%" and name like "%%%s%%" ' %  (importrasta.rasta[0]['Phone'], importrasta.rasta[0]['Last Name']))
