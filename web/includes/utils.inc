@@ -4,7 +4,7 @@
 	utilities used by auth and shared, which contain no object-specific stuff
 
   Copyright (C) 2003-2005  ken restivo <ken@restivo.org>
-#<!-- $Id$ --> 
+<!-- $Id$ --> 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -476,23 +476,7 @@ findSchoolYear($date = 0, $guess = 1, $increment = 0)
 	}
 
 
-	//look up the year in the db, based on cutoff dates
-	$query = sprintf("select school_year, event_date from calendar_events 
-				where event_id = 6 and '%s' <= event_date 
-				order by event_date asc limit 1",
-					 $date);
-	$listq = mysql_query($query);
-	$err = mysql_error();
-	if($err){
-		PEAR::raiseError("dead query", 555);
-	}
-	
-	// got one? use it.
-	if (mysql_num_rows($listq)) {
-		$row = mysql_fetch_assoc($listq);
-		return $row['school_year'];
-	}
-									
+	//TODO: look up the year in the db
 
 	//ok, nothing there, so guess
 	if($guess){
@@ -581,3 +565,7 @@ function todaysDate(datefield) {
 
 //EOF!!!  DON'T DELETE PAST HERE, I NEED THAT STUFF
 ?>
+<!-- END UTILS -->
+
+
+
