@@ -10,9 +10,29 @@ import os
 import csv
 from datetime import date
 import MySQLdb
-mdb=MySQLdb  # loathe CapNames
+
 
 rasta=[]                                    # the completed am/pm minimarket
+
+#TODO check these!
+valid_keys = [
+ 'Mom Name',
+ 'Tu',
+ 'Th',
+ 'Phone',
+ 'Last Name',
+ 'Address',
+ 'M',
+ 'School Job',
+ 'DOB',
+ 'session',
+ 'F',
+ 'W',
+ 'Child',
+ 'Email',
+ 'Dad/Partner']
+
+
 
 ## do i *really* need an object here? or is encapsualtion in import ok?
 ## ah, ok. one rastaimport for each of am/pm
@@ -86,14 +106,83 @@ class RastaImport:
 
 ####END of rastaimport class
 
+class TooManyFound(Exception):
+    def __init__(self):
+        print "too many found"
+
+class NoneFound(Exception):
+    def __init__(self):
+        print 'None found...'
+
+########end of exception classes
+
+class Adder:
+    """abstract base class for the various db objects"""
+    rec={}
+    c=None
+    r=[]
+    pk=""
+    
+    def __init__(self, c, rec):
+        self.rec = rec
+        self.c = c
+        
+    def wrapper(self):
+        try:
+            return self.get()
+        except NoneFound:
+            return self.add()
+        except TooManyFound:
+            return self.choose()
+
+    def choose(self):
+        """silly little chooser"""
+        print '--- For this Line: ---'
+        for i in self.rec.values(): print '%s' %  i
+        print "\n--------\nHere are the database results:\n"
+        for i in self.r:
+            print '-----------'
+            for j in i.values(): print j
+        valid=[x[self.pk] for x in self.r]
+        n=input('Pick the ID above (%s): ' %
+                ','.join([str(x) for x in valid]))
+        if not int(n) in valid:
+            print "no, that's not OK. try again"
+            self.choose()               # can i tail recurse? will it do it?
+        else:
+            return n
+        
+        
+class Family(Adder):
+    def get(self):
+        """a very cheap way to get the family."""
+        self.pk='family_id'
+        c.execute("""select * from families where phone like '%%%s%%'
+        and name like '%%%s%%' """ % (self.rec['Phone'], self.rec['Last Name']))
+        self.r=c.fetchall()
+        if c.rowcount < 1: raise NoneFound
+        if c.rowcount > 1: raise TooManyFound
+        return r[0][self.pk]
+    
+        #TODO: handle the situation where the family last name is a duplicate!
+    def add(self):
+        """simple insert wrapper"""
+        c.execute("""insert into families set name = '%s', phone = '%s',
+        address1 = '%s', email = '%s'""" %
+                  (self.rec['Last Name'], self.rec['Phone'],
+                   self.rec['Address'], self.rec['Email']))
+        return c.lastrowid
+    
+
+
+##########naked functions
+
 def load(am_file, pm_file):
     """Takes AM, PM files, builds objects for them, and loads them"""
     AM=RastaImport(am_file, 'AM')
     PM=RastaImport(pm_file, 'PM')
     rasta.extend(AM.get())
     rasta.extend(PM.get())
-
-
 
 
 
@@ -104,18 +193,10 @@ if __name__ == '__main__':
             "/mnt/kens/ki/proj/coop/imports/PMRoster05-06.csv")
 
 
-def getFamilyID(rec):
-    c.execute("""select * from families where phone like '%%%s%%'
-    and name like '%%%s%%' """ % (rec['Phone'], rec['Last Name']))
-    r=c.fetchall()
-    if c.rowcount < 1: raise NoneFound
-    if c.rowcount > 1: raise TooManyFound
-    return r[0]['family_id']
 
 
 #db open
-conn=mdb.connect(user='input', passwd='test', db='coop',
-                 host='localhost', cursorclass=mdb.cursors.DictCursor) 
+conn=MySQLdb.connect(user='input', passwd='test', db='coop',
+                 host='localhost', cursorclass=MySQLdb.cursors.DictCursor) 
 c=conn.cursor()
 
-#c.execute('select * from kids where phone like "%%%s%%" and name like "%%%s%%" ' %  (importrasta.rasta[0]['Phone'], importrasta.rasta[0]['Last Name']))
