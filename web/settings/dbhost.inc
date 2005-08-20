@@ -25,12 +25,12 @@
 	global $dbuser ;
 	global $dbpwd ;
 	global $dbhost ;
-		global $debug;
+        global $debug;
 
-		$debug = 2;
+        $debug = 2;
 	$dbuser = "springfest";
 	$dbpwd = "92xPi9";
-	$dbhost =  "bc";
+	$dbhost =  "localhost";
 	#$coop_sendto =  "ken@restivo.org";
 
 	##<!-- END DBHOST -->

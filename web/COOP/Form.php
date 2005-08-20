@@ -29,8 +29,6 @@ require_once('lib/advmultselect.php');
 require_once('lib/customselect.php');
 require_once('lib/customdatebox.php');
 require_once('lib/customrequired.php');
-require_once('lib/customgroup.php');
-require_once('lib/subform.php');
 
 //////////////////////////////////////////
 /////////////////////// COOP FORM CLASS
@@ -46,8 +44,7 @@ class coopForm extends CoopObject
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function &build($vars = false)
 		{
-			$this->page->confessArray($vars, "BUILDING $this->table with vars", 
-									  3);
+			$this->page->confessArray($vars, "$this->table build vars", 3);
 			$this->id = (int)$vars[$this->prependTable($this->pk)];
 			if($this->id > 0){
 				$this->obj->get($this->id);
@@ -56,7 +53,7 @@ class coopForm extends CoopObject
 						   E_USER_NOTICE);
 			}
 			$formname = sprintf('edit_%s', $this->table);
-			if(!is_object($this->form)){	// deal with QFC
+			if(!$this->form){	// deal with QFC
 				$this->form =& new HTML_QuickForm($formname, false, false, 
 												  false, false, true);
 			}
@@ -103,6 +100,7 @@ class coopForm extends CoopObject
 	// yes this is easily as ugly as my old shared.inc, or FB. oh well.
 	function addAndFillVars($vars)
 		{
+			$st = $vars[$this->prependTable('subtables')];
 
 			// need these for un-html'ing
 			$trans_tbl = get_html_translation_table (HTML_ENTITIES);
@@ -144,8 +142,21 @@ class coopForm extends CoopObject
 					$el =& $this->obj->fb_preDefElements[$key];
 					$this->form->addElement(&$el);
 					$el->setName($fullkey); 
-				} else if($this->isLinkField($key)) {
-					$el =& $this->selectSubformCombo($vars, $key, $fullkey);
+				} else if($this->isLinkField(&$this->obj, $key)) {
+					// check that we don't want NEW here
+					if(isset($st[$key])){
+						$this->addSubtable($key);
+						continue;
+					} else {
+						$type = (!is_array($this->obj->fb_addNewLinkFields) ||
+							in_array($key, $this->obj->fb_addNewLinkFields)) 
+							? 'customselect' : 'select';
+						$el =& $this->form->addElement(
+							$type, 
+							$fullkey, false, 
+							$this->selectOptions($key));
+						
+					}
 				} else if(is_array($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{
@@ -167,8 +178,6 @@ class coopForm extends CoopObject
 								   'Date must be in format MM/DD/YYYY', 
 								   'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
 					$val && $val = sql_to_human_date($val);
-				} else if($key == 'school_year'){ // special case for schoolyear
-					$el =& $this->schoolYearPopup();
 				} else {
 					//i ALWAYS hide primary key. it's hardcoded here.
 					// note this is different from FB behaviour.
@@ -204,7 +213,6 @@ class coopForm extends CoopObject
 		{
 
 			// i ALWAYS want a choose onez. always. screw FB.
-			//TODO: use the globals! fb has one
 			$options[] = "-- CHOOSE ONE --";
 			//confessObj($this, 'this');
 			$link = explode(':', $this->forwardLinks[$key]);
@@ -248,11 +256,13 @@ class coopForm extends CoopObject
 			
 
 			/// process recursive subtables FIRST
-			if(is_array($st = $this->requestedSubtables($vars))){
+			$st = $vars[$this->prependTable('subtables')];
+			if(is_array($st)){
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
-						$this->page->printDebug("<br>DEBUG processing $key $val (table $table) for $this->table", 1);
+					$this->page->debug > 1 &&
+						print "<br>DEBUG processing $key $val (table $table) for $this->table";
 					$sub =& $this->subtables[$table]; // subobject cache
 					$sub->form->process(array(&$sub, 'process'));
 					$vars[$this->prependTable($key)] = $sub->id; // yay!!!
@@ -298,10 +308,10 @@ class coopForm extends CoopObject
 								
 				//TODO: escape currency chars, as per shared.inc
 								
-				$this->page->printDebug(
-					sprintf("CoopForm::scrubForSave(%s) %d chars<br>", 
-						   $fullkey, strlen($val)), 2);
-				
+				$this->page->debug > 2 && 
+					printf("CoopForm::scrubForSave(%s) %d chars<br>", 
+						   $fullkey, strlen($val));
+
 				if($val == ''){ 
 					$cleanvars[$key] = DB_DataObject_Cast::sql('NULL') ;
 				} else if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
@@ -376,7 +386,7 @@ class coopForm extends CoopObject
 			return $doubleopt;
 		}
 
-	/// XXX THIS SUCKS> it's only used in old RSVP. remove later.
+	/// XXX THIS SUCKS> it's only used in RSVP. remove later.
 	function passVarsThrough($varnames, $vars)
 		{
 			//XXX ack! this overrides what's there. should it?
@@ -397,28 +407,29 @@ class coopForm extends CoopObject
 	function addRequiredFields()
 		{
 			if(is_array($this->obj->fb_requiredFields)){
-				
+
 				$this->form->registerRule('customrequired', 
 										  'callback', 'validate', 
 										  'CustomRequired');
-				
-				$this->page->confessArray($this->obj->fb_addNewLinkFields, 
-										  "linknewfields in requiredfields", 4);
+
 				foreach($this->obj->fb_requiredFields as $fieldname){
-					// skip subfields. XXX cruft. do that in selectsubformcombo
-
-
-					$this->form->addRule($this->prependTable($fieldname), 
-										 "$key mustn't be empty.", 
-										 'customrequired');
-					// XXX hack around quickform braindeadedness
-					$this->form->_required[] = 
-						$this->prependTable($fieldname);
-					
-					$this->page->debug > 1 &&
-						user_error("$fieldname is required in $this->table", 
-								   E_USER_NOTICE);
-					
+// 					user_error("CoopForm::addRequiredFields($fieldname)", 
+// 							   E_USER_NOTICE);
+				
+					// exempt subfields
+					$vars = $this->form->getSubmitValues();
+					if(!isset($vars[$this->prependTable('subtables')][$fieldname])){
+						$this->form->addRule($this->prependTable($fieldname), 
+											 "$key mustn't be empty.", 
+											 'customrequired');
+						// XXX hack around quickform braindeadedness
+						$this->form->_required[] = 
+							$this->prependTable($fieldname);
+ 
+ 						$this->page->debug > 1 &&
+							user_error("$fieldname is required in $this->table", 
+ 								   E_USER_NOTICE);
+					}
 				}
 			}
 			//confessObj($this->form, 'ahc');
@@ -428,28 +439,24 @@ class coopForm extends CoopObject
 	// XXX i don't like this. i need to set in object, not in form
 	// but where? if i'm populating from db, i don't want to clobber with this!
 	// maybe do like my fb_ stuff? if it's set, ignore it?
-	function &setDefaults()
+	function setDefaults()
 		{
 			$this->page->debug > 2 && confessObj($this->page, 'coop page');
-			
-			// start out with DEFAULT defaults, dammit
-			$prepended =
-				array($this->prependTable('school_year') => 
-					  findSchoolYear(),
-					  $this->prependTable('family_id') => 
-					  $this->page->userStruct['family_id']);
-			
-			// gah. have to prepend table here
-			// these obviously override the default defaults above
-			if(is_array($this->obj->fb_defaults)){
-				foreach($this->obj->fb_defaults as $key => $val){
-					$prepended[$this->prependTable($key)] = $val;
-				}
+
+			if(!is_array($this->obj->fb_defaults)){
+				$this->form->setDefaults(
+					array($this->prependTable('school_year') => 
+						  findSchoolYear(),
+						  $this->prependTable('family_id') => 
+						   $this->page->userStruct['family_id']));
+				return;
 			}
 
+			// gah. have to prepend table here
+			foreach($this->obj->fb_defaults as $key => $val){
+				$prepended[$this->prependTable($key)] = $val;
+			}
 			$this->form->setDefaults($prepended);
-
-			return $prepended;
 		}
 
 	function processCrossLinks($vars)
@@ -680,45 +687,88 @@ class coopForm extends CoopObject
 			return sprintf('%s-%s', $this->table , $col);
 		}
 
-	// set subforms_only if you are using QFC and ONLY want to validate subforms
-	// not the mainform
-	function validate($subforms_only = false)
+	function validate()
 		{
 
-			user_error("Warning: my wacky validate called, not form validate",
-					   E_USER_WARNING);
+			$vals =& $this->form->getSubmitValues();
+			$st= $vals[$this->prependTable('subtables')];
+			if(is_array($st)){
+				foreach($st as $key => $val){
+					list($table, $farid) = explode(':', 
+												   $this->forwardLinks[$key]);
+					$this->page->debug > 1 &&
+						print "<br>DEBUG validating $key $val (table $table) for $this->table";
+					$temp = $this->subtables[$table]->validate(); // OBJECT!
+					if($this->page->debug > 1 && $temp == false){
+						print "<br>DEBUG $table didn't validate";
+						confessArray($this->subtables[$table]->form->_errors, 
+									 $table . ' form errors!', 3);
+					}
+					$res += $temp;
+					$count++;
+
+					// i have to refresh the thing, now that it's been validated
+					// it has already been added the first time, in ->build()
+					$this->addSubTable($key, $table, true);
+				}
+			}
 			
-			return  $this->form->validate();
+			$temp  = $this->form->validate(); // FORM!
+			if($this->page->debug > 1 && $temp == false){
+				print "<br>DEBUG $this->table didn't validate";
+				//confessObj($this->form, $this->table . ' form');
+			}
+			$res += $temp;
+			$count++;
+			
+			$this->page->debug > 1 && 
+				printf("<br>DEBUG %s cumulative validation [%d/%d]", 
+					   $this->table, $res, $count);
+
+			return  $res == $count ? true : false;
 		}
 
 	// the gettable means i'm sending it a KEYNAME not a tablename
 	// and i've got to look up the table
 	// all this formpresent shit sucks, but i don't know any other way
-	function addSubTable($field, $table = false)
+	function addSubTable($field, $table = false, $formpresent = false)
 		{
 			if(!$table){
 				list($table, $farid) = explode(':', $this->forwardLinks[$field]);
 			} 
 			
 			// ok, build the stinking thing
-			if(is_object($sub =& $this->subtables[$table])){
-				$this->page->printDebug(
-					"subtable $sub->table already exists under $this->table, not creating", 2);
-			} else {
-				$sub =& new CoopForm(&$this->page, $table, &$this); 
-				$this->page->printDebug(
-					"created subtable $table from $this->table", 2);
+			if(!$formpresent){
+				$sub = new CoopForm(&$this->page, $table, &$this); 
 				$sub->obj->fb_createSubmit = false;
 				$sub->build($_REQUEST); // request necessary to get submitted vals
 				$sub->addRequiredFields();
-				$sub->setDefaults();
-				
-				//TODO: add the id to the renderor!
-				
 				$this->subtables[$table] =& $sub; // cache it
-			} 
+			} else {
+				$sub =& $this->subtables[$table];
+			}
 
-			return $sub;
+			$inside = sprintf("<div>%s</div>", 
+							  preg_replace('!</?form[^>]*?>!i', '',
+										   $sub->form->toHTML()));
+			if(!$formpresent){
+				$fake =& $this->form->addElement('static',	
+												 $sub->prependTable($sub->pk), 
+												 false);
+			} else { 
+				$fake =& $this->form->getElement($sub->prependTable($sub->pk));
+			}
+			$fake->setValue($inside);
+
+
+			if(!$formpresent){
+			// basically, pass this thru, but with 'built', not ADD NEW
+			$this->form->addElement('hidden', 
+									sprintf("%s-subtables[%s]",
+											$this->table, $sub->pk),
+									'built');
+			}
+			
 
 		}
 
@@ -728,89 +778,13 @@ class coopForm extends CoopObject
 			$this->form =& $form;
 		}
 
-	//returns array of subtables, culled  from vars or getsubmitvars
-	function requestedSubtables($vars = null)
-		{
-			if(!is_array($vars)){
-				$vars = $this->form->exportValues();
-			}
-			$search = sprintf("/%s-subtables-(.+)/", $this->table);
-			foreach($vars as $key => $val){
-				// it only gets added iff $val is set, js sets it to 0
-				if(preg_match($search, $key, $matches) && $val){
-					$st[$matches[1]] = $val;
-				}
-			}
-			return $st;
-		}
 	
-function &selectSubformCombo($vars, $key, $fullkey)
-		{
-			// check that we really want a link first
-			// TODO: this will involve some privilege stuff too
-			$type = (!is_array($this->obj->fb_addNewLinkFields) ||
-					 in_array($key, $this->obj->fb_addNewLinkFields)) 
-				? 'customselect' : 'select';
-
-			/// THE SELECT BOX
- 			$select =& HTML_QuickForm::createElement(
-				$type, 
-				$fullkey, false, 
-				$this->selectOptions($key),
-				array('id' => $fullkey));
-
-
-
-			if($type == 'customselect'){
-				$select->_parentForm =& $this->form;
-				$group =& HTML_QuickForm::createElement(
-					'customgroup', 
-					$fullkey, false, &$select);
-				//TODO: create the custom group here
-				$this->form->addElement(&$group);
-				return $group;
-			}
-			
-			
-			return $this->form->addElement(&$select);
-		}
-
-function &schoolYearPopup()
-		{
-
-			$tmp =& new CoopObject(&$this->page, $this->table, &$nohing);
-			$tmp->obj->query(
-				sprintf(
-					'select distinct school_year from %s order by school_year', 
-						$this->table));
-			while($tmp->obj->fetch()){
-				$schoolyears[$tmp->obj->school_year] = $tmp->obj->school_year;
-			}
-
-			// add the defaults of this year and next year too
-			$thisyear = findSchoolYear();
-			$nextyear = findSchoolYear(0,1,1);
-			foreach (array($thisyear, $nextyear) as $year){
-				if(!in_array($year, array_keys($schoolyears))){
-					$schoolyears[$year] = $year;
-				}
-			}
-			
- 			$el =& $this->form->addElement(
-				'select', 
-				$this->prependTable('school_year'), 
-				false, 
-				$schoolyears);
-
-			//TODO: add js to dynamically tweek the familyid
-			// i.e. to constrain it to only this year's? complicated
-
-			return $el;
-		}
-
 
 } // END COOP FORM CLASS
 
 ////KEEP EVERTHANG BELOW
 
 ?>
+<!-- END COOP FORM -->
+
+
