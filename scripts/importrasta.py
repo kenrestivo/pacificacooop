@@ -128,6 +128,8 @@ class Adder:
         self.c = c
         
     def wrapper(self):
+        """abstract the process of choosing an existing record
+        or adding a new one"""
         try:
             return self.get()
         except NoneFound:
@@ -138,17 +140,18 @@ class Adder:
     def choose(self):
         """silly little chooser"""
         print '--- For this Line: ---'
-        for i in self.rec.values(): print '%s' %  i
+        for i in self.rec.items(): print '%s: %s' %  i
         print "\n--------\nHere are the database results:\n"
         for i in self.r:
             print '-----------'
-            for j in i.values(): print j
+            for j in i.items(): print '%s: %s' % j
         valid=[x[self.pk] for x in self.r]
-        n=input('Pick the ID above (%s): ' %
-                ','.join([str(x) for x in valid]))
+        n=input('Pick the %s above (%s): ' %
+                (self.pk,
+                ','.join([str(x) for x in valid])))
         if not int(n) in valid:
             print "no, that's not OK. try again"
-            self.choose()               # can i tail recurse? will it do it?
+            return self.choose()        # can i tail recurse? will it do it?
         else:
             return n
         
