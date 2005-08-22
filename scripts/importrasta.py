@@ -9,7 +9,7 @@ the databse with its spiffy new contents"""
 import os
 import csv
 from datetime import date
-import MySQLdb
+import MySQLdb, MySQLdb.cursors
 
 
 rasta=[]                                    # the completed am/pm minimarket
@@ -69,6 +69,7 @@ class RastaImport:
                 break
 
         #YAY! got the keys
+        #TODO: check that th keys are valid (validKeys), do any mapping needed
         keys=l
 
 
