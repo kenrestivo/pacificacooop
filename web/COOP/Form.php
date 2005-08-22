@@ -127,7 +127,7 @@ class coopForm extends CoopObject
 					$val = $dbval;
 				}
 
-				
+				// TODO: compare result to edit/add based on pk presence
 				if(!$this->isPermittedField($key)){
 					// the hidden thing. i think  i need to do hidden here
 					if(is_array($this->obj->fb_requiredFields) && 

@@ -885,5 +885,16 @@ CREATE TABLE counters (
     school_year varchar(50) default NULL
   );
 
+CREATE TABLE table_permissions (
+table_permissions_id int(32) primary key not null unique auto_increment,
+table_name varchar(255),
+field_name varchar(255),
+group_id int(32) default NULL,
+realm varchar(55) default NULL,
+user_level int(5) default NULL,
+group_level int(5) default NULL
+);
+
+
 
 -- EOF

@@ -1155,12 +1155,13 @@ order by packages.package_number
 --- the new user perms checking code: one trip to the goddamned db!
 select 
 table_permissions.table_name, table_permissions.field_name,
-if(user_privileges.user_level > table_permissions.user_level, 
-table_permissions.user_level, user_privileges.user_level) as cooked_user,
-if(user_privileges.group_level>  table_permissions.group_level, 
-table_permissions.group_level, user_privileges.group_level) as cooked_group
+max(if(user_privileges.user_level > table_permissions.user_level, 
+table_permissions.user_level, user_privileges.user_level)) as cooked_user,
+max(if(user_privileges.group_level>  table_permissions.group_level, 
+table_permissions.group_level, user_privileges.group_level)) as cooked_group
 from user_privileges 
 left join table_permissions on user_privileges.realm = table_permissions.realm 
 where user_id = 52 and table_name = 'leads'
+group by user_id,table_name,field_name
 
 --- EOF

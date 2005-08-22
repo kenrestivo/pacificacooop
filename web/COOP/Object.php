@@ -274,7 +274,7 @@ class coopObject
 			$aud->obj->insert();
 		}
 
-	function isPermittedField($key)
+	function isPermittedField($key, $action=ACCESS_VIEW)
 		{
 
 			// if it's a key, and we don't show them, then no
@@ -292,6 +292,7 @@ class coopObject
 			}
 
 			// TODO: check user permissions!
+			// get  from the new db-based perms
 			
 			//confessArray($this->obj->fb_fieldsToRender, "$key is in:");
 			return true;
