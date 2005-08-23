@@ -38,6 +38,7 @@ class coopObject
 	var $backlinks;				// list of links that are linked FROM here
 	var $forwardLinks;
 	var $overrides = array(); 	// ugly way to customise sub-tables
+    var $perms = array();       // new permissions array: field=> (user=>, group=>)
 
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
 		{
@@ -74,6 +75,7 @@ class coopObject
 									  "processing overrides for $this->table, top is $top->table", 3);
 			// i clobber here.
 			$this->readConf(&$top->overrides[$this->table], true, false);
+            $this->getPerms();
 
 		}
  
@@ -274,6 +276,7 @@ class coopObject
 			$aud->obj->insert();
 		}
 
+
 	function isPermittedField($key, $action=ACCESS_VIEW)
 		{
 
@@ -291,11 +294,20 @@ class coopObject
 				return false;
 			}
 
-			// TODO: check user permissions!
-			// get  from the new db-based perms
-			
 			//confessArray($this->obj->fb_fieldsToRender, "$key is in:");
-			return true;
+
+			// check user permissions! get  from the new  perms array
+            if(empty($this->perms[$key])){
+                return true;    // nothing in here, it's cool
+            }
+			
+            if($this->userStruct['family_id'] == $this->obj->family_id){
+                // XXX bug! user greater of group or user, here
+                return $this->perms[$key]['user'] >= $action;
+            }
+
+            return $this->perms[$key]['group'] >= $action;
+
 		}
 
 	// so commonly used, i need it here
@@ -380,6 +392,36 @@ class coopObject
 			}
 			
 		}
+
+    //populate permissions array, which caches this stuff
+    function getPerms()
+        {
+            $this->obj->query(sprintf("
+        select 
+        table_permissions.field_name,
+        max(if(user_privileges.user_level > table_permissions.user_level, 
+        table_permissions.user_level, user_privileges.user_level)) 
+                as cooked_user,
+        max(if(user_privileges.group_level>  table_permissions.group_level, 
+        table_permissions.group_level, user_privileges.group_level)) 
+                as cooked_group
+        from user_privileges 
+        left join table_permissions on user_privileges.realm = 
+                table_permissions.realm 
+        where user_id = %d and table_name = '%s'
+        group by user_id,table_name,field_name
+        ",
+                                      $this->page->auth['uid'],
+                                      $this->table));
+            $res = $this->obj->getDatabaseResult();
+            while ($row =& $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+                $this->perms[$row['field_name']] = 
+                    array('user'=>$row['cooked_user'],
+                          'group' =>$row['cooked_group']);
+            }
+
+            $this->page->confessArray($this->perms, 'perms', 2);
+        }
 
 
 } // END COOP OBJECT CLASS
