@@ -171,8 +171,8 @@ class Family(Adder):
         #TODO: handle the situation where the family last name is a duplicate!
     def add(self):
         """simple insert wrapper"""
-        c.execute("""insert into families set name = '%s', phone = '%s',
-        address1 = '%s', email = '%s'""" %
+        c.execute("""insert into families set name = %s, phone = %s,
+                    address1 = %s, email = %s""",
                   (self.rec['Last Name'], self.rec['Phone'],
                    self.rec['Address'], self.rec['Email']))
         return c.lastrowid
@@ -201,6 +201,6 @@ if __name__ == '__main__':
 
 #db open
 conn=MySQLdb.connect(user='input', passwd='test', db='coop',
-                 host='localhost', cursorclass=MySQLdb.cursors.DictCursor) 
+                 host='bc', cursorclass=MySQLdb.cursors.DictCursor) 
 c=conn.cursor()
 
