@@ -277,7 +277,7 @@ class coopObject
 		}
 
 
-	function isPermittedField($key, $action=ACCESS_VIEW)
+	function isPermittedField($key)
 		{
 
 			// if it's a key, and we don't show them, then no
@@ -302,11 +302,12 @@ class coopObject
             }
 			
             if($this->userStruct['family_id'] == $this->obj->family_id){
-                // XXX bug! user greater of group or user, here
-                return $this->perms[$key]['user'] >= $action;
+                // user greater of group or user, here
+                return max($this->perms[$key]['user'], 
+                           $this->perms[$key]['group']);
             }
 
-            return $this->perms[$key]['group'] >= $action;
+            return $this->perms[$key]['group'];
 
 		}
 
