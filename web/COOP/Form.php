@@ -113,6 +113,9 @@ class coopForm extends CoopObject
 				// deal with tablenamign these thigns
 				$fullkey = $this->prependTable($key);
 
+                // need this in a couple places, so cache it
+                $perms = $this->isPermittedField($key);
+
 				// if it's a new entry, fill from vars!
 				// this is a clusterfuck because i'm using setValue.
 				// otherwise, quickform would do this for me. *sigh*
@@ -127,8 +130,7 @@ class coopForm extends CoopObject
 					$val = $dbval;
 				}
 
-				// TODO: compare result to edit/add based on pk presence
-				if(!$this->isPermittedField($key)){
+                if($perms < ACCESS_VIEW){
 					// the hidden thing. i think  i need to do hidden here
 					if(is_array($this->obj->fb_requiredFields) && 
 					   in_array($key, $this->obj->fb_requiredFields)){
@@ -201,6 +203,13 @@ class coopForm extends CoopObject
 				{
 					$frozen[] = $fullkey;
 				}
+
+                //ok, perms stuff here now
+                if(($this->id && $perms < ACCESS_EDIT ) ||
+                    ($perms < ACCESS_ADD && !$this->id))
+                {
+					$frozen[] = $fullkey;
+                }
 
 			}
 			$this->page->confessArray($frozen, 
