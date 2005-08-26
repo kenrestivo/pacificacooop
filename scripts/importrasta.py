@@ -154,19 +154,23 @@ class Adder:
             print "no, that's not OK. try again"
             return self.choose()        # can i tail recurse? will it do it?
         else:
-            return n
+            return
         
-        
-class Family(Adder):
-    def get(self):
-        """a very cheap way to get the family."""
-        self.pk='family_id'
-        c.execute("""select * from families where phone like '%%%s%%'
-        and name like '%%%s%%' """ % (self.rec['Phone'], self.rec['Last Name']))
+	def _get(self, query):
+      	self.pk='family_id'
+        c.execute(query)
         self.r=c.fetchall()
         if c.rowcount < 1: raise NoneFound
         if c.rowcount > 1: raise TooManyFound
         return r[0][self.pk]
+
+        
+class Family(Adder):
+    def get(self)
+	    """a very cheap way to get the family."""
+    	return self._get("""select * from families where phone like '%%%s%%'
+        and name like '%%%s%%' """ % (self.rec['Phone'], self.rec['Last Name']))
+    
     
         #TODO: handle the situation where the family last name is a duplicate!
     def add(self):
@@ -176,7 +180,9 @@ class Family(Adder):
                   (self.rec['Last Name'], self.rec['Phone'],
                    self.rec['Address'], self.rec['Email']))
         return c.lastrowid
-    
+
+
+#TODO: kid, enrollment, parent, get/add!
 
 
 ##########naked functions

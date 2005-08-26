@@ -398,20 +398,30 @@ class coopObject
     function getPerms()
         {
             $this->obj->query(sprintf("
-        select 
-        table_permissions.field_name,
-        max(if(user_privileges.user_level > table_permissions.user_level, 
-        table_permissions.user_level, user_privileges.user_level)) 
-                as cooked_user,
-        max(if(user_privileges.group_level>  table_permissions.group_level, 
-        table_permissions.group_level, user_privileges.group_level)) 
-                as cooked_group
-        from user_privileges 
-        left join table_permissions on user_privileges.realm = 
-                table_permissions.realm 
-        where user_id = %d and table_name = '%s'
-        group by user_id,table_name,field_name
+select 
+table_permissions.table_name, table_permissions.field_name,
+max(if(upriv.max_user > table_permissions.user_level, 
+table_permissions.user_level, upriv.max_user)) as cooked_user,
+max(if(upriv.max_group >  table_permissions.group_level, 
+table_permissions.group_level, upriv.max_group)) as cooked_group
+from table_permissions 
+left join 
+(select max(user_level) as max_user, max(group_level) as max_group, 
+%d as user_id, realm
+from user_privileges 
+where user_id = %d 
+or (user_id is null and group_id in 
+(select group_id from users_groups_join 
+where user_id = %d)) 
+group by realm 
+order by realm) as upriv
+on upriv.realm = table_permissions.realm 
+where user_id = %d and table_name = '%s'
+group by user_id,table_name,field_name
         ",
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid'],
                                       $this->page->auth['uid'],
                                       $this->table));
             $res = $this->obj->getDatabaseResult();

@@ -567,7 +567,7 @@ CREATE TABLE users_groups_join (
   users_groups_join_id int(32) NOT NULL unique auto_increment,
   user_id int(32) default NULL,
   group_id int(32) default NULL,
-  PRIMARY KEY  (users_groups_join_id),
+  PRIMARY KEY  (users_groups_join_id)
  ) ;
 
 --

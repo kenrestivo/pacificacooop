@@ -412,4 +412,124 @@ insert into counters set
             school_year = '2004-2005',
             counter = 1;
 
+-- default group perms
+insert into user_privileges set
+group_id = 1,
+group_level = 100,
+user_level = 700,
+realm = 'invitations'; 
+
+insert into user_privileges set
+group_id = 1,
+group_level = 100,
+user_level = 200,
+realm = 'invitations_cash'; 
+
+insert into user_privileges set
+group_id = 1,
+group_level = 200,
+user_level = 700,
+realm = 'auction'; 
+
+insert into user_privileges set
+group_id = 1,
+group_level = 200,
+user_level = 200,
+realm = 'calendar'; 
+
+insert into user_privileges set
+group_id = 1,
+group_level = 0,
+user_level = 200,
+realm = 'money'; 
+
+insert into user_privileges set
+group_id = 1,
+group_level = 0,
+user_level = 200,
+realm = 'insurance'; 
+
+
+insert into user_privileges set
+group_id = 1,
+group_level = 200,
+user_level = 500,
+realm = 'roster'; 
+
+insert into user_privileges set
+group_id = 1,
+group_level = 200,
+user_level = 500,
+realm = 'jobs'; 
+
+
+insert into user_privileges set
+group_id = 1,
+group_level = 0,
+user_level = 200,
+realm = 'user'; 
+
+
+insert into user_privileges set
+group_id = 1,
+group_level = 0,
+user_level = 200,
+realm = 'enhancement'; 
+
+
+insert into user_privileges set
+group_id = 2,
+group_level = 200,
+user_level = 500,
+realm = 'roster'; 
+
+
+insert into user_privileges set
+group_id = 2,
+group_level = 700,
+user_level = 200,
+realm = 'calendar'; 
+
+
+insert into user_privileges set
+group_id = 2,
+group_level = 0,
+user_level = 200,
+realm = 'money'; 
+
+
+insert into user_privileges set
+group_id = 2,
+group_level = 100,
+user_level = 700,
+realm = 'auction'; 
+
+
+insert into user_privileges set
+group_id = 2,
+group_level = 700,
+user_level = 500,
+realm = 'insurance'; 
+
+
+insert into user_privileges set
+group_id = 2,
+group_level = 200,
+user_level = 200,
+realm = 'jobs'; 
+
+
+insert into user_privileges set
+group_id = 2,
+group_level = 200,
+user_level = 200,
+realm = 'enhancement'; 
+
+
+insert into user_privileges set
+group_id = 2,
+group_level = 0,
+user_level = 200,
+realm = 'user'; 
+
 -- EOF
