@@ -1152,6 +1152,7 @@ and packages.school_year = '2004-2005'
 order by packages.package_number
 
 
+
 -- unified perms checking code. holy shit. 
 select 
 table_permissions.table_name, table_permissions.field_name,
@@ -1164,12 +1165,27 @@ left join
 (select max(user_level) as max_user, max(group_level) as max_group, 
 91 as user_id, realm
 from user_privileges 
-where user_id = 91 or (user_id is null and group_id = 1) 
+where user_id = 91 
+or (user_id is null and group_id in 
+(select group_id from users_groups_join 
+where user_id = 91)) 
 group by realm 
 order by realm) as upriv
 on upriv.realm = table_permissions.realm 
 where user_id = 91 and table_name = 'leads'
 group by user_id,table_name,field_name
+
+
+---shorter version for auld auth
+select max(user_level) as user_level, max(group_level) as group_level,
+91 as user_id, realm
+from user_privileges 
+where realm = 'invitations' 
+and (user_id = 91 
+or (user_id is null and group_id in 
+(select group_id from users_groups_join 
+where user_id = 91)))
+group by realm 
 
 
 --- EOF
