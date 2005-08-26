@@ -123,11 +123,11 @@ class Adder:
     c=None
     r=[]
     pk=""
-    
+
     def __init__(self, c, rec):
         self.rec = rec
         self.c = c
-        
+
     def wrapper(self):
         """abstract the process of choosing an existing record
         or adding a new one"""
@@ -137,6 +137,15 @@ class Adder:
             return self.add()
         except TooManyFound:
             return self.choose()
+
+    def _get(self, query):
+        """utility used by get() methods of subclasses"""
+        self.pk='family_id'
+        c.execute(query)
+        self.r=c.fetchall()
+        if c.rowcount < 1: raise NoneFound
+        if c.rowcount > 1: raise TooManyFound
+        return self.r[0][self.pk]
 
     def choose(self):
         """silly little chooser"""
@@ -150,28 +159,19 @@ class Adder:
         n=input('Pick the %s above (%s): ' %
                 (self.pk,
                 ','.join([str(x) for x in valid])))
-        if not int(n) in valid:
-            print "no, that's not OK. try again"
-            return self.choose()        # can i tail recurse? will it do it?
-        else:
-            return
-        
-	def _get(self, query):
-      	self.pk='family_id'
-        c.execute(query)
-        self.r=c.fetchall()
-        if c.rowcount < 1: raise NoneFound
-        if c.rowcount > 1: raise TooManyFound
-        return r[0][self.pk]
+        if int(n) in valid:
+            return n
+        print "no, that's not OK. try again"
+        return self.choose()        # can i tail recurse? will it do it?
 
-        
+
 class Family(Adder):
-    def get(self)
-	    """a very cheap way to get the family."""
-    	return self._get("""select * from families where phone like '%%%s%%'
+    def get(self):
+        """a very cheap way to get the family."""
+        return self._get("""select * from families where phone like '%%%s%%'
         and name like '%%%s%%' """ % (self.rec['Phone'], self.rec['Last Name']))
-    
-    
+
+
         #TODO: handle the situation where the family last name is a duplicate!
     def add(self):
         """simple insert wrapper"""
