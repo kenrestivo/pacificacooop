@@ -305,14 +305,11 @@ getAuthLevel($auth, $targetrealm)
 	}
 
 	// the query
-	$query = sprintf("
-			SELECT user_privileges.*
-				FROM user_privileges
-			WHERE user_privileges.user_id = %d 
-				and (user_privileges.realm = '%s' or user_privileges.realm = 'all')
-			",
-			$auth['uid'], $targetrealm
-		);
+	$query = sprintf("select max(user_level) as user_level, max(group_level) as group_level, %d as user_id, realm from user_privileges where realm = '%s' and (user_id = %d or (user_id is null and group_id in (select group_id from users_groups_join where user_id = %d))) group by realm",
+                     $auth['uid'], 
+                     mysql_real_escape_string($targetrealm),
+                     $auth['uid'], 
+                     $auth['uid']);
 	//user_error("getAuthLevel(): [$query]: ", E_USER_NOTICE);
 	$listq = mysql_query($query);
 	$err = mysql_error();
