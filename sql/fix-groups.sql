@@ -7,12 +7,10 @@
 
 #the parents
 c.execute('select user_id from users where family_id > 0')
-r=c.fetchall()
-for j in [int(i['user_id']) for i in r]:
+for j in [int(i['user_id']) for i in c.fetchall()]:
       c.execute("insert into users_groups_join set group_id = 1, user_id = %d" % (j))
 
-#the teachers
+#the teachersa
 c.execute('select user_id from users where family_id < 1')
-r=c.fetchall()
-for j in [int(i['user_id']) for i in r]:
+for j in [int(i['user_id']) for i in c.fetchall()]:
       c.execute("insert into users_groups_join set group_id = 2, user_id = %d" % (j))
