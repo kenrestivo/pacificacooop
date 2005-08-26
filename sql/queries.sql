@@ -1152,16 +1152,24 @@ and packages.school_year = '2004-2005'
 order by packages.package_number
 
 
---- the new user perms checking code: one trip to the goddamned db!
+-- unified perms checking code. holy shit. 
 select 
 table_permissions.table_name, table_permissions.field_name,
-max(if(user_privileges.user_level > table_permissions.user_level, 
-table_permissions.user_level, user_privileges.user_level)) as cooked_user,
-max(if(user_privileges.group_level>  table_permissions.group_level, 
-table_permissions.group_level, user_privileges.group_level)) as cooked_group
+max(if(upriv.max_user > table_permissions.user_level, 
+table_permissions.user_level, upriv.max_user)) as cooked_user,
+max(if(upriv.max_group >  table_permissions.group_level, 
+table_permissions.group_level, upriv.max_group)) as cooked_group
+from table_permissions 
+left join 
+(select max(user_level) as max_user, max(group_level) as max_group, 
+91 as user_id, realm
 from user_privileges 
-left join table_permissions on user_privileges.realm = table_permissions.realm 
-where user_id = 52 and table_name = 'leads'
+where user_id = 91 or (user_id is null and group_id = 1) 
+group by realm 
+order by realm) as upriv
+on upriv.realm = table_permissions.realm 
+where user_id = 91 and table_name = 'leads'
 group by user_id,table_name,field_name
+
 
 --- EOF
