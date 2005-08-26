@@ -29,58 +29,17 @@ use Getopt::Std;
 
 getopts('rvth:p:d:') or &usage();
 
-$schoolyear = '2004-2005';
+$schoolyear = '2005-2006';
 
-#the access hash
-# in perl, the hash keys should NOT be quoted, or all hell will break loose!!
-%access = (
-	0 => 'ACCESS_NONE',
-	100 => 'ACCESS_SUMMARY' ,
-	200 => 'ACCESS_VIEW' ,
-	300 => 'ACCESS_VIEWALL' ,
-	500 => 'ACCESS_EDIT' ,
-	600 => 'ACCESS_ADD' ,
-	700 => 'ACCESS_DELETE' ,
-	800 => 'ACCESS_ADMIN' 
-);
 
-use constant _ACCESS_NONE => 0;
-use constant _ACCESS_SUMMARY => 100;
-use constant _ACCESS_VIEW => 200;
-use constant _ACCESS_VIEWALL => 300;
-use constant _ACCESS_EDIT => 500;
-use constant _ACCESS_ADD => 600;
-use constant _ACCESS_DELETE => 700;
-use constant _ACCESS_ADMIN => 800;
 
+print "this is deprecated and doesn't work anymore. add the family or teacher to the appropriate group instead of adding privs for them here\n";
+exit 1;
 
 #default privs for all families
 #  				group, 					user, 				item
-@familydefaults =  (
-	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "invitations" ],
-	[ _ACCESS_SUMMARY, _ACCESS_VIEW, "invitations_cash" ],
-	[ _ACCESS_VIEW, _ACCESS_DELETE, "auction" ],
-	[ _ACCESS_VIEW, _ACCESS_VIEW, "calendar" ],
-	[ _ACCESS_NONE, _ACCESS_VIEW, "money" ],
-	[ _ACCESS_NONE, _ACCESS_VIEW, "insurance" ],
-	[ _ACCESS_VIEW, _ACCESS_EDIT, "roster" ],
-	[ _ACCESS_VIEW, _ACCESS_EDIT, "jobs" ],
-	[ _ACCESS_NONE, _ACCESS_VIEW, "user" ],
-	[ _ACCESS_NONE, _ACCESS_VIEW, "enhancement" ]
-);
 
-@teacherdefaults =  (
-	[ _ACCESS_VIEW, _ACCESS_EDIT, "roster" ],
-	[ _ACCESS_DELETE, _ACCESS_VIEW, "calendar" ],
-	[ _ACCESS_NONE, _ACCESS_VIEW, "money" ],
-	[ _ACCESS_SUMMARY, _ACCESS_DELETE, "auction" ],
-	[ _ACCESS_DELETE, _ACCESS_EDIT, "insurance" ],
-	[ _ACCESS_VIEW, _ACCESS_VIEW, "jobs" ],
-	[ _ACCESS_VIEW, _ACCESS_VIEW, "enhancement" ],
-	[ _ACCESS_NONE, _ACCESS_VIEW, "user" ]
-);
-
-@teachers = ("Teacher Sandy", "Teacher Catherine", "Teacher Pat", "Shirley");
+@teachers = ("Teacher Sandy", "Teacher Catherine", "Teacher Diana", "Shirley");
 
 ### main code starts here
 
