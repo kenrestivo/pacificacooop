@@ -914,7 +914,9 @@ school_year varchar(50) default NULL
 
 create table realms(
 realm_id int(32) primary key not null unique auto_increment,
-realm varchar(255) default NULL
+realm varchar(255) default NULL,
+short_description varchar(255),
+meta_realm_id int(32)
 );
 
 -- EOF
