@@ -12,7 +12,6 @@ class Events extends DB_DataObject
     var $__table = 'events';                          // table name
     var $event_id;                        // int(32)  not_null primary_key unique_key auto_increment
     var $description;                     // string(255)  
-    var $realm;                           // string(55)  
     var $notes;                           // blob(16777215)  blob
     var $url;                             // string(255)  
     var $realm_id;                        // int(32)  

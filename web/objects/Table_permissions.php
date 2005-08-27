@@ -14,10 +14,9 @@ class Table_permissions extends DB_DataObject
     var $table_name;                      // string(255)  
     var $field_name;                      // string(255)  
     var $group_id;                        // int(32)  
-    var $realm;                           // string(55)  
+    var $realm_id;                        // int(32)  
     var $user_level;                      // int(5)  
     var $group_level;                     // int(5)  
-    var $realm_id;                        // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

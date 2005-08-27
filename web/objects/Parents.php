@@ -14,7 +14,6 @@ class Parents extends DB_DataObject
     var $last_name;                       // string(255)  
     var $first_name;                      // string(255)  
     var $type;                            // string(7)  enum
-    var $worker;                          // string(3)  enum
     var $family_id;                       // int(32)  
     var $email_address;                   // string(255)  
 

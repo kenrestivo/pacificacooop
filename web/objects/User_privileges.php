@@ -13,7 +13,6 @@ class User_privileges extends DB_DataObject
     var $privilege_id;                    // int(32)  not_null primary_key unique_key auto_increment
     var $user_id;                         // int(32)  
     var $group_id;                        // int(32)  
-    var $realm;                           // string(55)  
     var $user_level;                      // int(5)  
     var $group_level;                     // int(5)  
     var $realm_id;                        // int(32)  
