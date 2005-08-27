@@ -87,6 +87,31 @@ insert into groups set
             groupid = 2,
             name = "Teachers";
 
+
+--- realms
+INSERT INTO `realms` VALUES 
+(1,'auction'),
+(2,'calendar'),
+(3,'enhancement'),
+(4,'flyers'),
+(5,'insurance'),
+(6,'invitations'),
+(7,'invitations_cash'),
+(8,'jobs'),
+(9,'money'),
+(10,'nag'),
+(11,'packaging'),
+(12,'program'),
+(13,'raffle'),
+(14,'roster'),
+(15,'solicitation'),
+(16,'solicit_money'),
+(17,'thankyou'),
+(18,'tickets'),
+(19,'user');
+
+
+
 -- events
 insert into events set
             event_id = 1,
@@ -103,7 +128,7 @@ insert into events set
 
 insert into events set
             event_id = 3,
-            realm = 'nag',
+            realm_id = 10,
             description = "Springfest Invitation Names Due",
             notes = "Each family must enter a list of 10 people to be invited to Springfest ",
             url = '10names.php'
@@ -111,7 +136,7 @@ insert into events set
 
 insert into events set
             event_id = 4,
-            realm = 'nag',
+            realm_id = 10,
             description = "Springfest Auction Donation Items Due",
             url = 'auction.php',
             notes = "Each family must enter at least 1 auction donation online"
@@ -119,7 +144,7 @@ insert into events set
 
 insert into events set
             event_id = 5,
-            realm = 'enhancement',
+            realm_id = 3,
             description = "Fall Enhancement Cutoff Date",
             url = 'enhancement.php',
             notes = "Each family must complete their fall enhancement hours before this date"
@@ -128,7 +153,7 @@ insert into events set
 
 insert into events set
             event_id = 6,
-            realm = 'enhancement',
+            realm_id = 3,
             description = "Spring Enhancement Cutoff Date",
             url = 'enhancement.php',
             notes = "Each family must complete their spring enhancement hours before this date"
@@ -136,7 +161,7 @@ insert into events set
 
 insert into events set
             event_id = 7,
-            realm = 'nag',
+            realm_id = 10,
             description = "Springfest",
             url = 'public_auction.php',
             notes = "The date of this year's Springfest event"
@@ -412,124 +437,184 @@ insert into counters set
             school_year = '2004-2005',
             counter = 1;
 
+
+INSERT INTO `table_permissions` VALUES
+(56,'enrollment','family_id',NULL,NULL,200,200,14),
+(57,'enrollment','kid_id',NULL,NULL,200,200,14),
+(58,'enrollment','am_pm_session',NULL,NULL,200,600,14),
+(59,'enrollment','start_date',NULL,NULL,0,600,14),
+(60,'enrollment','dropout_date',NULL,NULL,0,700,14),
+(61,'enhancement_projects',NULL,NULL,NULL,NULL,500,3),
+(62,'enhancement_hours','family_id',NULL,NULL,200,200,3),
+(63,'enhancement_hours','parent_id',NULL,NULL,200,600,3),
+(64,'enhancement_hours',NULL,NULL,NULL,NULL,300,3),
+(65,'enhancement_hours','family_id',NULL,NULL,0,600,3),
+(66,'leads','family_id',NULL,NULL,0,600,6),
+(67,'leads','source_id',NULL,NULL,0,500,6),
+(68,'leads','lead_id',NULL,NULL,0,200,6),
+(69,'auction_donation_items','family_id',NULL,NULL,0,600,1),
+(70,'auction_donation_items','date_received',NULL,NULL,200,200,1),
+(71,'income',NULL,NULL,NULL,NULL,200,7),
+(72,'income','family_id',NULL,NULL,0,200,7),
+(73,'income','family_id',NULL,NULL,200,600,9),
+(74,'auction_donation_items',NULL,NULL,NULL,NULL,600,11),
+(75,'ads',NULL,NULL,NULL,NULL,200,12),
+(76,'ads','company_id',NULL,NULL,200,200,12),
+(77,'ads','ad_size_id',NULL,NULL,200,200,12),
+(78,'ads','artwork_provided',NULL,NULL,200,200,12),
+(79,'ads','family_id',NULL,NULL,200,200,12),
+(80,'auction_donation_items','company_id',NULL,NULL,200,600,15),
+(81,'auction_donation_items','date_received',NULL,NULL,200,200,15),
+(82,'auction_donation_items','family_id',NULL,NULL,0,600,15),
+(83,'auction_donation_items','thank_you_id',NULL,NULL,200,200,15),
+(84,'income',NULL,NULL,NULL,NULL,200,16),
+(85,'income','company_id',NULL,NULL,600,600,16),
+(86,'income','family_id',NULL,NULL,0,600,16),
+(87,'income','thank_you_id',NULL,NULL,200,200,16),
+(88,'solicitation_calls',NULL,NULL,NULL,NULL,200,15),
+(89,'solicitation_calls','family_id',NULL,NULL,0,600,15),
+(90,'ads',NULL,NULL,NULL,NULL,200,15),
+(91,'ads','artwork_received',NULL,NULL,200,200,15),
+(92,'ads','family_id',NULL,NULL,0,600,15),
+(93,'in_kind_donations','company_id',NULL,NULL,600,600,15),
+(94,'in_kind_donations','family_id',NULL,NULL,0,600,15),
+(95,'in_kind_donations','thank_you_id',NULL,NULL,200,200,15),
+(96,'thank_you','family_id',NULL,NULL,200,600,17),
+(97,'tickets',NULL,NULL,NULL,NULL,200,18),
+(98,'springfest_attendees',NULL,NULL,NULL,NULL,200,18),
+(99,'income','family_id',NULL,NULL,0,600,13),
+(100,'flyer_deliveries','company_id',NULL,NULL,600,600,4),
+(101,'flyer_deliveries','family_id',NULL,NULL,0,600,4),
+(102,'nag_indulgences',NULL,NULL,NULL,NULL,600,10),
+(103,'nag_indulgences','family_id',NULL,NULL,0,600,10),
+(104,'income',NULL,NULL,NULL,NULL,500,9),
+(105,'income','account_number',NULL,NULL,200,200,9),
+(106,'income','family_id',NULL,NULL,200,200,9),
+(107,'income','company_id',NULL,NULL,200,200,9),
+(108,'income','raffle_location_id',NULL,NULL,200,200,9),
+(109,'income','income_id',NULL,NULL,200,200,9),
+(110,'income',NULL,NULL,NULL,NULL,300,9);
+
+
+
 -- default group perms
 insert into user_privileges set
 group_id = 1,
 group_level = 100,
 user_level = 700,
-realm = 'invitations'; 
+realm_id = 6; 
 
 insert into user_privileges set
 group_id = 1,
 group_level = 100,
 user_level = 200,
-realm = 'invitations_cash'; 
+realm_id  = 7; 
 
 insert into user_privileges set
 group_id = 1,
 group_level = 200,
 user_level = 700,
-realm = 'auction'; 
+realm_id = 1; 
 
 insert into user_privileges set
 group_id = 1,
 group_level = 200,
 user_level = 200,
-realm = 'calendar'; 
+realm_id = 2; 
 
 insert into user_privileges set
 group_id = 1,
 group_level = 0,
 user_level = 200,
-realm = 'money'; 
+realm_id = 9; 
 
 insert into user_privileges set
 group_id = 1,
 group_level = 0,
 user_level = 200,
-realm = 'insurance'; 
+realm_id = 5; 
 
-
-insert into user_privileges set
-group_id = 1,
-group_level = 200,
-user_level = 500,
-realm = 'roster'; 
 
 insert into user_privileges set
 group_id = 1,
 group_level = 200,
 user_level = 500,
-realm = 'jobs'; 
+realm_id = 14; 
+
+insert into user_privileges set
+group_id = 1,
+group_level = 200,
+user_level = 500,
+realm_id = 8; 
 
 
 insert into user_privileges set
 group_id = 1,
 group_level = 0,
 user_level = 200,
-realm = 'user'; 
+realm_id = 19; 
 
 
 insert into user_privileges set
 group_id = 1,
 group_level = 0,
 user_level = 200,
-realm = 'enhancement'; 
+realm_id = 3; 
 
 
 insert into user_privileges set
 group_id = 2,
 group_level = 200,
 user_level = 500,
-realm = 'roster'; 
+realm_id = 14; 
 
 
 insert into user_privileges set
 group_id = 2,
 group_level = 700,
 user_level = 200,
-realm = 'calendar'; 
+realm_id = 2; 
 
 
 insert into user_privileges set
 group_id = 2,
 group_level = 0,
 user_level = 200,
-realm = 'money'; 
+realm_id = 9; 
 
 
 insert into user_privileges set
 group_id = 2,
 group_level = 100,
 user_level = 700,
-realm = 'auction'; 
+realm_id = 1; 
 
 
 insert into user_privileges set
 group_id = 2,
 group_level = 700,
 user_level = 500,
-realm = 'insurance'; 
+realm_id = 5; 
 
 
 insert into user_privileges set
 group_id = 2,
 group_level = 200,
 user_level = 200,
-realm = 'jobs'; 
+realm_id = 8; 
 
 
 insert into user_privileges set
 group_id = 2,
 group_level = 200,
 user_level = 200,
-realm = 'enhancement'; 
+realm_id = 3; 
 
 
 insert into user_privileges set
 group_id = 2,
 group_level = 0,
 user_level = 200,
-realm = 'user'; 
+realm_id = 19; 
 
 -- EOF

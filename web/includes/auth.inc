@@ -305,7 +305,7 @@ getAuthLevel($auth, $targetrealm)
 	}
 
 	// the query
-	$query = sprintf("select max(user_level) as user_level, max(group_level) as group_level, %d as user_id, realm from user_privileges where realm = '%s' and (user_id = %d or (user_id is null and group_id in (select group_id from users_groups_join where user_id = %d))) group by realm",
+	$query = sprintf("select max(user_level) as user_level, max(group_level) as group_level, %d as user_id, realm from user_privileges left join realms on user_privileges.realm_id = realms.realm_id where realm = '%s' and (user_id = %d or (user_id is null and group_id in (select group_id from users_groups_join where user_id = %d))) group by realm",
                      $auth['uid'], 
                      mysql_real_escape_string($targetrealm),
                      $auth['uid'], 
