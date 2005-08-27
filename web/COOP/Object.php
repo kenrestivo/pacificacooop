@@ -133,7 +133,7 @@ class coopObject
 			$this->page->confessArray($links, 
 									  "isLInkField(): links for $this->table", 4);
 
-			if(!$this->forwardLinks[$key]){
+			if(!($this->forwardLinks && $this->forwardLinks[$key])){
 				return false;
 			}
 			
