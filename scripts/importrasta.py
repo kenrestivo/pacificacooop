@@ -175,10 +175,26 @@ class Family(Adder):
         #TODO: handle the situation where the family last name is a duplicate!
     def add(self):
         """simple insert wrapper"""
+        print "inserting new family %s" % (self.rec['Last Name'])
         c.execute("""insert into families set name = %s, phone = %s,
                     address1 = %s, email = %s""",
                   (self.rec['Last Name'], self.rec['Phone'],
                    self.rec['Address'], self.rec['Email']))
+        return c.lastrowid
+
+class Kid(Adder):
+    def get(self):
+        return self._get("""select * from kids where last_name like '%%%s%%'
+        and first_name like '%%%s%%' """ %
+                         	(self.rec['Last Name'], self.rec['Child']))
+
+
+        #TODO: handle the situation where the family last name is a duplicate!
+    def add(self):
+        c.execute("""insert into kids set last_name = %s, first_name = %s,
+                    family_id = %d, date_of_birth = %s""",
+                  (self.rec['Last Name'], self.rec['Child'],
+                   SOMETHING, self.rec['DOB']))
         return c.lastrowid
 
 
