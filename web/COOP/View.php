@@ -34,7 +34,7 @@ class coopView extends CoopObject
 	var $permissions; 				//  new perms structure
 	var $recordActions; 		// array of actions for new recordbuttons
 	var $viewActions; 			// array of actoins for the total view
-	var $legacyPerms; 			// cache of permissions for this page ($p)
+	var $legacyPerms; 			// cache of OLD-style permissions ($p)
 	var $extraRecordButtons;  // HACK for non-standard actions, i.e. thankyous
 	//var $legacyFields;  //YAGNI. i hope
 
@@ -351,6 +351,7 @@ class coopView extends CoopObject
 
 			//confessObj($this, 'this');
 			// the new style!
+            //TODO: put in the permissions checking here!
 			if($this->recordActions){
 				foreach($this->recordActions as $action => $title){
 					$res .= $this->page->selfURL(
@@ -383,7 +384,7 @@ class coopView extends CoopObject
 			}
 
 			//if($this->permissions){
-				//return new stuff
+				//TODO: return new stuff
 			//}
 
 			return $res;
@@ -402,6 +403,7 @@ class coopView extends CoopObject
 			return $res;
 		}
 
+    // XXX UNUSED CRUFT! 
 	function checkMenuLevel()
 		{
 			return checkMenuLevel($this->page->auth, 

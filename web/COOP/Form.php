@@ -705,15 +705,15 @@ class coopForm extends CoopObject
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
-					$this->page->debug > 1 &&
-						print "<br>DEBUG validating $key $val (table $table) for $this->table";
+					$this->page->printDebug("validating $key $val (table $table) for $this->table", 3);
 					$temp = $this->subtables[$table]->validate(); // OBJECT!
-					if($this->page->debug > 1 && $temp == false){
-						print "<br>DEBUG $table didn't validate";
-						confessArray($this->subtables[$table]->form->_errors, 
-									 $table . ' form errors!', 3);
-					}
-					$res += $temp;
+					if($temp == false){
+                        $this->page->printDebug("$table didn't validate",
+                                                3);
+                        confessArray($this->subtables[$table]->form->_errors, 
+                                     $table . ' form errors!', 3);
+                    }
+                    $res += $temp;
 					$count++;
 
 					// i have to refresh the thing, now that it's been validated
@@ -723,16 +723,16 @@ class coopForm extends CoopObject
 			}
 			
 			$temp  = $this->form->validate(); // FORM!
-			if($this->page->debug > 1 && $temp == false){
-				print "<br>DEBUG $this->table didn't validate";
+			if($temp == false){
+				$this->page->printDebug("$this->table didn't validate", 3);
 				//confessObj($this->form, $this->table . ' form');
 			}
 			$res += $temp;
 			$count++;
 			
-			$this->page->debug > 1 && 
-				printf("<br>DEBUG %s cumulative validation [%d/%d]", 
-					   $this->table, $res, $count);
+			$this->page->printDebug(
+                sprintf("%s cumulative validation [%d/%d]", 
+                        $this->table, $res, $count), 3);
 
 			return  $res == $count ? true : false;
 		}
