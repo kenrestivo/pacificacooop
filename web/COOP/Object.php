@@ -407,15 +407,15 @@ table_permissions.group_level, upriv.max_group)) as cooked_group
 from table_permissions 
 left join 
 (select max(user_level) as max_user, max(group_level) as max_group, 
-%d as user_id, realm
+%d as user_id, realm_id
 from user_privileges 
 where user_id = %d 
 or (user_id is null and group_id in 
 (select group_id from users_groups_join 
 where user_id = %d)) 
-group by realm 
-order by realm) as upriv
-on upriv.realm = table_permissions.realm 
+group by realm_id 
+order by realm_id) as upriv
+on upriv.realm_id = table_permissions.realm_id
 where user_id = %d and table_name = '%s'
 group by user_id,table_name,field_name
         ",
