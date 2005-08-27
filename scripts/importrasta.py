@@ -196,15 +196,23 @@ class Kid(Adder):
 
         #TODO: handle the situation where the family last name is a duplicate!
     def add(self):
+        d=map(int, self.rec['DOB'].split('/'))
+        d.insert(0,d.pop())             # date wants y,m,d
+        if d[0] < 1900: d[0]+=1900
+        if d[0] < 1950: d[0]+=100
+        import datetime
         c.execute("""insert into kids set last_name = %s, first_name = %s,
                     family_id = %s, date_of_birth = %s""",
                   (self.rec['Last Name'], self.rec['Child'],
-                   int(self.family_id), self.rec['DOB']))
+                   int(self.family_id), datetime.date(*d)))
         return c.lastrowid
 
 
-#TODO: kid, enrollment, parent, get/add!
+#TODO: enrollment, parents, get/add!
 
+
+
+##########naked functions
 
 def line(rec):
     """Driver for looping through the necessary steps to parse out a line"""
@@ -215,8 +223,6 @@ def line(rec):
     print "kid %d, family %d" %(kid_id, family_id)
         
 
-
-##########naked functions
 
 def load(am_file, pm_file):
     """Takes AM, PM files, builds objects for them, and loads them"""
