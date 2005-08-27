@@ -16,6 +16,7 @@ class User_privileges extends DB_DataObject
     var $realm;                           // string(55)  
     var $user_level;                      // int(5)  
     var $group_level;                     // int(5)  
+    var $realm_id;                        // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

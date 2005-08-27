@@ -238,6 +238,7 @@ CREATE TABLE events (
   event_id int(32) NOT NULL unique auto_increment,
   description varchar(255) default NULL,
   realm varchar(55) default NULL,
+  realm_id int(32) default NULL,
   notes longtext,
   url varchar(255) default NULL,
   PRIMARY KEY  (event_id)
@@ -548,6 +549,7 @@ CREATE TABLE user_privileges (
   user_id int(32) default NULL,
   group_id int(32) default NULL,
   realm varchar(55) default NULL,
+  realm_id int(32) default NULL,
   user_level int(5) default NULL,
   group_level int(5) default NULL,
   PRIMARY KEY  (privilege_id),
@@ -897,6 +899,7 @@ table_name varchar(255),
 field_name varchar(255),
 group_id int(32) default NULL,
 realm varchar(55) default NULL,
+realm_id int(32) default NULL,
 user_level int(5) default NULL,
 group_level int(5) default NULL
 );
@@ -910,6 +913,12 @@ am_pm_session enum('AM','PM') default NULL,
 worker_for_donation tinyint(1),
 brings_baby tinyint(1),
 school_year varchar(50) default NULL
+);
+
+
+create table realms(
+realm_id int(32) primary key not null unique auto_increment,
+realm varchar(255) default NULL
 );
 
 -- EOF

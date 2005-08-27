@@ -12,7 +12,6 @@ class Groups extends DB_DataObject
     var $__table = 'groups';                          // table name
     var $group_id;                        // int(32)  not_null primary_key unique_key auto_increment
     var $name;                            // string(55)  
-    var $audit_user_id;                   // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

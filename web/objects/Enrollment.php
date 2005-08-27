@@ -16,6 +16,11 @@ class Enrollment extends DB_DataObject
     var $am_pm_session;                   // string(2)  enum
     var $start_date;                      // date(10)  binary
     var $dropout_date;                    // date(10)  binary
+    var $monday;                          // int(1)  
+    var $tuesday;                         // int(1)  
+    var $wednesday;                       // int(1)  
+    var $thursday;                        // int(1)  
+    var $friday;                          // int(1)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

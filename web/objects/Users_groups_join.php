@@ -10,8 +10,8 @@ class Users_groups_join extends DB_DataObject
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'users_groups_join';               // table name
-    var $user_id;                         // int(32)  not_null primary_key unique_key auto_increment
-    var $userid;                          // int(32)  
+    var $users_groups_join_id;            // int(32)  not_null primary_key unique_key auto_increment
+    var $user_id;                         // int(32)  
     var $group_id;                        // int(32)  
 
     /* ZE2 compatibility trick*/
