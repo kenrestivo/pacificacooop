@@ -27,7 +27,6 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
 $cp = new coopPage( $debug);
 print $cp->pageTop();
-//$cp->createLegacy($cp->auth);
 
 $targetTable = 'income';
 

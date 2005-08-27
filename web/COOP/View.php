@@ -31,12 +31,10 @@ class coopView extends CoopObject
 {
 
 	var $legacyCallbacks;			// hack for old callbacks
-	var $permissions; 				//  new perms structure
-	var $recordActions; 		// array of actions for new recordbuttons
-	var $viewActions; 			// array of actoins for the total view
 	var $legacyPerms; 			// cache of OLD-style permissions ($p)
 	var $extraRecordButtons;  // HACK for non-standard actions, i.e. thankyous
-	//var $legacyFields;  //YAGNI. i hope
+    var $recordActions = array('edit', 'confirmdelete', 'details');      
+    var $viewActions = array('new', 'view');     
 
 	// i will need the old-skool callbacks and perms
 	// in order to use the old-skool buttons and actions calculations
@@ -352,17 +350,21 @@ class coopView extends CoopObject
 			//confessObj($this, 'this');
 			// the new style!
             //TODO: put in the permissions checking here!
-			if($this->recordActions){
-				foreach($this->recordActions as $action => $title){
-					$res .= $this->page->selfURL(
-						$title, 
+            foreach($this->accessnames as $level => $pair){
+                //print "$level $pair[1]<br>";
+                //print_r($this->recordActions);
+                if($this->recordActions[$pair[1]] &&
+                   $this->isPermittedField() >= $level)
+                {
+                    $res .= $this->page->selfURL(
+						$pair[0], 
 						array( 
-							'action' => $action,
+							'action' => $pair[1],
 							'table' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}
 							));
-				}
+                }
 			}
 			return $res;
 		}
@@ -383,9 +385,9 @@ class coopView extends CoopObject
 										 $showview,  1);
 			}
 
-			//if($this->permissions){
+
 				//TODO: return new stuff
-			//}
+
 
 			return $res;
 		}

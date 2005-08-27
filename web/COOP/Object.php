@@ -38,7 +38,16 @@ class coopObject
 	var $backlinks;				// list of links that are linked FROM here
 	var $forwardLinks;
 	var $overrides = array(); 	// ugly way to customise sub-tables
-    var $perms = array();       // new permissions array: field=> (user=>, group=>)
+    var $perms = array();       // new perms array: field=> (user=>, group=>)
+    var $accessnames = array(  
+        0 => array('None', NULL),
+		100 => array('Summarize', 'summary'),
+        200 => array('View', 'view'),
+        500 => array('Edit', 'edit'),
+        600 => array('Create', 'add'),
+		700 => array('Delete', 'confirmdelete'),
+		800 => array('Administer permissions for', NULL)
+        );
 
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
 		{
@@ -277,20 +286,23 @@ class coopObject
 		}
 
 
-	function isPermittedField($key)
+	function isPermittedField($key = NULL)
 		{
 
 			// if it's a key, and we don't show them, then no
 			if($key == $this->pk && $this->obj->fb_hidePrimaryKey){
-				//print "GAH $key a pk<br>";
+				$this->page->printDebug("$this->table : $key is a pk", 4);
 				return false;
 			}
 			//we don't show if not in fieldstorender
 			//NOTE: it could not be in the db itself,
 			//but if it's in fieldstorender, then we show it anyway
-			if($this->obj->fb_fieldsToRender && 
-			   !in_array($key, $this->obj->fb_fieldsToRender)){
-				//confessArray($this->obj->fb_fieldsToRender, "$key is NOT in:");
+			if($this->obj->fb_fieldsToRender && $key &&
+			   !in_array($key, $this->obj->fb_fieldsToRender))
+            {
+				$this->page->printDebug(
+                    "ispermitted(): $this->table : $key NOT in fieldstorender", 
+                    4);
 				return false;
 			}
 
@@ -298,11 +310,17 @@ class coopObject
 
 			// check user permissions! get  from the new  perms array
             if(empty($this->perms[$key])){
+                $this->page->printDebug(
+                    "isPermitted(): $this->table : $key is not in db",4);
+                //XXX return the TABLE perms in this case?
                 return true;    // nothing in here, it's cool
             }
 			
             if($this->userStruct['family_id'] == $this->obj->family_id){
                 // user greater of group or user, here
+                $this->page->printDebug(
+                    "ispermitted(): FAMILY IS ME $this->table : $key, famid $this->obj->family_id",
+                                        4);
                 return max($this->perms[$key]['user'], 
                            $this->perms[$key]['group']);
             }
@@ -431,7 +449,7 @@ group by user_id,table_name,field_name
                           'group' =>$row['cooked_group']);
             }
 
-            $this->page->confessArray($this->perms, 'perms', 2);
+            $this->page->confessArray($this->perms, "getPerms $this->table", 2);
         }
 
 
