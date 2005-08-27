@@ -130,8 +130,8 @@ class coopObject
 				//print "no links for $this->table $key $val<br>";
 				return false;
 			}
-			$this->page->confessArray($links, 
-									  "isLInkField(): links for $this->table", 4);
+			$this->page->confessArray($this->forwardLinks, 
+									  "isLInkField($key): links for $this->table", 4);
 
 			if(!($this->forwardLinks && $this->forwardLinks[$key])){
 				return false;
