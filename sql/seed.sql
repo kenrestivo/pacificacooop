@@ -89,26 +89,29 @@ insert into groups set
 
 
 --- realms
-INSERT INTO `realms` VALUES 
-(1,'auction'),
-(2,'calendar'),
-(3,'enhancement'),
-(4,'flyers'),
-(5,'insurance'),
-(6,'invitations'),
-(7,'invitations_cash'),
-(8,'jobs'),
-(9,'money'),
-(10,'nag'),
-(11,'packaging'),
-(12,'program'),
-(13,'raffle'),
-(14,'roster'),
-(15,'solicitation'),
-(16,'solicit_money'),
-(17,'thankyou'),
-(18,'tickets'),
-(19,'user');
+INSERT INTO `realms` 
+(realm_id, realm, meta_realm_id, short_description)
+VALUES 
+(1,'auction', 20,'Auctions'),
+(2,'calendar',NULL, 'Calendar'),
+(3,'enhancement',NULL, 'Enhancement'),
+(4,'flyers', 20,'Flyers'),
+(5,'insurance',NULL,'Insurance'),
+(6,'invitations', 20,'Invitations'),
+(7,'invitations_cash', 20,'RSVPs'),
+(8,'jobs',NULL,'Jobs'),
+(9,'money',NULL,'Fees'),
+(10,'nag', 20,'Reminders'),
+(11,'packaging', 20,'Packaging'),
+(12,'program', 20,'Program'),
+(13,'raffle', 20,'Raffles'),
+(14,'roster',NULL,'Membership'),
+(15,'solicitation', 20,'Solicitation'),
+(16,'solicit_money', 20,'Solicitation-redundant'),
+(17,'thankyou', 20,'Thank You'),
+(18,'tickets', 20,'Tickets'),
+(19,'user',NULL,'Users'),
+(20, 'springfest',NULL,'Springfest');
 
 
 
