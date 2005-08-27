@@ -222,6 +222,11 @@ CREATE TABLE enrollment (
   am_pm_session enum('AM','PM') default NULL,
   start_date date default NULL,
   dropout_date date default NULL,
+  monday tinyint(1),
+  tuesday tinyint(1),
+  wednesday tinyint(1),
+  thursday tinyint(1),
+  friday tinyint(1),
   PRIMARY KEY  (enrollment_id),
 ) ;
 
@@ -349,6 +354,7 @@ CREATE TABLE kids (
   last_name varchar(255) default NULL,
   first_name varchar(255) default NULL,
     date_of_birth date default NULL, 
+  allergies varchar(255) default NULL,
  family_id int(32) default NULL,
   PRIMARY KEY  (kid_id),
 ) ;
@@ -895,6 +901,15 @@ user_level int(5) default NULL,
 group_level int(5) default NULL
 );
 
-
+create table workers(
+worker_id int(32) primary key not null unique auto_increment,
+parent_id int(32) default NULL,
+workday set('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'),
+epod enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'),
+am_pm_session enum('AM','PM') default NULL,
+worker_for_donation tinyint(1),
+brings_baby tinyint(1),
+school_year varchar(50) default NULL
+);
 
 -- EOF

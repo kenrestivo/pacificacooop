@@ -1188,4 +1188,14 @@ where user_id = 91)))
 group by realm 
 
 
+-- ONE TIME ONLY query to populate workers table,
+-- from contents of old parents table
+insert into workers (parent_id, am_pm_session, school_year) 
+(select distinct parent_id, enrollment.am_pm_session, school_year 
+from parents 
+left join kids on parents.family_id = kids.family_id 
+left join enrollment on enrollment.kid_id = kids.kid_id 
+where parents.worker = 'yes' 
+order by parents.last_name, parents.first_name, school_year);
+
 --- EOF
