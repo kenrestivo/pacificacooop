@@ -144,7 +144,7 @@ class coopForm extends CoopObject
 					$el =& $this->obj->fb_preDefElements[$key];
 					$this->form->addElement(&$el);
 					$el->setName($fullkey); 
-				} else if($this->isLinkField(&$this->obj, $key)) {
+				} else if($this->isLinkField($key)) {
 					// check that we don't want NEW here
 					if(isset($st[$key])){
 						$this->addSubtable($key);
@@ -157,6 +157,7 @@ class coopForm extends CoopObject
 							$type, 
 							$fullkey, false, 
 							$this->selectOptions($key));
+                        $el->_parentForm =& $this->form;
 						
 					}
 				} else if(is_array($this->obj->fb_textFields) &&
