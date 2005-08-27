@@ -140,7 +140,6 @@ class Adder:
 
     def _get(self, query):
         """utility used by get() methods of subclasses"""
-        self.pk='family_id'
         c.execute(query)
         self.r=c.fetchall()
         if c.rowcount < 1: raise NoneFound
@@ -168,6 +167,7 @@ class Adder:
 class Family(Adder):
     def get(self):
         """a very cheap way to get the family."""
+        self.pk='family_id'
         return self._get("""select * from families where phone like '%%%s%%'
         and name like '%%%s%%' """ % (self.rec['Phone'], self.rec['Last Name']))
 
@@ -183,22 +183,37 @@ class Family(Adder):
         return c.lastrowid
 
 class Kid(Adder):
+    def __init__(self, c, rec, family_id):
+        Adder.__init__(self, c, rec)
+        self.family_id=family_id
+        
     def get(self):
+        self.pk='kid_id'
         return self._get("""select * from kids where last_name like '%%%s%%'
         and first_name like '%%%s%%' """ %
-                         	(self.rec['Last Name'], self.rec['Child']))
+                            (self.rec['Last Name'], self.rec['Child']))
 
 
         #TODO: handle the situation where the family last name is a duplicate!
     def add(self):
         c.execute("""insert into kids set last_name = %s, first_name = %s,
-                    family_id = %d, date_of_birth = %s""",
+                    family_id = %s, date_of_birth = %s""",
                   (self.rec['Last Name'], self.rec['Child'],
-                   SOMETHING, self.rec['DOB']))
+                   int(self.family_id), self.rec['DOB']))
         return c.lastrowid
 
 
 #TODO: kid, enrollment, parent, get/add!
+
+
+def line(rec):
+    """Driver for looping through the necessary steps to parse out a line"""
+    f=Family(c,rec)
+    family_id = f.wrapper()
+    k=Kid(c,rec,family_id)
+    kid_id=k.wrapper()
+    print "kid %d, family %d" %(kid_id, family_id)
+        
 
 
 ##########naked functions
