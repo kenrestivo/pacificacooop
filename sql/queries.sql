@@ -1179,7 +1179,8 @@ group by user_id,table_name,field_name
 ---shorter version for auld auth
 select max(user_level) as user_level, max(group_level) as group_level,
 91 as user_id, realm
-from user_privileges 
+from user_privileges
+left join realms on user_privileges.realm_id = realms.realm_id 
 where realm = 'invitations' 
 and (user_id = 91 
 or (user_id is null and group_id in 
