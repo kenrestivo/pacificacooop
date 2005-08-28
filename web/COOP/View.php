@@ -33,8 +33,11 @@ class coopView extends CoopObject
 	var $legacyCallbacks;			// hack for old callbacks
 	var $legacyPerms; 			// cache of OLD-style permissions ($p)
 	var $extraRecordButtons;  // HACK for non-standard actions, i.e. thankyous
-    var $recordActions = array('edit', 'confirmdelete', 'details');      
-    var $viewActions = array('add', 'view');     
+    var $recordActions = array('edit'=> ACCESS_EDIT, 
+                               'confirmdelete' => ACCESS_DELETE, 
+                               'details' => ACCESS_VIEW);      
+    var $viewActions = array('add' => ACCESS_ADD, 
+                             'view'=> ACCESS_VIEW);     
 
 	// i will need the old-skool callbacks and perms
 	// in order to use the old-skool buttons and actions calculations
@@ -351,15 +354,13 @@ class coopView extends CoopObject
 
 			//confessObj($this, 'this');
 			// the new style!
-            foreach($this->accessnames as $level => $pair){
+            foreach($this->recordActions as $action => $needlevel){
                 //print "asking: $pair[1] $level,  i have: $permitted<br>";
-                if(in_array($pair[1], $this->recordActions) && 
-                   $permitted >= $level) 
-                {
+                if($permitted >= $needlevel) {
                     $res .= $this->page->selfURL(
-						$pair[0], 
+						$this->actionnames[$action], 
 						array( 
-							'action' => $pair[1],
+							'action' => $action,
 							'table' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}
@@ -393,15 +394,13 @@ class coopView extends CoopObject
 
 
             $permitted = $this->isPermittedField();
-            foreach(array_reverse($this->accessnames) as $level => $pair){
+            foreach($this->viewActions as $action => $needlevel){
                 //print "asking: $pair[1] $level,  i have: $permitted<br>";
-                if(in_array($pair[1], $this->viewActions) && 
-                   $permitted >= $level) 
-                {
+                if($permitted >= $needlevel) {
                     $res .= $this->page->selfURL(
-						$pair[0], 
+						$this->actionnames[$action], 
 						array( 
-							'action' => $pair[1],
+							'action' => $action,
 							'table' => $this->table));
                 }
 			}

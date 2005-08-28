@@ -39,15 +39,14 @@ class coopObject
 	var $forwardLinks;
 	var $overrides = array(); 	// ugly way to customise sub-tables
     var $perms = array();       // new perms array: field=> (user=>, group=>)
-    var $accessnames = array(  
-        0 => array('None', NULL),
-		100 => array('Summarize', 'summary'),
-        200 => array('View', 'view'),
-        500 => array('Edit', 'edit'),
-        600 => array('Enter New', 'add'),
-		700 => array('Delete', 'confirmdelete'),
-		800 => array('Administer permissions for', NULL)
-        );
+    //XXX this is probaly a stupid place to store this,
+    //but i can't think of where else
+    var $actionnames = array('add' => 'Enter New',
+                             'confirmdelete' => 'Delete',
+                             'delete' => 'Delete',
+                             'details' => 'Details',
+                             'view' => 'View',
+                             'edit'  => 'Edit');
 
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
 		{
@@ -313,7 +312,9 @@ class coopObject
                 $this->page->printDebug(
                     "isPermitted($this->table : $key) is not in db",4);
                 //XXX return the TABLE perms in this case?
-                return true;    // nothing in here, it's cool
+                //XXX2 HACK! if it's a table (no key),
+                //and there are no perms in the db for it,it's *not* ok to show.
+                return $key ? true: false;    
             }
 			
             if($this->page->userStruct['family_id'] == $this->obj->family_id){
