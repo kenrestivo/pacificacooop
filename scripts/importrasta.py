@@ -10,6 +10,7 @@ import os
 import csv
 from datetime import date
 import MySQLdb, MySQLdb.cursors
+import datetime
 
 
 rasta=[]                                    # the completed am/pm minimarket
@@ -200,7 +201,6 @@ class Kid(Adder):
         d.insert(0,d.pop())             # date wants y,m,d
         if d[0] < 1900: d[0]+=1900
         if d[0] < 1950: d[0]+=100
-        import datetime
         c.execute("""insert into kids set last_name = %s, first_name = %s,
                     family_id = %s, date_of_birth = %s""",
                   (self.rec['Last Name'], self.rec['Child'],
@@ -222,16 +222,14 @@ class Enrollment(Adder):
       #TODO: handle a *change*, i.e. from am/pm
 
     def add(self):
-        import datetime
         c.execute("""insert into enrollment set 
                         kid_id = %s, school_year = %s, am_pm_session = %s,
                         start_date = %s , monday = %s, tuesday = %s,
                         wednesday = %s, thursday = %s, friday = %s""",
                   tuple([self.kid_id, school_year, self.rec['session'],
-                   datetime.date.today()] +
-                  map(lambda d : sum(map(d.count, ('c', 'W'))),
-                      (self.rec['M'], self.rec['Tu'],
-                       self.rec['W'], self.rec['Th'], self.rec['F']))))
+                         datetime.date.today()] +
+                         [self.rec[i] is not '' for i in
+                          ['M','Tu', 'W','Th','F']]))
         return c.lastrowid
 
 
