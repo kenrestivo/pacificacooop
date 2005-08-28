@@ -15,8 +15,8 @@ class Files extends DB_DataObject
     var $original_filename;               // string(255)  
     var $disk_filename;                   // string(255)  
     var $school_year;                     // string(50)  
-    var $file_date;                       // date(10)  
-    var $upload_date;                     // datetime(19)  
+    var $file_date;                       // date(10)  binary
+    var $upload_date;                     // datetime(19)  binary
     var $mime_type;                       // string(255)  
     var $file_size;                       // int(20)  
 
@@ -39,23 +39,34 @@ class Files extends DB_DataObject
 	function preGenerateForm()
 		{
 
+            // 8MB s/b as big as i need
 			$this->fb_preDefElements['original_filename'] =& 
 				HTML_QuickForm::createElement('file', 
                                               'original_filename', 
                                               'File to upload:',
 											  'maxfilesize=8388608');
-            // 8MB s/b as big as i need
-			// $uploadForm->addRule('original_filename', 
-//                                  'You must select a file', 'uploadedfile');
 		}
+
+
+    function postGenerateForm()
+        {
+            
+            //how can i get the form? i need to add a rule for it
+            //or do i do it from somewhere above?
+// 			 $this->fb_form->addRule('original_filename', 
+//                                   'You must select a file', 'uploadedfile');
+        }
 
 	function insert()
 		{
 
 			$actual =& $_FILES['original_filename'];			
-			//confessObject($actual, "actual_file");
+			//print_r($actual);
 			$unique_filename = sprintf("%d-%s", rand(1,200), 
                                        $actual['name']);
+
+            // XXX bah! perms! chown, yuck. safe mode sucks.
+
             // TODO also check for a size < 1... zero-byte file. or, js?
             if (is_uploaded_file($actual['tmp_name']) &&
 				move_uploaded_file($actual['tmp_name'],
@@ -69,11 +80,11 @@ class Files extends DB_DataObject
                 $this->mime_type = $actual['type'];
                 $this->upload_date = date("Y-m-d H:i:s");
                 $this->file_size = $actual['size'];
-				// XXX bah! perms! chown, yuck. safe mode sucks.
-				$this->file_date = date('Y-m-d H:i:s',
-										filemtime($actual['tmp_name']));
 				// NOTE: assume school_year taken care of
                 // by CoopPage::setFormDefaults
+                $this->file_date = date('Y-m-d H:i:s', 
+                                        filemtime($this->kenPath . 
+                                                  $unique_filename));
                 return parent::insert();
             }
             

@@ -770,7 +770,7 @@ CREATE TABLE files (
 	 original_filename varchar(255) default NULL,
 	disk_filename varchar(255) default NULL,
 	school_year varchar(50) default NULL,
-    file_date date default NULL,
+    file_date datetime default NULL,
     upload_date datetime default NULL,
     mime_type varchar(255) default NULL,
 	file_size int(20) default NULL,
@@ -918,5 +918,15 @@ realm varchar(255) default NULL,
 short_description varchar(255),
 meta_realm_id int(32)
 );
+
+
+create table access_levels(
+access_level_id int(32) primary key not null unique,
+short_name varchar(50) default NULL,
+description varchar(255),
+const_name varchar(50) default NULL
+);
+
+
 
 -- EOF

@@ -19,7 +19,6 @@ class Insurance_information extends DB_DataObject
     var $companyname;                     // string(255)  
     var $naic;                            // int(5)  
     var $parent_id;                       // int(32)  
-    var $audit_user_id;                   // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

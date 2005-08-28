@@ -14,7 +14,6 @@ class Auction_donation_items extends DB_DataObject
     var $item_description;                // blob(16777215)  blob
     var $item_value;                      // real(11)  
     var $date_received;                   // date(10)  binary
-    var $audit_user_id;                   // int(32)  
     var $location_in_garage;              // string(255)  
     var $quantity;                        // int(5)  
     var $item_type;                       // string(16)  enum

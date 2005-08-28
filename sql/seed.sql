@@ -658,5 +658,17 @@ group_level = 200,
 user_level = 700,
 realm_id = 21; 
 
+----- access levels
+insert into access_levels 
+(access_level_id, short_name, description, const_name)
+values
+(0, NULL, 'None', 'ACCESS_NONE'),
+(100, 'summary', 'Summarize', 'ACCESS_SUMMARY'),
+(200, 'view', 'View', 'ACCESS_VIEW'),
+(300, 'viewmult', 'View Multiple (do not use)', 'ACCESS_VIEW_MULT_HACK'),
+(500, 'edit', 'Edit', 'ACCESS_EDIT'),
+(600, 'add', 'Create', 'ACCESS_ADD'),
+(700, 'confirmdelete', 'Delete', 'ACCESS_DELETE'),
+(800, NULL, 'Administer permissions for', 'ACCESS_ADMIN');
 
 -- EOF
