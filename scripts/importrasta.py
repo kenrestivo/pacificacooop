@@ -32,7 +32,7 @@ valid_keys = [
  'Email',
  'Dad/Partner']
 
-
+school_year = '2005-2006'
 
 ## do i *really* need an object here? or is encapsualtion in import ok?
 ## ah, ok. one rastaimport for each of am/pm
@@ -208,6 +208,34 @@ class Kid(Adder):
         return c.lastrowid
 
 
+class Enrollment(Adder):
+    def __init__(self, c, rec, kid_id):
+        Adder.__init__(self, c, rec)
+        self.kid_id=kid_id
+        
+    def get(self):
+        self.pk='enrollment_id'
+        return self._get("""select * from enrollment where kid_id = %d
+        and school_year = '%s' """ %
+                            (self.kid_id, school_year))
+
+      #TODO: handle a *change*, i.e. from am/pm
+
+    def add(self):
+        import datetime
+        c.execute("""insert into enrollment set 
+                        kid_id = %s, school_year = %s, am_pm_session = %s,
+                        start_date = %s , monday = %s, tuesday = %s,
+                        wednesday = %s, thursday = %s, friday = %s""",
+                  tuple([self.kid_id, school_year, self.rec['session'],
+                   datetime.date.today()] +
+                  map(lambda d : sum(map(d.count, ('c', 'W'))),
+                      (self.rec['M'], self.rec['Tu'],
+                       self.rec['W'], self.rec['Th'], self.rec['F']))))
+        return c.lastrowid
+
+
+
 #TODO: enrollment, parents, get/add!
 
 
@@ -220,7 +248,9 @@ def line(rec):
     family_id = f.wrapper()
     k=Kid(c,rec,family_id)
     kid_id=k.wrapper()
-    print "kid %d, family %d" %(kid_id, family_id)
+    e=Enrollment(c,rec,kid_id)
+    enrol_id=e.wrapper()
+    print "kid %d, family %d, enrollment %d" %(kid_id, family_id, enrol_id)
         
 
 
