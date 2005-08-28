@@ -34,7 +34,7 @@ class coopView extends CoopObject
 	var $legacyPerms; 			// cache of OLD-style permissions ($p)
 	var $extraRecordButtons;  // HACK for non-standard actions, i.e. thankyous
     var $recordActions = array('edit', 'confirmdelete', 'details');      
-    var $viewActions = array('new', 'view');     
+    var $viewActions = array('add', 'view');     
 
 	// i will need the old-skool callbacks and perms
 	// in order to use the old-skool buttons and actions calculations
@@ -351,7 +351,6 @@ class coopView extends CoopObject
 
 			//confessObj($this, 'this');
 			// the new style!
-            //TODO: put in the permissions checking here!
             foreach($this->accessnames as $level => $pair){
                 //print "asking: $pair[1] $level,  i have: $permitted<br>";
                 if(in_array($pair[1], $this->recordActions) && 
@@ -387,10 +386,27 @@ class coopView extends CoopObject
 			}
 
 
-				//TODO: return new stuff
+			//XXX hack! i'm only gonna bother with record buttons if familyid
+			// the right thing to do is to fish familyid out of backlinks!
+            // NOTE!!! this is TOTALLY DIFFERENT from the one in toarray!
+            $this->obj->family_id = $this->page->userStruct['family_id'];
 
 
-			return $res;
+            $permitted = $this->isPermittedField();
+            foreach(array_reverse($this->accessnames) as $level => $pair){
+                //print "asking: $pair[1] $level,  i have: $permitted<br>";
+                if(in_array($pair[1], $this->viewActions) && 
+                   $permitted >= $level) 
+                {
+                    $res .= $this->page->selfURL(
+						$pair[0], 
+						array( 
+							'action' => $pair[1],
+							'table' => $this->table));
+                }
+			}
+            return $res;
+
 		}
 
 	// note, this is not very well-used, but it will be.  i'll replace
