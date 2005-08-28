@@ -464,25 +464,22 @@ class coopForm extends CoopObject
 		{
 			$this->page->debug > 3 && confessObj($this->page, 
                                                  'setDefaults: coop page');
+
+            // gah. have to prepend table here
+
+            $prepended[$this->prependTable('school_year')] = findSchoolYear();
             
-            if(!is_array($this->obj->fb_defaults)){
-                $this->page->printDebug('setDefaults() using coopForm defaults',
-                                        3);
-				$this->form->setDefaults(
-					array($this->prependTable('school_year') => 
-						  findSchoolYear(),
-						  $this->prependTable('family_id') => 
-						   $this->page->userStruct['family_id']));
-				return;
-			}
-
-            $this->page->printDebug('setDefaults() using fb_defaults in DBOBJ',
-                                        3);
-
-			// gah. have to prepend table here
+            $prepended[$this->prependTable('family_id')] = 
+                $this->page->userStruct['family_id'];
+            
+            //NOTE this overrides the above
 			foreach($this->obj->fb_defaults as $key => $val){
 				$prepended[$this->prependTable($key)] = $val;
 			}
+            $this->page->confessArray($prepended, 
+                                      "CoopForm::setDefaults({$this->table}))", 
+                                      3);
+
 			$this->form->setDefaults($prepended);
 		}
 
