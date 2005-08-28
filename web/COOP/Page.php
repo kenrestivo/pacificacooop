@@ -43,7 +43,7 @@ function dump($data)
 {
 	// the getcwd is kind of redundant
 	$fname = sprintf("%s/logs/%s-debug.html", 
-					 getcwd(), mt_rand());
+					 getcwd(), date("YmdU"));
 	static $fp;
 	if(!$fp){
 		$fp = fopen($fname, 'w');
