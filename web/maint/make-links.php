@@ -38,6 +38,11 @@ foreach($tables as $table){
 
 }
 
+// stick the manuals in there first
+$links = parse_ini_file('schema/coop-manual-links.ini', TRUE);
+//print_r($links);
+
+
 // ok, now the actual links
 //reset($tables);
 
@@ -49,20 +54,24 @@ foreach($tableFields as $table => $fields){
 	}
 }
 
+
+
+//print_r($pkeys);
+//print_r($tableFields);
 //reset($links);
-
-//print_r($pkeys, "keys");
-//print_r($tableFields, "tables");
-//print_r($links, "links");
-
+//print_r($links);
 
 // ok format it for printing now
 //reset($links);
 foreach($links as $from => $tablelinks){
 	$res .= sprintf("\n[%s]\n", $from);
 	foreach($tablelinks as $id => $totable){
-		$res .= sprintf("%s = %s:%s\n",
-						$id, $totable, $id);
+        if(strstr($totable, ':')){
+            $res .= sprintf("%s = %s\n", $id, $totable);
+        } else {
+            $res .= sprintf("%s = %s:%s\n",
+                            $id, $totable, $id);
+        }
 	}
 }
 

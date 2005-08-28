@@ -126,7 +126,6 @@ guarantee-pear::
 
 update-links::
 	php maint/make-links.php > $(LINKSFILE)		
-	cat schema/coop-manual-links.ini >> $(LINKSFILE)
 	@echo "remember to manually check for ones the script doesn't catch"
 
 #EOF
