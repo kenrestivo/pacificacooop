@@ -1,26 +1,30 @@
 <?php
 
+//$Id$
+// nifty little util to grab the latest page and display it where's i can see it
 
-$cwd = getcwd();
+if ($handle = opendir('.')) {
+    /* This is the correct way to loop over the directory. */
+    while (false !== ($file = readdir($handle))) {
+        if(strstr($file, 'html')){
+            $saver = $file;
+        }
+    }
+    closedir($handle);
 
-print "$cwd<br>";
+    echo "LATEST.php: $saver is most recent<br>";
+    $fd = fopen($saver, 'r');
+    $contents = "";
+    do {
+        $data = fread($fd, 8192);
+        if (strlen($data) == 0) {
+            break;
+        }
+        echo $data;
+    } while(true);
+    fclose ($fd);
 
-
-
-// Outputs all the result of shellcommand "ls", and returns
-// the last output line into $last_line. Stores the return value
-// of the shell command in $retval.
-$last_line = system('ls', $retval);
-
-// Printing additional info
-echo '
-</pre>
-<hr>Last line of the output: '.$last_line.'
-<hr>Return value: '.$retval;
-
-
-system('ls '.escapeshellarg($cwd));
-
+}
 
 
 ?>
