@@ -301,7 +301,7 @@ class coopObject
 			   !in_array($key, $this->obj->fb_fieldsToRender))
             {
 				$this->page->printDebug(
-                    "ispermitted(): $this->table : $key NOT in fieldstorender", 
+                    "ispermitted($this->table : $key) NOT in fieldstorender", 
                     4);
 				return false;
 			}
@@ -311,21 +311,23 @@ class coopObject
 			// check user permissions! get  from the new  perms array
             if(empty($this->perms[$key])){
                 $this->page->printDebug(
-                    "isPermitted(): $this->table : $key is not in db",4);
+                    "isPermitted($this->table : $key) is not in db",4);
                 //XXX return the TABLE perms in this case?
                 return true;    // nothing in here, it's cool
             }
 			
-            if($this->userStruct['family_id'] == $this->obj->family_id){
+            if($this->page->userStruct['family_id'] == $this->obj->family_id){
                 // user greater of group or user, here
-                $this->page->printDebug(
-                    "ispermitted(): FAMILY IS ME $this->table : $key, famid $this->obj->family_id",
-                                        4);
-                return max($this->perms[$key]['user'], 
+                $res =  max($this->perms[$key]['user'], 
                            $this->perms[$key]['group']);
+            } else {
+                $res = $this->perms[$key]['group'];
             }
-
-            return $this->perms[$key]['group'];
+            $this->page->printDebug(
+                "ispermitted($this->table : $key) RETURNING for OBJ famid {$this->obj->family_id}, my famid {$this->page->userStruct['family_id']} perms $res",
+                4);
+             
+            return $res;
 
 		}
 

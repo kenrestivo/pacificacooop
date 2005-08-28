@@ -347,14 +347,15 @@ class coopView extends CoopObject
 								 "");
 			}
 
+            $permitted = $this->isPermittedField();
+
 			//confessObj($this, 'this');
 			// the new style!
             //TODO: put in the permissions checking here!
             foreach($this->accessnames as $level => $pair){
-                //print "$level $pair[1]<br>";
-                //print_r($this->recordActions);
-                if($this->recordActions[$pair[1]] &&
-                   $this->isPermittedField() >= $level)
+                //print "asking: $pair[1] $level,  i have: $permitted<br>";
+                if(in_array($pair[1], $this->recordActions) && 
+                   $permitted >= $level) 
                 {
                     $res .= $this->page->selfURL(
 						$pair[0], 
