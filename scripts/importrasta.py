@@ -234,8 +234,29 @@ class Enrollment(Adder):
 
 
 
-#TODO: enrollment, parents, get/add!
+#TODO: parents, worker, get/add!
 
+class Parent(Adder):
+    type=None
+    def __init__(self, c, rec, family_id, type):
+        Adder.__init__(self, c, rec)
+        self.family_id=family_id
+        self.type=type
+        
+    def get(self):
+        self.pk='parent_id'
+        return self._get("""select * from parents where last_name like '%%%s%%'
+        and first_name like '%%%s%%' and family_id = %d""" %
+                            (self.rec[self.type+'_last'],
+                             self.rec[self.type+'_first'],
+                             self.family_id))
+
+    def add(self):
+        c.execute("""insert into parents set last_name = %s, first_name = %s,
+                    family_id = %s, type = %s""",
+                  (self.rec[self.type+'_last'], self.rec[self.type+'_first'],
+                   int(self.family_id), self.type))
+        return c.lastrowid
 
 
 ##########naked functions
@@ -248,7 +269,11 @@ def line(rec):
     kid_id=k.wrapper()
     e=Enrollment(c,rec,kid_id)
     enrol_id=e.wrapper()
-    print "kid %d, family %d, enrollment %d" %(kid_id, family_id, enrol_id)
+    m=Parent(c,rec,family_id, 'mom')
+    mom_id=m.wrapper()
+    d=Parent(c,rec,family_id, 'dad')
+    dad_id=d.wrapper()
+    print "kid %d, family %d, enrollment %d, mom %d, dad/partner %d" % (kid_id, family_id, enrol_id, mom_id, dad_id)
         
 
 
