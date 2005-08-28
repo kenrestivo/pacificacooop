@@ -36,12 +36,17 @@ class Enrollment extends DB_DataObject
 		'school_year' => 'School Year',
 		'am_pm_session' => "Session",
 		'start_date' => 'Start Date',
-		'dropout_date' => "Drop Date"
+		'dropout_date' => "Drop Date",
+        'monday' => 'M',
+        'tuesday' => 'Tu',
+        'wednesday' => 'W',
+        'thursday' => 'Th',
+        'friday' => 'F',
 		);
-	var $fb_fieldsToRender = array('am_pm_session', 
-                                   'kid_id',
-                                   'start_date', 
-                                   'dropout_date');
+// 	var $fb_fieldsToRender = array('am_pm_session', 
+//                                    'kid_id',
+//                                    'start_date', 
+//                                    'dropout_date');
 	var $fb_requiredFields  = array('school_year', 'am_pm_session', 
 									'start_date', 'kid_id');
 	var $fb_linkDisplayFields = array('school_year', 'am_pm_session');

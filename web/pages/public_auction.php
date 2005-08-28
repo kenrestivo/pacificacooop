@@ -203,7 +203,7 @@ if(file_exists($prettyname)){
 print auctionItems(&$cp, $sy);
 
 
-print "<p><a href='../index.html'>Home</a></p>
+print "<p><a href='../'>Home</a></p>
 ";
 
 print "</div><!-- end rightcol div -->";

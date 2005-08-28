@@ -73,8 +73,8 @@ CREATE TABLE blog_entry (
   family_id int(32) default NULL,
   short_title varchar(255) default NULL,
   body longtext,
-  show_on_members_page enum('Unknown','Yes','No') default NULL,
-  show_on_public_page enum('Unknown','Yes','No') default NULL,
+  show_on_members_page enum('Unknown','Yes','No') default 'Yes',
+  show_on_public_page enum('Unknown','Yes','No') default 'No',
   PRIMARY KEY  (blog_entry_id)
 ) ;
 

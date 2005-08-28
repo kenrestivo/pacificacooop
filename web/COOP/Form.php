@@ -76,6 +76,7 @@ class coopForm extends CoopObject
 			// if so, bust it out somewhere.
 			//$this->form->addElement('hidden', 'table', $this->table);
 
+
 			//set defaults for new
 			if($this->id < 1){
 				$this->setDefaults();
@@ -114,7 +115,18 @@ class coopForm extends CoopObject
 				$fullkey = $this->prependTable($key);
 
                 // need this in a couple places, so cache it
+                //XXX hack to inject family id into new records!! AIIEE
+                if(!$this->id){
+                    $this->obj->family_id = $this->page->userStruct['family_id'];
+                }
+
                 $perms = $this->isPermittedField($key);
+
+
+                // don't even show it if i can't enter it, IFF its' new
+                if(!$this->id && $perms < ACCESS_EDIT){
+                    continue;
+                }
 
 				// if it's a new entry, fill from vars!
 				// this is a clusterfuck because i'm using setValue.
@@ -206,9 +218,8 @@ class coopForm extends CoopObject
 				}
 
                 //ok, perms stuff here now
-                if(($this->id && $perms < ACCESS_EDIT ) ||
-                    ($perms < ACCESS_ADD && !$this->id))
-                {
+                // i only need 
+                if($perms < ACCESS_EDIT ) {
 					$frozen[] = $fullkey;
                 }
 
@@ -451,9 +462,12 @@ class coopForm extends CoopObject
 	// maybe do like my fb_ stuff? if it's set, ignore it?
 	function setDefaults()
 		{
-			$this->page->debug > 2 && confessObj($this->page, 'coop page');
-
-			if(!is_array($this->obj->fb_defaults)){
+			$this->page->debug > 3 && confessObj($this->page, 
+                                                 'setDefaults: coop page');
+            
+            if(!is_array($this->obj->fb_defaults)){
+                $this->page->printDebug('setDefaults() using coopForm defaults',
+                                        3);
 				$this->form->setDefaults(
 					array($this->prependTable('school_year') => 
 						  findSchoolYear(),
@@ -461,6 +475,9 @@ class coopForm extends CoopObject
 						   $this->page->userStruct['family_id']));
 				return;
 			}
+
+            $this->page->printDebug('setDefaults() using fb_defaults in DBOBJ',
+                                        3);
 
 			// gah. have to prepend table here
 			foreach($this->obj->fb_defaults as $key => $val){
@@ -706,10 +723,10 @@ class coopForm extends CoopObject
 				foreach($st as $key => $val){
 					list($table, $farid) = explode(':', 
 												   $this->forwardLinks[$key]);
-					$this->page->printDebug("validating $key $val (table $table) for $this->table", 3);
+					$this->page->printDebug("CoopForm::validate()  $key $val (table $table) for $this->table", 3);
 					$temp = $this->subtables[$table]->validate(); // OBJECT!
 					if($temp == false){
-                        $this->page->printDebug("$table didn't validate",
+                        $this->page->printDebug("{$table}::validate() didn't validate",
                                                 3);
                         confessArray($this->subtables[$table]->form->_errors, 
                                      $table . ' form errors!', 3);
@@ -725,14 +742,14 @@ class coopForm extends CoopObject
 			
 			$temp  = $this->form->validate(); // FORM!
 			if($temp == false){
-				$this->page->printDebug("$this->table didn't validate", 3);
+				$this->page->printDebug("CoopForm::validate({$this->table}) didn't validate", 3);
 				//confessObj($this->form, $this->table . ' form');
 			}
 			$res += $temp;
 			$count++;
 			
 			$this->page->printDebug(
-                sprintf("%s cumulative validation [%d/%d]", 
+                sprintf("CoopForm::validate(%s) cumulative validation = [%d/%d]", 
                         $this->table, $res, $count), 3);
 
 			return  $res == $count ? true : false;

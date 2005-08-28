@@ -27,4 +27,14 @@ class Calendar_events extends DB_DataObject
     ###END_AUTOCODE
 	var $fb_enumFields = array ('status');
 
+	var $fb_linkDisplayFields = array('event_id', 'event_date');
+    var $fb_fieldLabels = array(
+        'status' => 'Status',
+        'event_id' => 'Event',
+        'event_date' => 'Date',
+        'keep_event_hidden_until_date' => 'Do not show until',
+        'school_year' => 'School Year'
+        );
+
+
 }

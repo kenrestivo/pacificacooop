@@ -363,7 +363,7 @@ class coopPage
 
 	function printDebug($string, $level, $outofband = true)
 		{
-			if($level < $this->debug){
+			if($level > $this->debug){
 				return;
 			}
 

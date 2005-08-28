@@ -171,6 +171,21 @@ insert into events set
             notes = "The date of this year's Springfest event"
 ;
 
+insert into events set
+            event_id = 8,
+            realm_id = 2,
+            description = "Start of Fall Semester",
+            notes = "The first day of the Fall Semester"
+;
+
+insert into events set
+            event_id = 9,
+            realm_id = 2,
+            description = "Start of Spring Semester",
+            notes = "The first day of the Spring Semester"
+;
+
+
 -- calendar items for this first online year. TEMP!
 insert into calendar_events set
             event_id = 4,
@@ -219,6 +234,13 @@ insert into calendar_events set
             school_year = '2005-2006',
             event_date = "2006-06-30"
 ;
+
+insert into calendar_events set
+            event_id = 8,
+            school_year = '2005-2006',
+            event_date = "2005-09-12"
+;
+
 
 -- the territories
 insert into territories set

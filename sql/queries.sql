@@ -1199,4 +1199,11 @@ left join enrollment on enrollment.kid_id = kids.kid_id
 where parents.worker = 'yes' 
 order by parents.last_name, parents.first_name, school_year);
 
+
+---blog
+select blog_entry.*, audit_trail.updated from blog_entry 
+left join audit_trail on audit_trail.index_id = blog_entry.blog_entry_id 
+where table_name = 'blog_entry' 
+order by updated desc;
+
 --- EOF

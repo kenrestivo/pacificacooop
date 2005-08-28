@@ -234,8 +234,6 @@ class Enrollment(Adder):
 
 
 
-#TODO: parents, worker, get/add!
-
 class Parent(Adder):
     type=None
     def __init__(self, c, rec, family_id, type):
@@ -257,6 +255,16 @@ class Parent(Adder):
                   (self.rec[self.type+'_last'], self.rec[self.type+'_first'],
                    int(self.family_id), self.type))
         return c.lastrowid
+
+
+#TODO: worker, get/add!
+
+#workday
+# ir.rasta[-9].items():
+#      if i[1] == 'W': i[0]
+#epod
+# ir.rasta[-9].items():
+#      if i[1] == 'E': i[0]
 
 
 ##########naked functions

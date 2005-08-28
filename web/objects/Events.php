@@ -24,4 +24,15 @@ class Events extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+	var $fb_linkDisplayFields = array('description');
+    var $fb_fieldLabels = array(
+        'description' => 'Description',
+        'url' => 'For more information',
+        'realm_id' => 'realm',
+        'notes' => 'Details'
+        );
+
+
+
 }

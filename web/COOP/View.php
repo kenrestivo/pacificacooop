@@ -203,6 +203,7 @@ class coopView extends CoopObject
 
 			/// XXX NASTY ASS HACK!!!! ispermittedfield is b0rken.
 			/// view and edit are different!
+			/// how do i do this in coopform? i think i've solved this elsewhere
 			if(!isset($this->obj->fb_hidePrimaryKey)){
 				$this->obj->fb_hidePrimaryKey = true;
 			}
