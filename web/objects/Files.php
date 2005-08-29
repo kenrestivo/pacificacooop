@@ -48,13 +48,12 @@ class Files extends DB_DataObject
 		}
 
 
-    function postGenerateForm()
+    function postGenerateForm(&$form)
         {
-            
             //how can i get the form? i need to add a rule for it
             //or do i do it from somewhere above?
-// 			 $this->fb_form->addRule('original_filename', 
-//                                   'You must select a file', 'uploadedfile');
+ 			 $form->addRule('original_filename', 
+                                   'You must select a file', 'uploadedfile');
         }
 
 	function insert()

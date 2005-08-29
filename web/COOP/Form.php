@@ -94,6 +94,16 @@ class coopForm extends CoopObject
 			$this->form->applyFilter('__ALL__', 'trim');
 
 			$this->form->addFormRule(array(&$this,'dupeCheck'));
+            
+            // NOTE! i must do this before calling postgenerate
+            $this->form->CoopForm =& $this; 
+
+            //godDAMN do i hate php.
+            if(is_callable(array($this->obj, "postGenerateForm"))){
+                $this->page->printDebug(
+                    "calling {$this->table}::postgenerateForm", 2);
+                $this->obj->postGenerateForm(&$this->form);
+            }
 
 			return $this->form;	// XXX not really necessary?
 		}
@@ -122,12 +132,6 @@ class coopForm extends CoopObject
 
                 $perms = $this->isPermittedField($key);
 
-
-                // don't even show it if i can't enter it, IFF its' new
-                if(!$this->id && $perms < ACCESS_EDIT){
-                    continue;
-                }
-
 				// if it's a new entry, fill from vars!
 				// this is a clusterfuck because i'm using setValue.
 				// otherwise, quickform would do this for me. *sigh*
@@ -142,7 +146,10 @@ class coopForm extends CoopObject
 					$val = $dbval;
 				}
 
-                if($perms < ACCESS_VIEW){
+                // jeez, this is byzantine.
+                if($perms < ACCESS_VIEW || 
+                   (!$this->id && $perms < ACCESS_EDIT))
+                {
 					// the hidden thing. i think  i need to do hidden here
 					if(is_array($this->obj->fb_requiredFields) && 
 					   in_array($key, $this->obj->fb_requiredFields)){

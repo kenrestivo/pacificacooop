@@ -26,6 +26,19 @@ class Job_descriptions extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+    function postGenerateForm(&$form)
+        {
+            //confessObj($form, 'form');
+            //confessArray(get_class_methods($form->CoopForm), 
+            //get_class($form->CoopForm));
+            $el =& $form->getElement(
+                $form->CoopForm->prependTable('long_description'));
+            $el->setRows(25);
+            $el->setCols(80);
+        }
+
+
 	var $fb_formHeaderText =  'Job Descriptions';
 	var $fb_linkDisplayFields = array('summary');
 	var $fb_fieldsToRender = array(
@@ -50,6 +63,5 @@ class Job_descriptions extends DB_DataObject
 //  									 'toTable' => 'families',
 //  									 'toField' => 'family_id',
 //  									 'type' => 'select'));
-
 
 }

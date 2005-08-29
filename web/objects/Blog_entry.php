@@ -42,4 +42,16 @@ class Blog_entry extends DB_DataObject
 	var $fb_requiredFields = array('family_id', 'short_title', 'body');
 	var $fb_defaults = array('show_on_members_page' => 'Yes',
                              'show_on_public_page' => 'No');
+
+    function postGenerateForm(&$form)
+        {
+            //confessObj($form, 'form');
+            //confessArray(get_class_methods($form->CoopForm), 
+            //get_class($form->CoopForm));
+            $el =& $form->getElement(
+                $form->CoopForm->prependTable('body'));
+            $el->setRows(25);
+            $el->setCols(80);
+        }
+
 }

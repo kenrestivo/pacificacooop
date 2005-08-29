@@ -475,7 +475,6 @@ INSERT INTO `table_permissions` VALUES
 (4,'enrollment','am_pm_session',NULL,14,200,600),
 (5,'enrollment','start_date',NULL,14,0,600),
 (6,'enrollment','dropout_date',NULL,14,0,700),
-(7,NULL,NULL,NULL,8,NULL,NULL),
 (8,'enhancement_projects',NULL,NULL,3,NULL,500),
 (9,'enhancement_hours',NULL,NULL,3,NULL,NULL),
 (10,'enhancement_hours','family_id',NULL,3,200,200),
