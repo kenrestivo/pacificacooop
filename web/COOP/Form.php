@@ -201,13 +201,8 @@ class coopForm extends CoopObject
 								   'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
 					$val && $val = sql_to_human_date($val);
 				} else {
-					//i ALWAYS hide primary key. it's hardcoded here.
-					// note this is different from FB behaviour.
-					// XXX this is broken. i need to deal with fb_hidePrimaryKey
-                    // FIXED IN ISPERMITTED!
-					$el =& $this->form->addElement(
-						$key == $this->pk ? 'hidden' : 'text', 
-						$fullkey);
+                    // ok, it's just text
+					$el =& $this->form->addElement('text', $fullkey);
 				}
 				//print $key . "->" .$this->obj->fb_fieldLabels[$key] . "<br>";
 				// TODO: uppercase this thing, replace _ with spaces
