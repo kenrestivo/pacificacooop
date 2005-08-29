@@ -114,7 +114,8 @@ class TooManyFound(Exception):
 
 class NoneFound(Exception):
     def __init__(self):
-        print 'None found...'
+        pass
+
 
 ########end of exception classes
 
@@ -201,6 +202,8 @@ class Kid(Adder):
         d.insert(0,d.pop())             # date wants y,m,d
         if d[0] < 1900: d[0]+=1900
         if d[0] < 1950: d[0]+=100
+        print "inserting new kid %s %s" % (self.rec['Child'],
+                                           self.rec['Last Name'])
         c.execute("""insert into kids set last_name = %s, first_name = %s,
                     family_id = %s, date_of_birth = %s""",
                   (self.rec['Last Name'], self.rec['Child'],
@@ -250,6 +253,8 @@ class Parent(Adder):
                              self.family_id))
 
     def add(self):
+        print "inserting new parent %s %s" % (self.rec[self.type+'_first'],
+                                           self.rec[self.type+'_last'])
         c.execute("""insert into parents set last_name = %s, first_name = %s,
                     family_id = %s, type = %s""",
                   (self.rec[self.type+'_last'], self.rec[self.type+'_first'],
@@ -257,7 +262,6 @@ class Parent(Adder):
         return c.lastrowid
 
 
-#TODO: worker, get/add!
 class Worker(Adder):
     days={'M': 'Monday',
           'Tu': 'Tuesday',
@@ -286,6 +290,9 @@ class Worker(Adder):
                    [self.days[j[0]] for j in filter(lambda i: i[1] == 'E',
                                          self.rec.items())][0]))
         return c.lastrowid
+
+
+### TODO: add the user and user-group-join to the db!
 
 
 
@@ -320,15 +327,12 @@ def load(am_file, pm_file):
 
 ###### MAIN
 if __name__ == '__main__':
-    #TODO: use argv. this is sillie
+    conn=MySQLdb.connect(user='input', passwd='test', db='coop',
+                         host='bc', cursorclass=MySQLdb.cursors.DictCursor) 
+    c=conn.cursor()
+    
     load("/mnt/kens/ki/proj/coop/imports/AMRoster05-06.csv", 
-            "/mnt/kens/ki/proj/coop/imports/PMRoster05-06.csv")
-
-
-
-
-#db open
-conn=MySQLdb.connect(user='input', passwd='test', db='coop',
-                 host='bc', cursorclass=MySQLdb.cursors.DictCursor) 
-c=conn.cursor()
+         "/mnt/kens/ki/proj/coop/imports/PMRoster05-06.csv")
+    
+    for i in ir.rasta: ir.line(i)
 
