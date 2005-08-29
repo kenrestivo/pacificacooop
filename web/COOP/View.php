@@ -201,8 +201,7 @@ class coopView extends CoopObject
 	function toArray()
 		{
 
-			/// XXX NASTY ASS HACK!!!! ispermittedfield is b0rken.
-			/// view and edit are different!
+			/// XXX NASTY ASS HACK!!!! 
 			/// how do i do this in coopform? i think i've solved this elsewhere
 			if(!isset($this->obj->fb_hidePrimaryKey)){
 				$this->obj->fb_hidePrimaryKey = true;
@@ -364,8 +363,8 @@ class coopView extends CoopObject
 							'action' => $action,
 							'table' => $this->table,
 							$this->prependTable($this->pk) => 
-							$this->obj->{$this->pk}
-							));
+							$this->obj->{$this->pk}),
+                        'generic.php'); // XXX: use page in obj!!!!
                 }
 			}
 			return $res;
@@ -402,7 +401,8 @@ class coopView extends CoopObject
 						$this->actionnames[$action], 
 						array( 
 							'action' => $action,
-							'table' => $this->table));
+							'table' => $this->table),
+                        'generic.php'); // XXX: use page in obj!!!
                 }
 			}
             return $res;

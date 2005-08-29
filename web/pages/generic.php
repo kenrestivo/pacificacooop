@@ -23,6 +23,22 @@ $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
 print $menu->topNavigation();
 
+
+//NASTY HACK
+if(!isset($_REQUEST['table'])){
+    $listq = mysql_query("show tables");
+    $err = mysql_error();
+	if($err){
+		user_error("poo(): [$listq]: $err", E_USER_ERROR);
+	}
+	while($row = mysql_fetch_array($listq)){
+        print $cp->selfURL($row[0],
+                           array('table'=> $row[0]));
+	}
+    
+    done();
+}
+
 $atd = new CoopView(&$cp, $_REQUEST['table'], $none);
 
 printf("<p>%s</p>",$atd->obj->fb_formHeaderText);

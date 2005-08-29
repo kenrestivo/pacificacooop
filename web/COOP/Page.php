@@ -171,29 +171,7 @@ class coopPage
 		}
 
 
-	// XXX broken. it needs to instantiate views first
-	function engine(){
-		if($_REQUEST['tables']){
-			$_SESSION['tables'] = $this->mergeArrays($_SESSION['tables'], 
-													 $_REQUEST['tables']);
-		}
-		//confessArray($tabarr, "tables");
-		foreach($_SESSION['tables'] as $table => $vals){
-			$this->setup($table); // XXX botcherunio. needs to instantiate views.
-				//	print_r($cp);
-			// OK copy my dispatcher logic over now
-			switch($vals['action']){
-			case 'list':
-				print $this->editAddTable();
-				break;
-			case 'detail':
-				print $this->detailForm($vals['id']);
-				break;
-			}
-		}
-
-	} /// end engine
-	
+	// XXX DOES THIS EVEN WORK??!
 	function mergeArrays($array, $overrides, $level = 0)
 		{
 			$this->confessArray($array, "BEFORE merge: level $level");
@@ -218,18 +196,26 @@ class coopPage
 		}
 
 
-	// TODO: some nifty way to get session vars outta there
-	// fishes the tables out of a request or session
+	// nifty way to get session vars outta there
+	// fishes shit out of a request or session
 	function requestOrSession($itemName){
+
+        if(isset($_REQUEST[$itemName])){
+            $_SESSION[$itemName] = $_REQUEST[$itemName];
+        } else if(isset($_SESSION[$itemName])){
+            $_REQUEST[$itemName] = $_SESSION[$itemName];
+        }
+        return $_REQUEST[$itemName];
 	}
 	
 
 
 	// USAGE: selfURL(
-	//					"text to display",
-	//					"var=value&morevar=morevalue",
+	//					value="text to display",
+	//					inside="var=value&morevar=morevalue",
 	//							or an array of pairs
-	//					"page.php")
+	//					base="page.php"
+    //                  popup if you want it to be a javascript popup)
 	// all of which are optional
 	// without any args, returns just coop session var for use in Header()
 	function selfURL($value = false, $inside = false, 
@@ -258,7 +244,7 @@ class coopPage
 				 $res .= sprintf('>%s</a></p>', 
 								 $value);
 			 }
-			 return $res;
+			 return $res; 
 		}
 
 
