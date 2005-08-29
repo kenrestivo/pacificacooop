@@ -257,10 +257,10 @@ select session_info.ip_addr, session_info.updated, users.name
 
 
 --- privilege information
-select user_privileges.* ,users.name 
-    from user_privileges 
-    left join users using (user_id) 
-    where realm = 'packaging';
+select user_privileges.*, realms.realm, users.name 
+from user_privileges left join realms using (realm_id) 
+left join users on users.user_id = user_privileges.user_id  
+where realm = 'jobs';
 
 -- common. i want to know what realms i have available
 select distinct(realm) from user_privileges
@@ -1205,5 +1205,6 @@ select blog_entry.*, audit_trail.updated from blog_entry
 left join audit_trail on audit_trail.index_id = blog_entry.blog_entry_id 
 where table_name = 'blog_entry' 
 order by updated desc;
+
 
 --- EOF
