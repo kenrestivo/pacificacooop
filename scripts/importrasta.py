@@ -292,7 +292,28 @@ class Worker(Adder):
         return c.lastrowid
 
 
-### TODO: add the user and user-group-join to the db!
+
+class User(Adder):
+    def __init__(self, c, rec, family_id):
+        Adder.__init__(self, c, rec)
+        self.family_id=family_id
+        
+    def get(self):
+        self.pk='user_id'
+        return self._get("""select * from users where family_id = %d """ %
+                            (self.family_id))
+
+
+    def add(self):
+        print "inserting new user for %s" % (self.rec['Last Name'])
+        c.execute("""insert into users set 
+                        family_id = %s, name = %s""",
+                  (self.family_id, self.rec['Last Name']+ ' Family'))
+        uid=c.lastrowid
+        c.execute("""insert into users_groups_join set
+        user_id = %s, group_id = 1""",
+                  (uid))
+        return uid
 
 
 
@@ -312,7 +333,9 @@ def line(rec):
     dad_id=d.wrapper()
     w=Worker(c,rec,mom_id)
     worker_id=w.wrapper()
-    print "kid %d, family %d, enrollment %d, mom %d, dad/partner %d worker %d" % (kid_id, family_id, enrol_id, mom_id, dad_id, worker_id)
+    u=User(c,rec,family_id)
+    user_id=u.wrapper()
+    print "kid %d, family %d, enrollment %d, mom %d, dad/partner %d, worker %d, user %d" % (kid_id, family_id, enrol_id, mom_id, dad_id, worker_id, user_id)
         
 
 
