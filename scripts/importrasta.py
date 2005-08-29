@@ -258,13 +258,35 @@ class Parent(Adder):
 
 
 #TODO: worker, get/add!
+class Worker(Adder):
+    days={'M': 'Monday',
+          'Tu': 'Tuesday',
+          'W': 'Wednesday',
+          'Th': 'Thursday',
+          'F' : 'Friday'}
+    def __init__(self, c, rec, parent_id):
+        Adder.__init__(self, c, rec)
+        self.parent_id=parent_id
+        
+    def get(self):
+        self.pk='worker_id'
+        return self._get("""select * from workers where parent_id = %d
+        and school_year = '%s' """ %
+                            (self.parent_id, school_year))
 
-#workday
-# ir.rasta[-9].items():
-#      if i[1] == 'W': i[0]
-#epod
-# ir.rasta[-9].items():
-#      if i[1] == 'E': i[0]
+
+    def add(self):
+        c.execute("""insert into workers set 
+                        parent_id = %s, school_year = %s, am_pm_session = %s,
+                        workday = %s, epod = %s""" ,
+                  (self.parent_id, school_year, self.rec['session'],
+                   #note: i only get ONE epod and ONE worker, sets are too hard
+                   [self.days[j[0]] for j in filter(lambda i: i[1] == 'W',
+                                         self.rec.items())][0],
+                   [self.days[j[0]] for j in filter(lambda i: i[1] == 'E',
+                                         self.rec.items())][0]))
+        return c.lastrowid
+
 
 
 ##########naked functions
@@ -281,7 +303,9 @@ def line(rec):
     mom_id=m.wrapper()
     d=Parent(c,rec,family_id, 'dad')
     dad_id=d.wrapper()
-    print "kid %d, family %d, enrollment %d, mom %d, dad/partner %d" % (kid_id, family_id, enrol_id, mom_id, dad_id)
+    w=Worker(c,rec,mom_id)
+    worker_id=w.wrapper()
+    print "kid %d, family %d, enrollment %d, mom %d, dad/partner %d worker %d" % (kid_id, family_id, enrol_id, mom_id, dad_id, worker_id)
         
 
 
