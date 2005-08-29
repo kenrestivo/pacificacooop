@@ -204,6 +204,7 @@ class coopForm extends CoopObject
 					//i ALWAYS hide primary key. it's hardcoded here.
 					// note this is different from FB behaviour.
 					// XXX this is broken. i need to deal with fb_hidePrimaryKey
+                    // FIXED IN ISPERMITTED!
 					$el =& $this->form->addElement(
 						$key == $this->pk ? 'hidden' : 'text', 
 						$fullkey);

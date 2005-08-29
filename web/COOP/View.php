@@ -201,12 +201,6 @@ class coopView extends CoopObject
 	function toArray()
 		{
 
-			/// XXX NASTY ASS HACK!!!! 
-			/// how do i do this in coopform? i think i've solved this elsewhere
-			if(!isset($this->obj->fb_hidePrimaryKey)){
-				$this->obj->fb_hidePrimaryKey = true;
-			}
-
 			$table = $this->obj->table();
 			$row = $this->obj->toArray();
 			foreach($row as $key => $val){
