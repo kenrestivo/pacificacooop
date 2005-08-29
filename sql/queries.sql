@@ -1156,10 +1156,10 @@ order by packages.package_number
 -- unified perms checking code. holy shit. 
 select 
 table_permissions.table_name, table_permissions.field_name,
-max(if(upriv.max_user > table_permissions.user_level, 
+max(if(upriv.max_user <= table_permissions.user_level, 
 upriv.max_user, table_permissions.user_level)) as cooked_user,
 max(if(upriv.max_group >  table_permissions.group_level, 
-upriv.max_group, table_permissions.group_level )) as cooked_group
+upriv.max_group, 0 )) as cooked_group
 from table_permissions 
 left join 
 (select max(user_level) as max_user, max(group_level) as max_group, 
@@ -1177,6 +1177,7 @@ group by user_id,table_name,field_name
 
 
 ---shorter version for auld auth
+-- XXX is this broken? go back and have a look. maybe not.
 select max(user_level) as user_level, max(group_level) as group_level,
 91 as user_id, realm
 from user_privileges
