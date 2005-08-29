@@ -111,6 +111,51 @@ switch($_REQUEST['action']){
 
 	 break;
 
+////CONFIRMDELETE
+ case 'confirmdelete':
+	 print "<p>Are you sure you wish to delete this? Click 'Delete' below to delete it, or the 'Back' button in your broswer to cancel.</p>";	 
+     $atdf = new CoopForm(&$cp, $_REQUEST['table'], $none); 
+	 $atdf->build($_REQUEST);
+
+	 $atdf->form->addElement('hidden', 'action', 'delete'); 
+	 $atdf->form->addElement('hidden', 'table', $_REQUEST['table']); 
+
+	 $atdf->legacyPassThru();
+
+	 $atdf->addRequiredFields();
+
+
+	 // change the save button and action to delete
+ 	 $el =& $atdf->form->getElement('savebutton');
+ 	 $el->setValue('Delete');
+
+	 
+	 //TODO and add a cancel button
+	 //$atdf->form->addElement('button', 'cancelbutton', 'Cancel');
+
+	 $atdf->form->freeze();
+
+	 print $atdf->form->toHTML();
+
+	 break;
+
+
+
+
+//// DELETE ////
+ case 'delete':
+ // hack , but it works. why reinvent the wheel?
+	 $atdf = new CoopForm(&$cp, $_REQUEST['table'], $none); 
+	 $atdf->build($_REQUEST);
+	 $atdf->obj->delete();
+	 print viewHack(&$cp, &$atd);
+
+	 break;
+
+
+
+
+
 //// DEFAULT (VIEW) //////
  default:
 	 print viewHack(&$cp, &$atd);
