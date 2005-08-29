@@ -310,7 +310,7 @@ class coopObject
 			// check user permissions! get  from the new  perms array
             if(empty($this->perms[$key])){
                 $this->page->printDebug(
-                    "isPermitted($this->table : $key) is not in db",4);
+                    "isPermitted($this->table : $key) is not in table_permissions",4);
                 //XXX return the TABLE perms in this case?
                 //XXX2 HACK! if it's a table (no key),
                 //and there are no perms in the db for it,it's *not* ok to show.
@@ -422,9 +422,9 @@ class coopObject
 select 
 table_permissions.table_name, table_permissions.field_name,
 max(if(upriv.max_user > table_permissions.user_level, 
-table_permissions.user_level, upriv.max_user)) as cooked_user,
+upriv.max_user, table_permissions.user_level)) as cooked_user,
 max(if(upriv.max_group >  table_permissions.group_level, 
-table_permissions.group_level, upriv.max_group)) as cooked_group
+upriv.max_group, table_permissions.group_level )) as cooked_group
 from table_permissions 
 left join 
 (select max(user_level) as max_user, max(group_level) as max_group, 

@@ -1157,9 +1157,9 @@ order by packages.package_number
 select 
 table_permissions.table_name, table_permissions.field_name,
 max(if(upriv.max_user > table_permissions.user_level, 
-table_permissions.user_level, upriv.max_user)) as cooked_user,
+upriv.max_user, table_permissions.user_level)) as cooked_user,
 max(if(upriv.max_group >  table_permissions.group_level, 
-table_permissions.group_level, upriv.max_group)) as cooked_group
+upriv.max_group, table_permissions.group_level )) as cooked_group
 from table_permissions 
 left join 
 (select max(user_level) as max_user, max(group_level) as max_group, 
