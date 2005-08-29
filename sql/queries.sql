@@ -1156,10 +1156,12 @@ order by packages.package_number
 -- unified perms checking code. holy shit. 
 select 
 table_permissions.table_name, table_permissions.field_name,
-max(if(upriv.max_user <= table_permissions.user_level, 
+max(if((upriv.max_user <= table_permissions.user_level or
+table_permissions.user_level is null), 
 upriv.max_user, table_permissions.user_level)) as cooked_user,
-max(if(upriv.max_group >  table_permissions.group_level, 
-upriv.max_group, 0 )) as cooked_group
+max(if((upriv.max_group >  table_permissions.group_level or
+table_permissions.user_level is null), 
+upriv.max_group, NULL )) as cooked_group
 from table_permissions 
 left join 
 (select max(user_level) as max_user, max(group_level) as max_group, 

@@ -229,6 +229,10 @@ class coopView extends CoopObject
 					{
 						$res[] = sprintf('<a href="%s">%s</a>',
 										 $this->page->fixURL($val), $val);
+					} else if(is_array($this->obj->fb_textFields) &&
+						in_array($key, $this->obj->fb_textFields)) 
+                    {
+                        $res[] = sprintf("%.40s...",$val); // truncate
 					} else {
 						$res[] = nl2br(htmlspecialchars(
 										   $this->checkLinkField($key, $val)));
@@ -350,6 +354,7 @@ class coopView extends CoopObject
 								 "");
 			}
 
+            //checking here for a WHOLE ROW, familyid been inserted toarray
             $permitted = $this->isPermittedField();
 
 			//confessObj($this, 'this');
@@ -387,12 +392,10 @@ class coopView extends CoopObject
 			}
 
 
-			//XXX hack! i'm only gonna bother with record buttons if familyid
-			// the right thing to do is to fish familyid out of backlinks!
-            // NOTE!!! this is TOTALLY DIFFERENT from the one in toarray!
+            //checking here for a WHOLE TABLE. 
+            //i HACK HACK HACK and force it to my family,
+            //because, at least SOME records (mine) i can do these actions to
             $this->obj->family_id = $this->page->userStruct['family_id'];
-
-
             $permitted = $this->isPermittedField();
             foreach($this->viewActions as $action => $needlevel){
                 //print "asking: $pair[1] $level,  i have: $permitted<br>";

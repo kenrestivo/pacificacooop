@@ -12,7 +12,7 @@ require_once('CoopMenu.php');
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
-//$debug = 4;
+$debug = 4;
 
 
 $cp = new coopPage( $debug);
@@ -50,8 +50,10 @@ print '<div id="centerCol">';
 
 function viewHack(&$cp, &$atd)
 {
-
-	 return $atd->simpleTable();
+    if($atd->isPermittedField() < ACCESS_VIEW){
+        $atd->obj->family_id = $cp->userStruct['family_id'];
+    }
+    return $atd->simpleTable();
 			
 }
 

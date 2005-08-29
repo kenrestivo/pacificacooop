@@ -305,17 +305,6 @@ class coopObject
 				return false;
 			}
 
-			//confessArray($this->obj->fb_fieldsToRender, "$key is in:");
-
-			// check user permissions! get  from the new  perms array
-            if(empty($this->perms[$key])){
-                $this->page->printDebug(
-                    "isPermitted($this->table : $key) is not in table_permissions",4);
-                //XXX return the TABLE perms in this case?
-                //XXX2 HACK! if it's a table (no key),
-                //and there are no perms in the db for it,it's *not* ok to show.
-                return $key ? true: false;    
-            }
 			
             if($this->page->userStruct['family_id'] == $this->obj->family_id){
                 // user greater of group or user, here
@@ -324,8 +313,13 @@ class coopObject
             } else {
                 $res = $this->perms[$key]['group'];
             }
+
+            // ok, no field in db, default to TABLE perms!
+            $res =  isset($res) ? $res : max($this->perms[NULL]['user'], 
+                                             $this->perms[NULL]['group']);
+
             $this->page->printDebug(
-                "ispermitted($this->table : $key) RETURNING for OBJ famid {$this->obj->family_id}, my famid {$this->page->userStruct['family_id']} perms $res",
+                "ispermitted($this->table : $key) RETURNING for OBJ famid {$this->obj->family_id}, my famid {$this->page->userStruct['family_id']} perms [$res]",
                 4);
              
             return $res;
@@ -421,10 +415,12 @@ class coopObject
             $this->obj->query(sprintf("
 select 
 table_permissions.table_name, table_permissions.field_name,
-max(if(upriv.max_user > table_permissions.user_level, 
+max(if((upriv.max_user <= table_permissions.user_level or
+table_permissions.user_level is null), 
 upriv.max_user, table_permissions.user_level)) as cooked_user,
-max(if(upriv.max_group >  table_permissions.group_level, 
-upriv.max_group, table_permissions.group_level )) as cooked_group
+max(if((upriv.max_group >  table_permissions.group_level or
+table_permissions.user_level is null), 
+upriv.max_group, NULL )) as cooked_group
 from table_permissions 
 left join 
 (select max(user_level) as max_user, max(group_level) as max_group, 
