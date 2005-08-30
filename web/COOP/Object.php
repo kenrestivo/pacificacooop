@@ -107,7 +107,7 @@ class coopObject
 			$links =& $_DB_DATAOBJECT['LINKS'][$this->obj->database()];
 
 			$this->page->confessArray($links, 
-									  "getLinks: links for $this->table",
+									  "getLinks($this->table) ALL links",
 									  4);
 
 			$this->forwardLinks =& $links[$this->table];
@@ -118,15 +118,16 @@ class coopObject
 						// split up farline and chzech it
 						list($fartable, $farcol) = explode(':', $farline);
 						if($fartable == $this->table){
-							$res[$maintable] = $nearcol;
+							$this->backlinks[$maintable] = $nearcol;
 						}
 					}
 				}
 			}
-			$this->backlinks = $res;
-			$this->page->confessArray($res,
+
+			$this->page->confessArray($this->backlinks,
 									  "getLinks() backlinks for $this->table",
 									  4);
+
 			return $this->backlinks;
 		}
 
@@ -461,6 +462,27 @@ group by user_id,table_name,field_name
 
         }
 
+    function findPathToFamilyID($results = "")
+        {
+            $tablename = $this->table;
+            print "trying... $tablename<br>";
+
+            $cv = get_class_vars($tablename);
+            //confessArray($cv, $tablename);
+            if(in_array('family_id', array_keys($cv))){
+                return "$tablename:family_id";
+            }
+            
+            //now go fishing
+            foreach($this->backlinks as $fartable => $farfield){
+                $co =& new CoopObject(&$this->page, $fartable, &$this);
+                $res = $co->findPathToFamilyID();
+                if(strstr($res, 'family_id')){
+                    return $res;
+                }
+            }
+            return 'none found';
+        }
 
 } // END COOP OBJECT CLASS
 
