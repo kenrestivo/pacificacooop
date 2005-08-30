@@ -27,4 +27,25 @@ class Workers extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+	var $fb_fieldLabels = array ('worker_id' => 'Worker',
+                                 'parent_id' => 'Parent',
+                                 'workday' => 'Work Day',
+                                 'epod' => 'EPOD Day',
+                                 'am_pm_session' => 'Session',
+                                 'worker_for_donation' => 'Worker For Donation?',
+                                 'brings_baby' => 'Bringing Baby?',
+                                 'school_year' => 'School Year');
+	var $fb_fieldsToRender = array('worker_id',
+                                   'parent_id' ,
+                                   'workday' ,
+                                   'epod' ,
+                                   'am_pm_session', 
+                                   'worker_for_donation', 
+                                   'brings_baby', 
+                                   'school_year' );
+								   
+	var $fb_formHeaderText =  'Workers';
+	var $fb_linkDisplayFields =  array('parent_id', 'am_pm_session');
+
 }

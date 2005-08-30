@@ -33,6 +33,7 @@ class coopView extends CoopObject
 	var $legacyCallbacks;			// hack for old callbacks
 	var $legacyPerms; 			// cache of OLD-style permissions ($p)
 	var $extraRecordButtons;  // HACK for non-standard actions, i.e. thankyous
+    var $fullText;             // NASTY hack to avoid truncating text on details
     var $recordActions = array('edit'=> ACCESS_EDIT, 
                                'confirmdelete' => ACCESS_DELETE, 
                                'details' => ACCESS_VIEW);      
@@ -44,7 +45,10 @@ class coopView extends CoopObject
 	function CoopView (&$page, $table, &$parentCO, $level = 0)
 		{
 			parent::CoopObject(&$page, $table, &$parentCO, $level);
-            print "PATH is " .$this->findPathToFamilyID();
+            $this->obj->CoopView =& $this;  //used by funcs in dbdo
+            //eventually...
+            $this->page->printDebug('PATH is: '. $this->findPathToFamilyID(), 
+                                    3);
 		}
 
 
@@ -244,7 +248,11 @@ class coopView extends CoopObject
 					} else if(is_array($this->obj->fb_textFields) &&
 						in_array($key, $this->obj->fb_textFields)) 
                     {
-                        $res[] = sprintf("%.40s...",$val); // truncate
+                        $res[] = $this->fullText ? $val : 
+                            sprintf("%.40s...",$val); // truncate, unless not
+					} else if ($table[$key] &  DB_DATAOBJECT_BOOL){
+                        //TODO: a little checkbox PNG would be nice
+                        $res[] =  $val? 'X' :'';
 					} else {
 						$res[] = nl2br(htmlspecialchars(
 										   $this->checkLinkField($key, $val)));
@@ -372,7 +380,10 @@ class coopView extends CoopObject
 
 			//confessObj($this, 'this');
 			// the new style!
-            foreach($this->recordActions as $action => $needlevel){
+            $ra = is_array($this->obj->fb_recordActions) ? 
+                $this->obj->fb_recordActions : $this->recordActions;
+
+            foreach($ra as $action => $needlevel){
                 //print "asking: $pair[1] $level,  i have: $permitted<br>";
                 if($permitted >= $needlevel) {
                     $res .= $this->page->selfURL(
@@ -382,7 +393,8 @@ class coopView extends CoopObject
 							'table' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}),
-                        'generic.php'); // XXX: use page in obj!!!!
+                        $this->obj->fb_usePage ? $this->fb_usePage :
+                        'generic.php'); 
                 }
 			}
 			return $res;
@@ -410,7 +422,9 @@ class coopView extends CoopObject
             //because, at least SOME records (mine) i can do these actions to
             $this->obj->family_id = $this->page->userStruct['family_id'];
             $permitted = $this->isPermittedField();
-            foreach($this->viewActions as $action => $needlevel){
+            $va = is_array($this->obj->fb_viewActions) ? 
+                $this->obj->fb_viewActions : $this->viewActions;
+            foreach($va as $action => $needlevel){
                 //print "asking: $pair[1] $level,  i have: $permitted<br>";
                 if($permitted >= $needlevel) {
                     $res .= $this->page->selfURL(
@@ -418,7 +432,8 @@ class coopView extends CoopObject
 						array( 
 							'action' => $action,
 							'table' => $this->table),
-                        'generic.php'); // XXX: use page in obj!!!
+                        $this->obj->fb_usePage ? $this->fb_usePage :
+                        'generic.php'); 
                 }
 			}
             return $res;

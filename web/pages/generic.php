@@ -44,14 +44,28 @@ print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the r
 print '<div id="centerCol">';
 
 
-function viewHack(&$cp, &$atd)
+function genericView(&$atd)
 {
 
-    $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
+    $atd =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
     //search only for my familyid
     if($atd->isPermittedField() < ACCESS_VIEW){
-        $atd->obj->family_id = $cp->userStruct['family_id'];
+        $atd->obj->family_id = $atd->page->userStruct['family_id'];
     }
+    
+    if($atd->obj->fb_allYears){
+        if(in_array('school_year', 
+                    array_keys(get_object_vars($atd->obj)))){
+            $atd->obj->orderBy('school_year desc');
+        }
+    } else {
+        !is_array($atd->obj->fb_fieldsToUnRender) &&
+            $atd->obj->fb_fieldsToUnRender = array(); 
+        array_push($atd->obj->fb_fieldsToUnRender, 'school_year');
+        $atd->obj->school_year = findSchoolYear();
+    }
+
+
     //TODO: some variation on the old "perms display" from auth.inc
     //maybe at bottom of doc? with editor to change them? ;-)
 
@@ -89,7 +103,7 @@ switch($_REQUEST['action']){
 		 print "saving...";
 		 print $atdf->form->process(array(&$atdf, 'process'));
 		 // gah, now display it again. they may want to make other changes!
-		 print viewHack(&$cp, &$atd);
+		 print genericView(&$atd);
 	 } else {
 		 print $atdf->form->toHTML();
 	 }
@@ -100,19 +114,29 @@ switch($_REQUEST['action']){
 //// DETAILS //////
  case 'details':
 
-	$top = new CoopView(&$cp, $_REQUEST['table'], &$nothing);
-	 $id = $_REQUEST[$top->prependTable($top->pk)];
-	$top->obj->{$top->pk} = $id;
-	$top->obj->find(true);		//  XXX aack! need this for summary
-	print $top->horizTable();
+     $atd->fullText = true;    // force details to show all
 
-	// standard audit trail, for all details
-	$aud =& new CoopView(&$cp, 'audit_trail', &$top);
-	$aud->obj->table_name = $top->table;
-	$aud->obj->index_id = $id;
-	$aud->obj->orderBy('updated desc');
-	print $aud->simpleTable();
+     if(is_callable(array($atd->obj, 'fb_display_details'))){
+         print $atd->obj->fb_display_details();
+         break;
+     }
+     
+     // TODO: in future, try to intelligently find all forward/backlinks
+     // or intermediately, adapt findfamily, and pass a list of tables
+     // let the code go fish out the path to 'em
 
+	 $id = $_REQUEST[$atd->prependTable($atd->pk)];
+     $atd->obj->{$atd->pk} = $id;
+     $atd->obj->find(true);		//  XXX aack! need this for summary
+     print $atd->horizTable();
+     
+     // standard audit trail, for all details
+     $aud =& new CoopView(&$cp, 'audit_trail', &$atd);
+     $aud->obj->table_name = $atd->table;
+     $aud->obj->index_id = $id;
+     $aud->obj->orderBy('updated desc');
+     print $aud->simpleTable();
+     
 	 break;
 
 ////CONFIRMDELETE
@@ -152,7 +176,7 @@ switch($_REQUEST['action']){
 	 $atdf = new CoopForm(&$cp, $_REQUEST['table'], $none); 
 	 $atdf->build($_REQUEST);
 	 $atdf->obj->delete();
-	 print viewHack(&$cp, &$atd);
+	 print genericView(&$atd);
 
 	 break;
 
@@ -162,7 +186,11 @@ switch($_REQUEST['action']){
 
 //// DEFAULT (VIEW) //////
  default:
-	 print viewHack(&$cp, &$atd);
+     if(is_callable(array($atd->obj, 'fb_display_view'))){
+         print $atd->obj->fb_display_view();
+         break;
+     }
+	 print genericView(&$atd);
 	 break;
 }
 

@@ -306,6 +306,17 @@ class coopObject
 				return false;
 			}
 			
+
+            if(is_array($this->obj->fb_fieldsToUnRender)  &&
+			   in_array($key, $this->obj->fb_fieldsToUnRender))
+            {
+            	$this->page->printDebug(
+                    "ispermitted($this->table : $key) is in UNrender, so blocking", 
+                    4);
+			    return false;  // i am very, very sorry for this
+            }
+            
+
             if($forceuser || 
                $this->page->userStruct['family_id'] == $this->obj->family_id){
                 // user greater of group or user, here

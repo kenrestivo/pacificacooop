@@ -232,15 +232,42 @@ class CoopMenu extends HTML_Menu
     function createNew()
         {
 
-            //TODO: use pear?
-            $listq = mysql_query("show tables");
-            $err = mysql_error();
-            if($err){
-                user_error("poo(): [$listq]: $err", E_USER_ERROR);
-            }
-            while($row = mysql_fetch_array($listq)){
-                $res .= $this->page->selfURL($row[0],
-                                   array('table'=> $row[0]));
+            $rl =& new CoopObject(&$this->page, 'realms', &$nothing);
+            $dbname = sprintf('Tables_in_%s', $rl->obj->_database); //NEED LATER
+            //$rl->obj->debugLevel(2);
+            $rl->obj->whereAdd('meta_realm_id is null');
+            $rl->obj->orderBy('short_description asc');
+            $rl->obj->find();
+            while($rl->obj->fetch()){
+                $res .= $rl->obj->short_description. '<br>';
+                    $tab =& new CoopObject(&$this->page, 'table_permissions',
+                                           &$subrl);
+                    $tab->obj->realm_id = $rl->obj->realm_id;
+                    $tab->obj->groupBy('table_name');
+                    $tab->obj->find();
+                    while($tab->obj->fetch()){
+                        $res .= $this->page->selfURL(
+                           $tab->obj->table_name,
+                           array('table' => $tab->obj->table_name));
+                    }
+                
+                $subrl =& new CoopObject(&$this->page, 'realms', &$nothing);
+                $subrl->obj->meta_realm_id = $rl->obj->realm_id;
+                $subrl->obj->orderBy('short_description asc');
+                $subrl->obj->find();
+                while($subrl->obj->fetch()){
+                    $res .= $subrl->obj->short_description . '<br>';
+                    $tab =& new CoopObject(&$this->page, 'table_permissions',
+                                           &$subrl);
+                    $tab->obj->realm_id = $subrl->obj->realm_id;
+                    $tab->obj->groupBy('table_name');
+                    $tab->obj->find();
+                    while($tab->obj->fetch()){
+                        $res .= $this->page->selfURL(
+                           $tab->obj->table_name,
+                           array('table' => $tab->obj->table_name));
+                    }
+                }
             }
             return $res;
             
