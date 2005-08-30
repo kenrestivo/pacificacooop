@@ -240,6 +240,8 @@ class CoopMenu extends HTML_Menu
 	
     function createNew()
         {
+            //GAH! this sucks doing it iteratively. it won't recurse endlessly
+            //i can only go two levels. XXX FIX THIS: rewrite recursively
             $i = 1;
             $rl =& new CoopObject(&$this->page, 'realms', &$nothing);
             $dbname = sprintf('Tables_in_%s', $rl->obj->_database); //NEED LATER
@@ -267,15 +269,16 @@ class CoopMenu extends HTML_Menu
                 $subrl->obj->orderBy('short_description asc');
                 $subrl->obj->find();
                 while($subrl->obj->fetch()){
-                    $res[++$i]['title'] = $subrl->obj->short_description;
+                    $res[$j]['sub'][++$i]['title'] = 
+                        $subrl->obj->short_description;
                     $tab =& new CoopObject(&$this->page, 'table_permissions',
                                            &$subrl);
                     $tab->obj->realm_id = $subrl->obj->realm_id;
                     $tab->obj->groupBy('table_name');
                     $tab->obj->find();
-                    $j = $i;
+                    $k = $j;
                     while($tab->obj->fetch()){
-                        $res[$j]['sub'][++$i] = 
+                        $res[$k]['sub'][++$i] = 
                             array('title'=> 
                                   $tab->obj->table_name,
                                   'url' => $tab->obj->table_name);
