@@ -39,6 +39,16 @@ class coopView extends CoopObject
     var $viewActions = array('add' => ACCESS_ADD, 
                              'view'=> ACCESS_VIEW);     
 
+
+    //chain up
+	function CoopView (&$page, $table, &$parentCO, $level = 0)
+		{
+			parent::CoopObject(&$page, $table, &$parentCO, $level);
+            $this->findFamilyID();
+		}
+
+
+
 	// i will need the old-skool callbacks and perms
 	// in order to use the old-skool buttons and actions calculations
 	// when i have new-skool button and dispatcher, this will be depreciated
@@ -65,10 +75,12 @@ class coopView extends CoopObject
 	// formats object is current in this object, um, as a table
 	function simpletable($find= true)
 		{
+
 			// NOTE. this object's find, not the DBDO find
 			if(!$this->find($find)){
 				return;
 			}
+
 			$tab = new HTML_Table('  bgcolor="#ffffff"');	
 		
 			while($this->obj->fetch()){
@@ -116,6 +128,12 @@ class coopView extends CoopObject
 	
 	function find($find)
 		{
+            // i stuck this into find so i don't have to duplicate it
+            // in horiztable, simpletable, onelinetable, etc
+            // and i have to FORCE ispermitted to return the userlevel
+            if($this->isPermittedField(NULL,true) < ACCESS_VIEW){
+                return false;
+            }
 			if($find){
 				$found = $this->obj->find();
 			} else {
@@ -234,7 +252,8 @@ class coopView extends CoopObject
 				}
 			}
 
-			//XXX hack! i'm only gonna bother with record buttons if familyid
+			//XXX hack! do this AFTER query, but not here.
+			// BEFORE the query, backlink whatever will need to get real familyid
 			// the right thing to do is to fish familyid out of backlinks!
 			if(!in_array('family_id', 
 						array_keys(get_object_vars($this->obj))))
@@ -418,6 +437,11 @@ class coopView extends CoopObject
 			}
 			return $res;
 		}
+
+    function findFamilyID()
+        {
+            
+        }
 
     // XXX UNUSED CRUFT! 
 	function checkMenuLevel()

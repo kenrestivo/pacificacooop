@@ -24,24 +24,20 @@ $menu->page =& $cp;				// XXX hack!
 print $menu->topNavigation();
 
 
-//NASTY HACK
-if(!isset($_REQUEST['table'])){
-    $listq = mysql_query("show tables");
-    $err = mysql_error();
-	if($err){
-		user_error("poo(): [$listq]: $err", E_USER_ERROR);
-	}
-	while($row = mysql_fetch_array($listq)){
-        print $cp->selfURL($row[0],
-                           array('table'=> $row[0]));
-	}
-    
+//{{{NASTY HACK
+if(!$_REQUEST['table']){
+    //$menu->createLegacy();
+    printf('<div id="leftCol">%s</div><!-- end leftcol div -->',
+           $menu->createNew());
     done();
 }
+print $cp->selfURL('My Hokey non-menu menu', 'table=');
+///}}}
+
 
 $atd = new CoopView(&$cp, $_REQUEST['table'], $none);
 
-printf("<p>%s</p>",$atd->obj->fb_formHeaderText);
+printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
 
 
 print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
@@ -50,9 +46,14 @@ print '<div id="centerCol">';
 
 function viewHack(&$cp, &$atd)
 {
+
+    //search only for my familyid
     if($atd->isPermittedField() < ACCESS_VIEW){
-        $atd->obj->family_id = $cp->userStruct['family_id'];
+        $this->obj->family_id = $cp->userStruct['family_id'];
     }
+    //TODO: some variation on the old "perms display" from auth.inc
+    //maybe at bottom of doc? with editor to change them? ;-)
+
     return $atd->simpleTable();
 			
 }

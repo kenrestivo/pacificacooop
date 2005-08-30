@@ -229,6 +229,23 @@ class CoopMenu extends HTML_Menu
 			return $res;
 		}
 	
+    function createNew()
+        {
+
+            //TODO: use pear?
+            $listq = mysql_query("show tables");
+            $err = mysql_error();
+            if($err){
+                user_error("poo(): [$listq]: $err", E_USER_ERROR);
+            }
+            while($row = mysql_fetch_array($listq)){
+                $res .= $this->page->selfURL($row[0],
+                                   array('table'=> $row[0]));
+            }
+            return $res;
+            
+        }
+
 
 
 } // END COOPMENU CLASS

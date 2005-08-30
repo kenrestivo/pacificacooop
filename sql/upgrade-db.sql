@@ -35,11 +35,21 @@ user_level , group_level) values
 ('blog_entry', 'show_on_members_page', null, 21, 500, NULL),
 ('blog_entry', 'show_on_public_page', null, 21, NULL, 700),
 ('blog_entry', 'family_id', null, 21, NULL, 200),
-('blog_entry', null, null, 21, 600, 200);
+('blog_entry', null, null, 21, null, null).
+('job_descriptions', null, null, 8, null, null);
 
 -- add new access_level table (definition.sql)
 -- seed the access_levels (seed.sql)
 -- add or replace the files table (definition.sql)
+
+insert into user_privileges set realm_id=19, user_id  = 52, group_level = 800, user_level = 800;
+insert into table_permissions set table_name = 'users', realm_id = 19;
+insert into table_permissions set table_name = 'groups', realm_id = 19;
+insert into table_permissions set table_name = 'users_groups_join', realm_id = 19;
+insert into table_permissions set table_name = 'realms', realm_id = 19;
+insert into table_permissions set table_name = 'access_levels', realm_id = 19;
+insert into table_permissions set table_name = 'user_privileges', realm_id = 19;
+insert into table_permissions set table_name = 'table_permisions', realm_id = 19;
 
 alter table parents drop column email_address;
 add the events for start of fall, etc, and the calendar_events too (seed.sql)

@@ -26,13 +26,14 @@ class Table_permissions extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_formHeaderText =  'Permissions and Realms for Tables';
 
 	var $fb_fieldLabels = array(
 		'table_name' => 'Table',
         'field_name' => 'Field',
         'group_id' => 'Group',
         'realm_id' => 'Realm',
-        'user_level' => 'Forbid this action level, to user\s own data, unless user has permissions at or above this',
+        'user_level' => 'Forbid this action level, to user\'s own data, unless user has permissions at or above this',
         'group_level' => 'Forbid this action to other families\' data, unless permitted'
         );
 

@@ -285,7 +285,7 @@ class coopObject
 		}
 
 
-	function isPermittedField($key = NULL)
+	function isPermittedField($key = NULL, $forceuser = false)
 		{
 
 			// if it's a key, and we don't show them, then no
@@ -304,9 +304,9 @@ class coopObject
                     4);
 				return false;
 			}
-
 			
-            if($this->page->userStruct['family_id'] == $this->obj->family_id){
+            if($forceuser || 
+               $this->page->userStruct['family_id'] == $this->obj->family_id){
                 // user greater of group or user, here
                 $res =  max($this->perms[$key]['user'], 
                            $this->perms[$key]['group']);
@@ -315,11 +315,13 @@ class coopObject
             }
 
             // ok, no field in db, default to TABLE perms!
+            // it's ugly to have to do this here, but it has to happen
+            // AFTER i've alredy run the above
             $res =  isset($res) ? $res : max($this->perms[NULL]['user'], 
                                              $this->perms[NULL]['group']);
 
             $this->page->printDebug(
-                "ispermitted($this->table : $key) RETURNING for OBJ famid {$this->obj->family_id}, my famid {$this->page->userStruct['family_id']} perms [$res]",
+                "ispermitted($this->table : $key) RETURNING for OBJ famid {$this->obj->family_id}, my famid {$this->page->userStruct['family_id']}, force [$forceuser] perms [$res]",
                 4);
              
             return $res;
@@ -448,7 +450,15 @@ group by user_id,table_name,field_name
                           'group' =>$row['cooked_group']);
             }
 
-            $this->page->confessArray($this->perms, "getPerms $this->table", 2);
+            $this->page->confessArray($this->perms, "getPerms({$this->table}) found in db", 2);
+
+            //XXXX: should these defaults NOT BE HARDCODED HERE?
+            if(count($this->perms) < 1){
+                $this->page->printDebug("getperms({$this->table}): NO perms, inserting defaults", 4);
+                $this->perms[null]['user'] = ACCESS_DELETE;   
+                $this->perms[null]['group'] = ACCESS_VIEW;   
+            }
+
         }
 
 
