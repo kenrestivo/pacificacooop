@@ -86,9 +86,6 @@ values
 (17, '2005-2006', '01-03-2006');
 --TODO: the rest of 'em
 
-
--- fix the user_privs for realm_id = 2. i squared them away in local db.
-
 -- GO BACK AND PUT SOME OF THESE IN SEEDS!
 -- i.e. the table permissions almost certaily belong in there.
 
