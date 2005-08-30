@@ -49,6 +49,7 @@ function genericView(&$atd)
 {
 
     $atd =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
+    //$atd->obj->debugLevel(2);
     //search only for my familyid
     if($atd->isPermittedField() < ACCESS_VIEW){
         $atd->obj->family_id = $atd->page->userStruct['family_id'];
@@ -69,7 +70,6 @@ function genericView(&$atd)
 
     //TODO: some variation on the old "perms display" from auth.inc
     //maybe at bottom of doc? with editor to change them? ;-)
-
     return $atd->simpleTable();
 			
 }

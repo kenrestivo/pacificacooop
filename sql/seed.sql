@@ -185,6 +185,21 @@ insert into events set
             notes = "The first day of the Spring Semester"
 ;
 
+insert into events (event_id, description, realm_id)
+values
+(10, 'All paperwork due to 1st V.P.',2),
+(11, 'School Holiday',2),
+(12, 'New parent orientation',2),
+(13, 'Board Meeting 7:00 pm PCNS',2),
+(14, 'Trike-a-thon',2),
+(15, 'Alternate parents day',2),
+(16, 'School out for Recess',2),
+(17, 'School Resumes',2),
+(18, 'KOA Family Campout',2),
+(19, 'Bug School',2);
+(20, 'Work Party',3);
+
+
 
 -- calendar items for this first online year. TEMP!
 insert into calendar_events set
@@ -562,6 +577,12 @@ user_level = 200,
 realm_id = 2; 
 
 insert into user_privileges set
+group_id = 2,
+group_level = 200,
+user_level = 200,
+realm_id = 2; 
+
+insert into user_privileges set
 group_id = 1,
 group_level = 0,
 user_level = 200,
@@ -606,13 +627,6 @@ group_id = 2,
 group_level = 200,
 user_level = 500,
 realm_id = 14; 
-
-
-insert into user_privileges set
-group_id = 2,
-group_level = 700,
-user_level = 200,
-realm_id = 2; 
 
 
 insert into user_privileges set
@@ -661,12 +675,6 @@ group_id = 2,
 group_level = 0,
 user_level = 200,
 realm_id = 19; 
-
-insert into user_privileges set
-group_id = 1,
-group_level = 200,
-user_level = 700,
-realm_id = 21; 
 
 insert into user_privileges set
 group_id = 2,

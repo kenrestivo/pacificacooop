@@ -136,6 +136,8 @@ class coopView extends CoopObject
             // in horiztable, simpletable, onelinetable, etc
             // and i have to FORCE ispermitted to return the userlevel
             if($this->isPermittedField(NULL,true) < ACCESS_VIEW){
+                $this->page->printDebug(
+                    "CoopView::find($this->table) NO VIEW PERMS!", 2 );
                 return false;
             }
 			if($find){
@@ -231,8 +233,7 @@ class coopView extends CoopObject
 					// XXX better way to do all this dispatching
 					if($table[$key] & DB_DATAOBJECT_MYSQLTIMESTAMP){ 
  						$res[] = timestamp_db_php($val);
-					} else if ($table[$key] &  8) {
-						// XXXX awful hack! DB_DATAOBJEC_TIME is not yet defined!
+					} else if ($table[$key] &  DB_DATAOBJECT_TIME) {
 						$res[] = timestamp_db_php($val);
 					} else if ($table[$key] &  DB_DATAOBJECT_DATE){
 						$res[] = sql_to_human_date($val);
@@ -320,6 +321,7 @@ class coopView extends CoopObject
 
 	function oneLineTable($find= 1)
 		{
+            //XXX: Use the this->find() function instead!!
 			if($find){
 				$found = $this->obj->find();
 				

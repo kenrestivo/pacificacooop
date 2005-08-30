@@ -246,8 +246,14 @@ timestamp_db_php($date)
 	}
 	/*$epoch = date("U", mktime($time[0],$time[1],$time[2],
 						$datebreak[1],$datebreak[2],$datebreak[0])); */
-	$datetime = sprintf("%02d/%02d/%04d&nbsp;%02d:%02d:%02d %s",
-						$month, $day, $year,$hour,$minute, $second, $ampm );
+	$datetime = sprintf("%02d/%02d/%04d",
+						$month, $day, $year);
+    
+    // don't show time if it is midnight, or nonexistent
+    if($hour + $minute + $second){
+        $datetime .= sprintf("&nbsp;%02d:%02d:%02d %s",
+                             $hour,$minute, $second, $ampm );
+    }
 	return $datetime;
 } /* EDN TIMESTAMPEDBPHP */
 

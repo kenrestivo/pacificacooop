@@ -317,12 +317,9 @@ class coopObject
             }
             
             // i'm looking in perms calc. choose what to use now.
-            // XXX THIS DOES NOT BELONG HERE! stick it in the db instead.
-            if(isset($this->perms[$key])){
-                $usethese =& $this->perms[$key];
-            } else if(isset($this->perms[NULL])){
-                $usethese =& $this->perms[NULL];
-            }
+            // remember! the db needs to give separate perms for fields/tables
+            $usethese = isset($this->perms[$key]) ? 
+                $this->perms[$key] : $this->perms[NULL];
 
 
             if($forceuser || 

@@ -2,6 +2,14 @@
 
 # 	$Id$	
 
+
+months={'january':1, 'february':2, 'march':3, 'april':4,'may':5,
+        'june':6, 'july':7, 'august':8, 'september':9, 'october':10,
+        'november':11, 'december':12}
+
+
+
+
 f=open('/mnt/kens/ki/proj/coop/imports/PCNS2005-2006Calendar.txt', 'r')
 l=f.readlines()
 f.close()

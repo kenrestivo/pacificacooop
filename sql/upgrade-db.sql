@@ -35,8 +35,9 @@ user_level , group_level) values
 ('blog_entry', 'show_on_members_page', null, 21, 500, NULL),
 ('blog_entry', 'show_on_public_page', null, 21, NULL, 700),
 ('blog_entry', 'family_id', null, 21, NULL, 200),
-('blog_entry', null, null, 21, null, null).
-('job_descriptions', null, null, 8, null, null);
+('blog_entry', null, null, 21, null, null),
+('job_descriptions', null, null, 8, null, null),
+('files', null, null, 21, null, null);
 
 -- add new access_level table (definition.sql)
 -- seed the access_levels (seed.sql)
@@ -52,10 +53,43 @@ insert into table_permissions set table_name = 'user_privileges', realm_id = 19;
 insert into table_permissions set table_name = 'table_permissions', realm_id = 19;
 insert into table_permissions set table_name = 'events', realm_id = 2, group_level = 500;
 insert into table_permissions set table_name = 'calendar_events', realm_id = 2;
+insert into table_permissions set table_name = 'calendar_events', 
+field_name = 'keep_event_hidden_until_date', realm_id = 2, group_level = 600, user_level  = 0;
 
 alter table parents drop column email_address;
 add the events for start of fall, etc, and the calendar_events too (seed.sql)
 alter table blog_entry change column show_on_public_page  show_on_public_page enum('Unknown','Yes','No') default 'No';
 alter table blog_entry change column   show_on_members_page show_on_members_page enum('Unknown','Yes','No') default 'Yes';
+
+-- add events stuff from seeds
+
+insert into calendar_events 
+(event_id, school_year, event_date)
+values
+(10, '2005-2006', '08-19-2005'),
+(20, '2005-2006', '08-20-2005'),
+(11, '2005-2006', '09-05-2005'),
+(2, '2005-2006', '09-13-2005'),
+(13, '2005-2006', '09-21-2005'),
+(2, '2005-2006', '10-04-2005'),
+(11, '2005-2006', '10-10-2005'),
+(13, '2005-2006', '10-19-2005'),
+(14, '2005-2006', '10-22-2005'),
+(2, '2005-2006', '11-01-2005'),
+(11, '2005-2006', '11-11-2005'),
+(13, '2005-2006', '11-16-2005'),
+(16, '2005-2006', '11-25-2005'),
+(17, '2005-2006', '11-28-2005'),
+(2, '2005-2006', '12-06-2005'),
+(13, '2005-2006', '12-21-2005'),
+(16, '2005-2006', '12-19-2005'),
+(17, '2005-2006', '01-03-2006');
+--TODO: the rest of 'em
+
+
+-- fix the user_privs for realm_id = 2. i squared them away in local db.
+
+-- GO BACK AND PUT SOME OF THESE IN SEEDS!
+-- i.e. the table permissions almost certaily belong in there.
 
 ---CONGRATULATIONS! you're done making massive changes to the database.

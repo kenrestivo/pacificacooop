@@ -35,6 +35,7 @@ class Calendar_events extends DB_DataObject
         'keep_event_hidden_until_date' => 'Do not show until',
         'school_year' => 'School Year'
         );
+	var $fb_formHeaderText =  'Calendar of Events';
 
 
 }
