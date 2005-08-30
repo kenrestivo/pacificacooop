@@ -465,6 +465,7 @@ group by user_id,table_name,field_name
     function findPathToFamilyID($results = "")
         {
             $tablename = $this->table;
+            $results .= $results ?':' :''. $tablename;
             print "trying... $tablename<br>";
 
             $cv = get_class_vars($tablename);
@@ -476,12 +477,12 @@ group by user_id,table_name,field_name
             //now go fishing
             foreach($this->backlinks as $fartable => $farfield){
                 $co =& new CoopObject(&$this->page, $fartable, &$this);
-                $res = $co->findPathToFamilyID();
+                $res = $co->findPathToFamilyID("$results");
                 if(strstr($res, 'family_id')){
-                    return $res;
+                    return "$results:$res";
                 }
             }
-            return 'none found';
+            return false;
         }
 
 } // END COOP OBJECT CLASS
