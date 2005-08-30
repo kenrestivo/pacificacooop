@@ -19,16 +19,17 @@ $cp = new coopPage( $debug);
 print $cp->pageTop();
 
 
-$menu =& new CoopMenu();
-$menu->page =& $cp;				// XXX hack!
+$menu =& new CoopMenu(&$cp);
 print $menu->topNavigation();
 
 
 //{{{NASTY HACK
 if(!$_REQUEST['table']){
+    
     //$menu->createLegacy();
+    $menu->createNew();
     printf('<div id="leftCol">%s</div><!-- end leftcol div -->',
-           $menu->createNew());
+           $menu->kenRender());
     done();
 }
 print $cp->selfURL('My Hokey non-menu menu', 'table=');

@@ -242,6 +242,7 @@ class CoopMenu extends HTML_Menu
         {
             //GAH! this sucks doing it iteratively. it won't recurse endlessly
             //i can only go two levels. XXX FIX THIS: rewrite recursively
+            //the only difference is the [j][k] level.
             $i = 1;
             $rl =& new CoopObject(&$this->page, 'realms', &$nothing);
             $dbname = sprintf('Tables_in_%s', $rl->obj->_database); //NEED LATER
@@ -250,6 +251,7 @@ class CoopMenu extends HTML_Menu
             $rl->obj->orderBy('short_description asc');
             $rl->obj->find();
             while($rl->obj->fetch()){
+                //{{{ NASTY DUPLICATION OF CODE
                 $res[++$i]['title'] = $rl->obj->short_description;
                 $tab =& new CoopObject(&$this->page, 'table_permissions',
                                        &$subrl);
@@ -259,15 +261,21 @@ class CoopMenu extends HTML_Menu
                 $j = $i;
                 while($tab->obj->fetch()){
                     $res[$j]['sub'][++$i] = 
-                        array('title'=> 
-                              $tab->obj->table_name,
-                              'url' => $tab->obj->table_name);
+                            array('title'=> 
+                                  $tab->obj->table_name,
+                                  'url' => 
+                                  $this->page->selfURL(
+                                      null, 
+                                      array('table' => 
+                                            $tab->obj->table_name),
+                                      'generic.php'));
                 }
-                
+                ///}}}
                 $subrl =& new CoopObject(&$this->page, 'realms', &$nothing);
                 $subrl->obj->meta_realm_id = $rl->obj->realm_id;
                 $subrl->obj->orderBy('short_description asc');
                 $subrl->obj->find();
+                //{{{ NASTY DUPLICATION OF ABOVE CODE
                 while($subrl->obj->fetch()){
                     $res[$j]['sub'][++$i]['title'] = 
                         $subrl->obj->short_description;
@@ -281,9 +289,16 @@ class CoopMenu extends HTML_Menu
                         $res[$k]['sub'][++$i] = 
                             array('title'=> 
                                   $tab->obj->table_name,
-                                  'url' => $tab->obj->table_name);
+                                  'url' => 
+                                  $this->page->selfURL(
+                                      null, 
+                                      array('table' => 
+                                            $tab->obj->table_name),
+                                      'generic.php'));
                     }
                 }
+                //}}}
+                
             }
   
 

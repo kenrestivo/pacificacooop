@@ -49,7 +49,9 @@ insert into table_permissions set table_name = 'users_groups_join', realm_id = 1
 insert into table_permissions set table_name = 'realms', realm_id = 19;
 insert into table_permissions set table_name = 'access_levels', realm_id = 19;
 insert into table_permissions set table_name = 'user_privileges', realm_id = 19;
-insert into table_permissions set table_name = 'table_permisions', realm_id = 19;
+insert into table_permissions set table_name = 'table_permissions', realm_id = 19;
+insert into table_permissions set table_name = 'events', realm_id = 2, group_level = 500;
+insert into table_permissions set table_name = 'calendar_events', realm_id = 2;
 
 alter table parents drop column email_address;
 add the events for start of fall, etc, and the calendar_events too (seed.sql)
