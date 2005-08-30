@@ -53,6 +53,15 @@ class CoopMenu extends HTML_Menu
 		);
 
 
+    //constructior
+    function CoopMenu(&$page)
+        {
+            parent::HTML_Menu();
+            $this->page =& $page;
+        }
+
+
+
 	function createLegacy($page )
 		{
 		
@@ -231,7 +240,7 @@ class CoopMenu extends HTML_Menu
 	
     function createNew()
         {
-
+            $i = 1;
             $rl =& new CoopObject(&$this->page, 'realms', &$nothing);
             $dbname = sprintf('Tables_in_%s', $rl->obj->_database); //NEED LATER
             //$rl->obj->debugLevel(2);
@@ -239,37 +248,45 @@ class CoopMenu extends HTML_Menu
             $rl->obj->orderBy('short_description asc');
             $rl->obj->find();
             while($rl->obj->fetch()){
-                $res .= $rl->obj->short_description. '<br>';
-                    $tab =& new CoopObject(&$this->page, 'table_permissions',
-                                           &$subrl);
-                    $tab->obj->realm_id = $rl->obj->realm_id;
-                    $tab->obj->groupBy('table_name');
-                    $tab->obj->find();
-                    while($tab->obj->fetch()){
-                        $res .= $this->page->selfURL(
-                           $tab->obj->table_name,
-                           array('table' => $tab->obj->table_name));
-                    }
+                $res[++$i]['title'] = $rl->obj->short_description;
+                $tab =& new CoopObject(&$this->page, 'table_permissions',
+                                       &$subrl);
+                $tab->obj->realm_id = $rl->obj->realm_id;
+                $tab->obj->groupBy('table_name');
+                $tab->obj->find();
+                $j = $i;
+                while($tab->obj->fetch()){
+                    $res[$j]['sub'][++$i] = 
+                        array('title'=> 
+                              $tab->obj->table_name,
+                              'url' => $tab->obj->table_name);
+                }
                 
                 $subrl =& new CoopObject(&$this->page, 'realms', &$nothing);
                 $subrl->obj->meta_realm_id = $rl->obj->realm_id;
                 $subrl->obj->orderBy('short_description asc');
                 $subrl->obj->find();
                 while($subrl->obj->fetch()){
-                    $res .= $subrl->obj->short_description . '<br>';
+                    $res[++$i]['title'] = $subrl->obj->short_description;
                     $tab =& new CoopObject(&$this->page, 'table_permissions',
                                            &$subrl);
                     $tab->obj->realm_id = $subrl->obj->realm_id;
                     $tab->obj->groupBy('table_name');
                     $tab->obj->find();
+                    $j = $i;
                     while($tab->obj->fetch()){
-                        $res .= $this->page->selfURL(
-                           $tab->obj->table_name,
-                           array('table' => $tab->obj->table_name));
+                        $res[$j]['sub'][++$i] = 
+                            array('title'=> 
+                                  $tab->obj->table_name,
+                                  'url' => $tab->obj->table_name);
                     }
                 }
             }
-            return $res;
+  
+
+			$this->setMenu($res);
+
+            //return $res;
             
         }
 
