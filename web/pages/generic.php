@@ -35,7 +35,7 @@ print $cp->selfURL('My Hokey non-menu menu', 'table=');
 ///}}}
 
 
-$atd = new CoopView(&$cp, $_REQUEST['table'], $none);
+$atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
 
 printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
 
@@ -47,9 +47,10 @@ print '<div id="centerCol">';
 function viewHack(&$cp, &$atd)
 {
 
+    $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
     //search only for my familyid
     if($atd->isPermittedField() < ACCESS_VIEW){
-        $this->obj->family_id = $cp->userStruct['family_id'];
+        $atd->obj->family_id = $cp->userStruct['family_id'];
     }
     //TODO: some variation on the old "perms display" from auth.inc
     //maybe at bottom of doc? with editor to change them? ;-)

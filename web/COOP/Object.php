@@ -464,9 +464,13 @@ group by user_id,table_name,field_name
 
     function findPathToFamilyID($results = "")
         {
+            // NOTE: this is depth-first traversal
+            // i don't know how to do it any other way, recursively
+
             $tablename = $this->table;
             $results .= $results ?':' :''. $tablename;
-            print "trying... $tablename<br>";
+            $this->page->printDebug(
+                "findPathTOFamily($results) trying... $tablename", 3);
 
             $cv = get_class_vars($tablename);
             //confessArray($cv, $tablename);

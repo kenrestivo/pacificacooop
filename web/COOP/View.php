@@ -44,7 +44,7 @@ class coopView extends CoopObject
 	function CoopView (&$page, $table, &$parentCO, $level = 0)
 		{
 			parent::CoopObject(&$page, $table, &$parentCO, $level);
-            $this->findFamilyID();
+            print "PATH is " .$this->findPathToFamilyID();
 		}
 
 
@@ -438,10 +438,6 @@ class coopView extends CoopObject
 			return $res;
 		}
 
-    function findFamilyID()
-        {
-            
-        }
 
     // XXX UNUSED CRUFT! 
 	function checkMenuLevel()
@@ -452,6 +448,8 @@ class coopView extends CoopObject
 								  $this->legacyCallbacks['fields']);
 		
 		}
+
+
 
 } // END COOP VIEW CLASS
 
