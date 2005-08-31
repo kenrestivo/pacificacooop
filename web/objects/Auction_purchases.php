@@ -41,4 +41,41 @@ class Auction_purchases extends DB_DataObject
 	var $fb_formHeaderText =  'Springfest Auction Purchases';
 	var $fb_displayFormat = array('package_sale_price' => '$%0.02f');
 
+    var $fb_recordActions = array();
+    var $fb_viewActions = array();
+    var $fb_shortHeader = 'Purchases';
+    var $fb_longHeader = 'This is the "Jane Report": the actual purchases of Springfest Packages, along with their final bid price, and the variance between what they sold for and their estimated value. The most popular packages (those that sold for at or above their estimated value) are listed first.';
+
+    function fb_display_view()
+        {
+
+            $this->query(sprintf("
+select distinct
+packages.package_number,
+packages.package_title,
+packages.package_value,
+auction_purchases.package_sale_price,
+(auction_purchases.package_sale_price - packages.package_value) as variance
+from packages
+left join  auction_purchases on auction_purchases.package_id = 
+      packages.package_id
+where packages.school_year = '%s' 
+order by variance desc",
+                                 findSchoolYear()		  
+                             ));
+
+            $this->fb_fieldsToRender = array('package_number', 
+                                             'package_title', 
+                                             'package_value',
+                                             'variance',
+                                             'package_sale_price'
+                );
+            $this->fb_fieldLabels['variance'] = 'Variance (over asking price)';
+            $this->fb_fieldLabels['package_sale_price'] = 'Actual Sale Price';
+            $this->fb_displayFormat['variance'] = '$%0.02f';
+            return $this->CoopView->simpleTable(false);
+
+        }
+
+
 }
