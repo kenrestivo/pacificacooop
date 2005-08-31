@@ -483,7 +483,7 @@ insert into counters set
 INSERT INTO `table_permissions` 
 (table_permissions_id , table_name , field_name , group_id , realm_id , 
 user_level , group_level)
-INSERT INTO `table_permissions` VALUES 
+values
 (1,'enrollment',NULL,NULL,14,200,200),
 (8,'enhancement_projects',NULL,NULL,3,NULL,500),
 (9,'enhancement_hours',NULL,NULL,3,NULL,NULL),
@@ -548,7 +548,11 @@ INSERT INTO `table_permissions` VALUES
 (68,'income','company_id',NULL,9,200,200),
 (69,'income','raffle_location_id',NULL,9,200,200),
 (70,'income','income_id',NULL,9,200,200),
-(71,'income',NULL,NULL,9,NULL,300);
+(71,'income',NULL,NULL,9,NULL,300),
+(72,'job_assignments',NULL,NULL,8,NULL,200),
+(73,'kids',NULL,NULL,14,NULL,NULL),
+(74,'parents',NULL,NULL,14,NULL,NULL),
+(75,'workers',NULL,NULL,14,NULL,NULL);
 
 
 -- default group perms

@@ -474,33 +474,56 @@ group by user_id,table_name,field_name
             }
 
         }
-
-    function findPathToFamilyID($results = "")
+    // because it's breadth first, returns an array
+    function findPathToFamilyID($path = '')
         {
-            // NOTE: this is depth-first traversal
-            // i don't know how to do it any other way, recursively
+            // easier if i append right at the top
+            $path = $path ? "$path:". $this->table : $this->table;
+            $this->page->printDebug("CoopObject::findpathtofamily($path): starting", 4);
 
-            $tablename = $this->table;
-            $results .= $results ?':' :''. $tablename;
-            $this->page->printDebug(
-                "findPathTOFamily($results) trying... $tablename", 3);
+            $res = array();
+            $searchthese = array();
 
-            $cv = get_class_vars($tablename);
-            //confessArray($cv, $tablename);
-            if(in_array('family_id', array_keys($cv))){
-                return "$tablename:family_id";
+            // first off, if i'm the one, i'm done!
+            if(in_array('family_id', array_keys(get_class_vars($this->table)))){
+                $res[] = $path;
+                $this->page->confessArray(get_class_vars($this->table), 
+                                          "CoopObject::findpathtofamily($path) found in top-level", 4);
+                return $res;
             }
-            
-            //now go fishing
+
+            //breadth first
             foreach($this->backlinks as $fartable => $farfield){
                 $co =& new CoopObject(&$this->page, $fartable, &$this);
-                $res = $co->findPathToFamilyID("$results");
-                if(strstr($res, 'family_id')){
-                    return "$results:$res";
+                $tmp = $co->findPathToFamilyID($path);
+                if(count($tmp) > 0){
+                     $this->page->printDebug("CoopObject::findpathtofamily($path) found it in $fartable", 
+                                             4);
+                    $res = array_merge($res, $tmp);
+                } else {
+                    //deal with later, remember, breadth first
+                    $searchthese[] =& $co;
                 }
             }
-            return false;
+            
+            if(count($res)){
+                // first-breadth worked. close enough for rock and roll
+                $this->page->printDebug("CoopObject::findpathtofamily($path) first pass worked", 4);
+                return $res;
+            }
+        
+            // nothing found at top, so depth-charge me
+            if(count($searchthese)){
+                foreach($searchthese as $co){
+                    $tmp = $co->findPathToFamilyID($path);
+                    if(count($tmp)){
+                        $res = array_merge($res, $tmp);
+                    }
+                }
+            }
+            return $res;
         }
+
 
 } // END COOP OBJECT CLASS
 

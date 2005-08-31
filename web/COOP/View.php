@@ -47,8 +47,8 @@ class coopView extends CoopObject
 			parent::CoopObject(&$page, $table, &$parentCO, $level);
             $this->obj->CoopView =& $this;  //used by funcs in dbdo
             //eventually...
-            $this->page->printDebug('PATH is: '. $this->findPathToFamilyID(), 
-                                    3);
+            $this->page->confessArray($this->findPathToFamilyID(), 
+                                      'findpathtofamilyid RETURNED', 3);
 		}
 
 
