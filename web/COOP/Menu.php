@@ -194,6 +194,7 @@ class CoopMenu extends HTML_Menu
 					// this substring thing is a nasty, awful hack
 					if(strncmp($cbs['realm'], $realm, 7) == 0){
                         hackCallbacks(&$cbs);
+                        //print $cbs['shortdesc'] . " - " . $cbs['maintable'] .'<br>';
 						$res[$realm]['sub'][$key]['title'] = 
 							$cbs['shortdesc'];
 						// TODO: put the menu stuff in here

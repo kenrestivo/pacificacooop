@@ -53,7 +53,7 @@ if($auth['state'] != 'loggedin'){
 }
 
 //OK, i am logged in!
-$cp =& new CoopPage;
+$cp =& new CoopPage($debug);
 $cp->createLegacy($auth);
 
 $menu =& new CoopMenu(&$cp);
