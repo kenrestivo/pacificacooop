@@ -62,11 +62,9 @@ class CoopMenu extends HTML_Menu
 
 
 
-	function createLegacy($page )
+	function createLegacy()
 		{
 		
-			$this->page =& $page;
-
 			// fix prefix, dammit
 			preg_match("|/(.+)/|", $_SERVER['PHP_SELF'],$match);
 			$prefix = $match[0];
@@ -136,6 +134,7 @@ class CoopMenu extends HTML_Menu
 	function callbacksToMenu($everything)
 		{
 			foreach($everything as $key => $cbs){
+                hackCallbacks(&$cbs);
 				$res[$key]['title'] = 
 					$cbs['shortdesc'];						
 				if(checkMenuLevel($this->page->auth, 
@@ -188,11 +187,13 @@ class CoopMenu extends HTML_Menu
 	// basically, the whole function needs to be rewritten
 	function nestByRealm($ie, $realm_map)
 		{
+            global $cp;
 			foreach($realm_map as $realm => $description){
 				$res[$realm]['title'] = $description;
 				foreach($ie as $key => $cbs){
 					// this substring thing is a nasty, awful hack
 					if(strncmp($cbs['realm'], $realm, 7) == 0){
+                        hackCallbacks(&$cbs);
 						$res[$realm]['sub'][$key]['title'] = 
 							$cbs['shortdesc'];
 						// TODO: put the menu stuff in here

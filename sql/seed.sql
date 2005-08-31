@@ -557,7 +557,9 @@ values
 (78,'blog_entry', 'family_id', null, 21, NULL, 200),
 (79,'blog_entry', null, null, 21, null, null),
 (80,'job_descriptions', null, null, 8, null, null),
-(81, 'files', null, null, 21, null, null);
+(81, 'files', null, null, 21, null, null),
+(82, 'audit_trail', null, null, 19, null, null);
+
 insert into table_permissions set table_name = 'users', realm_id = 19;
 insert into table_permissions set table_name = 'groups', realm_id = 19;
 insert into table_permissions set table_name = 'users_groups_join', realm_id = 19;

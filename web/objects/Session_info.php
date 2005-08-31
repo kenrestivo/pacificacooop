@@ -42,6 +42,9 @@ class Session_info extends DB_DataObject
 		);
 	var $fb_formHeaderText =  'Login History';
 
+    // details appear to be broken on this
+    var $fb_recordActions = array();
+    var $fb_viewActions = array();
 
 
 }

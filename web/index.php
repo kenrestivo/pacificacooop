@@ -17,6 +17,9 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+
+//$debug = -1;
+
 require_once("first.inc");
 require_once("shared.inc");
 require_once("auth.inc");
@@ -25,6 +28,7 @@ require_once("members.inc");
 require_once("everything.inc");
 require_once("CoopPage.php");
 require_once("CoopMenu.php");
+require_once("shared_OOP.php");
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT); //  before page exists.
 
@@ -52,8 +56,8 @@ if($auth['state'] != 'loggedin'){
 $cp =& new CoopPage;
 $cp->createLegacy($auth);
 
-$menu =& new CoopMenu;
-$menu->createLegacy(&$cp);
+$menu =& new CoopMenu(&$cp);
+$menu->createLegacy();
 
 	
 $u = $cp->userStruct; // cached by createlegacy

@@ -5,15 +5,14 @@ $Id$
 this uses PEAR, particualrly HTML::QuickForm and DB::DataObjects
 i tried to make it backwards-compatible to DB_DataObjects_FormBuilder
 fields i added to the dataobject, which are *not* in FormBuilder
+
 fb_allYears
-fb_display_[view|details]
+fb_display_[view|details|summary|alarm]
 fb_URLFIelds
 fb_joinPaths
 fb_usePage
-
-
-
-
+fb_longHeader
+fb_shortHeader
 
 
 
