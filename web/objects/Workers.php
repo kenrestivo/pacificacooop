@@ -45,7 +45,7 @@ class Workers extends DB_DataObject
                                    'brings_baby', 
                                    'school_year' );
 								   
-	var $fb_formHeaderText =  'Workers';
+	var $fb_formHeaderText =  'School Workdays';
 	var $fb_linkDisplayFields =  array('parent_id', 'am_pm_session');
 
 }

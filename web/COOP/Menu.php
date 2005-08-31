@@ -142,8 +142,9 @@ class CoopMenu extends HTML_Menu
 								  $this->page->userStruct, 
 								  $cbs, $cbs['fields'])== 0){
 					$res[$key]['url'] = htmlentities(
-						sprintf('%s%s', $cbs['page'], 
-								SID ? "?" .SID :""));
+						sprintf('%s?table=%s%s', $cbs['page'],
+                                $cbs['maintable'] , 
+                                SID ? '&' . SID : ''));
 
 
 				} else {
@@ -199,8 +200,9 @@ class CoopMenu extends HTML_Menu
 										  $this->page->userStruct, 
 										  $cbs, $cbs['fields'])== 0){
 							$res[$realm]['sub'][$key]['url'] = 
-								sprintf('%s%s', $cbs['page'], 
-										SID ? "?" .SID :"");
+								sprintf('%s?table=%s%s', $cbs['page'], 
+                                        $cbs['maintable'],
+										SID ? '&' . SID : '');
 
 						} else {
 							unset($res[$realm]['sub'][$key]['url']);
