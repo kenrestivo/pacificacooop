@@ -270,7 +270,8 @@ class CoopMenu extends HTML_Menu
                                   null, 
                                   array('table' => 
                                         $tab->obj->table_name),
-                                  'generic.php')); // OR, whatever is in obj
+                                  $this->obj->fb_usePage ? $this->fb_usePage :
+                                  'generic.php')); //  whatever is in obj
                 }
                 list($tmp, $i) = $this->createNew($i, $subrl->obj->realm_id);
                 foreach ($tmp as $key => $val){
