@@ -274,7 +274,7 @@ class CoopMenu extends HTML_Menu
                 }
                 list($tmp, $i) = $this->createNew($i, $subrl->obj->realm_id);
                 foreach ($tmp as $key => $val){
-                    $res[$j]['sub'][$key] = $val;
+                    $res[$k]['sub'][$key] = $val;
                 }
         
             }
