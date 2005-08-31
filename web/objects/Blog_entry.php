@@ -54,4 +54,36 @@ class Blog_entry extends DB_DataObject
             $el->setCols(80);
         }
 
+    function fb_display_summary()
+        {
+            if($this->CoopView->page->auth['token']){
+                $clause = 'members'; 
+            } else {
+                $clause = 'public'; 
+            }
+
+            $this->query(sprintf("select blog_entry.*,
+                date_format(audit_trail.updated, '%%a %%b %%D %%Y %%l:%%i %%p') 
+                        as update_human,
+            users.name
+			from blog_entry 
+			left join audit_trail 
+                   on audit_trail.index_id = blog_entry.blog_entry_id  
+                        and audit_trail.table_name = 'blog_entry'
+            left join users on audit_trail.audit_user_id = users.user_id
+            where show_on_%s_page = 'yes'
+			order by updated desc
+			limit 4", 
+                                 $clause));
+            while($this->fetch()){
+                $res .= sprintf("<p><b>%s</b><p class='small'>%s (Posted %s by %s)</p>", 
+                                $this->short_title, $this->body, 
+                                $this->update_human, $this->name
+                    );
+            }
+            return $res;
+
+        }
+
+
 }

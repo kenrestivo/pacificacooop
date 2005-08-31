@@ -1204,11 +1204,16 @@ order by parents.last_name, parents.first_name, school_year);
 
 
 ---blog
-select blog_entry.*, audit_trail.updated from blog_entry 
-left join audit_trail on audit_trail.index_id = blog_entry.blog_entry_id 
-where show_on_public_page = 'yes'
+select blog_entry.*,
+date_format(audit_trail.updated, '%a %b %D %Y %l:%i %p') as update_human,
+users.name
+from blog_entry 
+left join audit_trail 
+on audit_trail.index_id = blog_entry.blog_entry_id  
+and audit_trail.table_name = 'blog_entry'
+left join users on audit_trail.audit_user_id = users.user_id
+where show_on_members_page = 'yes'
 order by updated desc
-limit 4;
-
+limit 4
 
 --- EOF

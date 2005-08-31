@@ -706,6 +706,7 @@ realm_id = 21;
 insert into access_levels 
 (access_level_id, short_name, description, const_name)
 values
+(-1, NULL, 'Invalid', 'ACCESS_INVALID'),
 (0, NULL, 'None', 'ACCESS_NONE'),
 (100, 'summary', 'Summarize', 'ACCESS_SUMMARY'),
 (200, 'view', 'View', 'ACCESS_VIEW'),
