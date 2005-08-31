@@ -527,6 +527,18 @@ group by user_id,table_name,field_name
             return $res;
         }
 
+    function joinTo($fieldname)
+        {
+            if(!isset($this->obj->joinPaths[$fieldname])){
+                $found = $this->findPathToField($fieldname);
+                if(count($found) > 1){
+                    $this->page->confessArray($found, "joinTo($fieldname): WARNING! taking first one", 
+                                              1);
+                }
+                count($found) && $this->obj->joinPaths[$fieldname] = $found[0]; 
+            }
+        }
+
 
 } // END COOP OBJECT CLASS
 

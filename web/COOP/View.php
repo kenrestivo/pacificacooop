@@ -46,11 +46,12 @@ class coopView extends CoopObject
 		{
 			parent::CoopObject(&$page, $table, &$parentCO, $level);
             $this->obj->CoopView =& $this;  //used by funcs in dbdo
-            //eventually...
-//             $this->page->confessArray($this->findPathToField('family_id'), 
-//                                       'findpathtofield family RETURNED', 3);
-//             $this->page->confessArray($this->findPathToField('school_year'), 
-//                                       'findpathtofield schoolyear RETURNED', 3);
+
+            $this->joinTo('family_id');
+            $this->joinTo('school_year');
+            $page->confessArray($this->obj->joinPaths,
+                                      'coopView() joinpaths found', 3);
+            
 		}
 
 

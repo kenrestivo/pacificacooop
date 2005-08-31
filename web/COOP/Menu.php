@@ -253,6 +253,8 @@ class CoopMenu extends HTML_Menu
             }
             $subrl->obj->orderBy('short_description asc');
             $subrl->obj->find();
+            // TODO: I need to grab all the user/group perms here
+            // it's the inner part of the big join query
             while($subrl->obj->fetch()){
                 $k = ++$i;
                 $res[$k]['title'] = $subrl->obj->short_description;
@@ -262,16 +264,17 @@ class CoopMenu extends HTML_Menu
                 $tab->obj->groupBy('table_name');
                 $tab->obj->find();
                 while($tab->obj->fetch()){
-                    $res[$k]['sub'][++$i] = 
-                        array('title'=> 
-                              $tab->obj->table_name,
-                              'url' => 
-                              $this->page->selfURL(
-                                  null, 
-                                  array('table' => 
-                                        $tab->obj->table_name),
-                                  $this->obj->fb_usePage ? $this->fb_usePage :
-                                  'generic.php')); //  whatever is in obj
+                    $i++;
+                    // do add the tle always, but only url if 
+                    $res[$k]['sub'][$i]['title']= $tab->obj->table_name;
+                    // ANd here, compare and contrast the user permsit
+                    $res[$k]['sub'][$i]['url'] = 
+                        $this->page->selfURL(
+                            null, 
+                            array('table' => 
+                                  $tab->obj->table_name),
+                            $this->obj->fb_usePage ? $this->fb_usePage :
+                            'generic.php'); //  whatever is in obj
                 }
                 list($tmp, $i) = $this->createNew($i, $subrl->obj->realm_id);
                 foreach ($tmp as $key => $val){
