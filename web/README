@@ -1,6 +1,29 @@
 README the pacifica co-op nursery school database web interface
 $Id$
 
+
+this uses PEAR, particualrly HTML::QuickForm and DB::DataObjects
+i tried to make it backwards-compatible to DB_DataObjects_FormBuilder
+fields i added to the dataobject, which are *not* in FormBuilder
+fb_allYears
+fb_display_[view|details]
+fb_URLFIelds
+fb_joinPaths
+
+
+
+
+
+
+
+
+
+
+
+---------------
+
+NOTE: these are the OLD readme notes. no longer relevant
+
 instead of using some off-the-shelf open-source php web application framework (which i SHOULD have done!) i wrote my own set of gui widgets and database abstractions. in retrospect this was an error but i'm stuck with it now. so, i'm documenting it so that anyone maintaining this (including myself) can figure out what's what.
 
 general philosophy

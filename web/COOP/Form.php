@@ -266,7 +266,8 @@ class coopForm extends CoopObject
 			}
 
 			//TODO: try grabbing the dbresult object instead?
-			//confessArray($options, 'oopts');
+			$this->page->confessArray($options, 
+                                      "CoopForm::selectOptions($key)", 6);
 			return $options;
 		}
 

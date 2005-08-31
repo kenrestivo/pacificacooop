@@ -47,8 +47,10 @@ class coopView extends CoopObject
 			parent::CoopObject(&$page, $table, &$parentCO, $level);
             $this->obj->CoopView =& $this;  //used by funcs in dbdo
             //eventually...
-            $this->page->confessArray($this->findPathToFamilyID(), 
-                                      'findpathtofamilyid RETURNED', 3);
+//             $this->page->confessArray($this->findPathToField('family_id'), 
+//                                       'findpathtofield family RETURNED', 3);
+//             $this->page->confessArray($this->findPathToField('school_year'), 
+//                                       'findpathtofield schoolyear RETURNED', 3);
 		}
 
 
@@ -91,11 +93,13 @@ class coopView extends CoopObject
 				if(!$rowcnt++){
 					// MUST do this *after* fetch, to handl custom queries
 					// where column names are different from what's in obj
-					$tab->addRow($this->makeHeader(), 
+                    $header = $this->makeHeader();
+                    $this->page->confessArray($header, 'header', 2);
+					$tab->addRow(array_values($header['titles']), 
 							 'bgcolor=#aabbff align=left', 'TH'); 
 				}
 				//$tab->addRow(array_values($this->obj->toArray()));
-				$tab->addRow($this->toArray(),'valign="top"');
+				$tab->addRow($this->toArray($header['keys']),'valign="top"');
 			
 			}
 			
@@ -115,11 +119,12 @@ class coopView extends CoopObject
 			}
 
 			$tab =& new HTML_Table();
-			$tab->addCol($this->makeHeader(), 
-						 'align=right', 'TH');
+            $header = $this->makeHeader();
+			$tab->addCol($header['titles'], 'align=right', 'TH');
 
 			while($this->obj->fetch()){
-				$tab->addCol($this->toArray(),'bgcolor="#cccccc"' );
+				$tab->addCol($this->toArray($header['keys']),
+                             'bgcolor="#cccccc"' );
 			
 			}
 			if($this->extraRecordButtons){
@@ -222,43 +227,53 @@ class coopView extends CoopObject
 
 	/// generates an array of values, with permitted fields,
 	/// and record buttons, ready for passing to html::table::addRow()
-	function toArray()
+	function toArray($headerkeys = null)
 		{
 
 			$table = $this->obj->table();
 			$row = $this->obj->toArray();
 			foreach($row as $key => $val){
+
 				// this is where the fun begins.
-				if($this->isPermittedField($key)){
-					// XXX better way to do all this dispatching
-					if($table[$key] & DB_DATAOBJECT_MYSQLTIMESTAMP){ 
- 						$res[] = timestamp_db_php($val);
-					} else if ($table[$key] &  DB_DATAOBJECT_TIME) {
-						$res[] = timestamp_db_php($val);
-					} else if ($table[$key] &  DB_DATAOBJECT_DATE){
-						$res[] = sql_to_human_date($val);
-					} else if(is_array($this->obj->fb_displayFormat) &&
-						in_array($key, $this->obj->fb_displayFormat)) 
-					{
-						$res[] = sprintf($this->obj->fb_displayFormat, $val);
-					} else if(is_array($this->obj->fb_URLFields) &&
-						in_array($key, $this->obj->fb_URLFields)) 
-					{
-						$res[] = sprintf('<a href="%s">%s</a>',
-										 $this->page->fixURL($val), $val);
-					} else if(is_array($this->obj->fb_textFields) &&
-						in_array($key, $this->obj->fb_textFields)) 
-                    {
-                        $res[] = $this->fullText ? $val : 
-                            sprintf("%.40s...",$val); // truncate, unless not
-					} else if ($table[$key] &  DB_DATAOBJECT_BOOL){
-                        //TODO: a little checkbox PNG would be nice
-                        $res[] =  $val? 'X' :'';
-					} else {
-						$res[] = nl2br(htmlspecialchars(
-										   $this->checkLinkField($key, $val)));
-					}
-				}
+
+				if(is_array($headerkeys) && !in_array($key, $headerkeys)){
+                    //skip those not in header. MUST BE IN SYNC WITH HEADER!
+                    continue;
+                }
+
+                // XXX better way to do all this dispatching
+				if($this->isPermittedField($key) < ACCESS_VIEW){
+                    //for USERLEVEL. mask the data. but put placeholder
+                    //so that it's in sync with header
+                    $res[] = '';
+                } else if($table[$key] & DB_DATAOBJECT_MYSQLTIMESTAMP){ 
+                    $res[] = timestamp_db_php($val);
+                } else if ($table[$key] &  DB_DATAOBJECT_TIME) {
+                    $res[] = timestamp_db_php($val);
+                } else if ($table[$key] &  DB_DATAOBJECT_DATE){
+                    $res[] = sql_to_human_date($val);
+                } else if(is_array($this->obj->fb_displayFormat) &&
+                          in_array($key, $this->obj->fb_displayFormat)) 
+                {
+                    $res[] = sprintf($this->obj->fb_displayFormat, $val);
+                } else if(is_array($this->obj->fb_URLFields) &&
+                          in_array($key, $this->obj->fb_URLFields)) 
+                {
+                    $res[] = sprintf('<a href="%s">%s</a>',
+                                     $this->page->fixURL($val), $val);
+                } else if(is_array($this->obj->fb_textFields) &&
+                          in_array($key, $this->obj->fb_textFields)) 
+                {
+                    $res[] = $this->fullText ? $val : 
+                        sprintf("%.40s...",$val); // truncate, unless not
+                } else if ($table[$key] &  DB_DATAOBJECT_BOOL){
+                    //TODO: a little checkbox PNG would be nice
+                    $res[] =  $val? 'X' :'';
+                } else {
+                    $res[] = nl2br(htmlspecialchars(
+                                       $this->checkLinkField($key, $val)));
+                }
+				
 			}
 
 			//XXX hack! do this AFTER query, but not here.
@@ -286,7 +301,8 @@ class coopView extends CoopObject
 			// get the fieldnames out the dataobject
 			foreach($this->obj->toArray() as $key => $trash){
 				//print "checking $key<br>";
-				if($this->isPermittedField($key)){
+				if($this->isPermittedField($key, true)){
+                    $keys[] = $key;
 					if($this->obj->fb_fieldLabels[$key]){
 						$res[] = $this->obj->fb_fieldLabels[$key];
 					} else {
@@ -297,7 +313,8 @@ class coopView extends CoopObject
 			}
 			
 			$res[] = 'Actions';
-			return $res;
+			return array('titles' => $res,
+                         'keys' => $keys);
 
 		}
 
@@ -321,14 +338,11 @@ class coopView extends CoopObject
 
 	function oneLineTable($find= 1)
 		{
-            //XXX: Use the this->find() function instead!!
-			if($find){
-				$found = $this->obj->find();
-				
-				if($found < 1){
-					return false;
-				}
+			// NOTE. this object's find, not the DBDO find
+			if(!$this->find($find)){
+				return;
 			}
+
 			$tab =& new HTML_Table();
 		
 			
@@ -346,8 +360,16 @@ class coopView extends CoopObject
 															   'details'),
 												 $this->legacyCallbacks['page']);
 				} else {
-					// TODO: handle the no-legacy-callbacks case
-					$meat = $mainlink;
+					// handle the no-legacy-callbacks case
+                    $meat = $this->page->selfURL(
+						$mainlink,
+						array( 
+							'action' => 'details',
+							'table' => $this->table,
+							$this->prependTable($this->pk) => 
+							$this->obj->{$this->pk}),
+                        $this->obj->fb_usePage ? $this->fb_usePage :
+                        'generic.php'); 
 				}
 
 				$tab->addRow(array($meat,

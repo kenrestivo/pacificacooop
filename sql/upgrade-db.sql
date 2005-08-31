@@ -29,32 +29,12 @@ alter table auction_donation_items drop column audit_user_id;
 alter table insurance_information drop column audit_user_id;
 update groups set name = "Members" where group_id  =1;
 
-INSERT INTO `table_permissions` 
-( table_name , field_name , group_id , realm_id , 
-user_level , group_level) values
-('blog_entry', 'show_on_members_page', null, 21, 500, NULL),
-('blog_entry', 'show_on_public_page', null, 21, NULL, 700),
-('blog_entry', 'family_id', null, 21, NULL, 200),
-('blog_entry', null, null, 21, null, null),
-('job_descriptions', null, null, 8, null, null),
-('files', null, null, 21, null, null);
 
 -- add new access_level table (definition.sql)
 -- seed the access_levels (seed.sql)
 -- add or replace the files table (definition.sql)
 
 insert into user_privileges set realm_id=19, user_id  = 52, group_level = 800, user_level = 800;
-insert into table_permissions set table_name = 'users', realm_id = 19;
-insert into table_permissions set table_name = 'groups', realm_id = 19;
-insert into table_permissions set table_name = 'users_groups_join', realm_id = 19;
-insert into table_permissions set table_name = 'realms', realm_id = 19;
-insert into table_permissions set table_name = 'access_levels', realm_id = 19;
-insert into table_permissions set table_name = 'user_privileges', realm_id = 19;
-insert into table_permissions set table_name = 'table_permissions', realm_id = 19;
-insert into table_permissions set table_name = 'events', realm_id = 2, group_level = 500;
-insert into table_permissions set table_name = 'calendar_events', realm_id = 2;
-insert into table_permissions set table_name = 'calendar_events', 
-field_name = 'keep_event_hidden_until_date', realm_id = 2, group_level = 600, user_level  = 0;
 
 alter table parents drop column email_address;
 add the events for start of fall, etc, and the calendar_events too (seed.sql)
@@ -86,7 +66,5 @@ values
 (17, '2005-2006', '01-03-2006');
 --TODO: the rest of 'em
 
--- GO BACK AND PUT SOME OF THESE IN SEEDS!
--- i.e. the table permissions almost certaily belong in there.
 
 ---CONGRATULATIONS! you're done making massive changes to the database.

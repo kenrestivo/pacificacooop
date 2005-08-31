@@ -433,7 +433,7 @@ table_permissions.table_name, table_permissions.field_name,
 max(if((upriv.max_user <= table_permissions.user_level or
 table_permissions.user_level is null), 
 upriv.max_user, table_permissions.user_level)) as cooked_user,
-max(if((upriv.max_group >  table_permissions.group_level or
+max(if((upriv.max_group >=  table_permissions.group_level or
 table_permissions.user_level is null), 
 upriv.max_group, NULL )) as cooked_group
 from table_permissions 
@@ -474,30 +474,33 @@ group by user_id,table_name,field_name
             }
 
         }
+
+
+
     // because it's breadth first, returns an array
-    function findPathToFamilyID($path = '')
+    function findPathToField($field, $path = '')
         {
             // easier if i append right at the top
             $path = $path ? "$path:". $this->table : $this->table;
-            $this->page->printDebug("CoopObject::findpathtofamily($path): starting", 4);
+            $this->page->printDebug("CoopObject::findpathtofield($field, $path): starting", 4);
 
             $res = array();
             $searchthese = array();
 
             // first off, if i'm the one, i'm done!
-            if(in_array('family_id', array_keys(get_class_vars($this->table)))){
+            if(in_array($field, array_keys(get_class_vars($this->table)))){
                 $res[] = $path;
                 $this->page->confessArray(get_class_vars($this->table), 
-                                          "CoopObject::findpathtofamily($path) found in top-level", 4);
+                                          "CoopObject::findpathtofield($field, $path) found in top-level", 5);
                 return $res;
             }
 
             //breadth first
             foreach($this->backlinks as $fartable => $farfield){
                 $co =& new CoopObject(&$this->page, $fartable, &$this);
-                $tmp = $co->findPathToFamilyID($path);
+                $tmp = $co->findPathToField($field, $path);
                 if(count($tmp) > 0){
-                     $this->page->printDebug("CoopObject::findpathtofamily($path) found it in $fartable", 
+                     $this->page->printDebug("CoopObject::findpathtofield($field, $path) found it in $fartable", 
                                              4);
                     $res = array_merge($res, $tmp);
                 } else {
@@ -508,14 +511,14 @@ group by user_id,table_name,field_name
             
             if(count($res)){
                 // first-breadth worked. close enough for rock and roll
-                $this->page->printDebug("CoopObject::findpathtofamily($path) first pass worked", 4);
+                $this->page->printDebug("CoopObject::findpathtofield($field, $path) first pass worked", 4);
                 return $res;
             }
         
             // nothing found at top, so depth-charge me
             if(count($searchthese)){
                 foreach($searchthese as $co){
-                    $tmp = $co->findPathToFamilyID($path);
+                    $tmp = $co->findPathToField($field, $path);
                     if(count($tmp)){
                         $res = array_merge($res, $tmp);
                     }

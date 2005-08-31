@@ -478,8 +478,7 @@ insert into counters set
             school_year = '2004-2005',
             counter = 1;
 
----- table perms backup. ONLY those automatically assigned
----- XXX before too long, be sure to add any manual ones here!
+---- table perms backup. i've edited these, the script is wrong.
 INSERT INTO `table_permissions` 
 (table_permissions_id , table_name , field_name , group_id , realm_id , 
 user_level , group_level)
@@ -552,7 +551,24 @@ values
 (72,'job_assignments',NULL,NULL,8,NULL,200),
 (73,'kids',NULL,NULL,14,NULL,NULL),
 (74,'parents',NULL,NULL,14,NULL,NULL),
-(75,'workers',NULL,NULL,14,NULL,NULL);
+(75,'workers',NULL,NULL,14,NULL,NULL),
+(76, 'blog_entry', 'show_on_members_page', null, 21, 600, 200),
+(77,'blog_entry', 'show_on_public_page', null, 21, 200, 700),
+(78,'blog_entry', 'family_id', null, 21, NULL, 200),
+(79,'blog_entry', null, null, 21, null, null),
+(80,'job_descriptions', null, null, 8, null, null),
+(81, 'files', null, null, 21, null, null);
+insert into table_permissions set table_name = 'users', realm_id = 19;
+insert into table_permissions set table_name = 'groups', realm_id = 19;
+insert into table_permissions set table_name = 'users_groups_join', realm_id = 19;
+insert into table_permissions set table_name = 'realms', realm_id = 19;
+insert into table_permissions set table_name = 'access_levels', realm_id = 19;
+insert into table_permissions set table_name = 'user_privileges', realm_id = 19;
+insert into table_permissions set table_name = 'table_permissions', realm_id = 19;
+insert into table_permissions set table_name = 'events', realm_id = 2, group_level = 500;
+insert into table_permissions set table_name = 'calendar_events', realm_id = 2;
+insert into table_permissions set table_name = 'calendar_events', 
+field_name = 'keep_event_hidden_until_date', realm_id = 2, group_level = 600, user_level  = 0;
 
 
 -- default group perms
@@ -698,5 +714,14 @@ values
 (600, 'add', 'Create', 'ACCESS_ADD'),
 (700, 'confirmdelete', 'Delete', 'ACCESS_DELETE'),
 (800, NULL, 'Administer permissions for', 'ACCESS_ADMIN');
+
+
+------ first blog entry
+insert into blog_entry set
+family_id = 56,
+short_title = "Fall Session starts September 12",
+body = "There may still be a very few openings for Fall. Call 355-3272 for more information. You may also fill out a wait-list application.",
+show_on_public_page  = 'yes';
+
 
 -- EOF

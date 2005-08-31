@@ -2,6 +2,8 @@
 
 //$Id$
 
+$debug = 4;
+
 
 require_once('CoopPage.php');
 require_once('CoopView.php');
@@ -9,10 +11,7 @@ require_once('CoopForm.php');
 require_once('CoopMenu.php');
 
 
-
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
-
-$debug = 4;
 
 
 $cp = new coopPage( $debug);

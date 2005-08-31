@@ -1159,7 +1159,7 @@ table_permissions.table_name, table_permissions.field_name,
 max(if((upriv.max_user <= table_permissions.user_level or
 table_permissions.user_level is null), 
 upriv.max_user, table_permissions.user_level)) as cooked_user,
-max(if((upriv.max_group >  table_permissions.group_level or
+max(if((upriv.max_group >=  table_permissions.group_level or
 table_permissions.user_level is null), 
 upriv.max_group, NULL )) as cooked_group
 from table_permissions 
@@ -1206,8 +1206,9 @@ order by parents.last_name, parents.first_name, school_year);
 ---blog
 select blog_entry.*, audit_trail.updated from blog_entry 
 left join audit_trail on audit_trail.index_id = blog_entry.blog_entry_id 
-where table_name = 'blog_entry' 
-order by updated desc;
+where show_on_public_page = 'yes'
+order by updated desc
+limit 4;
 
 
 --- EOF

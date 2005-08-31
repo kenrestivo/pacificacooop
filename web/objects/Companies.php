@@ -87,4 +87,13 @@ class Companies extends DB_DataObject
 									'do_not_contact');
 	var $fb_formHeaderText =  'Springfest Solicitation Contacts';
 	var $fb_URLFields = array ('url');
+
+
+    function fb_display_view()
+        {
+            $this->orderBy('company_name, last_name');
+                        
+            return $this->CoopView->oneLineTable();
+
+        }
 }
