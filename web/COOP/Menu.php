@@ -238,12 +238,19 @@ class CoopMenu extends HTML_Menu
 			return $res;
 		}
 	
+
+
     //$i is the running total, MUST propogate it,it must be unique
-    function _subrl($i, $id)
+    //yay, a recursive depth-first tree-transversal function
+    function createNew($i = 0, $id = 0)
         {
-            //{{{ NASTY DUPLICATION OF ABOVE CODE
             $subrl =& new CoopObject(&$this->page, 'realms', &$nothing);
-            $subrl->obj->meta_realm_id = $id;
+            //$subrl->obj->debugLevel(2);
+            if($id){
+                $subrl->obj->meta_realm_id = $id;
+            }else {
+                $subrl->obj->whereAdd('meta_realm_id is null'); // ONLY top
+            }
             $subrl->obj->orderBy('short_description asc');
             $subrl->obj->find();
             while($subrl->obj->fetch()){
@@ -265,58 +272,20 @@ class CoopMenu extends HTML_Menu
                                         $tab->obj->table_name),
                                   'generic.php')); // OR, whatever is in obj
                 }
-            }
-            //TODO: also gen up some reports under here too
-            return array($res, $i);
-
-        }
-
-
-    function createNew()
-        {
-            //GAH! this sucks doing it iteratively. it won't recurse endlessly
-            //i can only go two levels. XXX FIX THIS: rewrite recursively
-            //the only difference is the [j][k] level.
-            $i = 1;
-            //{{{ NASTY DUPLICATION OF CODE, s/b in subrl
-            $rl =& new CoopObject(&$this->page, 'realms', &$nothing);
-            $dbname = sprintf('Tables_in_%s', $rl->obj->_database); //NEED LATER
-            $rl->obj->whereAdd('meta_realm_id is null');
-            $rl->obj->orderBy('short_description asc');
-            $rl->obj->find(); 
-            while($rl->obj->fetch()){
-                $res[++$i]['title'] = $rl->obj->short_description;
-                $tab =& new CoopObject(&$this->page, 'table_permissions',
-                                       &$subrl);
-                $tab->obj->realm_id = $rl->obj->realm_id;
-                $tab->obj->groupBy('table_name');
-                $tab->obj->find();
-                $j = $i;
-                while($tab->obj->fetch()){
-                    $res[$j]['sub'][++$i] = 
-                            array('title'=> 
-                                  $tab->obj->table_name,
-                                  'url' => 
-                                  $this->page->selfURL(
-                                      null, 
-                                      array('table' => 
-                                            $tab->obj->table_name),
-                                      'generic.php'));
-                }
-                //TODO: also gen up some reports under here too
-                ///}}}
-
-                list($tmp, $i) = $this->_subrl($i, $rl->obj->realm_id);
+                list($tmp, $i) = $this->createNew($i, $subrl->obj->realm_id);
                 foreach ($tmp as $key => $val){
                     $res[$j]['sub'][$key] = $val;
                 }
+        
             }
-  
-
-			$this->setMenu($res);
-
-            //return $res;
+            //TODO: also gen up some reports under here too
             
+            if(!$id){
+                $this->page->confessArray($res, 'res', 4);
+                $this->setMenu($res);
+            }
+
+            return array($res, $i);
         }
 
 
