@@ -250,7 +250,8 @@ class CoopMenu extends HTML_Menu
                     $res[$k]['sub'][$i]['title']= 
                         $co->obj->fb_shortHeader ? $co->obj->fb_shortHeader : 
                         $tab->obj->table_name;
-                    if($co->isPermittedField(NULL,true) >= ACCESS_VIEW){
+                    // check GROUPLEVEL for menulevel!
+                    if($co->isPermittedField(NULL, true) >= ACCESS_VIEW){
                         $res[$k]['sub'][$i]['url'] = 
                             $this->page->selfURL(
                                 null, 
