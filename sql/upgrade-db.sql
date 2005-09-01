@@ -2,6 +2,8 @@
 
 alter table groups drop column audit_user_id;
 --run the deleteoldperms script (deleteoldperms.sql)
+-- make sure there aren't any ugly things in there! 
+--i.e. w/o any user/group/realm
 -- 	then seed the new USER perms! (at the end of seed.sql)
 -- 	add workers table, (definition.sql)
 -- 	then run the populate workers query (from queries.sql)

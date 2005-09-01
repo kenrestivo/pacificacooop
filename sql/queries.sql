@@ -1216,4 +1216,9 @@ where show_on_members_page = 'yes'
 order by updated desc
 limit 4
 
+--- so common, i need to make a web page for it. oh wait, i already do!
+select field_name, table_name as tbl, group_id as grp, 
+user_level as usrlvl, group_level as grplvl, realm_id as rlm 
+from table_permissions 
+where field_name is null;
 --- EOF
