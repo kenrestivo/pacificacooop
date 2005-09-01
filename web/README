@@ -6,18 +6,14 @@ this uses PEAR, particualrly HTML::QuickForm and DB::DataObjects
 i tried to make it backwards-compatible to DB_DataObjects_FormBuilder
 fields i added to the dataobject, which are *not* in FormBuilder
 
-fb_allYears
+fb_allYears  (old allyears)
 fb_display_[view|details|summary|alarm]
 fb_URLFIelds
-fb_joinPaths
-fb_usePage
-fb_longHeader
-fb_shortHeader
-
-
-
-
-
+fb_joinPaths  (old links)
+fb_usePage    (old page)
+fb_longHeader (old summary, if applicable)
+fb_shortHeader (old shortdesc)
+fb_dupeIgnore
 
 
 ---------------
@@ -201,6 +197,8 @@ auth
 	each field can have its own perms. field perms are a LIMIT
 		if the user/group has at LEAST the field's perm levels, 
 			it can do that action
+			basically it means: limit THIS action to only people with perms
+				i.e, edit perms on group = only  groupperms >= view can edit
 		so to calculate a perm for a field, fieldPerms() factors in:
 			the DESIRED action
 			the field's GROUP level

@@ -40,6 +40,8 @@ function parseIniFile($filename)
 
 function hackDBURL()
 {
+    //NOTE! this function, for whatever reason, is a memory pig.
+	// TODO: if i can blow off old mysql, and use only pear, this can go away
 	// override database url with my crufty old caraap!
 	global $dburl;
 	$options = &PEAR::getStaticProperty('DB_DataObject','options');

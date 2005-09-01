@@ -257,8 +257,9 @@ class CoopMenu extends HTML_Menu
             }
             $subrl->obj->orderBy('short_description asc');
             $subrl->obj->find();
-            // TODO: I need to grab all the user/group perms here
+            // TODO: optimise by  grabbing all the user/group perms here
             // it's the inner part of the big join query
+            // then duplicating functionality of ispermittedfield in loop below
             while($subrl->obj->fetch()){
                 $k = ++$i;
                 $res[$k]['title'] = $subrl->obj->short_description;
@@ -272,13 +273,17 @@ class CoopMenu extends HTML_Menu
                     // do add the tle always, but only url if 
                     $res[$k]['sub'][$i]['title']= $tab->obj->table_name;
                     // ANd here, compare and contrast the user permsit
-                    $res[$k]['sub'][$i]['url'] = 
-                        $this->page->selfURL(
-                            null, 
-                            array('table' => 
-                                  $tab->obj->table_name),
-                            $this->obj->fb_usePage ? $this->fb_usePage :
-                            'generic.php'); //  whatever is in obj
+                    $co =&new CoopObject(&$this->page, $tab->obj->table_name, 
+                                         &$nothing);
+                    if($co->isPermittedField(null,true) >= ACCESS_VIEW){
+                        $res[$k]['sub'][$i]['url'] = 
+                            $this->page->selfURL(
+                                null, 
+                                array('table' => 
+                                      $tab->obj->table_name),
+                                $this->obj->fb_usePage ? $this->fb_usePage :
+                                'generic.php'); //  whatever is in obj
+                    }
                 }
                 list($tmp, $i) = $this->createNew($i, $subrl->obj->realm_id);
                 foreach ($tmp as $key => $val){
