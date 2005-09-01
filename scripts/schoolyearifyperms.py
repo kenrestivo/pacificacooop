@@ -4,16 +4,16 @@
 
 #uses global c above
 def has_school_year(j):
-    c.execute("explain %s" % (j))
+    c.execute("explain %s" % (j['table_name']))
     k=[i['Field'] for i in c.fetchall()]
     return k.count('school_year')
 
-c.execute('show tables')
-l=filter(has_school_year,
-         [i['Tables_in_coop'] for i in c.fetchall()])
+c.execute('select distinct table_name, realm_id from table_permissions')
+l=filter(has_school_year, c.fetchall())
 
 print """insert into table_permissions
-(field_name, table_name, user_level, group_level)
+(field_name, table_name, realm_id, user_level, group_level)
 values"""
-print ",\n".join(["('school_year', '%s', 200, 200)" % (i) for i in l])
+print ",\n".join(["('school_year', '%s', %d, 200, 200)" %
+                  (i['table_name'], i['realm_id']) for i in l])
     
