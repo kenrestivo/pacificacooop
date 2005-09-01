@@ -182,9 +182,13 @@ class coopForm extends CoopObject
 				} else if(is_array($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{
-					$el =& $this->form->addElement('textarea', $fullkey, false, 
-											 array('rows' => 4, 
-												   'cols' => 30 ));
+                    $cols = (is_array($this->obj->fb_sizes) &&
+                             !empty($this->obj->fb_sizes[$key])) ?
+                        $this->obj->fb_sizes[$key] : 40;
+					$el =& $this->form->addElement('textarea', 
+                                                   $fullkey, false, 
+                                                   array('rows' => 10,  //??
+                                                         'cols' => $cols));
 				} else if(is_array($this->obj->fb_enumFields) &&
 						  in_array($key, $this->obj->fb_enumFields))
 				{
@@ -207,6 +211,11 @@ class coopForm extends CoopObject
 				} else {
                     // ok, it's just text
 					$el =& $this->form->addElement('text', $fullkey);
+                    if(is_array($this->obj->fb_sizes) &&
+                       !empty($this->obj->fb_sizes[$key]))
+                    {
+                        $el->setSize($this->obj->fb_sizes[$key]);
+                    }
 				}
 				//print $key . "->" .$this->obj->fb_fieldLabels[$key] . "<br>";
 				// TODO: uppercase this thing, replace _ with spaces

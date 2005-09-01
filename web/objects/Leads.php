@@ -107,6 +107,16 @@ class Leads extends DB_DataObject
         );
 
 
+   var $fb_sizes = array(
+     'salutation' => 20,
+     'first_name' => 50,
+     'address1' => 50,
+     'city' => 15,
+     'state' => 5,
+     'zip' => 8,
+     'country' => 10
+   );
+
 	// can be called with no leadid if it's already in the object itself
 	// and no find is needed
 	// this is used in RSVP and tickets
@@ -184,21 +194,6 @@ class Leads extends DB_DataObject
 		}	
 
 
-// set salutation len = 25
-
-// set salutation size = 20
-
-// set first_name size = 50
-
-// set address1 size = 50
-
-// set city size = 15
-
-// set state size = 5
-
-// set zip size = 8
-
-// set country size = 10
 
 
 }

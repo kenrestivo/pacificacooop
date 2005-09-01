@@ -38,6 +38,7 @@ class Blog_entry extends DB_DataObject
                                    'show_on_members_page', 
 								   'show_on_public_page');
 	var $fb_formHeaderText =  'Breaking News';
+	var $fb_shortHeader =  'Blog';
 	var $fb_textFields = array('body');
 	var $fb_requiredFields = array('family_id', 'short_title', 'body');
 	var $fb_defaults = array('show_on_members_page' => 'Yes',
@@ -54,9 +55,9 @@ class Blog_entry extends DB_DataObject
             $el->setCols(80);
         }
 
-    function fb_display_summary()
+    function fb_display_summary($publiconly = false)
         {
-            if($this->CoopView->page->auth['token']){
+            if($this->CoopView->page->auth['token'] && !$publiconly){
                 $clause = 'members'; 
             } else {
                 $clause = 'public'; 

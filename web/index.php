@@ -57,7 +57,7 @@ $cp =& new CoopPage($debug);
 $cp->createLegacy($auth);
 
 $menu =& new CoopMenu(&$cp);
-$menu->createLegacy();
+$menu->createNew();
 
 	
 $u = $cp->userStruct; // cached by createlegacy

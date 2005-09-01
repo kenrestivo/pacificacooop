@@ -110,7 +110,7 @@ VALUES
 (16,'solicit_money', 20,'Solicitation-redundant'),
 (17,'thankyou', 20,'Thank You'),
 (18,'tickets', 20,'Tickets'),
-(19,'user',NULL,'Users'),
+(19,'user',NULL,'System'),
 (20, 'springfest',NULL,'Springfest'),
 (21, 'blog',NULL,'News');
 
@@ -562,9 +562,8 @@ values
 
 insert into table_permissions set table_name = 'users', realm_id = 19;
 insert into table_permissions set table_name = 'groups', realm_id = 19;
-insert into table_permissions set table_name = 'users_groups_join', realm_id = 19;
-insert into table_permissions set table_name = 'realms', realm_id = 19;
-insert into table_permissions set table_name = 'access_levels', realm_id = 19;
+--insert into table_permissions set table_name = 'realms', realm_id = 19;
+--insert into table_permissions set table_name = 'access_levels', realm_id = 19, user_level = 0, group_level = 0;
 insert into table_permissions set table_name = 'user_privileges', realm_id = 19;
 insert into table_permissions set table_name = 'table_permissions', realm_id = 19;
 insert into table_permissions set table_name = 'events', realm_id = 2, group_level = 500;

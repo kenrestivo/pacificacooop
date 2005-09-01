@@ -28,6 +28,8 @@ class Users extends DB_DataObject
 							'family_id' => 'Co-Op Family');
 	//var $fb_fieldsToRender = array('name', 'family_id');
 	var $fb_linkDisplayFields = array('name');
+	var $fb_formHeaderText = 'System Users';
+	var $fb_shortHeader = 'Users';
 
 	// from docs. very kewl
 	function preGenerateForm() {

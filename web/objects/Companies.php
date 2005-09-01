@@ -128,20 +128,14 @@ var $fb_shortHeader = 'Contacts';
 
         }
 
-// set salutation len = 25
-
-// set salutation size = 20
-
-// set address1 size = 50
-
-// set city size = 15
-
-// set state size = 5
-
-// set zip size = 8
-
-// set country size = 10
-
+   var $fb_sizes = array(
+     'salutation' => 20,
+     'address1' => 50,
+     'city' => 15,
+     'state' => 5,
+     'zip' => 8,
+     'country' => 10
+   );
 
 
 }

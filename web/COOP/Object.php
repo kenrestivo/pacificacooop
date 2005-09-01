@@ -323,7 +323,8 @@ class coopObject
 
 
             if($forceuser || 
-               $this->page->userStruct['family_id'] == $this->obj->family_id){
+               $this->page->userStruct['family_id'] == $this->obj->family_id)
+            {
             	$this->page->printDebug(
                     "ispermitted($this->table : $key) MINE, using max of group/user", 
                     4);
@@ -458,6 +459,9 @@ group by user_id,table_name,field_name
                                       $this->table));
             $res = $this->obj->getDatabaseResult();
             while ($row =& $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+                // chasing bthe heisenbug
+               $this->page->confessArray($row, 
+                                          "getPERMS({$this->table}) db outfreakage", 5);
                 $this->perms[$row['field_name']] = 
                     array('user'=>$row['cooked_user'],
                           'group' =>$row['cooked_group']);

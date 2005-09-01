@@ -71,7 +71,10 @@ class Ads extends DB_DataObject
         'artwork_provided' => 'Yes'
         );
 
-// set ad_copy size = 100
+   var $fb_sizes = array(
+     'ad_copy' => 100
+   );
+
 
 // set ad_copy lines = 3
 

@@ -34,8 +34,5 @@ class Raffle_locations extends DB_DataObject
         'location_name'
         );
     
-    var $fb_SAVEALWAYS = array(
-        'raffle_location_id'
-        );
     
 }

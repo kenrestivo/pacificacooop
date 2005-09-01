@@ -25,6 +25,9 @@ class Realms extends DB_DataObject
     ###END_AUTOCODE
 
 	var $fb_linkDisplayFields = array('realm');
+	var $fb_formHeaderText = 'Data Realms';
+	var $fb_shortHeader = 'Realms';
 
 
 }
+ 

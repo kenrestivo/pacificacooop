@@ -36,6 +36,9 @@ class Parents extends DB_DataObject
 	var $fb_linkOrderFields = array ('last_name', 'first_name');
 	var $fb_enumFields = array ('type', 'worker');
 	var $fb_fieldsToRender = array ('last_name', 'first_name', 'type', 'worker');
+	var $fb_formHeaderText = 'Parents';
+	var $fb_shortHeader = 'Parents';
+
 	function fb_linkConstraints()
 		{
 			// ugly, but consisent. only shows parents for this year

@@ -76,6 +76,9 @@ class Auction_donation_items extends DB_DataObject
     var $fb_currencyFields = array(
         'item_value'
         );
+   var $fb_sizes = array(
+     'item_description' => 100
+   );
 
 
 	function fb_linkConstraints()
@@ -147,7 +150,6 @@ class Auction_donation_items extends DB_DataObject
 			return $form;
 		}// end newpackageform
 
-// set item_description size = 100
 
 // set item_description lines = 3
 	

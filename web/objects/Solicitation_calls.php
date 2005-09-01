@@ -51,8 +51,10 @@ class Solicitation_calls extends DB_DataObject
         'school_year'
         );
 
+   var $fb_sizes = array(
+     'call_note' => 100
+   );
 
-// set call_note size = 100
 
 // set call_note lines = 3
 }

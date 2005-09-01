@@ -93,6 +93,9 @@ var $fb_currencyFields = array(
 									 'toField' => 'auction_donation_item_id',
 									 'type' => 'select'));
 
+   var $fb_sizes = array(
+     'package_description' => 100
+   );
 
 	function constrainedPackagePopup($schoolyear = false)
 		{
@@ -119,7 +122,6 @@ var $fb_currencyFields = array(
 			return $el;
 		}
 
-// set package_description size = 100
 
 // set package_description lines = 3
 

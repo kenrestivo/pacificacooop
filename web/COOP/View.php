@@ -141,7 +141,8 @@ class coopView extends CoopObject
             // i stuck this into find so i don't have to duplicate it
             // in horiztable, simpletable, onelinetable, etc
             // and i have to FORCE ispermitted to return the userlevel
-            if($this->isPermittedField(NULL,true) < ACCESS_VIEW){
+            $perms = $this->isPermittedField(NULL,true);
+            if($perms < ACCESS_VIEW){
                 $this->page->printDebug(
                     "CoopView::find($this->table) NO VIEW PERMS!", 2 );
                 return false;
@@ -151,7 +152,9 @@ class coopView extends CoopObject
 			} else {
 				$found = $this->obj->N;
 			}
-			return $found;
+            // ALSO. if i have "add" perms, then show the 'add new'
+            // even if nothign was found, force TRUE, so i get my enter new
+            return $found || $perms >= ACCESS_ADD;
 		}
 
 

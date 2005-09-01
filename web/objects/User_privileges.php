@@ -33,5 +33,7 @@ class User_privileges extends DB_DataObject
                                  'realm_id' => 'Data Realm'
                                  );
 
-	
+	var $fb_formHeaderText = 'User and Group Permissions';
+	var $fb_shortHeader = 'User Permissions';
+    
 }

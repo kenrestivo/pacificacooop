@@ -36,6 +36,7 @@ class Calendar_events extends DB_DataObject
         'school_year' => 'School Year'
         );
 	var $fb_formHeaderText =  'Calendar of Events';
+	var $fb_shortHeader =  'Calendar';
 
 
 }

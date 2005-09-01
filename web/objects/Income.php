@@ -76,6 +76,10 @@ var $fb_dupeIgnore = array(
    'note'
 );
 
+   var $fb_sizes = array(
+     'check_number' => 10
+   );
+
 // set check_number size = 10
 
 // set account_number check_jointo = families

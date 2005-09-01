@@ -32,6 +32,9 @@ class Files extends DB_DataObject
 
 	var	$kenPath = "../files/"; // NOTE! for the tests folder
 
+    
+    var $fb_formHeaderText = 'Uploaded Files';
+    var $fb_shortHeader = 'Files';
     var $fb_timeFields = array ('upload_date');
     var $fb_URLFields = array ('disk_filename');
     var $fb_fieldLabels = array( 'file_description' => "Description",

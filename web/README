@@ -14,7 +14,7 @@ fb_usePage    (old page)
 fb_longHeader (old summary, if applicable)
 fb_shortHeader (old shortdesc)
 fb_dupeIgnore
-
+fb_sizes
 
 ---------------
 

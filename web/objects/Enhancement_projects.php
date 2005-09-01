@@ -34,13 +34,10 @@ class Enhancement_projects extends DB_DataObject
         'project_name'
         );
     
-    var $fb_SAVEALWAYS = array(
-        'enhancement_project_id'
-);
-
-// set project_description size = 100
-
-// set project_description lines = 3
+    
+   var $fb_sizes = array(
+     'project_description' => 100
+   );
 
 
 }

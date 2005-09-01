@@ -27,6 +27,7 @@ class Table_permissions extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_formHeaderText =  'Permissions and Realms for Tables';
+	var $fb_shortHeader =  'Tables';
 
 	var $fb_fieldLabels = array(
 		'table_name' => 'Table',

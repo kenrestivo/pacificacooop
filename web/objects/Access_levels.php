@@ -26,5 +26,7 @@ class Access_levels extends DB_DataObject
 
 	var $fb_linkDisplayFields = array('description');
 
+	var $fb_formHeaderText = 'Access Levels';
+	var $fb_shortHeader = 'Levels';
 
 }

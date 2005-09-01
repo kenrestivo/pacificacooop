@@ -322,6 +322,9 @@ getAuthLevel($auth, $targetrealm)
 			E_USER_ERROR);
 		return 0; // there can beeee... only one!
 	}                  
+    // SET DEFAULTS!
+    $result = array('user_level' => null,
+                    'group_level' => null);
 
 	while($row = mysql_fetch_assoc($listq)){
 		$result['user_level'] = $row['user_level'];

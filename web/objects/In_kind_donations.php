@@ -61,7 +61,9 @@ var $fb_currencyFields = array(
 );
 
 
-// set item_description size = 100
+   var $fb_sizes = array(
+     'item_description' => 100
+   );
 
 // set item_description lines = 3
 

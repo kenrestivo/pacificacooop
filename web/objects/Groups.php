@@ -22,6 +22,9 @@ class Groups extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_linkDisplayFields = array('name');
+	var $fb_formHeaderText = 'Groups of Users';
+	var $fb_shortHeader = 'Groups';
 
 
 }
+ 

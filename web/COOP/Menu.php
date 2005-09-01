@@ -154,33 +154,6 @@ class CoopMenu extends HTML_Menu
 			return $res; 
 		}
 
-// 	function getMoney($ie)
-// 		{
-// 			foreach($ie as $page => $cbs){
-// 				if($cbs['maintable'] == 'income'){
-// 					$moneymenu[] = array(
-// 						'title' => $cbs['shortdesc'],
-// 						// TODO the permissions checking!
-// 						'url' => sprintf('%s%s', $cbs['page'], 
-// 										 SID ? "?" .SID :""));
-// 				}
-// 				confessArray($moneymenu, 'moneymenu');
-// 				return $moneymenu;
-// 			}
-// 		}
-
-// 	function getRealms($ie)
-// 		{
-// 			foreach($ie as $key => $cbs){
-// 				$realms[] = substr($cbs['realm'], 0, 7);
-				
-// 			}
-// 			$realms = array_unique($realms);
-// 			asort($realms);
-// 			confessArray($realms, "realmsort");
-// 			return $realms;
-// 		}
-
 
 	// XXX this creates bugs. the array indices are supposed to be NUMBERS
 	// but, i use the realm as a key, and that fucks it up
@@ -277,7 +250,7 @@ class CoopMenu extends HTML_Menu
                     $res[$k]['sub'][$i]['title']= 
                         $co->obj->fb_shortHeader ? $co->obj->fb_shortHeader : 
                         $tab->obj->table_name;
-                    if($co->isPermittedField(null,true) >= ACCESS_VIEW){
+                    if($co->isPermittedField(NULL,true) >= ACCESS_VIEW){
                         $res[$k]['sub'][$i]['url'] = 
                             $this->page->selfURL(
                                 null, 
