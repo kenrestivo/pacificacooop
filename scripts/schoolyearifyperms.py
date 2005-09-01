@@ -8,7 +8,7 @@
 
 def has_field(f,j):
     c.execute("explain %s" % (j['table_name']))
-    k=[i['Field'] for i in c.fetchall()]
+    k=[i['Field'] for i in filter(lambda x: not x['Key'], c.fetchall())]
     return k.count(f)
 
 def addDefaultPerms(field, user, group):
