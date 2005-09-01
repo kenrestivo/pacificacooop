@@ -1220,5 +1220,14 @@ limit 4
 select field_name, table_name as tbl, group_id as grp, 
 user_level as usrlvl, group_level as grplvl, realm_id as rlm 
 from table_permissions 
-where field_name is null;
+order by table_name,field_name;
+
+-- needign familyid
+select sum(if(field_name = 'family_id', 1, 0)) as present, 
+realm_id, table_name 
+from table_permissions  
+group by table_name, realm_id
+having present <1 
+order by table_name ;
+
 --- EOF

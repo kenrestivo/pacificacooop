@@ -44,5 +44,27 @@ class Calendar_events extends DB_DataObject
             return $this->CoopView->simpleTable();
         }
 
+    function fb_display_summary($publiconly = false)
+        {
+            if($this->CoopView->page->auth['token'] && !$publiconly){
+                $clause = 'members'; 
+            } else {
+                $clause = 'public'; 
+            }
+            //TODO: shouldn't it automatically join all subthings?
+            //isnt' that in dbdo? getlinks?
+            $this->whereAdd('show_on_public_page = "Yes"');
+            $this->limit(4);
+            while($this->fetch()){
+                $res .= sprintf("<p>%s:&nbsp;<b>%s</b></p><p>%s</p><br>", 
+                                $this->human_date, $this->description, 
+                                $this->notes,
+                                $publiconly ? '' : 
+                                $this->CoopView->recordButtons(&$this, false)
+                    );
+            }
+            return $res;
+
+        }
 
 }
