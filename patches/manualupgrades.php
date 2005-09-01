@@ -1,9 +1,3 @@
-Pacifica Co-Op Nursery School Data Entry
-
-NOTE! THIS IS THE DEV SITE! THIS IS NOT LIVE DATA, THIS IS ONLY FOR TESTING.
-If you want the live site, use the "members" link, NOT "members-dev". Thanks.
-
-08/31/2005
 
 DEBUG DEAL WITH duplicate realmmap
 Array
@@ -918,9 +912,4 @@ var $fb_SAVEALWAYS = array(
 );
 
 // total 29 found
-
------------------------------------------------------------------------------------
-
-Valid XHTML 1.0! If anything on this site appears to be not working properly, email
-ken@restivo.org or call ken at 650-355-1317
 
