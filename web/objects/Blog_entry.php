@@ -77,8 +77,10 @@ class Blog_entry extends DB_DataObject
 			limit 4", 
                                  $clause));
             while($this->fetch()){
-                $res .= sprintf("<p><b>%s</b>&nbsp;%s</p><p class='small'>(Posted %s by %s)</p><br>", 
+                $res .= sprintf("<p><b>%s</b>&nbsp;%s</p>%s<p class='small'>(Posted %s by %s)</p><br>", 
                                 $this->short_title, $this->body, 
+                                $publiconly ? '' : 
+                                $this->CoopView->recordButtons(&$this, false),
                                 $this->update_human, $this->name
                     );
             }

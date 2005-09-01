@@ -22,17 +22,14 @@ $menu =& new CoopMenu(&$cp);
 print $menu->topNavigation();
 
 
-//{{{NASTY HACK
+//in case of bug
 if(!$_REQUEST['table']){
-    
-    //$menu->createLegacy();
-    $menu->createNew();
-    printf('<div id="leftCol">%s</div><!-- end leftcol div -->',
-           $menu->kenRender());
+    print $cp->selfURL('Unspecified table. Go back to home.', 
+                       'nothing', 
+                       'index.php');
     done();
 }
-print $cp->selfURL('My Hokey non-menu menu', 'table=');
-///}}}
+
 
 
 $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);

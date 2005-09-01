@@ -394,10 +394,10 @@ class coopView extends CoopObject
 	
 	// i accept the row and i don't toarray it myself.
 	// because i might need hidden fields that toarray would remove!
-	function recordButtons(&$row)
+	// NOTE! row is deprciated, it's not used for dbdo-based stuff, only old
+	function recordButtons(&$row, $par = true)
 		{
-
-			// handle the simple case first: i have old callbacks
+            // handle the simple case first: i have old callbacks
 			if($this->legacyCallbacks){
 				return recordButtons($row, $this->legacyCallbacks, 
  								 $this->legacyPerms, 
@@ -424,7 +424,8 @@ class coopView extends CoopObject
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}),
                         $this->obj->fb_usePage ? $this->obj->fb_usePage :
-                        'generic.php'); 
+                        'generic.php', false, $par); 
+                    $par || $res .= '&nbsp;';
                 }
 			}
 			return $res;

@@ -216,10 +216,11 @@ class coopPage
 	//							or an array of pairs
 	//					base="page.php"
     //                  popup if you want it to be a javascript popup)
+    //                  and par if you want paragraph separators (default)
 	// all of which are optional
 	// without any args, returns just coop session var for use in Header()
 	function selfURL($value = false, $inside = false, 
-					 $base = false, $popup = false)
+					 $base = false, $popup = false, $par = true)
 		{
 			if(!$base){
 				$base = $_SERVER['PHP_SELF'];
@@ -228,7 +229,8 @@ class coopPage
 				 $base = substr($base, 0, $pos);
 			 }
 			 if($value){
-				 $res .= '<p><a href="';
+                 $par && $res .= '<p>';
+				 $res .= '<a href="';
 			 }
 
 			 if(!$popup){
@@ -241,8 +243,9 @@ class coopPage
 					 $res .= sprintf('onClick="popUp(\'%s\')"',
 									 $this->formatURLVars($base, $inside));
 				 }
-				 $res .= sprintf('>%s</a></p>', 
+				 $res .= sprintf('>%s</a>', 
 								 $value);
+                 $par && $res .= '</p>';
 			 }
 			 return $res; 
 		}
