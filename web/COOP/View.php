@@ -369,7 +369,7 @@ class coopView extends CoopObject
 							'table' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}),
-                        $this->obj->fb_usePage ? $this->fb_usePage :
+                        $this->obj->fb_usePage ? $this->obj->fb_usePage :
                         'generic.php'); 
 				}
 
@@ -418,7 +418,7 @@ class coopView extends CoopObject
 							'table' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}),
-                        $this->obj->fb_usePage ? $this->fb_usePage :
+                        $this->obj->fb_usePage ? $this->obj->fb_usePage :
                         'generic.php'); 
                 }
 			}
@@ -457,7 +457,7 @@ class coopView extends CoopObject
 						array( 
 							'action' => $action,
 							'table' => $this->table),
-                        $this->obj->fb_usePage ? $this->fb_usePage :
+                        $this->obj->fb_usePage ? $this->obj->fb_usePage :
                         'generic.php'); 
                 }
 			}

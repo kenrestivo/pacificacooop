@@ -36,4 +36,18 @@ class Thank_you extends DB_DataObject
 	var $fb_formHeaderText =  'Springfest Thank-You Notes';
 	var $fb_fieldsToRender = array ('date_sent', 'method', 'family_id');
 
+
+var $fb_usePage = 'thank_you_notes.php';
+
+var $fb_shortHeader = 'Thank-You Notes';
+
+var $fb_dupeIgnore = array(
+   'method'
+);
+
+var $fb_requiredFields = array(
+   'method'
+);
+
+
 }

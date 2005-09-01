@@ -65,18 +65,47 @@ class Leads extends DB_DataObject
 									'do_not_contact'=> "Do Not Contact After");
 	var  $fb_formHeaderText = "Springfest Invitation Contacts";
 
-	var $fb_requiredFields = array('last_name', 'address1', 
-								   'city', 'state', 'zip', 'country', 
-								   'source_id');
-
-	var $fb_defaults = array ('city' => 'Pacifica',
-							  'state' => 'CA',
-							  'zip' => '94044',
-							  'country' => 'USA'
-		);
 
 	var $fb_hidePrimaryKey = false; // i needs my lead_id!
     var $fb_allYears = true;   // by default,  leads  are not year-specific
+
+    var $fb_usePage = '10names.php';
+
+    var $fb_shortHeader = 'Contacts';
+
+    var $fb_dupeIgnore = array(
+        'family_id',
+        'salutation',
+        'title',
+        'address2',
+        'relation'
+        );
+
+
+// var $fb_joinPaths = array(
+//   'school_year' => 'enrollment'
+// );
+
+    var $fb_requiredFields = array(
+        'last_name',
+        'address1',
+        'city',
+        'state',
+        'zip',
+        'country',
+        'source_id',
+        'relation',
+        'school_year'
+        );
+
+    var $fb_defaults = array(
+        'city' => 'Pacifica',
+        'state' => 'CA',
+        'zip' => '94044',
+        'country' => 'USA',
+        'source_id' => 1
+        );
+
 
 	// can be called with no leadid if it's already in the object itself
 	// and no find is needed
@@ -153,4 +182,23 @@ class Leads extends DB_DataObject
 			$this->whereAdd("do_not_contact is null or do_not_contact< '2000-01-01'");
 
 		}	
+
+
+// set salutation len = 25
+
+// set salutation size = 20
+
+// set first_name size = 50
+
+// set address1 size = 50
+
+// set city size = 15
+
+// set state size = 5
+
+// set zip size = 8
+
+// set country size = 10
+
+
 }

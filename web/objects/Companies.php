@@ -89,6 +89,37 @@ class Companies extends DB_DataObject
 	var $fb_URLFields = array ('url');
 
 
+var $fb_requiredFields = array(
+   'company_name',
+   'state',
+   'country'
+);
+
+var $fb_dupeIgnore = array(
+   'family_id',
+   'salutation',
+   'title',
+   'address2',
+   'phone',
+   'fax',
+   'email_address',
+   'url',
+   'territory_id',
+   'flyer_ok'
+);
+
+var $fb_defaults = array(
+  'city' => 'Pacifica',
+  'state' => 'CA',
+  'zip' => 94044,
+  'country' => 'USA',
+  'flyer_ok' => 'Unknown'
+);
+
+
+var $fb_shortHeader = 'Contacts';
+
+
     function fb_display_view()
         {
             $this->orderBy('company_name, last_name');
@@ -96,4 +127,21 @@ class Companies extends DB_DataObject
             return $this->CoopView->oneLineTable();
 
         }
+
+// set salutation len = 25
+
+// set salutation size = 20
+
+// set address1 size = 50
+
+// set city size = 15
+
+// set state size = 5
+
+// set zip size = 8
+
+// set country size = 10
+
+
+
 }

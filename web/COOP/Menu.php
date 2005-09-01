@@ -270,18 +270,20 @@ class CoopMenu extends HTML_Menu
                 $tab->obj->find();
                 while($tab->obj->fetch()){
                     $i++;
-                    // do add the tle always, but only url if 
-                    $res[$k]['sub'][$i]['title']= $tab->obj->table_name;
                     // ANd here, compare and contrast the user permsit
                     $co =&new CoopObject(&$this->page, $tab->obj->table_name, 
                                          &$nothing);
+                    // do add the tle always, but only url if 
+                    $res[$k]['sub'][$i]['title']= 
+                        $co->obj->fb_shortHeader ? $co->obj->fb_shortHeader : 
+                        $tab->obj->table_name;
                     if($co->isPermittedField(null,true) >= ACCESS_VIEW){
                         $res[$k]['sub'][$i]['url'] = 
                             $this->page->selfURL(
                                 null, 
                                 array('table' => 
                                       $tab->obj->table_name),
-                                $this->obj->fb_usePage ? $this->fb_usePage :
+                                $co->obj->fb_usePage ? $co->obj->fb_usePage :
                                 'generic.php'); //  whatever is in obj
                     }
                 }

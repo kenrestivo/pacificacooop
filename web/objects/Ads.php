@@ -52,4 +52,27 @@ class Ads extends DB_DataObject
 		"school_year", 'income_id' 
 		);
 
+    var $fb_shortHeader = 'Ads';
+
+    var $fb_requiredFields = array(
+        'company_id',
+        'ad_size_id',
+        'artwork_provided',
+        'family_id',
+        'school_year'
+        );
+
+    var $fb_dupeIgnore = array(
+        'artwork_provided',
+        'ad_copy'
+        );
+
+    var $fb_defaults = array(
+        'artwork_provided' => 'Yes'
+        );
+
+// set ad_copy size = 100
+
+// set ad_copy lines = 3
+
 }

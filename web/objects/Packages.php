@@ -42,6 +42,17 @@ class Packages extends DB_DataObject
 								   'package_title', 'package_description', 
 								   'item_type', 'package_value',
 								   'display_publicly');
+    var $fb_shortHeader = 'Packages';
+    var $fb_dupeIgnore = array(
+        'package_type',
+        'package_title',
+        'package_description',
+        'donated_by_text',
+        'item_type',
+        'package_value',
+        'starting_bid',
+        'bid_increment'
+        );
 
 	var $fb_fieldLabels = array (
 		"package_id" => "Package ID" ,
@@ -58,6 +69,17 @@ class Packages extends DB_DataObject
 		"bid_increment" => 'Bid Increment ($)'
 		);
 	var $fb_formHeaderText = "Springfest Packages";
+
+
+var $fb_defaults = array(
+  'package_type' => 'Silent'
+);
+
+var $fb_currencyFields = array(
+   'package_value',
+   'starting_bid',
+   'bid_increment'
+);
 
 	var $fb_requiredFields = array('package_description', 'donated_by_text', 
 								   'starting_bid', 'bid_increment', 
@@ -97,6 +119,9 @@ class Packages extends DB_DataObject
 			return $el;
 		}
 
+// set package_description size = 100
+
+// set package_description lines = 3
 
 }
 

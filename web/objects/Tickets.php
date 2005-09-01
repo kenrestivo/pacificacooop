@@ -49,6 +49,11 @@ class Tickets extends DB_DataObject
 	var $fb_requiredFields = array('ticket_type_id', 'school_year', 
 								   'ticket_quantity');
 
+    var $fb_usePage = 'ticket_sales.php';
+    
+    var $fb_shortHeader = 'Reservations';
+    
+
 	var $fb_enumFields = array('vip_flag');
 
 	function updatePaddles(&$page)

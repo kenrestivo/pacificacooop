@@ -52,4 +52,9 @@ class Enrollment extends DB_DataObject
 	var $fb_linkDisplayFields = array('school_year', 'am_pm_session');
 
 
+    var $fb_usePage = 'newroster.php';
+    
+    var $fb_shortHeader = 'Roster';
+    
+
 }

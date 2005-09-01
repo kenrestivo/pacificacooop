@@ -25,4 +25,22 @@ class Enhancement_projects extends DB_DataObject
     ###END_AUTOCODE
 	
 	var $fb_linkDisplayFields = array ('project_name');
+
+    var $fb_usePage = 'enhancement_projects.php';
+    
+    var $fb_shortHeader = 'Projects';
+    
+    var $fb_requiredFields = array(
+        'project_name'
+        );
+    
+    var $fb_SAVEALWAYS = array(
+        'enhancement_project_id'
+);
+
+// set project_description size = 100
+
+// set project_description lines = 3
+
+
 }

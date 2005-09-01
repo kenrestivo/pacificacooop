@@ -32,4 +32,18 @@ class Nag_indulgences extends DB_DataObject
 		'family_id' => 'Co-Op Family',
 		'school_year' => 'School Year'
 		);
+var $fb_formHeaderText = 'Springfest Nag Indulgences';
+
+var $fb_usePage = 'indulgences.php';
+
+var $fb_shortHeader = 'Indulgences';
+
+var $fb_requiredFields = array(
+   'family_id',
+   'indulgence_type',
+   'granted_date',
+   'school_year'
+);
+
+
 }

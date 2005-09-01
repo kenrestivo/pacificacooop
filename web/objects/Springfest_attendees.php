@@ -53,6 +53,15 @@ class Springfest_attendees extends DB_DataObject
 									'attended'
 		);
 	
+    var $fb_usePage = 'paddles.php';
+
+    var $fb_shortHeader = 'Paddles';
+    
+    var $fb_requiredFields = array(
+        'springfest_attendee_id',
+        'school_year'
+        );
+
 	//the paddle number
 	function insert()
 		{

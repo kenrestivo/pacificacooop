@@ -45,6 +45,7 @@ class Income extends DB_DataObject
 								  "payment_amount", 
 								  "note",
 								  'thank_you_id');
+    var $fb_shortHeader = 'Income';
 
 	var $fb_fieldLabels = array( 
 		"check_number" => "Check or Credit Card Auth number" ,
@@ -65,4 +66,20 @@ class Income extends DB_DataObject
 	var $fb_requiredFields = array('check_number', 'check_date', 'payer', 
 								   'payment_amount', 'account_number', 
 								   'school_year' );
+
+    var $fb_currencyFields = array(
+        'payment_amount'
+        );
+
+
+var $fb_dupeIgnore = array(
+   'note'
+);
+
+// set check_number size = 10
+
+// set account_number check_jointo = families
+
+
+
 }

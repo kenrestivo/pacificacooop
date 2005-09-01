@@ -40,4 +40,31 @@ class In_kind_donations extends DB_DataObject
 	var $fb_fieldsToRender = array('item_description', 'item_value',  'quantity', 'school_year', 'thank_you_id');
 	var $fb_linkDisplayFields = array('item_description');
 
+
+var $fb_shortHeader = 'In-kind Donations';
+
+var $fb_requiredFields = array(
+   'company_id',
+   'quantity',
+   'item_description',
+   'item_value',
+   'family_id',
+   'school_year'
+);
+
+var $fb_defaults = array(
+  'quantity' => 1
+);
+
+var $fb_currencyFields = array(
+   'item_value'
+);
+
+
+// set item_description size = 100
+
+// set item_description lines = 3
+
+
+
 }
