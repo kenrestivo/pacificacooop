@@ -77,7 +77,7 @@ class Blog_entry extends DB_DataObject
 			limit 4", 
                                  $clause));
             while($this->fetch()){
-                $res .= sprintf("<p><b>%s</b><p class='small'>%s (Posted %s by %s)</p>", 
+                $res .= sprintf("<p><b>%s</b>&nbsp;%s</p><p class='small'>(Posted %s by %s)</p><br>", 
                                 $this->short_title, $this->body, 
                                 $this->update_human, $this->name
                     );

@@ -74,14 +74,24 @@ print $menu->kenRender();
 print '</div><!-- end leftcol div -->';
 
 print '<div id="rightCol">';
+
+print "\n\n<table border=0>\n";
+$blog =& new CoopView(&$cp, 'blog_entry', &$nothing);
+print rawMenuRow($blog->obj->fb_formHeaderText,
+                 $blog->obj->fb_display_summary(),
+                 $blog->actionButtons());
+print "\n</table>\n\n";
+
+
+
 print "<p>Please choose an action:</p>";
 
 print "\n\n<table border=0>\n";
 //	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
-
 	//narsty-ass ugly hack
 
 $everything = array_merge($members_everything,  $sf_everything);
+
 	
 while ( list( $key, $val ) = each($everything)) {
 	user_error(sprintf("main(): showing row for %s", $val['description']),

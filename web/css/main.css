@@ -188,6 +188,11 @@ p.error {
 	padding-right: 0;
  }
 
+.small {
+  color: grey;
+}
+
+
 @media print { 	
 	#header { display:none }	
 	#footer { display:none }	
