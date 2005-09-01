@@ -4,8 +4,6 @@
 
 #uses global c above
 
-##TODO: don't report it if it is a primary key. that could get ugly.
-
 def has_field(f,j):
     c.execute("explain %s" % (j['table_name']))
     k=[i['Field'] for i in filter(lambda x: not x['Key'], c.fetchall())]
