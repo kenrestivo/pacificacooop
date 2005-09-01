@@ -66,6 +66,9 @@ function genericView(&$atd)
         $atd->obj->school_year = findSchoolYear();
     }
 
+     if(is_callable(array($atd->obj, 'fb_display_view'))){
+         return $atd->obj->fb_display_view();
+     }
 
     //TODO: some variation on the old "perms display" from auth.inc
     //maybe at bottom of doc? with editor to change them? ;-)
@@ -186,10 +189,6 @@ switch($_REQUEST['action']){
 
 //// DEFAULT (VIEW) //////
  default:
-     if(is_callable(array($atd->obj, 'fb_display_view'))){
-         print $atd->obj->fb_display_view();
-         break;
-     }
 	 print genericView(&$atd);
 	 break;
 }

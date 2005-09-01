@@ -65,6 +65,14 @@ class coopForm extends CoopObject
 			// will need to guess field types
 			$this->_tableDef = $this->obj->table();
 
+            // NOTE! i must do this before calling generators
+            $this->form->CoopForm =& $this; 
+
+            if(is_callable(array($this->obj, "preGenerateForm"))){
+                $this->obj->preGenerateForm(&$this->form);
+            }
+
+
 			$this->addAndFillVars($vars);
 
 			// my hidden tracking stuff
@@ -95,8 +103,6 @@ class coopForm extends CoopObject
 
 			$this->form->addFormRule(array(&$this,'dupeCheck'));
             
-            // NOTE! i must do this before calling postgenerate
-            $this->form->CoopForm =& $this; 
 
             //godDAMN do i hate php.
             if(is_callable(array($this->obj, "postGenerateForm"))){

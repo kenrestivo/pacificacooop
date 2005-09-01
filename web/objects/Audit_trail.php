@@ -95,19 +95,25 @@ class Audit_trail extends DB_DataObject
 
             $res .= "<h3>An extensive audit trail of the last $limit items of activity on the site.</h3><p>This is still an experimental feature</p>";
             $res .= "<p>Times are in Mountain Time (Phoenix, AZ).</p>";
-	 
-            $perm <  ACCESS_VIEW && $this->audit_user_id = 
-                $this->CoopView->page->userStruct['uid'];
+
+            // don't show details unless you're privileged.
+            // TODO: make thie a hell of a lot more sensible
+            $this->fb_recordActions = array();
+            $perm >  ACCESS_VIEW &&  
+                $this->fb_recordActions['details'] = ACCESS_VIEW;
+
             $this->orderBy('updated desc');
             $this->limit($limit);
+
             array_push($this->fb_fieldsToRender, 'table_name');
-            $this->CoopView->recordActions = array('details' => 'Details');
+
             $res .= $this->CoopView->simpleTable();
 	 
 
             $logins = new CoopView(&$this->CoopView->page, 'session_info', $none);
-            $perm <  ACCESS_VIEW && $logins->obj->user_id = 
-                $this->CoopView->page->userStruct['uid'];
+
+            $perm >  ACCESS_VIEW &&  
+                $logins->obj->fb_recordActions['details'] = ACCESS_VIEW;
             $logins->obj->whereAdd('user_id > 0');
             $logins->obj->orderBy('updated desc');
             $logins->obj->limit($limit);

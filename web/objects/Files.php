@@ -47,13 +47,13 @@ class Files extends DB_DataObject
                                  'file_size' => 'Size');
     // var $fb_fieldsToRender = array ('file_description', 'original_filename');
 
-	function preGenerateForm()
+	function preGenerateForm(&$form)
 		{
 
             // 8MB s/b as big as i need
 			$this->fb_preDefElements['original_filename'] =& 
 				HTML_QuickForm::createElement('file', 
-                                              'original_filename', 
+                                              'original_filename',
                                               'File to upload:',
 											  'maxfilesize=8388608');
 		}
@@ -61,9 +61,9 @@ class Files extends DB_DataObject
 
     function postGenerateForm(&$form)
         {
-            //how can i get the form? i need to add a rule for it
-            //or do i do it from somewhere above?
- 			 $form->addRule('original_filename', 
+
+            //confessObj($this, 'this');
+            $form->addRule('original_filename',
                                    'You must select a file', 'uploadedfile');
         }
 

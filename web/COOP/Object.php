@@ -33,6 +33,7 @@ class coopObject
 	var $page;					// reference to the cooppage
 	var $table;					// convenience: the table the $this->obj is
 	var $pk;					// name of primary key. convenience, really.
+	var $id; // cache of last inserted id
 	var $recurseLevel;			// level, if i'm linked from somewhere
 	var $parentCO;				// reference. "parent" is reserved word
 	var $backlinks;				// list of links that are linked FROM here
@@ -239,6 +240,7 @@ class coopObject
             if (DB::isError($data)) {
                 die($data->getMessage());
             }
+            $this->id = $data;
             return $data;
         }
 
@@ -271,7 +273,8 @@ class coopObject
 // 					user_error("last insert != object's PK! this shouldn't happen",
 // 							   E_USER_ERROR);
 // 				}
-				$aud->obj->index_id = $this->lastInsertID();
+                // NOTE. the coopform insert palready populated $this->id
+				$aud->obj->index_id = $this->id;
 			} else {
 				$aud->obj->index_id = $this->obj->{$this->pk};
 			}
@@ -428,6 +431,8 @@ class coopObject
     //populate permissions array, which caches this stuff
     function getPerms()
         {
+            //it's REALLY annoying to see that shit here.
+            $this->obj->debugLevel($this->page->debug > 7 ? 2 : 0);
             $this->obj->query(sprintf("
 select 
 table_permissions.table_name, table_permissions.field_name,

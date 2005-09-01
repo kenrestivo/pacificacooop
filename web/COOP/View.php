@@ -51,6 +51,8 @@ class coopView extends CoopObject
             $this->joinTo('school_year');
             $page->confessArray($this->obj->joinPaths,
                                       'coopView() joinpaths found', 3);
+            // reset debuglevel in obj, which may bave been set by save!
+            $this->obj->debugLevel($this->page->debug > 5 ? 2: 0);
             
 		}
 

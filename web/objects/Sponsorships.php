@@ -171,16 +171,15 @@ class Sponsorships extends DB_DataObject
 
     function fb_display_view()
         {
-            $atd =& $this->CoopView;
-            $cp =& $this->CoopView->page;
-            $co =& new CoopObject(&$cp, 'sponsorship_types', &$atd);
-            $atd->obj->joinAdd($co->obj);
-            $atd->obj->school_year = findSchoolYear();
-            $atd->obj->orderBy('sponsorship_price desc');
-            $atd->obj->fb_fieldsToRender = array('company_id', 'lead_id', 
+             $cp =& $this->CoopView->page;
+            $co =& new CoopObject(&$cp, 'sponsorship_types', &$this->CoopView);
+            $this->joinAdd($co->obj);
+            $this->school_year = findSchoolYear();
+            $this->orderBy('sponsorship_price desc');
+            $this->fb_fieldsToRender = array('company_id', 'lead_id', 
                                                  'sponsorship_type_id', 
                                                  'entry_type');
-            return $atd->simpleTable();
+            return $this->CoopView->simpleTable();
 
         }
 

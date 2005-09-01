@@ -251,8 +251,8 @@ timestamp_db_php($date)
     
     // don't show time if it is midnight, or nonexistent
     if($hour + $minute + $second){
-        $datetime .= sprintf("&nbsp;%02d:%02d:%02d %s",
-                             $hour,$minute, $second, $ampm );
+        $datetime .= sprintf("&nbsp;%02d:%02d%s",
+                             $hour,$minute, $ampm );
     }
 	return $datetime;
 } /* EDN TIMESTAMPEDBPHP */

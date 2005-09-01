@@ -38,5 +38,11 @@ class Calendar_events extends DB_DataObject
 	var $fb_formHeaderText =  'Calendar of Events';
 	var $fb_shortHeader =  'Calendar';
 
+    function fb_display_view()
+        {
+            $this->orderBy('event_date asc');
+            return $this->CoopView->simpleTable();
+        }
+
 
 }
