@@ -920,3 +920,11 @@ new members look and feel
 		maybe, status?
 	i will need to deal with count and such
 		genericcount is an easy port
+
+
+----------
+year setup: required dates which *must* be entered!
+	fall and spring cutoff dates
+	start of school year
+	last day of school
+	all the parent ed meetings (or auto-enter?)

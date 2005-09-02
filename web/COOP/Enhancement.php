@@ -130,11 +130,18 @@ class Enhancement
             //spring cutoff
             $co = new CoopObject(&$this->cp, 'calendar_events', &$top);
             $co->obj->school_year = $this->schoolYear;
-            $co->obj->event_id = 6; // hard coded fall cutoff
+            $co->obj->event_id = 6; // hard coded spring cutoff
             $co->obj->selectAdd(
                 "date_format(event_date, '%Y-%m-%d') as date_formatted");
             $co->obj->find(true);
             $this->cutoffDatesArray['spring'] = $co->obj->date_formatted;
+
+            if(!($this->cutoffDatesArray['spring'] && 
+                 $this->cutoffDatesArray['fall']))
+            {
+                PEAR::raiseError("you don't have any cutoff dates for {$this->schoolYear}! your database/year setup is corrupted. fix this.", 
+                                 666);
+            }
         }
 
 

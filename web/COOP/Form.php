@@ -207,20 +207,20 @@ class coopForm extends CoopObject
 				} else if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
 					$el =& $this->form->addElement('customdatebox', $fullkey);
                     if($this->_tableDef[$key] & DB_DATAOBJECT_TIME){
-                        $this->form->addRule(
-                            $fullkey, 
+                        ///\d{2}... too?
+                        $this->form->addRule( 
+                           $fullkey, 
                             'Date must be in format MM/DD/YYYY HH:MM', 
                             'regex', '/^\d{2}\/\d{2}\/\d{4}/');
-                        ///\d{2}... too?
+                        $val && $val = timestamp_db_php($val);
                     }else{
                         $this->form->addRule(
                             $fullkey, 
                             'Date must be in format MM/DD/YYYY', 
                             'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
+                        $val && $val = sql_to_human_date($val);
                     }
-					$val && $val = sql_to_human_date($val, 
-                                                     $this->_tableDef[$key] & 
-                                                     DB_DATAOBJECT_TIME);
+
 				} else if($this->_tableDef[$key] & DB_DATAOBJECT_BOOL){
 					$el =& $this->form->addElement('advcheckbox', $fullkey, 
                                                    null, null, null, 
@@ -370,7 +370,11 @@ class coopForm extends CoopObject
 				if($val == ''){ 
 					$cleanvars[$key] = DB_DataObject_Cast::sql('NULL') ;
 				} else if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
-					$cleanvars[$key] = human_to_sql_date($val);
+                    if($this->_tableDef[$key] & DB_DATAOBJECT_TIME){
+                        $cleanvars[$key] = human_to_sql_timestamp($val);
+                    } else {
+                        $cleanvars[$key] = human_to_sql_date($val);
+                    }
 				} else {
 					///i don't need to escape here, i don't think
  					$cleanvars[$key] = $val;

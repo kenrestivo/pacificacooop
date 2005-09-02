@@ -128,5 +128,8 @@ update-links::
 	php maint/make-links.php > $(LINKSFILE)		
 	@echo "remember to manually check for ones the script doesn't catch"
 
+purge-logs:
+	rm -f logs/*.html
+
 #EOF
 

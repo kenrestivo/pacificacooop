@@ -21,47 +21,60 @@ class UtilsTest extends PHPUnit_TestCase {
 //         $this->assertTrue(0);
 //     }
 
+
+    /// TO HUMAN, FROM MACHINE
     function test_SQLdate() {
-        $this->assertTrue(sql_to_human_date('2005-01-01') == '01/01/2005');
+        $this->assertEquals('01/01/2005', 
+                            sql_to_human_date('2005-01-01'));
     }
 
-    function test_SQLdateFLAG() {
-        $this->assertTrue(sql_to_human_date('2005-01-01') == '01/01/2005');
-    }
 
     function test_SQLdatetime() {
-        $this->assertTrue(sql_to_human_date('2005-01-01 12:00:00', 1) == '01/01/2005 12:00:00');
+        $this->assertEquals('01/01/2005 12:00PM',
+                            timestamp_db_php('2005-01-01 12:00:00'));
+                            
     }
 
-    function test_SQLdatetimeNOFLAG() {
-        $this->assertTrue(sql_to_human_date('2005-01-01 12:00:00') == '01/01/2005 12:00:00');
+    function test_HUMANdateALREADY() {
+        $this->assertEquals('01/01/2005',
+                            sql_to_human_date('01/01/2005'));
     }
 
+
+
+    /// FROM HUMAN, TO MACHINE
     function test_HUMANdate() {
-        $this->assertTrue(sql_to_human_date('01/01/2005') == '01/01/2005');
+        $this->assertEquals('2005-01-01', 
+                            human_to_sql_date('01/01/2005'));
     }
 
-    function test_HUMANdateFLAG() {
-        $this->assertTrue(sql_to_human_date('01/01/2005') == '01/01/2005');
-    }
 
+    function test_HUMANdateSHORT() {
+        $this->assertEquals('2005-01-01',
+                            human_to_sql_date('1/1/2005'));
+    }
 
     function test_HUMANdatetime() {
-        $this->assertTrue(sql_to_human_date('01/01/2005 12:00:00') == '01/01/2005 12:00:00');
+        $this->assertEquals('2005-01-01 12:00',
+                            human_to_sql_timestamp('01/01/2005 12:00'));
     }
 
 
-    function test_HUMANdatetimeFLAG() {
-        $this->assertTrue(sql_to_human_date('01/01/2005 12:00:00',1) == '01/01/2005 12:00:00');
+    function test_HUMANdatetimeNOTIME() {
+        $this->assertEquals('2005-01-01',
+                            human_to_sql_timestamp('01/01/2005'));
     }
 
-    function test_HUMANdatetimeShort() {
-        $this->assertTrue(sql_to_human_date('01/01/2005 12:00') == '01/01/2005 12:00');
+    function test_HUMANdatetimeNOTIMESHORT() {
+        $this->assertEquals('2005-01-01',
+                            human_to_sql_timestamp('1/1/2005'));
     }
 
-    function test_HUMANdatetimeShortFLAG() {
-        $this->assertTrue(sql_to_human_date('01/01/2005 12:00') == '01/01/2005 12:00');
+    function test_HUMANdatetimeSHORT() {
+        $this->assertEquals("2005-01-01 12:00", 
+                            human_to_sql_timestamp('1/1/2005 12:00'));
     }
+
 
 }
 
