@@ -227,7 +227,7 @@ class coopPage
             $popup = isset($args['popup']) ? $args['popup'] :false;
             $par = isset($args['par']) ? $args['par'] :true;
             $title = isset($args['title']) ? $args['title'] :false;
-            
+            //confessArray($args, 'args');
             
 			if(!$base){
 				$base = $_SERVER['PHP_SELF'];
@@ -250,7 +250,11 @@ class coopPage
 					 $res .= sprintf('onClick="popUp(\'%s\')"',
 									 $this->formatURLVars($base, $inside));
 				 }
-                 $title && $res .= sprintf(' title = "%s" ', $title);
+
+                 if($title){
+                     $res .= sprintf(' title = "%s" ', 
+                                           htmlentities($title));
+                 }
 				 $res .= sprintf('>%s</a>', $value);
                  $par && $res .= '</p>';
 			 }

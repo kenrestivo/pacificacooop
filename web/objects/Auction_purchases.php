@@ -39,7 +39,7 @@ class Auction_purchases extends DB_DataObject
 		'package_sale_price'
 		);
 	var $fb_formHeaderText =  'Springfest Auction Purchases';
-	var $fb_displayFormat = array('package_sale_price' => '$%0.02f');
+	var $fb_currencyFields = array('package_sale_price');
 
     var $fb_recordActions = array();
     var $fb_viewActions = array();
@@ -72,7 +72,7 @@ order by variance desc",
                 );
             $this->fb_fieldLabels['variance'] = 'Variance (over asking price)';
             $this->fb_fieldLabels['package_sale_price'] = 'Actual Sale Price';
-            $this->fb_displayFormat['variance'] = '$%0.02f';
+            array_push($this->fb_currencyFields, 'variance');
             return $this->CoopView->simpleTable(false);
 
         }

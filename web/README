@@ -16,6 +16,7 @@ fb_shortHeader (old shortdesc)
 fb_dupeIgnore
 fb_sizes
 fb_fieldsToUnrender (always hide these! annoying, but needed.)
+fb_displayFormat
 
 ---------------
 

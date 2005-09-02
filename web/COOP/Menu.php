@@ -169,8 +169,7 @@ class CoopMenu extends HTML_Menu
                                     'inside' => array('table' => 
                                                       $tab->obj->table_name),
                                     'base' => $co->obj->fb_usePage ? 
-                                    $co->obj->fb_usePage :
-                                    'generic.php')); //  whatever is in obj
+                                    $co->obj->fb_usePage : 'generic.php')); 
                     }
                 } // END TABLES
                 // NOW GO RECURSE

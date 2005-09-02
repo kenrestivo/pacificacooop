@@ -267,6 +267,11 @@ class coopView extends CoopObject
                 {
                     $res[] = sprintf('<a href="%s">%s</a>',
                                      $this->page->fixURL($val), $val);
+                } else if(is_array($this->obj->fb_currencyFields) &&
+                          in_array($key, $this->obj->fb_currencyFields)) 
+                {
+                    //TODO: store thecurrency fmt in the conf file. yeah right.
+                    $res[] = sprintf('$%0.02f', $val);
                 } else if(is_array($this->obj->fb_textFields) &&
                           in_array($key, $this->obj->fb_textFields)) 
                 {

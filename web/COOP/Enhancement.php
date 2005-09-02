@@ -40,6 +40,8 @@ class Enhancement
 
 	// month number, array of fall hours and spring hours
 	var $startDates = array(
+		7 => array('fall' => 4, 'spring' => 4),
+		8 => array('fall' => 4, 'spring' => 4),
 		9 => array('fall' => 4, 'spring' => 4),
 		10 => array('fall' =>3, 'spring' => 4),
 		11 => array('fall' =>2, 'spring' => 4),
@@ -216,15 +218,15 @@ class Enhancement
             
             $this->getStartDropDate();
             $this->cp->confessArray($this->startdrop, 
-									'stardrop '. $this->familyID, 5);
+									'Enhancement::realhousedone: stardrop '. $this->familyID, 5);
             
             $this->getHoursOwed($this->startdrop['start']);
             //print "owed $owed<br>";
-            $this->cp->confessArray($this->owed, 'owed '. $this->familyID, 5);
+            $this->cp->confessArray($this->owed, 'Enhancement::realhoursdone owed '. $this->familyID, 5);
             
             $this->getHoursCompleted($this->familyID);
             $this->cp->confessArray($this->completed, 
-									'completed '. $this->familyID, 5);
+									'Enhancement::realhousedone: completed '. $this->familyID, 5);
             
             //confessObj($this, 'enhancement');
             
