@@ -587,21 +587,36 @@ function todaysDate(datefield) {
 
 /// UTILS IS NOT OOP. if it was, i'd just add test_FOO into the class
 class UtilsTest extends PHPUnit_TestCase {
-    var $fValue1;
-    var $fValue2;
 
     function UtilsTest($name) {
         $this->PHPUnit_TestCase($name);
     }
 
-    function setUp() {
-        $this->fValue1 = 2;
-        $this->fValue2 = 3;
+    function testFake() {
+        $this->assertTrue(1);
     }
 
-    function testAdd() {
-        $this->assertTrue($this->fValue1 + $this->fValue2 == 5);
+//     function testFailure() {
+//         $this->assertTrue(0);
+//     }
+
+    function test_SQLdate() {
+        $this->assertTrue(sql_to_human_date('2005-01-01') == '01/01/2005');
     }
+
+    function test_HUMANdate() {
+        $this->assertTrue(sql_to_human_date('01/01/2005') == '01/01/2005');
+    }
+
+    function test_SQLdatetime() {
+        $this->assertTrue(sql_to_human_date('2005-01-01 12:00:00') == '01/01/2005 12:00:00');
+    }
+
+    function test_HUMANdatedime() {
+        $this->assertTrue(sql_to_human_date('01/01/2005 12:00') == '01/01/2005 12:00');
+    }
+
+
 }
 
 

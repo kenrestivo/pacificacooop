@@ -17,7 +17,7 @@ print $cp->pageTop();
 // include file with object under test,
 // each including no-arg functions named testFOO
 // docs can go inside of classes. kewl.
-$suite  = new PHPUnit_TestSuite('MathTest');
+$suite  = new PHPUnit_TestSuite('UtilsTest');
 $result = PHPUnit::run($suite);
 
 $g = new PHPUnit_GUI_HTML(array($suite));
