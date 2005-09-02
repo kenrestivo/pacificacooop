@@ -167,7 +167,8 @@ class CoopMenu extends HTML_Menu
                             $this->page->selfURL(
                                 array(
                                     'inside' => array('table' => 
-                                                      $tab->obj->table_name),
+                                                      $tab->obj->table_name,
+                                                      'realm' => $tab->obj->realm_id),
                                     'base' => $co->obj->fb_usePage ? 
                                     $co->obj->fb_usePage : 'generic.php')); 
                     }
@@ -193,9 +194,11 @@ class CoopMenu extends HTML_Menu
                         $res[$k]['sub'][$i]['url'] = 
                             $this->page->selfURL(
                                 array(
-                                'inside' =>array('table' => 
-                                      $tab->obj->table_name),
-                                'base' =>$tab->obj->page)); 
+                                    'inside' =>
+                                    array('table' => 
+                                          $tab->obj->table_name,
+                                          'realm' => $tab->obj->realm_id),
+                                    'base' =>$tab->obj->page)); 
                     }
                 } // END REPORTS
 

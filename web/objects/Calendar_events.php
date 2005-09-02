@@ -31,9 +31,15 @@ class Calendar_events extends DB_DataObject
     var $fb_fieldLabels = array(
         'status' => 'Status',
         'event_id' => 'Event',
-        'event_date' => 'Date',
-        'keep_event_hidden_until_date' => 'Do not show until',
+        'event_date' => 'Date of Event',
+        'keep_event_hidden_until_date' => 'Hide this Event Until',
         'school_year' => 'School Year'
+        );
+    var $fb_fieldsToRender = array(
+        'status' ,
+        'event_id',
+        'event_date', 
+        'school_year' 
         );
 	var $fb_formHeaderText =  'Calendar of Events';
 	var $fb_shortHeader =  'Calendar';
@@ -54,6 +60,8 @@ class Calendar_events extends DB_DataObject
             //TODO: shouldn't it automatically join all subthings?
             //isnt' that in dbdo? getlinks?
             $this->whereAdd('show_on_public_page = "Yes"');
+
+            $this->whereAdd(sprintf('event_date >= "%s"', date('Y-m-d')));
             $this->limit(4);
             while($this->fetch()){
                 $res .= sprintf("<p>%s:&nbsp;<b>%s</b></p><p>%s</p><br>", 

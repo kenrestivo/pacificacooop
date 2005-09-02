@@ -64,13 +64,16 @@ class coopPage
 	var $indexed_all; 			// legacy stuff. ALL of the callbacks
 	var $userStruct;				// cache of legacy info ($u)
 	var $bufferedOutput;			// to store buffered output, for QFC
-	
+	var $vars;                  //alias of session vars. i hope.
+
 	function coopPage($debug = false)
 		{
 			$this->debug = $debug;
 			PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 
 								   array(&$this, 'kensPEARErrorHandler'));
 			dump("debug level $this->debug");
+            $this->mergeSessionVars();
+           
 		}
 
 	// for use with the old, non-object-oriented, homegrown auth/dispatcher
@@ -227,7 +230,7 @@ class coopPage
             $popup = isset($args['popup']) ? $args['popup'] :false;
             $par = isset($args['par']) ? $args['par'] :true;
             $title = isset($args['title']) ? $args['title'] :false;
-            //confessArray($args, 'args');
+            //1confessArray($args, 'args');
             
 			if(!$base){
 				$base = $_SERVER['PHP_SELF'];
@@ -379,6 +382,15 @@ class coopPage
 			print "<p>DEBUG $string</p>";
 
 		}
+
+    function mergeSessionVars()
+        {
+            //OLD STUFF FIRST, THEN NEW STUFF. so REQ overrides SESSION!
+            $_SESSION['cpVars'] =  array_merge($_SESSION['cpVars'], 
+                                               $_REQUEST['cpVars']);
+            $this->vars =& $_SESSION['cpVars'];
+        }
+
 
 
 } // END COOP PAGE CLASS

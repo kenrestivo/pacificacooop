@@ -271,14 +271,18 @@ human_to_sql_date($dt)
 				   E_USER_NOTICE);
 		return $dt;
 	}
-	if($dt && preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/", 
-						 $dt, $cleaned) < 1){
+	if($dt && (preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/", 
+						 $dt, $cleaned) < 1 &&
+           preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{4}) (\d{1,2}:\d{1,2}.*)$/", 
+                      $dt, $cleaned) < 1))
+    {
 		user_error("human_to_sql_date($dt) was passed an invalid value!!",
 				   E_USER_ERROR);
 	}
 	//confessArray($cleaned, "human_to_sql_date($dt)");
 	$cleandate = sprintf("%04d-%02d-%02d",
 						 $cleaned[3], $cleaned[1], $cleaned[2]);
+    $cleaned[4] && $cleandate .= ' '.$cleaned[4];
 	user_error("human_to_sql_date(): changed [$dt] to [$cleandate]",
 			   E_USER_NOTICE);
 	return $cleandate;
@@ -293,13 +297,19 @@ human_to_sql_date($dt)
 function
 sql_to_human_date($dt)
 {
-	if(preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/", 
-				  $dt, $cleaned) > 0){
+    if(preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/", 
+				  $dt, $cl) > 0  )
+    {
 		user_error("sql_to_human_date($dt) is already in human format",
 				   E_USER_NOTICE);
 		return $dt;
 	}
-	if($dt && preg_match("/^(\d{4})-(\d{2})-(\d{2})$/", $dt, $cl) < 1){
+    // handle timestamp format too
+	if($dt && (preg_match("/^(\d{4})-(\d{2})-(\d{2})$/", $dt, $cl) < 1 &&
+               preg_match(
+                   "/^(\d{4})-(\d{2})-(\d{2}) (\d{1,2}:\d{1,2}:\d{1,2})$/", 
+                   $dt, $cl) < 1))
+    {
 		user_error("sql_to_human_date($dt) is not a legal sql date!!",
 				   E_USER_NOTICE);
 	}
@@ -308,11 +318,14 @@ sql_to_human_date($dt)
 	if(($cl[1] + $cl[2] + $cl[3]) < 1){
 		return "";
 	}
-	$cleandate = sprintf("%02d/%02d/%04d",
+$cleandate = sprintf("%02d/%02d/%04d",
 						 $cl[2], $cl[3], $cl[1]);
+$cl[4] && $cleandate .=  ' ' . $cl[4];
+
 	user_error("sql_to_human_date(): changed [$dt] to [$cleandate]",
 			   E_USER_NOTICE);
-	return $cleandate;
+
+    return $cleandate;
 } /* END SQLDAAETOHUMANDATE */
 
 

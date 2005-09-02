@@ -31,8 +31,13 @@ if(!$_REQUEST['table']){
 }
 
 
-
 $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
+
+$cp->vars['last'] = array('table'=>$_REQUEST['table'], 
+                          'action' =>$_REQUEST['action'], 
+                          'id' =>$_REQUEST[$atd->prependTable($atd->pk)],
+                          'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : $cp->vars['last']['realm']);
+
 
 printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
 

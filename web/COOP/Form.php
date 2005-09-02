@@ -35,7 +35,6 @@ require_once('lib/customrequired.php');
 class coopForm extends CoopObject
 {
 	var $form;  // cache of generated form
-	var $id; // cache of last inserted id
 	var $_tableDef; //  cached table stuff
 	var $subtables = array(); // cached subtable coopforms, indexed by table
 
@@ -175,9 +174,10 @@ class coopForm extends CoopObject
 						$this->addSubtable($key);
 						continue;
 					} else {
-						$type = (!is_array($this->obj->fb_addNewLinkFields) ||
-							in_array($key, $this->obj->fb_addNewLinkFields)) 
-							? 'customselect' : 'select';
+                        $type = 'select';  // until i square shit away
+// 						$type = (!is_array($this->obj->fb_addNewLinkFields) ||
+// 							in_array($key, $this->obj->fb_addNewLinkFields)) 
+// 							? 'customselect' : 'select';
 						$el =& $this->form->addElement(
 							$type, 
 							$fullkey, false, 
@@ -206,9 +206,18 @@ class coopForm extends CoopObject
 					$el =& $this->form->addElement('advcheckbox', $fullkey);
 				} else if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
 					$el =& $this->form->addElement('customdatebox', $fullkey);
-					$this->form->addRule($fullkey, 
-								   'Date must be in format MM/DD/YYYY', 
-								   'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
+                    if($this->_tableDef[$key] & DB_DATAOBJECT_TIME){
+                        $this->form->addRule(
+                            $fullkey, 
+                            'Date must be in format MM/DD/YYYY HH:MM', 
+                            'regex', '/^\d{2}\/\d{2}\/\d{4}/');
+                        ///\d{2}... too?
+                    }else{
+                        $this->form->addRule(
+                            $fullkey, 
+                            'Date must be in format MM/DD/YYYY', 
+                            'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
+                    }
 					$val && $val = sql_to_human_date($val);
 				} else if($this->_tableDef[$key] & DB_DATAOBJECT_BOOL){
 					$el =& $this->form->addElement('advcheckbox', $fullkey, 
