@@ -168,7 +168,7 @@ class CoopMenu extends HTML_Menu
                                 array(
                                     'inside' => array('table' => 
                                                       $tab->obj->table_name),
-                                    'page' => $co->obj->fb_usePage ? 
+                                    'base' => $co->obj->fb_usePage ? 
                                     $co->obj->fb_usePage :
                                     'generic.php')); //  whatever is in obj
                     }
@@ -196,7 +196,7 @@ class CoopMenu extends HTML_Menu
                                 array(
                                 'inside' =>array('table' => 
                                       $tab->obj->table_name),
-                                'page' =>$tab->obj->page)); 
+                                'base' =>$tab->obj->page)); 
                     }
                 } // END REPORTS
 

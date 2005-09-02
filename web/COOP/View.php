@@ -364,7 +364,7 @@ class coopView extends CoopObject
 					$meat = $this->page->selfURL(array('value' => $mainlink, 
 											 'inside' => $this->nastyInner(&$this->obj, 
 															   'details'),
-												 'page' => $this->legacyCallbacks['page']));
+												 'base' => $this->legacyCallbacks['page']));
 				} else {
 					// handle the no-legacy-callbacks case
                     $meat = $this->page->selfURL(
@@ -375,7 +375,7 @@ class coopView extends CoopObject
 							'table' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}),
-                            'page' => $this->obj->fb_usePage ? $this->obj->fb_usePage :
+                            'base' => $this->obj->fb_usePage ? $this->obj->fb_usePage :
                         'generic.php')); 
 				}
 
