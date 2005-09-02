@@ -1161,7 +1161,10 @@ table_permissions.user_level is null),
 upriv.max_user, table_permissions.user_level)) as cooked_user,
 max(if((upriv.max_group >=  table_permissions.group_level or
 table_permissions.group_level is null), 
-upriv.max_group, NULL )) as cooked_group
+upriv.max_group, NULL )) as cooked_group,
+max(if((upriv.max_user > table_permissions.menu_level or
+table_permissions.menu_level is null), 
+upriv.max_user, NULL)) as cooked_menu
 from table_permissions 
 left join 
 (select max(user_level) as max_user, max(group_level) as max_group, 
@@ -1177,6 +1180,10 @@ on upriv.realm_id = table_permissions.realm_id
 where user_id = 91 and table_name = 'leads'
 group by user_id,table_name,field_name
 
+
+
+
+
 --- shorter for debugging what teh FUCK is going on?
 select max(user_level) as max_user, max(group_level) as max_group, 
 91 as user_id, realm
@@ -1188,6 +1195,8 @@ or (user_id is null and group_id in
 where user_id = 91)) 
 group by user_privileges.realm_id 
 order by user_privileges.realm_id
+
+
 
 
 ---shorter version for auld auth

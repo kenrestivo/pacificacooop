@@ -441,7 +441,10 @@ table_permissions.user_level is null),
 upriv.max_user, table_permissions.user_level)) as cooked_user,
 max(if((upriv.max_group >=  table_permissions.group_level or
 table_permissions.group_level is null), 
-upriv.max_group, NULL )) as cooked_group
+upriv.max_group, NULL )) as cooked_group,
+max(if((upriv.max_user > table_permissions.menu_level or
+table_permissions.menu_level is null),
+upriv.max_user, NULL)) as cooked_menu
 from table_permissions 
 left join 
 (select max(user_level) as max_user, max(group_level) as max_group, 
@@ -469,7 +472,8 @@ group by user_id,table_name,field_name
                                           "getPERMS({$this->table}) db outfreakage", 5);
                 $this->perms[$row['field_name']] = 
                     array('user'=>$row['cooked_user'],
-                          'group' =>$row['cooked_group']);
+                          'group' =>$row['cooked_group'],
+                          'menu' =>$row['cooked_menu']);
             }
 
             $this->page->confessArray($this->perms, "getPerms({$this->table}) foun in db", 2);
@@ -480,10 +484,10 @@ group by user_id,table_name,field_name
                 $this->page->printDebug("getperms({$this->table}): NO perms, inserting defaults", 4);
                 $this->perms[null]['user'] = ACCESS_DELETE;   
                 $this->perms[null]['group'] = ACCESS_VIEW;   
+                $this->perms[null]['menu'] = $this->perms[null]['user'];   
             }
 
         }
-
 
 
     // because it's breadth first, returns an array
@@ -535,6 +539,7 @@ group by user_id,table_name,field_name
             }
             return $res;
         }
+
 
     function joinTo($fieldname)
         {

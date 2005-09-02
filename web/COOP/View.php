@@ -361,21 +361,22 @@ class coopView extends CoopObject
 				$mainlink = $this->concatLinkFields(&$this->obj);
 
 				if($this->legacyCallbacks){
-					$meat = $this->page->selfURL($mainlink, 
-											 $this->nastyInner(&$this->obj, 
+					$meat = $this->page->selfURL(array('value' => $mainlink, 
+											 'inside' => $this->nastyInner(&$this->obj, 
 															   'details'),
-												 $this->legacyCallbacks['page']);
+												 'page' => $this->legacyCallbacks['page']));
 				} else {
 					// handle the no-legacy-callbacks case
                     $meat = $this->page->selfURL(
-						$mainlink,
-						array( 
+                        array(
+                            'value' => $mainlink,
+                            'inside' => array( 
 							'action' => 'details',
 							'table' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}),
-                        $this->obj->fb_usePage ? $this->obj->fb_usePage :
-                        'generic.php'); 
+                            'page' => $this->obj->fb_usePage ? $this->obj->fb_usePage :
+                        'generic.php')); 
 				}
 
 				$tab->addRow(array($meat,
@@ -417,14 +418,15 @@ class coopView extends CoopObject
                 //print "asking: $pair[1] $level,  i have: $permitted<br>";
                 if($permitted >= $needlevel) {
                     $res .= $this->page->selfURL(
-						$this->actionnames[$action], 
-						array( 
+						array('value' => $this->actionnames[$action], 
+						'inside' => array( 
 							'action' => $action,
 							'table' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}),
-                        $this->obj->fb_usePage ? $this->obj->fb_usePage :
-                        'generic.php', false, $par); 
+                              'base' =>$this->obj->fb_usePage ? $this->obj->fb_usePage :
+                              'generic.php', 
+                              'par' => $par)); 
                     $par || $res .= '&nbsp;';
                 }
 			}
@@ -458,13 +460,13 @@ class coopView extends CoopObject
             foreach($va as $action => $needlevel){
                 //print "asking: $pair[1] $level,  i have: $permitted<br>";
                 if($permitted >= $needlevel) {
-                    $res .= $this->page->selfURL(
-						$this->actionnames[$action], 
-						array( 
+                    $res .= $this->page->selfURL(array(
+						'value' =>$this->actionnames[$action], 
+						'inside' => array( 
 							'action' => $action,
 							'table' => $this->table),
-                        $this->obj->fb_usePage ? $this->obj->fb_usePage :
-                        'generic.php'); 
+                        'base' => $this->obj->fb_usePage ? $this->obj->fb_usePage :
+                        'generic.php')); 
                 }
 			}
             return $res;

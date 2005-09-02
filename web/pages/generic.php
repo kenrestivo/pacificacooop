@@ -24,9 +24,9 @@ print $menu->topNavigation();
 
 //in case of bug
 if(!$_REQUEST['table']){
-    print $cp->selfURL('Unspecified table. Go back to home.', 
-                       'nothing', 
-                       'index.php');
+    print $cp->selfURL(array('value' =>'Unspecified table. Go back to home.', 
+                             'inside' =>'nothing', 
+                             'base' =>'index.php'));
     done();
 }
 

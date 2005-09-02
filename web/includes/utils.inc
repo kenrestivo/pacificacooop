@@ -567,6 +567,8 @@ function todaysDate(datefield) {
            return $js;
 
 } // END DATEJAVA
+ 
+
 
 
 //EOF!!!  DON'T DELETE PAST HERE, I NEED THAT STUFF

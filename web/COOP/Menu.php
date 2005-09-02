@@ -110,12 +110,13 @@ class CoopMenu extends HTML_Menu
 
 			$tab->addCol(array(
 							 sprintf("<h3>Welcome %s!</h3>", $u['username'])));
-			$tab->addCol(array($this->page->selfURL(
-								   "Back to Main Menu", "action=menu", 
-								   "index.php"))
+			$tab->addCol(array($this->page->selfURL(array(
+								   'value' => "Back to Main Menu", 
+                                   'inside' =>"action=menu", 
+								   'base' => "index.php")))
 						 ); // TODO: maybe make that backbutton hilighted?
-			$tab->addCol(array($this->page->selfURL("Log Out", 
-													'action=logout')));
+			$tab->addCol(array($this->page->selfURL(array('value' =>"Log Out", 
+													'inside' =>'action=logout'))));
 			
 			
 						 
@@ -161,14 +162,15 @@ class CoopMenu extends HTML_Menu
                         $co->obj->fb_shortHeader ? $co->obj->fb_shortHeader : 
                         $tab->obj->table_name;
                     // check GROUPLEVEL for menulevel!
-                    if($co->isPermittedField(NULL, true) >= ACCESS_VIEW){
+                    if($co->perms[NULL]['menu'] >= ACCESS_VIEW){
                         $res[$k]['sub'][$i]['url'] = 
                             $this->page->selfURL(
-                                null, 
-                                array('table' => 
-                                      $tab->obj->table_name),
-                                $co->obj->fb_usePage ? $co->obj->fb_usePage :
-                                'generic.php'); //  whatever is in obj
+                                array(
+                                    'inside' => array('table' => 
+                                                      $tab->obj->table_name),
+                                    'page' => $co->obj->fb_usePage ? 
+                                    $co->obj->fb_usePage :
+                                    'generic.php')); //  whatever is in obj
                     }
                 } // END TABLES
                 // NOW GO RECURSE
@@ -191,10 +193,10 @@ class CoopMenu extends HTML_Menu
                     if(1){
                         $res[$k]['sub'][$i]['url'] = 
                             $this->page->selfURL(
-                                null, 
-                                array('table' => 
+                                array(
+                                'inside' =>array('table' => 
                                       $tab->obj->table_name),
-                                $tab->obj->page); 
+                                'page' =>$tab->obj->page)); 
                     }
                 } // END REPORTS
 
