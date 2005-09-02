@@ -8,6 +8,7 @@ chdir("../");                   // XXX only for "test" dir hack!
 require_once('CoopPage.php');
 require_once('CoopObject.php');
 require_once 'PHPUnit.php';
+require_once 'PHPUnit/GUI/HTML.php';
 
 
 $cp = new coopPage( $debug);
@@ -33,12 +34,20 @@ class MathTest extends PHPUnit_TestCase {
     }
 }
 
-$suite = new PHPUnit_TestSuite();
-$suite->addTest(new MathTest('testAdd'));
+// $suite = new PHPUnit_TestSuite();
+// $suite->addTest(new MathTest('testAdd'));
+// $result = PHPUnit::run($suite);
+// print $result->toHTML();
 
+
+// include file with object under test,
+// each including no-arg functions named testFOO
+$suite  = new PHPUnit_TestSuite('MathTest');
 $result = PHPUnit::run($suite);
-print $result->toHTML();
+//print $result->toHTML();
 
+$g = new PHPUnit_GUI_HTML(array($suite));
+print $g->show();
 
 done ();
 
