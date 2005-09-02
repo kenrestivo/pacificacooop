@@ -22,6 +22,7 @@
 
 
 require_once("HTML/Table.php");
+require_once 'PHPUnit.php';
 
 ###############
 # TDARRAY
@@ -171,6 +172,7 @@ function done()
 	print "</div><!-- end footer div -->"; // closes out bottom div
 	
 	print"</body></html> ";
+    
 	ob_end_flush();
 	session_write_close();		// redundant?
 	exit;
@@ -582,6 +584,25 @@ function todaysDate(datefield) {
 } // END DATEJAVA
  
 
+
+/// UTILS IS NOT OOP. if it was, i'd just add test_FOO into the class
+class UtilsTest extends PHPUnit_TestCase {
+    var $fValue1;
+    var $fValue2;
+
+    function UtilsTest($name) {
+        $this->PHPUnit_TestCase($name);
+    }
+
+    function setUp() {
+        $this->fValue1 = 2;
+        $this->fValue2 = 3;
+    }
+
+    function testAdd() {
+        $this->assertTrue($this->fValue1 + $this->fValue2 == 5);
+    }
+}
 
 
 //EOF!!!  DON'T DELETE PAST HERE, I NEED THAT STUFF

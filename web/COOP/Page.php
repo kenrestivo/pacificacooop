@@ -356,11 +356,11 @@ class coopPage
 	function flushBuffer($clean = true)
 		{
 			$res = $this->bufferedOutput;
+			dump("flushing buffered output");
 			if($clean){
 				ob_end_flush();
 				unset($this->bufferedOutput);
 			}
-			dump("flushing buffered output");
 			return $res;
 		}
 
@@ -389,6 +389,13 @@ class coopPage
             $_SESSION['cpVars'] =  array_merge($_SESSION['cpVars'], 
                                                $_REQUEST['cpVars']);
             $this->vars =& $_SESSION['cpVars'];
+        }
+
+    function done()
+        {
+            $this->confessArray($_SESSION, 
+                                'CoopPage::saving SESSION  at END of page');
+            done();
         }
 
 

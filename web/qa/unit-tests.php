@@ -7,30 +7,11 @@ require_once('CoopPage.php');
 require_once('CoopObject.php');
 require_once 'PHPUnit.php';
 require_once 'PHPUnit/GUI/HTML.php';
+require_once('utils.inc');
 
-
+// MAYBE automate this part too? login/uid?
 $cp = new coopPage( $debug);
 print $cp->pageTop();
-
-
-
-class MathTest extends PHPUnit_TestCase {
-    var $fValue1;
-    var $fValue2;
-
-    function MathTest($name) {
-        $this->PHPUnit_TestCase($name);
-    }
-
-    function setUp() {
-        $this->fValue1 = 2;
-        $this->fValue2 = 3;
-    }
-
-    function testAdd() {
-        $this->assertTrue($this->fValue1 + $this->fValue2 == 5);
-    }
-}
 
 
 // include file with object under test,

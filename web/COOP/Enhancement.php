@@ -178,6 +178,7 @@ class Enhancement
             list($year, $month, $day) = explode('-', $sqldate);
             // condom
             if(!($year && $month && $day)){
+				PEAR::raiseError('bad date passed in', 999);
                 user_error("Enhancement::sqlToUnix($date) bad date",
                            E_USER_ERROR);
             }

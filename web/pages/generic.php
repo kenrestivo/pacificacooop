@@ -103,12 +103,16 @@ switch($_REQUEST['action']){
 	 
 	 // make-um bigger
 
-	 
+
 	 if ($atdf->validate()) {
 		 print "saving...";
 		 print $atdf->form->process(array(&$atdf, 'process'));
-		 // gah, now display it again. they may want to make other changes!
-		 print genericView(&$atd);
+         // only go back to view if previous state was 'edit'
+         if($_REQUEST['action'] == 'edit'){
+             print genericView(&$atd);
+         }else {
+             print $atdf->form->toHTML();
+         }
 	 } else {
 		 print $atdf->form->toHTML();
 	 }
@@ -197,7 +201,7 @@ switch($_REQUEST['action']){
 
 
 
-done ();
+$cp->done ();
 
 ////KEEP EVERTHANG BELOW
 

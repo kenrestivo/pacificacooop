@@ -190,7 +190,7 @@ values
 (10, 'All paperwork due to 1st V.P.',2),
 (11, 'School Holiday',2),
 (12, 'New parent orientation',2),
-(13, 'Board Meeting 7:00 pm PCNS',2),
+(13, 'Board Meeting PCNS',2),
 (14, 'Trike-a-thon',2),
 (15, 'Alternate parents day',2),
 (16, 'School out for Recess',2),
