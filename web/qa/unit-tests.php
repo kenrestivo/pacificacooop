@@ -38,7 +38,6 @@ class MathTest extends PHPUnit_TestCase {
 // docs can go inside of classes. kewl.
 $suite  = new PHPUnit_TestSuite('MathTest');
 $result = PHPUnit::run($suite);
-//print $result->toHTML();
 
 $g = new PHPUnit_GUI_HTML(array($suite));
 print $g->show();
