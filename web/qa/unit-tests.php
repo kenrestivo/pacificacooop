@@ -1,8 +1,6 @@
 <?php
 
 //$Id$
-// to find last years' alumni and add them to the leads db.
-// I HATE THIS!!! people should be people, dammit.
 
 chdir("../");                   // XXX only for "test" dir hack!
 require_once('CoopPage.php');
@@ -34,14 +32,10 @@ class MathTest extends PHPUnit_TestCase {
     }
 }
 
-// $suite = new PHPUnit_TestSuite();
-// $suite->addTest(new MathTest('testAdd'));
-// $result = PHPUnit::run($suite);
-// print $result->toHTML();
-
 
 // include file with object under test,
 // each including no-arg functions named testFOO
+// docs can go inside of classes. kewl.
 $suite  = new PHPUnit_TestSuite('MathTest');
 $result = PHPUnit::run($suite);
 //print $result->toHTML();
