@@ -608,6 +608,12 @@ values
 ('family_id', 'tickets', 18, 200, 200),
 ('family_id', 'users', 19, 200, 200);
 
+-- still more
+insert into table_permissions
+(field_name, table_name, realm_id, user_level, group_level)
+values
+(NULL, 'report_permissions', 19, 200, 200);
+
 
 
 -- default group perms

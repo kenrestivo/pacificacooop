@@ -62,40 +62,6 @@ class CoopMenu extends HTML_Menu
 
 
 
-	function createLegacy()
-		{
-		
-			// fix prefix, dammit
-			preg_match("|/(.+)/|", $_SERVER['PHP_SELF'],$match);
-			$prefix = $match[0];
-			//print "ADDING [$prefix] to prefix";
-			$this->setURLPrefix($prefix);
-
-			// grab the legacy stuff
-			// NOTE! you must manually include the things. i don't do it here
-			global $sf_everything;
-			global $members_everything;
-			$sf = $this->page->indexEverything($sf_everything);
-			$members = $this->page->indexEverything($members_everything);
-
-			$this->page->indexed_all = array_merge($members, $sf);
-
-			$allelse_nested = $this->nestByRealm($members, 
-										  $this->other_realms);
-			$sf_nested =array(
-								'title' => 'Springfest',
-								'sub' => $this->nestByRealm($sf, 
-															$this->springfest_realms));
-//  			confessArray($allelse_nested, 'allelse');
-//  			confessArray($sf_nested, 'sf');
-
-			$heirmenu = array_merge($allelse_nested, array($sf_nested));
-							
-//			confessArray($heirmenu, "menuarray"); 
-			$this->setMenu($heirmenu);
-
-		}
-
 
 	function kenRender($type = 'sitemap')
 		{
@@ -131,63 +97,6 @@ class CoopMenu extends HTML_Menu
 			return $res;
 		}
 
-	function callbacksToMenu($everything)
-		{
-			foreach($everything as $key => $cbs){
-                hackCallbacks(&$cbs);
-				$res[$key]['title'] = 
-					$cbs['shortdesc'];						
-				if(checkMenuLevel($this->page->auth, 
-								  $this->page->userStruct, 
-								  $cbs, $cbs['fields'])== 0){
-					$res[$key]['url'] = htmlentities(
-						sprintf('%s?table=%s%s', $cbs['page'],
-                                $cbs['maintable'] , 
-                                SID ? '&' . SID : ''));
-
-
-				} else {
-					unset($res[$key]['url']);
-				}
-			}
-			//confessArray($menustruct, 'menustruct');
-			return $res; 
-		}
-
-
-	// XXX this creates bugs. the array indices are supposed to be NUMBERS
-	// but, i use the realm as a key, and that fucks it up
-	// basically, the whole function needs to be rewritten
-	function nestByRealm($ie, $realm_map)
-		{
-            global $cp;
-			foreach($realm_map as $realm => $description){
-				$res[$realm]['title'] = $description;
-				foreach($ie as $key => $cbs){
-					// this substring thing is a nasty, awful hack
-					if(strncmp($cbs['realm'], $realm, 7) == 0){
-                        hackCallbacks(&$cbs);
-                        //print $cbs['shortdesc'] . " - " . $cbs['maintable'] .'<br>';
-						$res[$realm]['sub'][$key]['title'] = 
-							$cbs['shortdesc'];
-						// TODO: put the menu stuff in here
-						if(checkMenuLevel($this->page->auth, 
-										  $this->page->userStruct, 
-										  $cbs, $cbs['fields'])== 0){
-							$res[$realm]['sub'][$key]['url'] = 
-								sprintf('%s?table=%s%s', $cbs['page'], 
-                                        $cbs['maintable'],
-										SID ? '&' . SID : '');
-
-						} else {
-							unset($res[$realm]['sub'][$key]['url']);
-						}
-						
-					}
-				}
-			}
-			return $res;
-		}
 
 	function topNavigation()
 		{
@@ -236,6 +145,7 @@ class CoopMenu extends HTML_Menu
             while($subrl->obj->fetch()){
                 $k = ++$i;
                 $res[$k]['title'] = $subrl->obj->short_description;
+                // first the tables
                 $tab =& new CoopObject(&$this->page, 'table_permissions',
                                        &$subrl);
                 $tab->obj->realm_id = $subrl->obj->realm_id;
@@ -260,14 +170,36 @@ class CoopMenu extends HTML_Menu
                                 $co->obj->fb_usePage ? $co->obj->fb_usePage :
                                 'generic.php'); //  whatever is in obj
                     }
-                }
+                } // END TABLES
+                // NOW GO RECURSE
                 list($tmp, $i) = $this->createNew($i, $subrl->obj->realm_id);
                 foreach ($tmp as $key => $val){
                     $res[$k]['sub'][$key] = $val;
                 }
-        
-            }
-            //TODO: also gen up some reports under here too
+
+                //NOW REPORTS
+                $tab =& new CoopObject(&$this->page, 'report_permissions',
+                                       &$subrl);
+                $tab->obj->realm_id = $subrl->obj->realm_id;
+                $tab->obj->groupBy('report_name');
+                $tab->obj->find();
+                while($tab->obj->fetch()){
+                    $i++;
+                    // do add the tle always, but only url if 
+                    $res[$k]['sub'][$i]['title']= $tab->obj->report_name;
+                    // TODO: check report level!
+                    if(1){
+                        $res[$k]['sub'][$i]['url'] = 
+                            $this->page->selfURL(
+                                null, 
+                                array('table' => 
+                                      $tab->obj->table_name),
+                                $tab->obj->page); 
+                    }
+                } // END REPORTS
+
+            } // END REALM
+
             
             if(!$id){
                 $this->page->confessArray($res, 'res', 4);

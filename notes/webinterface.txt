@@ -907,3 +907,16 @@ gui stuff
 			realm3 <tab> user <tab> group
 			which is how it's in the db:
 			i think i'm kinda stuck with that one
+
+-------------
+
+new members look and feel
+	menu on side (done)
+	NEWS (the blogs) (DONE!)
+	EVENTS (basically, the next 4 items in calendar)
+		upcoming events is the calendar (next 4 in summary?)
+	ALERTS (my you-must-pay action items)
+	OK, how's about summary?
+		maybe, status?
+	i will need to deal with count and such
+		genericcount is an easy port

@@ -15,7 +15,6 @@ class Parents extends DB_DataObject
     var $first_name;                      // string(255)  
     var $type;                            // string(7)  enum
     var $family_id;                       // int(32)  
-    var $email_address;                   // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

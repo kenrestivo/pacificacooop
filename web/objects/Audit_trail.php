@@ -6,7 +6,7 @@ require_once 'DB/DataObject.php';
 
 class Audit_trail extends DB_DataObject 
 {
-###START_AUTOCODE
+    ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'audit_trail';                     // table name
@@ -23,7 +23,7 @@ class Audit_trail extends DB_DataObject
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Audit_trail',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-###END_AUTOCODE
+    ###END_AUTOCODE
 	var $fb_formHeaderText =  'Audit Trail';
 	var $fb_shortHeader =  'Audit';
 	var $fb_linkDisplayFields = array();

@@ -1160,7 +1160,7 @@ max(if((upriv.max_user <= table_permissions.user_level or
 table_permissions.user_level is null), 
 upriv.max_user, table_permissions.user_level)) as cooked_user,
 max(if((upriv.max_group >=  table_permissions.group_level or
-table_permissions.user_level is null), 
+table_permissions.group_level is null), 
 upriv.max_group, NULL )) as cooked_group
 from table_permissions 
 left join 
@@ -1217,7 +1217,7 @@ order by parents.last_name, parents.first_name, school_year);
 
 ---blog
 select blog_entry.*,
-date_format(audit_trail.updated, '%a %b %D %Y %l:%i %p') as update_human,
+date_format(audit_trail.updated, '%a %m/%d/%Y %l:%i%p') as update_human,
 users.name
 from blog_entry 
 left join audit_trail 

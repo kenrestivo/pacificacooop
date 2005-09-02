@@ -15,7 +15,7 @@ class Files extends DB_DataObject
     var $original_filename;               // string(255)  
     var $disk_filename;                   // string(255)  
     var $school_year;                     // string(50)  
-    var $file_date;                       // date(10)  binary
+    var $file_date;                       // datetime(19)  binary
     var $upload_date;                     // datetime(19)  binary
     var $mime_type;                       // string(255)  
     var $file_size;                       // int(20)  

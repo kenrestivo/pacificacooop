@@ -440,7 +440,7 @@ max(if((upriv.max_user <= table_permissions.user_level or
 table_permissions.user_level is null), 
 upriv.max_user, table_permissions.user_level)) as cooked_user,
 max(if((upriv.max_group >=  table_permissions.group_level or
-table_permissions.user_level is null), 
+table_permissions.group_level is null), 
 upriv.max_group, NULL )) as cooked_group
 from table_permissions 
 left join 
@@ -472,7 +472,7 @@ group by user_id,table_name,field_name
                           'group' =>$row['cooked_group']);
             }
 
-            $this->page->confessArray($this->perms, "getPerms({$this->table}) found in db", 2);
+            $this->page->confessArray($this->perms, "getPerms({$this->table}) foun in db", 2);
 
             //XXXX: should these defaults NOT BE HARDCODED HERE?
             /// stick these in the db instead

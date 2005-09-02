@@ -897,7 +897,8 @@ field_name varchar(255),
 group_id int(32) default NULL,
 realm_id int(32) default NULL,
 user_level int(5) default NULL,
-group_level int(5) default NULL
+group_level int(5) default NULL,
+menu_level int(5) default NULL
 );
 
 create table workers(
@@ -925,6 +926,17 @@ access_level_id int(32) primary key not null unique,
 short_name varchar(50) default NULL,
 description varchar(255),
 const_name varchar(50) default NULL
+);
+
+
+CREATE TABLE report_permissions (
+report_permissions_id int(32) primary key not null unique auto_increment,
+report_name varchar(255),
+page varchar(255),
+realm_id int(32) default NULL,
+user_level int(5) default NULL,
+group_level int(5) default NULL,
+menu_level int(5) default NULL
 );
 
 
