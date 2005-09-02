@@ -3,11 +3,12 @@
 //$Id$
 
 chdir("../");                   // XXX only for "test" dir hack!
+require_once('first.inc');
 require_once('CoopPage.php');
 require_once('CoopObject.php');
 require_once 'PHPUnit.php';
 require_once 'PHPUnit/GUI/HTML.php';
-require_once('utils.inc');
+require_once('utilstest.php');
 
 // MAYBE automate this part too? login/uid?
 $cp = new coopPage( $debug);
