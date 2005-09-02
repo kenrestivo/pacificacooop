@@ -218,7 +218,9 @@ class coopForm extends CoopObject
                             'Date must be in format MM/DD/YYYY', 
                             'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
                     }
-					$val && $val = sql_to_human_date($val);
+					$val && $val = sql_to_human_date($val, 
+                                                     $this->_tableDef[$key] & 
+                                                     DB_DATAOBJECT_TIME);
 				} else if($this->_tableDef[$key] & DB_DATAOBJECT_BOOL){
 					$el =& $this->form->addElement('advcheckbox', $fullkey, 
                                                    null, null, null, 
