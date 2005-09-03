@@ -30,10 +30,12 @@ class User_privileges extends DB_DataObject
                                  'group_id' => 'Group',
                                  'user_level' => 'May do to their own data',
                                  'group_level' => 'May do to OTHER\'s data',
-                                 'realm_id' => 'Data Realm'
+                                 'realm_id' => 'Data/Menu Realm'
                                  );
 
 	var $fb_formHeaderText = 'User and Group Permissions';
 	var $fb_shortHeader = 'User Permissions';
+	var $fb_requiredFields = array('realm_id');
+
     
 }

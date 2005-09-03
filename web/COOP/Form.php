@@ -161,6 +161,12 @@ class coopForm extends CoopObject
 					continue;
 				}
 
+                // TODO: should i check fieldstounrender here too?
+                
+                if(!$this->obj->fb_allYears && $key == 'school_year'){
+                    continue;
+                }
+
 				if(is_array($this->obj->fb_preDefElements) && 
 				   in_array($key, array_keys($this->obj->fb_preDefElements))){
 					$el =& $this->obj->fb_preDefElements[$key];
@@ -443,14 +449,12 @@ class coopForm extends CoopObject
 		{
 			if(is_array($this->obj->fb_requiredFields)){
 
-				$this->form->registerRule('customrequired', 
-										  'callback', 'validate', 
-										  'CustomRequired');
 
 				foreach($this->obj->fb_requiredFields as $fieldname){
 // 					user_error("CoopForm::addRequiredFields($fieldname)", 
 // 							   E_USER_NOTICE);
-				
+					$this->form->addRule($this->prependTable($fieldname), 
+										 "$key mustn't be empty.", 'required');
 				}
 			}
 			//confessObj($this->form, 'ahc');

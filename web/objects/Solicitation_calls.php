@@ -55,6 +55,10 @@ class Solicitation_calls extends DB_DataObject
      'call_note' => 100
    );
 
+   var $fb_enumFields = array(
+     'method_of_contact'
+   );
+
 
 // set call_note lines = 3
 }

@@ -574,6 +574,7 @@ user_level , group_level, menu_level)
 values
 ('enhancement_projects',NULL,NULL,3,NULL,500,500);
 ('nag_indulgences',NULL,NULL,10,NULL,600, 700),
+('workers','workday',NULL,14,0,200,200),
 ('nag_indulgences','family_id',NULL,10,0,600,700);
 
 

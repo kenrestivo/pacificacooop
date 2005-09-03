@@ -33,10 +33,13 @@ class Table_permissions extends DB_DataObject
 		'table_name' => 'Table',
         'field_name' => 'Field',
         'group_id' => 'Group',
-        'realm_id' => 'Realm',
+        'realm_id' => 'Data/Menu Realm',
         'user_level' => 'Forbid this action level, to user\'s own data, unless user has permissions at or above this',
-        'group_level' => 'Forbid this action to other families\' data, unless permitted'
+        'group_level' => 'Forbid this action to other families\' data, unless permitted',
+        'menu_level' => 'Forbid users with group permissions below this from even being able to see the menu'
         );
+
+	var $fb_requiredFields = array('table_name', 'realm_id');
 
 
 

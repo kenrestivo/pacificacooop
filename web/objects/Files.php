@@ -37,22 +37,24 @@ class Files extends DB_DataObject
     var $fb_shortHeader = 'Files';
     var $fb_timeFields = array ('upload_date');
     var $fb_fieldLabels = array( 'file_description' => "Description",
-                                 'original_filename' => 'Filename',
-                                 'disk_filename' => 'URL',
+                                 'original_filename' => 
+                                 'Filename (click to download)',
+                                 'disk_filename' => 'On Disk As',
                                  'school_year' => 'School Year',
                                  'upload_date' => 'Uploaded On',
                                  'file_date' => 'File Modified',
                                  'mime_type' => 'File Type',
                                  'file_size' => 'Size');
-    var $fb_displayCallbacks = array ('disk_filename' => 'makeURL');
+    var $fb_displayCallbacks = array ('original_filename' => 'makeURL');
+    var $fb_fieldsToUnRender = array('disk_filename');
 
     //this ugly callback to get around, lack of lambdas, object crap, etc.
     function makeURL($val)
         {
             return $this->CoopView->page->selfURL(
-                array('value' =>$val,
+                array('value' => $val,
                       'inside' => 'nothing',
-                      'base' => "files/$val"));
+                      'base' => 'files/'.$this->disk_filename));
         }
 
 

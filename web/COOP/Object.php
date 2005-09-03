@@ -341,6 +341,15 @@ group by user_id,table_name,field_name";
 			    return false;  // i am very, very sorry for this
             }
             
+            if(!$this->obj->fb_allYears && $key == 'school_year'){
+            	$this->page->printDebug(
+                    "ispermitted($this->table : $key) is a school year, and i don't have allyears set", 
+                    4);
+                return false;
+            }
+
+
+
             // i'm looking in perms calc. choose what to use now.
             // remember! the db needs to give separate perms for fields/tables
             $usethese = isset($this->perms[$key]) ? 

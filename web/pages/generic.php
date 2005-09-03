@@ -75,11 +75,6 @@ function genericView(&$atd)
             $atd->obj->orderBy('school_year desc');
         }
     } else {
-        // TODO: put schoolyear chooser here instead! if permitted.
-        // save in session vars, preferences of schoolyear.
-        !is_array($atd->obj->fb_fieldsToUnRender) &&
-            $atd->obj->fb_fieldsToUnRender = array(); 
-        array_push($atd->obj->fb_fieldsToUnRender, 'school_year');
         $atd->obj->school_year = findSchoolYear();
     }
 

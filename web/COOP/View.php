@@ -528,10 +528,10 @@ class coopView extends CoopObject
             // cute. the perms are about me, but they're executed in privs
             // so they execute with teh rights and permissions of privs.
             // TODO: do this gambit only if they have < 800 on this object
-            $targ =& new CoopView(&$this->page, 'user_privileges', &$this);
-            //$targ->obj->debugLevel(2);
+            $targ =& new CoopView(&$this->page, 'users', &$this);
+            $this->page->debug > 4 && $targ->obj->debugLevel(2);
             $targ->obj->fb_formHeaderText = 
-                "Permissions for {$this->obj->fb_formHeaderText}";
+                "Total Permissions for {$this->obj->fb_formHeaderText}";
             $targ->obj->query(sprintf($this->permsQuery,
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid'],
@@ -541,8 +541,9 @@ class coopView extends CoopObject
             $res .= $targ->simpleTable(false);
 
 
-            ///// USER
-            $targ->obj->fb_formHeaderText = "Access Levels for ". 
+
+            ///// USER ONLY
+            $targ->obj->fb_formHeaderText = "User Levels for ". 
                 $this->page->userStruct['username'];
             $targ->obj->query(
                 sprintf('select max(user_level) as user_level, 
@@ -550,18 +551,14 @@ max(group_level) as group_level,  realm
 from user_privileges 
 left join realms on user_privileges.realm_id = realms.realm_id
 where user_id = %d 
-or (user_id is null and group_id in 
-(select group_id from users_groups_join 
-where user_id = %d)) 
 group by realm
 order by realm',
-                        $this->page->auth['uid'],
-                        $this->page->auth['uid']));
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid']));
                     
             //confessObj($targ, 'targ');
             $res .= $targ->simpleTable(false);
-
-
 
 
 
@@ -584,16 +581,18 @@ where users_groups_join.user_id = %d
 
 
 
-            ///// USER
-            $targ->obj->fb_formHeaderText = "Access Levels for ". 
+            ///// GROUPS, that user belongs to
+            $targ =& new CoopView(&$this->page, 'groups', &$this);
+            $targ->obj->fb_formHeaderText = "Group Levels for ". 
                 $this->page->userStruct['username'];
             $targ->obj->query(
-                sprintf('select max(user_level) as user_level, 
+                sprintf('select name as Group_Name, 
+max(user_level) as user_level, 
 max(group_level) as group_level,  realm
 from user_privileges 
 left join realms on user_privileges.realm_id = realms.realm_id
-where user_id = %d 
-or (user_id is null and group_id in 
+left join groups on groups.group_id = user_privileges.group_id
+where (user_privileges.group_id in 
 (select group_id from users_groups_join 
 where user_id = %d)) 
 group by realm
@@ -607,12 +606,11 @@ order by realm',
 
 
 
-
             
             /// TABLE
             $targ =& new CoopView(&$this->page, 'table_permissions', &$this);
                  
-            $targ->obj->fb_formHeaderText = "Table Permissions for {$this->table}";
+            $targ->obj->fb_formHeaderText = "Table Permissions for {$this->obj->fb_formHeaderText}";
             $targ->obj->query(
                 sprintf('
 select field_name, table_name, group_id, 

@@ -1197,6 +1197,16 @@ group by user_privileges.realm_id
 order by user_privileges.realm_id
 
 
+--- JUST the users
+select max(user_level) as max_user, max(group_level) as max_group, 
+91 as user_id, realm_id
+from user_privileges 
+where user_id = 91 or 
+(user_id is null and group_id in 
+(select
+group_id from users_groups_join where user_id = 91)) 
+group by realm_id 
+order by realm_id;
 
 
 ---shorter version for auld auth
