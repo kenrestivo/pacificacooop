@@ -399,9 +399,31 @@ class coopPage
         }
 
 
+    function stackPath()
+        {
+            $res = array();
+
+            // cute, but useless
+            // $path = array_map(create_function('$ar', 
+            //'return($ar["table"]);'),
+        //                    $this->vars['stack']);
+
+            foreach($this->vars['stack'] as $stack){
+                $co =& new CoopObject(&$this, $stack['table'], &$this);
+                $res[] = $this->selfURL(
+                    array('value' =>$co->obj->fb_shortHeader ? 
+                                              $co->obj->fb_shortHeader : 
+                          $co->table,
+                          'inside' => $stack,
+                          'par' => false,
+                          'base' => $co->obj->usePage));
+        }
+            return count($res) ? '': implode('&gt; ', $res);
+
+        }
+ 
 
 } // END COOP PAGE CLASS
-
 
 ////KEEP EVERTHANG BELOW
 

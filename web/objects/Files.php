@@ -36,7 +36,6 @@ class Files extends DB_DataObject
     var $fb_formHeaderText = 'Uploaded Files';
     var $fb_shortHeader = 'Files';
     var $fb_timeFields = array ('upload_date');
-    var $fb_URLFields = array ('disk_filename');
     var $fb_fieldLabels = array( 'file_description' => "Description",
                                  'original_filename' => 'Filename',
                                  'disk_filename' => 'URL',
@@ -45,8 +44,20 @@ class Files extends DB_DataObject
                                  'file_date' => 'File Modified',
                                  'mime_type' => 'File Type',
                                  'file_size' => 'Size');
-    // var $fb_fieldsToRender = array ('file_description', 'original_filename');
+    var $fb_displayCallbacks = array ('disk_filename' => 'makeURL');
 
+    //this ugly callback to get around, lack of lambdas, object crap, etc.
+    function makeURL($val)
+        {
+            return $this->CoopView->page->selfURL(
+                array('value' =>$val,
+                      'inside' => 'nothing',
+                      'base' => "files/$val"));
+        }
+
+
+
+    // var $fb_fieldsToRender = array ('file_description', 'original_filename');
 	function preGenerateForm(&$form)
 		{
 
@@ -112,5 +123,8 @@ class Files extends DB_DataObject
                                
 			return $result;
 		}
+
+
+
 	
 } 

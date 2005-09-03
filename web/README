@@ -16,8 +16,8 @@ fb_shortHeader (old shortdesc)
 fb_dupeIgnore
 fb_sizes
 fb_fieldsToUnrender (always hide these! annoying, but needed.)
-fb_displayFormat
-
+fb_displayFormat  array (field => sprintffrormat)
+fb_displayCallabacks = array (field => cb)
 ---------------
 
 NOTE: these are the OLD readme notes. no longer relevant

@@ -8,79 +8,42 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
 	var $_parentForm;			// cache
 
-	function toHtml()
-		{
-
-			// I don't understand all this render/accept shit. fuck it.
-			// sprintf, however, i understand
+    function toHtml()
+    {
+        if ($this->_flagFrozen) {
+            return $this->getFrozenHtml();
+        } else {
+            $cf =& $this->_parentForm->CoopForm; // save typing
+            $values = $this->_parentForm->exportValues();
 			list($table, $field) = explode('-', $this->getName());
-			
-			$values = $this->_parentForm->exportValues();
-			if($values[sprintf('%s-subtables-%s',$table, $field)]){
-				$hidden = 'hidden';
-				$this->_options[0]['text'] = "Enter New Below >>";
-			}
-			//confessObj($this, 'selectthing');
-			
-			return sprintf('%s %s<div class="%s" id="div-%s">&nbsp;
-				<a href="javascript:void();" id="%s-toggle"
-					onClick="toggleSubform(\'%s\',\'%s\')">Add New %s &gt;&gt;</a></div>',
-						   $this->_getJs(),
-						   parent::toHTML(), // the actual {element}!
-						   $hidden,	
-						   $this->getName(),
-						   $this->getName(),
-						   $field,
-						   $table,
-						   ''/* TODO: fetch the grouplabel */ );
-		}
+            //confessArray($values, 'values');
 
+            // TODO: go get the object or name of the linkfield
 
-       function _getJs()
-       {
-           // Generate the javascript code needed to handle this element
-           $js = '';
-           if (!defined('HTML_QUICKFORM_CUSTOMSELECT_EXISTS')) {
-			   // We only want to include the javascript code once per form
-               define('HTML_QUICKFORM_CUSTOMSELECT_EXISTS', true);
+            if(isset($cf->forwardLinks[$field])){
+                $link =$cf->forwardLinks[$field];
+            } else {
+                $link = $cf->backLinks[$field];
+            }
+            list($target, $targfield) = explode(':', $link);
 
-               $js .= sprintf('
-/* begin javascript for HTML_QuickForm_customselect */
+            //XXX didn't i do this somewhere else already?
+            $sub =& new CoopObject(&$cf->page, $target, &$cf);
+            
+			return 
+                sprintf('%s <div class="sublink">&nbsp;%s</div>',
+                        parent::toHTML(), // the actual {element}!
+                        $cf->page->selfURL(
+                            array(
+                                'value' =>sprintf('Add New %s &gt;&gt;',
+                                                  $sub->obj->fb_shortHeader),
+                                'inside' => array('table' => $target,
+                                                  'action' => 'add',
+                                                  'push' => $this->getName())
+                                )));
 
-function toggleSubform(field, table) 
-{
-   addnew = document.getElementById("div-" + table + "-" + field);
-   select = document.getElementById(table + "-" + field);
-   passthru = document.getElementById(table + "-subtables-" + field);
-   subform = document.getElementById(table + "-" + field + "-subform");
-   select.value = 0;
-   if(passthru.value != "0") {
-	 subform.className = "hidden";
-	 addnew.className = "";
-     passthru.value = "0";
-     select.options[0].text = "-- CHOOSE ONE --";
-     select.disabled = false;
-   } else {
-	 subform.className = "";
-	 addnew.className = "hidden";
-     passthru.value = "1";
-     select.options[0].text = "Enter New Below >>";
-     select.disabled = true;
-   }
-}
-/* end javascript for HTML_QuickForm_customselect */
-               ',
-							  $this->getName(),
-							  $this->getName(),
-							  'subform-thing',
-							  $this->getName(),
-							  'subform-thing');
-			   // wrap wrap wrap wrap it up. i'll take it. up the ying-yang.
-               $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
-				   $js . "//]]>\n</script>";
-           }
-           return $js;
-       }
+        }
+    } //end func toHtml
 
 
 	   

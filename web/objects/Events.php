@@ -31,7 +31,7 @@ class Events extends DB_DataObject
     var $fb_fieldLabels = array(
         'description' => 'Description',
         'url' => 'For more information',
-        'realm_id' => 'realm',
+        'realm_id' => 'Data Realm (for grouping and permissions)',
         'notes' => 'Details'
         );
 

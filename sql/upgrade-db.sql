@@ -66,8 +66,11 @@ values
 (2, '2005-2006', '2005-12-06 19:00:00'),
 (13, '2005-2006', '2005-12-21 19:00:00'),
 (16, '2005-2006', '2005-12-19'),
-(17, '2005-2006', '2006-01-03');
---TODO: the rest of 'em
+(17, '2005-2006', '2006-01-03'),
+(6, '2005-2006', '2006-06-30'),
+(5, '2005-2006', '2006-02-01');
+--TODO: the rest of 'em from lisa
+-- ENTER THEM MANUALLY DUDE
 
 
 ---CONGRATULATIONS! you're done making massive changes to the database.

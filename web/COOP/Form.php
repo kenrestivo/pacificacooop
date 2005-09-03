@@ -174,11 +174,11 @@ class coopForm extends CoopObject
 						$this->addSubtable($key);
 						continue;
 					} else {
-                        $type = 'select';  // until i square shit away
-// 						$type = (!is_array($this->obj->fb_addNewLinkFields) ||
-// 							in_array($key, $this->obj->fb_addNewLinkFields)) 
-// 							? 'customselect' : 'select';
-						$el =& $this->form->addElement(
+ 						$type = (!is_array($this->obj->fb_addNewLinkFields) ||
+							in_array($key, $this->obj->fb_addNewLinkFields)) 
+							? 'customselect' : 'select';
+                        $type = 'select';  // XXX FORCE until i square shit away
+                        $el =& $this->form->addElement(
 							$type, 
 							$fullkey, false, 
 							$this->selectOptions($key));

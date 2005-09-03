@@ -252,6 +252,15 @@ class coopView extends CoopObject
                     //for USERLEVEL. mask the data. but put placeholder
                     //so that it's in sync with header
                     $res[] = '';
+                } else if(is_array($this->obj->fb_displayCallbacks) &&
+                          in_array($key, 
+                                   array_keys($this->obj->fb_displayCallbacks)) &&
+                          is_callable(array($this->obj, 
+                                            $this->obj->fb_displayCallbacks[$key])))
+                {
+                    $res[] = call_user_func(
+                        array($this->obj, $this->obj->fb_displayCallbacks[$key]),
+                        $val);
                 } else if($table[$key] & DB_DATAOBJECT_MYSQLTIMESTAMP){ 
                     $res[] = timestamp_db_php($val);
                 } else if ($table[$key] &  DB_DATAOBJECT_TIME) {
@@ -259,9 +268,10 @@ class coopView extends CoopObject
                 } else if ($table[$key] &  DB_DATAOBJECT_DATE){
                     $res[] = sql_to_human_date($val);
                 } else if(is_array($this->obj->fb_displayFormat) &&
-                          in_array($key, $this->obj->fb_displayFormat)) 
+                          in_array($key, 
+                                   array_keys($this->obj->fb_displayFormat))) 
                 {
-                    $res[] = sprintf($this->obj->fb_displayFormat, $val);
+                    $res[] = sprintf($this->obj->fb_displayFormat[$key], $val);
                 } else if(is_array($this->obj->fb_URLFields) &&
                           in_array($key, $this->obj->fb_URLFields)) 
                 {
