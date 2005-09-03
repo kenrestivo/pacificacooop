@@ -31,15 +31,21 @@ while($co->obj->fetch()){
 
             
 foreach($tables as $table){
+    $err = '';
     $targ =& new CoopObject(&$page, $table, &$co);
     foreach(array('family_id', 'school_year') as $linkcol){
         $targ->joinTo($linkcol);
+        if(count($targ->obj->fb_joinPaths[$linkcol]) != 1){
+            ++$i;
+            $err .= "ERROR!!! $table path to $linkcol is not 1<br>";
+        }
+        if($err){
+            confessArray($targ->obj->fb_joinPaths, $err);
+        }
     }
-    confessArray($targ->obj->fb_joinPaths, 
-                 "linkpaths for  $table");
 }
             
-
+print "total errors found: $i<br>";
 
 done ();
 
