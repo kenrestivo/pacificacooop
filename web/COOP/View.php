@@ -317,12 +317,14 @@ class coopView extends CoopObject
 
 	function makeHeader()
 		{
-
+            $par = $this->getParent();
 			///confessArray($this->obj->toArray(), 'makeheader:toarray');
 			// get the fieldnames out the dataobject
 			foreach($this->obj->toArray() as $key => $trash){
 				//print "checking $key<br>";
-				if($this->isPermittedField($key, true)){
+				if($this->isPermittedField($key, true) &&
+                    $key != $par->pk)
+                {
                     $keys[] = $key;
 					if($this->obj->fb_fieldLabels[$key]){
 						$res[] = $this->obj->fb_fieldLabels[$key];
@@ -343,10 +345,11 @@ class coopView extends CoopObject
 	function tableTitle($contents)
 		{
 			//TODO: use DIV's instead of tables for this.
+            $par = $this->getParent();
 			$title = sprintf("%s %.50s", 
 							 $this->title(),
-							 $this->parentCO ? 
-							 "for " . $this->parentCO->getSummary() : "");
+							 is_a($par, 'CoopObject') ? 
+							 "for " . $par->getSummary() : "");
 		
 			$toptab = new HTML_Table(
 				'bgcolor="#aa99ff" cellpadding="0" cellspacing="0"');
@@ -475,21 +478,31 @@ class coopView extends CoopObject
             foreach($va as $action => $needlevel){
                 //print "asking: $pair[1] $level,  i have: $permitted<br>";
                 if($permitted >= $needlevel) {
+                    $in = array( 
+                        'action' => $action,
+                        'table' => $this->table);
+                    $par = $this->getParent(); // NOT  parentCO, _join!
+                    if(is_object($par) && is_a(&$par, 'CoopObject')){
+                        //print "HEY!!! {$this->table} GOT ONE!!!";
+                        $in[$this->prependTable($par->pk)] = 
+                            $this->obj->{$par->pk};
+                    }
                     $res .= $this->page->selfURL(array(
 						'value' =>$this->actionnames[$action], 
-						'inside' => array( 
-							'action' => $action,
-							'table' => $this->table),
-                        'base' => $this->obj->fb_usePage ? $this->obj->fb_usePage :
-                        'generic.php')); 
+						'inside' => $in,
+                        'base' => $this->obj->fb_usePage ? 
+                        $this->obj->fb_usePage :
+                        'generic.php'));
+ //                     confessObj($this->obj, 'this obj');
+//                     confessObj($this->obj, 'parent obj');
                 }
 			}
             return $res;
 
 		}
 
-	// note, this is not very well-used, but it will be.  i'll replace
-	// legacy recordbuttons with stuff using this
+
+	// legacy recordbuttons crap. depreciated
 	function nastyInner(&$obj, $action)
 		{
 			$res .= sprintf("action=%s", $action);
@@ -500,19 +513,124 @@ class coopView extends CoopObject
 			}
 			return $res;
 		}
+ 
+    function showPerms()
+        {
 
 
-    // XXX UNUSED CRUFT! 
-	function checkMenuLevel()
-		{
-			return checkMenuLevel($this->page->auth, 
-								  $this->page->userStruct, 
-								  $this->legacyCallbacks, 
-								  $this->legacyCallbacks['fields']);
-		
-		}
+            $res = "<h3>Detailed Permissions for {$this->obj->fb_formHeaderText}</h3>";
+            $res .= $this->actionButtons();
+            /// GETPERMS, AS CALCULATED
+            $res .= sprintf("<pre>%s</pre>", print_r($this->perms, 1));
 
 
+            //////  GETPERMS, from db
+            // cute. the perms are about me, but they're executed in privs
+            // so they execute with teh rights and permissions of privs.
+            // TODO: do this gambit only if they have < 800 on this object
+            $targ =& new CoopView(&$this->page, 'user_privileges', &$this);
+            //$targ->obj->debugLevel(2);
+            $targ->obj->fb_formHeaderText = 
+                "Permissions for {$this->obj->fb_formHeaderText}";
+            $targ->obj->query(sprintf($this->permsQuery,
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid'],
+                                      $this->table));
+            $res .= $targ->simpleTable(false);
+
+
+            ///// USER
+            $targ->obj->fb_formHeaderText = "Access Levels for ". 
+                $this->page->userStruct['username'];
+            $targ->obj->query(
+                sprintf('select max(user_level) as user_level, 
+max(group_level) as group_level,  realm
+from user_privileges 
+left join realms on user_privileges.realm_id = realms.realm_id
+where user_id = %d 
+or (user_id is null and group_id in 
+(select group_id from users_groups_join 
+where user_id = %d)) 
+group by realm
+order by realm',
+                        $this->page->auth['uid'],
+                        $this->page->auth['uid']));
+                    
+            //confessObj($targ, 'targ');
+            $res .= $targ->simpleTable(false);
+
+
+
+
+
+
+            /// GROUP MEMBERSHIP
+            $targ =& new CoopView(&$this->page, 'groups', &$this);
+            $targ->obj->fb_formHeaderText = "Groups for ". 
+                $this->page->userStruct['username'];
+
+            $targ->obj->query(
+                sprintf('
+select name from groups 
+left join users_groups_join using (group_id)
+where users_groups_join.user_id = %d
+',
+                                      $this->page->auth['uid']));
+                    
+            //confessObj($targ, 'targ');
+            $res .= $targ->simpleTable(false);
+
+
+
+            ///// USER
+            $targ->obj->fb_formHeaderText = "Access Levels for ". 
+                $this->page->userStruct['username'];
+            $targ->obj->query(
+                sprintf('select max(user_level) as user_level, 
+max(group_level) as group_level,  realm
+from user_privileges 
+left join realms on user_privileges.realm_id = realms.realm_id
+where user_id = %d 
+or (user_id is null and group_id in 
+(select group_id from users_groups_join 
+where user_id = %d)) 
+group by realm
+order by realm',
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid']));
+                    
+            //confessObj($targ, 'targ');
+            $res .= $targ->simpleTable(false);
+
+
+
+
+            
+            /// TABLE
+            $targ =& new CoopView(&$this->page, 'table_permissions', &$this);
+                 
+            $targ->obj->fb_formHeaderText = "Table Permissions for {$this->table}";
+            $targ->obj->query(
+                sprintf('
+select field_name, table_name, group_id, 
+user_level, group_level, table_permissions.realm_id 
+from table_permissions  
+left join realms using (realm_id)
+where table_name = "%s"
+order by table_name,field_name;
+',
+                                      $this->table));
+                    
+            confessObj($targ, 'targ');
+            $res .= $targ->simpleTable(false);
+
+
+
+            return $res;
+        }
 
 } // END COOP VIEW CLASS
 

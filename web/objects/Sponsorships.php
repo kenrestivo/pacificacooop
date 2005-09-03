@@ -57,7 +57,6 @@ class Sponsorships extends DB_DataObject
             $top =& $this->CoopView;      // make life sane!
             $cp =& $this->CoopView->page;
 
-            $top->obj->{$top->pk} = $_REQUEST[$top->pk];
             $top->obj->find(true);		//  XXX aack! need this for summary
             print $top->horizTable();
 

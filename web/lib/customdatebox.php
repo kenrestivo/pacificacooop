@@ -56,7 +56,7 @@ function %stodaysDate(datefield) {
                $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
 				   $js . "//]]>\n</script>";
            }
-			   $js .= "<noscript><h1>WARNING! This page WILL NOT work without Javascript. You must enable Javascript in your browser first. Sorry about that.</h1></noscript>";
+			   $js .= "<noscript><h1>NOTICE! Some features on this page require Javascript. You will need to enable Javascript in your browser to use them.</h1></noscript>";
 			   return $js;
        }
    }

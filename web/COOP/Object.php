@@ -48,6 +48,32 @@ class coopObject
                              'details' => 'Details',
                              'view' => 'View',
                              'edit'  => 'Edit');
+    // used for getperms, and for report too. one place, no double-changing.
+    var $permsQuery = "select 
+table_permissions.table_name, table_permissions.field_name,
+max(if((upriv.max_user <= table_permissions.user_level or
+table_permissions.user_level is null), 
+upriv.max_user, table_permissions.user_level)) as cooked_user,
+max(if((upriv.max_group >=  table_permissions.group_level or
+table_permissions.group_level is null), 
+upriv.max_group, NULL )) as cooked_group,
+max(if((upriv.max_user > table_permissions.menu_level or
+table_permissions.menu_level is null),
+upriv.max_user, NULL)) as cooked_menu
+from table_permissions 
+left join 
+(select max(user_level) as max_user, max(group_level) as max_group, 
+%d as user_id, realm_id
+from user_privileges 
+where user_id = %d 
+or (user_id is null and group_id in 
+(select group_id from users_groups_join 
+where user_id = %d)) 
+group by realm_id 
+order by realm_id) as upriv
+on upriv.realm_id = table_permissions.realm_id
+where user_id = %d and table_name = '%s'
+group by user_id,table_name,field_name";
 
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
 		{
@@ -223,10 +249,6 @@ class coopObject
 	function getSummary()
 		{
 			
-			// XXX hack to skip over jointables. ugly, but it works.
-			if(preg_match('/_join/', $this->table, $matches)){
-				return $this->parentCO->getSummary();
-			}
 			//confessObj($this, 'getSummary');
 			return $this->concatLinkFields(&$this->obj);
 				
@@ -433,33 +455,7 @@ class coopObject
         {
             //it's REALLY annoying to see that shit here.
             $this->obj->debugLevel($this->page->debug > 7 ? 2 : 0);
-            $this->obj->query(sprintf("
-select 
-table_permissions.table_name, table_permissions.field_name,
-max(if((upriv.max_user <= table_permissions.user_level or
-table_permissions.user_level is null), 
-upriv.max_user, table_permissions.user_level)) as cooked_user,
-max(if((upriv.max_group >=  table_permissions.group_level or
-table_permissions.group_level is null), 
-upriv.max_group, NULL )) as cooked_group,
-max(if((upriv.max_user > table_permissions.menu_level or
-table_permissions.menu_level is null),
-upriv.max_user, NULL)) as cooked_menu
-from table_permissions 
-left join 
-(select max(user_level) as max_user, max(group_level) as max_group, 
-%d as user_id, realm_id
-from user_privileges 
-where user_id = %d 
-or (user_id is null and group_id in 
-(select group_id from users_groups_join 
-where user_id = %d)) 
-group by realm_id 
-order by realm_id) as upriv
-on upriv.realm_id = table_permissions.realm_id
-where user_id = %d and table_name = '%s'
-group by user_id,table_name,field_name
-        ",
+            $this->obj->query(sprintf($this->permsQuery,
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid'],
@@ -478,14 +474,6 @@ group by user_id,table_name,field_name
 
             $this->page->confessArray($this->perms, "getPerms({$this->table}) foun in db", 2);
 
-            //XXXX: should these defaults NOT BE HARDCODED HERE?
-            /// stick these in the db instead
-            if(count($this->perms) < 1){
-                $this->page->printDebug("getperms({$this->table}): NO perms, inserting defaults", 4);
-                $this->perms[null]['user'] = ACCESS_DELETE;   
-                $this->perms[null]['group'] = ACCESS_VIEW;   
-                $this->perms[null]['menu'] = $this->perms[null]['user'];   
-            }
 
         }
 

@@ -6,18 +6,25 @@ this uses PEAR, particualrly HTML::QuickForm and DB::DataObjects
 i tried to make it backwards-compatible to DB_DataObjects_FormBuilder
 fields i added to the dataobject, which are *not* in FormBuilder
 
-fb_allYears  (old allyears)
+in DO:
+fb_allYears  1/0 (old allyears. show for ALL schoolyears)
 fb_display_[view|details|summary|alarm]
-fb_URLFIelds
-fb_joinPaths  (old links)
-fb_usePage    (old page)
-fb_longHeader (old summary, if applicable)
-fb_shortHeader (old shortdesc)
-fb_dupeIgnore
-fb_sizes
+fb_URLFIelds array(fieldn...)
+fb_joinPaths  array(table -> path:tghrough:links)
+fb_usePage    "" (old page)
+fb_longHeader "" (old summary, if applicable)
+fb_shortHeader "" (old shortdesc)
+fb_dupeIgnore array(fieldn...)
+fb_sizes  = array(field, size)
 fb_fieldsToUnrender (always hide these! annoying, but needed.)
 fb_displayFormat  array (field => sprintffrormat)
 fb_displayCallabacks = array (field => cb)
+fb_viewActions = array  (action => level)
+fb_recordActions = array  (action => level)
+
+in coopview
+fullText (do not truncate longtextfields)
+
 ---------------
 
 NOTE: these are the OLD readme notes. no longer relevant

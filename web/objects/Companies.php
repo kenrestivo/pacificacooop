@@ -138,4 +138,83 @@ var $fb_shortHeader = 'Contacts';
    );
 
 
+function fb_display_details()
+        {
+
+            // use names from old code. easier than search/replacing.
+            $cp =& $this->CoopView->page;
+            $top =& $this->CoopView;
+            $mi = $top->pk;
+            $cid = $this->{$mi};
+            
+            //confessObj($this, 'this');
+
+	//$res .= "CHECKING $table<br>";
+	$top->obj->$mi = $cid;
+	$top->obj->find(true);		//  XXX aack! need this for summary
+	$res .= $top->horizTable();
+
+	// sponsorships
+	$sp = new CoopView(&$cp, 'sponsorships', &$top);
+	$sp->obj->$mi = $cid;
+	$sp->obj->orderBy('school_year desc');
+	$res .= $sp->simpleTable();
+
+	foreach(array('flyer_deliveries', 
+				  'solicitation_calls', 'ads') as $table)
+	{
+		$view = new CoopView(&$cp, $table, &$top);
+		//$res .= "CHECKING $table<br>";
+		if(in_array('school_year', array_keys(get_object_vars($view->obj)))){
+			$view->obj->orderBy('school_year desc');
+		}
+		$view->obj->$mi = $cid;
+		$res .= $view->simpleTable();
+	}
+
+	// XXX this just SXCREAMS for a refactoring. a repetitive function.
+	// linktable, destinationtable, mainindex, and id?
+	$co = new CoopObject(&$cp, 'companies_income_join', &$top);
+	$co->obj->$mi = $cid;
+	$real = new CoopView(&$cp, 'income', &$co);
+	$real->obj->orderBy('school_year desc');
+	$real->obj->joinadd($co->obj);
+	//$real->obj->fb_fieldsToRender[] = 'family_id';
+	$res .= $real->simpleTable();
+	
+
+	$co = new CoopObject(&$cp, 'companies_auction_join', &$top);
+	$co->obj->$mi = $cid;
+	$real = new CoopView(&$cp, 'auction_donation_items', &$top);
+	$real->obj->orderBy('school_year desc');
+	$real->obj->joinadd($co->obj);
+	$res .= $real->simpleTable();
+
+	$co = new CoopObject(&$cp, 'companies_in_kind_join', &$top);
+	$co->obj->$mi = $cid;
+	$real = new CoopView(&$cp, 'in_kind_donations', &$co);
+	$real->obj->joinadd($co->obj);
+	$res .= $real->simpleTable();
+
+	//TODO put tickets in here!
+
+
+	$inv =& new CoopObject(&$cp, 'springfest_attendees', &$top);
+	$inv->obj->$mi = $cid;
+	$inc = new CoopView(&$cp, 'auction_purchases', &$top);
+	$inc->obj->joinAdd($inv->obj);
+	$res .= $inc->simpleTable();
+
+
+	// standard audit trail, for all details
+	$aud =& new CoopView(&$cp, 'audit_trail', &$top);
+	$aud->obj->table_name = $top->table;
+	$aud->obj->index_id = $cid;
+	$aud->obj->orderBy('updated desc');
+	$res .= $aud->simpleTable();
+    return $res;
+
+        }
+
+
 }

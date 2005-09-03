@@ -34,6 +34,8 @@ class Audit_trail extends DB_DataObject
 		'updated' => 'Edited On'
 		);
 	var $fb_fieldsToRender = array ('audit_user_id', 'updated');
+    var $fb_recordActions = array();
+    var $fb_viewActions = array();
 
     //XXX details surfing is broken, this request shit. force off.
 //     var $fb_recordActions = array();

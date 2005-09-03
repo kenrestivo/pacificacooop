@@ -45,6 +45,7 @@ class Ads extends DB_DataObject
 		'income_id' =>  'Payment Summary',
 		'lead_id' => "Invitee"
 		);
+    
 
 	var $fb_fieldsToRender = array(
 		"ad_size_id" ,

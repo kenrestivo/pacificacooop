@@ -139,6 +139,8 @@ switch($_REQUEST['action']){
  case 'details':
 
      $atd->fullText = true;    // force details to show all
+     // MUST DO THIS! FIRST! please find a better way, this sucks
+     $atd->obj->{$atd->pk} = $_REQUEST[$atd->prependTable($atd->pk)]; 
 
      if(is_callable(array($atd->obj, 'fb_display_details'))){
          print $atd->obj->fb_display_details();
@@ -160,8 +162,19 @@ switch($_REQUEST['action']){
      $aud->obj->index_id = $id;
      $aud->obj->orderBy('updated desc');
      print $aud->simpleTable();
-     
-	 break;
+
+     print $cp->selfURL(
+         array('value' => 'Click here for detailed view of Permissions',
+
+               'inside' => array('table' => $atd->table,
+                                 'action' => 'perms')
+               ));
+ 	 break;
+ 
+ case 'perms':
+     print $atd->showPerms();
+     break;
+
 
 ////CONFIRMDELETE
  case 'confirmdelete':
