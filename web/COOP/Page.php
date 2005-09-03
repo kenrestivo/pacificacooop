@@ -65,6 +65,8 @@ class coopPage
 	var $userStruct;				// cache of legacy info ($u)
 	var $bufferedOutput;			// to store buffered output, for QFC
 	var $vars;                  //alias of session vars. i hope.
+    var $title = 'Data Entry';  // the titlebar of the browser windowi
+    var $heading = 'Pacifica Co-Op Nursery School Data Entry'; // to display
 
 	function coopPage($debug = false)
 		{
@@ -85,8 +87,7 @@ class coopPage
 
 
 	// NOTE! prints directly to screen, doesn't return output!
-	function header($title = 'Data Entry', 
-					$heading = 'Pacifica Co-Op Nursery School Data Entry')
+	function header()
 		{
 			global $metalinks; // from first.inc. bah.
 			global $doctype; // from first.inc. bah.
@@ -99,7 +100,7 @@ class coopPage
 
 		<div id="header">
 				<h2>%s</h2>',
-				   $doctype, $metalinks, $title, $heading);
+				   $doctype, $metalinks, $this->title, $this->heading);
 			
 			
 			$this->debugCrap();

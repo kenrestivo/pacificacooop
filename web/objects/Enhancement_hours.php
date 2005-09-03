@@ -56,9 +56,9 @@ class Enhancement_hours extends DB_DataObject
      'hours' => 10
    );
 
-//     var $fb_joinPaths = array(
-//         'school_year' => 'parents:kids:enrollment'
-//         );
+     var $fb_joinPaths = array(
+         'family_id' => 'parents'
+         );
 
 
 // set hours size = 10

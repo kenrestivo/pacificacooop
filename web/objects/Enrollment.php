@@ -55,6 +55,7 @@ class Enrollment extends DB_DataObject
     var $fb_usePage = 'newroster.php';
     
     var $fb_shortHeader = 'Roster';
-    
+   
+    var $fb_joinPaths = array('family_id' => 'kids'); //while findpaths is broken
 
 }

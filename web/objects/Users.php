@@ -30,22 +30,28 @@ class Users extends DB_DataObject
 	var $fb_linkDisplayFields = array('name');
 	var $fb_formHeaderText = 'System Users';
 	var $fb_shortHeader = 'Users';
+	var $fb_fieldsToUnRender = array('password');
 
-	// from docs. very kewl
-	function preGenerateForm() {
-		$this->fb_preDefElements['password'] = 
-			HTML_QuickForm::createElement('password', 'password', 
-										  'Password');
+// 	// from docs. DOES NOT work with my stuff
+// 	function preGenerateForm() {
+//         unset($this->fb_fieldsToUnRender);
+// 		$this->fb_preDefElements['password'] = 
+// 			HTML_QuickForm::createElement('password', 'password', 
+// 										  'Password');
 		
-}
+// }
 	
-	function preProcessForm(&$data) {
-//		confessArray($data, "preproecessdata");
-		if(isset($data['password'])) {
-			if($data['password'] != $this->password) {
-				$data['password'] = md5($data['password']);
-			}
-		}
-	}
+// 	function preProcessForm(&$data) {
+// //		confessArray($data, "preproecessdata");
+//         confessObj($this, 'this');
+//         $cf =& $this->CoopForm;
+// 		if(isset($data[$cf->prependTable('password')])) {
+//             print 'HEY';
+// 			if($data[$cf->prependTable('password')] != $this->password) {
+//                 print 'YOU';
+// 				$this->password = md5($data[$cf->prependTable('password')]);
+// 			}
+// 		}
+// 	}
 
 }

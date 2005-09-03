@@ -49,4 +49,9 @@ class Workers extends DB_DataObject
 	var $fb_shortHeader =  'Workdays';
 	var $fb_linkDisplayFields =  array('parent_id', 'am_pm_session');
 
+     var $fb_joinPaths = array(
+         'family_id' => 'parents'
+         );
+
+
 }

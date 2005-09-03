@@ -27,7 +27,10 @@ class Realms extends DB_DataObject
 	var $fb_linkDisplayFields = array('realm');
 	var $fb_formHeaderText = 'Data Realms';
 	var $fb_shortHeader = 'Realms';
-
+	var $fb_crossLinks = array(array('table' => 'user_privileges', 
+									 'toTable' => 'users',
+									 'toField' => 'user_id',
+									 'type' => 'select'));
 
 }
  

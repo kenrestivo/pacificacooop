@@ -49,7 +49,7 @@ class coopView extends CoopObject
 
             $this->joinTo('family_id');
             $this->joinTo('school_year');
-            $page->confessArray($this->obj->joinPaths,
+            $page->confessArray($this->obj->fb_joinPaths,
                                       'coopView() joinpaths found', 3);
             // reset debuglevel in obj, which may bave been set by save!
             $this->obj->debugLevel($this->page->debug > 5 ? 2: 0);
@@ -625,6 +625,21 @@ order by table_name,field_name;
             confessObj($targ, 'targ');
             $res .= $targ->simpleTable(false);
 
+
+           /// REEPORTS
+            $targ =& new CoopView(&$this->page, 'report_permissions', &$this);
+                 
+            $targ->obj->fb_formHeaderText = "Report Permissions";
+            $targ->obj->query(
+                sprintf('
+select report_name, page, 
+user_level, group_level, report_permissions.realm_id 
+from report_permissions  
+left join realms using (realm_id)
+order by report_name'));
+                    
+            confessObj($targ, 'targ');
+            $res .= $targ->simpleTable(false);
 
 
             return $res;

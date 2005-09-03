@@ -38,6 +38,8 @@ class Parents extends DB_DataObject
 	var $fb_formHeaderText = 'Parents';
 	var $fb_shortHeader = 'Parents';
 
+    var $fb_joinPaths = array('school_year' => 'kids:enrollment');
+
 	function fb_linkConstraints()
 		{
 			// ugly, but consisent. only shows parents for this year

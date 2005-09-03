@@ -151,12 +151,34 @@ switch($_REQUEST['action']){
      $atd->obj->find(true);		//  XXX aack! need this for summary
      print $atd->horizTable();
      
+
+     //confessObj($atd, 'what');
+     foreach($atd->backlinks as $table =>$linkid){
+         // for now, blow off the jointables
+         $cp->printDebug("$this->table backwards link for $linkid {$atd->obj->$linkid}  $table<br>", 4);
+         $aud =& new CoopView(&$cp, $table, &$atd);
+         $aud->obj->{$linkid} = $atd->obj->{$linkid};
+         //confessObj($aud, 'aud');
+         $cp->debug > 4 && $aud->obj->debugLevel(2);
+         print $aud->simpleTable();
+     }
+
+     foreach($atd->forwardLinks as $table =>$linkpair){
+         list($table, $linkid) = explode(':', $linkpair);
+         $cp->printDebug("$this->table forward link for $linkid {$atd->obj->$linkid}  $table<br>", 4);
+         // for now, blow off the jointables
+         $aud =& new CoopView(&$cp, $table, &$atd);
+         $aud->obj->{$linkid} = $atd->obj->{$linkid};
+         print $aud->simpleTable();
+     }
+
      // standard audit trail, for all details
      $aud =& new CoopView(&$cp, 'audit_trail', &$atd);
      $aud->obj->table_name = $atd->table;
      $aud->obj->index_id = $id;
      $aud->obj->orderBy('updated desc');
      print $aud->simpleTable();
+
 
      print $cp->selfURL(
          array('value' => 'Click here for detailed view of Permissions',

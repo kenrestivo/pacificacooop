@@ -24,6 +24,10 @@ class Groups extends DB_DataObject
 	var $fb_linkDisplayFields = array('name');
 	var $fb_formHeaderText = 'Groups of Users';
 	var $fb_shortHeader = 'Groups';
+	var $fb_crossLinks = array(array('table' => 'users_groups_join', 
+									 'toTable' => 'users',
+									 'toField' => 'user_id',
+									 'type' => 'select'));
 
 
 }

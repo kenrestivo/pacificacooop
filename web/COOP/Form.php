@@ -121,6 +121,7 @@ class coopForm extends CoopObject
 			$trans_tbl = array_flip ($trans_tbl);       
 
 
+
 			$frozen = array();
 			//confessObj($this, 'coopForm::build($id) found');
 			foreach($this->obj->toArray() as $key => $dbval){
@@ -160,12 +161,6 @@ class coopForm extends CoopObject
 					}
 					continue;
 				}
-
-                // TODO: should i check fieldstounrender here too?
-                
-                if(!$this->obj->fb_allYears && $key == 'school_year'){
-                    continue;
-                }
 
 				if(is_array($this->obj->fb_preDefElements) && 
 				   in_array($key, array_keys($this->obj->fb_preDefElements))){
@@ -304,10 +299,24 @@ class coopForm extends CoopObject
 									  sprintf('CoopForm::process(vars): %s', 
 											  $this->table), 
 									  2);
-	
-			$old = $this->obj; // copy, not ref!
+
+			$old = $this->obj->__clone($this->obj); // copy, not ref!
 		
 			$this->obj->setFrom($this->scrubForSave($vars));
+
+
+            // NOTE! this is very different from fb. here the OBJ does the
+            // work, not the vars
+            // ALSO! do it *after* scrubforsave! otherwise it gets wiped out!
+            if(is_callable(array($this->obj, 'preProcessForm'))){
+                $this->page->printDebug(
+                    "CoopForm::process($this->table)) PREPROCESSING", 3);
+                // NOTE! i must do this before calling generators
+                $this->obj->CoopForm =& $this; 
+                call_user_func(array($this->obj, 'preProcessForm'), &$vars);
+            }
+
+
 
 			// better way to guess?
 			if($vars[$this->prependTable($this->pk)]){		
@@ -491,7 +500,7 @@ class coopForm extends CoopObject
 		{
 			//confessObj($this, 'this');
 			print $this->page->confessArray($vars, 
-									  'CoopForm::processAddRemove(vars)', 1);
+									  'CoopForm::processCrossLinks(vars)', 1);
 			
 			if(!is_array($this->obj->fb_crossLinks)){
 				return;

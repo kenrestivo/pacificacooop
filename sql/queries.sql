@@ -1253,12 +1253,58 @@ user_level as usrlvl, group_level as grplvl, realm_id as rlm
 from table_permissions 
 order by table_name,field_name;
 
--- needign familyid
+-- needign familyide
 select sum(if(field_name = 'family_id', 1, 0)) as present, 
 realm_id, table_name 
 from table_permissions  
 group by table_name, realm_id
 having present <1 
 order by table_name ;
+
+
+
+-- the DISASTER of report perms
+select 
+report_permissions.report_name, report_permissions.page,
+max(if((upriv.max_group > report_permissions.menu_level or
+report_permissions.menu_level is null), 
+upriv.max_group, NULL)) as cooked_menu
+from report_permissions 
+left join 
+(select max(user_level) as max_user, max(group_level) as max_group, 
+91 as user_id, realm_id
+from user_privileges 
+where user_id = 91 
+or (user_id is null and group_id in 
+(select group_id from users_groups_join 
+where user_id = 91)) 
+group by realm_id 
+order by realm_id) as upriv
+on upriv.realm_id = report_permissions.realm_id 
+where user_id = 91 
+group by user_id,report_name,report_permissions.realm_id
+
+
+-------AGAIN, with feeling
+select 
+report_permissions.report_name, report_permissions.page,
+max(if((upriv.max_group > report_permissions.menu_level or
+report_permissions.menu_level is null), 
+upriv.max_group, NULL)) as cooked_menu
+from report_permissions 
+left join 
+(select max(user_level) as max_user, max(group_level) as max_group, 
+91 as user_id, realm_id
+from user_privileges 
+where user_id = 91 
+or (user_id is null and group_id in 
+(select group_id from users_groups_join 
+where user_id = 91)) 
+group by realm_id 
+order by realm_id) as upriv
+on upriv.realm_id = report_permissions.realm_id 
+where user_id = 91 and report_permissions.realm_id = 3
+group by user_id,report_name,report_permissions.realm_id
+
 
 --- EOF

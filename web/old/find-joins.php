@@ -31,17 +31,30 @@ while($co->obj->fetch()){
 
             
 foreach($tables as $table){
-    $err = '';
+    $err = ''; 
+    $status = ''; 
     $targ =& new CoopObject(&$page, $table, &$co);
     foreach(array('family_id', 'school_year') as $linkcol){
+        //print "HEY $table $linkcol [". $targ->obj->fb_joinPaths[$linkcol]. ']<br>';
+        if($targ->obj->fb_joinPaths[$linkcol]){
+            //print "foio";
+            $status .= "$linkcol was in fb_joinPaths ";
+        }
         $targ->joinTo($linkcol);
         if(count($targ->obj->fb_joinPaths[$linkcol]) != 1){
             ++$i;
-            $err .= "$linkcol ";
+            $err .= "NO $linkcol ";
         }
+
+        if(count($targ->obj->fb_joinPaths[$linkcol]) > 1){
+            ++$i;
+            $err .= "TOO MANY $linkcol ";
+        }
+
     }
     if($err){
-        confessArray($targ->obj->fb_joinPaths, "$table ======== $err");
+        print "ERROR $table ======== $err, $status ===========<br>";
+        confessArray($targ->obj->fb_joinPaths, $table);
     }
 }
             

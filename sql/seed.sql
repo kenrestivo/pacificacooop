@@ -558,7 +558,8 @@ values
 
 insert into table_permissions set table_name = 'users', realm_id = 19;
 insert into table_permissions set table_name = 'groups', realm_id = 19;
---insert into table_permissions set table_name = 'realms', realm_id = 19;
+insert into table_permissions set table_name = 'user_privileges', realm_id = 19;
+insert into table_permissions set table_name = 'realms', realm_id = 19;
 --insert into table_permissions set table_name = 'access_levels', realm_id = 19, user_level = 0, group_level = 0;
 
 insert into table_permissions set table_name = 'table_permissions', realm_id = 19;

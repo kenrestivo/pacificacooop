@@ -155,6 +155,9 @@ group by user_id,table_name,field_name";
 									  "getLinks() backlinks for $this->table",
 									  4);
 
+			$this->page->confessArray($this->forwardLinks,
+									  "getLinks() forward for $this->table",
+									  4);
 			return $this->backlinks;
 		}
 
@@ -487,67 +490,19 @@ group by user_id,table_name,field_name";
         }
 
 
-    // because it's breadth first, returns an array
-    function findPathToField($field, $path = '')
-        {
-            // easier if i append right at the top
-            $path = $path ? "$path:". $this->table : $this->table;
-            $this->page->printDebug("CoopObject::findpathtofield($field, $path): starting", 4);
 
-            $res = array();
-            $searchthese = array();
-
-            // first off, if i'm the one, i'm done!
-            if(in_array($field, array_keys(get_class_vars($this->table)))){
-                $res[] = $path;
-                $this->page->confessArray(get_class_vars($this->table), 
-                                          "CoopObject::findpathtofield($field, $path) found in top-level", 5);
-                return $res;
-            }
-
-            //breadth first
-            foreach($this->backlinks as $fartable => $farfield){
-                $co =& new CoopObject(&$this->page, $fartable, &$this);
-                $tmp = $co->findPathToField($field, $path);
-                if(count($tmp) > 0){
-                     $this->page->printDebug("CoopObject::findpathtofield($field, $path) found it in $fartable", 
-                                             4);
-                    $res = array_merge($res, $tmp);
-                } else {
-                    //deal with later, remember, breadth first
-                    $searchthese[] =& $co;
-                }
-            }
-            
-            if(count($res)){
-                // first-breadth worked. close enough for rock and roll
-                $this->page->printDebug("CoopObject::findpathtofield($field, $path) first pass worked", 4);
-                return $res;
-            }
-        
-            // nothing found at top, so depth-charge me
-            if(count($searchthese)){
-                foreach($searchthese as $co){
-                    $tmp = $co->findPathToField($field, $path);
-                    if(count($tmp)){
-                        $res = array_merge($res, $tmp);
-                    }
-                }
-            }
-            return $res;
-        }
-
-
+    // populates the jointable ONLY for tables not already set by dbdo
+    // ONLY a few will have this be dynamic. most have it static for now.
     function joinTo($fieldname)
         {
-            if(!isset($this->obj->joinPaths[$fieldname])){
-                $found = $this->findPathToField($fieldname);
-                if(count($found) > 1){
-                    $this->page->confessArray($found, "joinTo($fieldname): WARNING! taking first one", 
-                                              1);
-                }
-                count($found) && $this->obj->joinPaths[$fieldname] = $found[0]; 
+            // it's local, fret not
+            if(in_array($fieldname, array_keys(get_class_vars($this->table)))){
+                $this->obj->fb_joinPaths[$fieldname] = $this->table;
             }
+            if(!isset($this->obj->fb_joinPaths[$fieldname])){
+                return false;
+            }
+
         }
 
 

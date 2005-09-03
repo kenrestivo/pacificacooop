@@ -189,8 +189,10 @@ class CoopMenu extends HTML_Menu
                     $i++;
                     // do add the tle always, but only url if 
                     $res[$k]['sub'][$i]['title']= $tab->obj->report_name;
-                    // TODO: check report level!
-                    if(1){
+                    $rp =& new CoopObject(&$this->page, 'report_permissions',
+                                       &$subrl);
+                    if($this->getReportPerms(&$rp, $tab->obj->realm_id) >= ACCESS_VIEW)
+                    {
                         $res[$k]['sub'][$i]['url'] = 
                             $this->page->selfURL(
                                 array(
@@ -199,7 +201,8 @@ class CoopMenu extends HTML_Menu
                                           $tab->obj->table_name,
                                           'realm' => $tab->obj->realm_id),
                                     'base' =>$tab->obj->page)); 
-                    }
+          
+          }
                 } // END REPORTS
 
             } // END REALM
@@ -213,9 +216,47 @@ class CoopMenu extends HTML_Menu
             return array($res, $i);
         }
 
+    // maybe create a report class, which is a subclass of coopview
+    function getReportPerms(&$rp, $realmid)
+        {
+            $rp->obj->query(sprintf('
+select 
+report_permissions.report_name, report_permissions.page,
+max(if((upriv.max_group > report_permissions.menu_level or
+report_permissions.menu_level is null), 
+upriv.max_group, NULL)) as cooked_menu
+from report_permissions 
+left join 
+(select max(user_level) as max_user, max(group_level) as max_group, 
+%d as user_id, realm_id
+from user_privileges 
+where user_id = %d 
+or (user_id is null and group_id in 
+(select group_id from users_groups_join 
+where user_id = %d)) 
+group by realm_id 
+order by realm_id) as upriv
+on upriv.realm_id = report_permissions.realm_id 
+where user_id = %d and report_permissions.realm_id = %d
+group by report_permissions.realm_id',
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid'],
+                                      $this->page->auth['uid'],
+                                      $realmid
+                                      ));
+            $res = $rp->obj->getDatabaseResult();
+            while ($row =& $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+                $menu  = $row['cooked_menu'];
+                //confessArray($row, 'row');
+            }
+            return $menu;
+        }
 
 
-} // END COOPMENU CLASS
+
+} // END COOPMENU CLASSr
+
 
 
 
