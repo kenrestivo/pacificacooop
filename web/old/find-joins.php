@@ -37,11 +37,11 @@ foreach($tables as $table){
         $targ->joinTo($linkcol);
         if(count($targ->obj->fb_joinPaths[$linkcol]) != 1){
             ++$i;
-            $err .= "ERROR!!! $table path to $linkcol is not 1<br>";
+            $err .= "$linkcol ";
         }
-        if($err){
-            confessArray($targ->obj->fb_joinPaths, $err);
-        }
+    }
+    if($err){
+        confessArray($targ->obj->fb_joinPaths, "$table ======== $err");
     }
 }
             
