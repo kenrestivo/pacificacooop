@@ -36,7 +36,6 @@ class coopForm extends CoopObject
 {
 	var $form;  // cache of generated form
 	var $_tableDef; //  cached table stuff
-	var $subtables = array(); // cached subtable coopforms, indexed by table
 
 
 
@@ -116,7 +115,6 @@ class coopForm extends CoopObject
 	// yes this is easily as ugly as my old shared.inc, or FB. oh well.
 	function addAndFillVars($vars)
 		{
-			$st = $vars[$this->prependTable('subtables')];
 
 			// need these for un-html'ing
 			$trans_tbl = get_html_translation_table (HTML_ENTITIES);
@@ -169,22 +167,16 @@ class coopForm extends CoopObject
 					$this->form->addElement(&$el);
 					$el->setName($fullkey); 
 				} else if($this->isLinkField($key)) {
-					// check that we don't want NEW here
-					if(isset($st[$key])){
-						$this->addSubtable($key);
-						continue;
-					} else {
- 						$type = (!is_array($this->obj->fb_addNewLinkFields) ||
-							in_array($key, $this->obj->fb_addNewLinkFields)) 
-							? 'customselect' : 'select';
-                        $type = 'select';  // XXX FORCE until i square shit away
-                        $el =& $this->form->addElement(
-							$type, 
-							$fullkey, false, 
-							$this->selectOptions($key));
-                        $el->_parentForm =& $this->form;
+                    $type = (!is_array($this->obj->fb_addNewLinkFields) ||
+                             in_array($key, $this->obj->fb_addNewLinkFields)) 
+                        ? 'customselect' : 'select';
+                    $type = 'select';  // XXX FORCE until i square shit away
+                    $el =& $this->form->addElement(
+                        $type, 
+                        $fullkey, false, 
+                        $this->selectOptions($key));
+                    $el->_parentForm =& $this->form;
 						
-					}
 				} else if(is_array($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{
@@ -308,22 +300,6 @@ class coopForm extends CoopObject
 									  2);
 	
 			$old = $this->obj; // copy, not ref!
-			
-
-			/// process recursive subtables FIRST
-			$st = $vars[$this->prependTable('subtables')];
-			if(is_array($st)){
-				foreach($st as $key => $val){
-					list($table, $farid) = explode(':', 
-												   $this->forwardLinks[$key]);
-					$this->page->debug > 1 &&
-						print "<br>DEBUG processing $key $val (table $table) for $this->table";
-					$sub =& $this->subtables[$table]; // subobject cache
-					$sub->form->process(array(&$sub, 'process'));
-					$vars[$this->prependTable($key)] = $sub->id; // yay!!!
-				}
-			}
-
 		
 			$this->obj->setFrom($this->scrubForSave($vars));
 
@@ -475,20 +451,6 @@ class coopForm extends CoopObject
 // 					user_error("CoopForm::addRequiredFields($fieldname)", 
 // 							   E_USER_NOTICE);
 				
-					// exempt subfields
-					$vars = $this->form->getSubmitValues();
-					if(!isset($vars[$this->prependTable('subtables')][$fieldname])){
-						$this->form->addRule($this->prependTable($fieldname), 
-											 "$key mustn't be empty.", 
-											 'customrequired');
-						// XXX hack around quickform braindeadedness
-						$this->form->_required[] = 
-							$this->prependTable($fieldname);
- 
- 						$this->page->debug > 1 &&
-							user_error("$fieldname is required in $this->table", 
- 								   E_USER_NOTICE);
-					}
 				}
 			}
 			//confessObj($this->form, 'ahc');
@@ -753,27 +715,6 @@ class coopForm extends CoopObject
 		{
 
 			$vals =& $this->form->getSubmitValues();
-			$st= $vals[$this->prependTable('subtables')];
-			if(is_array($st)){
-				foreach($st as $key => $val){
-					list($table, $farid) = explode(':', 
-												   $this->forwardLinks[$key]);
-					$this->page->printDebug("CoopForm::validate()  $key $val (table $table) for $this->table", 3);
-					$temp = $this->subtables[$table]->validate(); // OBJECT!
-					if($temp == false){
-                        $this->page->printDebug("{$table}::validate() didn't validate",
-                                                3);
-                        confessArray($this->subtables[$table]->form->_errors, 
-                                     $table . ' form errors!', 3);
-                    }
-                    $res += $temp;
-					$count++;
-
-					// i have to refresh the thing, now that it's been validated
-					// it has already been added the first time, in ->build()
-					$this->addSubTable($key, $table, true);
-				}
-			}
 			
 			$temp  = $this->form->validate(); // FORM!
 			if($temp == false){
@@ -790,49 +731,6 @@ class coopForm extends CoopObject
 			return  $res == $count ? true : false;
 		}
 
-	// the gettable means i'm sending it a KEYNAME not a tablename
-	// and i've got to look up the table
-	// all this formpresent shit sucks, but i don't know any other way
-	function addSubTable($field, $table = false, $formpresent = false)
-		{
-			if(!$table){
-				list($table, $farid) = explode(':', $this->forwardLinks[$field]);
-			} 
-			
-			// ok, build the stinking thing
-			if(!$formpresent){
-				$sub = new CoopForm(&$this->page, $table, &$this); 
-				$sub->obj->fb_createSubmit = false;
-				$sub->build($_REQUEST); // request necessary to get submitted vals
-				$sub->addRequiredFields();
-				$this->subtables[$table] =& $sub; // cache it
-			} else {
-				$sub =& $this->subtables[$table];
-			}
-
-			$inside = sprintf("<div>%s</div>", 
-							  preg_replace('!</?form[^>]*?>!i', '',
-										   $sub->form->toHTML()));
-			if(!$formpresent){
-				$fake =& $this->form->addElement('static',	
-												 $sub->prependTable($sub->pk), 
-												 false);
-			} else { 
-				$fake =& $this->form->getElement($sub->prependTable($sub->pk));
-			}
-			$fake->setValue($inside);
-
-
-			if(!$formpresent){
-			// basically, pass this thru, but with 'built', not ADD NEW
-			$this->form->addElement('hidden', 
-									sprintf("%s-subtables[%s]",
-											$this->table, $sub->pk),
-									'built');
-			}
-			
-
-		}
 
 	//FB API compatibility
 	function useForm(&$form)
