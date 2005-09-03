@@ -12,6 +12,8 @@ require_once('utilstest.php');
 
 // MAYBE automate this part too? login/uid?
 $cp = new coopPage( $debug);
+$cp->title = 'Unit Tests for Co-Op';
+$cp->heading = 'Unit Tests';
 print $cp->pageTop();
 
 
