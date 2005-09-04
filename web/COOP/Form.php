@@ -571,6 +571,8 @@ class coopForm extends CoopObject
 			}
 		}
 
+    // now, remember. these are totally different tables that
+    // COOPFORM AND THIS DBDO DOESN"T KNOW ABOUT! treat it carefully
 	function addCrossLinks($vars)
 		{
 			
@@ -585,10 +587,23 @@ class coopForm extends CoopObject
 				$ft = $la['toTable'];
 				$nk = $this->backlinks[$mt];
 
+
+                // links will add or delete from the mid table!
+				$mid = new CoopObject(&$this->page, $mt, $this);
+                if($mid->isPermittedField() < ACCESS_DELETE){
+                    return;
+                }
+
 				
 				//duplication of selectoptions
-				$this->page->debug > 3 && $this->obj->debugLevel(2);
+                $this->debugWrap(3);
 				$far = new CoopObject(&$this->page, $ft, $this);
+
+                // i obviously need to view the remotes
+                if($far->isPermittedField() < ACCESS_VIEW){
+                    return;
+                }
+
 
 				// IIRC this has a different name in FB. use theirs!
  				if(is_callable(array($far->obj, 'fb_linkConstraints'))){

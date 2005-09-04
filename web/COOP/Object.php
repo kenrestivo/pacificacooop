@@ -505,6 +505,16 @@ group by user_id,table_name,field_name";
 
         }
 
+    function debugWrap($pagedebuglevel, $dblevel = 2)
+        {
+            if($this->page->debug < $pagedebuglevel){
+                return;
+            }
+
+            $this->page->printDebug("$this->table setting dbdo debuglevel to $dblevel");
+            $this->obj->debugLevel($dblevel);
+        }
+
 
 } // END COOP OBJECT CLASS
 
