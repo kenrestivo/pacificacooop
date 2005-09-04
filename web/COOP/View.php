@@ -144,12 +144,38 @@ class coopView extends CoopObject
             // in horiztable, simpletable, onelinetable, etc
             // and i have to FORCE ispermitted to return the userlevel
             $perms = $this->isPermittedField(NULL,true);
+
+
             if($perms < ACCESS_VIEW){
                 $this->page->printDebug(
                     "CoopView::find($this->table) NO VIEW PERMS!", 2 );
                 return false;
             }
-			if($find){
+	
+
+            //XXX if it's a subview, it may be for the *above* family.
+            /// note the permitted here is NOT forcing family, for lookup
+            if($this->isPermittedField() < ACCESS_VIEW)
+            {
+                $this->page->printDebug("FORCING familyid for search", 2);
+                $this->obj->family_id = $this->page->userStruct['family_id'];
+            }
+    
+            if($this->perms[NULL]['year'] < ACCESS_VIEW){
+                //TODO: use the GLOBAL or LOCAL POPUP!
+                $this->obj->school_year = findSchoolYear();
+            } else {
+                //TODO: maybe instead check path?
+                if($this->inObject('school_year')){
+                    //TODO: i'll need an orderby in the fucking object.
+                    //or... another global popup, the user can change!
+                    $this->obj->orderBy('school_year desc');
+                }
+            }
+
+
+            //// finally, go get 'em!
+            if($find){
 				$found = $this->obj->find();
 			} else {
 				$found = $this->obj->N;
@@ -299,6 +325,7 @@ class coopView extends CoopObject
 
 			//XXX hack! do this AFTER query, but not here.
 			// BEFORE the query, backlink whatever will need to get real familyid
+            // XXX DO NOT DO THIS!! go FIX IT! THIS IS A BUG BUG BUG!
 			// the right thing to do is to fish familyid out of backlinks!
 			if(!$this->inObject('family_id')) {
                 $this->page->printDebug(

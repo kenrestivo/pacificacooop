@@ -65,27 +65,18 @@ function genericView(&$atd)
     $atd =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
     //$atd->obj->debugLevel(2);
 
-    // TODO: if i move this to simpletable, i need to check if it is set first
-    //i.e. if it's a subview, it may be for the *above* family.
-    //search only for my familyid
-    if($atd->isPermittedField() < ACCESS_VIEW){
-        $atd->obj->family_id = $atd->page->userStruct['family_id'];
-    }
-    
-    if($atd->perms[NULL]['year'] < ACCESS_VIEW){
-        if($atd->inObject('school_year')){
-            $atd->obj->orderBy('school_year desc');
-        }
-    } else {
-        $atd->obj->school_year = findSchoolYear();
-    }
+
 
      if(is_callable(array($atd->obj, 'fb_display_view'))){
+         $atd->page->printDebug('callign callback for view', 2);
          return $atd->obj->fb_display_view();
      }
 
+
+     //$atd->debugWrap(2);
+
     //TODO: some variation on the old "perms display" from auth.inc
-    //maybe at bottom of doc? with editor to change them? ;-)
+    //maybe at or top of doc? with editor to change them? ;-)
     return $atd->simpleTable();
 			
 }

@@ -57,12 +57,12 @@ class Enrollment extends DB_DataObject
     var $fb_shortHeader = 'Roster';
    
     var $fb_joinPaths = array('family_id' => 'kids'); //while findpaths is broken
-    function fb_display_view()
-        {
-            $this->orderBy('am_pm_session'); //, kids.last_name, kids.first_name');
-            return $this->CoopView->simpleTable();
+//     function fb_display_view()
+//         {
+//             $this->orderBy('am_pm_session'); //, kids.last_name, kids.first_name');
+//             return $this->CoopView->simpleTable();
             
-        }
+//         }
 
     function fb_display_details()
         {
