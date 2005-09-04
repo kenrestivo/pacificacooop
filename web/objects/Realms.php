@@ -32,5 +32,11 @@ class Realms extends DB_DataObject
 									 'toField' => 'user_id',
 									 'type' => 'select'));
 
+    var $fb_fieldsToRender = array ('short_description', 'meta_realm_id');
+    var $fb_linkDisplayFields = array ('short_description');
+    var $fb_fieldLabels = array('realm' => 'Id',
+                                'short_description' => 'Data/Menu Realm',
+                                'meta_realm_id' => 'Is Subrealm of');
+
 }
  

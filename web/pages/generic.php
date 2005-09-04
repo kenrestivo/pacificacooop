@@ -152,31 +152,32 @@ switch($_REQUEST['action']){
      print $atd->horizTable();
      
 
-     //confessObj($atd, 'what');
-     foreach($atd->backlinks as $table =>$linkid){
+     // NIFTY CODE TO SHOW ALL LINKS!
+     foreach(array_merge($atd->backlinks, $atd->forwardLinks) as $key =>$val){
+         
+         // backlinks and forward links are different, alas
+         if(strstr($val, ':')){
+             $nearid = $key;
+             list($table, $farid) = explode(':', $val);
+         } else {
+             $table = $key;
+             $nearid = $farid = $val;
+         }
+
          if($table == $atd->table){ // blow off recursion
              continue;
          }
+
+
          // for now, blow off the jointables
-         $cp->printDebug("$atd->table backwards link for $linkid {$atd->obj->$linkid}  $table<br>", 4);
+         $cp->printDebug("$atd->table  link for $nearid {$atd->obj->$nearid}  $table<br>", 4);
          $aud =& new CoopView(&$cp, $table, &$atd);
-         $aud->obj->{$linkid} = $atd->obj->{$linkid};
+         $aud->obj->{$farid} = $atd->obj->{$nearid};
          //confessObj($aud, 'aud');
          $cp->debug > 4 && $aud->obj->debugLevel(2);
          print $aud->simpleTable();
      }
 
-     foreach($atd->forwardLinks as $table =>$linkpair){
-         list($table, $linkid) = explode(':', $linkpair);
-         if($table == $atd->table){ // blow off recursion
-             continue;
-         }
-         $cp->printDebug("$atd->table forward link for $linkid {$atd->obj->$linkid}  $table<br>", 4);
-         // for now, blow off the jointables
-         $aud =& new CoopView(&$cp, $table, &$atd);
-         $aud->obj->{$linkid} = $atd->obj->{$linkid};
-         print $aud->simpleTable();
-     }
 
      // standard audit trail, for all details
      $aud =& new CoopView(&$cp, 'audit_trail', &$atd);
