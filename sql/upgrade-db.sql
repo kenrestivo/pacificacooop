@@ -12,7 +12,7 @@ alter table parents drop column worker;
 -- 	add the realms (seed.sql)
 alter table events add column   realm_id int(32) default NULL;
 alter table user_privileges add column   realm_id int(32) default NULL;
-alter table table_permissions add column   realm_id int(32) default NULL;
+
 
 -- 	new table_permissions use hardcopy stored in seed.sql
 
@@ -35,6 +35,7 @@ update groups set name = "Members" where group_id  =1;
 -- add new access_level table (definition.sql)
 -- seed the access_levels (seed.sql)
 -- add or replace the files table (definition.sql)
+
 
 insert into user_privileges set realm_id=19, user_id  = 52, group_level = 800, user_level = 800;
 
@@ -73,5 +74,7 @@ values
 -- ENTER THEM MANUALLY DUDE
 
 alter table calendar_events add column show_on_public_page enum('Unknown','Yes','No') default 'No';
+
+-- give betsy year level 500 permissions on membership! so she can see fams.
 
 ---CONGRATULATIONS! you're done making massive changes to the database.

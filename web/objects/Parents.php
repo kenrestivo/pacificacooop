@@ -34,15 +34,18 @@ class Parents extends DB_DataObject
 		);
 	var $fb_linkOrderFields = array ('last_name', 'first_name');
 	var $fb_enumFields = array ('type', 'worker');
-	var $fb_fieldsToRender = array ('last_name', 'first_name', 'type', 'worker');
 	var $fb_formHeaderText = 'Parents';
 	var $fb_shortHeader = 'Parents';
 
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
 
-	function fb_linkConstraints()
+	function fb_linkConstraints(&$co)
 		{
 			// ugly, but consisent. only shows parents for this year
+            // UNLESS THE USER HAS PERMS FOR IT!!
+            if($co->perms[NULL]['year'] >= ACCESS_VIEW){
+                return;
+            }
 
 			//$this->debugLevel(2);
 			$fam = $this->factory('families'); 

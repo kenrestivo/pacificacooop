@@ -59,10 +59,14 @@ table_permissions.group_level is null),
 upriv.max_group, NULL )) as cooked_group,
 max(if((upriv.max_user > table_permissions.menu_level or
 table_permissions.menu_level is null),
-upriv.max_user, NULL)) as cooked_menu
+upriv.max_user, NULL)) as cooked_menu,
+ max(if((upriv.max_year <= table_permissions.year_level or
+table_permissions.year_level is null), 
+upriv.max_year, table_permissions.year_level)) as cooked_year
 from table_permissions 
 left join 
 (select max(user_level) as max_user, max(group_level) as max_group, 
+max(year_level) as max_year,
 %d as user_id, realm_id
 from user_privileges 
 where user_id = %d 
@@ -333,6 +337,11 @@ group by user_id,table_name,field_name";
                     4);
 				return false;
 			}
+
+            //XXX this is totally wrong still
+            if($key == 'school_year' && $this->perms[NULL]['year'] < ACCESS_VIEW){
+                return false;
+            }
 			
 
             if(is_array($this->obj->fb_fieldsToUnRender)  &&
@@ -343,15 +352,6 @@ group by user_id,table_name,field_name";
                     4);
 			    return false;  // i am very, very sorry for this
             }
-            
-            if(!$this->obj->fb_allYears && $key == 'school_year'){
-            	$this->page->printDebug(
-                    "ispermitted($this->table : $key) is a school year, and i don't have allyears set", 
-                    4);
-                return false;
-            }
-
-
 
             // i'm looking in perms calc. choose what to use now.
             // remember! the db needs to give separate perms for fields/tables
@@ -370,6 +370,7 @@ group by user_id,table_name,field_name";
             } else {
                 $res = $usethese['group'];
             }
+
 
             $this->page->printDebug(
                 "ispermitted($this->table : $key) RETURNING for OBJ famid {$this->obj->family_id}, my famid {$this->page->userStruct['family_id']}, force [$forceuser] perms [$res]",
@@ -414,10 +415,15 @@ group by user_id,table_name,field_name";
 			return ucwords($this->table);
 		}
 	
-	// by default, i want to constrain finds in this way:
+	// by default, i want to constrain join/finds in this way:
+	// this callback is executed BEFORE stuffing choices in a SELECT box
 	function defaultConstraints()
 		{
-			$this->obj->school_year = findSchoolYear();
+            // UNLESS THE USER HAS PERMS FOR IT!!
+            if($this->perms[NULL]['year'] >= ACCESS_VIEW){
+                return;
+            }
+            $this->obj->school_year = findSchoolYear();
 		}
 
 	/// XXX this is not really used. instead, i overload insert
@@ -481,7 +487,8 @@ group by user_id,table_name,field_name";
                 $this->perms[$row['field_name']] = 
                     array('user'=>$row['cooked_user'],
                           'group' =>$row['cooked_group'],
-                          'menu' =>$row['cooked_menu']);
+                          'menu' =>$row['cooked_menu'],
+                          'year' =>$row['cooked_menu']);
             }
 
             $this->page->confessArray($this->perms, "getPerms({$this->table}) foun in db", 2);

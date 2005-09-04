@@ -67,7 +67,6 @@ class Leads extends DB_DataObject
 
 
 	var $fb_hidePrimaryKey = false; // i needs my lead_id!
-    var $fb_allYears = true;   // by default,  leads  are not year-specific
 
     var $fb_usePage = '10names.php';
 

@@ -898,7 +898,8 @@ field_name varchar(255),
 realm_id int(32) default NULL,
 user_level int(5) default NULL,
 group_level int(5) default NULL,
-menu_level int(5) default NULL
+menu_level int(5) default NULL,
+year_level int(5) default NULL
 );
 
 create table workers(

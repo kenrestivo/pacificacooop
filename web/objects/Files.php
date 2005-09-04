@@ -108,7 +108,7 @@ class Files extends DB_DataObject
                 $this->file_date = date('Y-m-d H:i:s', 
                                         filemtime($this->kenPath . 
                                                   $unique_filename));
-                return parent::insert();
+                parent::insert();
             }
             
             return false;  // uh oh. boo boo.

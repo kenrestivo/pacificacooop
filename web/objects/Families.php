@@ -41,11 +41,14 @@ class Families extends DB_DataObject
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
 
 
-	function fb_linkConstraints()
+	function fb_linkConstraints(&$co)
 		{
 			// ugly, but consisent. only shows families for this year
 
             // UNLESS THE USER HAS PERMS FOR IT!!
+            if($co->perms[NULL]['year'] >= ACCESS_VIEW){
+                return;
+            }
 
 			$kids = $this->factory('kids'); 
  			if (PEAR::isError($kids)){

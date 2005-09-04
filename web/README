@@ -7,7 +7,6 @@ i tried to make it backwards-compatible to DB_DataObjects_FormBuilder
 fields i added to the dataobject, which are *not* in FormBuilder
 
 in DO:
-fb_allYears  1/0 (old allyears. show for ALL schoolyears)
 fb_display_[view|details|summary|alarm]
 fb_URLFIelds array(fieldn...)
 fb_joinPaths  array(table -> path:tghrough:links)

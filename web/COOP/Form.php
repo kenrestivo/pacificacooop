@@ -268,9 +268,9 @@ class coopForm extends CoopObject
 			$top =& $this->findTop(); // need this for overrides
 			if(!isset($top->overrides[$sub->table]['fb_linkConstraints'])){ 
 				if(is_callable(array($sub->obj, 'fb_linkConstraints'))){
-					$sub->obj->fb_linkConstraints();
+					$sub->obj->fb_linkConstraints(&$this);
 				} else {
-					$sub->defaultConstraints();
+					$sub->defaultConstraints(&$this);
 				}
 			}
 			//TODO add linkorderfields
@@ -607,9 +607,9 @@ class coopForm extends CoopObject
 
 				// IIRC this has a different name in FB. use theirs!
  				if(is_callable(array($far->obj, 'fb_linkConstraints'))){
-					$far->obj->fb_linkConstraints();
+					$far->obj->fb_linkConstraints(&$this);
 				} else {
-					$far->defaultConstraints();
+					$far->defaultConstraints(&$this);
 				}
 				$far->obj->orderBy(implode(', ', 
 										   $far->obj->fb_linkDisplayFields));
