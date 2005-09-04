@@ -121,4 +121,6 @@
 			  (visit-all-links wtc family url))
 			'("Cooke" "Bartlett" "Restivo")))
 
+;; i.e.; (many-visit-hack wtc "http://www/coop-dev") 
+
 ;;EOF

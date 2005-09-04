@@ -290,6 +290,7 @@ human_to_sql_date($dt)
 
 /*******************
 	HUMANTOSQLTIME
+        this function ought to be taken out and shot
 	takes a human-formatted date, and make it palatable to sql
 	inputs: a human-formatted date
 	outputs: an sql-formatted date
@@ -337,7 +338,8 @@ human_to_sql_timestamp($dt)
 function
 sql_to_human_date($dt)
 {
-	if(preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/", 
+    // NOTE: this pregmatch *MUST* match the one in human_to_sql_timestamp
+	if(preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s*?((\d{1,2}):(\d{2})(:\d{1,2})*)*\s*(\w{2})*$/",
 				  $dt, $cleaned) > 0){
 		user_error("sql_to_human_date($dt) is already in human format",
 				   E_USER_NOTICE);

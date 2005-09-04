@@ -37,7 +37,9 @@ class Table_permissions extends DB_DataObject
         'realm_id' => 'Data/Menu Realm',
         'user_level' => 'Forbid this action level, or any above, to user\'s own data, ever.',
         'group_level' => 'Forbid this action to other families\' data, unless permitted.',
-        'menu_level' => 'Forbid users with group permissions below this from even being able to see the menu'
+        'menu_level' => 'Forbid users with group permissions below this from even being able to see the menu',
+        'year_level' => 'Forbit users with menu perms below this from doing this accion to OLD (not this school year) data'
+
         );
 
 	var $fb_requiredFields = array('table_name', 'realm_id');
