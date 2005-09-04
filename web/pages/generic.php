@@ -64,14 +64,16 @@ function genericView(&$atd)
 
     $atd =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
     //$atd->obj->debugLevel(2);
+
+    // TODO: if i move this to simpletable, i need to check if it is set first
+    //i.e. if it's a subview, it may be for the *above* family.
     //search only for my familyid
     if($atd->isPermittedField() < ACCESS_VIEW){
         $atd->obj->family_id = $atd->page->userStruct['family_id'];
     }
     
-    if($atd->obj->fb_allYears){
-        if(in_array('school_year', 
-                    array_keys(get_object_vars($atd->obj)))){
+    if($atd->perms[NULL]['year'] < ACCESS_VIEW){
+        if($atd->inObject('school_year')){
             $atd->obj->orderBy('school_year desc');
         }
     } else {

@@ -300,9 +300,7 @@ class coopView extends CoopObject
 			//XXX hack! do this AFTER query, but not here.
 			// BEFORE the query, backlink whatever will need to get real familyid
 			// the right thing to do is to fish familyid out of backlinks!
-			if(!in_array('family_id', 
-						array_keys(get_object_vars($this->obj))))
-			{
+			if(!$this->inObject('family_id')) {
                 $this->page->printDebug(
                     sprintf('HEY! i am forcing the familyid from %d to 0!',
                             $row['family_id']), 4);
@@ -551,7 +549,7 @@ class coopView extends CoopObject
                 $this->page->userStruct['username'];
             $targ->obj->query(
                 sprintf('select max(user_level) as user_level, 
-max(group_level) as group_level,  realm
+max(group_level) as group_level,  max(year_level) as year_level, realm
 from user_privileges 
 left join realms on user_privileges.realm_id = realms.realm_id
 where user_id = %d 

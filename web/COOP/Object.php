@@ -60,8 +60,7 @@ upriv.max_group, NULL )) as cooked_group,
 max(if((upriv.max_user > table_permissions.menu_level or
 table_permissions.menu_level is null),
 upriv.max_user, NULL)) as cooked_menu,
- max(if((upriv.max_year <= table_permissions.year_level or
-table_permissions.year_level is null), 
+max(if(upriv.max_year > table_permissions.user_level,
 upriv.max_year, table_permissions.year_level)) as cooked_year
 from table_permissions 
 left join 
@@ -488,7 +487,7 @@ group by user_id,table_name,field_name";
                     array('user'=>$row['cooked_user'],
                           'group' =>$row['cooked_group'],
                           'menu' =>$row['cooked_menu'],
-                          'year' =>$row['cooked_menu']);
+                          'year' =>$row['cooked_year']);
             }
 
             $this->page->confessArray($this->perms, "getPerms({$this->table}) foun in db", 2);
@@ -520,6 +519,19 @@ group by user_id,table_name,field_name";
 
             $this->page->printDebug("$this->table setting dbdo debuglevel to $dblevel");
             $this->obj->debugLevel($dblevel);
+        }
+
+    // very useful utility for checking for the presence of a field
+    function inObject($key, $isset = false)
+        {
+            if($isset){
+                return isset($this->obj->$key);
+            }
+            
+            //shows whether this thing is part of this object!
+            return in_array($key, 
+                            array_keys(get_object_vars($this->obj)));
+           
         }
 
 

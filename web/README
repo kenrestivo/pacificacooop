@@ -24,6 +24,17 @@ fb_recordActions = array  (action => level)
 in coopview
 fullText (do not truncate longtextfields)
 
+
+unique app-specific tweaks:
+family_id and school_year are *special* fields
+	both are:
+		automatically populated with defaults in form, if empty
+			using quickform setdefaults, so any setting overrides it
+		automatically searched for in genericview, IFF perms require it!
+	family_id
+
+
+
 ---------------
 
 NOTE: these are the OLD readme notes. no longer relevant
