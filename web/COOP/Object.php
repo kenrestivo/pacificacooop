@@ -317,7 +317,8 @@ group by user_id,table_name,field_name";
 		}
 
 
-	function isPermittedField($key = NULL, $forceuser = false)
+	function isPermittedField($key = NULL, $forceuser = false, 
+                              $forceyear = null)
 		{
 
 			// if it's a key, and we don't show them, then no
@@ -336,8 +337,8 @@ group by user_id,table_name,field_name";
                     4);
 				return false;
 			}
-
-            //XXX this is totally wrong still
+            
+            //XXX this is totally wrong still. is it really separate from below?
             if($key == 'school_year' && $this->perms[NULL]['year'] < ACCESS_VIEW){
                 return false;
             }
@@ -358,6 +359,7 @@ group by user_id,table_name,field_name";
                 $this->perms[$key] : $this->perms[NULL];
 
 
+
             if($forceuser || 
                $this->page->userStruct['family_id'] == $this->obj->family_id)
             {
@@ -369,6 +371,20 @@ group by user_id,table_name,field_name";
             } else {
                 $res = $usethese['group'];
             }
+
+            $sy = findSchoolYear();  
+            if(!$forceyear &&  
+               $this->inObject('school_year') &&$sy != $this->obj->school_year)
+            {
+                
+            	$this->page->printDebug(
+                    "ispermitted($this->table : $key) NOT MY YEAR! limiting", 
+                    4);
+                    //MIN! limit them.
+                $res = min($res, $usethese['year']);
+            }
+
+
 
 
             $this->page->printDebug(
@@ -527,7 +543,9 @@ group by user_id,table_name,field_name";
             if($isset){
                 return isset($this->obj->$key);
             }
-            
+  
+            // i get OBJECT vars here, not class vars. if i've set it
+            confessArray(array_keys(get_object_vars($this->obj)), "$key in $this->table");
             //shows whether this thing is part of this object!
             return in_array($key, 
                             array_keys(get_object_vars($this->obj)));

@@ -102,7 +102,10 @@ class coopView extends CoopObject
 							 'bgcolor=#aabbff align=left', 'TH'); 
 				}
 				//$tab->addRow(array_values($this->obj->toArray()));
-				$tab->addRow($this->toArray($header['keys']),'valign="top"');
+                if($this->isPermittedField() >= ACCESS_VIEW){
+                    $tab->addRow($this->toArray($header['keys']),
+                                 'valign="top"');
+                }
 			
 			}
 			
@@ -140,11 +143,12 @@ class coopView extends CoopObject
 	
 	function find($find)
 		{
+
+
             // i stuck this into find so i don't have to duplicate it
             // in horiztable, simpletable, onelinetable, etc
             // and i have to FORCE ispermitted to return the userlevel
-            $perms = $this->isPermittedField(NULL,true);
-
+            $perms = $this->isPermittedField(NULL,true,true);
 
             if($perms < ACCESS_VIEW){
                 $this->page->printDebug(
@@ -155,22 +159,29 @@ class coopView extends CoopObject
 
             //XXX if it's a subview, it may be for the *above* family.
             /// note the permitted here is NOT forcing family, for lookup
-            if($this->isPermittedField() < ACCESS_VIEW)
+            if($this->isPermittedField(null) < ACCESS_VIEW)
             {
                 $this->page->printDebug("FORCING familyid for search", 2);
                 $this->obj->family_id = $this->page->userStruct['family_id'];
             }
     
-            if($this->perms[NULL]['year'] < ACCESS_VIEW){
+            /// XXX have to do it man, and this is not the way to do it
+            /// check ispermitted here too, just in case
+            /// they shouldn't even *see* a chooser if they aren't permitted
+            /// but i's like to be paranoid
+            if(!$CHECKGLOBALSCHOOLYEAR){
                 //TODO: use the GLOBAL or LOCAL POPUP!
-                $this->obj->school_year = findSchoolYear();
-            } else {
-                //TODO: maybe instead check path?
-                if($this->inObject('school_year')){
-                    //TODO: i'll need an orderby in the fucking object.
-                    //or... another global popup, the user can change!
-                    $this->obj->orderBy('school_year desc');
-                }
+                //only use $sy if nothing is set
+                $this->obj->school_year = $sy;
+            } 
+
+            //TODO: maybe instead check path?
+            //i may not ALWAYS want to sort by school year, ya know
+            if($this->inObject('school_year')){
+                print "ADDING SY for $this->table ???";
+                //TODO: i'll need an orderby in the fucking object.
+                //or... another global popup, the user can change!
+                $this->obj->orderBy('school_year desc');
             }
 
 
@@ -350,7 +361,7 @@ class coopView extends CoopObject
 			// get the fieldnames out the dataobject
 			foreach($this->obj->toArray() as $key => $trash){
 				//print "checking $key<br>";
-				if($this->isPermittedField($key, true) &&
+				if($this->isPermittedField($key) &&
                     $key != $par->pk)
                 {
                     $keys[] = $key;
@@ -499,7 +510,7 @@ class coopView extends CoopObject
             //checking here for a WHOLE TABLE. 
             //i HACK HACK HACK and force it to my family,
             //because, at least SOME records (mine) i can do these actions to
-            $permitted = $this->isPermittedField(null, true);
+            $permitted = $this->isPermittedField(null, true, true);
             $va = is_array($this->obj->fb_viewActions) ? 
                 $this->obj->fb_viewActions : $this->viewActions;
             foreach($va as $action => $needlevel){
