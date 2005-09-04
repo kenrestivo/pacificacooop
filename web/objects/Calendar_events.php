@@ -34,16 +34,13 @@ class Calendar_events extends DB_DataObject
         'event_id' => 'Event',
         'event_date' => 'Date of Event',
         'keep_event_hidden_until_date' => 'Hide this Event Until',
-        'school_year' => 'School Year'
-        );
-    var $fb_fieldsToRender = array(
-        'status' ,
-        'event_id',
-        'event_date', 
-        'school_year' 
+        'school_year' => 'School Year',
+        'show_on_public_page' => 'Show on publicly-accessible home page?'
         );
 	var $fb_formHeaderText =  'Calendar of Events';
 	var $fb_shortHeader =  'Calendar';
+    var $fb_fieldsToUnRender = array('keep_event_hidden_until_date');
+    var $fb_enumFields = array('show_on_public_page');
 
     function fb_display_view()
         {

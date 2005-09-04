@@ -104,7 +104,7 @@ switch($_REQUEST['action']){
 
 
 	 // ugly assthrus for my cheap dispatcher
-	 $atdf->form->addElement('hidden', 'action', 'edit'); 
+	 $atdf->form->addElement('hidden', 'action', $_REQUEST['action']); 
 	 $atdf->form->addElement('hidden', 'table', $_REQUEST['table']); 
 
 	 $atdf->legacyPassThru();
@@ -121,6 +121,7 @@ switch($_REQUEST['action']){
          if($_REQUEST['action'] == 'edit'){
              print genericView(&$atd);
          }else {
+             confessArray($_REQUEST, 'request before redisplay');
              print $atdf->form->toHTML();
          }
 	 } else {

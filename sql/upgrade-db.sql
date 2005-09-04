@@ -44,34 +44,7 @@ add the events for start of fall, etc, and the calendar_events too (seed.sql)
 alter table blog_entry change column show_on_public_page  show_on_public_page enum('Unknown','Yes','No') default 'No';
 alter table blog_entry change column   show_on_members_page show_on_members_page enum('Unknown','Yes','No') default 'Yes';
 
--- add events stuff from seeds
-
-insert into calendar_events 
-(event_id, school_year, event_date)
-values
-(10, '2005-2006', '2005-08-19'),
-(20, '2005-2006', '2005-08-20'),
-(11, '2005-2006', '2005-09-05'),
-(2, '2005-2006', '2005-09-13 19:00:00'),
-(12, '2005-2006', '2005-09-07 19:00:00'),
-(13, '2005-2006', '2005-09-21 19:00:00'),
-(2, '2005-2006', '2005-10-04 19:00:00'),
-(11, '2005-2006', '2005-10-10'),
-(13, '2005-2006', '2005-10-19 19:00:00'),
-(14, '2005-2006', '2005-10-22'),
-(2, '2005-2006', '2005-11-01 19:00:00'),
-(11, '2005-2006', '2005-11-11'),
-(13, '2005-2006', '2005-11-16 19:00:00'),
-(16, '2005-2006', '2005-11-25'),
-(17, '2005-2006', '2005-11-28'),
-(2, '2005-2006', '2005-12-06 19:00:00'),
-(13, '2005-2006', '2005-12-21 19:00:00'),
-(16, '2005-2006', '2005-12-19'),
-(17, '2005-2006', '2006-01-03'),
-(6, '2005-2006', '2006-06-30'),
-(5, '2005-2006', '2006-02-01');
---TODO: the rest of 'em from lisa
--- ENTER THEM MANUALLY DUDE
+-- add events and calendar events stuff from seeds
 
 alter table calendar_events add column show_on_public_page enum('Unknown','Yes','No') default 'No';
 

@@ -116,145 +116,77 @@ VALUES
 
 
 
--- events
-insert into events set
-            event_id = 1,
-            description = "Christmas Tree Field Trip",
-            notes = "Christmas tree farm. All insurance and drivers licenses must be up-to-date.",
-            url = 'insurance.php'
-;
-
-insert into events set
-            event_id = 2,
-            description = "Parent Education Meeting",
-            notes = "Mandatory meeting for all parents"
-;
-
-insert into events set
-            event_id = 3,
-            realm_id = 10,
-            description = "Springfest Invitation Names Due",
-            notes = "Each family must enter a list of 10 people to be invited to Springfest ",
-            url = '10names.php'
-;
-
-insert into events set
-            event_id = 4,
-            realm_id = 10,
-            description = "Springfest Auction Donation Items Due",
-            url = 'auction.php',
-            notes = "Each family must enter at least 1 auction donation online"
-;
-
-insert into events set
-            event_id = 5,
-            realm_id = 3,
-            description = "Fall Enhancement Cutoff Date",
-            url = 'enhancement.php',
-            notes = "Each family must complete their fall enhancement hours before this date"
-;
-
-
-insert into events set
-            event_id = 6,
-            realm_id = 3,
-            description = "Spring Enhancement Cutoff Date",
-            url = 'enhancement.php',
-            notes = "Each family must complete their spring enhancement hours before this date"
-;
-
-insert into events set
-            event_id = 7,
-            realm_id = 10,
-            description = "Springfest",
-            url = 'public_auction.php',
-            notes = "The date of this year's Springfest event"
-;
-
-insert into events set
-            event_id = 8,
-            realm_id = 2,
-            description = "Start of Fall Semester",
-            notes = "The first day of the Fall Semester"
-;
-
-insert into events set
-            event_id = 9,
-            realm_id = 2,
-            description = "Start of Spring Semester",
-            notes = "The first day of the Spring Semester"
-;
-
-insert into events (event_id, description, realm_id)
-values
-(10, 'All paperwork due to 1st V.P.',2),
-(11, 'School Holiday',2),
-(12, 'New parent orientation',2),
-(13, 'Board Meeting PCNS',2),
-(14, 'Trike-a-thon',2),
-(15, 'Alternate parents day',2),
-(16, 'School out for Recess',2),
-(17, 'School Resumes',2),
-(18, 'KOA Family Campout',2),
-(19, 'Bug School',2);
-(20, 'Work Party',3);
+INSERT INTO `events` VALUES 
+(1,'Christmas Tree Field Trip','Christmas tree farm. All insurance and drivers licenses must be up-to-date.','insurance.php',NULL),
+(2,'Parent Education Meeting','Attendance is mandatory for all families',NULL,2),
+(3,'Springfest Invitation Names Due','Each family must enter a list of 10 people to be invited to Springfest ','10names.php',10),
+(4,'Springfest Auction Donation Items Due','Each family must enter at least 1 auction donation online','auction.php',10),
+(5,'Fall Enhancement Cutoff Date','Each family must complete their fall enhancement hours before this date','enhancement.php',3),
+(6,'Spring Enhancement Cutoff Date','Each family must complete their spring enhancement hours before this date','enhancement.php',3),
+(7,'Springfest','Springfest is our biggest fundraiser of the year.','public_auction.php',10),
+(8,'Start of Fall Semester','The first day of the Fall Semester','calendar.php',2),
+(9,'Start of Spring Semester','The first day of the Spring Semester','calendar.php',2),
+(10,'All paperwork due to 1st V.P.',NULL,NULL,2),
+(11,'School Holiday',NULL,NULL,2),
+(12,'New parent orientation','All new parents must attend this.',NULL,2),
+(13,'Board Meeting','Board meetings are open to membership, and are held at the school.',NULL,2),
+(14,'Trike-a-thon','Our Fall Fundraiser',NULL,2),
+(15,'Alternate parents day',NULL,NULL,2),
+(16,'School out for Recess',NULL,NULL,2),
+(17,'School Resumes',NULL,NULL,2),
+(18,'KOA Family Campout',NULL,NULL,2),
+(19,'Bug School Begins',NULL,NULL,2),
+(20,'Work Party','Earn your required enhancement hours by working on the school and playground',NULL,3),
+(21,'Tuition Due','Please pay promptly to avoid fees!',NULL,9),
+ (22,'Last day of school','The school year ends here. Have a great summer!',NULL,2);
 
 
 
--- calendar items for this first online year. TEMP!
-insert into calendar_events set
-            event_id = 4,
-            school_year = '2003-2004',
-            event_date = "2003-12-18"
-;
-
-insert into calendar_events set
-            event_id = 3,
-            school_year = '2003-2004',
-            event_date = "2003-11-04"
-;
-
-insert into calendar_events set
-            event_id = 1,
-            school_year = '2003-2004',
-            event_date = "2003-12-12"
-;
-
-insert into calendar_events set
-            event_id = 5,
-            school_year = '2004-2005',
-            event_date = "2004-12-31"
-;
-
-insert into calendar_events set
-            event_id = 6,
-            school_year = '2004-2005',
-            event_date = "2005-06-30"
-;
-
-insert into calendar_events set
-            event_id = 7,
-            school_year = '2004-2005',
-            event_date = "2005-03-19"
-;
-
-insert into calendar_events set
-            event_id = 5,
-            school_year = '2005-2006',
-            event_date = "2005-12-31"
-;
-
-insert into calendar_events set
-            event_id = 6,
-            school_year = '2005-2006',
-            event_date = "2006-06-30"
-;
-
-insert into calendar_events set
-            event_id = 8,
-            school_year = '2005-2006',
-            event_date = "2005-09-12"
-;
+INSERT INTO `calendar_events` VALUES 
+(1,4,'Active',NULL,'2003-12-18 00:00:00','2003-2004','No'),
+(2,3,'Active',NULL,'2003-11-04 00:00:00','2003-2004','No'),
+(3,1,'Active',NULL,'2003-12-12 00:00:00','2003-2004','No'),
+(4,5,'Active',NULL,'2005-02-01 00:00:00','2004-2005','No'),
+(5,6,'Active',NULL,'2005-06-30 00:00:00','2004-2005','No'),
+(6,7,'Active',NULL,'2005-03-19 00:00:00','2004-2005','No'),
+(90,5,'Active',NULL,'2006-02-01 00:00:00','2005-2006','No'),
+(89,6,'Active',NULL,'2006-06-30 00:00:00','2005-2006','No'),
+(88,2,'Active',NULL,'2006-02-07 19:00:00','2005-2006','No'),
+(87,13,'Active',NULL,'2006-01-18 19:00:00','2005-2006','No'),
+(86,17,'Active',NULL,'2006-01-03 00:00:00','2005-2006','No'),
+(85,16,'Active',NULL,'2005-12-19 00:00:00','2005-2006','No'),
+(84,13,'Active',NULL,'2005-12-21 19:00:00','2005-2006','No'),
+(83,2,'Active',NULL,'2005-12-06 19:00:00','2005-2006','No'),
+(82,17,'Active',NULL,'2005-11-28 00:00:00','2005-2006','No'),
+(81,16,'Active',NULL,'2005-11-25 00:00:00','2005-2006','No'),
+(80,13,'Active',NULL,'2005-11-16 19:00:00','2005-2006','No'),
+(79,11,'Active',NULL,'2005-11-11 00:00:00','2005-2006','No'),
+(78,2,'Active',NULL,'2005-11-01 19:00:00','2005-2006','No'),
+(77,14,'Active',NULL,'2005-10-22 00:00:00','2005-2006','Yes'),
+(76,13,'Active',NULL,'2005-10-19 19:00:00','2005-2006','No'),
+(75,11,'Active',NULL,'2005-10-10 00:00:00','2005-2006','No'),
+(74,2,'Active',NULL,'2005-10-04 19:00:00','2005-2006','No'),
+(73,13,'Active',NULL,'2005-09-21 19:00:00','2005-2006','No'),
+(72,12,'Active',NULL,'2005-09-07 19:00:00','2005-2006','No'),
+(71,2,'Active',NULL,'2005-09-13 19:00:00','2005-2006','No'),
+(70,11,'Active',NULL,'2005-09-05 00:00:00','2005-2006','No'),
+(69,20,'Active',NULL,'2005-08-20 00:00:00','2005-2006','No'),
+(68,10,'Active',NULL,'2005-08-19 00:00:00','2005-2006','No'),
+(91,11,'Active',NULL,'2006-02-20 00:00:00','2005-2006','No'),
+(92,13,'Active',NULL,'2006-02-22 00:00:00','2005-2006','No'),
+(93,13,'Active',NULL,'2006-03-22 19:00:00','2005-2006','No'),
+(94,7,'Active',NULL,'2006-03-25 00:00:00','2005-2006','Yes'),
+(95,2,'Active',NULL,'2006-04-04 19:00:00','2005-2006','No'),
+(96,16,'Active',NULL,'2006-04-10 00:00:00','2005-2006','No'),
+(97,17,'Active',NULL,'2006-04-17 00:00:00','2005-2006','No'),
+(98,13,'Active',NULL,'2006-04-19 19:00:00','2005-2006','No'),
+(99,2,'Active',NULL,'2006-05-02 19:00:00','2005-2006','No'),
+(100,13,'Active',NULL,'2006-05-17 19:00:00','2005-2006','No'),
+(101,11,'Active',NULL,'2006-05-29 00:00:00','2005-2006','No'),
+(102,2,'Active',NULL,'2006-06-06 00:00:00','2005-2006','No'),
+(103,13,'Active',NULL,'2006-06-14 19:00:00','2005-2006','No'),
+(104,22,'Active',NULL,'2006-06-14 00:00:00','2005-2006','No'),
+ (105,18,'Active',NULL,'2006-06-16 00:00:00','2005-2006','No');
 
 
 -- the territories
@@ -555,7 +487,7 @@ values
 (81, 'files', null, null, 21, null, null),
 (82, 'audit_trail', null, null, 19, null, null),
 (83,'families',NULL,NULL,14,500,200),
-(84,'calendar_events', 'show_on_public_page', null, 2, 200, 700),
+(84,'calendar_events', 'show_on_public_page', null, 2, 0, 500),
 (85,'calendar_events', NULL, null, 2, NULL, NULL),
 (86,'calendar_events', 'keep_event_hidden_until_date', null, 2, 0, 600)
 ;
