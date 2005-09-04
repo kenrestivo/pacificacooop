@@ -306,17 +306,21 @@ human_to_sql_timestamp($dt)
 	}
     // IS LEGAL HUMAN?
 	if($dt && preg_match(
-           "/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s*?(\d{1,2}:\d{2}(:\d{1,2})*\s*?(\w{2})*)*$/", 
+           "/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s*?((\d{1,2}):(\d{2})(:\d{1,2})*)*\s*(\w{2})*$/", 
 						 $dt, $cleaned) < 1 )
     {
         $err = "human_to_sql_time($dt) was passed an invalid value!!";
 		//PEAR::raiseError($err, E_USER_ERROR);
-        user_error($err, E_USER_ERROR);
+        user_error($err, E_USER_NOTICE);
 	}
 	confessArray($cleaned, "human_to_sql_timestamp($dt)");
 	$cleandate = sprintf("%04d-%02d-%02d",
 						 $cleaned[3], $cleaned[1], $cleaned[2]);
-    $cleaned[4] && $cleandate .= ' '. $cleaned[4];
+    if($cleaned[5]){
+        $cleandate .= sprintf(' %02d:%02d',
+                              $cleaned[8]? $cleaned[5]+12: $cleaned[5], 
+                              $cleaned[6]);
+    }
 	user_error("human_to_sql_time(): changed [$dt] to [$cleandate]",
 			   E_USER_NOTICE);
 	return $cleandate;
