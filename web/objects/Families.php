@@ -36,19 +36,24 @@ class Families extends DB_DataObject
 	//'fromField' => 'family_id', 'toField' => 'income_id'
 	var $fb_linkNewValue = 1;
 	var $fb_fieldsToRender = array ('name', 'phone', 'address1', 'email');
-	
+    var $fb_formHeaderText = "Co-Op Member Families";
+    var $fb_shortHeader = "Families";
+    var $fb_joinPaths = array('school_year' => 'kids:enrollment');
+
+
 	function fb_linkConstraints()
 		{
 			// ugly, but consisent. only shows families for this year
 
+            // UNLESS THE USER HAS PERMS FOR IT!!
 
-			$kids = DB_DataObject::factory('kids'); 
+			$kids = $this->factory('kids'); 
  			if (PEAR::isError($kids)){
 				user_error("Tickets.php::linkconstraint(): db badness", 
 						   E_USER_ERROR);
 			}
 			
-			$enrol = DB_DataObject::factory('enrollment'); 
+			$enrol = $this->factory('enrollment'); 
  			if (PEAR::isError($enrol)){
 				user_error("Tickets.php::linkconstraint(): db badness", 
 						   E_USER_ERROR);

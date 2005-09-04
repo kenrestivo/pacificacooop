@@ -29,6 +29,16 @@ class Report_permissions extends DB_DataObject
 	var $fb_formHeaderText =  'Report Permissions';
     var $fb_shortHeader = 'Reports';
 
+	var $fb_fieldLabels = array(
+		'report_name' => 'Report Short Name',
+        'realm_id' => 'Data/Menu Realm',
+        'user_level' => 'Forbid this action level, to user\'s own data, unless user has permissions at or above this',
+        'group_level' => 'Forbid this action to other families\' data, unless permitted',
+        'menu_level' => 'Forbid users with group permissions below this from even being able to see the menu',
+        'page' => 'The hacky old page this report is on, from the old system'
+        );
+
+	var $fb_requiredFields = array('report_name', 'realm_id', 'page');
 
 
 }

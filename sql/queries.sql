@@ -1249,7 +1249,7 @@ order by updated desc
 limit 4
 
 --- so common, i need to make a web page for it. oh wait, i already do!
-select field_name, table_name as tbl, group_id as grp, 
+select field_name, table_name as tbl,
 user_level as usrlvl, group_level as grplvl, realm_id as rlm 
 from table_permissions 
 order by table_name,field_name;
@@ -1306,6 +1306,21 @@ order by realm_id) as upriv
 on upriv.realm_id = report_permissions.realm_id 
 where user_id = 91 and report_permissions.realm_id = 3
 group by user_id,report_name,report_permissions.realm_id
+
+---- rasta importation errors. fuck it.
+select count(parent_id) as size, name 
+from parents 
+left join families using (family_id) 
+group by parents.family_id 
+having size > 2;
+
+
+--- much harder to find the errors.
+select count(kid_id) as size, name 
+from kids
+left join families using (family_id) 
+group by kids.family_id 
+having size > 1;
 
 
 --- EOF

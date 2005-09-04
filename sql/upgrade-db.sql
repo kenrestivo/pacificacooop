@@ -72,5 +72,6 @@ values
 --TODO: the rest of 'em from lisa
 -- ENTER THEM MANUALLY DUDE
 
+alter table calendar_events add column show_on_public_page enum('Unknown','Yes','No') default 'No';
 
 ---CONGRATULATIONS! you're done making massive changes to the database.

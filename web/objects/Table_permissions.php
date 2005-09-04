@@ -13,7 +13,6 @@ class Table_permissions extends DB_DataObject
     var $table_permissions_id;            // int(32)  not_null primary_key unique_key auto_increment
     var $table_name;                      // string(255)  
     var $field_name;                      // string(255)  
-    var $group_id;                        // int(32)  
     var $realm_id;                        // int(32)  
     var $user_level;                      // int(5)  
     var $group_level;                     // int(5)  
@@ -42,6 +41,17 @@ class Table_permissions extends DB_DataObject
 
 	var $fb_requiredFields = array('table_name', 'realm_id');
 
+    function fb_display_summary()
+        {
+            /// TODO: the simple summary of what i can do
+            
+        }
 
+    function FOOfb_display_details()
+        {
+            /// TODO: the showperms from coopview
+            
+        }
+    
 
 }

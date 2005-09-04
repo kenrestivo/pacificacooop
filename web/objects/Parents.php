@@ -45,19 +45,19 @@ class Parents extends DB_DataObject
 			// ugly, but consisent. only shows parents for this year
 
 			//$this->debugLevel(2);
-			$fam = DB_DataObject::factory('families'); 
+			$fam = $this->factory('families'); 
  			if (PEAR::isError($fam)){
 				user_error("Tickets.php::linkconstraint(): db badness", 
 						   E_USER_ERROR);
 			}
 			
-			$kids = DB_DataObject::factory('kids'); 
+			$kids = $this->factory('kids'); 
  			if (PEAR::isError($kids)){
 				user_error("Tickets.php::linkconstraint(): db badness", 
 						   E_USER_ERROR);
 			}
 			
-			$enrol = DB_DataObject::factory('enrollment'); 
+			$enrol = $this->factory('enrollment'); 
  			if (PEAR::isError($enrol)){
 				user_error("Tickets.php::linkconstraint(): db badness", 
 						   E_USER_ERROR);

@@ -16,6 +16,7 @@ class Calendar_events extends DB_DataObject
     var $keep_event_hidden_until_date;    // datetime(19)  binary
     var $event_date;                      // datetime(19)  binary
     var $school_year;                     // string(50)  
+    var $show_on_public_page;             // string(7)  enum
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

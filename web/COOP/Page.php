@@ -365,7 +365,7 @@ class coopPage
 			return $res;
 		}
 
-	function printDebug($string, $level, $outofband = true)
+	function printDebug($string, $level = 0, $outofband = true)
 		{
 			if($level > $this->debug){
 				return;

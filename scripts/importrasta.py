@@ -192,7 +192,7 @@ class Kid(Adder):
     def get(self):
         self.pk='kid_id'
         return self._get("""select * from kids where last_name like '%%%s%%'
-        and first_name like '%%%s%%' """ %
+        and soundex(first_name) = soundex('%%%s%%') """ %
                             (self.rec['Last Name'], self.rec['Child']))
 
 
@@ -246,9 +246,10 @@ class Parent(Adder):
         
     def get(self):
         self.pk='parent_id'
-        return self._get("""select * from parents where last_name like '%%%s%%'
-        and first_name like '%%%s%%' and family_id = %d""" %
-                            (self.rec[self.type+'_last'],
+        return self._get("""select * from parents where 
+        (soundex(first_name) = soundex('%%%s%%')
+        or first_name like '%%%s%%') and family_id = %d""" %
+                            (self.rec[self.type+'_first'],
                              self.rec[self.type+'_first'],
                              self.family_id))
 

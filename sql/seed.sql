@@ -537,7 +537,6 @@ values
 (59,'flyer_deliveries',NULL,NULL,4,NULL,NULL),
 (60,'flyer_deliveries','company_id',NULL,4,600,600),
 (61,'flyer_deliveries','family_id',NULL,4,0,600),
-(62,'families',NULL,NULL,10,NULL,NULL),
 (65,'income',NULL,NULL,9,NULL,500),
 (66,'income','account_number',NULL,9,200,200),
 (67,'income','family_id',NULL,9,200,200),
@@ -554,7 +553,12 @@ values
 (79,'blog_entry', null, null, 21, null, null),
 (80,'job_descriptions', null, null, 8, null, null),
 (81, 'files', null, null, 21, null, null),
-(82, 'audit_trail', null, null, 19, null, null);
+(82, 'audit_trail', null, null, 19, null, null),
+(83,'families',NULL,NULL,14,500,200),
+(84,'calendar_events', 'show_on_public_page', null, 2, 200, 700),
+(85,'calendar_events', NULL, null, 2, NULL, NULL),
+(86,'calendar_events', 'keep_event_hidden_until_date', null, 2, 0, 600)
+;
 
 insert into table_permissions set table_name = 'users', realm_id = 19;
 insert into table_permissions set table_name = 'groups', realm_id = 19;
@@ -565,9 +569,6 @@ insert into table_permissions set table_name = 'realms', realm_id = 19;
 insert into table_permissions set table_name = 'table_permissions', realm_id = 19;
 insert into table_permissions set table_name = 'events', realm_id = 2, group_level = 500, menu_level = 500;
 
-insert into table_permissions set table_name = 'calendar_events', realm_id = 2;
-insert into table_permissions set table_name = 'calendar_events', 
-field_name = 'keep_event_hidden_until_date', realm_id = 2, group_level = 600, user_level  = 0;
 
 INSERT INTO `table_permissions` 
 (table_name , field_name , group_id , realm_id , 
@@ -621,6 +622,20 @@ insert into table_permissions
 values
 (NULL, 'report_permissions', 19, 200, 200);
 
+--- NOTE DIFFERENT ORDER!
+ INSERT INTO table_permissions (table_name ,
+realm_id , user_level , group_level , menu_level )
+VALUES 
+('auction_purchases' , 11 , 500 , 500 , 500 )
+
+
+-- reports
+INSERT INTO `report_permissions` 
+VALUES 
+(1,'Summary','enhancement_summary.php',3,0,0,700),
+(2,'Summary','carriereport.php',9,0,0,700),
+(3,'Summary','nag.php',10,0,0,200),
+(4,'Summary','solicit_summary.php',15,0,0,200);
 
 
 -- default group perms

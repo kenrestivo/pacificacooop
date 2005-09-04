@@ -88,6 +88,7 @@ CREATE TABLE calendar_events (
   status enum('Active','Tentative','Cancelled') default 'Active',
   keep_event_hidden_until_date datetime default NULL,
   event_date datetime default NULL,
+  show_on_public_page enum('Unknown','Yes','No') default 'No',
   school_year varchar(50) default NULL,
   PRIMARY KEY  (calendar_event_id)
 ) ;
@@ -894,7 +895,6 @@ CREATE TABLE table_permissions (
 table_permissions_id int(32) primary key not null unique auto_increment,
 table_name varchar(255),
 field_name varchar(255),
-group_id int(32) default NULL,
 realm_id int(32) default NULL,
 user_level int(5) default NULL,
 group_level int(5) default NULL,
