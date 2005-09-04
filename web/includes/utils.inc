@@ -297,20 +297,23 @@ human_to_sql_date($dt)
 function
 human_to_sql_timestamp($dt)
 {
+    // IS ALREADY LEGAL SQL (then skip)
 	if($dt && preg_match("/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}:d{2}(:\d{2})*)$/", 
                          $dt, $cl) >0) {
 		user_error("human_to_sql_time($dt) is already a legal sql date",
 				   E_USER_NOTICE);
 		return $dt;
 	}
+    // IS LEGAL HUMAN?
 	if($dt && preg_match(
-           "/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s*?(\d{1,2}:\d{2}(:\d{1,2})*)*$/", 
+           "/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s*?(\d{1,2}:\d{2}(:\d{1,2})*\s*?(\w{2})*)*$/", 
 						 $dt, $cleaned) < 1 )
     {
-		PEAR::raiseError("human_to_sql_time($dt) was passed an invalid value!!",
-				   E_USER_ERROR);
+        $err = "human_to_sql_time($dt) was passed an invalid value!!";
+		//PEAR::raiseError($err, E_USER_ERROR);
+        user_error($err, E_USER_ERROR);
 	}
-	//confessArray($cleaned, "human_to_sql_date($dt)");
+	confessArray($cleaned, "human_to_sql_timestamp($dt)");
 	$cleandate = sprintf("%04d-%02d-%02d",
 						 $cleaned[3], $cleaned[1], $cleaned[2]);
     $cleaned[4] && $cleandate .= ' '. $cleaned[4];
