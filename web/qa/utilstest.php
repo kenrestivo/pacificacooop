@@ -54,11 +54,17 @@ class UtilsTest extends PHPUnit_TestCase {
                             human_to_sql_date('1/1/2005'));
     }
 
+
+    //// THE DATETIME
     function test_HUMANdatetime() {
         $this->assertEquals('2005-01-01 12:00',
                             human_to_sql_timestamp('01/01/2005 12:00'));
     }
 
+   function test_HUMANdatetimedeconds() {
+        $this->assertEquals('2005-01-01 12:00',
+                            human_to_sql_timestamp('01/01/2005 12:00:00'));
+    }
 
     function test_HUMANdatetimeNOTIME() {
         $this->assertEquals('2005-01-01',
@@ -69,12 +75,55 @@ class UtilsTest extends PHPUnit_TestCase {
         $this->assertEquals('2005-01-01',
                             human_to_sql_timestamp('1/1/2005'));
     }
-
+    
     function test_HUMANdatetimeSHORT() {
         $this->assertEquals("2005-01-01 12:00", 
                             human_to_sql_timestamp('1/1/2005 12:00'));
     }
 
+
+    function test_HUMANdatetimePM() {
+        $this->assertEquals('2005-01-01 23:00', 
+                            human_to_sql_timestamp("01/01/2005 11:00PM"));
+    }
+
+    function test_HUMANdatetimeSHORTPM() {
+        $this->assertEquals('2005-01-01 13:00', 
+                            human_to_sql_timestamp("1/1/2005 1:00PM"));
+    }
+
+    function test_HUMANdatetimeSPACEPM() {
+        $this->assertEquals('2005-01-01 23:00',
+                            human_to_sql_timestamp('01/01/2005 11:00 PM'));
+    }
+
+    function test_HUMANdatetimeSHORTspacePM() {
+        $this->assertEquals('2005-01-01 13:00',
+                            human_to_sql_timestamp('01/01/2005 1:00 PM'));
+    }
+
+    function test_HUMANdatetimelcSPACEPM() {
+        $this->assertEquals('2005-01-01 23:00', 
+                            human_to_sql_timestamp('01/01/2005 11:00 pm'));
+    }
+
+    function test_HUMANdatetimelcSHORTspacePM() {
+        $this->assertEquals('2005-01-01 13:00', 
+                            human_to_sql_timestamp('01/01/2005 1:00 pm'));
+    }
+
+    function test_HUMANdatetimelcPM() {
+        $this->assertEquals('2005-01-01 23:00', 
+                            human_to_sql_timestamp("01/01/2005 11:00pm"));
+    }
+
+    function test_HUMANdatetimelcSHORTPM() {
+        $this->assertEquals('2005-01-01 13:00', 
+                            human_to_sql_timestamp('1/1/2005 1:00pm'));
+    }
+
+    /// ALSO ADD VARIATIONS THAT TEST FOR ALREADY OK!
+    // i.e. passing an sqldate to humantosqldate, and vice versa
 
 }
 
