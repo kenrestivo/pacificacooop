@@ -303,6 +303,9 @@ class coopView extends CoopObject
 			if(!in_array('family_id', 
 						array_keys(get_object_vars($this->obj))))
 			{
+                $this->page->printDebug(
+                    sprintf('HEY! i am forcing the familyid from %d to 0!',
+                            $row['family_id']), 4);
 				$row['family_id'] = 0;
 			}
 			
@@ -471,8 +474,7 @@ class coopView extends CoopObject
             //checking here for a WHOLE TABLE. 
             //i HACK HACK HACK and force it to my family,
             //because, at least SOME records (mine) i can do these actions to
-            $this->obj->family_id = $this->page->userStruct['family_id'];
-            $permitted = $this->isPermittedField();
+            $permitted = $this->isPermittedField(null, true);
             $va = is_array($this->obj->fb_viewActions) ? 
                 $this->obj->fb_viewActions : $this->viewActions;
             foreach($va as $action => $needlevel){
@@ -514,6 +516,8 @@ class coopView extends CoopObject
 			return $res;
 		}
  
+
+    // MOVE THIS TO TABLE PERMISSIONS. as details, perhapsxs?
     function showPerms()
         {
 
@@ -613,7 +617,7 @@ order by realm',
             $targ->obj->fb_formHeaderText = "Table Permissions for {$this->obj->fb_formHeaderText}";
             $targ->obj->query(
                 sprintf('
-select field_name, table_name, group_id, 
+select field_name, table_name, 
 user_level, group_level, table_permissions.realm_id 
 from table_permissions  
 left join realms using (realm_id)
