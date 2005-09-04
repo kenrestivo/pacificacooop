@@ -310,10 +310,10 @@ human_to_sql_timestamp($dt)
 						 $dt, $cleaned) < 1 )
     {
         $err = "human_to_sql_time($dt) was passed an invalid value!!";
-		//PEAR::raiseError($err, E_USER_ERROR);
-        user_error($err, E_USER_NOTICE);
+		PEAR::raiseError($err, E_USER_ERROR);
+        //user_error($err, E_USER_NOTICE);
 	}
-	confessArray($cleaned, "human_to_sql_timestamp($dt)");
+	//confessArray($cleaned, "human_to_sql_timestamp($dt)");
 	$cleandate = sprintf("%04d-%02d-%02d",
 						 $cleaned[3], $cleaned[1], $cleaned[2]);
     if($cleaned[5]){
