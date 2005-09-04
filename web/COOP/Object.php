@@ -392,7 +392,7 @@ group by user_id,table_name,field_name";
 			// TODO: maybe try to calculate mid or fartable? dangerous?
 			$far = new CoopObject(&$this->page, $farTable, $this);
 			//confessObj($this, 'CoopObject::checkCrossLinks(this)');
-			$this->page->debug > 2 && $far->obj->debugLevel(2);
+			$this->debugWrap(2);
 			$mid =& new CoopObject(&$this->page, $midTable, &$far);
 			$mid->obj->{$this->pk} = $this->obj->{$this->pk};
 			$far->obj->joinAdd($mid->obj);
@@ -466,7 +466,7 @@ group by user_id,table_name,field_name";
     function getPerms()
         {
             //it's REALLY annoying to see that shit here.
-            $this->obj->debugLevel($this->page->debug > 7 ? 2 : 0);
+            $this->debugWrap(7);
             $this->obj->query(sprintf($this->permsQuery,
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid'],
