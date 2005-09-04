@@ -21,7 +21,8 @@
 */
 
 require_once('CoopPage.php');
-require_once('DB/DataObject.php');
+//require_once('DB/DataObject.php');
+require_once('CoopDBDO.php');
 require_once("HTML/Table.php");
 require_once('object-config.php');
 
@@ -89,7 +90,7 @@ group by user_id,table_name,field_name";
 			
 			$this->page->printDebug("CoopObject: instantiating $table from $parentCO->table", 3);
 
- 			$this->obj = DB_DataObject::factory($this->table); // & instead?
+ 			$this->obj = CoopDBDO::factory($this->table); // & instead?
   			if (PEAR::isError($this->obj)){
 				$this->page->kensPEARErrorHandler(&$this->obj);
 				 user_error("coopObject::constructor: " . 
