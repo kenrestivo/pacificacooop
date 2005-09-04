@@ -545,7 +545,7 @@ values
 (69,'income','raffle_location_id',NULL,9,200,200),
 (70,'income','income_id',NULL,9,200,200),
 (71,'income',NULL,NULL,9,NULL,300),
-(72,'job_assignments',NULL,NULL,8,NULL,200),
+(72,'job_assignments',NULL,NULL,8,200,200),
 (73,'kids',NULL,NULL,14,NULL,NULL),
 (74,'parents',NULL,NULL,14,NULL,NULL),
 (75,'workers',NULL,NULL,14,NULL,NULL),
