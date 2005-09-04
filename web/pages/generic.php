@@ -154,8 +154,11 @@ switch($_REQUEST['action']){
 
      //confessObj($atd, 'what');
      foreach($atd->backlinks as $table =>$linkid){
+         if($table == $atd->table){ // blow off recursion
+             continue;
+         }
          // for now, blow off the jointables
-         $cp->printDebug("$this->table backwards link for $linkid {$atd->obj->$linkid}  $table<br>", 4);
+         $cp->printDebug("$atd->table backwards link for $linkid {$atd->obj->$linkid}  $table<br>", 4);
          $aud =& new CoopView(&$cp, $table, &$atd);
          $aud->obj->{$linkid} = $atd->obj->{$linkid};
          //confessObj($aud, 'aud');
@@ -165,7 +168,10 @@ switch($_REQUEST['action']){
 
      foreach($atd->forwardLinks as $table =>$linkpair){
          list($table, $linkid) = explode(':', $linkpair);
-         $cp->printDebug("$this->table forward link for $linkid {$atd->obj->$linkid}  $table<br>", 4);
+         if($table == $atd->table){ // blow off recursion
+             continue;
+         }
+         $cp->printDebug("$atd->table forward link for $linkid {$atd->obj->$linkid}  $table<br>", 4);
          // for now, blow off the jointables
          $aud =& new CoopView(&$cp, $table, &$atd);
          $aud->obj->{$linkid} = $atd->obj->{$linkid};
