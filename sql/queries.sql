@@ -1236,7 +1236,7 @@ order by parents.last_name, parents.first_name, school_year);
 
 ---blog
 select blog_entry.*,
-date_format(audit_trail.updated, '%a %m/%d/%Y %l:%i%p') as update_human,
+date_format(max(audit_trail.updated), '%a %m/%d/%Y %l:%i%p') as update_human,
 users.name
 from blog_entry 
 left join audit_trail 
@@ -1244,6 +1244,7 @@ on audit_trail.index_id = blog_entry.blog_entry_id
 and audit_trail.table_name = 'blog_entry'
 left join users on audit_trail.audit_user_id = users.user_id
 where show_on_members_page = 'yes'
+ group by blog_entry_id
 order by updated desc
 limit 4
 

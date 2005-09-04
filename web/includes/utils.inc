@@ -612,7 +612,3 @@ function todaysDate(datefield) {
 
 //EOF!!!  DON'T DELETE PAST HERE, I NEED THAT STUFF
 ?>
-<!-- END UTILS -->
-
-
-

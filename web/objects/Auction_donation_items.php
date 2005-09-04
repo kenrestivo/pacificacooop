@@ -98,7 +98,7 @@ class Auction_donation_items extends DB_DataObject
 			$form->addElement('header', 'newpackageheader', 
 							  'Create a new Package starting with this Auction Item?');
 				 // donated by! first guess families...
-			//$this->debugLevel(2);
+			//$this->CoopView->debugWrap(2);
 			$aifj =& new CoopObject(&$cp, 
 									'auction_items_families_join', &$top);
 			$aifj->obj->auction_donation_item_id = 

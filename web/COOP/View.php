@@ -52,7 +52,7 @@ class coopView extends CoopObject
             $page->confessArray($this->obj->fb_joinPaths,
                                       'coopView() joinpaths found', 3);
             // reset debuglevel in obj, which may bave been set by save!
-            $this->obj->debugLevel($this->page->debug > 5 ? 2: 0);
+            $this->debugWrap(5);
             
 		}
 
@@ -529,7 +529,7 @@ class coopView extends CoopObject
             // so they execute with teh rights and permissions of privs.
             // TODO: do this gambit only if they have < 800 on this object
             $targ =& new CoopView(&$this->page, 'users', &$this);
-            $this->page->debug > 4 && $targ->obj->debugLevel(2);
+            $this->debugWrap(4);
             $targ->obj->fb_formHeaderText = 
                 "Total Permissions for {$this->obj->fb_formHeaderText}";
             $targ->obj->query(sprintf($this->permsQuery,
@@ -651,6 +651,3 @@ order by report_name'));
 ////KEEP EVERTHANG BELOW
 
 ?>
-<!-- END COOP VIEW -->
-
-

@@ -354,9 +354,9 @@ class coopForm extends CoopObject
 								
 				//TODO: escape currency chars, as per shared.inc
 								
-				$this->page->debug > 2 && 
-					printf("CoopForm::scrubForSave(%s) %d chars<br>", 
-						   $fullkey, strlen($val));
+				$this->page->printDebug(
+					sprintf("CoopForm::scrubForSave(%s) %d chars<br>", 
+						   $fullkey, strlen($val)),3);
 
 				if($val == ''){ 
 					$cleanvars[$key] = DB_DataObject_Cast::sql('NULL') ;
@@ -773,6 +773,3 @@ class coopForm extends CoopObject
 ////KEEP EVERTHANG BELOW
 
 ?>
-<!-- END COOP FORM -->
-
-

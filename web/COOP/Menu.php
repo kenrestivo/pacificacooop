@@ -132,7 +132,7 @@ class CoopMenu extends HTML_Menu
     function createNew($i = 0, $id = 0)
         {
             $subrl =& new CoopObject(&$this->page, 'realms', &$nothing);
-            //$subrl->obj->debugLevel(2);
+            //$subrl->debugWrap(2);
             if($id){
                 $subrl->obj->meta_realm_id = $id;
             }else {
