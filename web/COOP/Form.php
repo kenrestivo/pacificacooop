@@ -200,11 +200,12 @@ class coopForm extends CoopObject
 				} else if($this->_tableDef[$key] & DB_DATAOBJECT_DATE){
 					$el =& $this->form->addElement('customdatebox', $fullkey);
                     if($this->_tableDef[$key] & DB_DATAOBJECT_TIME){
-                        ///\d{2}... too?
+                        // NOTE! regexp must match utils.inc:humantosqldate
                         $this->form->addRule( 
                            $fullkey, 
                             'Date must be in format MM/DD/YYYY HH:MM', 
-                            'regex', '/^\d{2}\/\d{2}\/\d{4}/');
+                           'regex', 
+                           '/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s*?((\d{1,2}):(\d{2})(:\d{1,2})*)*\s*(\w{2})*$/');
                         $val && $val = timestamp_db_php($val);
                     }else{
                         $this->form->addRule(
@@ -681,7 +682,7 @@ class coopForm extends CoopObject
 			$foo->whereAdd();
 			$this->page->debug > 2 && $foo->debugLevel(2);
 			$ov = array_keys(get_object_vars($foo));
-			foreach($vars as $fullkey => $var){
+			foreach($this->scrubForSave($vars) as $fullkey => $var){
 				list($table, $key) = explode('-', $fullkey);
 				if($table != $this->table){
 					continue;
