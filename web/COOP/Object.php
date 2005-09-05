@@ -590,6 +590,38 @@ group by user_id,table_name,field_name";
              return $res;
         }
 
+    function doJoins()
+        {
+            if(!is_array($this->obj->fb_joinPaths)){
+                return;
+            }
+
+
+            // each LINKID/PATH
+            foreach ($this->obj->fb_joinPaths as $key => $path){
+                print "HEY! $path<br>";
+                // must join from far to near
+                $stack = explode(':', $path); 
+                confessArray($stack, 'stack');
+                $done = 0;
+                while ($table = array_pop($stack)){
+                    print "JOINING [$table] to {$prev->table}<br>";
+                    if($this->table == $table){
+                        $targ =& $this;
+                        $table = '';
+                    } else {
+                        print "INSTANTIATING $table<br>";
+                        $targ =& new CoopObject(&$this->page, $table, &$top);
+                    }
+                    $prev && $targ->obj->joinAdd(&$prev->obj);
+                    $prev =& $targ;
+                } 
+                print "JOINED {$this->table}, $path, $table<br>";
+            }
+            confessObj($this->obj, 'dojoins');
+        }
+    
+    
 
 } // END COOP OBJECT CLASS
 
