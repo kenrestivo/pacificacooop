@@ -538,18 +538,21 @@ group by user_id,table_name,field_name";
         }
 
     // very useful utility for checking for the presence of a field
-    function inObject($key, $isset = false)
+    function inObject($key, $type = 'object', $isset = false)
         {
             if($isset){
                 return isset($this->obj->$key);
             }
   
+            $res =in_array($key, 
+                            array_keys(call_user_func("get_{$type}_vars",
+                                                      $this->obj)));
+
             // i get OBJECT vars here, not class vars. if i've set it
-            confessArray(array_keys(get_object_vars($this->obj)), "$key in $this->table");
+            $this->page->confessArray(array_keys(get_object_vars($this->obj)), 
+                         "inobject($key, $type, $isset) in $this->table = $res", 7);
             //shows whether this thing is part of this object!
-            return in_array($key, 
-                            array_keys(get_object_vars($this->obj)));
-           
+             return $res;
         }
 
 

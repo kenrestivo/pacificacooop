@@ -100,13 +100,15 @@ class coopView extends CoopObject
                     $this->page->confessArray($header, 'header', 2);
 					$tab->addRow(array_values($header['titles']), 
 							 'bgcolor=#aabbff align=left', 'TH'); 
-				}
-				//$tab->addRow(array_values($this->obj->toArray()));
-                if($this->isPermittedField() >= ACCESS_VIEW){
-                    $tab->addRow($this->toArray($header['keys']),
-                                 'valign="top"');
                 }
-			
+				//$tab->addRow(array_values($this->obj->toArray()));
+                if($this->isPermittedField() < ACCESS_VIEW){
+                    $this->page->printDebug("simpletable {$this->table} ERROR WARNING! row is not permitted, but it showed up in the sort! your sort is b0rken");
+                        continue;
+                }
+                $tab->addRow($this->toArray($header['keys']),
+                             'valign="top"');
+                			
 			}
 			
 			$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
@@ -165,6 +167,7 @@ class coopView extends CoopObject
                 $this->obj->family_id = $this->page->userStruct['family_id'];
             }
     
+
             /// XXX have to do it man, and this is not the way to do it
             /// check ispermitted here too, just in case
             /// they shouldn't even *see* a chooser if they aren't permitted
@@ -176,13 +179,15 @@ class coopView extends CoopObject
             } 
 
             //TODO: maybe instead check path?
+            //do this BEFORE injecting anything into it?
             //i may not ALWAYS want to sort by school year, ya know
-            if($this->inObject('school_year')){
-                print "ADDING SY for $this->table ???";
+            if($this->inObject('school_year', 'class')){
+                //print "ADDING SY for $this->table ???";
                 //TODO: i'll need an orderby in the fucking object.
                 //or... another global popup, the user can change!
                 $this->obj->orderBy('school_year desc');
             }
+
 
 
             //// finally, go get 'em!
@@ -361,7 +366,9 @@ class coopView extends CoopObject
 			// get the fieldnames out the dataobject
 			foreach($this->obj->toArray() as $key => $trash){
 				//print "checking $key<br>";
-				if($this->isPermittedField($key) &&
+                //force EVERYTHING for header. some might be theirs
+                //also, it doesn't know year, so i have to force
+				if($this->isPermittedField($key,true,true) &&
                     $key != $par->pk)
                 {
                     $keys[] = $key;
