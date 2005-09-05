@@ -68,7 +68,7 @@ function genericView(&$atd)
 
 
      if(is_callable(array($atd->obj, 'fb_display_view'))){
-         $atd->page->printDebug('callign callback for view', 2);
+         $atd->page->printDebug('calling callback for view', 2);
          return $atd->obj->fb_display_view();
      }
 

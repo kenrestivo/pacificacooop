@@ -372,9 +372,11 @@ group by user_id,table_name,field_name";
                 $res = $usethese['group'];
             }
 
+            ///XXX THIS IS TOO HEAVY! cache this, or use chooser global
             $sy = findSchoolYear();  
             if(!$forceyear &&  
-               $this->inObject('school_year') &&$sy != $this->obj->school_year)
+               $this->inObject('school_year') &&
+               $sy != $this->obj->school_year)
             {
                 
             	$this->page->printDebug(
@@ -550,7 +552,8 @@ group by user_id,table_name,field_name";
 
             // i get OBJECT vars here, not class vars. if i've set it
             $this->page->confessArray(array_keys(get_object_vars($this->obj)), 
-                         "inobject($key, $type, $isset) in $this->table = $res", 7);
+                         "inobject($key, $type, $isset) in $this->table = $res", 
+                                      4);
             //shows whether this thing is part of this object!
              return $res;
         }

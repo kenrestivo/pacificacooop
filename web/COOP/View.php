@@ -166,7 +166,8 @@ class coopView extends CoopObject
                 $this->page->printDebug("FORCING familyid for search", 2);
                 $this->obj->family_id = $this->page->userStruct['family_id'];
             }
-    
+            
+            $sy = findSchoolYear();
 
             /// XXX have to do it man, and this is not the way to do it
             /// check ispermitted here too, just in case
@@ -182,6 +183,7 @@ class coopView extends CoopObject
             //do this BEFORE injecting anything into it?
             //i may not ALWAYS want to sort by school year, ya know
             if($this->inObject('school_year', 'class')){
+                print "SCHOOLYEAR IN CLASS";
                 //print "ADDING SY for $this->table ???";
                 //TODO: i'll need an orderby in the fucking object.
                 //or... another global popup, the user can change!
@@ -341,14 +343,6 @@ class coopView extends CoopObject
 
 			//XXX hack! do this AFTER query, but not here.
 			// BEFORE the query, backlink whatever will need to get real familyid
-            // XXX DO NOT DO THIS!! go FIX IT! THIS IS A BUG BUG BUG!
-			// the right thing to do is to fish familyid out of backlinks!
-			if(!$this->inObject('family_id')) {
-                $this->page->printDebug(
-                    sprintf('HEY! i am forcing the familyid from %d to 0!',
-                            $row['family_id']), 4);
-				$row['family_id'] = 0;
-			}
 			
 			$res[] = $this->recordButtons($row);
 			
