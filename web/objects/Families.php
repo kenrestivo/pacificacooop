@@ -41,35 +41,13 @@ class Families extends DB_DataObject
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
 
 
-	function fb_linkConstraints(&$co)
-		{
-			// ugly, but consisent. only shows families for this year
+// 	function fb_linkConstraints(&$co)
+// 		{
+// 			// ugly, but consisent. only shows families for this year
+// 			$enrol->whereAdd('dropout_date is null or dropout_date < "2000-01-01"');
 
-            // UNLESS THE USER HAS PERMS FOR IT!!
-            if($co->perms[NULL]['year'] >= ACCESS_VIEW){
-                return;
-            }
 
-			$kids = $this->factory('kids'); 
- 			if (PEAR::isError($kids)){
-				user_error("Tickets.php::linkconstraint(): db badness", 
-						   E_USER_ERROR);
-			}
-			
-			$enrol = $this->factory('enrollment'); 
- 			if (PEAR::isError($enrol)){
-				user_error("Tickets.php::linkconstraint(): db badness", 
-						   E_USER_ERROR);
-			}
-			$enrol->school_year = findSchoolYear();
-			$enrol->whereAdd('dropout_date is null or dropout_date < "2000-01-01"');
-			$kids->joinAdd($enrol);
-			$this->joinAdd($kids);
-
-			$this->selectAdd();
-			$this->selectAdd('families.family_id, families.name');
-
-		}
+// 		}
 
 
 

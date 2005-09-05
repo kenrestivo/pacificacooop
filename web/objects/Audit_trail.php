@@ -37,9 +37,6 @@ class Audit_trail extends DB_DataObject
     var $fb_recordActions = array();
     var $fb_viewActions = array();
 
-    //XXX details surfing is broken, this request shit. force off.
-//     var $fb_recordActions = array();
-//     var $fb_viewActions = array();
 
     function fb_display_details()
         {

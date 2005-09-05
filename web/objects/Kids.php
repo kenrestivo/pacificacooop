@@ -35,10 +35,9 @@ class Kids extends DB_DataObject
 	);
 	var $fb_formHeaderText = "Students";
     var $fb_shortHeader = 'Kids';
-	var $fb_fieldsToRender = array('last_name' , 'family_id' , 
-								   'first_name', 'date_of_birth');
+
 	var $fb_requiredFields  = array('last_name', 'first_name', 'family_id');
-	//XXX TEMP! var $fb_fieldsToRender = array ('last_name', 'first_name', 'date_of_birth');
+
     var $fb_joinPaths = array('school_year' => 'enrollment');
 
 }

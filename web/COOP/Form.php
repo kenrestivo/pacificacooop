@@ -266,15 +266,12 @@ class coopForm extends CoopObject
 			$link = explode(':', $this->forwardLinks[$key]);
 			$sub =& new CoopObject(&$this->page, $link[0], &$this);
 
-			$top =& $this->findTop(); // need this for overrides
-			if(!isset($top->overrides[$sub->table]['fb_linkConstraints'])){ 
-				if(is_callable(array($sub->obj, 'fb_linkConstraints'))){
-					$sub->obj->fb_linkConstraints(&$this);
-				} else {
-					$sub->defaultConstraints(&$this);
-				}
-			}
+			///$top =& $this->findTop(); // will need this for overrides
+            
+            $this->linkConstraints();
+
 			//TODO add linkorderfields
+			//XXX this will fuck up the linkconstraints won't it?
 			foreach($sub->obj->fb_linkDisplayFields as $field){
 				$ldf[] = sprintf("%s.%s", $sub->table, $field);
 			}
@@ -481,7 +478,8 @@ class coopForm extends CoopObject
 
             // gah. have to prepend table here
 
-            $prepended[$this->prependTable('school_year')] = findSchoolYear();
+            $prepended[$this->prependTable('school_year')] = 
+                $this->page->currentSchoolYear;
             
             $prepended[$this->prependTable('family_id')] = 
                 $this->page->userStruct['family_id'];
@@ -607,11 +605,8 @@ class coopForm extends CoopObject
 
 
 				// IIRC this has a different name in FB. use theirs!
- 				if(is_callable(array($far->obj, 'fb_linkConstraints'))){
-					$far->obj->fb_linkConstraints(&$this);
-				} else {
-					$far->defaultConstraints(&$this);
-				}
+                $this->linkConstraints();
+
 				$far->obj->orderBy(implode(', ', 
 										   $far->obj->fb_linkDisplayFields));
 				$far->obj->find();

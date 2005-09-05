@@ -157,40 +157,10 @@ class coopView extends CoopObject
                     "CoopView::find($this->table) NO VIEW PERMS!", 2 );
                 return false;
             }
-	
 
-            //XXX if it's a subview, it may be for the *above* family.
-            /// note the permitted here is NOT forcing family, for lookup
-            if($this->isPermittedField(null) < ACCESS_VIEW)
-            {
-                $this->page->printDebug("FORCING familyid for search", 2);
-                $this->obj->family_id = $this->page->userStruct['family_id'];
-            }
             
-            $sy = findSchoolYear();
-
-            /// XXX have to do it man, and this is not the way to do it
-            /// check ispermitted here too, just in case
-            /// they shouldn't even *see* a chooser if they aren't permitted
-            /// but i's like to be paranoid
-            if(!$CHECKGLOBALSCHOOLYEAR){
-                //TODO: use the GLOBAL or LOCAL POPUP!
-                //only use $sy if nothing is set
-                $this->obj->school_year = $sy;
-            } 
-
-            //TODO: maybe instead check path?
-            //do this BEFORE injecting anything into it?
-            //i may not ALWAYS want to sort by school year, ya know
-            if($this->inObject('school_year', 'class')){
-                print "SCHOOLYEAR IN CLASS";
-                //print "ADDING SY for $this->table ???";
-                //TODO: i'll need an orderby in the fucking object.
-                //or... another global popup, the user can change!
-                $this->obj->orderBy('school_year desc');
-            }
-
-
+            $this->linkConstraints();
+	
 
             //// finally, go get 'em!
             if($find){

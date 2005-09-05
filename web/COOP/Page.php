@@ -67,7 +67,8 @@ class coopPage
 	var $vars;                  //alias of session vars. i hope.
     var $title = 'Data Entry';  // the titlebar of the browser windowi
     var $heading = 'Pacifica Co-Op Nursery School Data Entry'; // to display
-
+    var $currentSchoolYear;   // cache so i'm not pounding findschoolyear
+    
 	function coopPage($debug = false)
 		{
 			$this->debug = $debug;
@@ -75,6 +76,7 @@ class coopPage
 								   array(&$this, 'kensPEARErrorHandler'));
 			dump("debug level $this->debug");
             $this->mergeSessionVars();
+            $this->currentSchoolYear = findSchoolYear();
            
 		}
 

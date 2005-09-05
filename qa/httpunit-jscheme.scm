@@ -119,7 +119,7 @@
   (for-each (lambda (family)
 			  (write-line (string-append ".....checking " family))
 			  (visit-all-links wtc family url))
-			'("Cooke" "Bartlett" "Restivo")))
+			'("Bartlett" "Restivo" "Cooke" )))
 
 ;; i.e.; (many-visit-hack wtc "http://www/coop-dev") 
 

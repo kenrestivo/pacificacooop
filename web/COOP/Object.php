@@ -373,10 +373,9 @@ group by user_id,table_name,field_name";
             }
 
             ///XXX THIS IS TOO HEAVY! cache this, or use chooser global
-            $sy = findSchoolYear();  
             if(!$forceyear &&  
                $this->inObject('school_year') &&
-               $sy != $this->obj->school_year)
+               $this->page->currentSchoolYear != $this->obj->school_year)
             {
                 
             	$this->page->printDebug(
@@ -434,13 +433,46 @@ group by user_id,table_name,field_name";
 	
 	// by default, i want to constrain join/finds in this way:
 	// this callback is executed BEFORE stuffing choices in a SELECT box
-	function defaultConstraints()
+	function linkConstraints()
 		{
-            // UNLESS THE USER HAS PERMS FOR IT!!
-            if($this->perms[NULL]['year'] >= ACCESS_VIEW){
-                return;
+
+            if(is_callable(array($this->obj, 'fb_linkConstraints'))){
+                return $this->obj->fb_linkConstraints(&$this);
+            } 
+
+
+            //XXX if it's a subview, it may be for the *above* family.
+            /// note the permitted here is NOT forcing family, for lookup
+            if($this->isPermittedField(null) < ACCESS_VIEW)
+            {
+                $this->page->printDebug("FORCING familyid for search", 2);
+                $this->obj->family_id = $this->page->userStruct['family_id'];
             }
-            $this->obj->school_year = findSchoolYear();
+            
+            $sy = findSchoolYear();
+
+            /// XXX have to do it man, and this is not the way to do it
+            /// check ispermitted here too, just in case
+            /// they shouldn't even *see* a chooser if they aren't permitted
+            /// but i's like to be paranoid
+            if(!$CHECKGLOBALSCHOOLYEAR){
+                //TODO: use the GLOBAL or LOCAL POPUP!
+                //only use $sy if nothing is set
+                $this->obj->school_year = $sy;
+            } 
+
+            //TODO: maybe instead check path?
+            //do this BEFORE injecting anything into it?
+            //i may not ALWAYS want to sort by school year, ya know
+            if($this->inObject('school_year', 'class')){
+                print "SCHOOLYEAR IN CLASS";
+                //print "ADDING SY for $this->table ???";
+                //TODO: i'll need an orderby in the fucking object.
+                //or... another global popup, the user can change!
+                $this->obj->orderBy('school_year desc');
+            }
+
+
 		}
 
 	/// XXX this is not really used. instead, i overload insert

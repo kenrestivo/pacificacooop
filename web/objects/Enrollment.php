@@ -56,7 +56,11 @@ class Enrollment extends DB_DataObject
     var $fb_joinPaths = array('family_id' => 'kids'); //while findpaths is broken
      function fb_display_view()
         {
-            $this->orderBy('am_pm_session'); //, kids.last_name, kids.first_name');
+
+            //XXX quick hack, so i can push live, allyears is  betsy only!
+            $this->obj->school_year = findSchoolYear();
+
+             $this->orderBy('am_pm_session'); //, kids.last_name, kids.first_name');
             return $this->CoopView->simpleTable();
             
         }

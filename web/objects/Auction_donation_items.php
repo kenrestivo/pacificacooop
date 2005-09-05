@@ -83,6 +83,7 @@ class Auction_donation_items extends DB_DataObject
 
 	function fb_linkConstraints()
 		{
+            //XXX isn't this unnecessary now with year perms?
 			$this->school_year = findSchoolYear(); 
 			$this->whereAdd("date_received > '2000-01-01'");
 		}
