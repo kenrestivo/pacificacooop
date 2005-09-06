@@ -137,14 +137,7 @@ function genericView(&$atd)
 			
 }
 
-
-// cheap dispatcher
-//confessArray($_REQUEST,'req');
-switch($_REQUEST['action']){
-//// EDIT AND NEW //////
- case 'new':
- case 'add':					//  for OLD menu system
- case 'edit':
+function formaggio(&$cp){
 	 // NOT the coopView above!
 	 $atdf = new CoopForm(&$cp, $_REQUEST['table'], $none); 
 
@@ -171,14 +164,35 @@ switch($_REQUEST['action']){
              print genericView(&$atd);
          }else {
              //SUCCESSFUL, display a new blank entry
-             $atdf->page->confessArray($_REQUEST, 'request before redisplay',
+             $atdf->page->confessArray($_REQUEST, 
+                                       'recursive request before redisplay',
                                        2);
-             print $atdf->form->toHTML();
+             print '<p>You may add another below, or click below to go back to viewing</p>';
+             print  $atdf->page->selfURL(
+                 array('value' => 'View',
+                       'inside' => array('action' => 'view',
+                                         'table' => $atdf->table)));
+             
+             // XXX bug lurking here. if i want to keep the seeded ID
+             // from the page->vars->last, i got problems here.
+             formaggio(&$cp);// to recurse, divine
          }
 	 } else {
 		 print $atdf->form->toHTML();
 	 }
+}
 
+
+
+
+// cheap dispatcher
+//confessArray($_REQUEST,'req');
+switch($_REQUEST['action']){
+//// EDIT AND NEW //////
+ case 'new':
+ case 'add':					//  for OLD menu system
+ case 'edit':
+     formaggio(&$cp);
 	 //confessArray($_DB_DATAOBJECT_FORMBUILDER, 'dbdofb');
 	 break;
 
@@ -226,7 +240,7 @@ switch($_REQUEST['action']){
          $aud =& new CoopView(&$cp, $table, &$atd);
          $aud->obj->{$farid} = $atd->obj->{$nearid};
          //confessObj($aud, 'aud');
-         $aud->debugWrap(4);
+         $aud->debugWrap(5);
          print $aud->simpleTable();
      }
 
@@ -241,10 +255,8 @@ switch($_REQUEST['action']){
 
      print $cp->selfURL(
          array('value' => 'Click here for detailed view of Permissions',
-
                'inside' => array('table' => $atd->table,
-                                 'action' => 'perms')
-               ));
+                                 'action' => 'perms')));
  	 break;
  
  case 'perms':
