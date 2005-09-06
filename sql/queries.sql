@@ -1165,7 +1165,7 @@ upriv.max_group, NULL )) as cooked_group,
  max(if((upriv.max_user > table_permissions.menu_level or
 table_permissions.menu_level is null), 
 upriv.max_user, NULL)) as cooked_menu,
-max(if(upriv.max_year > table_permissions.user_level,
+max(if((upriv.max_year > table_permissions.user_level or table_permissions.year_level is null),
 upriv.max_year, table_permissions.year_level)) as cooked_year
 from table_permissions 
 left join 
@@ -1368,5 +1368,11 @@ left join families using (family_id)
 group by kids.family_id 
 having size > 1;
 
+
+---  perms showing
+select description 
+from access_levels 
+where access_level_id <= 800 and access_level_id > 0 
+order by access_level_id;
 
 --- EOF

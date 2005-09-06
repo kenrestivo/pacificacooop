@@ -60,7 +60,8 @@ upriv.max_group, NULL )) as cooked_group,
 max(if((upriv.max_user > table_permissions.menu_level or
 table_permissions.menu_level is null),
 upriv.max_user, NULL)) as cooked_menu,
-max(if(upriv.max_year > table_permissions.user_level,
+max(if((upriv.max_year > table_permissions.user_level 
+or table_permissions.year_level is null),
 upriv.max_year, table_permissions.year_level)) as cooked_year
 from table_permissions 
 left join 
