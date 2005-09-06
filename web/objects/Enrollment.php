@@ -78,7 +78,7 @@ class Enrollment extends DB_DataObject
         {
 
             $top =& $this->CoopView;
-            $mi = $top->table;
+            $mi = $top->pk;
             $cid = $this->{$top->pk};
             $cp =& $top->page;
 
@@ -104,14 +104,11 @@ class Enrollment extends DB_DataObject
 
 
 	// get all the kids... who are enrolled. gah.
-	$view = new CoopView(&$cp, 'kids', &$top);
-	$view->obj->family_id = $family_id;
-	$subenrol = new CoopView(&$cp, 'enrollment', &$view);
-	$subenrol->obj->whereAdd(
-		'dropout_date is null or dropout_date < "2000-01-01"');
-	$subenrol->obj->school_year = $sy; // usual case.
-	$view->obj->joinAdd($subenrol->obj);
-	print $view->simpleTable();
+	$subenrol = new CoopView(&$cp, 'enrollment', &$top);
+	$subenrol->obj->whereAdd("$mi = $cid");
+    $subenrol->obj->whereAdd(sprintf('school_year = "%s"', 
+                                 $subenrol->page->currentSchoolYear));
+	print $subenrol->simpleTable();
 
 	//parents are easier. most of the time ;-)
 	$view = new CoopView(&$cp, 'parents', &$top);
@@ -122,11 +119,9 @@ class Enrollment extends DB_DataObject
 	
 	//workers
 	$view = new CoopView(&$cp, 'workers', &$top);
-	$subparent = new CoopView(&$cp, 'parents', &$view);
-	$subparent->obj->family_id = $family_id;
-	$view->obj->school_year = $sy; // usual case.
-	$view->obj->joinAdd($subparent->obj);
-    //TODO actionbutons to edit
+	$view->obj->whereAdd("$mi = $cid");
+    $view->obj->whereAdd(sprintf('enrollment.school_year = "%s"', 
+                                 $view->page->currentSchoolYear));
 	print $view->simpleTable();
 
      // standard audit trail, for all details

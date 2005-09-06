@@ -58,6 +58,47 @@ printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
 print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div id="centerCol">';
 
+/////////////////////////////////////////////// END PSEUDO-MAIN
+
+function bruteForceDeleteCheck(&$atd)
+{
+    
+    // go get em
+    $links =& $_DB_DATAOBJECT['LINKS'][$atd->obj->database()];
+    foreach($links as $table=> $link){
+        foreach($link as $nearcol => $farpair){
+            if($atd->pk == $nearcol){
+                $checkme[] = $table;
+                list($fartab, $farcol) = explode(':', $farpair);
+                $checkme[] = $fartab;
+            }
+        }
+    }
+    if(!is_array($checkme)){
+        return false;
+    }
+    $checkme = array_unique($checkme);
+    // now check 'em
+    foreach($checkme as $checktab){
+        $check =& new CoopView(&$atd->page, $checktab, &$atd);
+        $check->obj->{$atd->pk} = $atd->obj->{$atd->pk};
+        $found = $check->obj->find();
+        if($found){
+            $totalfound += $found;
+            $res .= $check->simpleTable(false);
+        }
+    }
+    
+    if($totalfound){
+        return '<p class="error">YOU CANNOT DELETE THIS RECORD because other records depend on it. Fix that first.</p>' . $res;
+        
+    }
+
+    return false;
+}
+
+
+
 
 function genericView(&$atd)
 {
@@ -195,6 +236,12 @@ switch($_REQUEST['action']){
 
 ////CONFIRMDELETE
  case 'confirmdelete':
+
+     if($res = bruteForceDeleteCheck(&$atd)){
+         print $res;
+         break;
+     }
+
 	 print "<p>Are you sure you wish to delete this? Click 'Delete' below to delete it, or the 'Back' button in your broswer to cancel.</p>";	 
      $atdf = new CoopForm(&$cp, $_REQUEST['table'], $none); 
 	 $atdf->build($_REQUEST);

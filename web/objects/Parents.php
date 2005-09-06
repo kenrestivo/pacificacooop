@@ -70,8 +70,8 @@ class Parents extends DB_DataObject
                                                 as school_year");
             $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
 
-
-            $this->CoopView->debugWrap(5);
+            confessObj($this->CoopView, 'sure it is an objec');
+            //r$this->CoopView->debugWrap(5);
 
 			// ugly, but consisent. only shows families for this year
 
