@@ -68,6 +68,7 @@ function bruteForceDeleteCheck(&$atd)
     $atd =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
     $id = $_REQUEST[$atd->prependTable($atd->pk)];
     $atd->obj->{$atd->pk} = $id;
+    $atd->obj->find(true);		//  XXX aack! need this for summary
     
 
 
@@ -104,7 +105,6 @@ function bruteForceDeleteCheck(&$atd)
     }
     
     if($totalfound){
-        $atd->obj->find(true);		//  XXX aack! need this for summary
         $restop = $atd->horizTable();
         return $restop . '<p class="error">YOU CANNOT DELETE THIS RECORD because the records below depend on it. Fix these first.</p>' .  $res;
         
