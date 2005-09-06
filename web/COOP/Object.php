@@ -531,8 +531,8 @@ group by user_id,table_name,field_name";
             $res = $this->obj->getDatabaseResult();
             while ($row =& $res->fetchRow(DB_FETCHMODE_ASSOC)) {
                 // chasing bthe heisenbug
-               $this->page->confessArray($row, 
-                                          "getPERMS({$this->table}) db outfreakage", 5);
+               $this->page->confessArray(
+                   $row, "getPERMS({$this->table}) db outfreakage", 5);
                 $this->perms[$row['field_name']] = 
                     array('user'=>$row['cooked_user'],
                           'group' =>$row['cooked_group'],
@@ -540,7 +540,8 @@ group by user_id,table_name,field_name";
                           'year' =>$row['cooked_year']);
             }
 
-            $this->page->confessArray($this->perms, "getPerms({$this->table}) foun in db", 2);
+            $this->page->confessArray($this->perms, 
+                                      "getPerms({$this->table}) foun in db", 2);
 
 
         }

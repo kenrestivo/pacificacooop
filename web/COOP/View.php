@@ -105,7 +105,10 @@ class coopView extends CoopObject
                 }
 				//$tab->addRow(array_values($this->obj->toArray()));
                 if($this->isPermittedField() < ACCESS_VIEW){
-                    $this->page->printDebug("simpletable {$this->table} ERROR WARNING! row is not permitted, but it showed up in the sort! your sort is b0rken");
+                    $this->page->printDebug(
+                        sprintf('simpletable ERROR WARNING! row %d of %s is not permitted, but it showed up in the results! your whereadd is out of sync with ispermittedfield', 
+                                $this->obj->{$this->pk}, 
+                                $this->table ));
                         continue;
                 }
                 $tab->addRow($this->toArray($header['keys']),
@@ -609,7 +612,9 @@ where users_groups_join.user_id = %d
             $targ->obj->query(
                 sprintf('select name as Group_Name, 
 max(user_level) as user_level, 
-max(group_level) as group_level,  realm
+max(group_level) as group_level, 
+max(year_level) as year_level, 
+ realm
 from user_privileges 
 left join realms on user_privileges.realm_id = realms.realm_id
 left join groups on groups.group_id = user_privileges.group_id
