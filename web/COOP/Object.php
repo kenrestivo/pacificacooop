@@ -599,24 +599,26 @@ group by user_id,table_name,field_name";
 
             // each LINKID/PATH
             foreach ($this->obj->fb_joinPaths as $key => $path){
-                print "HEY! $path<br>";
+                $this->page->printDebug( "HEY! $path", 7);
                 // must join from far to near
                 $stack = explode(':', $path); 
-                confessArray($stack, 'stack');
+                $this->page->confessArray($stack, 'stack',7);
                 $done = 0;
                 while ($table = array_pop($stack)){
-                    print "JOINING [$table] to {$prev->table}<br>";
+                    $this->page->printDebug(
+                        "JOINING [$table] to {$prev->table}", 7);
                     if($this->table == $table){
                         $targ =& $this;
-                        $table = '';
+                        continue;
                     } else {
-                        print "INSTANTIATING $table<br>";
+                        $this->page->printDebug( "INSTANTIATING $table", 7);
                         $targ =& new CoopObject(&$this->page, $table, &$top);
                     }
                     $prev && $targ->obj->joinAdd(&$prev->obj);
                     $prev =& $targ;
                 } 
-                print "JOINED {$this->table}, $path, $table<br>";
+                    $this->page->printDebug(
+                        "JOINED {$this->table}, $path, $table", 2);
             }
             confessObj($this->obj, 'dojoins');
         }
