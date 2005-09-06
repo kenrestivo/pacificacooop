@@ -1185,10 +1185,41 @@ group by user_id,table_name,field_name
 
 
 
+-- UN MAXED for debuggin g NULL issues
+select 
+table_permissions.table_name, table_permissions.field_name,
+if((upriv.max_user <= table_permissions.user_level or
+table_permissions.user_level is null), 
+upriv.max_user, table_permissions.user_level) as cooked_user,
+if((upriv.max_group >=  table_permissions.group_level or
+table_permissions.group_level is null), 
+upriv.max_group, NULL ) as cooked_group,
+if((upriv.max_user > table_permissions.menu_level or
+table_permissions.menu_level is null), 
+upriv.max_user, NULL) as cooked_menu,
+if(upriv.max_year > table_permissions.user_level,
+upriv.max_year, table_permissions.year_level) as cooked_year
+from table_permissions 
+left join 
+(select max(user_level) as max_user, max(group_level) as max_group, 
+max(year_level) as max_year,
+91 as user_id, realm_id
+from user_privileges 
+where user_id = 91 
+or (user_id is null and group_id in 
+(select group_id from users_groups_join 
+where user_id = 91)) 
+group by realm_id 
+order by realm_id) as upriv
+on upriv.realm_id = table_permissions.realm_id 
+where user_id = 91 and table_name = 'leads'
+
+
 
 
 --- shorter for debugging what teh FUCK is going on?
 select max(user_level) as max_user, max(group_level) as max_group, 
+max(year_level) as max_year, 
 91 as user_id, realm
 from user_privileges 
 left join realms on user_privileges.realm_id = realms.realm_id
@@ -1199,6 +1230,18 @@ where user_id = 91))
 group by user_privileges.realm_id 
 order by user_privileges.realm_id
 
+
+
+-- another thign useful for WTF
+select 
+table_permissions.table_name, table_permissions.field_name,
+table_permissions.user_level,
+table_permissions.group_level,
+table_permissions.user_level,
+ table_permissions.year_level from table_permissions where
+table_name in('kids', 'families')
+group by table_name,field_name
+\G
 
 --- JUST the users
 select max(user_level) as max_user, max(group_level) as max_group, 
