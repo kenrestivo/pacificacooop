@@ -135,7 +135,7 @@ class coopForm extends CoopObject
                         $this->page->userStruct['family_id'];
                 }
 
-                $perms = $this->isPermittedField($key, false, true);
+                $perms = $this->isPermittedField($key, false, !$this->id);
 
 				// if it's a new entry, fill from vars!
 				// this is a clusterfuck because i'm using setValue.
@@ -590,7 +590,7 @@ class coopForm extends CoopObject
 
                 // links will add or delete from the mid table!
 				$mid = new CoopObject(&$this->page, $mt, $this);
-                if($mid->isPermittedField(null, false, true) < ACCESS_DELETE){
+                if($mid->isPermittedField(null, false, !$this->id) < ACCESS_DELETE){
                     return;
                 }
 
@@ -600,7 +600,7 @@ class coopForm extends CoopObject
 				$far = new CoopObject(&$this->page, $ft, $this);
 
                 // i obviously need to view the remotes
-                if($far->isPermittedField(null, false, true) < ACCESS_VIEW){
+                if($far->isPermittedField(null, false, !$this->id) < ACCESS_VIEW){
                     return;
                 }
 
