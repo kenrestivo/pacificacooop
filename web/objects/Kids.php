@@ -60,6 +60,7 @@ class Kids extends DB_DataObject
             $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
 
 
+            /// AGAIN, nasty hack
             if($this->CoopView->perms[NULL]['year'] < ACCESS_VIEW){
                 // TODO! support chooser
                 $this->whereAdd(
@@ -73,7 +74,7 @@ class Kids extends DB_DataObject
             $this->selectAdd("max(enrollment.school_year) 
                                                 as school_year");
             $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
-            $this->debugLevel(1);
+            //$this->debugLevel(1);
 
 			// ugly, but consisent. only shows families for this year
 
