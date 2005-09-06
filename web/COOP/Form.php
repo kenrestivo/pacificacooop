@@ -96,6 +96,13 @@ class coopForm extends CoopObject
 			   $this->obj->fb_createSubmit > 0)
 			{
 				$this->form->addElement('submit', 'savebutton', 'Save');
+                $this->form->addElement(
+                    'static', 
+                    'cancel', '', 
+                    $this->page->selfURL(
+                        array('value' => 'Cancel',
+                              'inside' => array(
+                                  'table' => $this->table))));
 			}
 
 			$this->form->applyFilter('__ALL__', 'trim');
