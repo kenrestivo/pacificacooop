@@ -379,8 +379,9 @@ group by user_id,table_name,field_name";
             {
                 
             	$this->page->printDebug(
-                    "ispermitted($this->table : $key) NOT MY YEAR! limiting", 
+                    "ispermitted($this->table : $key) {$this->obj->school_year} is NOT {$this->page->currentSchoolYear}, so limiting for permcheck", 
                     4);
+                PEAR::raiseError('foobar', 111);
                     //MIN! limit them.
                 $res = min($res, $usethese['year']);
             }
@@ -443,13 +444,12 @@ group by user_id,table_name,field_name";
 
             //XXX if it's a subview, it may be for the *above* family.
             /// note the permitted here is NOT forcing family, for lookup
-            if($this->isPermittedField(null) < ACCESS_VIEW)
+            if($this->isPermittedField(null, false, true) < ACCESS_VIEW)
             {
                 $this->page->printDebug("FORCING familyid for search", 2);
                 $this->obj->family_id = $this->page->userStruct['family_id'];
             }
             
-            $sy = findSchoolYear();
 
             /// XXX have to do it man, and this is not the way to do it
             /// check ispermitted here too, just in case
@@ -458,7 +458,7 @@ group by user_id,table_name,field_name";
             if(!$CHECKGLOBALSCHOOLYEAR){
                 //TODO: use the GLOBAL or LOCAL POPUP!
                 //only use $sy if nothing is set
-                $this->obj->school_year = $sy;
+                $this->obj->school_year = $this->page->currentSchoolYear;
             } 
 
             //TODO: maybe instead check path?
@@ -479,7 +479,7 @@ group by user_id,table_name,field_name";
 	function getCounter($column, $schoolyear = false)
 		{
 			if(!$schoolyear){
-				$schoolyear  = findSchoolYear();
+				$schoolyear  = $this->page->currentSchoolYear;
 			}
 			$this->obj->query("update counters set 
 						counter = last_insert_id(counter+1) 

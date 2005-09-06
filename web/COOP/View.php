@@ -53,6 +53,8 @@ class coopView extends CoopObject
                                       'coopView() joinpaths found', 3);
             // reset debuglevel in obj, which may bave been set by save!
             $this->debugWrap(5);
+
+            $this->doJoins();
             
 		}
 
