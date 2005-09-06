@@ -131,7 +131,8 @@ class coopForm extends CoopObject
                 // need this in a couple places, so cache it
                 //XXX hack to inject family id into new records!! AIIEE
                 if(!$this->id){
-                    $this->obj->family_id = $this->page->userStruct['family_id'];
+                    $this->obj->family_id = 
+                        $this->page->userStruct['family_id'];
                 }
 
                 $perms = $this->isPermittedField($key);
@@ -675,35 +676,25 @@ class coopForm extends CoopObject
 			$temp =& new CoopObject(&$this->page, $this->table, &$this);
 			$foo = $temp->obj;
 			$foo->whereAdd();
-			$this->page->debug > 2 && $foo->debugLevel(2);
-			$ov = array_keys(get_object_vars($foo));
-			foreach($this->scrubForSave($vars) as $fullkey => $var){
-				list($table, $key) = explode('-', $fullkey);
-				if($table != $this->table){
-					continue;
-				}
-				// XXX hack, cough, gaaack.
-				if(in_array($key, $ov) && $key != $this->pk && $var){
-					if(!is_numeric($var)){
-						$var = sprintf("'%s'", $foo->escape($var));
-					}
-					$foo->whereAdd(sprintf("%s = %s", 
-										   $key, $var));
-				}
-			}
-			//confessObj($foo, 'foo');
+			$this->debugWrap(2);
+			$ov = $foo->keys();
+            $scrubbed = $this->scrubForSave($vars);
+            //confessArray($scrubbed, 'scrubby');
+            $foo->setFrom($scrubbed);
+			//confessObj($foo, "{$this->table} dupechecking ");
 			if($foo->find(true)){
 				foreach($vars as $fullkey => $val){
 					list($table, $key) = explode('-', $fullkey);
 					if($table != $this->table){
 						continue;
 					}
-					if($val == $foo->$key){
-						$duples[$key] = 'Duplicate entry.';
+					if($scrubbed[$key] == $foo->$key){
+						$duples[$fullkey] = 'Duplicate entry.';
 					}
 				}
 				return $duples ;
 			}
+            // TODO:: you need to add a duplicate entry FORM error!
 			return true;
 		}
 			
@@ -742,17 +733,11 @@ class coopForm extends CoopObject
 			
 			$temp  = $this->form->validate(); // FORM!
 			if($temp == false){
-				$this->page->printDebug("CoopForm::validate({$this->table}) didn't validate", 3);
-				//confessObj($this->form, $this->table . ' form');
+                $this->page->confessArray($this->form->_errors, 
+                                          "CoopForm::validate({$this->table}) didn't validate", 3);
 			}
-			$res += $temp;
-			$count++;
-			
-			$this->page->printDebug(
-                sprintf("CoopForm::validate(%s) cumulative validation = [%d/%d]", 
-                        $this->table, $res, $count), 3);
 
-			return  $res == $count ? true : false;
+			return  $temp;
 		}
 
 
