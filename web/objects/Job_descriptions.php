@@ -40,7 +40,7 @@ class Job_descriptions extends DB_DataObject
 		'free_tuition_months' => "Months of Free Tuition Days"
 		);
 	var $fb_textFields = array('long_description');
-	var $fb_enumFields = array ('board_position');
+	var $fb_enumFields = array ('board_position', 'family_type');
 	var $fb_requiredFields = array('long_description', 'summary');
     var $fb_longHeader = 'The virtual job description binder.';
 	var $fb_shortHeader = 'Descriptions';
@@ -69,6 +69,25 @@ class Job_descriptions extends DB_DataObject
             $el->setRows(25);
             $el->setCols(80);
         }
+
+
+	function fb_linkConstraints()
+		{
+
+            $ass =  $this->factory('job_assignments');
+
+            $this->joinAdd($ass);
+
+            $this->orderBy('summary');
+            $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
+
+            //$this->CoopView->debugWrap(1);
+
+			// ugly, but consisent. only shows families for this year
+
+
+
+ 		}
 
 
 }

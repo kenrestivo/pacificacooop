@@ -65,7 +65,7 @@ class Families extends DB_DataObject
             $this->selectAdd('max(school_year) as school_year');
 
 
-            //$this->debugLevel(1);
+            //$this->CoopView->debugWrap(1);
 
 			// ugly, but consisent. only shows families for this year
 

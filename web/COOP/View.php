@@ -373,6 +373,11 @@ class coopView extends CoopObject
 							 $this->title(),
 							 is_a($par, 'CoopObject') ? 
 							 "for " . $par->getSummary() : "");
+
+            //XXX HAACK!! REMOVE THIS when i get schoolyearchooser
+            if($this->perms[NULL]['year'] >= ACCESS_VIEW){
+                $title .= " (SCHOOL-YEARS CHOOSER COMING SOON) ";
+            }
 		
 			$toptab = new HTML_Table(
 				'bgcolor="#aa99ff" cellpadding="0" cellspacing="0"');

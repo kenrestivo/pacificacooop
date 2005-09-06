@@ -63,7 +63,7 @@ function genericView(&$atd)
 {
 
     $atd =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
-    //$atd->obj->debugLevel(2);
+    //$atd->debugWrap(2);
 
 
 

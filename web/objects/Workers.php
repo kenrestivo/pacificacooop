@@ -53,5 +53,59 @@ class Workers extends DB_DataObject
          'family_id' => 'parents'
          );
 
+	function fb_linkConstraints()
+		{
+
+            $enrollment =  $this->factory('enrollment');
+
+            // HACK! this is presuming VIEW, but in popup it could be EDIT
+            //ALWAYS show ONLY this years
+                $enrollment->whereAdd(
+                    'dropout_date is null or dropout_date < "2000-01-01"');
+                $enrollment->whereAdd(
+                    sprintf('enrollment.school_year = "%s"',
+                        $this->CoopView->page->currentSchoolYear));
+
+
+            $kids =  $this->factory('kids');
+            $kids->joinAdd($enrollment, '');
+
+
+            $families =  $this->factory('families');
+            $families->joinAdd($kids);
+
+
+            $parents =  $this->factory('parents');
+            $parents->joinAdd($families);
+
+
+            $this->joinAdd($parents);
+            $this->orderBy('am_pm_session, workday, parents.last_name, parents.first_name');
+
+
+            /// AGAIN, nasty hack
+            if($this->CoopView->perms[NULL]['year'] < ACCESS_VIEW){
+                // TODO! support chooser
+                $this->whereAdd(
+                    "enrollment.school_year = '{$this->CoopView->page->currentSchoolYear}'");
+            }
+
+
+            
+            $this->selectAdd();
+            $this->selectAdd("{$this->CoopView->table}.*");
+            $this->selectAdd("max(enrollment.school_year) 
+                                                as school_year");
+            $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
+
+            //$this->CoopView->debugWrap(1);
+            
+			// ugly, but consisent. only shows families for this year
+
+
+
+ 		}
+
+
 
 }
