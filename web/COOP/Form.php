@@ -135,7 +135,7 @@ class coopForm extends CoopObject
                         $this->page->userStruct['family_id'];
                 }
 
-                $perms = $this->isPermittedField($key);
+                $perms = $this->isPermittedField($key, false, true);
 
 				// if it's a new entry, fill from vars!
 				// this is a clusterfuck because i'm using setValue.
@@ -590,7 +590,7 @@ class coopForm extends CoopObject
 
                 // links will add or delete from the mid table!
 				$mid = new CoopObject(&$this->page, $mt, $this);
-                if($mid->isPermittedField() < ACCESS_DELETE){
+                if($mid->isPermittedField(null, false, true) < ACCESS_DELETE){
                     return;
                 }
 
@@ -600,7 +600,7 @@ class coopForm extends CoopObject
 				$far = new CoopObject(&$this->page, $ft, $this);
 
                 // i obviously need to view the remotes
-                if($far->isPermittedField() < ACCESS_VIEW){
+                if($far->isPermittedField(null, false, true) < ACCESS_VIEW){
                     return;
                 }
 
@@ -680,15 +680,19 @@ class coopForm extends CoopObject
 			$ov = $foo->keys();
             // let scrubforsave do the work, instead of duplicatinghere
             foreach($this->scrubForSave($vars) as $key => $val){
-                if(is_array($this->obj->fb_dupeIgnore &&
-                       !in_array($key, $this->obj->fb_dupeIgnore)))
+                if(!is_array($this->obj->fb_dupeIgnore ||
+                       in_array($key, $this->obj->fb_dupeIgnore)))
                 {
                     $scrubbed[$key] = $val;
                 }
             }
-            //confessArray($scrubbed, 'scrubby');
+            $this->page->confessArray($scrubbed, 'scrubby', 2);
+            if(count($scrubbed) < 1){
+                $this->page->printDebug('SERIOUS ERROR IN DUPECHECK! trying to search for NOTHING!');
+                
+                confessObj($foo, "{$this->table} dupes found ");
+            }
             $foo->setFrom($scrubbed);
-			//confessObj($foo, "{$this->table} dupechecking ");
 			if($foo->find(true)){
 				foreach($vars as $fullkey => $val){
 					list($table, $key) = explode('-', $fullkey);
@@ -700,6 +704,8 @@ class coopForm extends CoopObject
 						$duples[$fullkey] = 'Duplicate entry.';
 					}
 				}
+                $this->page->debug > 1 && 
+                    confessObj($foo, "{$this->table} dupes found ");
                 $duples[NULL] = "Duplicate entry (see below).";
 				return $duples ;
 			}
