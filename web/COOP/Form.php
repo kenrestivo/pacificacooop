@@ -678,7 +678,14 @@ class coopForm extends CoopObject
 			$foo->whereAdd();
 			$this->debugWrap(2);
 			$ov = $foo->keys();
-            $scrubbed = $this->scrubForSave($vars);
+            // let scrubforsave do the work, instead of duplicatinghere
+            foreach($this->scrubForSave($vars) as $key => $val){
+                if(is_array($this->obj->fb_dupeIgnore &&
+                       !in_array($key, $this->obj->fb_dupeIgnore)))
+                {
+                    $scrubbed[$key] = $val;
+                }
+            }
             //confessArray($scrubbed, 'scrubby');
             $foo->setFrom($scrubbed);
 			//confessObj($foo, "{$this->table} dupechecking ");
@@ -688,10 +695,12 @@ class coopForm extends CoopObject
 					if($table != $this->table){
 						continue;
 					}
-					if($scrubbed[$key] == $foo->$key){
+                    //XXX why is this != instead of == !!?? makes no SENSE!!!
+					if($scrubbed[$key] != $foo->$key){
 						$duples[$fullkey] = 'Duplicate entry.';
 					}
 				}
+                $duples[NULL] = "Duplicate entry (see below).";
 				return $duples ;
 			}
             // TODO:: you need to add a duplicate entry FORM error!
