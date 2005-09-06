@@ -73,7 +73,6 @@ function genericView(&$atd)
      }
 
 
-     //$atd->debugWrap(2);
 
     //TODO: some variation on the old "perms display" from auth.inc
     //maybe at or top of doc? with editor to change them? ;-)

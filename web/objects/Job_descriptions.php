@@ -45,6 +45,7 @@ class Job_descriptions extends DB_DataObject
     var $fb_longHeader = 'The virtual job description binder.';
 	var $fb_shortHeader = 'Descriptions';
     // NOTE ! do NOT schoolyearify the jobdescriptions. show all years.
+    // XXX Ryeah, but, dumbass, you need to EDIT only this years'
     var $fb_joinPaths = array('family_id' => 'job_assignments');
 	var $fb_crossLinks = array(array('table' => 'job_assignments', 
 									 'toTable' => 'families',
@@ -71,23 +72,25 @@ class Job_descriptions extends DB_DataObject
         }
 
 
-	function fb_linkConstraints()
-		{
+/////NOT YET! first fix the form linking, doesn't work in form.
+/////and perms for job_descr: don't want people editing the days tuition
+// 	function fb_linkConstraints()
+// 		{
+    
+//             $ass =  $this->factory('job_assignments');
 
-            $ass =  $this->factory('job_assignments');
+//             $this->joinAdd($ass);
 
-            $this->joinAdd($ass);
+//             $this->orderBy('summary');
+//             $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
 
-            $this->orderBy('summary');
-            $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
+//             $this->CoopView->debugWrap(4);
 
-            //$this->CoopView->debugWrap(1);
-
-			// ugly, but consisent. only shows families for this year
+// 			ugly, but consisent. only shows families for this year
 
 
 
- 		}
+//  		}
 
 
 }

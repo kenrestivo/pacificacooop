@@ -558,7 +558,7 @@ class coopView extends CoopObject
             // so they execute with teh rights and permissions of privs.
             // TODO: do this gambit only if they have < 800 on this object
             $targ =& new CoopView(&$this->page, 'users', &$this);
-            $this->debugWrap(4);
+            $this->debugWrap(5);
             $targ->obj->fb_formHeaderText = 
                 "Total Permissions for {$this->obj->fb_formHeaderText}";
             $targ->obj->query(sprintf($this->permsQuery,

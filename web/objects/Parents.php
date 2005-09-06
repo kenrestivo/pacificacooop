@@ -71,7 +71,7 @@ class Parents extends DB_DataObject
             $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
 
 
-            //$this->CoopView->debugWrap(1);
+            $this->CoopView->debugWrap(5);
 
 			// ugly, but consisent. only shows families for this year
 

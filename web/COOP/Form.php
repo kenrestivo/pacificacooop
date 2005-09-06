@@ -47,8 +47,9 @@ class coopForm extends CoopObject
 			if($this->id > 0){
 				$this->obj->get($this->id);
 			} else {
-				user_error("coopForm::build($this->table $this->id) called with no id, assuming NEW", 
-						   E_USER_NOTICE);
+				$this->page->printDebug(
+                    "coopForm::build($this->table $this->id) called with no id, assuming NEW");
+                
 			}
 			$formname = sprintf('edit_%s', $this->table);
 			if(!$this->form){	// deal with QFC
@@ -676,7 +677,7 @@ class coopForm extends CoopObject
 			$temp =& new CoopObject(&$this->page, $this->table, &$this);
 			$foo = $temp->obj;
 			$foo->whereAdd();
-			$this->debugWrap(2);
+			$this->debugWrap(4);
 			$ov = $foo->keys();
             // let scrubforsave do the work, instead of duplicatinghere
             foreach($this->scrubForSave($vars) as $key => $val){

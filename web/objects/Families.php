@@ -41,7 +41,7 @@ class Families extends DB_DataObject
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
 
 
-	function fb_linkConstraints()
+ 	function fb_linkConstraints()
 		{
 
             $enrollment =  $this->factory('enrollment');
@@ -65,7 +65,7 @@ class Families extends DB_DataObject
             $this->selectAdd('max(school_year) as school_year');
 
 
-            //$this->CoopView->debugWrap(1);
+            $this->CoopView->debugWrap(5);
 
 			// ugly, but consisent. only shows families for this year
 
