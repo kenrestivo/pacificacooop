@@ -170,7 +170,9 @@ switch($_REQUEST['action']){
          if($_REQUEST['action'] == 'edit'){
              print genericView(&$atd);
          }else {
-             confessArray($_REQUEST, 'request before redisplay');
+             //SUCCESSFUL, display a new blank entry
+             $atdf->page->confessArray($_REQUEST, 'request before redisplay',
+                                       2);
              print $atdf->form->toHTML();
          }
 	 } else {

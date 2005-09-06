@@ -718,9 +718,12 @@ class coopForm extends CoopObject
 	// cleans out REQUEST after a save! vital for re-displaying new.
 	function enema($vars)
 		{
+			//$ov = $this->obj->keys();
 			$ov = array_keys(get_object_vars($this->obj));
  			foreach($ov as $key){
 				$fullkey = $this->prependTable($key);
+                $this->page->printDebug("$this->table unsetting $fullkey",
+                                        3);
  				unset($_REQUEST[$fullkey]);
  			}
 			// i have to hack qf tracksumbit here.
@@ -731,6 +734,7 @@ class coopForm extends CoopObject
 			if(!is_array($this->obj->fb_crossLinks)){
 				return;
 			}
+            // don't i need to purge the xlinks too?
 			foreach($this->obj->fb_crossLinks as $la){
 				unset($_REQUEST[$this->prependTable($la['toField'])]);
 			}

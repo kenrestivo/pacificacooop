@@ -48,6 +48,6 @@ alter table blog_entry change column   show_on_members_page show_on_members_page
 
 alter table calendar_events add column show_on_public_page enum('Unknown','Yes','No') default 'No';
 
--- give betsy year level 500 permissions on membership! so she can see fams.
+-- give betsy year level 800 permissions on membership! so she can see fams.
 
 ---CONGRATULATIONS! you're done making massive changes to the database.

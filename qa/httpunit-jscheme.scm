@@ -71,6 +71,10 @@
 
   )
 
+(define (get-sublinks wtc)
+
+  )
+
 (define (visit-all-links wtc family url)
   (let ((gtc (invoke wtc 'getTestContext))) ;; the junit object
 	(invoke gtc 'setBaseUrl url))
@@ -96,6 +100,8 @@
 ; 		 (display (dump-page wtc) save-port)
 ; 		 (close-output-port save-port)
 		 (invoke wtc 'assertTextPresent "</html>")
+
+         ;; TODO: now visit the first Details and Enter New on each
 		 
 		 ;;(validate-html wtc)
 		 ))
