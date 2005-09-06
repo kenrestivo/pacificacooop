@@ -49,9 +49,6 @@ class Kids extends DB_DataObject
             if($this->CoopView->perms[NULL]['year'] < ACCESS_VIEW){
                 $enrollment->whereAdd(
                     'dropout_date is null or dropout_date < "2000-01-01"');
-                $enrollment->whereAdd(
-                    sprintf('school_year = "%s"',
-                        $this->CoopView->page->currentSchoolYear));
             }
 
 
@@ -60,9 +57,23 @@ class Kids extends DB_DataObject
 
             // IMPORTANT! otherwise it matches old year
             $this->selectAdd('max(school_year) as school_year');
-            $this->groupBy('kids.kid_id');
+            $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
 
-            //$this->debugLevel(1);
+
+            if($this->CoopView->perms[NULL]['year'] < ACCESS_VIEW){
+                // TODO! support chooser
+                $this->whereAdd(
+                    "enrollment.school_year = '{$this->CoopView->page->currentSchoolYear}'");
+            }
+
+
+
+            $this->selectAdd();
+            $this->selectAdd("{$this->CoopView->table}.*");
+            $this->selectAdd("max(enrollment.school_year) 
+                                                as school_year");
+            $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
+            $this->debugLevel(1);
 
 			// ugly, but consisent. only shows families for this year
 
