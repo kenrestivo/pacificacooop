@@ -511,13 +511,13 @@ insert into table_permissions set table_name = 'events', realm_id = 2, group_lev
 
 
 INSERT INTO `table_permissions` 
-(table_name , field_name , group_id , realm_id , 
+(table_name , field_name ,  realm_id , 
 user_level , group_level, menu_level)
 values
-('enhancement_projects',NULL,NULL,3,NULL,500,500);
-('nag_indulgences',NULL,NULL,10,NULL,600, 700),
-('workers','workday',NULL,14,0,200,200),
-('nag_indulgences','family_id',NULL,10,0,600,700);
+('enhancement_projects',NULL,3,NULL,500,500);
+('nag_indulgences',NULL,10,NULL,600, 700),
+('workers','workday',14,0,200,200),
+('nag_indulgences','family_id',10,0,600,700);
  
 INSERT INTO table_permissions (table_name ,
 field_name , realm_id , user_level , group_level , 
@@ -583,6 +583,8 @@ VALUES
 
 -- reports
 INSERT INTO `report_permissions` 
+(report_permissions_id, report_name, page, realm_id, user_level, 
+group_level, menu_level)
 VALUES 
 (1,'Summary','enhancement_summary.php',3,0,0,700),
 (2,'Summary','carriereport.php',9,0,0,700),
