@@ -64,6 +64,13 @@ function bruteForceDeleteCheck(&$atd)
 {
     global $_DB_DATAOBJECT;
     // go get em
+
+    $atd =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
+    $id = $_REQUEST[$atd->prependTable($atd->pk)];
+    $atd->obj->{$atd->pk} = $id;
+    
+
+
     $links =& $_DB_DATAOBJECT['LINKS'][$atd->obj->database()];
     foreach($links as $table=> $link){
         foreach($link as $nearcol => $farpair){
@@ -84,12 +91,11 @@ function bruteForceDeleteCheck(&$atd)
     foreach($checkme as $checktab){
         $atd->page->printDebug(
             sprintf('confirmdelete link checking %s => %s [%d]', 
-                    $atd->table, $checktab, 
-                    $atd->obj->{$atd->pk}), 
+                    $atd->table, $checktab, $id), 
             4);
         $check =& new CoopView(&$atd->page, $checktab, &$atd);
         $check->debugWrap(7);
-        $check->obj->{$atd->pk} = $atd->obj->{$atd->pk};
+        $check->obj->{$atd->pk} = $id;
         $found = $check->obj->find();
         if($found){
             $totalfound += $found;
@@ -98,7 +104,9 @@ function bruteForceDeleteCheck(&$atd)
     }
     
     if($totalfound){
-        return '<p class="error">YOU CANNOT DELETE THIS RECORD because other records depend on it. Fix these first.</p>' . $res;
+        $atd->obj->find(true);		//  XXX aack! need this for summary
+        $restop = $atd->horizTable();
+        return $restop . '<p class="error">YOU CANNOT DELETE THIS RECORD because the records below depend on it. Fix these first.</p>' .  $res;
         
     }
 
