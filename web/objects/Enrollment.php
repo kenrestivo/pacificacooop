@@ -6,7 +6,7 @@ require_once 'DB/DataObject.php';
 
 class Enrollment extends DB_DataObject 
 {
-    ###START_AUTOCODE
+###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'enrollment';                      // table name
@@ -29,7 +29,7 @@ class Enrollment extends DB_DataObject
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Enrollment',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-    ###END_AUTOCODE
+###END_AUTOCODE
 	var $fb_enumFields = array ('am_pm_session');
 	var $fb_fieldLabels = array(
 		'kid_id' => 'Student',
@@ -55,24 +55,49 @@ class Enrollment extends DB_DataObject
     
     var $fb_joinPaths = array('family_id' => 'kids'); 
     
-    function fb_linkConstraints()
-        {
+
+	function fb_linkConstraints(&$co)
+		{
+
             $kids =  $this->factory('kids');
+
+
             $this->joinAdd($kids);
 
-        }
+            $this->orderBy('last_name, first_name');
 
-    function fb_display_view()
-        {
-            
-            //XXX quick hack, so i can push live, allyears is  betsy only!
-            $this->obj->school_year = $this->page->currentSchoolYear;
-            
-            $this->orderBy('am_pm_session, kids.last_name, kids.first_name');
+            // IMPORTANT! otherwise it matches old year
+            $this->selectAdd('max(school_year) as school_year');
+            $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
 
-            return $this->CoopView->simpleTable();
+
+            /// AGAIN, nasty hack
+            //if($co->perms[NULL]['year'] < ACCESS_VIEW){
+            // HACKED to always just show current rasta
+                // TODO! support chooser
+            $this->whereAdd(
+                'dropout_date is null or dropout_date < "2000-01-01"');
             
-        }
+            $this->having("enrollment.school_year = '{$co->page->currentSchoolYear}'");
+                    
+
+
+            $this->selectAdd();
+            $this->selectAdd("{$co->table}.*");
+            $this->selectAdd("max(enrollment.school_year) 
+                                                as school_year");
+            $this->groupBy("{$co->table}.{$co->pk}");
+            //$co->debugWrap(2);
+
+			// ugly, but consisent. only shows families for this year
+
+
+
+ 		}
+
+
+
+
 
     function fb_display_details()
         {
@@ -83,53 +108,53 @@ class Enrollment extends DB_DataObject
             $cp =& $top->page;
 
             
-	$sy =findSchoolYear();
+            $sy =findSchoolYear();
 	
 
-	//print "CHECKING $table<br>";
-	$top->obj->$mi = $cid;
-	$top->obj->find(true);
-	print $top->horizTable();
+            //print "CHECKING $table<br>";
+            $top->obj->$mi = $cid;
+            $top->obj->find(true);
+            print $top->horizTable();
 
 
-	// need that familyid!
-	$top->obj->getLinks();
-	$family_id = $top->obj->_kid_id->family_id;
-	//confessObj($top->obj, 'enrol');
+            // need that familyid!
+            $top->obj->getLinks();
+            $family_id = $top->obj->_kid_id->family_id;
+            //confessObj($top->obj, 'enrol');
 
-	$view = new CoopView(&$cp, 'families', &$top);
-	$view->obj->family_id = $family_id;
-	print $view->simpleTable();
+            $view = new CoopView(&$cp, 'families', &$top);
+            $view->obj->family_id = $family_id;
+            print $view->simpleTable();
 
 
 
-	// get all the kids... who are enrolled. gah.
-	$subenrol = new CoopView(&$cp, 'enrollment', &$top);
-	$subenrol->obj->whereAdd("$mi = $cid");
-    $subenrol->obj->whereAdd(sprintf('school_year = "%s"', 
-                                 $subenrol->page->currentSchoolYear));
-	print $subenrol->simpleTable();
+            // get all the kids... who are enrolled. gah.
+            $subenrol = new CoopView(&$cp, 'enrollment', &$top);
+            $subenrol->obj->whereAdd("$mi = $cid");
+            $subenrol->obj->whereAdd(sprintf('school_year = "%s"', 
+                                             $subenrol->page->currentSchoolYear));
+            print $subenrol->simpleTable();
 
-	//parents are easier. most of the time ;-)
-	$view = new CoopView(&$cp, 'parents', &$top);
-	$view->obj->family_id = $family_id;
-    $view->obj->orderBy('type asc');
-    //TODO actionbutons to edit
-	print $view->simpleTable();
+            //parents are easier. most of the time ;-)
+            $view = new CoopView(&$cp, 'parents', &$top);
+            $view->obj->family_id = $family_id;
+            $view->obj->orderBy('type asc');
+            //TODO actionbutons to edit
+            print $view->simpleTable();
 	
-	//workers
-	$view = new CoopView(&$cp, 'workers', &$top);
-	$view->obj->whereAdd("$mi = $cid");
-    $view->obj->whereAdd(sprintf('enrollment.school_year = "%s"', 
-                                 $view->page->currentSchoolYear));
-	print $view->simpleTable();
+            //workers
+            $view = new CoopView(&$cp, 'workers', &$top);
+            $view->obj->whereAdd("$mi = $cid");
+            $view->obj->whereAdd(sprintf('enrollment.school_year = "%s"', 
+                                         $view->page->currentSchoolYear));
+            print $view->simpleTable();
 
-     // standard audit trail, for all details
-     $aud =& new CoopView(&$cp, 'audit_trail', &$atd);
-     $aud->obj->table_name = $top->table;
-     $aud->obj->index_id = $this->{$top->pk};
-     $aud->obj->orderBy('updated desc');
-     print $aud->simpleTable();
+            // standard audit trail, for all details
+            $aud =& new CoopView(&$cp, 'audit_trail', &$atd);
+            $aud->obj->table_name = $top->table;
+            $aud->obj->index_id = $this->{$top->pk};
+            $aud->obj->orderBy('updated desc');
+            print $aud->simpleTable();
 
 
 

@@ -369,10 +369,11 @@ class coopView extends CoopObject
 		{
 			//TODO: use DIV's instead of tables for this.
             $par = $this->getParent();
-			$title = sprintf("%s %.50s", 
+			$title = sprintf("%s %.50s (%d found)", 
 							 $this->title(),
 							 is_a($par, 'CoopObject') ? 
-							 "for " . $par->getSummary() : "");
+							 "for " . $par->getSummary() : "",
+                             $this->obj->N);
 
             //XXX HAACK!! REMOVE THIS when i get schoolyearchooser
             if($this->perms[NULL]['year'] >= ACCESS_VIEW){
