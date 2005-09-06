@@ -62,14 +62,16 @@ print '<div id="centerCol">';
 
 function bruteForceDeleteCheck(&$atd)
 {
-    
+    global $_DB_DATAOBJECT;
     // go get em
     $links =& $_DB_DATAOBJECT['LINKS'][$atd->obj->database()];
     foreach($links as $table=> $link){
         foreach($link as $nearcol => $farpair){
-            if($atd->pk == $nearcol){
+            if($atd->pk == $nearcol && $table != $atd->table){
                 $checkme[] = $table;
-                list($fartab, $farcol) = explode(':', $farpair);
+            }
+            list($fartab, $farcol) = explode(':', $farpair);
+            if($atd->pk == $farcol && $fartab != $atd->table){
                 $checkme[] = $fartab;
             }
         }
@@ -80,7 +82,13 @@ function bruteForceDeleteCheck(&$atd)
     $checkme = array_unique($checkme);
     // now check 'em
     foreach($checkme as $checktab){
+        $atd->page->printDebug(
+            sprintf('confirmdelete link checking %s => %s [%d]', 
+                    $atd->table, $checktab, 
+                    $atd->obj->{$atd->pk}), 
+            4);
         $check =& new CoopView(&$atd->page, $checktab, &$atd);
+        $check->debugWrap(7);
         $check->obj->{$atd->pk} = $atd->obj->{$atd->pk};
         $found = $check->obj->find();
         if($found){
@@ -90,7 +98,7 @@ function bruteForceDeleteCheck(&$atd)
     }
     
     if($totalfound){
-        return '<p class="error">YOU CANNOT DELETE THIS RECORD because other records depend on it. Fix that first.</p>' . $res;
+        return '<p class="error">YOU CANNOT DELETE THIS RECORD because other records depend on it. Fix these first.</p>' . $res;
         
     }
 
