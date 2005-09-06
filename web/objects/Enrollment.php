@@ -43,24 +43,33 @@ class Enrollment extends DB_DataObject
         'thursday' => 'Th',
         'friday' => 'F',
 		);
-
+    
 	var $fb_requiredFields  = array('school_year', 'am_pm_session', 
 									'start_date', 'kid_id');
 	var $fb_linkDisplayFields = array('school_year', 'am_pm_session');
-
-
-    //var $fb_usePage = 'newroster.php';
+    var $fb_orderBy = 'school_year, am_pm_session';
+    
+//var $fb_usePage = 'newroster.php';
     
     var $fb_shortHeader = 'Roster';
-   
-    var $fb_joinPaths = array('family_id' => 'kids'); //while findpaths is broken
-     function fb_display_view()
+    
+    var $fb_joinPaths = array('family_id' => 'kids'); 
+    
+    function fb_linkConstraints()
         {
+            $kids =  $this->factory('kids');
+            $this->joinAdd($kids);
 
+        }
+
+    function fb_display_view()
+        {
+            
             //XXX quick hack, so i can push live, allyears is  betsy only!
-            $this->obj->school_year = findSchoolYear();
+            $this->obj->school_year = $this->page->currentSchoolYear;
+            
+            $this->orderBy('am_pm_session, kids.last_name, kids.first_name');
 
-             $this->orderBy('am_pm_session'); //, kids.last_name, kids.first_name');
             return $this->CoopView->simpleTable();
             
         }

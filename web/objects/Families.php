@@ -41,13 +41,32 @@ class Families extends DB_DataObject
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
 
 
-// 	function fb_linkConstraints(&$co)
-// 		{
-// 			// ugly, but consisent. only shows families for this year
-// 			$enrol->whereAdd('dropout_date is null or dropout_date < "2000-01-01"');
+	function fb_linkConstraints()
+		{
+
+            $enrollment =  $this->factory('enrollment');
+			$enrollment->whereAdd(
+                'dropout_date is null or dropout_date < "2000-01-01"');
+            $enrollment->whereAdd(
+                sprintf('school_year = "%s"',
+                        $this->CoopView->page->currentSchoolYear));
+            $kids =  $this->factory('kids');
+            $kids->joinAdd($enrollment, '');
+
+            $this->joinAdd($kids);
+            $this->orderBy('families.name');
+            $this->groupBy('families.name');
+
+            $this->selectAdd('max(school_year) as school_year');
 
 
-// 		}
+            //$this->debugLevel(1);
+
+			// ugly, but consisent. only shows families for this year
+
+
+
+ 		}
 
 
 

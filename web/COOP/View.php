@@ -164,6 +164,10 @@ class coopView extends CoopObject
             $this->linkConstraints();
 	
 
+//             $this->obj->orderBy(implode(', ', 
+//                                        $this->obj->fb_linkDisplayFields));
+//             confessObj($this->obj, $this->table);
+
             //// finally, go get 'em!
             if($find){
 				$found = $this->obj->find();
@@ -330,12 +334,16 @@ class coopView extends CoopObject
             $par = $this->getParent();
 			///confessArray($this->obj->toArray(), 'makeheader:toarray');
 			// get the fieldnames out the dataobject
+
+            $labels = array_keys($this->obj->fb_fieldLabels);
+
 			foreach($this->obj->toArray() as $key => $trash){
 				//print "checking $key<br>";
                 //force EVERYTHING for header. some might be theirs
                 //also, it doesn't know year, so i have to force
 				if($this->isPermittedField($key,true,true) &&
-                    $key != $par->pk)
+                    $key != $par->pk &&
+                    in_array($key, $labels))
                 {
                     $keys[] = $key;
 					if($this->obj->fb_fieldLabels[$key]){

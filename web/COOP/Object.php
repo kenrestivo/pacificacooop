@@ -381,7 +381,7 @@ group by user_id,table_name,field_name";
             	$this->page->printDebug(
                     "ispermitted($this->table : $key) {$this->obj->school_year} is NOT {$this->page->currentSchoolYear}, so limiting for permcheck", 
                     4);
-                PEAR::raiseError('foobar', 111);
+                //PEAR::raiseError('foobar', 111);
                     //MIN! limit them.
                 $res = min($res, $usethese['year']);
             }
@@ -441,36 +441,36 @@ group by user_id,table_name,field_name";
                 return $this->obj->fb_linkConstraints(&$this);
             } 
 
-
-            //XXX if it's a subview, it may be for the *above* family.
-            /// note the permitted here is NOT forcing family, for lookup
-            if($this->isPermittedField(null, false, true) < ACCESS_VIEW)
-            {
-                $this->page->printDebug("FORCING familyid for search", 2);
-                $this->obj->family_id = $this->page->userStruct['family_id'];
-            }
+// NONE of this works. fuckers.
+  //           //XXX if it's a subview, it may be for the *above* family.
+//             /// note the permitted here is NOT forcing family, for lookup
+//             if($this->isPermittedField(null, false, true) < ACCESS_VIEW)
+//             {
+//                 $this->page->printDebug("FORCING familyid for search", 2);
+//                 $this->obj->family_id = $this->page->userStruct['family_id'];
+//             }
             
 
-            /// XXX have to do it man, and this is not the way to do it
-            /// check ispermitted here too, just in case
-            /// they shouldn't even *see* a chooser if they aren't permitted
-            /// but i's like to be paranoid
-            if(!$CHECKGLOBALSCHOOLYEAR){
-                //TODO: use the GLOBAL or LOCAL POPUP!
-                //only use $sy if nothing is set
-                $this->obj->school_year = $this->page->currentSchoolYear;
-            } 
+//             /// XXX have to do it man, and this is not the way to do it
+//             /// check ispermitted here too, just in case
+//             /// they shouldn't even *see* a chooser if they aren't permitted
+//             /// but i's like to be paranoid
+//             if(!$CHECKGLOBALSCHOOLYEAR){
+//                 //TODO: use the GLOBAL or LOCAL POPUP!
+//                 //only use $sy if nothing is set
+//                 $this->obj->school_year = $this->page->currentSchoolYear;
+//             } 
 
-            //TODO: maybe instead check path?
-            //do this BEFORE injecting anything into it?
-            //i may not ALWAYS want to sort by school year, ya know
-            if($this->inObject('school_year', 'class')){
-                print "SCHOOLYEAR IN CLASS";
-                //print "ADDING SY for $this->table ???";
-                //TODO: i'll need an orderby in the fucking object.
-                //or... another global popup, the user can change!
-                $this->obj->orderBy('school_year desc');
-            }
+//             //TODO: maybe instead check path?
+//             //do this BEFORE injecting anything into it?
+//             //i may not ALWAYS want to sort by school year, ya know
+//             if($this->inObject('school_year', 'class')){
+//                 print "SCHOOLYEAR IN CLASS";
+//                 //print "ADDING SY for $this->table ???";
+//                 //TODO: i'll need an orderby in the fucking object.
+//                 //or... another global popup, the user can change!
+//                 $this->obj->orderBy('school_year desc');
+//             }
 
 
 		}
@@ -561,7 +561,7 @@ group by user_id,table_name,field_name";
 
         }
 
-    function debugWrap($pagedebuglevel, $dblevel = 2)
+    function debugWrap($pagedebuglevel, $dblevel = 1)
         {
             if($this->page->debug < $pagedebuglevel){
                 return;
@@ -596,34 +596,20 @@ group by user_id,table_name,field_name";
                 return;
             }
 
-
             // each LINKID/PATH
             foreach ($this->obj->fb_joinPaths as $key => $path){
-                $this->page->printDebug( "HEY! $path", 7);
-                // must join from far to near
-                $stack = explode(':', $path); 
-                $this->page->confessArray($stack, 'stack',7);
-                $done = 0;
-                while ($table = array_pop($stack)){
-                    $this->page->printDebug(
-                        "JOINING [$table] to {$prev->table}", 7);
-                    if($this->table == $table){
-                        $targ =& $this;
-                        continue;
-                    } else {
-                        $this->page->printDebug( "INSTANTIATING $table", 7);
-                        $targ =& new CoopObject(&$this->page, $table, &$top);
-                    }
-                    $prev && $targ->obj->joinAdd(&$prev->obj);
-                    $prev =& $targ;
-                } 
-                    $this->page->printDebug(
-                        "JOINED {$this->table}, $path, $table", 2);
+                $this->page->printDebug("joining {$this->table} path to $key", 
+                                        4);
+                $this->recurseJoin($path);
             }
-            confessObj($this->obj, 'dojoins');
+
         }
     
-    
+    function recurseJoin($stack)
+        {
+            
+        }
+
 
 } // END COOP OBJECT CLASS
 

@@ -44,8 +44,8 @@ class Job_descriptions extends DB_DataObject
 	var $fb_requiredFields = array('long_description', 'summary');
     var $fb_longHeader = 'The virtual job description binder.';
 	var $fb_shortHeader = 'Descriptions';
-    var $fb_joinPaths = array('family_id' => 'job_assignments',
-                              'school_year' => 'job_assignments');
+    // NOTE ! do NOT schoolyearify the jobdescriptions. show all years.
+    var $fb_joinPaths = array('family_id' => 'job_assignments');
 	var $fb_crossLinks = array(array('table' => 'job_assignments', 
 									 'toTable' => 'families',
 									 'toField' => 'family_id',

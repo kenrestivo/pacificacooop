@@ -168,7 +168,7 @@ switch($_REQUEST['action']){
          $aud =& new CoopView(&$cp, $table, &$atd);
          $aud->obj->{$farid} = $atd->obj->{$nearid};
          //confessObj($aud, 'aud');
-         $cp->debug > 4 && $aud->obj->debugLevel(2);
+         $aud->debugWrap(4);
          print $aud->simpleTable();
      }
 

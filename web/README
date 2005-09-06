@@ -23,7 +23,7 @@ fb_recordActions = array  (action => level)
 
 in coopview
 fullText (do not truncate longtextfields)
-
+linkdisplayfields is a SUPERset of fieldstorender, in simpletable at least
 
 unique app-specific tweaks:
 family_id and school_year are *special* fields
@@ -32,6 +32,7 @@ family_id and school_year are *special* fields
 			using quickform setdefaults, so any setting overrides it
 		automatically searched for in genericview, IFF perms require it!
 	family_id
+
 
 
 
