@@ -74,7 +74,7 @@ class Job_descriptions extends DB_DataObject
 
 /////NOT YET! first fix the form linking, doesn't work in form.
 /////and perms for job_descr: don't want people editing the days tuition
-// 	function fb_linkConstraints()
+// 	function fb_linkConstraints(&$co)
 // 		{
     
 //             $ass =  $this->factory('job_assignments');
@@ -82,9 +82,9 @@ class Job_descriptions extends DB_DataObject
 //             $this->joinAdd($ass);
 
 //             $this->orderBy('summary');
-//             $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
+//             $this->groupBy("{$co->table}.{$co->pk}");
 
-//             $this->CoopView->debugWrap(4);
+//             $co->debugWrap(4);
 
 // 			ugly, but consisent. only shows families for this year
 

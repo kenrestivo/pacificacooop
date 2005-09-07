@@ -40,13 +40,13 @@ class Kids extends DB_DataObject
 
     var $fb_joinPaths = array('school_year' => 'enrollment');
 
-	function fb_linkConstraints()
+	function fb_linkConstraints(&$co)
 		{
 
             $enrollment =  $this->factory('enrollment');
 
             // HACK! this is presuming VIEW, but in popup it could be EDIT
-            if($this->CoopView->perms[NULL]['year'] < ACCESS_VIEW){
+            if($co->perms[NULL]['year'] < ACCESS_VIEW){
                 $enrollment->whereAdd(
                     '(dropout_date is null or dropout_date < "2000-01-01")');
             }
@@ -57,24 +57,24 @@ class Kids extends DB_DataObject
 
             // IMPORTANT! otherwise it matches old year
             $this->selectAdd('max(school_year) as school_year');
-            $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
+            $this->groupBy("{$co->table}.{$co->pk}");
 
 
             /// AGAIN, nasty hack
-            if($this->CoopView->perms[NULL]['year'] < ACCESS_VIEW){
+            if($co->perms[NULL]['year'] < ACCESS_VIEW){
                 // TODO! support chooser
                 $this->whereAdd(
-                    "enrollment.school_year = '{$this->CoopView->page->currentSchoolYear}'");
+                    "enrollment.school_year = '{$co->page->currentSchoolYear}'");
             }
 
 
 
             $this->selectAdd();
-            $this->selectAdd("{$this->CoopView->table}.*");
+            $this->selectAdd("{$co->table}.*");
             $this->selectAdd("max(enrollment.school_year) 
                                                 as school_year");
-            $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
-            //$this->CoopView->debugWrap(2);
+            $this->groupBy("{$co->table}.{$co->pk}");
+            //$co->debugWrap(2);
 
 			// ugly, but consisent. only shows families for this year
 

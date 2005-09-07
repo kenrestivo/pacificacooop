@@ -41,18 +41,18 @@ class Families extends DB_DataObject
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
 
 
- 	function fb_linkConstraints()
+ 	function fb_linkConstraints(&$co)
 		{
 
             $enrollment =  $this->factory('enrollment');
 
             // HACK! this is presuming VIEW, but in popup it could be EDIT
-            if($this->CoopView->perms[NULL]['year'] < ACCESS_VIEW){
+            if($co->perms[NULL]['year'] < ACCESS_VIEW){
                 $enrollment->whereAdd(
                     '(dropout_date is null or dropout_date < "2000-01-01")');
                 $enrollment->whereAdd(
                     sprintf('school_year = "%s"',
-                        $this->CoopView->page->currentSchoolYear));
+                        $co->page->currentSchoolYear));
             }
 
             $kids =  $this->factory('kids');
@@ -65,7 +65,7 @@ class Families extends DB_DataObject
             $this->selectAdd('max(school_year) as school_year');
 
 
-            //$this->CoopView->debugWrap(5);
+            //$co->debugWrap(5);
 
 			// ugly, but consisent. only shows families for this year
 
