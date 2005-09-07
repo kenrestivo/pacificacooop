@@ -595,6 +595,11 @@ VALUES
 (4,'Summary','solicit_summary.php',15,0,0,200);
 
 
+--- finally create root (do this FIRST)
+insert into users set user_id = 1, name = 'System Admin';
+insert into user_privileges (user_id, group_id, realm_id, user_level, group_level, menu_level, year_level) values (1, NULL, 19, 800, 800, 800, 800);
+
+
 -- default group perms
 insert into user_privileges set
 group_id = 1,
@@ -741,6 +746,7 @@ family_id = 56,
 short_title = "Fall Session starts September 12",
 body = "There may still be a very few openings for Fall. Call 355-3272 for more information. You may also fill out a wait-list application.",
 show_on_public_page  = 'yes';
+
 
 
 -- EOF

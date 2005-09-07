@@ -451,7 +451,8 @@ function loginPopup($uid)
 						where (enrollment.school_year = '$sy'
 							and (enrollment.dropout_date < '2000-01-01'
 							or enrollment.dropout_date is null)
-							or  users.family_id < 1)
+							or  (users.family_id is null 
+                                        or users.family_id < 1))
 			  			group by user_id
 								order by name");
 	$err = mysql_error();
