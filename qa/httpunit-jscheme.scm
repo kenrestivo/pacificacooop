@@ -71,17 +71,8 @@
 
   )
 
-(define (get-sublinks wtc)
-
-  )
-
-(define (visit-all-links wtc family url)
-  (let ((gtc (invoke wtc 'getTestContext))) ;; the junit object
-	(invoke gtc 'setBaseUrl url))
-  (get-to-main-page wtc (string-append family " Family"))
-  (let ((links (vector->list (invoke (get-response wtc) 'getLinks)) )
-		(run-number (random 1000)))
-	(for-each
+(define (check-sublinks links limit)
+  (for-each
 	 (lambda (link)
 	   (let* ((url (invoke link 'getURLString))
 			  (link-text (invoke link 'asText))
@@ -107,7 +98,17 @@
 		 ))
 		 ;; skip main menu (first two) and email (last)
 		 (cddr (list-head links
-					  (- (length links) 1))))))
+					  (- (length links) 1)))))
+
+
+(define (visit-all-links wtc family url)
+  (let ((gtc (invoke wtc 'getTestContext))) ;; the junit object
+	(invoke gtc 'setBaseUrl url))
+  (get-to-main-page wtc (string-append family " Family"))
+  (let ((links (vector->list (invoke (get-response wtc) 'getLinks)) )
+		(run-number (random 1000)))
+    (check-sublinks links 0)
+	))
 
 ;;or http://validator.w3.org/check
 (define (validate-html wtc)
