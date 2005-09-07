@@ -75,6 +75,7 @@ insert into user_privileges
 (user_id, group_id, realm_id, user_level, group_level, menu_level, year_level)
 values
 (4, NULL, 14, 800, 800, 800, 800);
+update user_privileges set user_level = 700 where user_id = 4 and realm_id = 3;
 
 -- finally, import the new rasta, if that hasn't already been done.
 
