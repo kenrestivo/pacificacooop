@@ -354,11 +354,12 @@ def load(am_file, pm_file):
 ###### MAIN
 if __name__ == '__main__':
     conn=MySQLdb.connect(user='input', passwd='test', db='coop',
-                         host='bc', cursorclass=MySQLdb.cursors.DictCursor) 
+                         host='127.0.0.1', port=2299,
+                         cursorclass=MySQLdb.cursors.DictCursor) 
     c=conn.cursor()
     
     load("/mnt/kens/ki/proj/coop/imports/AMRoster05-06.csv", 
          "/mnt/kens/ki/proj/coop/imports/PMRoster05-06.csv")
     
-    for i in ir.rasta: ir.line(i)
+    for i in rasta: line(i)
 

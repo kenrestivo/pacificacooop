@@ -2,7 +2,7 @@
 
 //$Id$
 
-$debug = 4;
+//$debug = 4;
 
 
 require_once('CoopPage.php');
@@ -161,7 +161,7 @@ function formaggio(&$cp){
 		 print $atdf->form->process(array(&$atdf, 'process'));
          // only go back to view if previous state was 'edit'
          if($_REQUEST['action'] == 'edit'){
-             print genericView(&$atd);
+             print genericView(&$atdf);
          }else {
              //SUCCESSFUL, display a new blank entry
              $atdf->page->confessArray($_REQUEST, 

@@ -20,6 +20,7 @@
 	 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+require_once('CoopPage.php');
 require_once('CoopObject.php');
 require_once('DB/DataObject.php');
 require_once("HTML/Table.php");
@@ -349,7 +350,7 @@ class coopView extends CoopObject
                 //also, it doesn't know year, so i have to force
 				if($this->isPermittedField($key,true,true) &&
                     $key != $par->pk &&
-                    in_array($key, $labels))
+                    is_array($labels) && in_array($key, $labels))
                 {
                     $keys[] = $key;
 					if($this->obj->fb_fieldLabels[$key]){

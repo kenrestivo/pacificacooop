@@ -12,9 +12,20 @@ alter table groups drop column audit_user_id;
 
 -- 	then run the populate workers query (from queries.sql)
 
+-- add job_assignments table (definition)
+
 alter table parents drop column worker;	
 
 -- 	add realms table (from definition.sql)
+
+-- add users_groups_join table (definition)
+
+insert into users_groups_join (group_id, user_id) 
+select 1, user_id from users where family_id > 0
+
+insert into users_groups_join (group_id, user_id) 
+select 2, user_id from users where family_id < 1
+
 
 -- 	add the realms (seed.sql)
 
@@ -23,6 +34,7 @@ alter table user_privileges add column   realm_id int(32) default NULL;
 alter table user_privileges add column   year_level  int(32) default NULL;
 alter table user_privileges add column   menu_level  int(32) default NULL;
 
+-- add table permissions table (definition)
 
 -- 	new table_permissions use hardcopy stored in seed.sql
 
@@ -51,11 +63,12 @@ update groups set name = "Members" where group_id  =1;
 -- seed the access_levels (seed.sql)
 
 -- add or replace the files table (definition.sql)
-
+ 
 
 insert into user_privileges set realm_id=19, user_id  = 52, group_level = 800, user_level = 800;
 
 alter table parents drop column email_address;
+
 
 --add the events for start of fall, etc, and the calendar_events too (seed.sql)
 
@@ -70,7 +83,6 @@ alter table blog_entry change column   show_on_members_page show_on_members_page
 
 
 
--- give betsy year level 800 permissions on membership! so she can see fams.
 insert into user_privileges
 (user_id, group_id, realm_id, user_level, group_level, menu_level, year_level)
 values

@@ -20,6 +20,7 @@
 	 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+require_once('CoopPage.php');
 require_once('CoopObject.php');
 require_once('DB/DataObject.php');
 require_once 'HTML/QuickForm.php';
