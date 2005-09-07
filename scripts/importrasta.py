@@ -35,6 +35,7 @@ valid_keys = [
 
 school_year = '2005-2006'
 first_day_of_school = '2005-09-12'
+blank_count = 3
 
 ## do i *really* need an object here? or is encapsualtion in import ok?
 ## ah, ok. one rastaimport for each of am/pm
@@ -58,7 +59,7 @@ class RastaImport:
 
     def get(self):
         self.f.seek(0)                               # just ot be sure
-        while map(self._cleanInput, self.r.next()).count('') < 10 :
+        while map(self._cleanInput, self.r.next()).count('') < blank_count :
             print "Skipping header line..."
 
         ##skipping blanks
@@ -67,7 +68,7 @@ class RastaImport:
         while True:
             print "Skipping BLANK line..."
             l=map(self._cleanInput, self.r.next())
-            if l.count('') < 10:
+            if l.count('') < blank_count:
                 break
 
         #YAY! got the keys
