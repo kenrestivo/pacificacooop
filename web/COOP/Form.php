@@ -96,6 +96,8 @@ class coopForm extends CoopObject
 			   $this->obj->fb_createSubmit > 0)
 			{
 				$this->form->addElement('submit', 'savebutton', 'Save');
+                // XXX this cancel link is brain-dead
+                // it needs to go BACK, to whatever called this, stack
                 $this->form->addElement(
                     'static', 
                     'cancel', '', 

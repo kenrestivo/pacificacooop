@@ -142,7 +142,10 @@ INSERT INTO `events` VALUES
 
 
 
-INSERT INTO `calendar_events` VALUES 
+INSERT INTO `calendar_events` 
+(calendar_event_id, event_id, status, keep_event_hidden_until_date,
+event_date, school_year, show_on_public_page)
+VALUES 
 (1,4,'Active',NULL,'2003-12-18 00:00:00','2003-2004','No'),
 (2,3,'Active',NULL,'2003-11-04 00:00:00','2003-2004','No'),
 (3,1,'Active',NULL,'2003-12-12 00:00:00','2003-2004','No'),
