@@ -223,7 +223,7 @@ class coopForm extends CoopObject
                         $this->form->addRule(
                             $fullkey, 
                             'Date must be in format MM/DD/YYYY', 
-                            'regex', '/^\d{2}\/\d{2}\/\d{4}$/');
+                            'regex', '/^\d{2}\/\d{2}\/\d{2,4}$/');
                         $val && $val = sql_to_human_date($val);
                     }
 
@@ -691,8 +691,8 @@ class coopForm extends CoopObject
 			$ov = $foo->keys();
             // let scrubforsave do the work, instead of duplicatinghere
             foreach($this->scrubForSave($vars) as $key => $val){
-                if(!is_array($this->obj->fb_dupeIgnore ||
-                       in_array($key, $this->obj->fb_dupeIgnore)))
+                if(!is_array($this->obj->fb_dupeIgnore) ||
+                       in_array($key, $this->obj->fb_dupeIgnore))
                 {
                     $scrubbed[$key] = $val;
                 }

@@ -54,6 +54,19 @@ class UtilsTest extends PHPUnit_TestCase {
                             human_to_sql_date('1/1/2005'));
     }
 
+
+    function test_HUMANdateNOYTK() {
+        $this->assertEquals('2005-01-01', 
+                            human_to_sql_date('01/01/05'));
+    }
+
+
+    function test_HUMANdateSHORTNOYTK() {
+        $this->assertEquals('2005-01-01',
+                            human_to_sql_date('1/1/05'));
+    }
+
+
     /// weird case of passing a time to sqldate
     function test_HUMANtimeALREADYPM() {
         $this->assertEquals('01/01/2005 12:00PM',

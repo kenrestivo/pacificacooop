@@ -275,11 +275,16 @@ human_to_sql_date($dt)
 				   E_USER_NOTICE);
 		return $dt;
 	}
-	if($dt && preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/", 
+	if($dt && preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/", 
 						 $dt, $cleaned) < 1){
 		user_error("human_to_sql_date($dt) was passed an invalid value!!",
 				   E_USER_ERROR);
 	}
+
+    // handle non y2k dates
+    $cleaned[3] = $cleaned[3] < 1900 ? $cleaned[3] + 1900: $cleaned[3];
+    $cleaned[3] = $cleaned[3] < 1950 ? $cleaned[3] + 100: $cleaned[3];
+
 	//confessArray($cleaned, "human_to_sql_date($dt)");
 	$cleandate = sprintf("%04d-%02d-%02d",
 						 $cleaned[3], $cleaned[1], $cleaned[2]);
