@@ -34,6 +34,7 @@ valid_keys = [
  'Dad/Partner']
 
 school_year = '2005-2006'
+first_day_of_school = '2005-09-12'
 
 ## do i *really* need an object here? or is encapsualtion in import ok?
 ## ah, ok. one rastaimport for each of am/pm
@@ -230,7 +231,7 @@ class Enrollment(Adder):
                         start_date = %s , monday = %s, tuesday = %s,
                         wednesday = %s, thursday = %s, friday = %s""",
                   tuple([self.kid_id, school_year, self.rec['session'],
-                         datetime.date.today()] +
+                         first_day_of_school] +
                          [self.rec[i] is not '' for i in
                           ['M','Tu', 'W','Th','F']]))
         return c.lastrowid
