@@ -35,7 +35,7 @@ valid_keys = [
 
 school_year = '2005-2006'
 first_day_of_school = '2005-09-12'
-blank_count = 3
+blank_count = 10
 
 ## do i *really* need an object here? or is encapsualtion in import ok?
 ## ah, ok. one rastaimport for each of am/pm

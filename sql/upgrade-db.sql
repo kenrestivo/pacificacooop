@@ -80,7 +80,7 @@ update user_privileges set user_level = 700 where user_id = 4 and realm_id = 3;
 --create a ROOT user!
 insert into users set name = 'System Admin';
 select user_id from  users where name = 'System Admin';
---insert into user_privileges (user_id, group_id, realm_id, user_level, group_level, menu_level, year_level) values (GEET IT, NULL, 19, 800, 800, 800, 800);
+-- insert into user_privileges (user_id, group_id, realm_id, user_level, group_level, menu_level, year_level) select YOUPICKIT, NULL, realm_id, 800, 800, 800, 800 from realms;
 
 
 -- finally, import the new rasta, if that hasn't already been done.

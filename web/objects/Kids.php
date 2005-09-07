@@ -48,7 +48,7 @@ class Kids extends DB_DataObject
             // HACK! this is presuming VIEW, but in popup it could be EDIT
             if($this->CoopView->perms[NULL]['year'] < ACCESS_VIEW){
                 $enrollment->whereAdd(
-                    'dropout_date is null or dropout_date < "2000-01-01"');
+                    '(dropout_date is null or dropout_date < "2000-01-01")');
             }
 
 

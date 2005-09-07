@@ -61,7 +61,7 @@ class Workers extends DB_DataObject
             // HACK! this is presuming VIEW, but in popup it could be EDIT
             //ALWAYS show ONLY this years
                 $enrollment->whereAdd(
-                    'dropout_date is null or dropout_date < "2000-01-01"');
+                    '(dropout_date is null or dropout_date < "2000-01-01")');
                 $enrollment->whereAdd(
                     sprintf('enrollment.school_year = "%s"',
                         $this->CoopView->page->currentSchoolYear));

@@ -62,31 +62,18 @@ class Enrollment extends DB_DataObject
             $kids =  $this->factory('kids');
 
 
-            $this->joinAdd($kids);
+            $this->joinAdd($kids, 'left');
 
-            $this->orderBy('last_name, first_name');
-
-            // IMPORTANT! otherwise it matches old year
-            $this->selectAdd('max(school_year) as school_year');
-            $this->groupBy("{$this->CoopView->table}.{$this->CoopView->pk}");
-
-
-            /// AGAIN, nasty hack
-            //if($co->perms[NULL]['year'] < ACCESS_VIEW){
-            // HACKED to always just show current rasta
                 // TODO! support chooser
             $this->whereAdd(
-                'dropout_date is null or dropout_date < "2000-01-01"');
+                '(dropout_date is null or dropout_date < "2000-01-01")');
             
-            $this->having("enrollment.school_year = '{$co->page->currentSchoolYear}'");
-                    
+            $this->school_year = $co->page->currentSchoolYear;
 
+            $this->orderBy('am_pm_session, last_name, first_name');
 
             $this->selectAdd();
             $this->selectAdd("{$co->table}.*");
-            $this->selectAdd("max(enrollment.school_year) 
-                                                as school_year");
-            $this->groupBy("{$co->table}.{$co->pk}");
             //$co->debugWrap(2);
 
 			// ugly, but consisent. only shows families for this year

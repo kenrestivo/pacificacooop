@@ -597,8 +597,7 @@ VALUES
 
 --- finally create root (do this FIRST)
 insert into users set user_id = 1, name = 'System Admin';
-insert into user_privileges (user_id, group_id, realm_id, user_level, group_level, menu_level, year_level) values (1, NULL, 19, 800, 800, 800, 800);
-
+insert into user_privileges (user_id, group_id, realm_id, user_level, group_level, menu_level, year_level) select 1, NULL, realm_id, 800, 800, 800, 800 from realms;
 
 -- default group perms
 insert into user_privileges set
