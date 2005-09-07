@@ -177,6 +177,9 @@ class coopView extends CoopObject
 			} else {
 				$found = $this->obj->N;
 			}
+            $this->page->confessArray($this->obj->_query,  
+                                      "FINDING {$this->table}  [{$this->obj->_join}] found {$this->obj->N}", 
+                                      2);
             // ALSO. if i have "add" perms, then show the 'add new'
             // even if nothign was found, force TRUE, so i get my enter new
             return $found || $perms >= ACCESS_ADD;
