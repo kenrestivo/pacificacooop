@@ -70,7 +70,7 @@ class Parents extends DB_DataObject
                                                 as school_year");
             $this->groupBy("{$co->table}.{$co->pk}");
 
-            confessObj($co, 'sure it is an objec');
+            //confessObj($co, 'sure it is an objec');
             //r$co->debugWrap(5);
 
 			// ugly, but consisent. only shows families for this year

@@ -131,9 +131,8 @@ class Enrollment extends DB_DataObject
 	
             //workers
             $view = new CoopView(&$cp, 'workers', &$top);
-            $view->obj->whereAdd("$mi = $cid");
-            $view->obj->whereAdd(sprintf('enrollment.school_year = "%s"', 
-                                         $view->page->currentSchoolYear));
+            $view->obj->whereAdd("family_id = $family_id");
+            $view->obj->school_year = $view->page->currentSchoolYear;
             print $view->simpleTable();
 
             // standard audit trail, for all details

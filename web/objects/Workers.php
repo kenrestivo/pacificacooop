@@ -59,6 +59,7 @@ class Workers extends DB_DataObject
             $par = $this->factory('parents');
 
             $this->joinAdd($par);
+            $this->selectAdd('family_id');
 
             /// AGAIN, nasty hack
 //            if($co->perms[NULL]['year'] < ACCESS_VIEW){
