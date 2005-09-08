@@ -36,3 +36,5 @@ addDefaultPerms('family_id', 200,200)
 
 # misc shit
 #for i in ['table_permissions', 'report_permissions', 'user_privileges'] : print 'alter table %s add column year_level int(5) default NULL;' %(i) 
+
+

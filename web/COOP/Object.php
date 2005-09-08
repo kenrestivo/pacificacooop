@@ -70,7 +70,7 @@ max(year_level) as max_year,
 %d as user_id, realm_id
 from user_privileges 
 where user_id = %d 
-or (user_id is null and group_id in 
+or ((user_id < 1 or user_id is null) and group_id in 
 (select group_id from users_groups_join 
 where user_id = %d)) 
 group by realm_id 

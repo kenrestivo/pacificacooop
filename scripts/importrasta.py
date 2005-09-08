@@ -363,3 +363,4 @@ if __name__ == '__main__':
     
     for i in rasta: line(i)
 
+#dict([(i['School Job'], i['Last Name']) for i in ir.rasta])
