@@ -65,16 +65,12 @@ class Enhancement_hours extends DB_DataObject
 
 // set hours size = 10
 
-    function _getEnhancementTotal()
-        {
-
-        }
 
 
     function fb_display_summary(&$co)
         {
-            //$co->debugWrap(2);
 
+            ///{{{ XXXX DUPLICATION WITH BELOW
             $fid =  $co->page->userStruct['family_id'];
             if(!$fid){
                 confessObj(&$co, 'HEY');
@@ -87,21 +83,61 @@ class Enhancement_hours extends DB_DataObject
             //confessObj($en, 'en');
             
             $needed =  $en->owed[$sem] - $total;
+            //}}}} END DUPLICATION
 
-            if($total > 0){
-                return sprintf("%s Your family has performed %0.02f enhancement hours for the %s semester of the %s year.", 
-                       $needed > 0 ? "" : "Congratulations!",
-                       $total, $sem, $en->schoolYear );
-            } 
+            $res = '';
+            if($total <= 0){
+                $res .= sprintf("No enhancement hours have been entered for your family yet for %s semester of the %s school year.",
+                               $sem, $en->schoolYear);
 
-            return sprintf("No enhancement hours have been entered for your family yet for %s semester of the %s school year.",
-                           $sem, $en->schoolYear);
+            }
+
+            if($needed == 0){
+                $res .= sprintf("%s Your family has performed %0.02f enhancement hours for the %s semester of the %s year.", 
+                                $needed > 0 ? "" : "Congratulations!",
+                                $total, $sem, $en->schoolYear );
+            } else if ($needed < 0){
+                $res .= sprintf(
+                        " You have %0.0f hours to carry over to the spring.",
+                        -$needed);
+            }
+
+            return $res;
+             
+
             
         }
 
 
     function fb_display_alert(&$co)
         {
+
+            ///{{{ XXXX DUPLICATION WITH ABOVE
+            $fid =  $co->page->userStruct['family_id'];
+            if(!$fid){
+                confessObj(&$co, 'HEY');
+                return; // give up, it's a teacher
+            }
+
+            $en =& new Enhancement(&$co->page, $fid);
+            $total = $en->realHoursDone();
+            $sem = $en->guessSemester();
+            //confessObj($en, 'en');
+            
+            $needed =  $en->owed[$sem] - $total;
+            //}}}} END DUPLICATION
+            
+            if($needed > 0){
+                return sprintf(" You must perform %0.02f more hours before %s.",
+                       $needed,
+                       $en->cutoffDatesArray[$sem]
+                    );
+            } else if ($needed == 0){
+                return 0;
+            } 
+
+            
+            
             
         }
 
