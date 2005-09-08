@@ -61,11 +61,11 @@ class Workers extends DB_DataObject
             $this->joinAdd($par);
 
             /// AGAIN, nasty hack
-            if($co->perms[NULL]['year'] < ACCESS_VIEW){
+//            if($co->perms[NULL]['year'] < ACCESS_VIEW){
                 // TODO! support chooser
                 $this->whereAdd(
                     "school_year = '{$co->page->currentSchoolYear}'");
-            }
+                //          }
 
             $this->orderBy('am_pm_session, workday, parents.last_name, parents.first_name');
             
