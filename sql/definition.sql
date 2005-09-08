@@ -905,7 +905,7 @@ year_level int(5) default NULL
 create table workers(
 worker_id int(32) primary key not null unique auto_increment,
 parent_id int(32) default NULL,
-workday set('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'),
+workday enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'),
 epod enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'),
 am_pm_session enum('AM','PM') default NULL,
 worker_for_donation tinyint(1),

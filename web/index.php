@@ -24,7 +24,6 @@ require_once("first.inc");
 require_once("shared.inc");
 require_once("auth.inc");
 
-require_once("members.inc");
 require_once("everything.inc");
 require_once("CoopPage.php");
 require_once("CoopMenu.php");
@@ -90,7 +89,7 @@ print "\n\n<table border=0>\n";
 //	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
 	//narsty-ass ugly hack
 
-$everything = array_merge($members_everything,  $sf_everything);
+$everything = $sf_everything;
 
 	
 while ( list( $key, $val ) = each($everything)) {
