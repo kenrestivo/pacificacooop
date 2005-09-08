@@ -3,6 +3,7 @@
  * Table Definition for enhancement_hours
  */
 require_once 'DB/DataObject.php';
+require_once 'Enhancement.php';
 
 class Enhancement_hours extends DB_DataObject 
 {
@@ -61,7 +62,49 @@ class Enhancement_hours extends DB_DataObject
          );
 
 
+
 // set hours size = 10
+
+    function _getEnhancementTotal()
+        {
+
+        }
+
+
+    function fb_display_summary(&$co)
+        {
+            //$co->debugWrap(2);
+
+            $fid =  $co->page->userStruct['family_id'];
+            if(!$fid){
+                confessObj(&$co, 'HEY');
+                return; // give up, it's a teacher
+            }
+
+            $en =& new Enhancement(&$co->page, $fid);
+            $total = $en->realHoursDone();
+            $sem = $en->guessSemester();
+            //confessObj($en, 'en');
+            
+            $needed =  $en->owed[$sem] - $total;
+
+            if($total > 0){
+                return sprintf("%s Your family has performed %0.02f enhancement hours for the %s semester of the %s year.", 
+                       $needed > 0 ? "" : "Congratulations!",
+                       $total, $sem, $en->schoolYear );
+            } 
+
+            return sprintf("No enhancement hours have been entered for your family yet for %s semester of the %s school year.",
+                           $sem, $en->schoolYear);
+            
+        }
+
+
+    function fb_display_alert(&$co)
+        {
+            
+        }
+
 
 
 }
