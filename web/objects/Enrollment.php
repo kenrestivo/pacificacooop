@@ -72,6 +72,7 @@ class Enrollment extends DB_DataObject
 
             $this->orderBy('am_pm_session, last_name, first_name');
 
+            //TODO: selectadd familyid!
             $this->selectAdd();
             $this->selectAdd("{$co->table}.*");
             //$co->debugWrap(2);
@@ -86,10 +87,10 @@ class Enrollment extends DB_DataObject
 
 
 
-    function fb_display_details()
+    function fb_display_details(&$co)
         {
 
-            $top =& $this->CoopView;
+            $top =& $co;
             $mi = $top->pk;
             $cid = $this->{$top->pk};
             $cp =& $top->page;

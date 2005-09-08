@@ -54,6 +54,17 @@ if($sp= $cp->stackPath()){
 
 printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
 
+print '<div>';
+if(is_callable(array($atd->obj, 'fb_display_summary'))){
+    $atd->page->printDebug('calling callback for summary', 2);
+    print $atd->obj->fb_display_summary(&$atd);
+}
+
+if(is_callable(array($atd->obj, 'fb_display_alert'))){
+    $atd->page->printDebug('calling callback for alert', 2);
+    print $atd->obj->fb_display_alert(&$atd);
+}
+print '</div><!-- end status alert div -->';
 
 print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div id="centerCol">';
@@ -126,14 +137,18 @@ function genericView(&$atd)
 
      if(is_callable(array($atd->obj, 'fb_display_view'))){
          $atd->page->printDebug('calling callback for view', 2);
-         return $atd->obj->fb_display_view();
+         return $atd->obj->fb_display_view(&$atd);
      }
 
 
 
     //TODO: some variation on the old "perms display" from auth.inc
     //maybe at or top of doc? with editor to change them? ;-)
-    return $atd->simpleTable();
+
+     $res .= $atd->simpleTable();
+
+    return $res;
+
 			
 }
 
@@ -204,7 +219,7 @@ switch($_REQUEST['action']){
      $atd->obj->{$atd->pk} = $_REQUEST[$atd->prependTable($atd->pk)]; 
 
      if(is_callable(array($atd->obj, 'fb_display_details'))){
-         print $atd->obj->fb_display_details();
+         print $atd->obj->fb_display_details(&$co);
          break;
      }
      

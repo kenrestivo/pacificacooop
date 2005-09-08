@@ -21,11 +21,11 @@ NFSNRSYNC="--rsync-path=/usr/local/bin/rsync"
 NFSNUSR=ken
 NFSNHOST=localnfsn
 NFSNDOCROOT=/f1/content/paccoop/htdocs
-NFSNLIVEPATH=$(NFSNDOCROOT)/sf/
+NFSNLIVEPATH=$(NFSNDOCROOT)/members/
 LIVEHERE=../livesite/
 IMAGEHERE=../images/
 NFSNIMAGEPATH=$(NFSNDOCROOT)/images/
-NFSNDEVPATH=$(NFSNDOCROOT)/sf-dev/
+NFSNDEVPATH=$(NFSNDOCROOT)/members-dev/
 DEVHERE=../web-online/
 PLAYGROUND=../web/
 XCLUDE='*dbhost*' 

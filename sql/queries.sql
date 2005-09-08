@@ -1375,4 +1375,25 @@ from access_levels
 where access_level_id <= 800 and access_level_id > 0 
 order by access_level_id;
 
---- EOF
+--- the rasta export
+--"Last Name","Mom Name *","Dad/Partner *","Child ",DOB,Address,Phone,Email,M,Tu,W,Th,F,"School Job"
+select kids.last_name, concat(mom.first_name, ' ', mom.last_name),
+concat(dad.first_name, ' ', dad.last_name), kids.first_name, 
+kids.date_of_birth, families.address1, families.phone, families.email,
+enrollment.monday, enrollment.tuesday, enrollment.wednesday, 
+enrollment.thursday, enrollment.friday, job_descriptions.summary
+from enrollment
+left join kids on enrollment.kids_id = kids.kids_id
+left join (select * from parents where type = 'Mom') as mom 
+on mom.family_id = kids.family_id
+left join (select * from parents where type is not 'Mom') as dad
+on dad.family_id = kids.family_id
+left join families on kids.family_id = families.family_id
+left join job_assignments on kids.family_id = job_assignments.family_id and job_assignments.school_year = '2005-2006'
+left join job_descriptions on job_descriptions.job_description_id = job_assignments.job_assignment_id
+where enrollment.school_year = '2005-2006'
+order by enrollment.am_pm_session, kids.last_name, kids_first_name
+
+
+
+--- EOFjoin o

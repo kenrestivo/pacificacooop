@@ -30,7 +30,7 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 function getentries(&$cp)
 {
     $co =& new CoopView(&$cp, 'blog_entry', &$none);
-    print $co->obj->fb_display_summary(true);
+    print $co->obj->fb_display_summary(&$co, true);
 
 }
 

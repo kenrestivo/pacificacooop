@@ -42,15 +42,15 @@ class Calendar_events extends DB_DataObject
     var $fb_fieldsToUnRender = array('keep_event_hidden_until_date');
     var $fb_enumFields = array('show_on_public_page');
 
-    function fb_display_view()
+    function fb_display_view(&$co)
         {
             $this->orderBy('event_date asc');
-            return $this->CoopView->simpleTable();
+            return $co->simpleTable();
         }
 
-    function fb_display_summary($publiconly = false)
+    function fb_display_summary(&$co, $publiconly = false)
         {
-            if($this->CoopView->page->auth['token'] && !$publiconly){
+            if($co->page->auth['token'] && !$publiconly){
                 $clause = 'members'; 
             } else {
                 $clause = 'public'; 
@@ -66,7 +66,7 @@ class Calendar_events extends DB_DataObject
                                 $this->human_date, $this->description, 
                                 $this->notes,
                                 $publiconly ? '' : 
-                                $this->CoopView->recordButtons(&$this, false)
+                                $co->recordButtons(&$this, false)
                     );
             }
             return $res;

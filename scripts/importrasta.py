@@ -15,8 +15,7 @@ import datetime
 
 rasta=[]                                    # the completed am/pm minimarket
 
-#TODO check these!
-valid_keys = [
+required_keys = [
  'Mom Name',
  'Tu',
  'Th',
@@ -26,12 +25,15 @@ valid_keys = [
  'M',
  'School Job',
  'DOB',
- 'session',
  'F',
  'W',
  'Child',
  'Email',
  'Dad/Partner']
+
+#TODO check these!
+valid_keys = required_keys + ['session']
+
 
 school_year = '2005-2006'
 first_day_of_school = '2005-09-12'

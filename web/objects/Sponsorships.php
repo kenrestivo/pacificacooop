@@ -51,11 +51,11 @@ class Sponsorships extends DB_DataObject
 		);
 
 
-    function fb_display_details()
+    function fb_display_details(&$co)
         {
 
-            $top =& $this->CoopView;      // make life sane!
-            $cp =& $this->CoopView->page;
+            $top =& $co;      // make life sane!
+            $cp =& $co->page;
 
             $top->obj->find(true);		//  XXX aack! need this for summary
             print $top->horizTable();
@@ -168,17 +168,17 @@ class Sponsorships extends DB_DataObject
 
         }
 
-    function fb_display_view()
+    function fb_display_view(&$co)
         {
-             $cp =& $this->CoopView->page;
-            $co =& new CoopObject(&$cp, 'sponsorship_types', &$this->CoopView);
+             $cp =& $co->page;
+            $co =& new CoopObject(&$cp, 'sponsorship_types', &$co);
             $this->joinAdd($co->obj);
             $this->school_year = findSchoolYear();
             $this->orderBy('sponsorship_price desc');
             $this->fb_fieldsToRender = array('company_id', 'lead_id', 
                                                  'sponsorship_type_id', 
                                                  'entry_type');
-            return $this->CoopView->simpleTable();
+            return $co->simpleTable();
 
         }
 

@@ -120,11 +120,11 @@ var $fb_defaults = array(
 var $fb_shortHeader = 'Contacts';
 
 
-    function fb_display_view()
+    function fb_display_view(&$co)
         {
             $this->orderBy('company_name, last_name');
                         
-            return $this->CoopView->oneLineTable();
+            return $co->oneLineTable();
 
         }
 
@@ -138,12 +138,12 @@ var $fb_shortHeader = 'Contacts';
    );
 
 
-function fb_display_details()
+function fb_display_details(&$co)
         {
 
             // use names from old code. easier than search/replacing.
-            $cp =& $this->CoopView->page;
-            $top =& $this->CoopView;
+            $cp =& $co->page;
+            $top =& $co;
             $mi = $top->pk;
             $cid = $this->{$mi};
             

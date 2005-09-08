@@ -73,8 +73,7 @@ class Enhancement_hours extends DB_DataObject
             ///{{{ XXXX DUPLICATION WITH BELOW
             $fid =  $co->page->userStruct['family_id'];
             if(!$fid){
-                confessObj(&$co, 'HEY');
-                return; // give up, it's a teacher
+                  return; // give up, it's a teacher
             }
 
             $en =& new Enhancement(&$co->page, $fid);
@@ -115,7 +114,6 @@ class Enhancement_hours extends DB_DataObject
             ///{{{ XXXX DUPLICATION WITH ABOVE
             $fid =  $co->page->userStruct['family_id'];
             if(!$fid){
-                confessObj(&$co, 'HEY');
                 return; // give up, it's a teacher
             }
 

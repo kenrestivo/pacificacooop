@@ -55,9 +55,9 @@ class Blog_entry extends DB_DataObject
             $el->setCols(80);
         }
 
-    function fb_display_summary($publiconly = false)
+    function fb_display_summary(&$co, $publiconly = false)
         {
-            if($this->CoopView->page->auth['token'] && !$publiconly){
+            if($co->page->auth['token'] && !$publiconly){
                 $clause = 'members'; 
             } else {
                 $clause = 'public'; 
@@ -81,7 +81,7 @@ class Blog_entry extends DB_DataObject
                 $res .= sprintf("<p><b>%s</b>&nbsp;%s</p><p>%s</p><p class=\"small\">(Posted %s by %s)</p><br>", 
                                 $this->short_title, $this->body, 
                                 $publiconly ? '' : 
-                                $this->CoopView->recordButtons(&$this, false),
+                                $co->recordButtons(&$this, false),
                                 $this->update_human, $this->name
                     );
             }

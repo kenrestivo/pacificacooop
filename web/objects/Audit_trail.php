@@ -84,13 +84,13 @@ class Audit_trail extends DB_DataObject
 
         }
 
-    function fb_display_view()
+    function fb_display_view(&$co)
         {
 
             //XXX move this to a session var or somethign. or provide a chooser
             $limit = $_REQUEST['limit'] ? $_REQUEST['limit'] : 20;
 
-            $perm = $this->CoopView->isPermittedField();
+            $perm = $co->isPermittedField();
 
             $res .= "<h3>An extensive audit trail of the last $limit items of activity on the site.</h3><p>This is still an experimental feature</p>";
             $res .= "<p>Times are in Mountain Time (Phoenix, AZ).</p>";
@@ -106,10 +106,10 @@ class Audit_trail extends DB_DataObject
 
             array_push($this->fb_fieldsToRender, 'table_name');
 
-            $res .= $this->CoopView->simpleTable();
+            $res .= $co->simpleTable();
 	 
 
-            $logins = new CoopView(&$this->CoopView->page, 'session_info', $none);
+            $logins = new CoopView(&$co->page, 'session_info', $none);
 
             $perm >  ACCESS_VIEW &&  
                 $logins->obj->fb_recordActions['details'] = ACCESS_VIEW;

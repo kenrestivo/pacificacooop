@@ -32,6 +32,7 @@ class Enhancement
 {
     var $cp; // cache reference to page object
 	var $schoolYear; // cache of this year's, um, year.
+                     // NOTE! this might not be same as cp->currentyear!
     var $cutoffDatesArray; // cache fall, spring
     var $familyID; // cache of familyID
     var $startdrop; //cache: array of start adn drop dates
@@ -59,6 +60,7 @@ class Enhancement
 		{
             $this->cp =& $cp;
             $this->familyID = $familyID;
+            
 			// guess it and cache it
             $this->schoolYear = $schoolYear ? $schoolYear : 
                 $this->cp->currentSchoolYear;
@@ -119,6 +121,11 @@ class Enhancement
     // gets cutoff dates from db and caches them
     function loadCutoffs()
         {
+            
+            if($this->familyID < 1){
+                PEAR::raiseError( "[$familyID] blank familyid! that is just wrong.", 666);
+            }
+
             //fall cutoff
             $co = new CoopObject(&$this->cp, 'calendar_events', &$top);
             $co->obj->school_year = $this->schoolYear;

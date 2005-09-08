@@ -18,7 +18,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-//$debug = -1;
+//$debug = 6;
 
 require_once("first.inc");
 require_once("shared.inc");
@@ -75,10 +75,17 @@ print '</div><!-- end leftcol div -->';
 print '<div id="rightCol">';
 
 print "\n\n<table border=0>\n";
+// TODO: let the user configure what to show?
 $blog =& new CoopView(&$cp, 'blog_entry', &$nothing);
 print rawMenuRow($blog->obj->fb_formHeaderText,
-                 $blog->obj->fb_display_summary(),
+                 $blog->obj->fb_display_summary(&$blog),
                  $blog->actionButtons());
+
+$blog =& new CoopView(&$cp, 'enhancement_hours', &$nothing);
+print rawMenuRow($blog->obj->fb_formHeaderText,
+                 $blog->obj->fb_display_alert(&$blog),
+                 $blog->actionButtons());
+
 print "\n</table>\n\n";
 
 

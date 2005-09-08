@@ -44,13 +44,13 @@ class Table_permissions extends DB_DataObject
 
 	var $fb_requiredFields = array('table_name', 'realm_id');
 
-    function fb_display_summary()
+    function fb_display_summary(&$co)
         {
             /// TODO: the simple summary of what i can do
             
         }
 
-    function FOOfb_display_details()
+    function FOOfb_display_details(&$co)
         {
             /// TODO: the showperms from coopview
             

@@ -48,7 +48,7 @@ class Auction_purchases extends DB_DataObject
 
 
 
-    function fb_display_view()
+    function fb_display_view(&$co)
         {
 
 
@@ -78,7 +78,7 @@ order by variance desc",
             $this->fb_fieldLabels['variance'] = 'Variance (over asking price)';
             $this->fb_fieldLabels['package_sale_price'] = 'Actual Sale Price';
             array_push($this->fb_currencyFields, 'variance');
-            return $this->CoopView->simpleTable(false);
+            return $co->simpleTable(false);
 
         }
 
