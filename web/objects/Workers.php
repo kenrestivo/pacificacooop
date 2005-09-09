@@ -12,7 +12,7 @@ class Workers extends DB_DataObject
     var $__table = 'workers';                         // table name
     var $worker_id;                       // int(32)  not_null primary_key unique_key auto_increment
     var $parent_id;                       // int(32)  
-    var $workday;                         // string(40)  set
+    var $workday;                         // string(9)  enum
     var $epod;                            // string(9)  enum
     var $am_pm_session;                   // string(2)  enum
     var $worker_for_donation;             // int(1)  

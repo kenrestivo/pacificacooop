@@ -17,7 +17,6 @@ class Report_permissions extends DB_DataObject
     var $user_level;                      // int(5)  
     var $group_level;                     // int(5)  
     var $menu_level;                      // int(5)  
-    var $year_level;                      // int(5)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

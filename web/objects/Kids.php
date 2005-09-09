@@ -15,6 +15,7 @@ class Kids extends DB_DataObject
     var $first_name;                      // string(255)  
     var $family_id;                       // int(32)  
     var $date_of_birth;                   // date(10)  binary
+    var $allergies;                       // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

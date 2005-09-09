@@ -6,7 +6,7 @@ require_once 'DB/DataObject.php';
 
 class Enrollment extends DB_DataObject 
 {
-###START_AUTOCODE
+    ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'enrollment';                      // table name
@@ -29,7 +29,7 @@ class Enrollment extends DB_DataObject
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Enrollment',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-###END_AUTOCODE
+    ###END_AUTOCODE
 	var $fb_enumFields = array ('am_pm_session');
 	var $fb_fieldLabels = array(
 		'kid_id' => 'Student',
