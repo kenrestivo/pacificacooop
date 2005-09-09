@@ -50,20 +50,34 @@ class Calendar_events extends DB_DataObject
 
     function fb_display_summary(&$co, $publiconly = false)
         {
-            if($co->page->auth['token'] && !$publiconly){
-                $clause = 'members'; 
-            } else {
+            
+            $ev =& $this->factory('events');
+            $this->joinAdd($ev);
+
+            if(!$co->page->auth['token'] || $publiconly){
                 $clause = 'public'; 
+                $this->show_on_public_page = 'Yes';            
             }
-            //TODO: shouldn't it automatically join all subthings?
-            //isnt' that in dbdo? getlinks?
-            $this->whereAdd('show_on_public_page = "Yes"');
+            $this->status = 'Active';
 
             $this->whereAdd(sprintf('event_date >= "%s"', date('Y-m-d')));
+            $this->whereAdd(
+                sprintf(
+                    '(keep_event_hidden_until_date is null 
+                                or  keep_event_hidden_until_date >= "%s")', 
+                                    date('Y-m-d')));
             $this->limit(4);
+
+            $this->orderBy('event_date asc');
+
+            $co->page->confessArray($this->_query, $this->table .$this->_join);
+
+
+
+            $this->find();
             while($this->fetch()){
                 $res .= sprintf("<p>%s:&nbsp;<b>%s</b></p><p>%s</p><br>", 
-                                $this->human_date, $this->description, 
+                                $this->event_date, $this->description, 
                                 $this->notes,
                                 $publiconly ? '' : 
                                 $co->recordButtons(&$this, false)
