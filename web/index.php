@@ -24,7 +24,6 @@ require_once("first.inc");
 require_once("shared.inc");
 require_once("auth.inc");
 
-require_once("everything.inc");
 require_once("CoopPage.php");
 require_once("CoopMenu.php");
 require_once("shared_OOP.php");
@@ -81,40 +80,19 @@ print rawMenuRow($blog->obj->fb_formHeaderText,
                  $blog->obj->fb_display_summary(&$blog),
                  $blog->actionButtons());
 
-$blog =& new CoopView(&$cp, 'enhancement_hours', &$nothing);
-print rawMenuRow($blog->obj->fb_formHeaderText,
-                 $blog->obj->fb_display_alert(&$blog),
-                 $blog->actionButtons());
 
-print "\n</table>\n\n";
-
-
-
-print "<p>Please choose an action:</p>";
-
-print "\n\n<table border=0>\n";
-//	tdArray( array ("Description", "Summary", "Actions"), 'align=center');
-	//narsty-ass ugly hack
-
-$everything = $sf_everything;
-
-	
-while ( list( $key, $val ) = each($everything)) {
-	user_error(sprintf("main(): showing row for %s", $val['description']),
-			   E_USER_NOTICE);
-	// hack around the $callbacks not yet including fields, which it SHOULD
-	showMenuRow($auth, $u, $val, ${$val['fields']});
+//TODO: put this in as a generic function, in an object, using HTML_TABLE!
+foreach($menu->alertme as $table){
+    $alert =& new CoopView(&$cp, $table, &$nothing);
+    if(is_callable(array($alert->obj, 'fb_display_alert'))){
+        print rawMenuRow($alert->obj->fb_formHeaderText,
+                         $alert->obj->fb_display_alert(&$alert),
+                         $alert->actionButtons());
+    }
 }
-	
-
-/* admin 
-	XXX can't use standard showMenuRow? 
-		it uses FAMILYID, but admin wants USERID
-	showMenuRow($auth, $u, 'User Administration', 
-		'adminSummary', 'user', 'admin.php');
-*/
-
 print "\n</table>\n\n";
+
+
 
 
 ///////////////////////

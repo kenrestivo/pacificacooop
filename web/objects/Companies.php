@@ -141,17 +141,19 @@ var $fb_shortHeader = 'Contacts';
 function fb_display_details(&$co)
         {
 
+//             if(!is_a('CoopView', $co)){
+//                 PEAR::raiseError('passed a non coopviw into details. bad', 666);
+//             }
             // use names from old code. easier than search/replacing.
             $cp =& $co->page;
             $top =& $co;
             $mi = $top->pk;
             $cid = $this->{$mi};
             
-            //confessObj($this, 'this');
+            //nfessObj($co, 'co');
 
 	//$res .= "CHECKING $table<br>";
 	$top->obj->$mi = $cid;
-	$top->obj->find(true);		//  XXX aack! need this for summary
 	$res .= $top->horizTable();
 
 	// sponsorships

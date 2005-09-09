@@ -55,14 +55,15 @@ if($sp= $cp->stackPath()){
 printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
 
 print '<div>';
-if(is_callable(array($atd->obj, 'fb_display_summary'))){
-    $atd->page->printDebug('calling callback for summary', 2);
-    print $atd->obj->fb_display_summary(&$atd);
+$atd2 = $atd->obj->__clone($atd);
+if(is_callable(array($atd2->obj, 'fb_display_summary'))){
+    $atd2->page->printDebug('calling callback for summary', 2);
+    print $atd2->obj->fb_display_summary(&$atd2);
 }
 
-if(is_callable(array($atd->obj, 'fb_display_alert'))){
-    $atd->page->printDebug('calling callback for alert', 2);
-    print $atd->obj->fb_display_alert(&$atd);
+if(is_callable(array($atd2->obj, 'fb_display_alert'))){
+    $atd2->page->printDebug('calling callback for alert', 2);
+    print $atd2->obj->fb_display_alert(&$atd2);
 }
 print '</div><!-- end status alert div -->';
 
@@ -219,7 +220,7 @@ switch($_REQUEST['action']){
      $atd->obj->{$atd->pk} = $_REQUEST[$atd->prependTable($atd->pk)]; 
 
      if(is_callable(array($atd->obj, 'fb_display_details'))){
-         print $atd->obj->fb_display_details(&$co);
+         print $atd->obj->fb_display_details(&$atd);
          break;
      }
      

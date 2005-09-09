@@ -941,5 +941,12 @@ menu_level int(5) default NULL
 );
 
 
+create table parent_ed_attendance(
+parent_ed_attendance_id int(32) primary key not null unique auto_increment,
+parent_id int(32),
+calendar_event_id int(32),
+hours decimal(4,2) default NULL
+);
+
 
 -- EOF

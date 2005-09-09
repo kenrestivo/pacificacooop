@@ -1,4 +1,4 @@
-<?php
+2<?php
 
 //$Id$
 
@@ -33,25 +33,7 @@ class CoopMenu extends HTML_Menu
 	var $realms;
 	var $page;
 	var $renderer;
-	var $springfest_realms = array( 
-		'auction' => 'Auctions',
-		'flyers' => 'Flyers',
-		'invitations' => 'Invitations',
-		'money' => 'Family Fees',
-		'nag' => 'Reminders',
-		'packaging' => 'Packaging',
-		'program,' => 'Program',
-		'raffle' => 'Raffles',
-		'solicit' => 'Solicitation',
-		'thankyou' => 'Thank You',
-		'tickets' => 'Tickets'
-		);
-	var $other_realms = array(
-		'roster' => 'Membership',
-		'jobs' => 'Jobs',
-		'enhancement' => 'Enhancement'
-		);
-
+    var $alertme = array(); // list of tables to check for alerts
 
     //constructior
     function CoopMenu(&$page)
@@ -163,6 +145,7 @@ class CoopMenu extends HTML_Menu
                         $tab->obj->table_name;
                     // check GROUPLEVEL for menulevel!
                     if($co->perms[NULL]['menu'] >= ACCESS_VIEW){
+                        $this->alertme[] = $tab->obj->table_name;
                         $res[$k]['sub'][$i]['url'] = 
                             $this->page->selfURL(
                                 array(
@@ -208,9 +191,10 @@ class CoopMenu extends HTML_Menu
             } // END REALM
 
             
+            //it's recursive. only return at top
             if(!$id){
                 $this->page->confessArray($res, 'res', 4);
-                $this->setMenu($res);
+                  $this->setMenu($res);
             }
 
             return array($res, $i);
