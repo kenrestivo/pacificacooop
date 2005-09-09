@@ -1,0 +1,42 @@
+companies as a linktable. just do it
+	my guile script. any other things needed?
+	companies are now a linktable. full stop.
+	update tables that use it
+		auction join
+		income join
+		contacts (nags)
+		flyers
+		ads
+		in-kind
+		attendees
+	and.... just about every. single. thing. in. springfest.
+		just imagine what that's gonna do to my thankyou notes!
+			heh. it'll simplify it
+
+DB CHANGES!
+	consolidate companies and leads! and then adjust
+		note company_name vs company. auugh.
+		then go thru each jointable and backhaul those too
+		companies_auctions_join... make it leads_auctions_join
+		companies_income_join... make it leads_income_join?
+		flyer_deliveries... as if anyone gives a shit.
+		really, families are companies,and aprents and kids are people
+
+	finally drop hte duplicates fields:
+		first/last: 
+			parents, leads, companycontacts, ins, lic, 
+		addresses/phone: 
+			leads, companies, families (after import)
+		orgs/companies:
+			leads, companies, flyerlocation, rafflelocation
+
+	converting the old data's gonna be interesting!
+		select old, insert into new
+			similar to rastaimport: check for dupe's first, otherwise insert
+			then get the insert_id from that, and putit back into old!
+		so, i'm going to grab families:address, dump it into addresses/sites
+			then get the addressid (insert_id) and put it in families:addressid
+ 
+	table changes:
+		leads gets renamed to invitations and becomes a join
+
