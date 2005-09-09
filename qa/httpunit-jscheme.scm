@@ -126,7 +126,12 @@
   (for-each (lambda (family)
 			  (write-line (string-append ".....checking " family))
 			  (visit-all-links wtc family url))
-			'("Bartlett" "Restivo" "Cooke" )))
+			'("Bartlett" "Restivo" "Cooke" ))
+  (for-each (lambda (other)
+			  (write-line (string-append ".....checking " other))
+			  (visit-all-links wtc other url))
+			'("Teacher Sandy" "Shirley" ))
+  )
 
 ;; i.e.; (many-visit-hack wtc "http://www/coop-dev") 
 

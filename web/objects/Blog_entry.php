@@ -64,7 +64,7 @@ class Blog_entry extends DB_DataObject
             }
 
             $this->query(sprintf("select distinct blog_entry.*,
-                date_format(max(audit_trail.updated), '%%a %%m/%%d/%%Y %%l:%%i %%p') 
+                date_format(max(audit_trail.updated), '%%a %%m/%%d/%%Y %%l:%%i%%p') 
                         as update_human,
             users.name
 			from blog_entry 

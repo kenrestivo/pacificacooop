@@ -445,22 +445,24 @@ group by user_id,table_name,field_name";
 // NONE of this works. fuckers.
   //           //XXX if it's a subview, it may be for the *above* family.
 //             /// note the permitted here is NOT forcing family, for lookup
-//             if($this->isPermittedField(null, false, true) < ACCESS_VIEW)
-//             {
-//                 $this->page->printDebug("FORCING familyid for search", 2);
-//                 $this->obj->family_id = $this->page->userStruct['family_id'];
-//             }
+             if($this->isPermittedField(null, false, true) < ACCESS_VIEW)
+             {
+                 $this->page->printDebug("FORCING familyid for search", 2);
+                 $this->obj->whereAdd('family_id = ' . $this->page->userStruct['family_id']);
+             }
             
 
 //             /// XXX have to do it man, and this is not the way to do it
 //             /// check ispermitted here too, just in case
 //             /// they shouldn't even *see* a chooser if they aren't permitted
 //             /// but i's like to be paranoid
-//             if(!$CHECKGLOBALSCHOOLYEAR){
-//                 //TODO: use the GLOBAL or LOCAL POPUP!
-//                 //only use $sy if nothing is set
-//                 $this->obj->school_year = $this->page->currentSchoolYear;
-//             } 
+
+            if(!$CHECKGLOBALSCHOOLYEAR){
+                //TODO: use the GLOBAL or LOCAL POPUP!
+                //only use $sy if nothing is set
+                $this->obj->school_year = $this->page->currentSchoolYear;
+            } 
+
 
 //             //TODO: maybe instead check path?
 //             //do this BEFORE injecting anything into it?

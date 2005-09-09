@@ -23,4 +23,10 @@ class Parent_ed_attendance extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+
+    //TODO: link constraints: from here to parents to kids to enrollment
+    //also need (for reports) links to calevent for sorting by date!
+
+
 }

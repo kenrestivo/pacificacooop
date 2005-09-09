@@ -49,13 +49,12 @@ if($sp= $cp->stackPath()){
     print "<p>YOUR NAVIGATION: $sp</p>";
 }
 
-
 //////////////}}} END STACK HANDLING
 
 printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
 
 print '<div>';
-$atd2 = $atd->obj->__clone($atd);
+$atd2 =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
 if(is_callable(array($atd2->obj, 'fb_display_summary'))){
     $atd2->page->printDebug('calling callback for summary', 2);
     print $atd2->obj->fb_display_summary(&$atd2);

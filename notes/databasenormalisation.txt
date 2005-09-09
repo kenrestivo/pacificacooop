@@ -1,3 +1,14 @@
+	finally drop hte duplicates fields:
+		first/last: 
+			parents, leads, companycontacts, ins, lic, 
+		addresses/phone: 
+			leads, companies, families
+		orgs/companies:
+			leads, companies, flyerlocation, rafflelocation
+
+
+
+
 companies as a linktable. just do it
 	my guile script. any other things needed?
 	companies are now a linktable. full stop.
@@ -21,14 +32,6 @@ DB CHANGES!
 		companies_income_join... make it leads_income_join?
 		flyer_deliveries... as if anyone gives a shit.
 		really, families are companies,and aprents and kids are people
-
-	finally drop hte duplicates fields:
-		first/last: 
-			parents, leads, companycontacts, ins, lic, 
-		addresses/phone: 
-			leads, companies, families (after import)
-		orgs/companies:
-			leads, companies, flyerlocation, rafflelocation
 
 	converting the old data's gonna be interesting!
 		select old, insert into new

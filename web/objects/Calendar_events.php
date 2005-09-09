@@ -48,6 +48,7 @@ class Calendar_events extends DB_DataObject
             return $co->simpleTable();
         }
 
+
     function fb_display_summary(&$co, $publiconly = false)
         {
             
@@ -87,6 +88,7 @@ class Calendar_events extends DB_DataObject
                                 $co->recordButtons(&$this, false)
                     );
             }
+            $res .= '<p>For more events, click "View" above.</p>';
             return $res;
 
         }

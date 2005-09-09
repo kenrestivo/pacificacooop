@@ -80,6 +80,10 @@ print rawMenuRow($blog->obj->fb_formHeaderText,
                  $blog->obj->fb_display_summary(&$blog),
                  $blog->actionButtons());
 
+$cal =& new CoopView(&$cp, 'calendar_events', &$nothing);
+print rawMenuRow($cal->obj->fb_formHeaderText,
+                 $cal->obj->fb_display_summary(&$cal),
+                 $cal->actionButtons());
 
 //TODO: put this in as a generic function, in an object, using HTML_TABLE!
 foreach($menu->alertme as $table){

@@ -65,6 +65,17 @@ class Enhancement_hours extends DB_DataObject
 
 // set hours size = 10
 
+    function fb_linkConstraints(&$co)
+        {
+            $par = $this->factory('parents');
+            $this->joinAdd($par);
+            if($co->isPermittedField(true) < ACCESS_VIEW){
+                /// XXX need to check that a familyid exists!
+                $this->whereAdd('parents.family_id  = '. $co->page->userStruct['family_id']);
+            }
+            $this->school_year = $co->page->currentSchoolYear;
+            
+        }
 
 
     function fb_display_summary(&$co)
