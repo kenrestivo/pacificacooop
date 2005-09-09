@@ -68,16 +68,20 @@ class Calendar_events extends DB_DataObject
                                     date('Y-m-d')));
             $this->limit(4);
 
+            $this->selectAdd('date_format(event_date, "%a %b %D, %Y") as human_date');
+            $this->selectAdd('if(hour(event_date) > 0, date_format(event_date, "%l:%i%p"), "") as human_time');
             $this->orderBy('event_date asc');
 
             $co->page->confessArray($this->_query, $this->table .$this->_join);
-
+            //$co->debugWrap(2);
 
 
             $this->find();
             while($this->fetch()){
-                $res .= sprintf("<p>%s:&nbsp;<b>%s</b></p><p>%s</p><br>", 
-                                $this->event_date, $this->description, 
+                $res .= sprintf("<p>%s%s:&nbsp;<b>%s</b></p><p>%s</p><br>", 
+                                $this->human_date, 
+                                $this->human_time ? ' '. $this->human_time : '',
+                                $this->description, 
                                 $this->notes,
                                 $publiconly ? '' : 
                                 $co->recordButtons(&$this, false)
