@@ -68,7 +68,7 @@ class coopForm extends CoopObject
             // NOTE! i must do this before calling generators
             $this->form->CoopForm =& $this; 
 
-            if(is_callable(array($this->obj, "preGenerateForm"))){
+            if(is_callable(array($this->obj, 'preGenerateForm'))){
                 $this->obj->preGenerateForm(&$this->form);
             }
 
@@ -114,7 +114,7 @@ class coopForm extends CoopObject
             
 
             //godDAMN do i hate php.
-            if(is_callable(array($this->obj, "postGenerateForm"))){
+            if(is_callable(array($this->obj, 'postGenerateForm'))){
                 $this->page->printDebug(
                     "calling {$this->table}::postgenerateForm", 2);
                 $this->obj->postGenerateForm(&$this->form);

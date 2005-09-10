@@ -24,9 +24,44 @@ class Parent_ed_attendance extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 
+    function preGenerateForm(&$form)
+        {
+            $calev = $this->factory('calendar_events');
+            $calev->school_year = $form->CoopForm->page->currentSchoolYear;
+			$calev->whereAdd('event_id = 2'); // parent ed meeting
+            $calev->orderBy('event_date asc');
+            $calev->selectAdd('date_format(event_date, "%a %b %D, %Y") as human_date');
+			$calev->find();
+			$options[] = '-- CHOOSE ONE --';
+			while($calev->fetch()){
+                // TODO: use the linkfunction that surfs through linkdisplay
+				$options[$calev->calendar_event_id] = $calev->human_date;
+			}
+			$el =& HTML_QuickForm::createElement(
+                'select', 
+                $form->CoopForm->prependTable('calendar_event_id'), 
+                $this->fb_fieldLabels['calendar_event_id'], 
+                &$options);
+            
+            $this->fb_preDefElements['calendar_event_id'] = $el;
+			return $el;
+            
+        }
+
 
     //TODO: link constraints: from here to parents to kids to enrollment
     //also need (for reports) links to calevent for sorting by date!
+
+	var $fb_linkDisplayFields = array('parent_id','calendar_event_id');
+	var $fb_fieldLabels = array (
+        'parent_id' => 'Co-Op Parent Attending',
+        'calendar_event_id' => 'Meeting',
+        'hours' => 'Hours attended'
+		);
+	var $fb_formHeaderText = 'Parent Education Meeting Attendance';
+	var $fb_shortHeader = 'Parent Ed';
+
+    var $fb_joinPaths = array('school_year' => 'kids:enrollment');
 
 
 }

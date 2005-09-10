@@ -1,4 +1,4 @@
-2<?php
+<?php
 
 //$Id$
 
@@ -118,7 +118,7 @@ class CoopMenu extends HTML_Menu
             if($id){
                 $subrl->obj->meta_realm_id = $id;
             }else {
-                $subrl->obj->whereAdd('meta_realm_id is null'); // ONLY top
+                $subrl->obj->whereAdd('meta_realm_id is null or meta_realm_id < 1'); // ONLY top
             }
             $subrl->obj->orderBy('short_description asc');
             $subrl->obj->find();
@@ -127,6 +127,9 @@ class CoopMenu extends HTML_Menu
             // then duplicating functionality of ispermittedfield in loop below
             while($subrl->obj->fetch()){
                 $k = ++$i;
+                $this->page->printDebug('checking realm ' . 
+                                        $subrl->obj->short_description, 
+                                            2);
                 $res[$k]['title'] = $subrl->obj->short_description;
                 // first the tables
                 $tab =& new CoopObject(&$this->page, 'table_permissions',
@@ -136,6 +139,9 @@ class CoopMenu extends HTML_Menu
                 $tab->obj->find();
                 while($tab->obj->fetch()){
                     $i++;
+                    $this->page->printDebug('checking perms on table ' . 
+                                            $tab->obj->table_name, 
+                                            2);
                     // ANd here, compare and contrast the user permsit
                     $co =&new CoopObject(&$this->page, $tab->obj->table_name, 
                                          &$nothing);

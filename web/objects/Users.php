@@ -32,12 +32,12 @@ class Users extends DB_DataObject
 	var $fb_shortHeader = 'Users';
 	var $fb_fieldsToUnRender = array('password');
 
-// 	// from docs. DOES NOT work with my stuff
-// 	function preGenerateForm() {
-//         unset($this->fb_fieldsToUnRender);
-// 		$this->fb_preDefElements['password'] = 
-// 			HTML_QuickForm::createElement('password', 'password', 
-// 										  'Password');
+// XXX doesn't work?
+ // 	function preGenerateForm() {
+//          unset($this->fb_fieldsToUnRender);
+//  		$this->fb_preDefElements['password'] = 
+//  			HTML_QuickForm::createElement('password', 'password', 
+//  										  'Password');
 		
 // }
 	

@@ -151,11 +151,9 @@ class Auction_donation_items extends DB_DataObject
 		}// end newpackageform
 
 
-    function fb_display_view(&$co)
-        {
-            
-
-        }
+//     function fb_display_view(&$co)
+//         {
+//         }
 
 // set item_description lines = 3
 	

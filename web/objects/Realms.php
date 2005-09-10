@@ -27,11 +27,11 @@ class Realms extends DB_DataObject
 	var $fb_linkDisplayFields = array('realm');
 	var $fb_formHeaderText = 'Data Realms';
 	var $fb_shortHeader = 'Realms';
-	var $fb_crossLinks = array(array('table' => 'user_privileges', 
-									 'toTable' => 'users',
-									 'toField' => 'user_id',
-									 'type' => 'select'));
-
+    // nice idea, but no. i need to define perms for each
+// 	var $fb_crossLinks = array(array('table' => 'user_privileges', 
+// 									 'toTable' => 'users',
+// 									 'toField' => 'user_id',
+// 									 'type' => 'select'));
     var $fb_fieldsToRender = array ('short_description', 'meta_realm_id');
     var $fb_linkDisplayFields = array ('short_description');
     var $fb_fieldLabels = array('realm' => 'Id',

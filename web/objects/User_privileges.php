@@ -32,6 +32,7 @@ class User_privileges extends DB_DataObject
                                  'group_id' => 'Group',
                                  'user_level' => 'May do to their own data',
                                  'group_level' => 'May do to OTHER\'s data',
+                                 'menu_level' => 'May see the menu (what does this mean?)',
                                  'realm_id' => 'Data/Menu Realm',
                                  'year_level' => 'May do to OLD (not this school year) data'
                                  );
