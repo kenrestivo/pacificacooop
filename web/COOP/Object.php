@@ -215,7 +215,8 @@ group by user_id,table_name,field_name";
 		}
 
 
-
+    // NOTE! i pass the DBDO object in because getlinks DOES NOT KNOW how
+    // to get my coopobject objects. duh.
 	function concatLinkFields(&$obj)
 		{
 			$ldfs = $obj->fb_linkDisplayFields;
@@ -316,8 +317,10 @@ group by user_id,table_name,field_name";
 			$aud->obj->audit_user_id = $this->page->auth['uid'];
 			$aud->obj->insert();
 		}
-
-
+    
+    // key is the field. 
+    //forceuser means assume the record belongs to this user even if it does not (useful in menus, or where you want a best case situation)
+    // forceyear is to assume that the record is this year's-- best case, i.e. in menus
 	function isPermittedField($key = NULL, $forceuser = false, 
                               $forceyear = null)
 		{
@@ -373,7 +376,7 @@ group by user_id,table_name,field_name";
                 $res = $usethese['group'];
             }
 
-            ///XXX THIS IS TOO HEAVY! cache this, or use chooser global
+            /// TODO: use chooser global, not currentschoolyear
             if(!$forceyear &&  
                $this->inObject('school_year') &&
                $this->page->currentSchoolYear != $this->obj->school_year)
@@ -445,22 +448,26 @@ group by user_id,table_name,field_name";
 // NONE of this works. fuckers.
   //           //XXX if it's a subview, it may be for the *above* family.
 //             /// note the permitted here is NOT forcing family, for lookup
-             if($this->isPermittedField(null, false, true) < ACCESS_VIEW)
+             if($this->isPermittedField(null, false, true) < ACCESS_VIEW &&
+                 $this->inObject('family_id'))
              {
-                 $this->page->printDebug("FORCING familyid for search", 2);
+                 $this->page->printDebug("FORCING familyid for search, with wheraedd", 2);
                  $this->obj->whereAdd('family_id = ' . $this->page->userStruct['family_id']);
              }
             
 
-//             /// XXX have to do it man, and this is not the way to do it
-//             /// check ispermitted here too, just in case
-//             /// they shouldn't even *see* a chooser if they aren't permitted
-//             /// but i's like to be paranoid
-
-            if(!$CHECKGLOBALSCHOOLYEAR){
+//             XXX have to do it man, and this is not the way to do it
+//             check ispermitted here too, just in case
+//             they shouldn't even *see* a chooser if they aren't permitted
+//             but i's like to be paranoid
+                                                                        
+              if($this->perms['year'] < ACCESS_VIEW && 
+                 $this->inObject('school_year'))
+              {
                 //TODO: use the GLOBAL or LOCAL POPUP!
                 //only use $sy if nothing is set
-                $this->obj->school_year = $this->page->currentSchoolYear;
+                $this->obj->whereAdd(sprintf('school_year = "%s"',
+                                             $this->page->currentSchoolYear));
             } 
 
 

@@ -20,7 +20,6 @@
 	 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require_once('CoopPage.php');
 require_once('CoopObject.php');
 require_once('DB/DataObject.php');
 require_once("HTML/Table.php");
@@ -178,9 +177,6 @@ class coopView extends CoopObject
 			} else {
 				$found = $this->obj->N;
 			}
-            $this->page->confessArray($this->obj->_query,  
-                                      "FINDING {$this->table}  [{$this->obj->_join}] found {$this->obj->N}", 
-                                      2);
             // ALSO. if i have "add" perms, then show the 'add new'
             // even if nothign was found, force TRUE, so i get my enter new
             return $found || $perms >= ACCESS_ADD;
@@ -350,7 +346,7 @@ class coopView extends CoopObject
                 //also, it doesn't know year, so i have to force
 				if($this->isPermittedField($key,true,true) &&
                     $key != $par->pk &&
-                    is_array($labels) && in_array($key, $labels))
+                    in_array($key, $labels))
                 {
                     $keys[] = $key;
 					if($this->obj->fb_fieldLabels[$key]){

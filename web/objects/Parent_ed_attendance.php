@@ -63,5 +63,18 @@ class Parent_ed_attendance extends DB_DataObject
 
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
 
+	function fb_linkConstraints(&$co)
+		{
+            $par = $this->factory('parents');
+            $this->joinAdd($par);
+            if($co->isPermittedField(true) < ACCESS_VIEW){
+                /// XXX need to check that a familyid exists!
+                $this->whereAdd('parents.family_id  = '. $co->page->userStruct['family_id']);
+            }
+            //XXX until i have year perms.
+            $this->school_year = $co->page->currentSchoolYear;
 
+
+
+        }
 }
