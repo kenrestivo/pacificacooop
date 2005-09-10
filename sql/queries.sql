@@ -1395,5 +1395,37 @@ where enrollment.school_year = '2005-2006'
 order by enrollment.am_pm_session, kids.last_name, kids_first_name
 
 
+--- parent ed attendance
+select calendar_events.* from calendar_events
+where event_id = 2 
+and calendar_events.school_year = '2005-2006'
+and calendar_events.event_date < now()
 
---- EOFjoin o
+
+--- select all parent ed attendance
+select  calendar_event_id, enrolled_parents.family_id, sum(hours) as hours
+from parent_ed_attendance
+left join 
+(
+select distinct parents.parent_id, parents.family_id
+from parents 
+left join kids on kids.family_id = parents.family_id
+left join enrollment on enrollment.kid_id = kids.kid_id 
+where enrollment.school_year = '2005-2006'
+order by parent_id
+) as enrolled_parents
+on enrolled_parents.parent_id = parent_ed_attendance.parent_id
+group by enrolled_parents.family_id
+order by enrolled_parents.family_id
+
+
+-- currently enrolled parents. goddammit. i need this everywhere.
+select distinct parents.parent_id, parents.family_id
+from parents 
+left join kids on kids.family_id = parents.family_id
+left join enrollment on enrollment.kid_id = kids.kid_id 
+where enrollment.school_year = '2005-2006'
+order by parent_id
+
+
+--- EOF
