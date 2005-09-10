@@ -280,7 +280,7 @@ class coopForm extends CoopObject
 
 			///$top =& $this->findTop(); // will need this for overrides
             
-            $this->linkConstraints();
+            $sub->linkConstraints();
 
 			//TODO add linkorderfields
 			//XXX this will fuck up the linkconstraints won't it?
