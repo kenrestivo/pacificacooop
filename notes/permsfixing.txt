@@ -1,0 +1,36 @@
+ notes on teh permissions redesign
+
+
+
+check perms when 0's are in there.
+	perm-modification-harness
+	nice: the *only* functions which query the perms db are
+		coopobj::getperms
+		coopmenu::getreportperms
+	save results from BEFORE query somewhere (python pickle?)
+	do the modifications to change to the new db
+		perhaps store them in the same script, or an sql script
+	then run the *new* perms query, and compare/contrast
+
+
+normalise the perms!
+	this userlevel/grouplevel/menulevel is horseshit
+	make a RIGHTS table: 
+		rightid, type (enum, user/group/menu/year), level!
+	then the table/report/user perms link to these rights
+	easy normalisation, i think.	
+	build a unit test of the existing permissions results
+		matrix: user/group/realm/table/field/userlevel/grouplevel/menulevel/yearlevel
+		check that before and after results are EXACTLY the same!
+the levels idea is utterly wrong
+	there should be individual rights, which are *not* level-specific
+	things like, show all schoolyears. that doesn't map to the existing system.
+	have to whack old pages before migrating to this kind of system
+		it's in 60-some-odd pages
+	menulevel becomes a menu "right"
+	i like my moveboxes, but  checkboxes might be nicer
+		grab from fb? they have their checkbox shit together.
+	what sucks about this is that everything in my code needs to be re-done!
+	my massive query then becomes several, which return lists of rights
+		get all rights for this table/column/user combo
+

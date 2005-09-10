@@ -1,0 +1,42 @@
+notes on subform navigation, flipping between screens
+
+i can now go bopping around to different things!
+	at page load, if there is anything on the stack, pop it, use that
+		when? before/after i save?
+		how do i decide when to pop?
+	at validate time, simulate a page load, remember i'm not using header
+	how to deal with edit? i'll have an id in there. will it be on the stack?
+		or, should i header redirect?
+		i think my generic 'id' is braindead. but i need it for coopview?
+			i probably want the long-name of it, no?
+	aha. it doesn't push the LAST one, just the CURRENT onw
+		this shows up in the menu. 
+		it is pushing the TO one, not the FROM one (latest)
+			well, it doesn't KNOW where it came from :-(
+			unless it ALWAYS pushes at the end of a pageload, 
+				and always pops at beginning
+			and only DOESN'T pop when... what? it's the same?
+				and replaces with current if supplied? THINK
+	might even have a cool javascript edit thing, to go EDIT one that is shown
+	hmm, i have to know what table i came from if i'm going to push
+	put "push" into ALL menu and recordbuttons IFF there is a parencot
+		to cover details and reports or anywhere else i stick one
+		it'll push back not to the parent of it, but to whatever's on stack
+	this is pretty straightforwards for views, which only go one way
+		and which don't have data to save!
+	qf issues:
+		on validation of a form, i need to decide what to display!
+			if there is anything on the stack, don't display THIS form or view
+				instead, pop the previous off the stack, and show that
+		the add new will need to be javascript after all. i need to save vals
+			set it to 'push', with the table to push to
+				basically, copy exactly what view does, and KEEP IT CONSISTENT!
+			basically, then the same pop decision tree used for views works here
+		i am goign to need to do the header and dbdo debug stuff, 
+			or i will go crazeee!
+	nice thing is, then a wizard just becomes a custom QF, a collection of links
+		you bounce down into each of them, save stuff, pop back with ID's
+		when you're all done, you save.
+		bummer is, you can't undo all the shit you just saved.
+			i prefer the qfc way of batching them all together
+
