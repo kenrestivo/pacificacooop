@@ -1395,11 +1395,39 @@ where enrollment.school_year = '2005-2006'
 order by enrollment.am_pm_session, kids.last_name, kids_first_name
 
 
---- parent ed attendance
+--- meetings to date
 select calendar_events.* from calendar_events
 where event_id = 2 
 and calendar_events.school_year = '2005-2006'
 and calendar_events.event_date < now()
+
+
+
+--- everything for family attendance! yow.
+select calendar_events.event_date, calendar_events.event_id,
+family_attendance.hours, family_attendance.family_id
+from calendar_events
+left join (
+select  calendar_event_id, enrolled_parents.family_id, sum(hours) as hours
+from parent_ed_attendance
+left join 
+(
+select distinct parents.parent_id, parents.family_id
+from parents 
+left join kids on kids.family_id = parents.family_id
+left join enrollment on enrollment.kid_id = kids.kid_id 
+where enrollment.school_year = '2005-2006'
+order by parent_id
+) as enrolled_parents
+on enrolled_parents.parent_id = parent_ed_attendance.parent_id
+group by enrolled_parents.family_id
+order by enrolled_parents.family_id
+) as family_attendance
+on calendar_events.calendar_event_id = family_attendance.calendar_event_id
+where event_id = 2 
+and calendar_events.school_year = '2005-2006'
+and calendar_events.event_date < now()
+
 
 
 --- select all parent ed attendance
