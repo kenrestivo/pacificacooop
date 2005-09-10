@@ -1,0 +1,49 @@
+schoolyear choooser notes
+
+
+????
+the schoolyear thing. i need a schoolyear chooser, EVERYWHERE.
+		make a test, and a test page to see how it'll work
+			chooser, and other links too
+	ok. i think it's easy. i create a schoolyear GLOBAL, at the top
+		it is only shown if yearlevel > whatever is target (view/edit/etc)
+		i check it, in view, other places
+		i save/restore it from session, and use save/restored version 
+			i.e. it sets itself from $cp->vars
+			it's its own weirdo form, so it can only work with view then
+			BUT, it may be checked by CoopForm/View/Object
+		i'll need to calculate it based on all the years present in data
+			adding of course this and next year, if not
+			and set default to THIS (qf default should work nicely)
+			so this thing BELONGS in coopview!
+				but... no.the form shit is too scary.
+			ok. so i put the *function* in coopview, 
+				but i call it from generic?
+			so, put it in the OBJECT, but only show it if no parents?
+				hack, but gets me through details alive.
+			now, in coopform, coopobject, or a new class?
+				a customelement. i'll need it in coopform too! for schoolyear
+					ooh, this is getting good.
+				it'll need to be a coopform subclass
+		update any other weirdo chooser i have, to user $cp->vars
+			i.e. the chooser in carriereport, or in enhancement
+		make sure it maintains state		
+			state will go with the TABLE, in page->vars
+		have a look through the objects, for linkconstraints
+			be sure the linkconstraints will work now
+		NOTE duplication between what we're doing here and defaultconstraints
+			perhaps i shouldn't be putting this shit in coopview:find?
+				it may belong in defaultconstraints instead
+		ah. do NOT need a custom element. 
+			just a custom way of generating selectoptions	
+		the ugliness goes into addandsetvars
+			force schoolyear to always be a select
+			a function to populate the schoolyears
+		cache the thing.
+		handling it as a global is gonna be ugly
+			when choosing reports, make set schoolyear = getparent's sy!
+				which should be set thru the popup
+	leads not showing up. see if that's still broken after joins
+		it is. i need to add linkconstraints where i *un* constrain it.
+	AUUGH! schoolyearifyperms was WRONG. i need to delete all those from the db.
+		in seeds
