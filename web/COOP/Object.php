@@ -448,8 +448,10 @@ group by user_id,table_name,field_name";
 // NONE of this works. fuckers.
   //           //XXX if it's a subview, it may be for the *above* family.
 //             /// note the permitted here is NOT forcing family, for lookup
+// i'm also forcing this schoolyear, which is stupid. fix that later.
              if($this->isPermittedField(null, false, true) < ACCESS_VIEW &&
-                 $this->inObject('family_id'))
+                $co->page->userStruct['family_id'] &&
+                $this->inObject('family_id'))
              {
                  $this->page->printDebug("FORCING familyid for search, with wheraedd", 2);
                  $this->obj->whereAdd('family_id = ' . $this->page->userStruct['family_id']);
