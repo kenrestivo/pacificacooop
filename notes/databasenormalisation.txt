@@ -1,3 +1,10 @@
+notes on the database normalisation project
+
+
+	people merge (after my nested form shit works!!)
+		lead/company/parents/kids => people
+		auctionmerges: no more solicit vs personal anymore!
+
 	finally drop hte duplicates fields:
 		first/last: 
 			parents, leads, companycontacts, ins, lic, 

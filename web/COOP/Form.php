@@ -599,15 +599,19 @@ class coopForm extends CoopObject
 				$nk = $this->backlinks[$mt];
 
 
+				$this->page->printDebug(
+                    "processing crosslinks $mt:$nk $ft:$tf ",
+                                        2);
+
                 // links will add or delete from the mid table!
 				$mid = new CoopObject(&$this->page, $mt, $this);
-                if($mid->isPermittedField(null, false, !$this->id) < ACCESS_DELETE){
+                if($mid->isPermittedField(null, false, !$this->id) < ACCESS_DELETE)
+                {
                     return;
                 }
 
-				
 				//duplication of selectoptions
-                $this->debugWrap(3);
+                $this->debugWrap(5);
 				$far = new CoopObject(&$this->page, $ft, $this);
 
                 // i obviously need to view the remotes

@@ -1,8 +1,9 @@
  notes on teh permissions redesign
 
 
-
-check perms when 0's are in there.
+???
+build a unit test of the existing permissions results
+	matrix: user/group/realm/table/field/userlevel/grouplevel/menulevel/yearlevel		check that before and after results are EXACTLY the same!
 	perm-modification-harness
 	nice: the *only* functions which query the perms db are
 		coopobj::getperms
@@ -13,20 +14,17 @@ check perms when 0's are in there.
 	then run the *new* perms query, and compare/contrast
 
 
+???
 normalise the perms!
+	normalize user/group perms. two separate tables, not one tabel!
 	this userlevel/grouplevel/menulevel is horseshit
 	make a RIGHTS table: 
-		rightid, type (enum, user/group/menu/year), level!
-	then the table/report/user perms link to these rights
+		rightid, type (enum: owner/other/menu/year), level!
 	easy normalisation, i think.	
-	build a unit test of the existing permissions results
-		matrix: user/group/realm/table/field/userlevel/grouplevel/menulevel/yearlevel
-		check that before and after results are EXACTLY the same!
+	then the table/report/user perms link to these rights
 the levels idea is utterly wrong
 	there should be individual rights, which are *not* level-specific
 	things like, show all schoolyears. that doesn't map to the existing system.
-	have to whack old pages before migrating to this kind of system
-		it's in 60-some-odd pages
 	menulevel becomes a menu "right"
 	i like my moveboxes, but  checkboxes might be nicer
 		grab from fb? they have their checkbox shit together.
@@ -34,3 +32,30 @@ the levels idea is utterly wrong
 	my massive query then becomes several, which return lists of rights
 		get all rights for this table/column/user combo
 
+
+???
+	do i have to whack old pages before migrating to this kind of system?
+		it's in 60-some-odd pages
+	the only place the db is queried is in getAuthLevel anyway.
+	
+
+right way to do realms:
+	super-realm (area?) tags for them as 'springfest' or whatever.
+		then i can make a FB checkbox thingus.
+	yes, they're recursive. and i'll have to show that
+
+	a tree structure in SQL! it is possible.
+		but traversing it to calculate realms could be eerily difficult
+
+
+
+admin section stuff
+	changelog
+	last/currently-logged-in-users
+	permissions!!!
+	password maint screens
+		reset (almost done!)
+			only this years? not easy. not even a good idea
+			and an "are you sure" screen.
+				don't bother with qf, i don't think.
+			then save the change. using coopform process? or raw dbdo?

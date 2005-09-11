@@ -47,3 +47,41 @@ the schoolyear thing. i need a schoolyear chooser, EVERYWHERE.
 		it is. i need to add linkconstraints where i *un* constrain it.
 	AUUGH! schoolyearifyperms was WRONG. i need to delete all those from the db.
 		in seeds
+
+
+OLD build backlinks table
+	on edit:
+	recursively add them to the SESSION vars
+		i may need to add an output var, dump all these in there b4 display
+	remove them when detail over?
+	this is trouble. i find this stuff midway through (i.e. in detail form)
+		i need to change globals, and restart engine? what do i do?
+	i should store a heirarchal array of tables displayed
+		top, and subs.
+		if the action changes at top, refresh all the subs
+	this still doesn't answer what to do about *where* to show forms?
+		inside the object? new/cloned objects?
+tedium which *must* get done:
+	selectAddEmpty!... for link fields that i don't want a default on
+		my framework makes selectaddempty the default. i like that.
+	tree view	
+		enhancementhours
+			hours, project, summary
+		roster
+			edit
+		insurance
+			cars, licenses, insurancecards
+		springfest (follow committees perhaps? logical structure?)
+			invitations
+				addinvite, track cash
+			auction
+			solicitation
+				company, calls?, auction separate?
+			packaging 				packages, check-in
+			raffle
+				finance, locations (MUST these be separate?!)
+			flyers
+				companies, delivery? (agai, WHY expose companies?)
+			tickets
+			management
+				nag, indulgences, reconciliation, money stuff??

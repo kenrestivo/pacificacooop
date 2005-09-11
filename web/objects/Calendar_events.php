@@ -26,7 +26,7 @@ class Calendar_events extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $fb_enumFields = array ('status');
+	var $fb_enumFields = array ('status', 'show_on_public_page');
 
 	var $fb_linkDisplayFields = array('event_id', 'event_date');
     var $fb_fieldLabels = array(
@@ -41,6 +41,9 @@ class Calendar_events extends DB_DataObject
 	var $fb_shortHeader =  'Calendar';
     var $fb_fieldsToUnRender = array('keep_event_hidden_until_date');
     var $fb_enumFields = array('show_on_public_page');
+    var $fb_defaults = array('status' => 'Active');
+    var $fb_requiredFields = array('event_id', 'status', 'school_year', 
+                                   'event_date');
 
     function fb_display_view(&$co)
         {

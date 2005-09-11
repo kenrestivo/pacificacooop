@@ -90,7 +90,7 @@ class Audit_trail extends DB_DataObject
             //XXX move this to a session var or somethign. or provide a chooser
             $limit = $_REQUEST['limit'] ? $_REQUEST['limit'] : 20;
 
-            $perm = $co->isPermittedField();
+            $perm = $co->isPermittedField(NULL);
 
             $res .= "<h3>An extensive audit trail of the last $limit items of activity on the site.</h3><p>This is still an experimental feature</p>";
             $res .= "<p>Times are in Mountain Time (Phoenix, AZ).</p>";

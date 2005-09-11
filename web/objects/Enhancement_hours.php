@@ -69,7 +69,7 @@ class Enhancement_hours extends DB_DataObject
         {
             $par = $this->factory('parents');
             $this->joinAdd($par);
-            if($co->isPermittedField(true) < ACCESS_VIEW){
+            if($co->isPermittedField(NULL) < ACCESS_VIEW){
                 /// XXX need to check that a familyid exists!
                 $this->whereAdd('parents.family_id  = '. 
                                 $co->page->userStruct['family_id']);

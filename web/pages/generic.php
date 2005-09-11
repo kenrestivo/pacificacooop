@@ -53,18 +53,6 @@ if($sp= $cp->stackPath()){
 
 printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
 
-print '<div>';
-$atd2 =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
-if(is_callable(array($atd2->obj, 'fb_display_summary'))){
-    $atd2->page->printDebug('calling callback for summary', 2);
-    print $atd2->obj->fb_display_summary(&$atd2);
-}
-
-if(is_callable(array($atd2->obj, 'fb_display_alert'))){
-    $atd2->page->printDebug('calling callback for alert', 2);
-    print $atd2->obj->fb_display_alert(&$atd2);
-}
-print '</div><!-- end status alert div -->';
 
 print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div id="centerCol">';
@@ -133,13 +121,25 @@ function genericView(&$atd)
     $atd =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
     //$atd->debugWrap(2);
 
+    print '<div>';
+    $atd2 =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
+    if(is_callable(array($atd2->obj, 'fb_display_summary'))){
+        $atd2->page->printDebug('calling callback for summary', 2);
+        print $atd2->obj->fb_display_summary(&$atd2);
+    }
+    
+    if(is_callable(array($atd2->obj, 'fb_display_alert'))){
+        $atd2->page->printDebug('calling callback for alert', 2);
+        print $atd2->obj->fb_display_alert(&$atd2);
+    }
+    print '</div><!-- end status alert div -->';
+    
 
-
-     if(is_callable(array($atd->obj, 'fb_display_view'))){
-         $atd->page->printDebug('calling callback for view', 2);
-         return $atd->obj->fb_display_view(&$atd);
-     }
-
+    if(is_callable(array($atd->obj, 'fb_display_view'))){
+        $atd->page->printDebug('calling callback for view', 2);
+        return $atd->obj->fb_display_view(&$atd);
+    }
+    
 
 
     //TODO: some variation on the old "perms display" from auth.inc

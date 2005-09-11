@@ -67,7 +67,7 @@ class Parent_ed_attendance extends DB_DataObject
 		{
             $par = $this->factory('parents');
             $this->joinAdd($par);
-            if($co->isPermittedField(true) < ACCESS_VIEW && 
+            if($co->isPermittedField(NULL) < ACCESS_VIEW && 
                 $co->page->userStruct['family_id'])
             {
                 /// XXX need to check that a familyid exists!
@@ -77,7 +77,18 @@ class Parent_ed_attendance extends DB_DataObject
             //XXX until i have year perms.
             $this->school_year = $co->page->currentSchoolYear;
 
+            //$co->debugWrap(2);
+
+        }
+
+    function fb_display_alert(&$co)
+        {
+
 
 
         }
+
+    /// custom displayview here
+
+
 }
