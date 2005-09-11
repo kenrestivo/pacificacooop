@@ -33,8 +33,8 @@ class Job_descriptions extends DB_DataObject
 	var $fb_linkDisplayFields = array('summary');
 	var $fb_fieldLabels = array (
 		'summary' => "Name of Position",
-		'family_type' => "New or Returning Family?",
 		'long_description' => "Job Description",
+		'family_type' => "New or Returning Family?",
 		'board_position' => "Board-level position?",
 		'free_tuition_days' => "Days Per Week of Free Tuition",
 		'free_tuition_months' => "Months of Free Tuition Days"

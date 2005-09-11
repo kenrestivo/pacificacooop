@@ -30,9 +30,9 @@ class Calendar_events extends DB_DataObject
 
 	var $fb_linkDisplayFields = array('event_id', 'event_date');
     var $fb_fieldLabels = array(
-        'status' => 'Status',
         'event_id' => 'Event',
         'event_date' => 'Date (and time) of Event (MM/DD/YYYY), with optional "HH:MM AM/PM"',
+        'status' => 'Status',
         'keep_event_hidden_until_date' => 'Hide this Event Until',
         'school_year' => 'School Year',
         'show_on_public_page' => 'Show on publicly-accessible home page?'

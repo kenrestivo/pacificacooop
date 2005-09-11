@@ -29,8 +29,8 @@ class Job_assignments extends DB_DataObject
 	var $fb_linkDisplayFields =  array('family_id');
 	var $fb_fieldLabels = array (
 		'job_description_id' => 'Job Description',
-		'school_year' => 'School Year',
-		'family_id' => 'Co-Op Family'
+		'family_id' => 'Co-Op Family',
+		'school_year' => 'School Year'
 		);
 	var $fb_requiredFields = array('job_description_id', 
 								   'school_year',

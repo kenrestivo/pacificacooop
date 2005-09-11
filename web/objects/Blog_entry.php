@@ -28,11 +28,12 @@ class Blog_entry extends DB_DataObject
 	var $fb_enumFields = array ('show_on_members_page', 
 								'show_on_public_page');
 	var $fb_linkDisplayFields = array('short_title');
-	var $fb_fieldLabels = array ('family_id' => 'Entered by Co-Op Family',
-								 'short_title' => 'Headline',
-								 'body' => 'Story',
-								 'show_on_members_page' => 'OK to show on members-only page?',
-								 'show_on_public_page' => 'OK to show on public web-site'
+	var $fb_fieldLabels = array (
+        'short_title' => 'Headline',
+        'body' => 'Story',
+		'family_id' => 'Entered by Co-Op Family',
+        'show_on_members_page' => 'OK to show on members-only page?',
+        'show_on_public_page' => 'OK to show on public web-site'
 		);
 	var $fb_fieldsToRender = array('family_id', 'short_title', 'body', 
                                    'show_on_members_page', 
