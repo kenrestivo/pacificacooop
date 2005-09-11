@@ -19,7 +19,7 @@
 
 NFSNRSYNC="--rsync-path=/usr/local/bin/rsync"
 NFSNUSR=ken
-NFSNHOST=localnfsn
+NFSNHOST=dev.phx.nearlyfreespeech.net
 NFSNDOCROOT=/f1/content/paccoop/htdocs
 NFSNLIVEPATH=$(NFSNDOCROOT)/members/
 LIVEHERE=../livesite/
