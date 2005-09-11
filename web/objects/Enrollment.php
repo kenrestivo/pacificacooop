@@ -90,6 +90,7 @@ class Enrollment extends DB_DataObject
     function fb_display_details(&$co)
         {
 
+            $res = '';
             $top =& $co;
             $mi = $top->pk;
             $cid = $this->{$top->pk};
@@ -102,7 +103,7 @@ class Enrollment extends DB_DataObject
             //print "CHECKING $table<br>";
             $top->obj->$mi = $cid;
             $top->obj->find(true);
-            print $top->horizTable();
+            $res .= $top->horizTable();
 
 
             // need that familyid!
@@ -112,7 +113,7 @@ class Enrollment extends DB_DataObject
 
             $view = new CoopView(&$cp, 'families', &$top);
             $view->obj->family_id = $family_id;
-            print $view->simpleTable();
+            $res .= $view->simpleTable();
 
 
 
@@ -121,30 +122,81 @@ class Enrollment extends DB_DataObject
             $subenrol->obj->whereAdd("$mi = $cid");
             $subenrol->obj->whereAdd(sprintf('school_year = "%s"', 
                                              $subenrol->page->currentSchoolYear));
-            print $subenrol->simpleTable();
+            $res .= $subenrol->simpleTable();
 
             //parents are easier. most of the time ;-)
             $view = new CoopView(&$cp, 'parents', &$top);
             $view->obj->family_id = $family_id;
             $view->obj->orderBy('type asc');
             //TODO actionbutons to edit
-            print $view->simpleTable();
+            $res .= $view->simpleTable();
 	
             //workers
             $view = new CoopView(&$cp, 'workers', &$top);
             $view->obj->whereAdd("family_id = $family_id");
             $view->obj->school_year = $view->page->currentSchoolYear;
-            print $view->simpleTable();
+            $res .= $view->simpleTable();
 
             // standard audit trail, for all details
             $aud =& new CoopView(&$cp, 'audit_trail', &$atd);
             $aud->obj->table_name = $top->table;
             $aud->obj->index_id = $this->{$top->pk};
             $aud->obj->orderBy('updated desc');
-            print $aud->simpleTable();
+            $res .= $aud->simpleTable();
 
-
-
+            return $res;
 
         }
+
+    function fb_display_view(&$co)
+        {
+
+            $rastaquery = 
+                'select kids.last_name as kid_last, concat(moms.first_name, " ", 
+moms.last_name) as mom,
+concat(dads.first_name, " ", dads.last_name) as dad, kids.first_name as kid_first, 
+date_format(kids.date_of_birth, "%%m/%%d/%%Y") as human_date, 
+families.address1, 
+families.phone, 
+families.email,
+enrollment.monday, enrollment.tuesday, enrollment.wednesday, 
+enrollment.thursday, enrollment.friday, job_descriptions.summary as school_job
+from enrollment
+left join kids on enrollment.kid_id = kids.kid_id
+left join parents as dads 
+on dads.family_id = kids.family_id and dads.type <> "Mom"
+left join parents as moms
+on moms.family_id = kids.family_id and moms.type = "Mom"
+left join families on kids.family_id = families.family_id
+left join job_assignments 
+on kids.family_id = job_assignments.family_id 
+and job_assignments.school_year = "%s"
+left join job_descriptions 
+on job_descriptions.job_description_id = job_assignments.job_assignment_id
+where enrollment.school_year = "%s" and am_pm_session = "%s"
+order by enrollment.am_pm_session, kids.last_name, kids.first_name';
+            
+            
+            $co->obj->fb_fieldLabels = array_merge(
+                $co->obj->fb_fieldLabels, 
+                array ('last_name' => 'Last Name',
+                       'mom' => 'Mom Name',
+                       'dad' => 'Dad/Partner',
+                       'kid_first' => 'Child',
+                       'human_date' => 'DOB',
+                       'address'=> 'Address',
+                       'phone' => 'Phone',
+                       'email'=> 'Email',
+                       'school_job' => 'School Job'));
+            
+            $co->obj->query(sprintf($rastaquery, 
+                               $co->page->currentSchoolYear,
+                               $co->page->currentSchoolYear,
+                               'AM'));
+
+            $res .= $co->simpleTable(false);
+            return $res;
+            
+        }
+
 }
