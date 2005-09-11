@@ -173,7 +173,7 @@ left join job_assignments
 on kids.family_id = job_assignments.family_id 
 and job_assignments.school_year = "%s"
 left join job_descriptions 
-on job_descriptions.job_description_id = job_assignments.job_assignment_id
+on job_descriptions.job_description_id = job_assignments.job_description_id
 where enrollment.school_year = "%s"
 order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             
@@ -185,7 +185,7 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
                        'dad' => 'Dad/Partner',
                        'kid_first' => 'Child',
                        'human_date' => 'DOB',
-                       'address'=> 'Address',
+                       'address1'=> 'Address',
                        'phone' => 'Phone',
                        'email'=> 'Email',
                        'monday' => 'M',
@@ -198,16 +198,40 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
                        'dropout_date' => "Drop Date",
                        );
             
+            // TODO: add in the split for am/pm, in to separate tables
             $this->query(sprintf($rastaquery, 
                                $co->page->currentSchoolYear,
-                               $co->page->currentSchoolYear,
-                               'AM'));
+                               $co->page->currentSchoolYear));
+
+
+            foreach(array('monday', 'tuesday', 'wednesday', 
+                          'thursday', 'friday') as $field)
+            {
+                // these are tinyint's; override that 
+                $this->fb_displayCallbacks[$field] = 'checkWorkday';
+            }
+
 
             $res .= $co->simpleTable(false);
 
 
             return $res;
             
+        }
+
+    function checkWorkday($val, $key)
+        {
+            print "HEY". $this->workday;
+            if(strtolower($this->workday) == $key){
+                if($this->brings_baby){
+                    return 'B';
+                }
+                return 'W';
+            }
+            if(strtolower($this->epod) == $key){
+                return 'E';
+            }
+            return $val ? 'c' : '';
         }
 
 }
