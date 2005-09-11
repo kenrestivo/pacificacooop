@@ -30,7 +30,7 @@ DEVHERE=../web-online/
 PLAYGROUND=../web/
 XCLUDE='*dbhost*' 
 LINKSFILE=schema/coop.links.ini
-
+#FUCKED="-p 6666"
 
 all: help
 
@@ -40,7 +40,7 @@ help::
 
 upload-live::
 	-rm $(LIVEHERE)/.\#*
-	rsync -e "ssh -p 6666" \
+	rsync -e "ssh $(FUCKED)" \
 		$(NFSNRSYNC) \
 		-avxWcC  \
 		--exclude $(XCLUDE) \
@@ -48,7 +48,7 @@ upload-live::
 		$(LIVEHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNLIVEPATH)
 
 download-live::
-	rsync -e "ssh -p 6666" \
+	rsync -e "ssh $(FUCKED)" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
@@ -57,14 +57,14 @@ download-live::
 
 upload-dev:: 
 	-rm $(DEVHERE)/.\#*
-	rsync -e "ssh -p 6666" \
+	rsync -e "ssh $(FUCKED)" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
 		$(DEVHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)
 
 download-dev::
-	rsync -e "ssh -p 6666" \
+	rsync -e "ssh $(FUCKED)" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
@@ -73,14 +73,14 @@ download-dev::
 
 upload-head:: 
 	-rm $(DEVHERE)/.\#*
-	rsync -e "ssh -p 6666" \
+	rsync -e "ssh $(FUCKED)" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
 		$(PLAYGROUND) $(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)
 
 download-head::
-	rsync -e "ssh -p 6666" \
+	rsync -e "ssh $(FUCKED)" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
@@ -89,7 +89,7 @@ download-head::
 
 upload-images::
 	-rm $(IMAGEHERE)/.\#*
-	rsync -e "ssh -p 6666" \
+	rsync -e "ssh $(FUCKED)" \
 		$(NFSNRSYNC) \
 		-avxWcC  \
 		--exclude $(XCLUDE) \
