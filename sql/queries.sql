@@ -1396,7 +1396,7 @@ on kids.family_id = job_assignments.family_id
 and job_assignments.school_year = '2005-2006'
 left join job_descriptions 
 on job_descriptions.job_description_id = job_assignments.job_assignment_id
-where enrollment.school_year = '2005-2006'
+where enrollment.school_year = '2005-2006' and am_pm_session = 'AM'
 order by enrollment.am_pm_session, kids.last_name, kids.first_name
 
 

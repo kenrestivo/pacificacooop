@@ -58,10 +58,12 @@ class Parent_ed_attendance extends DB_DataObject
         'calendar_event_id' => 'Meeting',
         'hours' => 'Hours attended'
 		);
+    var $fb_requiredFields = array ('parent_id', 'calendar_event_id');
 	var $fb_formHeaderText = 'Parent Education Meeting Attendance';
 	var $fb_shortHeader = 'Parent Ed';
-
+    
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
+
 
 	function fb_linkConstraints(&$co)
 		{

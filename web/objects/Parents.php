@@ -38,6 +38,8 @@ class Parents extends DB_DataObject
 	var $fb_enumFields = array ('type', 'worker');
 	var $fb_formHeaderText = 'Parents';
 	var $fb_shortHeader = 'Parents';
+    var $fb_requiredFields = array('last_name', 'first_name', 
+                                   'family_id', 'type');
 
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
 
