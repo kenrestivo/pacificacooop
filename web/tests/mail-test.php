@@ -4,8 +4,9 @@
 
 // unit test for my vitally required includes. return an error if
 // the shit has hit the fan
-
+chdir('../');
 require_once('Mail.php');
+require_once('CoopPage.php');
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
@@ -25,6 +26,11 @@ $mail_object =& Mail::factory('smtp', $params);
 $mail_object->send($recipients, $headers, $body);
 
 
-print "OK";
+print "RAW test OK\n";
+
+$cp = new CoopPage(4);
+$cp->mailError('testing through cooppage', 
+               'this is a test thru cooppage mailerror');
+print "COOPAGE test OK\n";
 
 ?>
