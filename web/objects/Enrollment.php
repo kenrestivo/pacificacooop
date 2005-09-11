@@ -152,7 +152,7 @@ class Enrollment extends DB_DataObject
         {
 
             $rastaquery = 
-                'select kids.last_name as kid_last, concat(moms.first_name, " ", 
+                'select distinct enrollment_id, kids.last_name as kid_last, concat(moms.first_name, " ", 
 moms.last_name) as mom,
 concat(dads.first_name, " ", dads.last_name) as dad, kids.first_name as kid_first, 
 date_format(kids.date_of_birth, "%%m/%%d/%%Y") as human_date, 
@@ -181,7 +181,7 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             $this->fb_fieldLabels = array_merge(
                 $this->fb_fieldLabels, 
                 array ('am_pm_session' => 'Session',
-                       'last_name' => 'Last Name',
+                       'kid_last' => 'Last Name',
                        'mom' => 'Mom Name',
                        'dad' => 'Dad/Partner',
                        'kid_first' => 'Child',
