@@ -104,7 +104,7 @@
 (define (visit-all-links wtc family url)
   (let ((gtc (invoke wtc 'getTestContext))) ;; the junit object
 	(invoke gtc 'setBaseUrl url))
-  (get-to-main-page wtc (string-append family " Family"))
+  (get-to-main-page wtc family)
   (let ((links (vector->list (invoke (get-response wtc) 'getLinks)) )
 		(run-number (random 1000)))
     (check-sublinks links 0)
@@ -125,7 +125,7 @@
 (define (many-visit-hack wtc url)
   (for-each (lambda (family)
 			  (write-line (string-append ".....checking " family))
-			  (visit-all-links wtc family url))
+			  (visit-all-links wtc (string-append family " Family") url))
 			'("Bartlett" "Restivo" "Cooke" ))
   (for-each (lambda (other)
 			  (write-line (string-append ".....checking " other))
