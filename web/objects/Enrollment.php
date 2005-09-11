@@ -160,7 +160,8 @@ families.address1,
 families.phone, 
 families.email,
 enrollment.monday, enrollment.tuesday, enrollment.wednesday, 
-enrollment.thursday, enrollment.friday, job_descriptions.summary as school_job
+enrollment.thursday, enrollment.friday, job_descriptions.summary as school_job,
+am_pm_session
 from enrollment
 left join kids on enrollment.kid_id = kids.kid_id
 left join parents as dads 
@@ -173,13 +174,14 @@ on kids.family_id = job_assignments.family_id
 and job_assignments.school_year = "%s"
 left join job_descriptions 
 on job_descriptions.job_description_id = job_assignments.job_assignment_id
-where enrollment.school_year = "%s" and am_pm_session = "%s"
+where enrollment.school_year = "%s"
 order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             
             
-            $co->obj->fb_fieldLabels = array_merge(
-                $co->obj->fb_fieldLabels, 
-                array ('last_name' => 'Last Name',
+            $this->fb_fieldLabels = array_merge(
+                $this->fb_fieldLabels, 
+                array ('am_pm_session' => 'Session',
+                       'last_name' => 'Last Name',
                        'mom' => 'Mom Name',
                        'dad' => 'Dad/Partner',
                        'kid_first' => 'Child',
@@ -189,12 +191,14 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
                        'email'=> 'Email',
                        'school_job' => 'School Job'));
             
-            $co->obj->query(sprintf($rastaquery, 
+            $this->query(sprintf($rastaquery, 
                                $co->page->currentSchoolYear,
                                $co->page->currentSchoolYear,
                                'AM'));
 
             $res .= $co->simpleTable(false);
+
+
             return $res;
             
         }
