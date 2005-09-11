@@ -1,2 +1,19 @@
 email subscription notes
 
+need hooks for new news insertion or edit: trigger an email
+	or, let the user do it manually?
+
+
+at insert time, SOME things will need to trigger email
+
+notify() trigger email function
+	look in subscription list
+	spam everyone who subscribed
+
+look around for a good example
+	shell_exec('nohup something')
+	or, ignore_user_abort
+
+the tricky bit is alerts. they have to be checked, somehow
+	maybe those are manual
+	or maybe i save status of who has been alerted?

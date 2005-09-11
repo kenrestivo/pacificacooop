@@ -38,7 +38,7 @@
 (define (main-page-ok wtc)
   (invoke wtc 'assertTextPresent "</html>")
   (invoke wtc 'assertLinkPresentWithText "Log Out")
-  (invoke wtc 'assertLinkPresentWithText "Enter New")
+  ;; shirley has no enter (invoke wtc 'assertLinkPresentWithText "Enter New")
   (invoke wtc 'assertLinkPresentWithText "View")
   )
 

@@ -559,10 +559,11 @@ findSchoolYear($date = 0, $guess = 1, $increment = 0)
 // returns 1 if i am on the dev site, otherwise 0
 function devSite()
 {
-	$parth = pathinfo($_SERVER['SCRIPT_FILENAME']);
-	$dir = $parth['dirname'] ;
-	// IF YOU EVER MOVE TO ANOTHER HOSTER, DEAL WITH THIS
-	if(preg_match('/-dev/', $dir) > 0 || preg_match('/pacsql/', $dbhost) < 1) 
+    global $dbhost;
+	$parth = $_SERVER['PHP_SELF'];
+	// XXX: IF YOU EVER MOVE TO ANOTHER HOSTER, DEAL WITH THIS
+	// notice the logic too: anything with -dev in it OR anything not at ISP
+	if(preg_match('/-dev/', $parth) > 0 || preg_match('/pacsql/', $dbhost) < 1) 
 	{
 		return 1;
 	}
