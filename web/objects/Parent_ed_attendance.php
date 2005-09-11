@@ -67,8 +67,14 @@ class Parent_ed_attendance extends DB_DataObject
 
 	function fb_linkConstraints(&$co)
 		{
+            $fam = $this->factory('families');
             $par = $this->factory('parents');
+            $par->joinAdd($fam);
             $this->joinAdd($par);
+
+            $ev = $this->factory('calendar_events');
+            $this->joinAdd($ev);
+
             if($co->isPermittedField(NULL) < ACCESS_VIEW && 
                 $co->page->userStruct['family_id'])
             {
@@ -76,19 +82,21 @@ class Parent_ed_attendance extends DB_DataObject
                 $this->whereAdd('parents.family_id  = '. 
                                 $co->page->userStruct['family_id']);
             }
+            
+            $this->orderBy('families.name, event_date');
+
             //XXX until i have year perms.
             $this->school_year = $co->page->currentSchoolYear;
-
+            
+            
             //$co->debugWrap(2);
 
         }
 
-    function fb_display_alert(&$co)
-        {
+//     function fb_display_alert(&$co)
+//         {
+//         }
 
-
-
-        }
 
     /// custom displayview here
 

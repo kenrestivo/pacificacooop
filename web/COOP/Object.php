@@ -632,7 +632,7 @@ group by user_id,table_name,field_name";
             }
 
             foreach(array_keys($this->obj->fb_fieldLabels) as $key){
-                $sorted[$key] = $things[$key];
+                isset($things[$key]) && $sorted[$key] = $things[$key];
             }
             return $sorted;
         }

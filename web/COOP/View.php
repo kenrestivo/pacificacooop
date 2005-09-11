@@ -283,7 +283,7 @@ class coopView extends CoopObject
                 {
                     $res[] = call_user_func(
                         array($this->obj, $this->obj->fb_displayCallbacks[$key]),
-                        $val);
+                        $val, $key);
                 } else if($table[$key] & DB_DATAOBJECT_MYSQLTIMESTAMP){ 
                     $res[] = timestamp_db_php($val);
                 } else if ($table[$key] &  DB_DATAOBJECT_TIME) {

@@ -49,7 +49,7 @@ class Files extends DB_DataObject
     var $fb_fieldsToUnRender = array('disk_filename');
 
     //this ugly callback to get around, lack of lambdas, object crap, etc.
-    function makeURL($val)
+    function makeURL($val, $key)
         {
             return $this->CoopView->page->selfURL(
                 array('value' => $val,
