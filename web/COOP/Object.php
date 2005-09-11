@@ -624,6 +624,19 @@ group by user_id,table_name,field_name";
         }
 
 
+
+    function reorder($things)
+        {
+            if(!is_array($this->obj->fb_fieldLabels)){
+                return $things;
+            }
+
+            foreach(array_keys($this->obj->fb_fieldLabels) as $key){
+                $sorted[$key] = $things[$key];
+            }
+            return $sorted;
+        }
+
 } // END COOP OBJECT CLASS
 
 

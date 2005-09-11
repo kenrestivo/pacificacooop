@@ -178,8 +178,7 @@ where enrollment.school_year = "%s"
 order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             
             
-            $this->fb_fieldLabels = array_merge(
-                $this->fb_fieldLabels, 
+            $this->fb_fieldLabels = 
                 array ('am_pm_session' => 'Session',
                        'kid_last' => 'Last Name',
                        'mom' => 'Mom Name',
@@ -189,7 +188,15 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
                        'address'=> 'Address',
                        'phone' => 'Phone',
                        'email'=> 'Email',
-                       'school_job' => 'School Job'));
+                       'monday' => 'M',
+                       'tuesday' => 'Tu',
+                       'wednesday' => 'W',
+                       'thursday' => 'Th',
+                       'friday' => 'F',
+                       'school_job' => 'School Job',
+                       'start_date' => 'Start Date',
+                       'dropout_date' => "Drop Date",
+                       );
             
             $this->query(sprintf($rastaquery, 
                                $co->page->currentSchoolYear,

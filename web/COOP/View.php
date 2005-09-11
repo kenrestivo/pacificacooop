@@ -260,7 +260,7 @@ class coopView extends CoopObject
 		{
 
 			$table = $this->obj->table();
-			$row = $this->obj->toArray();
+			$row = $this->reorder($this->obj->toArray());
 			foreach($row as $key => $val){
 
 				// this is where the fun begins.
@@ -340,7 +340,7 @@ class coopView extends CoopObject
 
             $labels = array_keys($this->obj->fb_fieldLabels);
 
-			foreach($this->obj->toArray() as $key => $trash){
+			foreach($this->reorder($this->obj->toArray()) as $key => $trash){
 				//print "checking $key<br>";
                 //force EVERYTHING for header. some might be theirs
                 //also, it doesn't know year, so i have to force
