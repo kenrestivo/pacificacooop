@@ -1377,13 +1377,19 @@ order by access_level_id;
 
 --- the rasta export
 --"Last Name","Mom Name *","Dad/Partner *","Child ",DOB,Address,Phone,Email,M,Tu,W,Th,F,"School Job"
-select kids.last_name, concat(moms.first_name, ' ', moms.last_name),
-concat(dads.first_name, ' ', dads.last_name), kids.first_name, 
-date_format(kids.date_of_birth, '%m/%d/%Y') as human_date, families.address1, 
+select  enrollment_id, kids.last_name as kid_last, 
+concat(moms.first_name, " ", 
+moms.last_name) as mom,
+concat(dads.first_name, " ", dads.last_name) as dad, 
+kids.first_name as kid_first, 
+date_format(kids.date_of_birth, "%%m/%%d/%%Y") as human_date, 
+families.address1, 
 families.phone, 
 families.email,
 enrollment.monday, enrollment.tuesday, enrollment.wednesday, 
-enrollment.thursday, enrollment.friday, job_descriptions.summary as school_job
+enrollment.thursday, enrollment.friday, job_descriptions.summary as school_job,
+enrollment.am_pm_session, enrollment.start_date, enrollment.dropout_date,
+workers.workday, workers.epod, workers.brings_baby, workers.am_pm_session
 from enrollment
 left join kids on enrollment.kid_id = kids.kid_id
 left join parents as dads 
@@ -1393,10 +1399,12 @@ on moms.family_id = kids.family_id and moms.type = "Mom"
 left join families on kids.family_id = families.family_id
 left join job_assignments 
 on kids.family_id = job_assignments.family_id 
-and job_assignments.school_year = '2005-2006'
+and job_assignments.school_year = "2005-2006"
 left join job_descriptions 
-on job_descriptions.job_description_id = job_assignments.job_assignment_id
-where enrollment.school_year = '2005-2006' and am_pm_session = 'AM'
+on job_descriptions.job_description_id = job_assignments.job_description_id
+left join workers on (workers.parent_id = moms.parent_id or workers.parent_id =dads.parent_id) and workers.school_year = "2005-2006"
+where enrollment.school_year = "2005-2006" and enrollment.am_pm_session = "AM"
+group by enrollment_id
 order by enrollment.am_pm_session, kids.last_name, kids.first_name
 
 
