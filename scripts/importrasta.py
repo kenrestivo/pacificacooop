@@ -204,6 +204,7 @@ class Family(Adder):
         f=c.fetchall()[0]  #assume only 1? XXX exept IndexError if wrong!
         old=[str(x) for x in [f['phone'], f['address1'], f['email']]]
         if new != old:
+            print 'data changed for %s...' % (self.rec['Last Name'])
             n=raw_input('OLD [%s]\n NEW [%s]\n use new? y/n ' %
                         (','.join(old), ','.join(new)))
             if n == 'y':
@@ -253,10 +254,14 @@ class Kid(Adder):
         c.execute("""select * from kids where kid_id = %s""", (pid))
         f=c.fetchall()[0]  #assume only 1? XXX exept IndexError if wrong!
         try:
-            old=[f['date_of_birth'].strftime('%m/%d/%y')]
+            d=f['date_of_birth']
+            oldshort=['/'.join(map(str,[d.month,d.day,d.strftime('%y')]))]
+            oldlong=[d.strftime('%m/%d/%y')]
         except AttributeError:
             old=''
-        if new != old:
+        if new != oldlong and new != oldshort:
+            print 'data changed for %s %s...' % (self.rec['Child'],
+                                                 self.rec['Last Name'])
             n=raw_input('OLD [%s]\n NEW [%s]\n use new? y/n ' %
                         (','.join(old), ','.join(new)))
             if n == 'y':
