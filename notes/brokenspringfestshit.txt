@@ -1,0 +1,125 @@
+broken springfest items
+
+		gah... all of the conditional branches, i.e. edit, lookup, DNC!
+			will need to create a tree function somewhere
+
+
+can i use these for editing??!
+
+what have i got here
+	a common field: lead_id is the only one
+	fields i need to determine which table to use: ticket quantity, amount
+		if tickets * price > amount, it's not a ticket, it's a donation!
+	fields that are specific to tickets only: vip
+	subfields that may be best taken care of with my new subfield thing:
+		income
+	and then i is done! use the fucking qfc now?
+	hey, cool. the payment shows up inside anyway
+		so, i can just pass stuff through as a convenience item, perhaps
+			pre-populating, basically
+
+
+so. leave it as it is, until savepaid or savecomp?
+	THEN, at the save point, instead of calling updatepaddles, check first!
+		if a paddle number has been passed in (i.e. from erin), USE it!
+		otherwise, updatepaddles to create it
+	the hack here is i'm assuming entering income multiple times
+		otherwise, i'd need to use a multi-select for un-claimed paddles
+		or x input fields for the number of paddles
+			each with an add new. goddamn this is confusing
+
+maybe try doing it using my subform thingie!
+	conditionalise the subform, based on what i've got there
+	rememebr, i'm in control of validate, out at the setup point!
+
+if i want to get fancy, i can also assign specific paddles instead of auto!
+	i.e. intead of calling createpaddles, just assign them here
+	thus solving two problems at once!
+
+really fucked up. i think i'm checking for FORM in a few places
+	and useform really fucks that up?
+
+
+
+what if i start from scratch.
+	ticketwizard does ugly things. what if i replace it with the new interface?
+	enter code OR popup? i no longer need the old deal!
+
+
+fix donations, goddamit, 1526
+	hmm. ticketwizard/rsvpwizard is utterly fucked. 
+		need to prependtable throughout
+		which, could suck. i'm re-using a lot
+
+	ah. addrequiredfields is just plain broken
+		it should add them all
+
+	ok. where do i use coopform, and can i hack around this mess
+		savepaid. i could cycle thru passvarsthrough() maybe
+			also the getelement shit. gah... refreshes will kill me
+			and setdefaults too
+			maybe globally set vars?
+ 			process! totally broken in ticket and leads_income. gah
+				again, unless i customise the vars
+		savecomp is a bit simpler, but same issue
+		editaddress: also a total fucking botch
+
+
+	then add the money. wizard, perhaps?
+		becomes a variant on tickets!
+		because... they need to purchase a ticket. duh.
+
+	at-the-door paddles
+		income for payment of paddles!
+			how to deal with multiple paddles to ticket/income??
+			huh? wtf does that mean?
+				it means, asshole, that one check may pay for > 1 ticket
+		enter paddle, lead, then money.
+		this miht be easy! the money stuff might be trickiest/wizardy
+
+
+	genericise?
+		i have nested things, in general, done. what am i missing?
+		nested MULTIPLES: like a multi-select, but with edit/new
+			i.e. income -> paddle -> auctionpurchases
+			or income -> ticket/donation
+			or family -> parents (2)
+			or family -> policy -> vehicle
+		
+don't show the tickets only
+	gah. i hacked around with findthanksneeded, but i need to fix the query
+		i.e., error out if findthanksneeded is not the query
+		good luck figuring out how to do the query in sql ;-)
+
+
+
+clean up erin's manually-sent invites
+
+auction purchases
+	one big thing:
+		first enter check.
+			once it is entered, freeze it or htable it
+				with an edit button, for future edits
+				how to know?
+		then enter a bunch of paddles
+			trick is how to show that shit
+			same problem as above
+			naw, use my multi-select thing!
+		for each paddle, list of items
+			AND PURCHASE PRICE! that's the kicker
+		action? the nextaction on all the subs go back to top?
+			do frozens include hidden? or not?
+	
+	it's a fucking wizard again!
+		check
+		paddle
+		items
+
+		details-style?
+			list all the auction purchases for this
+				with edit/delete
+			and a new button pre-populated with income
+		my ugly all-forms-together?
+			use the fact that some fields overlap
+			naw, won't work for multiples.
+
