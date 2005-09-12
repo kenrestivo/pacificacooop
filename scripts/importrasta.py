@@ -137,12 +137,17 @@ class Adder:
     def wrapper(self):
         """abstract the process of choosing an existing record
         or adding a new one"""
+        pid=0
+        update=1
         try:
-            return self.get()
+            pid = self.get()
         except NoneFound:
-            return self.add()
+            pid = self.add()
+            update=0
         except TooManyFound:
-            return self.choose()
+            pid = self.choose()
+        update and self.update(pid)
+        return pid
 
     def _get(self, query):
         """utility used by get() methods of subclasses"""
@@ -169,6 +174,10 @@ class Adder:
         print "no, that's not OK. try again"
         return self.choose()        # can i tail recurse? will it do it?
 
+    def update(self,pid):
+        """Base virtual method"""
+        pass
+
 
 class Family(Adder):
     def get(self):
@@ -187,6 +196,25 @@ class Family(Adder):
                   (self.rec['Last Name'], self.rec['Phone'],
                    self.rec['Address'], self.rec['Email']))
         return c.lastrowid
+
+    def update(self, pid):
+        """keepin' it real, y'know what i'm sayin'?"""
+        new=[self.rec['Phone'], self.rec['Address'], self.rec['Email']]
+        c.execute("""select * from families where family_id = %s""", (pid))
+        f=c.fetchall()[0]  #assume only 1? XXX exept IndexError if wrong!
+        old=[str(x) for x in [f['phone'], f['address1'], f['email']]]
+        if new != old:
+            n=raw_input('OLD [%s]\n NEW [%s]\n use new? y/n ' %
+                        (','.join(old), ','.join(new)))
+            if n == 'y':
+                c.execute("""update families set phone = %s,
+                address1 = %s, email = %s where family_id = %s""",
+                          (self.rec['Phone'],
+                           self.rec['Address'], self.rec['Email'],
+                           pid))
+        return
+        
+
 
 class Kid(Adder):
     def __init__(self, c, rec, family_id):
