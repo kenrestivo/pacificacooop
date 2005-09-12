@@ -33,7 +33,6 @@ class Table_permissions extends DB_DataObject
 	var $fb_fieldLabels = array(
 		'table_name' => 'Table',
         'field_name' => 'Field',
-        'group_id' => 'Group',
         'realm_id' => 'Data/Menu Realm',
         'user_level' => 'Forbid this action level, or any above, to user\'s own data, ever.',
         'group_level' => 'Forbid this action to other families\' data, unless permitted.',
@@ -44,9 +43,37 @@ class Table_permissions extends DB_DataObject
 
 	var $fb_requiredFields = array('table_name', 'realm_id');
 
+
+
+
+    function preGenerateForm(&$form)
+        {
+
+            // TODO: heirselect!
+            $foo = $this->factory('table_permissions');
+			$foo->query('show tables');
+			$options[] = '-- CHOOSE ONE --';
+            confessObj($this, 'this');
+            $thing='Tables_in_'.$this->_database;
+			while($foo->fetch()){
+				$options[$foo->$thing] = $foo->$thing;
+			}
+			$el =& HTML_QuickForm::createElement(
+                'select', 
+                $form->CoopForm->prependTable('table_name'), 
+                $this->fb_fieldLabels['table_name'], 
+                &$options);
+            $this->fb_preDefElements['table_name'] = $el;
+			return $el;
+            
+        }
+
+
+
     function fb_display_summary(&$co)
         {
-            /// TODO: the simple summary of what i can do
+            /// TODO: the simple summary of what i can do to thistable
+            /// and.... who can do it if i cannot!
             
         }
 
