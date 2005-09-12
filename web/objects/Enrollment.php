@@ -49,6 +49,7 @@ class Enrollment extends DB_DataObject
 	var $fb_linkDisplayFields = array('school_year', 'am_pm_session');
     var $fb_orderBy = 'school_year, am_pm_session';
     
+    var $fb_formHeaderText = 'Enrollment Roster';
 //var $fb_usePage = 'newroster.php';
     
     var $fb_shortHeader = 'Roster';
@@ -151,9 +152,28 @@ class Enrollment extends DB_DataObject
     function fb_display_view(&$co)
         {
 
+            
+            
+            // NOW actually run the query
+
+            
+            $res .= $this->_prepareView(&$co, 'AM');  
+
+            // i need separate copies for am/pm
+            $co2 = new CoopView(&$co->page, $co->table, &$nothing);
+            $res .= $co2->obj->_prepareView(&$co2, 'PM');
+
+            return $res; 
+
+            
+        }
+
+    function _prepareView(&$co, $session)
+        {
             // TODO: do not show dropped enrollment!
+
             $rastaquery = 
-                'select distinct enrollment_id, kids.last_name as kid_last, 
+                'select  enrollment_id, kids.last_name as kid_last, 
 concat(moms.first_name, " ", 
 moms.last_name) as mom,
 concat(dads.first_name, " ", dads.last_name) as dad, 
@@ -179,11 +199,11 @@ and job_assignments.school_year = "%s"
 left join job_descriptions 
 on job_descriptions.job_description_id = job_assignments.job_description_id
 left join workers on (workers.parent_id = moms.parent_id or workers.parent_id =dads.parent_id) and workers.school_year = "%s"
-where enrollment.school_year = "%s"
+where enrollment.school_year = "%s" and enrollment.am_pm_session = "%s"
+group by enrollment_id
 order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             
-            
-            $this->fb_fieldLabels = 
+            $co->obj->fb_fieldLabels = 
                 array ('am_pm_session' => 'Session',
                        'kid_last' => 'Last Name',
                        'mom' => 'Mom Name',
@@ -203,27 +223,28 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
                        'dropout_date' => "Drop Date",
                        );
             
-            // TODO: add in the split for am/pm, in to separate tables
-            $this->query(sprintf($rastaquery, 
-                               $co->page->currentSchoolYear,
-                               $co->page->currentSchoolYear,
-                               $co->page->currentSchoolYear));
 
+            $this->fb_formHeaderText .= 
+                " {$co->page->currentSchoolYear} $session session";
 
             foreach(array('monday', 'tuesday', 'wednesday', 
                           'thursday', 'friday') as $field)
             {
                 // these are tinyint's; override that 
-                $this->fb_displayCallbacks[$field] = 'checkWorkday';
+                $co->obj->fb_displayCallbacks[$field] = 'checkWorkday';
             }
 
+            $co->obj->query(sprintf($rastaquery, 
+                                 $co->page->currentSchoolYear,
+                                 $co->page->currentSchoolYear,
+                                 $co->page->currentSchoolYear, 
+                                 $session));
 
-            $res .= $co->simpleTable(false);
 
+            return $co->simpleTable(false);
 
-            return $res;
-            
         }
+
 
     function checkWorkday($val, $key)
         {
