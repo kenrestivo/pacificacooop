@@ -254,7 +254,7 @@ class Parent(Adder):
         (soundex(first_name) = soundex('%%%s%%')
         or first_name like '%%%s%%') and family_id = %d""" %
                             (self.rec[self.type+'_first'],
-                             self.rec[self.type+'_first'],
+                             self.rec[self.type+'_first'].split()[0],
                              self.family_id))
 
     def add(self):
