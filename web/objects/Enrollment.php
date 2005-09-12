@@ -153,10 +153,7 @@ class Enrollment extends DB_DataObject
         {
 
             
-            
-            // NOW actually run the query
-
-            
+            // XXX not very object-oriented, but, fuck it, it works
             $res .= $this->_prepareView(&$co, 'AM');  
 
             // i need separate copies for am/pm
@@ -204,8 +201,7 @@ group by enrollment_id
 order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             
             $co->obj->fb_fieldLabels = 
-                array ('am_pm_session' => 'Session',
-                       'kid_last' => 'Last Name',
+                array ('kid_last' => 'Last Name',
                        'mom' => 'Mom Name',
                        'dad' => 'Dad/Partner',
                        'kid_first' => 'Child',
