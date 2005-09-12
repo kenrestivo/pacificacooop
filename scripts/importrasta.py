@@ -107,7 +107,7 @@ class RastaImport:
             return d
         else:
             return date.fromordinal(
-                int(d)+
+                int(d) - 2 +
                 date.toordinal(date(1900,1,1))).strftime("%m/%d/%y")
 
 ####END of rastaimport class
