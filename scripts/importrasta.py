@@ -230,17 +230,42 @@ class Kid(Adder):
 
         #TODO: handle the situation where the family last name is a duplicate!
     def add(self):
-        d=map(int, self.rec['DOB'].split('/'))
-        d.insert(0,d.pop())             # date wants y,m,d
-        if d[0] < 1900: d[0]+=1900
-        if d[0] < 1950: d[0]+=100
         print "inserting new kid %s %s" % (self.rec['Child'],
                                            self.rec['Last Name'])
         c.execute("""insert into kids set last_name = %s, first_name = %s,
                     family_id = %s, date_of_birth = %s""",
                   (self.rec['Last Name'], self.rec['Child'],
-                   int(self.family_id), datetime.date(*d)))
+                   int(self.family_id), self._human_to_dt(self.rec['DOB'])))
         return c.lastrowid
+
+
+    def _human_to_dt(self,dob):
+        d=map(int, dob.split('/'))
+        d.insert(0,d.pop())             # date wants y,m,d
+        if d[0] < 1900: d[0]+=1900
+        if d[0] < 1950: d[0]+=100
+        return datetime.date(*d)
+
+
+    def update(self, pid):
+        """keepin' it real, y'know what i'm sayin'?"""
+        new=[self.rec['DOB']]
+        c.execute("""select * from kids where kid_id = %s""", (pid))
+        f=c.fetchall()[0]  #assume only 1? XXX exept IndexError if wrong!
+        try:
+            old=[f['date_of_birth'].strftime('%m/%d/%y')]
+        except AttributeError:
+            old=''
+        if new != old:
+            n=raw_input('OLD [%s]\n NEW [%s]\n use new? y/n ' %
+                        (','.join(old), ','.join(new)))
+            if n == 'y':
+                c.execute("""update kids set date_of_birth = %s
+                 where kid_id = %s""",
+                          (self._human_to_dt(self.rec['DOB']),
+                           pid))
+        return
+
 
 
 class Enrollment(Adder):
