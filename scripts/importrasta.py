@@ -190,8 +190,9 @@ class Family(Adder):
         #TODO: handle the situation where the family last name is a duplicate!
     def add(self):
         """simple insert wrapper"""
-        print "inserting new family %s" % (self.rec['Last Name'])
-        c.execute("""insert into families set name = %s, phone = %s,
+        n=raw_input("insert new family %s (y/n)? " % (self.rec['Last Name']))
+        if n == 'y':
+            c.execute("""insert into families set name = %s, phone = %s,
                     address1 = %s, email = %s""",
                   (self.rec['Last Name'], self.rec['Phone'],
                    self.rec['Address'], self.rec['Email']))
@@ -231,12 +232,13 @@ class Kid(Adder):
 
         #TODO: handle the situation where the family last name is a duplicate!
     def add(self):
-        print "inserting new kid %s %s" % (self.rec['Child'],
-                                           self.rec['Last Name'])
-        c.execute("""insert into kids set last_name = %s, first_name = %s,
-                    family_id = %s, date_of_birth = %s""",
-                  (self.rec['Last Name'], self.rec['Child'],
-                   int(self.family_id), self._human_to_dt(self.rec['DOB'])))
+        n=raw_input("insert new kid %s %s (y/n)? " % (self.rec['Child'],
+                                           self.rec['Last Name']))
+        if n == 'y':
+            c.execute("""insert into kids set last_name = %s, first_name = %s,
+            family_id = %s, date_of_birth = %s""",
+                      (self.rec['Last Name'], self.rec['Child'],
+                       int(self.family_id), self._human_to_dt(self.rec['DOB'])))
         return c.lastrowid
 
 
@@ -288,14 +290,18 @@ class Enrollment(Adder):
       #TODO: handle a *change*, i.e. from am/pm
 
     def add(self):
-        c.execute("""insert into enrollment set 
-                        kid_id = %s, school_year = %s, am_pm_session = %s,
-                        start_date = %s , monday = %s, tuesday = %s,
-                        wednesday = %s, thursday = %s, friday = %s""",
-                  tuple([self.kid_id, school_year, self.rec['session'],
-                         first_day_of_school] +
-                         [self.rec[i] is not '' for i in
-                          ['M','Tu', 'W','Th','F']]))
+        n=raw_input("insert new enrollment for %s %s %s (y/n)?" %
+                    (self.rec['Child'], self.rec['Last Name'],
+                     self.rec['session']))
+        if n == 'y':
+            c.execute("""insert into enrollment set 
+            kid_id = %s, school_year = %s, am_pm_session = %s,
+            start_date = %s , monday = %s, tuesday = %s,
+            wednesday = %s, thursday = %s, friday = %s""",
+                      tuple([self.kid_id, school_year, self.rec['session'],
+                             first_day_of_school] +
+                            [self.rec[i] is not '' for i in
+                             ['M','Tu', 'W','Th','F']]))
         return c.lastrowid
 
 
@@ -317,9 +323,11 @@ class Parent(Adder):
                              self.family_id))
 
     def add(self):
-        print "inserting new parent %s %s" % (self.rec[self.type+'_first'],
-                                           self.rec[self.type+'_last'])
-        c.execute("""insert into parents set last_name = %s, first_name = %s,
+        n=raw_input("insert new parent %s %s (y/n)?" %
+                    (self.rec[self.type+'_first'],
+                     self.rec[self.type+'_last']))
+        if n == 'y':
+            c.execute("""insert into parents set last_name = %s, first_name = %s,
                     family_id = %s, type = %s""",
                   (self.rec[self.type+'_last'], self.rec[self.type+'_first'],
                    int(self.family_id), self.type))
@@ -344,7 +352,10 @@ class Worker(Adder):
 
 
     def add(self):
-        c.execute("""insert into workers set 
+        n=raw_input("insert new worker %s %s (y/n)? " %
+                    (self.rec['Last Name'], self.rec['session']))
+        if n == 'y':
+            c.execute("""insert into workers set 
                         parent_id = %s, school_year = %s, am_pm_session = %s,
                         workday = %s, epod = %s""" ,
                   (self.parent_id, school_year, self.rec['session'],
