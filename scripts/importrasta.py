@@ -258,12 +258,13 @@ class Kid(Adder):
             oldshort=['/'.join(map(str,[d.month,d.day,d.strftime('%y')]))]
             oldlong=[d.strftime('%m/%d/%y')]
         except AttributeError:
-            old=''
+            oldlong=''
+            oldshort=''
         if new != oldlong and new != oldshort:
             print 'data changed for %s %s...' % (self.rec['Child'],
                                                  self.rec['Last Name'])
             n=raw_input('OLD [%s]\n NEW [%s]\n use new? y/n ' %
-                        (','.join(old), ','.join(new)))
+                        (','.join(oldshort), ','.join(new)))
             if n == 'y':
                 c.execute("""update kids set date_of_birth = %s
                  where kid_id = %s""",
