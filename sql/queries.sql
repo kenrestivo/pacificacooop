@@ -1487,5 +1487,14 @@ order by  workday
 
 
 
+--- the enrollment summary
+select  am_pm_session, sum(monday) as monday, sum(tuesday) as tuesday, 
+sum(wednesday) as wednesday, 
+sum(thursday) as thursday, sum(friday) as friday
+from enrollment
+where enrollment.school_year = "2005-2006" 
+group by am_pm_session
+order by enrollment.am_pm_session
+
 
 --- EOF
