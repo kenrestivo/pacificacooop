@@ -41,8 +41,7 @@ class Enhancement_hours extends DB_DataObject
         'school_year'=> 'School Year'
         );
 
-    var $fb_usePage = 'enhancement_hours.php';
-    
+      
     var $fb_shortHeader = 'Hours';
 
     var $fb_requiredFields = array(

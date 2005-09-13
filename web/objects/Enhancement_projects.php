@@ -26,7 +26,6 @@ class Enhancement_projects extends DB_DataObject
 	
 	var $fb_linkDisplayFields = array ('project_name');
 
-    var $fb_usePage = 'enhancement_projects.php';
     
     var $fb_shortHeader = 'Projects';
     
