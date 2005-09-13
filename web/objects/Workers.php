@@ -85,6 +85,14 @@ class Workers extends DB_DataObject
 
     function  fb_display_summary(&$co)
         {
+
+            ///XXX HACK! ispermitted field is returning NO for regular users anyway
+            if($co->isPermittedField(null,true) <  ACCESS_VIEW){
+                return '';
+            }
+
+            $res = '';
+            $this->fb_formHeaderText = 'Workday Summary';
             $this->fb_recordActions = array();
             $this->fb_fieldsToRender = array('workday', 'AM', 'PM');
             $this->fb_fieldLabels = array(
@@ -102,7 +110,31 @@ where school_year = "%s"
 group by  workday
 order by  workday',
                     $co->page->currentSchoolYear));
-            return $co->simpleTable(false);
+            $res .= $co->simpleTable(false);
+
+
+            /// EPODS
+            $co2 = new CoopView(&$co->page, $co->table, &$nothing);
+            $co2->obj->fb_formHeaderText = 'EPOD Summary';
+            $co2->obj->fb_recordActions = array();
+            $co2->obj->fb_fieldsToRender = array('epod', 'AM', 'PM');
+            $co2->obj->fb_fieldLabels = array(
+                'epod' => 'EPOD',
+                'AM' => 'Total AM',
+                'PM' => 'Total PM'
+                );
+
+            $co2->obj->query(
+                sprintf('select epod, sum(if(am_pm_session = "AM", 1,0 )) as AM, 
+sum(if(am_pm_session = "PM", 1,0 )) as PM
+from workers 
+where school_year = "%s"
+group by  epod
+order by  epod',
+                         $co->page->currentSchoolYear));
+            
+            $res .= $co2->simpleTable(false);
+            return $res;
 
         }
 
