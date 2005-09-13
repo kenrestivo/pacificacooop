@@ -256,4 +256,27 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             return $val ? 'c' : '';
         }
 
+
+    function  fb_display_summary(&$co)
+        {
+            foreach(array('monday', 'tuesday', 'wednesday', 
+                          'thursday', 'friday') as $day){
+                $this->fb_displayFormat[$day] = '%d';
+            }
+
+            $this->fb_fieldsToUnRender = array('start_date', 
+                                               'dropout_date',
+                                               'kid_id');
+
+            $this->fb_formHeaderText = 'Enrollment Session Summary';
+            $this->fb_recordActions = array();
+            $this->query(
+                sprintf(
+                    'select  am_pm_session, sum(monday) as monday, sum(tuesday) as tuesday, sum(wednesday) as wednesday, sum(thursday) as thursday, sum(friday) as friday from enrollment where enrollment.school_year = "2005-2006" group by am_pm_session order by enrollment.am_pm_session',
+                    $co->page->currentSchoolYear));
+            return $co->simpleTable(false);
+
+        }
+
+
 }
