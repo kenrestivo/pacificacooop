@@ -83,6 +83,29 @@ class Workers extends DB_DataObject
 
  		}
 
+    function  fb_display_summary(&$co)
+        {
+            $this->fb_recordActions = array();
+            $this->fb_fieldsToRender = array('workday', 'AM', 'PM');
+            $this->fb_fieldLabels = array(
+                'workday' => 'Work Day',
+                'AM' => 'Total AM',
+                'PM' => 'Total PM'
+                );
+            $this->query(
+                sprintf(
+'select  
+workday, sum(if(am_pm_session = "AM", 1,0 )) as AM, 
+sum(if(am_pm_session = "PM", 1,0 )) as PM
+from workers 
+where school_year = "%s"
+group by  workday
+order by  workday',
+                    $co->page->currentSchoolYear));
+            return $co->simpleTable(false);
+
+        }
+
 
 
 }
