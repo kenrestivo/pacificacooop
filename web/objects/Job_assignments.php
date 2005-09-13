@@ -40,4 +40,15 @@ class Job_assignments extends DB_DataObject
 								   'school_year',
 								   'family_id');
 
+    function fb_linkConstraints(&$co)
+		{
+            $descr = $this->factory('job_descriptions');
+            $this->joinAdd($descr);
+            $this->orderBy('summary');
+            $this->whereAdd(sprintf('school_year = "%s"',
+                                    $co->page->currentSchoolYear));
+   
+            
+        }
+
 }
