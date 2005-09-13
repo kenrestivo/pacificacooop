@@ -47,33 +47,35 @@ class Parents extends DB_DataObject
 	function fb_linkConstraints(&$co)
 		{
 
-            $enrollment =  $this->factory('enrollment');
+            $this->orderBy('parents.last_name, parents.first_name');
 
             // HACK! this is presuming VIEW, but in popup it could be EDIT
             if($co->perms[NULL]['year'] < ACCESS_VIEW){
+                $enrollment =  $this->factory('enrollment');
                 ///NOTE! no dropout dates, need to show paretnts for enhancement
                 $enrollment->whereAdd(
                     sprintf('enrollment.school_year = "%s"',
-                        $co->page->currentSchoolYear));
-            }
-
-            $kids =  $this->factory('kids');
-            $kids->joinAdd($enrollment);
+                            $co->page->currentSchoolYear));
 
 
-            $families =  $this->factory('families');
-            $families->joinAdd($kids);
+                $kids =  $this->factory('kids');
+                $kids->joinAdd($enrollment);
 
 
-            $this->joinAdd($families);
-            $this->orderBy('parents.last_name, parents.first_name');
+                $families =  $this->factory('families');
+                $families->joinAdd($kids);
 
-            $this->selectAdd();
-            $this->selectAdd("{$co->table}.*");
-            $this->selectAdd("max(enrollment.school_year) 
+
+                $this->joinAdd($families);
+
+
+                $this->selectAdd();
+                $this->selectAdd("{$co->table}.*");
+                $this->selectAdd("max(enrollment.school_year) 
                                                 as school_year");
-            $this->groupBy("{$co->table}.{$co->pk}");
+                $this->groupBy("{$co->table}.{$co->pk}");
 
+            }
             //confessObj($co, 'sure it is an objec');
             //r$co->debugWrap(5);
 

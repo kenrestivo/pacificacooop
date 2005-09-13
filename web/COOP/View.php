@@ -338,7 +338,8 @@ class coopView extends CoopObject
 			///confessArray($this->obj->toArray(), 'makeheader:toarray');
 			// get the fieldnames out the dataobject
 
-            $labels = array_keys($this->obj->fb_fieldLabels);
+            $labels = is_array($this->obj->fb_fieldLabels) ? 
+                array_keys($this->obj->fb_fieldLabels) : array();
 
 			foreach($this->reorder($this->obj->toArray()) as $key => $trash){
 				//print "checking $key<br>";

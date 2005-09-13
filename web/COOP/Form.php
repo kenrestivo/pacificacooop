@@ -139,12 +139,6 @@ class coopForm extends CoopObject
 				// deal with tablenamign these thigns
 				$fullkey = $this->prependTable($key);
 
-                // need this in a couple places, so cache it
-                //XXX hack to inject family id into new records!! AIIEE
-                if(!$this->id){
-                    $this->obj->family_id = 
-                        $this->page->userStruct['family_id'];
-                }
 
                 $perms = $this->isPermittedField($key, false, !$this->id);
 
@@ -493,8 +487,11 @@ class coopForm extends CoopObject
             $prepended[$this->prependTable('school_year')] = 
                 $this->page->currentSchoolYear;
             
-            $prepended[$this->prependTable('family_id')] = 
-                $this->page->userStruct['family_id'];
+            // XXX DUH! otherwise it won't let a new family go in there.
+            if($this->pk != 'family_id'){
+                $prepended[$this->prependTable('family_id')] = 
+                    $this->page->userStruct['family_id'];
+            }
             
             //NOTE this overrides the above
 			foreach($this->obj->fb_defaults as $key => $val){

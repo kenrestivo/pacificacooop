@@ -287,7 +287,7 @@ switch($_REQUEST['action']){
          break;
      }
 
-	 print "<p>Are you sure you wish to delete this? Click 'Delete' below to delete it, or the 'Back' button in your broswer to cancel.</p>";	 
+	 print "<p>Are you sure you wish to delete this? Click 'Delete' or 'Cancel' to go back.</p>";	 
      $atdf = new CoopForm(&$cp, $_REQUEST['table'], $none); 
 	 $atdf->build($_REQUEST);
 

@@ -102,7 +102,7 @@ class RastaImport:
 
     def _dateFix(self, d):
         """Deal with Excel dates, which sometimes come up unformatted
-        as integers"""
+        as integers. NOTE the -2 to deal with excel/lotus bugs."""
         if d.count('/') > 1:
             return d
         else:

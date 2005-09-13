@@ -35,6 +35,25 @@ family_id and school_year are *special* fields
 
 
 
+to create a new table: est time per table: 1-2 hours
+	add to sql/definitions.sql and then copy/paste definition into SQL
+	cd web; make update-dbobject update-links
+	edit the resulting table in objects/Tablename.php
+		fbformheadertext and fbshortheader and fblongheader
+		fbrequiredfields
+		fbfieldlabels
+		linkdisplayFields
+        linkConstraints() function
+		optional
+			fbcrosslinks
+			any overrides: fb_display_FOO, pre/postgenerateform, etc
+	add it to a realm
+		optionally add a realm if not already there
+		if the realm is new, add a default to user_privileges
+	add it to table_privileges, with menu/usr/group level
+
+
+
 
 ---------------
 

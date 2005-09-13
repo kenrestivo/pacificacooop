@@ -1,5 +1,25 @@
  notes on teh permissions redesign
 
+rights
+	view
+	have in menu
+	edit
+	add
+	delete
+	post to public site
+	adminiser perms
+	
+on (range?)
+	mine
+	other peoples
+	other years
+
+to
+	user
+	group
+
+
+-----------
 
 ???
 build a unit test of the existing permissions results

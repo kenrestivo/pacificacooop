@@ -46,35 +46,39 @@ class Kids extends DB_DataObject
 
             $enrollment =  $this->factory('enrollment');
 
+
+            $this->orderBy('last_name, first_name');
+
             // HACK! this is presuming VIEW, but in popup it could be EDIT
             if($co->perms[NULL]['year'] < ACCESS_VIEW){
                 $enrollment->whereAdd(
                     '(dropout_date is null or dropout_date < "2000-01-01")');
-            }
 
 
-            $this->joinAdd($enrollment);
-            $this->orderBy('last_name, first_name');
 
-            // IMPORTANT! otherwise it matches old year
-            $this->selectAdd('max(school_year) as school_year');
-            $this->groupBy("{$co->table}.{$co->pk}");
+                $this->joinAdd($enrollment);
+
+                // IMPORTANT! otherwise it matches old year
+                $this->selectAdd('max(school_year) as school_year');
+                $this->groupBy("{$co->table}.{$co->pk}");
 
 
-            /// AGAIN, nasty hack
-            if($co->perms[NULL]['year'] < ACCESS_VIEW){
                 // TODO! support chooser
                 $this->whereAdd(
                     "enrollment.school_year = '{$co->page->currentSchoolYear}'");
+
+
+
+
+                $this->selectAdd();
+                $this->selectAdd("{$co->table}.*");
+                $this->selectAdd("max(enrollment.school_year) 
+                                                as school_year");
+                $this->groupBy("{$co->table}.{$co->pk}");
+
+
             }
 
-
-
-            $this->selectAdd();
-            $this->selectAdd("{$co->table}.*");
-            $this->selectAdd("max(enrollment.school_year) 
-                                                as school_year");
-            $this->groupBy("{$co->table}.{$co->pk}");
             //$co->debugWrap(2);
 
 			// ugly, but consisent. only shows families for this year

@@ -1,6 +1,11 @@
 email subscription notes
 
-need hooks for new news insertion or edit: trigger an email
+need hooks for new 
+	blog insertion or edit: 
+	any rasta-related table edit or add
+
+
+trigger an email
 	or, let the user do it manually?
 
 

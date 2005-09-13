@@ -29,7 +29,7 @@ global $dbhost ;
 global $debug;
 
 // #let me overide
-$debug = isset($debug) ? $debug : 2;
+$debug = isset($debug) ? $debug : 4;
 $dbuser = "springfest";
 $dbpwd = "92xPi9";
 $dbhost =  "bc";

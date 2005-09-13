@@ -343,8 +343,13 @@ group by user_id,table_name,field_name";
 			}
             
             //XXX this is totally wrong still. is it really separate from below?
-            if($key == 'school_year' && $this->perms[NULL]['year'] < ACCESS_VIEW){
-                return false;
+            if($key == 'school_year' && 
+               $this->perms[NULL]['year'] < ACCESS_VIEW)
+            {
+            	$this->page->printDebug(
+                    "ispermitted($this->table : $key) is school_year and you don't have year permissions", 
+                    4);
+			    return false;
             }
 			
 

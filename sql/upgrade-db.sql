@@ -1,13 +1,19 @@
 -- HEREIT IS!
 
--- add parent ed attendance (definition)
--- add realm attendance
--- add table parent_ed to realm attendance
--- add default perms view/view/view for group members and teachers
--- add admin perms for margolis
+-- add parent ed attendance (definition) DONE
+
+--cvs the thing DONe
+
+-- add realm attendance DONE
+
+-- add table parent_ed to realm attendance DONE
+
+-- add default perms view/view/view for group members and teachers DONE
+
+-- add admin perms for margolis on attendance DONE
 
 
--- users groups to table: edit/edit/admin/admin
+-- usersgroupsjoin to table perms: edit/edit/admin/admin WHAT THE FUCK does this mean ah. ok. i need to add the usersgroupsjoin to the perms table so that it shows up in my crosslinks DONE
 
 -- add board groups, with admin perms for blog, for starters anyway
 

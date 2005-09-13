@@ -1,5 +1,51 @@
 broken springfest items
 
+
+easy ones i need to deal with
+	[packaging_checkin.php] => 9
+	[program_ads.php] => 10
+	[solicit_ads.php] => 15
+	[solicit_company.php] => 11
+	[flyer_company.php] => 23
+	
+
+
+	have a look through any Coop* or objects/* code for XXX's
+
+???
+	dispatch based on realm!
+	 
+	[auction.php] => 5
+	[packaging_checkin.php] => 9
+	[solicit_auction.php] => 12
+	
+	
+	[invitation_cash.php] => 6
+	[money.php] => 7
+	[solicit_cash.php] => 13
+	[raffle_finance.php] => 22
+	[reconciliation.php] => 27
+	
+	
+	
+	[program_ads.php] => 10
+	[solicit_ads.php] => 15
+	
+	[solicit_company.php] => 11
+	[flyer_company.php] => 23
+	
+	try just redirecting output, and executing the target page!
+		might need to copy in any items gaspacho needs, like ID
+			look elsewhere i might have done this. generic? form->build()?
+		that WILL NOT WORK, because i've already done pagetop, etc.
+			instead, i can do what states.inc does.
+
+
+	watch out for flipping back and forth between things (i.e. in details)
+		my realms could get all fucked up and out of sync.
+
+
+
 		gah... all of the conditional branches, i.e. edit, lookup, DNC!
 			will need to create a tree function somewhere
 
@@ -122,4 +168,39 @@ auction purchases
 		my ugly all-forms-together?
 			use the fact that some fields overlap
 			naw, won't work for multiples.
+
+
+batch deposit summaries for lisa
+
+tickets for solicitation? gah.
+
+thank you notes, details, etc, are all b0rken
+
+
+the manual entry of the OTHER paddles
+	text file homeboy, or, a simple gui with ugly back-end
+	have a look at the actual data first. see what you need.
+
+what do i want?
+	AUCTION PURCHASE WIZARD
+		income/payment
+			paddle number(s)
+				package number and price
+	ROSTER WIZARD
+		new family add/edit
+	PADDLE WIZARD
+		edit (or enter) existing paddle number
+		then branch do the ticket/rsvp wizard!
+		don't create a new paddle if one's already provided
+	TICKET WIZARD
+		similar to RSVP, but starts with ticket type!
+			different entry point into the beast
+	RSVP WIZARD
+		enter lead_id
+			or pick from db!!
+			and perform actions on it: DNC, edit
+		enter stuff to decide where to dispatch
+			vip, amount, #tickets
+		finally, either the leads income join, or tickets
+			decide which it is, and call it
 

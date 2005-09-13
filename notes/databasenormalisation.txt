@@ -1,9 +1,6 @@
 notes on the database normalisation project
 
 
-	people merge (after my nested form shit works!!)
-		lead/company/parents/kids => people
-		auctionmerges: no more solicit vs personal anymore!
 
 	finally drop hte duplicates fields:
 		first/last: 
@@ -12,6 +9,11 @@ notes on the database normalisation project
 			leads, companies, families
 		orgs/companies:
 			leads, companies, flyerlocation, rafflelocation
+
+
+	people merge (after my nested form shit works!!)
+		lead/company/parents/kids => people
+		auctionmerges: no more solicit vs personal anymore!
 
 
 
@@ -50,3 +52,18 @@ DB CHANGES!
 	table changes:
 		leads gets renamed to invitations and becomes a join
 
+
+dupes
+	for a company
+		WHICH is the master, which is the dupe??!!!
+			i got the bottle, you got the cup
+		more data: actually *all* data
+			ah. link to view the dupe details
+				then the radio button in there.
+	on process, for each of the dupes chosen
+		blast through its backlinks
+			each backlink, find all the records that match its ide
+			and change it to the *new* id
+		finally, delete the old record
+	i might have to do this whole goddamed thign again for leads now
+		since i just merged them in. fucker.

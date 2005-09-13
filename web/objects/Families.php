@@ -52,17 +52,19 @@ class Families extends DB_DataObject
                     '(dropout_date is null or dropout_date < "2000-01-01")');
                 $enrollment->whereAdd(
                     sprintf('school_year = "%s"',
-                        $co->page->currentSchoolYear));
+                            $co->page->currentSchoolYear));
+                
+                
+                $kids =  $this->factory('kids');
+                $kids->joinAdd($enrollment, '');
+                
+                $this->joinAdd($kids);
+                $this->selectAdd('max(school_year) as school_year');
             }
 
-            $kids =  $this->factory('kids');
-            $kids->joinAdd($enrollment, '');
-
-            $this->joinAdd($kids);
             $this->orderBy('families.name');
             $this->groupBy('families.name');
-
-            $this->selectAdd('max(school_year) as school_year');
+            
 
 
             //$co->debugWrap(5);

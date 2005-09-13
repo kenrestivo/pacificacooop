@@ -259,6 +259,12 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
 
     function  fb_display_summary(&$co)
         {
+
+            // XXX probably not necessary
+            if($co->isPermittedField(null,true) <  ACCESS_VIEW){
+                return '';
+            }
+
             foreach(array('monday', 'tuesday', 'wednesday', 
                           'thursday', 'friday') as $day){
                 $this->fb_displayFormat[$day] = '%d';
