@@ -1477,13 +1477,14 @@ left join users using (family_id)
 where user_id is null);
 
 --- summary of workdays
-
 select  
-am_pm_session, workday, count(worker_id)
+workday, sum(if(am_pm_session = 'AM', 1,0 )) as AM, 
+sum(if(am_pm_session = 'PM', 1,0 )) as PM
 from workers 
 where school_year = '2005-2006'
-group by am_pm_session, workday
-order by am_pm_session, workday
+group by  workday
+order by  workday
+
 
 
 
