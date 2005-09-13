@@ -168,8 +168,6 @@ function formaggio(&$cp){
 
 	 $atdf->addRequiredFields();
 	 
-	 // make-um bigger
-
 
 	 if ($atdf->validate()) {
 		 print "saving...";

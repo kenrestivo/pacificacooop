@@ -50,7 +50,6 @@ class Enrollment extends DB_DataObject
     var $fb_orderBy = 'school_year, am_pm_session';
     
     var $fb_formHeaderText = 'Enrollment Roster';
-//var $fb_usePage = 'newroster.php';
     
     var $fb_shortHeader = 'Roster';
     

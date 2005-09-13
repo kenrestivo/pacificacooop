@@ -6,11 +6,11 @@ what's available now
 	roster (partial)
 
 available before end of year
-	parent ed attendance
-	job descriptions
-	blog
+	parent ed attendance DONE
+	job descriptions DONE
+	blog DONE
 	insurance
-	calendar
+	calendar DONE
 
 projects i will complete b4 end of next year
 	database "normalisation" (major fixes)

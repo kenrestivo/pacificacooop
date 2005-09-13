@@ -295,17 +295,19 @@ class coopForm extends CoopObject
 		}
 
 
-	// this is called by quickform
+	// this is back-called by quickform.
+	// remember, you have to  pass QF a callback function. THIS is that func
 	function process($vars)
 		{
 			
+            
 			$this->page->confessArray($vars, 
 									  sprintf('CoopForm::process(vars): %s', 
 											  $this->table), 
 									  2);
 
 			$old = $this->obj->__clone($this->obj); // copy, not ref!
-		
+
 			$this->obj->setFrom($this->scrubForSave($vars));
 
 
@@ -467,7 +469,8 @@ class coopForm extends CoopObject
 // 					user_error("CoopForm::addRequiredFields($fieldname)", 
 // 							   E_USER_NOTICE);
 					$this->form->addRule($this->prependTable($fieldname), 
-										 "$key mustn't be empty.", 'required');
+										 "$key mustn't be empty.", 
+                                         'customrequired');
 				}
 			}
 			//confessObj($this->form, 'ahc');
@@ -757,6 +760,7 @@ class coopForm extends CoopObject
 			return sprintf('%s-%s', $this->table , $col);
 		}
 
+    // wrapper so that i can see when it doesn't validate. this is silly
 	function validate()
 		{
 
@@ -767,6 +771,7 @@ class coopForm extends CoopObject
                 $this->page->confessArray($this->form->_errors, 
                                           "CoopForm::validate({$this->table}) didn't validate", 3);
 			}
+            
 
 			return  $temp;
 		}
