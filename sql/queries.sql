@@ -1485,6 +1485,13 @@ where school_year = '2005-2006'
 group by  workday
 order by  workday
 
+select  
+epod, sum(if(am_pm_session = 'AM', 1,0 )) as AM, 
+sum(if(am_pm_session = 'PM', 1,0 )) as PM
+from workers 
+where school_year = '2005-2006'
+group by  epod
+order by  epod
 
 
 --- the enrollment summary
