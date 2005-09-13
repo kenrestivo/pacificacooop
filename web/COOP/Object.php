@@ -489,7 +489,9 @@ group by user_id,table_name,field_name";
 //                 $this->obj->orderBy('school_year desc');
 //             }
 
-              if(is_array($this->obj->fb_linkDisplayFields)){
+              if(is_array($this->obj->fb_linkDisplayFields) && 
+                 count($this->obj->fb_linkDisplayFields) > 0)
+              {
                   $this->obj->orderBy(
                       implode(',', 
                               $this->obj->fb_linkDisplayFields));
