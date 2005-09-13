@@ -1469,4 +1469,23 @@ where enrollment.school_year = '2005-2006'
 order by parent_id
 
 
+--- fix null users
+insert into users (name, family_id) 
+(select concat(families.name, ' Family'), families.family_id 
+from families 
+left join users using (family_id) 
+where user_id is null);
+
+--- summary of workdays
+
+select  
+am_pm_session, workday, worker_id, parents.last_name, parents.first_name
+from workers 
+left join parents on workers.parent_id = parents.parent_id
+where school_year = '2005-2006'
+--group by am_pm_session, workday
+order by am_pm_session, workday, last_name, first_name
+
+
+
 --- EOF
