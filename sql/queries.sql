@@ -1479,12 +1479,11 @@ where user_id is null);
 --- summary of workdays
 
 select  
-am_pm_session, workday, worker_id, parents.last_name, parents.first_name
+am_pm_session, workday, count(worker_id)
 from workers 
-left join parents on workers.parent_id = parents.parent_id
 where school_year = '2005-2006'
---group by am_pm_session, workday
-order by am_pm_session, workday, last_name, first_name
+group by am_pm_session, workday
+order by am_pm_session, workday
 
 
 
