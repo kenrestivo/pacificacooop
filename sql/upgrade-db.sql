@@ -12,7 +12,7 @@ insert into brings_baby
 from workers 
 where brings_baby > 0);
 
-alter table kids drop column brings_baby;
+alter table workers drop column brings_baby;
 
 -- run the doctor import (importrasta.py)
 
