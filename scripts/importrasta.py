@@ -40,6 +40,7 @@ doctor_keys = [
  'Child',
  'Doctor',
  'Doctors Phone',
+ 'Doctors Number',
  'Allergies',
  'Dad/Partner']
 
@@ -455,10 +456,13 @@ class Doctor(Adder):
         n=raw_input("insert new doctor %s (y/n)?" %
                     (self.rec['Doctor']))
         if n == 'y':
+            try:
+                num=self.rec['Doctors Number']
+            except KeyError:
+                num=self.rec['Doctors Phone']
             c.execute("""insert into leads set last_name = %s, first_name = %s,
                     phone  = %s""",
-                  (self.dr_last, self.dr_first[0],
-                   self.rec['Doctors Number']))
+                  (self.dr_last, self.dr_first[0], num))
         self.id=c.lastrowid
         return self.id
 
