@@ -1,6 +1,10 @@
 notes on the database normalisation project
 
 
+aha! my companies are already duplicated in leads!
+	there are 245 companies in leads already i did it!
+	i just need to make the gui deal with that now
+
 
 	finally drop hte duplicates fields:
 		first/last: 

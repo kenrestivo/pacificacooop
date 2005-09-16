@@ -357,6 +357,7 @@ CREATE TABLE kids (
   first_name varchar(255) default NULL,
     date_of_birth date default NULL, 
   allergies varchar(255) default NULL,
+    doctor_id int(32),
  family_id int(32) default NULL,
   PRIMARY KEY  (kid_id),
 ) ;
@@ -947,6 +948,15 @@ parent_ed_attendance_id int(32) primary key not null unique auto_increment,
 parent_id int(32),
 calendar_event_id int(32),
 hours decimal(4,2) default NULL
+);
+
+
+
+create table brings_baby(
+bring_baby_id int(32) primary key not null unique auto_increment,
+worker_id int(32),
+baby_due_date date,
+baby_too_old_date date
 );
 
 

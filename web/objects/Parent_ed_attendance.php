@@ -67,6 +67,7 @@ class Parent_ed_attendance extends DB_DataObject
 
 	function fb_linkConstraints(&$co)
 		{
+            //print "WTF";
             $fam = $this->factory('families');
             $par = $this->factory('parents');
             $par->joinAdd($fam);
@@ -78,6 +79,7 @@ class Parent_ed_attendance extends DB_DataObject
             if($co->isPermittedField(NULL) < ACCESS_VIEW && 
                 $co->page->userStruct['family_id'])
             {
+                // print "HEY!";
                 /// XXX need to check that a familyid exists!
                 $this->whereAdd('parents.family_id  = '. 
                                 $co->page->userStruct['family_id']);
@@ -89,7 +91,7 @@ class Parent_ed_attendance extends DB_DataObject
             $this->school_year = $co->page->currentSchoolYear;
             
             
-            //$co->debugWrap(2);
+            ///$co->debugWrap(2);
 
         }
 

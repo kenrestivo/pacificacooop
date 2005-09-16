@@ -167,10 +167,6 @@ class coopView extends CoopObject
             $this->linkConstraints();
 	
 
-//             $this->obj->orderBy(implode(', ', 
-//                                        $this->obj->fb_linkDisplayFields));
-//             confessObj($this->obj, $this->table);
-
             //// finally, go get 'em!
             if($find){
 				$found = $this->obj->find();
