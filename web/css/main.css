@@ -192,6 +192,14 @@ p.error {
   color: grey;
 }
 
+.altrow1 {  
+  background-color: #dddddd;
+}
+
+.altrow2 {  
+  background-color: #ccccff;
+}
+
 
 @media print { 	
 	#header { display:none }	
