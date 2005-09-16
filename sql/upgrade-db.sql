@@ -14,3 +14,5 @@ where brings_baby > 0);
 
 
 -- run the doctor import (importrasta.py)
+
+-- permissions for allergies and doctor fields: only for EDIT!

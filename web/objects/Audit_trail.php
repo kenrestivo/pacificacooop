@@ -15,6 +15,7 @@ class Audit_trail extends DB_DataObject
     var $index_id;                        // int(32)  
     var $audit_user_id;                   // int(32)  
     var $updated;                         // timestamp(19)  not_null unsigned zerofill binary timestamp
+    var $details;                         // blob(16777215)  blob
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

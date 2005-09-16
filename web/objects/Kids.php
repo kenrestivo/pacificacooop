@@ -16,6 +16,7 @@ class Kids extends DB_DataObject
     var $family_id;                       // int(32)  
     var $date_of_birth;                   // date(10)  binary
     var $allergies;                       // string(255)  
+    var $doctor_id;                       // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -32,7 +33,9 @@ class Kids extends DB_DataObject
 		'last_name' => "Last Name",
 		'family_id' => "Co-Op Family",
 		'first_name' => "First Name",
-		'date_of_birth' => 'Birthday'
+		'date_of_birth' => 'Birthday',
+		'allergies' => 'Allergies',
+        'doctor_id' => 'Doctor'
 	);
 	var $fb_formHeaderText = "Co-Op Students";
     var $fb_shortHeader = 'Students';

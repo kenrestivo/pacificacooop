@@ -92,7 +92,7 @@ class coopView extends CoopObject
 				return;
 			}
 
-			$tab = new HTML_Table('  bgcolor="#ffffff"');	
+			$tab = new HTML_Table();	
 		
 			while($this->obj->fetch()){
 				if(!$rowcnt++){
@@ -101,7 +101,7 @@ class coopView extends CoopObject
                     $header = $this->makeHeader();
                     $this->page->confessArray($header, 'header', 2);
 					$tab->addRow(array_values($header['titles']), 
-							 'bgcolor=#aabbff align=left', 'TH'); 
+							 'class="tabletitles"', 'TH'); 
                 }
 				//$tab->addRow(array_values($this->obj->toArray()));
                 if($this->isPermittedField() < ACCESS_VIEW){
@@ -137,7 +137,7 @@ class coopView extends CoopObject
 
 			while($this->obj->fetch()){
 				$tab->addCol($this->toArray($header['keys']),
-                             'bgcolor="#cccccc"' );
+                             'class="tableheader"' );
 			
 			}
 			if($this->extraRecordButtons){
@@ -378,9 +378,9 @@ class coopView extends CoopObject
             }
 		
 			$toptab = new HTML_Table(
-				'bgcolor="#aa99ff" cellpadding="0" cellspacing="0"');
+				'class="tablecontainer"');
 			$toptab->addRow(array($title, $this->actionButtons()), 
-							'align="center"', "TH");
+							'class="mysteryclass"', "TH");
 			$toptab->addRow(array($contents), 'colspan="2"');
 			
 			return $toptab->toHTML();
@@ -398,7 +398,7 @@ class coopView extends CoopObject
 			
 			$tab->addRow(array($this->title(),
 							   $this->actionButtons()), 
-						 'bgcolor="#aabbff" align="left"', 'TH'); 
+						 'class="tabletitles"', 'TH'); 
 
 			while($this->obj->fetch()){
 				//confessObj($this, 'onelinetable');
@@ -523,6 +523,9 @@ class coopView extends CoopObject
                 }
 			}
             return $res;
+
+            //XXX why doesn't the below actually hide?
+            //return "<div class=\"actionbuttons\">$res</div>";
 
 		}
 
