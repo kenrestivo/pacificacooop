@@ -546,8 +546,6 @@ if __name__ == '__main__':
 
 
 #now the doctor doctor give me the news
-    load('/mnt/kens/ki/proj/coop/imports/AMdr.csv',
-         '/mnt/kens/ki/proj/coop/imports/PMdoctor.csv')
     
     load('/mnt/kens/ki/proj/coop/imports/amdoctors.csv',
          '/mnt/kens/ki/proj/coop/imports/PMdoctors.csv')
