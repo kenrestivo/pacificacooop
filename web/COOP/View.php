@@ -116,8 +116,8 @@ class coopView extends CoopObject
                 			
 			}
 			
-			$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
-								   'bgcolor="#ccccff"');
+			$tab->altRowAttributes(1, 'class="altrow1"', 
+								   'class="altrow2"');
 
 			
 			return $this->tableTitle($tab->toHTML());
@@ -429,8 +429,8 @@ class coopView extends CoopObject
 							 'valign="top"');
 			
 			}
-			$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
-								   'bgcolor="#ccccff"');
+			$tab->altRowAttributes(1, 'class="altrow1"', 
+								   'class="altrow2"');
 
 			$res .= $tab->toHTML();
 			return $res;
