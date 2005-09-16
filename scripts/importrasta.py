@@ -161,6 +161,8 @@ class Adder:
             update=0
         except TooManyFound:
             pid = self.choose()
+            if pid < 1:
+                pid=self.add()
         update and self.update(pid)
         return pid
 
@@ -181,12 +183,18 @@ class Adder:
             print '-----------'
             for j in i.items(): print '%s: %s' % j
         valid=[x[self.pk] for x in self.r]
-        n=input('Pick the %s above (%s): ' %
-                (self.pk,
-                ','.join([str(x) for x in valid])))
-        if int(n) in valid:
-            self.id=n
-            return n
+        try:
+            n=raw_input('Pick the %s above (%s) or "0" for none: ' %
+                        (self.pk,
+                         ','.join([str(x) for x in valid])))
+            if int(n) in valid:
+                self.id=n
+                return n
+            if int(n) == 0:
+                print "using none of the above, adding new"
+                return n
+        except ValueError:
+            print "you need to type a number"
         print "no, that's not OK. try again"
         return self.choose()        # can i tail recurse? will it do it?
 
@@ -300,8 +308,13 @@ class Kid(Adder):
 
     def addDoc(self, dr_id):
         """updates  doctor for this particular kid"""
-        c.execute("""update kids set doctor_id = %s where kid_id = %s""",
-                  (dr_id, self.id))
+        try:
+            allergy=self.rec['Allergies']
+        except KeyError:
+            allergy=self.rec['Notes']
+        c.execute("""update kids set doctor_id = %s, allergies = %s
+        where kid_id = %s""",
+                  (dr_id, allergy, self.id))
         return c.lastrowid
 
 
@@ -437,6 +450,8 @@ class Doctor(Adder):
         Adder.__init__(self, c, rec)
         self.kid_id=kid_id
         dr=self.rec['Doctor'].split()
+        if len(dr) < 2:
+            dr=self.rec['Doctor'].split('.')
         self.dr_last=dr.pop()
         self.dr_first=dr
         
