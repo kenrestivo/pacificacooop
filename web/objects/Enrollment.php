@@ -159,6 +159,8 @@ class Enrollment extends DB_DataObject
             $co2 = new CoopView(&$co->page, $co->table, &$nothing);
             $res .= $co2->obj->_prepareView(&$co2, 'PM');
 
+            $res .= '<p class="small">Legend: W=Worker, c=Child Attends, E=EPOD, B=Brings Baby</p>';
+
             return $res; 
 
             
@@ -259,7 +261,9 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
     function  fb_display_summary(&$co)
         {
 
-            // XXX probably not necessary
+            // XXX probably not necessary. only for those who care
+            // TODO: move this to the REPORT page, along with shirley's counts
+            // make the summary be the family summary
             if($co->isPermittedField(null,true) <  ACCESS_VIEW){
                 return '';
             }

@@ -63,7 +63,7 @@ class Parent_ed_attendance extends DB_DataObject
 	var $fb_shortHeader = 'Parent Ed';
     
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
-
+    var $fb_defaults = array('hours' => 3);
 
 	function fb_linkConstraints(&$co)
 		{

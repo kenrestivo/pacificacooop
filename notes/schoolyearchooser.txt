@@ -7,6 +7,9 @@ schoolyear choooser notes
 		use this in coopform
 		grab ideas from utils.inc
 
+in reports, i need to javascript the schoolyear thingus
+	so that it changes everything.
+
 
 ????
 the schoolyear thing. i need a schoolyear chooser, EVERYWHERE.

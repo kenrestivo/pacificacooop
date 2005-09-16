@@ -78,6 +78,7 @@ order by realm_id) as upriv
 on upriv.realm_id = table_permissions.realm_id
 where user_id = %d and table_name = '%s'
 group by user_id,table_name,field_name";
+    var $changes = array();  // array('field' => array('old'=>serialisedstuff, 'new'=> serialisedstuff))
 
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
 		{
@@ -298,11 +299,6 @@ group by user_id,table_name,field_name";
 			$aud->obj->table_name = $this->table;
 
 			if($insert){
-				// NO CONFIDENcE  in DBDO. use lastinsert instead!
-// 				if($this->obj->{$this->pk} != $this->lastInsertID()){
-// 					user_error("last insert != object's PK! this shouldn't happen",
-// 							   E_USER_ERROR);
-// 				}
                 // NOTE. the coopform insert palready populated $this->id
 				$aud->obj->index_id = $this->id;
 			} else {
@@ -313,6 +309,11 @@ group by user_id,table_name,field_name";
 			if(!$aud->obj->index_id){
 				PEAR::raiseError('NULL audit trail attempt', 666);
 			}
+
+            // serialise and save the details!
+            if(count($this->changes)){
+                $aud->obj->details = serialize($this->changes);
+            }
 
 			$aud->obj->audit_user_id = $this->page->auth['uid'];
 			$aud->obj->insert();

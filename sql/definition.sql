@@ -61,6 +61,7 @@ CREATE TABLE audit_trail (
   index_id int(32) default NULL,
   audit_user_id int(32) default NULL,
   updated timestamp(14) NOT NULL,
+  details longtext,
   PRIMARY KEY  (audit_trail_id),
 ) ;
 

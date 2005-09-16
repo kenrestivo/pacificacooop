@@ -54,7 +54,7 @@ class Job_descriptions extends DB_DataObject
 
 
 	// save it until i square away schoolyear
-//  	var $fb_crossLinks = array(array('table' => 'job_descriptions_families_join', 
+//  	var $fb_crossLinks = array(array('table' => 'job_assignments', 
 //  									 'toTable' => 'families',
 //  									 'toField' => 'family_id',
 //  									 'type' => 'select'));
