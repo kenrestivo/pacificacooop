@@ -160,9 +160,11 @@ class Adder:
             pid = self.add()
             update=0
         except TooManyFound:
-            pid = self.choose()
-            if pid < 1:
+            try:
+                pid = self.choose()
+            except NoneFound:
                 pid=self.add()
+                return pid
         update and self.update(pid)
         return pid
 
@@ -190,9 +192,8 @@ class Adder:
             if int(n) in valid:
                 self.id=n
                 return n
-            if int(n) == 0:
-                print "using none of the above, adding new"
-                return n
+            if int(n) < 1:
+                raise NoneFound
         except ValueError:
             print "you need to type a number"
         print "no, that's not OK. try again"
@@ -468,6 +469,8 @@ class Doctor(Adder):
                              
 
     def add(self):
+        """add a new doctor to the db"""
+        print 'adding new doctor %s' % self.rec['Doctor']
         n=raw_input("insert new doctor %s (y/n)?" %
                     (self.rec['Doctor']))
         if n == 'y':
