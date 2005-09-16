@@ -31,6 +31,19 @@ required_keys = [
  'Email',
  'Dad/Partner']
 
+doctor_keys = [
+ 'Mom Name',
+ 'Phone',
+ 'Last Name',
+ 'Address',
+ 'DOB',
+ 'Child',
+ 'Doctor',
+ 'Doctors Phone',
+ 'Allergies',
+ 'Dad/Partner']
+
+
 #TODO check these!
 valid_keys = required_keys + ['session']
 
@@ -129,6 +142,7 @@ class Adder:
     c=None
     r=[]
     pk=""
+    id=0
 
     def __init__(self, c, rec):
         self.rec = rec
@@ -170,6 +184,7 @@ class Adder:
                 (self.pk,
                 ','.join([str(x) for x in valid])))
         if int(n) in valid:
+            self.id=n
             return n
         print "no, that's not OK. try again"
         return self.choose()        # can i tail recurse? will it do it?
@@ -183,8 +198,9 @@ class Family(Adder):
     def get(self):
         """a very cheap way to get the family."""
         self.pk='family_id'
-        return self._get("""select * from families where phone like '%%%s%%'
+        self.id=self._get("""select * from families where phone like '%%%s%%'
         and name like '%%%s%%' """ % (self.rec['Phone'], self.rec['Last Name']))
+        return self.id
 
 
         #TODO: handle the situation where the family last name is a duplicate!
@@ -196,24 +212,29 @@ class Family(Adder):
                     address1 = %s, email = %s""",
                   (self.rec['Last Name'], self.rec['Phone'],
                    self.rec['Address'], self.rec['Email']))
-        return c.lastrowid
+        self.id=c.lastrowid
+        return self.id
 
     def update(self, pid):
         """keepin' it real, y'know what i'm sayin'?"""
-        new=[self.rec['Phone'], self.rec['Address'], self.rec['Email']]
-        c.execute("""select * from families where family_id = %s""", (pid))
-        f=c.fetchall()[0]  #assume only 1? XXX exept IndexError if wrong!
-        old=[str(x) for x in [f['phone'], f['address1'], f['email']]]
-        if new != old:
-            print 'data changed for %s...' % (self.rec['Last Name'])
-            n=raw_input('OLD [%s]\n NEW [%s]\n use new? y/n ' %
-                        (','.join(old), ','.join(new)))
-            if n == 'y':
-                c.execute("""update families set phone = %s,
-                address1 = %s, email = %s where family_id = %s""",
-                          (self.rec['Phone'],
-                           self.rec['Address'], self.rec['Email'],
-                           pid))
+        try:
+            new=[self.rec['Phone'], self.rec['Address'], self.rec['Email']]
+            c.execute("""select * from families where family_id = %s""", (pid))
+            f=c.fetchall()[0]  #assume only 1? XXX exept IndexError if wrong!
+            old=[str(x) for x in [f['phone'], f['address1'], f['email']]]
+            if new != old:
+                print 'data changed for %s...' % (self.rec['Last Name'])
+                n=raw_input('OLD [%s]\n NEW [%s]\n use new? y/n ' %
+                            (','.join(old), ','.join(new)))
+                if n == 'y':
+                    c.execute("""update families set phone = %s,
+                    address1 = %s, email = %s where family_id = %s""",
+                              (self.rec['Phone'],
+                               self.rec['Address'], self.rec['Email'],
+                               pid))
+        except KeyError:
+            print 'skipping update for %s' % (self.rec['Last Name'])
+            return
         return
         
 
@@ -225,9 +246,10 @@ class Kid(Adder):
         
     def get(self):
         self.pk='kid_id'
-        return self._get("""select * from kids where last_name like '%%%s%%'
+        self.id=self._get("""select * from kids where last_name like '%%%s%%'
         and soundex(first_name) = soundex('%%%s%%') """ %
                             (self.rec['Last Name'], self.rec['Child']))
+        return self.id
 
 
         #TODO: handle the situation where the family last name is a duplicate!
@@ -239,7 +261,8 @@ class Kid(Adder):
             family_id = %s, date_of_birth = %s""",
                       (self.rec['Last Name'], self.rec['Child'],
                        int(self.family_id), self._human_to_dt(self.rec['DOB'])))
-        return c.lastrowid
+        self.id=c.lastrowid
+        return self.id
 
 
     def _human_to_dt(self,dob):
@@ -274,6 +297,12 @@ class Kid(Adder):
                            pid))
         return
 
+    def addDoc(self, dr_id):
+        """updates  doctor for this particular kid"""
+        c.execute("""update kids set doctor_id = %s where kid_id = %s""",
+                  (dr_id, self.id))
+        return c.lastrowid
+
 
 
 class Enrollment(Adder):
@@ -283,9 +312,10 @@ class Enrollment(Adder):
         
     def get(self):
         self.pk='enrollment_id'
-        return self._get("""select * from enrollment where kid_id = %d
+        self.id=self._get("""select * from enrollment where kid_id = %d
         and school_year = '%s' """ %
                             (self.kid_id, school_year))
+        return self.id
 
       #TODO: handle a *change*, i.e. from am/pm
 
@@ -302,7 +332,8 @@ class Enrollment(Adder):
                              first_day_of_school] +
                             [self.rec[i] is not '' for i in
                              ['M','Tu', 'W','Th','F']]))
-        return c.lastrowid
+        self.id=c.lastrowid
+        return self.id
 
 
 
@@ -315,12 +346,13 @@ class Parent(Adder):
         
     def get(self):
         self.pk='parent_id'
-        return self._get("""select * from parents where 
+        self.id=self._get("""select * from parents where 
         (soundex(first_name) = soundex('%%%s%%')
         or first_name like '%%%s%%') and family_id = %d""" %
                             (self.rec[self.type+'_first'],
                              self.rec[self.type+'_first'].split()[0],
                              self.family_id))
+        return self.id
 
     def add(self):
         n=raw_input("insert new parent %s %s (y/n)?" %
@@ -331,7 +363,8 @@ class Parent(Adder):
                     family_id = %s, type = %s""",
                   (self.rec[self.type+'_last'], self.rec[self.type+'_first'],
                    int(self.family_id), self.type))
-        return c.lastrowid
+        self.id=c.lastrowid
+        return self.id
 
 
 class Worker(Adder):
@@ -346,9 +379,10 @@ class Worker(Adder):
         
     def get(self):
         self.pk='worker_id'
-        return self._get("""select * from workers where parent_id = %d
+        self.id=self._get("""select * from workers where parent_id = %d
         and school_year = '%s' """ %
                             (self.parent_id, school_year))
+        return self.id
 
 
     def add(self):
@@ -364,7 +398,8 @@ class Worker(Adder):
                                          self.rec.items())][0],
                    [self.days[j[0]] for j in filter(lambda i: i[1] == 'E',
                                          self.rec.items())][0]))
-        return c.lastrowid
+        self.id=c.lastrowid
+        return self.id
 
 
 
@@ -375,8 +410,9 @@ class User(Adder):
         
     def get(self):
         self.pk='user_id'
-        return self._get("""select * from users where family_id = %d """ %
+        self.id=self._get("""select * from users where family_id = %d """ %
                             (self.family_id))
+        return self.id
 
 
     def add(self):
@@ -389,6 +425,42 @@ class User(Adder):
         user_id = %s, group_id = 1""",
                   (uid))
         return uid
+
+
+
+class Doctor(Adder):
+    kid_id=0
+    dr_first=''
+    dr_last=''
+    def __init__(self, c, rec, kid_id):
+        Adder.__init__(self, c, rec)
+        self.kid_id=kid_id
+        dr=self.rec['Doctor'].split()
+        self.dr_last=dr.pop()
+        self.dr_first=dr
+        
+    def get(self):
+        self.pk='lead_id'
+        self.id=self._get("""select * from leads where 
+        (soundex(first_name) = soundex('%%%s%%')
+        or first_name like '%%%s%%') and (soundex(last_name) = soundex('%%%s%%')
+        or last_name like '%%%s%%')""" %
+                            (self.dr_first[0][0], self.dr_first[0][0],
+                             self.dr_last,self.dr_last))
+        return self.id
+                          
+                             
+
+    def add(self):
+        n=raw_input("insert new doctor %s (y/n)?" %
+                    (self.rec['Doctor']))
+        if n == 'y':
+            c.execute("""insert into leads set last_name = %s, first_name = %s,
+                    phone  = %s""",
+                  (self.dr_last, self.dr_first[0],
+                   self.rec['Doctors Number']))
+        self.id=c.lastrowid
+        return self.id
 
 
 
@@ -414,6 +486,19 @@ def line(rec):
         
 
 
+def doctor_line(rec):
+    """Driver for looping through the necessary steps to parse out a doctor"""
+    f=Family(c,rec)
+    family_id = f.wrapper()
+    k=Kid(c,rec,family_id)
+    kid_id=k.wrapper()
+    d=Doctor(c,rec,kid_id)
+    dr_id=d.wrapper()
+    k.addDoc(dr_id)
+#    print "kid %d, family %d, doctor %d, mom %d, dad/partner %d, worker %d, user %d" % (kid_id, family_id, enrol_id, mom_id, dad_id, worker_id, user_id)
+
+
+
 def load(am_file, pm_file):
     """Takes AM, PM files, builds objects for them, and loads them"""
     AM=RastaImport(am_file, 'AM')
@@ -436,3 +521,14 @@ if __name__ == '__main__':
     for i in rasta: line(i)
 
 #dict([(i['School Job'], i['Last Name']) for i in ir.rasta])
+
+
+#now the doctor doctor give me the news
+    load('/mnt/kens/ki/proj/coop/imports/AMdr.csv',
+         '/mnt/kens/ki/proj/coop/imports/PMdoctor.csv')
+    
+    load('/mnt/kens/ki/proj/coop/imports/amdoctors.csv',
+         '/mnt/kens/ki/proj/coop/imports/PMdoctors.csv')
+
+
+    for i in rasta: doctor_line(i)
