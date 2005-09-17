@@ -16,4 +16,11 @@ alter table workers drop column brings_baby;
 
 -- run the doctor import (importrasta.py)
 
--- permissions for allergies and doctor fields: only for EDIT!
+update leads set salutation = 'Dr.' where lead_id in 
+(select doctor_id from kids where doctor_id > 0);
+
+-- add realm for bring_baby: membership
+
+-- make leads 600/600/500. this is gonna be a wild ride
+
+-- permissions for allergies and doctor fields: group 500

@@ -44,25 +44,10 @@ class Brings_baby extends DB_DataObject
 	function fb_linkConstraints(&$co)
 		{
 
-            $this->orderBy('parents.last_name, parents.first_name');
-            // TODO: cascade the linkconstraints!!
+            $workers = new CoopObject(&$co->page, 'workers', &$co);
+            $workers->linkConstraints();
 
-            $this->selectAdd('family_id');
-
-            /// AGAIN, nasty hack
-            if($co->perms[NULL]['year'] < ACCESS_VIEW){
-                // TODO! support chooser
-                $this->whereAdd(
-                    "school_year = '{$co->page->currentSchoolYear}'");
-            }
-
-            $this->orderBy('am_pm_session, workday, parents.last_name, parents.first_name');
-            
-
-            //$co->debugWrap(5);
-            
-			// ugly, but consisent. only shows families for this year
-
+            $this->joinAdd($workers->obj);
 
 
  		}

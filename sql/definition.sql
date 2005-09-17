@@ -911,7 +911,6 @@ workday enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'),
 epod enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'),
 am_pm_session enum('AM','PM') default NULL,
 worker_for_donation tinyint(1),
-brings_baby tinyint(1),
 school_year varchar(50) default NULL
 );
 

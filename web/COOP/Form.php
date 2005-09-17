@@ -282,6 +282,7 @@ class coopForm extends CoopObject
 				$ldf[] = sprintf("%s.%s", $sub->table, $field);
 			}
 			$sub->obj->orderBy(implode(', ', $ldf));
+            //$this->debugWrap(2);
 			$sub->obj->find();
 			while($sub->obj->fetch()){
 				$options[(string)$sub->obj->$link[1]] = 
