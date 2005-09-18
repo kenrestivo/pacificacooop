@@ -16,7 +16,6 @@ class Workers extends DB_DataObject
     var $epod;                            // string(9)  enum
     var $am_pm_session;                   // string(2)  enum
     var $worker_for_donation;             // int(1)  
-    var $brings_baby;                     // int(1)  
     var $school_year;                     // string(50)  
 
     /* ZE2 compatibility trick*/

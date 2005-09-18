@@ -254,7 +254,12 @@ switch($_REQUEST['action']){
          // for now, blow off the jointables
          $cp->printDebug("$atd->table  link for $nearid {$atd->obj->$nearid}  $table<br>", 4);
          $aud =& new CoopView(&$cp, $table, &$atd);
-         $aud->obj->{$farid} = $atd->obj->{$nearid};
+         $tabs = $aud->obj->table();
+         $farwhole = $farid;
+         if(!empty($tabs[$farid])){
+             $farwhole = "{$aud->table}.$farid";
+         }
+         $aud->obj->whereAdd("$farwhole = " .  $atd->obj->{$nearid});
          //confessObj($aud, 'aud');
          $aud->debugWrap(5);
          print $aud->simpleTable();

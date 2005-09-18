@@ -24,7 +24,6 @@ class Leads extends DB_DataObject
     var $country;                         // string(255)  
     var $phone;                           // string(255)  
     var $relation;                        // string(8)  enum
-    var $family_id;                       // int(32)  
     var $do_not_contact;                  // date(10)  binary
     var $school_year;                     // string(50)  
     var $source_id;                       // int(32)  
@@ -63,12 +62,9 @@ class Leads extends DB_DataObject
 								 'phone' => "Phone Number", 
 								 'source_id' => "Source of Contact", 
 									'do_not_contact'=> "Do Not Contact After");
-	var  $fb_formHeaderText = "Springfest Invitation Contacts";
-
+	var  $fb_formHeaderText = "Master Names Database";
 
 	var $fb_hidePrimaryKey = false; // i needs my lead_id!
-
-    var $fb_usePage = '10names.php';
 
     var $fb_shortHeader = 'Contacts';
 

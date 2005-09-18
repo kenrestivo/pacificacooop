@@ -30,6 +30,7 @@ class Invitations extends DB_DataObject
 	var $fb_selectAddEmpty = array ('family_id', 'lead_id');
 
 	var $fb_formHeaderText =  'Springfest Invitations';
+	var $fb_shortHeader =  'Invitations';
 
 	var $fb_fieldsToRender = array (
 		'lead_id',
@@ -39,7 +40,7 @@ class Invitations extends DB_DataObject
 		'label_printed'
 		);
 
-	var $fb_linkDisplayFields = array('company_name', 'last_name',
+	var $fb_linkDisplayFields = array('company', 'last_name',
 									  'first_name');
 	var $fb_fieldLabels = array (
 		'lead_id' => 'Contact',
@@ -48,6 +49,22 @@ class Invitations extends DB_DataObject
 		'relation' => 'Relation to Inviting Family',
 		'label_printed' => 'Mailing Label Printed On'
 		);
+
+    function fb_linkConstraints(&$co)
+        {
+            $par = $this->factory('leads');
+            $this->joinAdd($par);
+            if($co->isPermittedField(NULL) < ACCESS_VIEW){
+                /// XXX need to check that a familyid exists!
+                $this->whereAdd('family_id  = '. 
+                                $co->page->userStruct['family_id']);
+            }
+            $this->whereAdd(sprintf('invitations.school_year = "%s"',
+                                    $co->page->currentSchoolYear));
+            
+        }
+
+
 
 
 }
