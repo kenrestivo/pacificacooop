@@ -56,8 +56,8 @@ class Invitations extends DB_DataObject
             $this->joinAdd($par);
             if($co->isPermittedField(NULL) < ACCESS_VIEW){
                 /// XXX need to check that a familyid exists!
-                $this->whereAdd('family_id  = '. 
-                                $co->page->userStruct['family_id']);
+                $this->whereAdd(sprintf('family_id  = %d', 
+                                $co->page->userStruct['family_id']));
             }
             $this->whereAdd(sprintf('invitations.school_year = "%s"',
                                     $co->page->currentSchoolYear));

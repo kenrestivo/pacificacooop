@@ -81,8 +81,8 @@ class Parent_ed_attendance extends DB_DataObject
             {
                 // print "HEY!";
                 /// XXX need to check that a familyid exists!
-                $this->whereAdd('parents.family_id  = '. 
-                                $co->page->userStruct['family_id']);
+                $this->whereAdd(sprintf('parents.family_id  = %d', 
+                                $co->page->userStruct['family_id']));
             }
             
             $this->orderBy('families.name, event_date');

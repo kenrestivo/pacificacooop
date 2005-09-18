@@ -384,6 +384,11 @@ getUser($uid)
 		$savedrow = array_reverse($row); //XXX hack around mysql
 	}
 
+    // HACK around some nulls in the query.
+    if($savedrow['family_id'] < 1){
+        $savedrow['family_id'] = 0;
+    }
+
 	return $savedrow;
 
 }/* END GETUSER */
