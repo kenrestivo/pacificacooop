@@ -263,30 +263,39 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
 
     function  fb_display_summary(&$co)
         {
+            // make the summary be the family summary, like it used to be
+            // and DON'T print it out. wrap it in some non-printing div
 
-            // XXX probably not necessary. only for those who care
-            // TODO: move this to the REPORT page, along with shirley's counts
-            // make the summary be the family summary
-            if($co->isPermittedField(null,true) <  ACCESS_VIEW){
-                return '';
+            // and this to keep betsy happy
+            if($co->isPermittedField(null,true) >=  ACCESS_VIEW){
+                return $this->displayTotals(&$co);
             }
 
+        }
+
+
+
+// used in reports
+    function displayTotals(&$co)
+        {
             foreach(array('monday', 'tuesday', 'wednesday', 
                           'thursday', 'friday') as $day){
                 $this->fb_displayFormat[$day] = '%d';
             }
-
+    
             $this->fb_fieldsToUnRender = array('start_date', 
-                                               'dropout_date',
+                                               'dropout_date', 'school_year',
                                                'kid_id');
-
+    
             $this->fb_formHeaderText = 'Enrollment Session Summary';
             $this->fb_recordActions = array();
             $this->query(
                 sprintf(
                     'select  am_pm_session, sum(monday) as monday, sum(tuesday) as tuesday, sum(wednesday) as wednesday, sum(thursday) as thursday, sum(friday) as friday from enrollment where enrollment.school_year = "2005-2006" group by am_pm_session order by enrollment.am_pm_session',
                     $co->page->currentSchoolYear));
-            return $co->simpleTable(false);
+            $res .= $co->simpleTable(false);
+
+            return $res;
 
         }
 

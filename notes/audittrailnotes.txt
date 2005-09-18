@@ -1,6 +1,14 @@
 audit trail niceties
 
-audit trail niceties
+	handle deletions! 
+		what if the record is deleted
+		what if the index of a linkfield points to a deleted record
+			it'll show as 'number'
+
+	only tables/fields labeled as "audit"?
+		or fieldstorender, if no fields
+
+
 	or only those that are subscribed to?
 	table of subscriptions: realm, subscription
 		a jointable, with an add/remove

@@ -127,7 +127,13 @@ class Audit_trail extends DB_DataObject
 
     function formatChanges(&$co, $val, $key)
         {
+            
             $res = '';
+            
+            if(!$val){
+                return 'No details saved';
+            }
+
             //return '<pre>' .print_r(unserialize($val),1) . '</pre>';
             $changes = unserialize($val);
             $cho = new CoopObject(&$co->page, $this->table_name, &$nothing);
@@ -138,10 +144,23 @@ class Audit_trail extends DB_DataObject
             $cho->obj->get($this->index_id);
             
             foreach($changes as $field => $change){
-                $res .=  $cho->obj->fb_fieldLabels[$field];
+                
+                $cho->obj->$field = $change['old'];
+                $oldformatted = $cho->checkLinkField($field, 
+                                                     $cho->obj->$field);
+
+                $cho->obj->$field = $change['new'];
+                $newformatted = $cho->checkLinkField($field, 
+                                                     $cho->obj->$field);
+
+                // ok, so this is a bit of a duplication of coopview.
+                $res .=  empty($cho->obj->fb_fieldLabels[$field]) ?
+                    $field : $cho->obj->fb_fieldLabels[$field];
+                
+                // finally, SHOW the damned thing
                 if($cho->isPermittedField($field) >= ACCESS_VIEW){
-                    $res .= sprintf(': %s => %s', 
-                                    $change['old'], $change['new']);
+                    $res .= sprintf(': %s changed to %s', 
+                                    $oldformatted, $newformatted);
                 } else {
                     $res .= "(Not Permitted)";
                 }

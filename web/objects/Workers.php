@@ -84,10 +84,6 @@ class Workers extends DB_DataObject
     function  fb_display_summary(&$co)
         {
 
-            ///XXX HACK! ispermitted field is returning NO for regular users anyway
-            if($co->isPermittedField(null,true) <  ACCESS_VIEW){
-                return '';
-            }
 
             $res = '';
             $this->fb_formHeaderText = 'Workday Summary';
