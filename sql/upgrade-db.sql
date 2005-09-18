@@ -26,3 +26,4 @@ update leads set salutation = 'Dr.' where lead_id in
 -- permissions for allergies and doctor fields: group 500
 
 -- add enrollment_summary report to reports db (membership realm)
+

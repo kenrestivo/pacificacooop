@@ -143,7 +143,7 @@ class Enhancement_hours extends DB_DataObject
                        $en->cutoffDatesArray[$sem]
                     );
             } else if ($needed == 0){
-                return 0;
+                return ;
             } 
 
             

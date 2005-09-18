@@ -1,20 +1,9 @@
 may meeting
 
-what's available now
-	enhancement hours (complete)
-	springfest (nearly complete)
-	roster (partial)
-
-available before end of year
-	parent ed attendance DONE
-	job descriptions DONE
-	blog DONE
-	insurance
-	calendar DONE
-
-projects i will complete b4 end of next year
+projects i will complete b4 end of year
 	database "normalisation" (major fixes)
-	user-friendly adminstration screens
+	user-friendly adminstration permissions screens
+	insurance
 
 skills needed for 2005-2006
 	design
@@ -36,3 +25,16 @@ what you got
 	i own the copyright
 	PCNS is licensed to modify, publish, or sell it
 		any buyers are also licensed to do the same
+
+
+
+-----
+DONE
+what's available now
+	enhancement hours (complete)
+	springfest (nearly complete)
+	roster (complete)
+	parent ed attendance DONE
+	job descriptions DONE
+	blog DONE
+	calendar DONE

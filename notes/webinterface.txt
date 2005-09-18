@@ -930,14 +930,3 @@ year setup: required dates which *must* be entered!
 	all the parent ed meetings (or auto-enter?)
 
 -------
-margolis has an interesting idea
-	for parent ed attendance, show ALL attendance for one meeting
-		with checkboxes. check all, uncheck all
-		javascript: hide the actual hours, use checkboxes instead
-	at save time, save for the ENTIRE meeting
-		at least everyone who was enrolled at that time (start/drop dates)
-		you'd have to go through and look at which changed, save them only if
-		and of course INSERT for any parents who didn't have attendance
-	this'd be a wacky custom form, having little/nothing to do with coopform
-		might be fun playign with it!
-	i don't think pear is right for this. XUL?
