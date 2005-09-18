@@ -54,5 +54,15 @@ class Brings_baby extends DB_DataObject
  		}
 
 
+    function fb_display_view(&$co)
+        {
+            $this->fb_fieldLabels['workday'] = 'Work Day';
+            $this->fb_fieldLabels['epod'] = 'EPOD Day';
+            $this->fb_fieldLabels['am_pm_session'] = 'Session';
+
+            return $co->simpleTable();
+        }
+
+
 
 }
