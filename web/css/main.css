@@ -1,7 +1,7 @@
 /* $Id$ */
 p,table,li,h1,h2,h3
 {
-  font-family: verdana, arial, sans serif; 
+  font-family: verdana, arial, "sans serif"; 
 }
 
 body{ 
@@ -35,7 +35,7 @@ html>body p {
 /* */
 
 .foobar {
-  background: grey;
+  background: gray;
 }
 
 h3 { 
@@ -148,7 +148,7 @@ p.letter{
 
 #toplogo{  
 	display: none;
-	position: center; 
+	position: fixed; 
 }
 
 #mainletter{ 
@@ -190,7 +190,7 @@ p.error {
  }
 
 .small {
-  color: grey;
+  color: gray;
 }
 
 .altrow1 {  
@@ -220,6 +220,7 @@ p.error {
   margin: 0;
  }
 
+
 @media print { 	
 	#header { display:none }	
 	#footer { display:none }	
@@ -233,5 +234,7 @@ p.error {
 			border-spacing: 0; 
 			border-bottom: 1pt solid black; 
 	}
+
+  .pagebreak { page-break-before: always }
 
  }

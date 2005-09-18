@@ -34,7 +34,6 @@ class Workers extends DB_DataObject
                                  'epod' => 'EPOD Day',
                                  'am_pm_session' => 'Session',
                                  'worker_for_donation' => 'Worker For Donation?',
-                                 'brings_baby' => 'Bringing Baby?',
                                  'school_year' => 'School Year');
 	var $fb_fieldsToRender = array('worker_id',
                                    'parent_id' ,
@@ -42,7 +41,6 @@ class Workers extends DB_DataObject
                                    'epod' ,
                                    'am_pm_session', 
                                    'worker_for_donation', 
-                                   'brings_baby', 
                                    'school_year' );
 								   
     var $fb_requiredFields = array('parent_id', 'workday', 'epod', 

@@ -155,6 +155,8 @@ class Enrollment extends DB_DataObject
             // XXX not very object-oriented, but, fuck it, it works
             $res .= $this->_prepareView(&$co, 'AM');  
 
+            $res .= '<p class="pagebreak"></p>';
+            
             // i need separate copies for am/pm
             $co2 = new CoopView(&$co->page, $co->table, &$nothing);
             $res .= $co2->obj->_prepareView(&$co2, 'PM');
@@ -183,7 +185,7 @@ families.email,
 enrollment.monday, enrollment.tuesday, enrollment.wednesday, 
 enrollment.thursday, enrollment.friday, job_descriptions.summary as school_job,
 enrollment.am_pm_session, enrollment.start_date, enrollment.dropout_date,
-workers.workday, workers.epod, workers.brings_baby, workers.am_pm_session
+workers.workday, workers.epod, workers.am_pm_session
 from enrollment
 left join kids on enrollment.kid_id = kids.kid_id
 left join parents as dads 
@@ -246,9 +248,10 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
     function checkWorkday($val, $key)
         {
             if(strtolower($this->workday) == $key){
-                if($this->brings_baby){
-                    return 'B';
-                }
+                // TODO: need to use the new baby stuff
+//                 if($this->brings_baby){
+//                     return 'B';
+//                 }
                 return 'W';
             }
             if(strtolower($this->epod) == $key){
