@@ -302,12 +302,10 @@ group by user_id,table_name,field_name";
 			$aud =& new CoopObject(&$this->page, 'audit_trail', &$top);
 			$aud->obj->table_name = $this->table;
 
-			if($insert){
-                // NOTE. the coopform insert palready populated $this->id
-				$aud->obj->index_id = $this->id;
-			} else {
-				$aud->obj->index_id = $this->obj->{$this->pk};
-			}
+
+            // NOTE. the coopform insert palready populated $this->id
+            $aud->obj->index_id = $this->id;
+
 			
 			// one more sanity czech
 			if(!$aud->obj->index_id){

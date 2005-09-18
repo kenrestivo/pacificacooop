@@ -401,6 +401,14 @@ class coopForm extends CoopObject
 
 			$this->obj->update($old);
 			$this->id = $this->obj->{$this->pk};
+
+            foreach($this->obj->table() as $key => $type){
+                if($this->obj->$key != $old->$key){
+                    $this->changes[$key] = array('old' => $old->$key,
+                                                 'new' => $this->obj->$key);
+                }
+            }
+            
 		
 			$this->saveAudit(false);
 		

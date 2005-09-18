@@ -402,7 +402,7 @@ class coopView extends CoopObject
 
 			while($this->obj->fetch()){
 				//confessObj($this, 'onelinetable');
-				$mainlink = $this->concatLinkFields(&$this->obj);
+				$mainlink = $this->concatLinkFields();
 
 				if($this->legacyCallbacks){
 					$meat = $this->page->selfURL(array('value' => $mainlink, 
@@ -573,6 +573,7 @@ class coopView extends CoopObject
 
 
             ///// USER ONLY
+            $targ =& new CoopView(&$this->page, 'users', &$this);
             $targ->obj->fb_formHeaderText = "User Levels for ". 
                 $this->page->userStruct['username'];
             $targ->obj->query(

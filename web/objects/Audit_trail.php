@@ -33,12 +33,12 @@ class Audit_trail extends DB_DataObject
 		'index_id' => 'Unique ID',
 		'audit_user_id' => 'Edited By',
 		'updated' => 'Edited On',
-        'details' => 'What was changed'
+        'details' => 'What changed'
 		);
 	var $fb_fieldsToRender = array ('audit_user_id', 'updated', 'details');
     var $fb_recordActions = array();
     var $fb_viewActions = array();
-
+    var $fb_displayCallbacks = array('details' => 'unmangle');
 
     function fb_display_details()
         {
@@ -124,6 +124,24 @@ class Audit_trail extends DB_DataObject
             return $res;
         }
 
+
+    function unmangle($val, $key)
+        {
+            //return '<pre>' .print_r(unserialize($val),1) . '</pre>';
+            $changes = unserialize($val);
+            $obj = $this->factory($this->table_name);
+  			if (PEAR::isError($obj)){
+                PEAR::raiseError('you are trying to show the audit trail for a table that no longer exists. did you rename your tables? did you remember to change all the values in the audit_trail.table_name to match it? bad bad bad.', 666);
+            }
+
+            foreach($changes as $field => $change){
+                $res .= sprintf('%s: %s => %s', 
+                                $obj->fb_fieldLabels[$field],
+                                $change['old'],
+                                $change['new']);
+            }
+            return $res;
+        }
 
 }
 
