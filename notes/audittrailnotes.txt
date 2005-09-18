@@ -1,0 +1,25 @@
+audit trail niceties
+
+audit trail niceties
+	or only those that are subscribed to?
+	table of subscriptions: realm, subscription
+		a jointable, with an add/remove
+		constrain: only those who have view perms on the realm
+	for each realm: subscribe to:
+		news
+		alerts
+		events
+		changes
+			maybe make changes the only one for now that has realm-specific
+
+	make it groupy: members should have alerts defaulted to ON
+		if nothing in the db for that user, use the group settings instead
+	only those realms in the subscriptions tables, should i auditsave
+	what happens when perms checking depends on content of fiel?
+		my formatChanges method will fuck up big timex
+	it might be a good idea to store the FORMATTED (checklinkfield) version!
+		so that if the linked data changes, the change makes sense
+			i.e. if i change kids.foo to kids.bar, and over time kids.foo changes
+				the audittrail will be wrong! it'll be confusing.
+	some text color maybe, for old to new (old in grey? new in red?)
+
