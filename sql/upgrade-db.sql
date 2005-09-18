@@ -27,3 +27,14 @@ update leads set salutation = 'Dr.' where lead_id in
 
 -- add enrollment_summary report to reports db (membership realm)
 
+
+create table lead_temp(
+lead_id int(32) primary key not null unique,
+family_id int(32)
+);
+
+insert into lead_temp (family_id, lead_id) (select family_id, lead_id from leads where family_id > 0 order by lead_id);
+
+alter table leads drop column family_id;
+
+-- then dump/backup
