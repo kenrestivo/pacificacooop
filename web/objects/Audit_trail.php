@@ -125,18 +125,18 @@ class Audit_trail extends DB_DataObject
         }
 
 
-    function unmangle($val, $key)
+    function unmangle(&$co, $val, $key)
         {
             //return '<pre>' .print_r(unserialize($val),1) . '</pre>';
             $changes = unserialize($val);
-            $obj = $this->factory($this->table_name);
-  			if (PEAR::isError($obj)){
-                PEAR::raiseError('you are trying to show the audit trail for a table that no longer exists. did you rename your tables? did you remember to change all the values in the audit_trail.table_name to match it? bad bad bad.', 666);
-            }
+            $cho = new CoopObject(&$co->page, $this->table_name, &$nothing);
+
+            //PEAR::raiseError('you are trying to show the audit trail for a table that no longer exists. did you rename your tables? did you remember to change all the values in the audit_trail.table_name to match it? bad bad bad.', 666);
+            
 
             foreach($changes as $field => $change){
                 $res .= sprintf('%s: %s => %s', 
-                                $obj->fb_fieldLabels[$field],
+                                $cho->obj->fb_fieldLabels[$field],
                                 $change['old'],
                                 $change['new']);
             }

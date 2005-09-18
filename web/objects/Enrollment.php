@@ -155,7 +155,7 @@ class Enrollment extends DB_DataObject
             // XXX not very object-oriented, but, fuck it, it works
             $res .= $this->_prepareView(&$co, 'AM');  
 
-            $res .= '<p class="pagebreak"></p>';
+            $res .= '<hr><p class="pagebreak"></p>';
             
             // i need separate copies for am/pm
             $co2 = new CoopView(&$co->page, $co->table, &$nothing);
@@ -245,7 +245,7 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
         }
 
 
-    function checkWorkday($val, $key)
+    function checkWorkday(&$co, $val, $key)
         {
             if(strtolower($this->workday) == $key){
                 // TODO: need to use the new baby stuff
