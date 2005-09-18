@@ -27,7 +27,7 @@ class Events extends DB_DataObject
 
 	var $fb_formHeaderText = 'Event Types and Details';
 	var $fb_shortHeader = 'Events';
-	var $fb_linkDisplayFields = array('description', 'notes');
+	var $fb_linkDisplayFields = array('description');
     var $fb_fieldLabels = array(
         'description' => 'Description',
         'url' => 'For more information',

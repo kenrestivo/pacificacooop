@@ -286,7 +286,7 @@ class coopForm extends CoopObject
 			$sub->obj->find();
 			while($sub->obj->fetch()){
 				$options[(string)$sub->obj->$link[1]] = 
-					$this->concatLinkFields(&$sub->obj);
+					$sub->concatLinkFields();
 			}
 
 			//TODO: try grabbing the dbresult object instead?
@@ -632,7 +632,7 @@ class coopForm extends CoopObject
 				while($far->obj->fetch()){
 					$options[(string)$far->obj->$tf] = 
 							 sprintf('%.42s...', 
-									 $this->concatLinkFields(&$far->obj));
+									 $far->concatLinkFields());
 				}
 				
 	
@@ -654,7 +654,7 @@ class coopForm extends CoopObject
 						$far->obj->find(true);
 						$options[$key] = 
 							 sprintf('%.42s...', 
-									 $this->concatLinkFields(&$far->obj));
+									 $far->concatLinkFields());
 					}
 				}
 				

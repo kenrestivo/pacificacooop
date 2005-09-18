@@ -205,37 +205,41 @@ group by user_id,table_name,field_name";
 			//ok, we have run the fucking gauntlet here.
 			//confessObj($obj, 
 //					   "checkLinkField() from $this->table: obj with links for $key of $val");
+            list($subtable, $subkey) = explode(':', $this->forwardLinks[$key]);
+			$sub =& new CoopObject(&$this->page, $subtable, &$this);
+            $sub->obj->get($subkey, $this->obj->$key);
+            
 
-			$subobj = $this->obj->getLink($key); 
 	//confessObj($subobj, "checkLInkFild() subobj $subobj->__table for $key of $val");
 
 
 			// remember, subobj does NOT have a concatlinkfields method
 			// so i am keepign the method here and passing the subobj
-			return $this->concatLinkFields(&$subobj);
+			return $sub->concatLinkFields();
 		}
 
 
     // NOTE! i pass the DBDO object in because getlinks DOES NOT KNOW how
     // to get my coopobject objects. duh.
-	function concatLinkFields(&$obj)
+	function concatLinkFields()
 		{
-			$ldfs = $obj->fb_linkDisplayFields;
+			$ldfs = $this->obj->fb_linkDisplayFields;
 			if(!$ldfs){
 				return $val;
 			}
-			//confessObj($obj, "concatlinkfields(obj)");
+			//confessObj($this->obj, "concatlinkfields(obj)");
 			// only if i have linkfields in the dataobj
 			$val = false; 		// gotta reset it here.
 			foreach($ldfs as $linkfield){
 				// trying to YAGNI here. i don't need 2-level links yet
 				// so, i'm not coding that recursion in here now. sorry charlie.
-				if($obj->$linkfield){
+				if($this->obj->$linkfield){
 					// TODO: this is where i'd recursively czech these.
 					// also, building an array and then imploding it
 					// might be more readable
 					$val .= sprintf("%s%s", $val ? ' - ' : "", 
-									$obj->$linkfield);
+									$this->checkLinkField($linkfield, 
+                                                          $this->obj->$linkfield));
 				}
 			}
 			return $val;
