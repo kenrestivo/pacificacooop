@@ -38,7 +38,7 @@ class Audit_trail extends DB_DataObject
 	var $fb_fieldsToRender = array ('audit_user_id', 'updated', 'details');
     var $fb_recordActions = array();
     var $fb_viewActions = array();
-    var $fb_displayCallbacks = array('details' => 'unmangle');
+    var $fb_displayCallbacks = array('details' => 'formatChanges');
 
     function fb_display_details()
         {
@@ -125,20 +125,26 @@ class Audit_trail extends DB_DataObject
         }
 
 
-    function unmangle(&$co, $val, $key)
+    function formatChanges(&$co, $val, $key)
         {
+            $res = '';
             //return '<pre>' .print_r(unserialize($val),1) . '</pre>';
             $changes = unserialize($val);
             $cho = new CoopObject(&$co->page, $this->table_name, &$nothing);
-
+  
             //PEAR::raiseError('you are trying to show the audit trail for a table that no longer exists. did you rename your tables? did you remember to change all the values in the audit_trail.table_name to match it? bad bad bad.', 666);
             
-
+            //XXX what if this fails?
+            $cho->obj->get($this->index_id);
+            
             foreach($changes as $field => $change){
-                $res .= sprintf('%s: %s => %s', 
-                                $cho->obj->fb_fieldLabels[$field],
-                                $change['old'],
-                                $change['new']);
+                $res .=  $cho->obj->fb_fieldLabels[$field];
+                if($cho->isPermittedField($field) >= ACCESS_VIEW){
+                    $res .= sprintf(': %s => %s', 
+                                    $change['old'], $change['new']);
+                } else {
+                    $res .= "(Not Permitted)";
+                }
             }
             return $res;
         }
