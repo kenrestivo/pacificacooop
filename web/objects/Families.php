@@ -75,22 +75,24 @@ class Families extends DB_DataObject
 
  		}
 
-    function insert()
+    function afterInsert(&$co)
         {
-            parent::insert();
+
             //lawwdy help you if you change column names in families or users!
 
-            // GAH! a duplication of coopobject::lastInsertID.
-            $db =& $this->getDatabaseConnection();
-            $data =& $db->getOne('select last_insert_id()');
-            if (DB::isError($data)) {
-                die($data->getMessage());
-            }
-
+            // they are users too
             $user = $this->factory('users');
-            $user->family_id = $data;
+            $user->family_id = $co->id;
             $user->name = $this->name . ' Family';
             $user->insert();
+
+            //any new family you add? they are members. dammit.
+            $ugj = $this->factory('users_groups_join');
+            $ugj->user_id = $co->lastInsertID();
+            $ugj->group_id = 1; // MEMBERS
+            $ugj->insert();
+
+            
         }
 
     // NOTE i don't override delete because my confirmdelete link checks should find that

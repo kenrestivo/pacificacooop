@@ -59,6 +59,7 @@ print '<div id="centerCol">';
 
 /////////////////////////////////////////////// END PSEUDO-MAIN
 
+//TODO: move this to coopobject? coopview?
 function bruteForceDeleteCheck(&$atd)
 {
     global $_DB_DATAOBJECT;
@@ -69,8 +70,10 @@ function bruteForceDeleteCheck(&$atd)
     $atd->obj->{$atd->pk} = $id;
     $atd->obj->find(true);		//  XXX aack! need this for summary
     
-
-
+    
+    //NOTE! i do *not* use backlinks/forwardlinks here
+    //because some of these fields may not show up as actual links
+    //i.e. if they're not PK's! but i still want to prevent orphans
     $links =& $_DB_DATAOBJECT['LINKS'][$atd->obj->database()];
     foreach($links as $table=> $link){
         foreach($link as $nearcol => $farpair){

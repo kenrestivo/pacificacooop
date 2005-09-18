@@ -32,9 +32,10 @@ class Audit_trail extends DB_DataObject
 		'table_name' => 'Name of Table',
 		'index_id' => 'Unique ID',
 		'audit_user_id' => 'Edited By',
-		'updated' => 'Edited On'
+		'updated' => 'Edited On',
+        'details' => 'What was changed'
 		);
-	var $fb_fieldsToRender = array ('audit_user_id', 'updated');
+	var $fb_fieldsToRender = array ('audit_user_id', 'updated', 'details');
     var $fb_recordActions = array();
     var $fb_viewActions = array();
 

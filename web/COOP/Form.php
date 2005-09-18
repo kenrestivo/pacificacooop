@@ -416,6 +416,11 @@ class coopForm extends CoopObject
 			$this->obj->insert();
 			$this->id = $this->lastInsertID();
 			$this->saveAudit(true);
+
+            //why? because saveaudit above needs lastinsertid. duh.
+            if(is_callable(array($this->obj,'afterInsert'))){
+                $this->obj->afterInsert(&$this);
+            }
 			return $this->id;
 		}
 
@@ -650,6 +655,7 @@ class coopForm extends CoopObject
 				foreach($incl as $key ){
 					if(!in_array($key, $optkeys)){
 						$far = new CoopObject(&$this->page, $ft, &$this);
+                        //TODO: try instead $far->obj->get($tf, $key)
 						$far->obj->$tf = $key;
 						$far->obj->find(true);
 						$options[$key] = 

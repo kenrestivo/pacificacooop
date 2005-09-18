@@ -24,3 +24,4 @@ update leads set salutation = 'Dr.' where lead_id in
 -- make leads 600/600/500. this is gonna be a wild ride
 
 -- permissions for allergies and doctor fields: group 500
+
