@@ -145,6 +145,7 @@ class Audit_trail extends DB_DataObject
                 } else {
                     $res .= "(Not Permitted)";
                 }
+                $res .= '<br>';
             }
             return $res;
         }
