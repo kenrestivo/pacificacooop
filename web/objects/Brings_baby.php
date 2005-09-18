@@ -49,6 +49,7 @@ class Brings_baby extends DB_DataObject
 
             $this->joinAdd($workers->obj);
 
+            $this->orderBy('parents.last_name, parents.first_name');
 
  		}
 
