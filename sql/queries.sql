@@ -1216,11 +1216,11 @@ where user_id = 91 and table_name = 'leads'
 
 
 
-
+-- TODO: this'd make a nice screen
 --- shorter for debugging what teh FUCK is going on?
 select max(user_level) as max_user, max(group_level) as max_group, 
 max(year_level) as max_year, 
-91 as user_id, realm
+91 as user_id, short_description
 from user_privileges 
 left join realms on user_privileges.realm_id = realms.realm_id
 where user_id = 91 
@@ -1235,6 +1235,7 @@ order by user_privileges.realm_id
 -- another thign useful for WTF
 select 
 table_permissions.table_name, table_permissions.field_name,
+table_permissions.realm_id,
 table_permissions.user_level,
 table_permissions.group_level,
 table_permissions.user_level,
@@ -1389,7 +1390,7 @@ families.email,
 enrollment.monday, enrollment.tuesday, enrollment.wednesday, 
 enrollment.thursday, enrollment.friday, job_descriptions.summary as school_job,
 enrollment.am_pm_session, enrollment.start_date, enrollment.dropout_date,
-workers.workday, workers.epod, workers.brings_baby, workers.am_pm_session
+workers.workday, workers.epod,  workers.am_pm_session
 from enrollment
 left join kids on enrollment.kid_id = kids.kid_id
 left join parents as dads 
