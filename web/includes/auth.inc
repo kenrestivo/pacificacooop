@@ -574,7 +574,7 @@ logIn($vars)
 					),
 		needlogin => array (
 					func => "needLoginState",
-					wanted => array ( "uid"),
+					wanted => array ( "uid", 'pwd'),
 					description => "You must log in, but you haven't yet"
 					),
 		loggedout => array (
@@ -772,7 +772,7 @@ changeState($auth, $states, $newstate, $wanted = 0, $savedauth = NULL)
 				$newauth[$val] = $savedauth[$val];
 			} else if($auth[$val]){
 				user_error(sprintf("changeState(%s): keeping passed %s auth[%s] = %s ", 
-					$newstate, "required", $val, $savedauth[$val]), 
+					$newstate, "wanted", $val, $auth[$val]), 
 						E_USER_NOTICE);
 				$newauth[$val] = $auth[$val];
 			}
@@ -1027,7 +1027,7 @@ wrongPassState($auth, $states)
 {
 
 	$auth['pwd'] = $auth['confirm'] = NULL;
-	loginForm(changeState($auth, $states, 'needlogin', 1),
+	loginForm(changeState($auth, $states, 'checklogin', 1),
 		'password', 'hide', 
 		"<span color='#ff0000'>Incorrect password</span>. You already have a password in the system, and what you typed isn't it. Please try again.</p><p>Helpful hints:</p><ul class=normal><li>Check your CAPS LOCK key.</li><li>Your husband, wife, or partner may already have entered a password for you. You may want to ask him or her.</li><li>Finally, people forget their passwords. A lot. If you've forgotten, email or call and we'll reset it for you.</li></ul>" );
 
