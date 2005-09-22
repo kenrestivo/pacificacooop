@@ -1,32 +1,9 @@
 -- HEREIT IS!
 
+alter table job_descriptions add column free_tuition_start_month enum('January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+ alter table job_descriptions add column free_tuition_end_month enum('January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+update  job_descriptions set free_tuition_start_month = 'September', free_tuition_end_month = 'June'  where free_tuition_months = 10;
+update  job_descriptions set free_tuition_start_month = 'December', free_tuition_end_month = 'June'  where free_tuition_months = 6;
+alter table job_descriptions drop column free_tuition_months;
 
-alter table audit_trail add column details longtext;
-alter table kids add column doctor_id int(32);
-
---- add bring baby table (definition.sql)
-
-insert into brings_baby 
-(baby_due_date, baby_too_old_date, worker_id)  
-(select '2005-09-12', '2005-06-12', worker_id 
-from workers 
-where brings_baby > 0);
-
-alter table workers drop column brings_baby;
-
--- run the doctor import (importrasta.py)
-
-update leads set salutation = 'Dr.' where lead_id in 
-(select doctor_id from kids where doctor_id > 0);
-
--- add realm for bring_baby: membership
-
--- make leads 600/600/500. this is gonna be a wild ride
-
--- permissions for allergies and doctor fields: group 500
-
--- add enrollment_summary report to reports db (membership realm)
-
-alter table leads drop column family_id;
-
--- then dump/backup
+-- perms: set free_tuition_[start|end]_month to superuser-only

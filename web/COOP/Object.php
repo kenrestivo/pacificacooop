@@ -600,6 +600,7 @@ group by user_id,table_name,field_name";
         }
 
     // very useful utility for checking for the presence of a field
+    // NOTE: if  'class', it could use obj->table() instead of get_class_vars
     function inObject($key, $type = 'object', $isset = false)
         {
             if($isset){
@@ -613,7 +614,7 @@ group by user_id,table_name,field_name";
             // i get OBJECT vars here, not class vars. if i've set it
             $this->page->confessArray(array_keys(get_object_vars($this->obj)), 
                          "inobject($key, $type, $isset) in $this->table = $res", 
-                                      4);
+                                      5);
             //shows whether this thing is part of this object!
              return $res;
         }

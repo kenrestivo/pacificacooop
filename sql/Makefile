@@ -33,6 +33,7 @@ FARPORT=2299
 BKPW=test
 PW=test
 BKUSER=input
+NFSNHOST=c3.phx.nearlyfreespeech.net
 
 all::
 	@echo "not so fast... get specific"
@@ -81,11 +82,11 @@ backup-live::
 	$(MAKE) backup DBUSER=$(BKUSER) DBHOST=127.0.0.1 DBPORT=$(FARPORT) PW=$(BKPW)
 
 ssh-tunnel-fucked::
-	ssh -n -f -N -L6666:dev.phx.nearlyfreespeech.net:22 portaserver.restivo.org
+	ssh -n -f -N -L6666:$(NFSNHOST):22 portaserver.restivo.org
 	ssh -n -f -N -L$(FARPORT):$(REALDB):3306 -p 6666 ken@localnfsn
 
 ssh-tunnel::
-	ssh -n -f -N -L$(FARPORT):$(REALDB):3306  ken@dev.phx.nearlyfreespeech.net
+	ssh -n -f -N -L$(FARPORT):$(REALDB):3306  ken@$(NFSNHOST)
 
 diagram:
 	autodia.pl -l DBI -i "mysql:$(DB):$(DBHOST)" -U$(BKUSER) -P$(BKPW) -o schema.dia

@@ -854,7 +854,8 @@ CREATE TABLE job_descriptions (
     family_type enum('New', 'Returning') default 'New',
     board_position enum('No', 'Yes') default 'No',
   free_tuition_days int(3),
-	free_tuition_months int(3),
+	free_tuition_start_month enum('January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'),
+	free_tuition_end_month enum('January', 'Feburary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'),
      PRIMARY KEY  (job_description_id)
 ) ;
 

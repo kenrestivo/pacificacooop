@@ -16,7 +16,8 @@ class Job_descriptions extends DB_DataObject
     var $family_type;                     // string(9)  enum
     var $board_position;                  // string(3)  enum
     var $free_tuition_days;               // int(3)  
-    var $free_tuition_months;             // int(3)  
+    var $free_tuition_start_month;        // string(9)  enum
+    var $free_tuition_end_month;          // string(9)  enum
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -37,10 +38,13 @@ class Job_descriptions extends DB_DataObject
 		'family_type' => "New or Returning Family?",
 		'board_position' => "Board-level position?",
 		'free_tuition_days' => "Days Per Week of Free Tuition",
-		'free_tuition_months' => "Months of Free Tuition Days"
+		'free_tuition_start_month' => "First Month of Free Tuition",
+		'free_tuition_end_month' => "Last Month of Free Tuition"
 		);
 	var $fb_textFields = array('long_description');
-	var $fb_enumFields = array ('board_position', 'family_type');
+	var $fb_enumFields = array ('board_position', 'family_type',
+                                'free_tuition_end_month', 
+                                'free_tuition_start_month');
 	var $fb_requiredFields = array('long_description', 'summary');
     var $fb_longHeader = 'The virtual job description binder.';
 	var $fb_shortHeader = 'Descriptions';
