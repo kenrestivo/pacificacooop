@@ -123,10 +123,20 @@ order by Before_Event desc, At_Event desc
 					   ,1);
 
 
-	$res .= showRawQuery("Solicitation Summary by Company",
+
+    $view =& new CoopView(&$atd->page, 'companies', &$nothing);
+	$view->obj->fb_formHeaderText = 'Solicitation Summary by Company';
+    $view->obj->fb_fieldsToRender = array(); // bah, i must have crap in there
+    $view->obj->fb_fieldLabels= array(
+        'company' => 'Company',
+        'cash_donations' => 'Cash Donations',
+        'auction_purchases' => 'Auction Purchases',
+        'auction_donations' => 'Auction Donations',
+        'in_kind_donations' => 'In-Kind Donations');
+    $view->obj->query(
 " 
 select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
-    as Company,
+    as company, companies.company_id,
         sum(inc.payment_amount) as cash_donations,
         sum(pur.payment_amount) as auction_purchases,
         sum(auct.item_value) as auction_donations,
@@ -180,7 +190,10 @@ having cash_donations > 0 or auction_purchases > 0 or auction_donations > 0 or i
 order by cash_donations desc, auction_purchases desc, 
     auction_donations desc, in_kind_donations desc 
 
-", 1);
+");
+    $res .= $view->simpleTable(false);
+
+
 
 	$res .= showRawQuery("Top Soliciting Families",
 " 
