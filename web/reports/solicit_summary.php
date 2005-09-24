@@ -47,21 +47,12 @@ print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the r
 print '<div id="centerCol">';
 
 
-
-
-
-
-function viewHack(&$atd)
+function schoolYearChooser(&$atd)
 {
-
-    $res = '';
-
-	//$schoolyear = $atd->page->currentSchoolYear;
- 
-
+    $res ='';
+    
     $at = new CoopView(&$atd->page, 'income', $none);
  
-
     $syform =& new HTML_QuickForm('schoolyearchooser', false, false, 
                                   false, false, true);
     $el =& $syform->addElement('select', 'gschoolyear', false, 
@@ -71,12 +62,28 @@ function viewHack(&$atd)
         $syform->addElement('hidden', 'coop', $sid); 
     }
 
+    $syform->setDefaults(array('school_year' => $at->page->currentSchoolYear));
 
     $res .= $syform->toHTML();
     
     $foo = $el->getValue();
     $schoolyear=$foo[0];
 
+    return array($schoolyear, $res);
+}
+
+
+
+
+
+function viewHack(&$atd)
+{
+
+    $res = '';
+
+    list($schoolyear, $chooser) = schoolYearChooser(&$atd);
+
+    $res .= $chooser;
 
 	$res .= showRawQuery("Solicitation Cash Income by Type",
 " 
