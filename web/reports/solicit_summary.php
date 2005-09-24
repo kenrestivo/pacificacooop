@@ -62,7 +62,7 @@ function schoolYearChooser(&$atd, $table)
         $syform->addElement('hidden', 'coop', $sid); 
     }
 
-    $syform->setDefaults(array('school_year' => $at->page->currentSchoolYear));
+    $syform->setDefaults(array('gschoolyear' => $at->page->currentSchoolYear));
 
     $res .= $syform->toHTML();
     
