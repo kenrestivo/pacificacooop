@@ -1,15 +1,21 @@
 schoolyear choooser notes
 
 
-in reports, i need to javascript the schoolyear thingus
-	so that it fuckin SUBMITS!
-	ah. i need to onchange, then i need to add teh js
-		is there a nice way to do it? or do i HAQUE!
+???
+	now, globalise it!
+		in coopview and/or generic
+		use the schoolyear in the chooser, not the one in currentschoolyear?
+			or, store this thing in page somewhere instead? chosenschoolyear?
+
+	
+	WHERE does this global belong?
+		page?
+		view? ($top?)
+		page->savedvars?
 
 
-????
-the schoolyear thing. i need a schoolyear chooser, EVERYWHERE.
-ok. i think it's easy. i create a schoolyear GLOBAL, at the top
+
+	ok. i think it's easy. i create a schoolyear GLOBAL, at the top
 		it is only shown if yearlevel > whatever is target (view/edit/etc)
 		i check it, in view, other places
 		i save/restore it from session, and use save/restored version 
@@ -33,4 +39,7 @@ ok. i think it's easy. i create a schoolyear GLOBAL, at the top
 				which should be set thru the popup
 
 
+
+clean up the shit in solicit summary, make it more generic
+	i.e. try it in generic!
 
