@@ -68,7 +68,9 @@ class Enrollment extends DB_DataObject
             $this->whereAdd(
                 '(dropout_date is null or dropout_date < "2000-01-01")');
             
-            $this->school_year = $co->page->currentSchoolYear;
+            $this->whereAdd(sprintf('%s.school_year like "%s"',
+                                    $co->table,
+                                    $co->page->currentSchoolYear));
 
             $this->orderBy('am_pm_session, last_name, first_name');
 

@@ -1,5 +1,26 @@
 schoolyear choooser notes
 
+2 hours PHP
+add an optional $all flag to the schoolyearchooseroptions
+	unshift '%' => 'ALL' to it
+	everywhere i dick with schoolyear (mostly coopobject?), s/=/like/g
+		in all linkconstraints, basically
+	test and make sure this works
+	i need to change all the if perms<year! i *always* want to check year
+		so the user can constrain
+
+1 hour PHP
+the most logical place for this is in the $top
+	but not injecting it into the object! store it somewhere, chosenschoolyear
+	show it inside of the coopview? maybe in the header?
+	no wait, it needs to be a global, for the purposes of CROSSLINKS!
+		selectboxen
+	or, maybe that can be a findTop() kind of thing
+		will findtop ALWAYS work?
+
+1 hour PHP
+test EVERYTHING
+
 
 ???
 	now, globalise it!

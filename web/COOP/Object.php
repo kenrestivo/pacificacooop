@@ -476,7 +476,7 @@ group by user_id,table_name,field_name";
               {
                 //TODO: use the GLOBAL or LOCAL POPUP!
                 //only use $sy if nothing is set
-                $this->obj->whereAdd(sprintf('school_year = "%s"',
+                $this->obj->whereAdd(sprintf('school_year like "%s"',
                                              $this->page->currentSchoolYear));
             } 
 
@@ -656,7 +656,7 @@ group by user_id,table_name,field_name";
 
     // returns key->val pair, useful for QF selectboxes
     // this is in here, not in QF, because i will need it elsewhere too
-	function getSchoolYears($val = false)
+	function getSchoolYears($val = false, $all = false)
 		{
             $db =& $this->obj->getDatabaseConnection();
 
@@ -681,8 +681,15 @@ group by user_id,table_name,field_name";
             }
 
             asort($years);
-         
-            // $options = array_combine($years, $years) is only in PHP5. doy.
+        
+            // for the various coopview choosers, not for saving
+            if($all){
+                $options['%'] ='ALL';
+            }
+
+ 
+            // array_push($options, array_combine($years, $years)) 
+                //is only in PHP5. doy.
             foreach($years as $year){
                 $options[$year] = $year;
             }
