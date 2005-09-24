@@ -20,4 +20,4 @@ Username: paccoop
 Password: <Your member password>
  
 
-i set system admin pw as n00dl13
+i set system admin pw in the coop's code as n00dl13
