@@ -35,27 +35,47 @@ $cp = new coopPage( $debug);
 print $cp->pageTop();
 
 
-$atd = new CoopView(&$cp, 'families', $none);
+$atd = new CoopView(&$cp, 'companies', $none);
 
 $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
 print $menu->topNavigation();
 
-print "<p>Contribution Summary by Family</p>";
-
+print  "<h2>Solicitation totals for $schoolyear </h2>";
 
 print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div id="centerCol">';
 
 
 
+
+
+
 function viewHack(&$atd)
 {
 
-	$schoolyear = $atd->page->currentSchoolYear;
+    $res = '';
+
+	//$schoolyear = $atd->page->currentSchoolYear;
  
 
-	$res = "<h2>Solicitation totals for $schoolyear </h2>";
+    $at = new CoopView(&$atd->page, 'income', $none);
+ 
+
+    $syform =& new HTML_QuickForm('schoolyearchooser', false, false, 
+                                  false, false, true);
+    $el =& $syform->addElement('select', 'gschoolyear', false, 
+                               $at->getSchoolYears());
+
+    if($sid = thruAuthCore($at->page->auth)){
+        $syform->addElement('hidden', 'coop', $sid); 
+    }
+
+
+    $res .= $syform->toHTML();
+    
+    $foo = $el->getValue();
+    $schoolyear=$foo[0];
 
 
 	$res .= showRawQuery("Solicitation Cash Income by Type",
