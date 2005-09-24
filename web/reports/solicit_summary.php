@@ -41,11 +41,10 @@ $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
 print $menu->topNavigation();
 
-print  "<h2>Solicitation totals for $schoolyear </h2>";
 
 print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div id="centerCol">';
-
+javaSubmit();
 
 function schoolYearChooser(&$atd, $table)
 {
@@ -55,8 +54,9 @@ function schoolYearChooser(&$atd, $table)
  
     $syform =& new HTML_QuickForm('schoolyearchooser', false, false, 
                                   false, false, true);
-    $el =& $syform->addElement('select', 'gschoolyear', false, 
-                               $at->getSchoolYears());
+    $el =& $syform->addElement('select', 'gschoolyear', 'Choose School Year', 
+                               $at->getSchoolYears(),
+                               array('onchange' =>'javascript:submitForm()'));
 
     if($sid = thruAuthCore($at->page->auth)){
         $syform->addElement('hidden', 'coop', $sid); 
@@ -84,6 +84,8 @@ function viewHack(&$atd)
     list($schoolyear, $chooser) = schoolYearChooser(&$atd, 'income');
 
     $res .= $chooser;
+
+    $res .=  "<h2>Solicitation totals for $schoolyear </h2>";
 
 	$res .= showRawQuery("Solicitation Cash Income by Type",
 " 
