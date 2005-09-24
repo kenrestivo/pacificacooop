@@ -656,7 +656,7 @@ group by user_id,table_name,field_name";
 
     // returns key->val pair, useful for QF selectboxes
     // this is in here, not in QF, because i will need it elsewhere too
-	function getSchoolYears($val)
+	function getSchoolYears($val = false)
 		{
             $db =& $this->obj->getDatabaseConnection();
 
