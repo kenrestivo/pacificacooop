@@ -199,6 +199,13 @@ class coopForm extends CoopObject
 				{
 					$el =& $this->form->addElement('select', $fullkey, false, 
 											 $this->getEnumOptions($key));
+
+				} else if($key == 'school_year') {
+                    // handle schoolyears speciaally!
+					$el =& $this->form->addElement('select', $fullkey, false, 
+											 $this->getSchoolYears($val));
+
+
 				} else if(is_array($this->obj->fb_booleanFields) &&
 						  in_array($key, $this->obj->fb_booleanFields))
 				{
@@ -294,6 +301,41 @@ class coopForm extends CoopObject
                                       "CoopForm::selectOptions($key)", 6);
 			return $options;
 		}
+
+
+
+	function getSchoolYears($val)
+		{
+            $db =& $this->obj->getDatabaseConnection();
+
+            $years = $db->getCol(
+                sprintf('select distinct school_year from %s 
+                        group by school_year order by school_year', 
+                        $this->table),
+                'school_year');
+
+            $this->page->confessArray($years, 'getschoolyears', 5);
+  
+            if(!is_array($years) || !in_array($this->page->currentSchoolYear,
+                                              $years))
+            {
+                array_push($years, $this->page->currentSchoolYear);
+            }
+
+            $next = findSchoolYear(0,1,1);
+            if(!in_array($next, $years))
+            {
+                array_push($years, $next);
+            }
+
+            asort($years);
+            foreach($years as $year){
+                $options[$year] = $year;
+            }
+
+            return $options;
+		}
+
 
 
 	// this is back-called by quickform.

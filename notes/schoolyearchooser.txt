@@ -1,5 +1,9 @@
 schoolyear choooser notes
 
+		make a test, and a test page to see how it'll work
+			chooser, and other links too
+		workdays will be my testcase, for now	
+
 30 mins
 	* the ugliness goes into addandsetvars
 		force schoolyear to always be a select
@@ -13,9 +17,7 @@ in reports, i need to javascript the schoolyear thingus
 
 ????
 the schoolyear thing. i need a schoolyear chooser, EVERYWHERE.
-		make a test, and a test page to see how it'll work
-			chooser, and other links too
-	ok. i think it's easy. i create a schoolyear GLOBAL, at the top
+ok. i think it's easy. i create a schoolyear GLOBAL, at the top
 		it is only shown if yearlevel > whatever is target (view/edit/etc)
 		i check it, in view, other places
 		i save/restore it from session, and use save/restored version 
