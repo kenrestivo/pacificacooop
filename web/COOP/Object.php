@@ -653,6 +653,46 @@ group by user_id,table_name,field_name";
             return $sorted;
         }
 
+
+    // returns key->val pair, useful for QF selectboxes
+    // this is in here, not in QF, because i will need it elsewhere too
+	function getSchoolYears($val)
+		{
+            $db =& $this->obj->getDatabaseConnection();
+
+            $years = $db->getCol(
+                sprintf('select distinct school_year from %s 
+                        group by school_year order by school_year', 
+                        $this->table),
+                'school_year');
+
+            $this->page->confessArray($years, 'getschoolyears', 5);
+  
+            if(!is_array($years) || !in_array($this->page->currentSchoolYear,
+                                              $years))
+            {
+                array_push($years, $this->page->currentSchoolYear);
+            }
+
+            $next = findSchoolYear(0,1,1);
+            if(!in_array($next, $years))
+            {
+                array_push($years, $next);
+            }
+
+            asort($years);
+         
+            // $options = array_combine($years, $years) is only in PHP5. doy.
+            foreach($years as $year){
+                $options[$year] = $year;
+            }
+
+            return $options;
+		}
+
+
+
+
 } // END COOP OBJECT CLASS
 
 
