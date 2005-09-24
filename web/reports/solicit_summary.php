@@ -47,11 +47,11 @@ print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the r
 print '<div id="centerCol">';
 
 
-function schoolYearChooser(&$atd)
+function schoolYearChooser(&$atd, $table)
 {
     $res ='';
     
-    $at = new CoopView(&$atd->page, 'income', $none);
+    $at = new CoopView(&$atd->page, $table, $none);
  
     $syform =& new HTML_QuickForm('schoolyearchooser', false, false, 
                                   false, false, true);
@@ -81,7 +81,7 @@ function viewHack(&$atd)
 
     $res = '';
 
-    list($schoolyear, $chooser) = schoolYearChooser(&$atd);
+    list($schoolyear, $chooser) = schoolYearChooser(&$atd, 'income');
 
     $res .= $chooser;
 
