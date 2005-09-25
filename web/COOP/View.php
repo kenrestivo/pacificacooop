@@ -39,7 +39,7 @@ class coopView extends CoopObject
                                'details' => ACCESS_VIEW);      
     var $viewActions = array('add' => ACCESS_ADD, 
                              'view'=> ACCESS_VIEW);     
-
+    var $chosenSchoolYear = ''; // the year to use by default, as chosen by user
 
     //chain up
 	function CoopView (&$page, $table, &$parentCO, $level = 0)
@@ -166,6 +166,7 @@ class coopView extends CoopObject
             
             $this->linkConstraints();
 	
+            $this->debugWrap(5);
 
             //// finally, go get 'em!
             if($find){
@@ -372,9 +373,12 @@ class coopView extends CoopObject
 							 "for " . $par->getSummary() : "",
                              $this->obj->N);
 
-            //XXX HAACK!! REMOVE THIS when i get schoolyearchooser
             if($this->perms[NULL]['year'] >= ACCESS_VIEW){
-                $title .= " (SCHOOL-YEARS CHOOSER COMING SOON) ";
+                //XXX HACK! can't compare objects
+                $top =& $this->findTop();
+                if($top->table == $this->table) { 
+                    $title .= $this->schoolYearChooser();
+                }
             }
 		
 			$toptab = new HTML_Table(
@@ -542,6 +546,44 @@ class coopView extends CoopObject
 			return $res;
 		}
  
+
+
+function schoolYearChooser()
+{
+    $res ='';
+ 
+    $syform =& new HTML_QuickForm('schoolyearchooser', false, false, 
+                                  false, false, true);
+    $el =& $syform->addElement('select', 'gschoolyear', 'School Year', 
+                               //TODO check ispermittedfield for allyears!
+                               $this->getSchoolYears(null, true),
+                               array('onchange' =>'javascript:submitForm()'));
+
+    if($sid = thruAuthCore($this->page->auth)){
+        $syform->addElement('hidden', 'coop', $sid); 
+    }
+    $syform->setDefaults(array('gschoolyear' => $this->page->currentSchoolYear));
+
+
+    // XXX temporary hacks until i get my savevars shit working
+    $syform->addElement('hidden', 'table', $this->table); 
+    $syform->addElement('hidden', 'action', $this->page->vars['last']['action']); 
+    $syform->addElement('hidden', $this->prependTable($this->pk), 
+                        $this->page->vars['last']['id']); 
+    $syform->addElement('hidden', 'realm', $this->page->vars['last']['realm']); 
+
+
+
+    $res .= $syform->toHTML();
+    
+    $foo = $el->getValue();
+    $this->chosenSchoolYear = $foo[0];
+
+    return $res;
+}
+
+
+
 
     // MOVE THIS TO TABLE PERMISSIONS. as details, perhapsxs?
     function showPerms()

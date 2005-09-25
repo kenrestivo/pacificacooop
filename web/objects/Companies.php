@@ -137,8 +137,8 @@ var $fb_shortHeader = 'Contacts';
      'country' => 10
    );
 
-
-function fb_display_details(&$co)
+//XXX THIS IS NOT BEING USED NOW
+function NOfb_display_details(&$co)
         {
 
 //             if(!is_a('CoopView', $co)){

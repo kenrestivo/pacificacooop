@@ -658,12 +658,16 @@ group by user_id,table_name,field_name";
     // this is in here, not in QF, because i will need it elsewhere too
 	function getSchoolYears($val = false, $all = false)
 		{
+  
+            // the actual work for *this* table
+
             $db =& $this->obj->getDatabaseConnection();
 
             $years = $db->getCol(
                 sprintf('select distinct school_year from %s 
                         group by school_year order by school_year', 
-                        $this->table),
+                        //XXX we always use enrollment to get schoolyears!
+                        'enrollment'),
                 'school_year');
 
             $this->page->confessArray($years, 'getschoolyears', 5);
@@ -697,7 +701,33 @@ group by user_id,table_name,field_name";
             return $options;
 		}
 
-
+    // gets all links, forward and backward,
+    // as array: tablename => array(nearid, farid)
+    function allLinks()
+        {
+            foreach(array_merge($this->backlinks, $this->forwardLinks) 
+                    as $key =>$val)
+            {
+                
+                // backlinks and forward links are different, alas
+                if(strstr($val, ':')){
+                    $nearid = $key;
+                    list($table, $farid) = explode(':', $val);
+                } else {
+                    $table = $key;
+                    $nearid = $farid = $val;
+                }
+                
+                if($table == $this->table){ // blow off recursion
+                    continue;
+                }
+                
+                $all[$table] = array($nearid, $farid);
+   
+            }
+            $this->page->confessArray($all, "allLinks for {$this->table}", 4);
+            return $all;
+        }
 
 
 } // END COOP OBJECT CLASS

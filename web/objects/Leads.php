@@ -39,7 +39,8 @@ class Leads extends DB_DataObject
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $fb_fieldsToRender = array( 'lead_id', 'last_name', 'first_name',
+	var $fb_fieldsToRender = array( 'lead_id', 'last_name', 'first_name', 
+                                    'company',
 									'salutation', 'title', 'company',
 									'address1', 'address2', 'city', 'state',
 									'zip', 'country', 'phone', 

@@ -234,23 +234,8 @@ switch($_REQUEST['action']){
      print $atd->horizTable();
      
 
-     // NIFTY CODE TO SHOW ALL LINKS!
-     foreach(array_merge($atd->backlinks, $atd->forwardLinks) as $key =>$val){
-         
-         // backlinks and forward links are different, alas
-         if(strstr($val, ':')){
-             $nearid = $key;
-             list($table, $farid) = explode(':', $val);
-         } else {
-             $table = $key;
-             $nearid = $farid = $val;
-         }
-
-         if($table == $atd->table){ // blow off recursion
-             continue;
-         }
-
-
+     foreach($atd->allLinks() as $table => $ids){
+         list($nearid, $farid) = $ids;
          // for now, blow off the jointables
          $cp->printDebug("$atd->table  link for $nearid {$atd->obj->$nearid}  $table<br>", 4);
          $aud =& new CoopView(&$cp, $table, &$atd);
@@ -259,7 +244,8 @@ switch($_REQUEST['action']){
          if(!empty($tabs[$farid])){
              $farwhole = "{$aud->table}.$farid";
          }
-         $aud->obj->whereAdd("$farwhole = " .  $atd->obj->{$nearid});
+         $aud->obj->whereAdd(sprintf('%s = %d', 
+                                     $farwhole, $atd->obj->{$nearid}));
          //confessObj($aud, 'aud');
          $aud->debugWrap(5);
          print $aud->simpleTable();
