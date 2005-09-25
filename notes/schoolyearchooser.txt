@@ -1,6 +1,11 @@
 schoolyear choooser notes
 
 
+fix details EVERYWHERE that use currentschoolyear. it's fucked
+	i think i broke horiztable: in enrollment anyway
+		ONLY in enrollment. straaange
+		the OBJECT has the right shit in there, but it's not printing!!?
+
 
 2 hours PHP
 	everywhere i dick with schoolyear (mostly coopobject?), s/=/like/g
@@ -15,21 +20,25 @@ in details, some details will need to be default ALL, not default this year
 	 company, family, leads(people)
 
 
+ok, when people have no perms, do i force this year, or JUST SHOW NOTHING?
+	i like the idea of just showing nothing instead. but how?
 
 
 1 hour PHP
 test EVERYTHING
 
 
+	go back and fix the choosers in all the rasta areas
+		enhancement, 
+		job: nobody has multiyear perms.
+		 parented attendance: may have collision here with schoolyear?
+
+
+
 ??? PHP
 	when i flip back and forth i'll need to store/recover storevars too
 		it'll stay with the top-level object/table
 
-
-	go back and fix the choosers in all the rasta areas
-		enhancement, 
-		job, 
-		 parented attendance: may have collision here with schoolyear?
 
 let all members view year for membership! they can see all rastas now
 

@@ -88,7 +88,6 @@ class Enrollment extends DB_DataObject
 
 
 
-
     function fb_display_details(&$co)
         {
 
@@ -99,9 +98,6 @@ class Enrollment extends DB_DataObject
             $cp =& $top->page;
 
             
-            $sy =findSchoolYear();
-	
-
             //print "CHECKING $table<br>";
             $top->obj->$mi = $cid;
             $top->obj->find(true);
@@ -122,8 +118,7 @@ class Enrollment extends DB_DataObject
             // get all the kids... who are enrolled. gah.
             $subenrol = new CoopView(&$cp, 'enrollment', &$top);
             $subenrol->obj->whereAdd("$mi = $cid");
-            $subenrol->obj->whereAdd(sprintf('school_year = "%s"', 
-                                             $subenrol->page->currentSchoolYear));
+            $subenrol->constrainSchoolYear(); // NOT family
             $res .= $subenrol->simpleTable();
 
             //parents are easier. most of the time ;-)
@@ -136,7 +131,7 @@ class Enrollment extends DB_DataObject
             //workers
             $view = new CoopView(&$cp, 'workers', &$top);
             $view->obj->whereAdd(sprintf('family_id = %d',$family_id));
-            $view->obj->school_year = $view->page->currentSchoolYear;
+            $view->constrainSchoolYear(); // NOT family
             $res .= $view->simpleTable();
 
             // standard audit trail, for all details
