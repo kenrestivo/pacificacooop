@@ -34,32 +34,18 @@ test EVERYTHING
 		 parented attendance: may have collision here with schoolyear?
 
 
+what to do about places where schoolyear makes no sense?
+	there are only a few: perms, for instance
+	can i designate this? allyears maybe?
 
 ??? PHP
 	when i flip back and forth i'll need to store/recover storevars too
 		it'll stay with the top-level object/table
 
-
+10 minutes PHP
 let all members view year for membership! they can see all rastas now
 
 
-???
-	now, globalise it!
-		in coopview and/or generic
-		use the schoolyear in the chooser, not the one in currentschoolyear?
-			or, store this thing in page somewhere instead? chosenschoolyear?
-
-	
-	WHERE does this global belong?
-		page?
-		view? ($top?)
-		page->savedvars?
-
-
-
-	ok. i think it's easy. i create a schoolyear GLOBAL, at the top
-		it is only shown if yearlevel > whatever is target (view/edit/etc)
-		i check it, in view, other places
 		i save/restore it from session, and use save/restored version 
 			i.e. it sets itself from $cp->vars
 			it's its own weirdo form, so it can only work with view then
@@ -84,6 +70,7 @@ let all members view year for membership! they can see all rastas now
 
 clean up the shit in solicit summary, make it more generic
 	i.e. try it in generic!
+	didn't i do that?
 
 
 ???? PHP

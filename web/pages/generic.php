@@ -252,6 +252,10 @@ switch($_REQUEST['action']){
      }
 
 
+     if(is_callable(array(&$atd->obj, 'extraDetails'))){
+         print $atd->obj->extraDetails(&$atd);
+     }
+
      // standard audit trail, for all details
      $aud =& new CoopView(&$cp, 'audit_trail', &$atd);
      $aud->obj->table_name = $atd->table;
