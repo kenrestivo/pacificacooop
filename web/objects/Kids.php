@@ -47,40 +47,32 @@ class Kids extends DB_DataObject
 	function fb_linkConstraints(&$co)
 		{
 
+            // NOTE i do this the easy way: i don't constrain to families
+            // just to enrollment, because it's the shortest path
             $enrollment =  $this->factory('enrollment');
 
 
             $this->orderBy('last_name, first_name');
 
             // HACK! this is presuming VIEW, but in popup it could be EDIT
-            if($co->perms[NULL]['year'] < ACCESS_VIEW){
-                $enrollment->whereAdd(
-                    '(dropout_date is null or dropout_date < "2000-01-01")');
 
 
+            $this->joinAdd($enrollment);
 
-                $this->joinAdd($enrollment);
-
-                // IMPORTANT! otherwise it matches old year
-                $this->selectAdd('max(school_year) as school_year');
-                $this->groupBy("{$co->table}.{$co->pk}");
-
-
-                // TODO! support chooser
-                $this->whereAdd(
-                    "enrollment.school_year = '{$co->page->currentSchoolYear}'");
-
-
-
-
-                $this->selectAdd();
-                $this->selectAdd("{$co->table}.*");
-                $this->selectAdd("max(enrollment.school_year) 
+            // IMPORTANT! otherwise it matches old year
+            $this->selectAdd("max(enrollment.school_year) 
                                                 as school_year");
-                $this->groupBy("{$co->table}.{$co->pk}");
+            $this->groupBy("{$co->table}.{$co->pk}");
+
+            $co->constrainSchoolYear();
 
 
-            }
+
+            $this->selectAdd();
+            $this->selectAdd("{$co->table}.*");
+            $this->groupBy("{$co->table}.{$co->pk}");
+
+
 
             //$co->debugWrap(2);
 

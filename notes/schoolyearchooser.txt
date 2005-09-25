@@ -26,6 +26,13 @@ test EVERYTHING
 		it'll stay with the top-level object/table
 
 
+	go back and fix the choosers in all the rasta areas
+		enhancement, 
+		job, 
+		 parented attendance: may have collision here with schoolyear?
+
+let all members view year for membership! they can see all rastas now
+
 
 ???
 	now, globalise it!

@@ -70,7 +70,7 @@ class Enrollment extends DB_DataObject
             
             $this->whereAdd(sprintf('%s.school_year like "%s"',
                                     $co->table,
-                                    $co->page->currentSchoolYear));
+                                    $chosen));
 
             $this->orderBy('am_pm_session, last_name, first_name');
 
@@ -172,6 +172,10 @@ class Enrollment extends DB_DataObject
 
     function _prepareView(&$co, $session)
         {
+
+            $co->schoolYearChooser();
+            $chosen = $co->getChosenSchoolYear();
+
             // TODO: do not show dropped enrollment!
 
             $rastaquery = 
@@ -226,7 +230,7 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             
 
             $this->fb_formHeaderText .= 
-                " {$co->page->currentSchoolYear} $session session";
+                " {$chosen} $session session";
 
             foreach(array('monday', 'tuesday', 'wednesday', 
                           'thursday', 'friday') as $field)
@@ -236,9 +240,9 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             }
 
             $co->obj->query(sprintf($rastaquery, 
-                                 $co->page->currentSchoolYear,
-                                 $co->page->currentSchoolYear,
-                                 $co->page->currentSchoolYear, 
+                                 $chosen,
+                                 $chosen,
+                                 $chosen, 
                                  $session));
 
 
@@ -280,6 +284,7 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
 // used in reports
     function displayTotals(&$co)
         {
+            //XXX need to force the schoolyearchooser first!
             foreach(array('monday', 'tuesday', 'wednesday', 
                           'thursday', 'friday') as $day){
                 $this->fb_displayFormat[$day] = '%d';
@@ -294,7 +299,7 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             $this->query(
                 sprintf(
                     'select  am_pm_session, sum(monday) as monday, sum(tuesday) as tuesday, sum(wednesday) as wednesday, sum(thursday) as thursday, sum(friday) as friday from enrollment where enrollment.school_year = "2005-2006" group by am_pm_session order by enrollment.am_pm_session',
-                    $co->page->currentSchoolYear));
+                    $co->getChosenSchoolYear()));
             $res .= $co->simpleTable(false);
 
             return $res;

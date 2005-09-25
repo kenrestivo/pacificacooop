@@ -66,6 +66,7 @@ class Enhancement_hours extends DB_DataObject
 
     function fb_linkConstraints(&$co)
         {
+            //TODO: make the schoolyear chooser happen here
             $par = $this->factory('parents');
             $this->joinAdd($par);
             if($co->isPermittedField(NULL) < ACCESS_VIEW ){
