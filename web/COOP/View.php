@@ -39,6 +39,7 @@ class coopView extends CoopObject
                                'details' => ACCESS_VIEW);      
     var $viewActions = array('add' => ACCESS_ADD, 
                              'view'=> ACCESS_VIEW);     
+    var $yearTitle = '';  // NASTY hack to deal with order of action
 
 
     //chain up
@@ -162,6 +163,8 @@ class coopView extends CoopObject
                     "CoopView::find($this->table) NO VIEW PERMS!", 2 );
                 return false;
             }
+            
+            $this->schoolYearChooser();
 
             
             $this->linkConstraints();
@@ -373,14 +376,9 @@ class coopView extends CoopObject
 							 "for " . $par->getSummary() : "",
                              $this->obj->N);
 
-            if($this->perms[NULL]['year'] >= ACCESS_VIEW){
-                //XXX HACK! can't compare objects
-                $top =& $this->findTop();
-                if($top->table == $this->table) { 
-                    $title .= $this->schoolYearChooser();
-                }
-            }
-		
+
+            $title .= $this->yearTitle;		
+
 			$toptab = new HTML_Table(
 				'class="tablecontainer"');
 			$toptab->addRow(array($title, $this->actionButtons()), 
@@ -550,6 +548,21 @@ class coopView extends CoopObject
 
 function schoolYearChooser()
 {
+
+    if($this->perms[NULL]['year'] < ACCESS_VIEW)
+    {
+        $this->yearTitle = "School Year {$this->page->currentSchoolYear}";
+        return;
+    }
+
+    //XXX HACK! can't compare objects
+    $top =& $this->findTop();
+    if($top->table != $this->table){
+        $this->yearTitle = "School Year {$top->chosenSchoolYear}";
+        return;
+    }
+
+    
     $res ='';
  
     $syform =& new HTML_QuickForm('schoolyearchooser', false, false, 
@@ -579,7 +592,9 @@ function schoolYearChooser()
     $foo = $el->getValue();
     $this->chosenSchoolYear = $foo[0];
     $this->page->printDebug("{$this->table} setting chosen schoolyear to {$this->chosenSchoolYear}", 3);
-    return $res;
+    $this->yearTitle = $res;
+
+    return;
 }
 
 
