@@ -1,20 +1,11 @@
 schoolyear choooser notes
 
 
-so. if there's a schoolyear, AND i've got something in chosen here OR on the top, AND i have permissions, use that.
-	otherwise, make it always this schoolyear
-	
 
-now, use chosenschoolyear in top!
-	where? linkconstraints?
+BUG
+	the schoolyear is CHECKED before it is SAVED. 
+	fucking a! this is html at its GODDAMNED worst
 
-
-
-
-so. the popup needs to SAVE chosenschoolyear
-	and i need to check it in linkconstraints
-	THIS WILL SUCK!!! in popupmenus! it'll always have the wrong shit in there
-	ah. so only check schoolyear if it is chosen. otherwise, all
 
 
 ??? PHP

@@ -459,54 +459,60 @@ group by user_id,table_name,field_name";
   //           //XXX if it's a subview, it may be for the *above* family.
 //             /// note the permitted here is NOT forcing family, for lookup
 // i'm also forcing this schoolyear, which is stupid. fix that later.
-             if($this->isPermittedField(null, false, true) < ACCESS_VIEW &&
-                $co->page->userStruct['family_id'] &&
-                $this->inObject('family_id'))
-             {
-                 $this->page->printDebug("FORCING familyid for search, with wheraedd", 2);
-                 $this->obj->whereAdd(
-                     sprintf('family_id = %d',
-                             $this->page->userStruct['family_id']));
-             }
             
-
-             //this code ought to be taken out and shot.
-             if($this->inObject('school_year')){
-                 if($this->perms[null]['year'] < ACCESS_VIEW) {
-                     $this->obj->whereAdd(
-                         sprintf('school_year = "%s"',
-                                 $this->page->currentSchoolYear));
-                 } else {
-                     $chosen = $this->getChosenSchoolYear();
-                     if($chosen){
-                         $this->obj->whereAdd(
-                             sprintf('school_year like "%s"', $chosen));
-                     }
-                 }
-             }
+            $this->constrainFamily();
               
-
-
-//             //TODO: maybe instead check path?
-//             //do this BEFORE injecting anything into it?
-//             //i may not ALWAYS want to sort by school year, ya know
-//             if($this->inObject('school_year', 'class')){
-//                 print "SCHOOLYEAR IN CLASS";
-//                 //print "ADDING SY for $this->table ???";
-//                 //TODO: i'll need an orderby in the fucking object.
-//                 //or... another global popup, the user can change!
-//                 $this->obj->orderBy('school_year desc');
-//             }
-
-              if(is_array($this->obj->fb_linkDisplayFields) && 
-                 count($this->obj->fb_linkDisplayFields) > 0)
-              {
-                  $this->obj->orderBy(
-                      implode(',', 
-                              $this->obj->fb_linkDisplayFields));
-              }
+            if($this->inObject('school_year')){
+                $this->constrainSchoolYear();
+            }
+             
+             
+             if(is_array($this->obj->fb_linkDisplayFields) && 
+                count($this->obj->fb_linkDisplayFields) > 0)
+             {
+                 $this->obj->orderBy(
+                     implode(',', 
+                             $this->obj->fb_linkDisplayFields));
+             }
 
 		}
+
+
+    function constrainSchoolYear()
+        {
+             //this code ought to be taken out and shot.
+            if($this->perms[null]['year'] < ACCESS_VIEW) {
+                $this->obj->whereAdd(
+                    sprintf('school_year = "%s"',
+                            $this->page->currentSchoolYear));
+            } else {
+                $chosen = $this->getChosenSchoolYear();
+                // yes, i only constrain IFF something is chosen
+                // so that  linkfields properly show all years
+                if($chosen){
+                    $this->obj->whereAdd(
+                        sprintf('school_year like "%s"', $chosen));
+                    $this->obj->orderBy('school_year desc');
+                }
+            }
+        }
+
+
+
+    function constrainFamily()
+        {
+            if($this->isPermittedField(null, false, true) < ACCESS_VIEW &&
+               $co->page->userStruct['family_id'] &&
+               $this->inObject('family_id'))
+            {
+                $this->page->printDebug("FORCING familyid for search, with wheraedd", 2);
+                $this->obj->whereAdd(
+                    sprintf('family_id = %d',
+                            $this->page->userStruct['family_id']));
+            }
+            
+        }
+
 
 	/// XXX this is not really used. instead, i overload insert
 	function getCounter($column, $schoolyear = false)
@@ -738,7 +744,12 @@ group by user_id,table_name,field_name";
 
     function getChosenSchoolYear()
         {
+            $this->page->printDebug("CHECKING chosenschoolyear $this->table", 
+                                    3);
             if($this->chosenSchoolYear){
+                $this->page->printDebug(
+                    "getChosenSchoolyear {$this->table} found {$this->chosenSchoolYear}", 
+                                        3);
                 return $this->chosenSchoolYear;
             }
 

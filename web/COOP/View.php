@@ -578,7 +578,7 @@ function schoolYearChooser()
     
     $foo = $el->getValue();
     $this->chosenSchoolYear = $foo[0];
-
+    $this->page->printDebug("{$this->table} setting chosen schoolyear to {$this->chosenSchoolYear}", 3);
     return $res;
 }
 

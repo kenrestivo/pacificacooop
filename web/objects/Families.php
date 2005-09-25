@@ -47,27 +47,26 @@ class Families extends DB_DataObject
             $enrollment =  $this->factory('enrollment');
 
             // HACK! this is presuming VIEW, but in popup it could be EDIT
-            if($co->perms[NULL]['year'] < ACCESS_VIEW){
-                $enrollment->whereAdd(
-                    '(dropout_date is null or dropout_date < "2000-01-01")');
-                $enrollment->whereAdd(
-                    sprintf('school_year = "%s"',
-                            $co->page->currentSchoolYear));
+            
+            $kids =  $this->factory('kids');
+            $kids->joinAdd($enrollment, '');
+            
+            $this->joinAdd($kids);
+            $this->selectAdd('max(school_year) as school_year');
                 
-                
-                $kids =  $this->factory('kids');
-                $kids->joinAdd($enrollment, '');
-                
-                $this->joinAdd($kids);
-                $this->selectAdd('max(school_year) as school_year');
-            }
+            $co->constrainSchoolYear();
 
             $this->orderBy('families.name');
             $this->groupBy('families.name');
             
 
+            // XXX broken! in previous years, i need to see dropouts
+            if($co->perms[NULL]['year'] < ACCESS_VIEW){
+                $enrollment->whereAdd(
+                    '(dropout_date is null or dropout_date < "2000-01-01")');
+            }
 
-            //$co->debugWrap(5);
+            //$co->debugWrap(4);
 
 			// ugly, but consisent. only shows families for this year
 
