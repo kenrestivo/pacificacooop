@@ -2,22 +2,6 @@ schoolyear choooser notes
 
 
 
-BUG
-	the schoolyear is CHECKED before it is SAVED. 
-	fucking a! this is html at its GODDAMNED worst
-
-
-
-??? PHP
-the most logical place for this is in the $top
-	show it inside of the coopview? maybe in the header?
-	no wait, it needs to be a global, for the purposes of CROSSLINKS!
-		selectboxen
-	or, maybe that can be a findTop() kind of thing
-		will findtop ALWAYS work?
-	when i flip back and forth i'll need to store/recover storevars too
-		it'll stay with the top-level object/table
-
 2 hours PHP
 	everywhere i dick with schoolyear (mostly coopobject?), s/=/like/g
 		in all linkconstraints, basically
@@ -25,19 +9,22 @@ the most logical place for this is in the $top
 	i need to change all the if perms<year! i *always* want to check year
 		so the user can constrain
 
+
 ??? PHP
 in details, some details will need to be default ALL, not default this year
 	 company, family, leads(people)
+
+
 
 
 1 hour PHP
 test EVERYTHING
 
 
-???? PHP
-	interesting brain-death. in search, i want to know what's already there
-		in entry, i *may* want to enter for all possible years
-	HOW thefuck can i do that? generate list of years dating back to... when?
+??? PHP
+	when i flip back and forth i'll need to store/recover storevars too
+		it'll stay with the top-level object/table
+
 
 
 ???
@@ -82,5 +69,9 @@ test EVERYTHING
 clean up the shit in solicit summary, make it more generic
 	i.e. try it in generic!
 
-add an optional $all flag to the schoolyearchooseroptions
-	unshift '%' => 'ALL' to it
+
+???? PHP
+	interesting brain-death. in search, i want to know what's already there
+		in entry, i *may* want to enter for all possible years
+	HOW thefuck can i do that? generate list of years dating back to... when?
+

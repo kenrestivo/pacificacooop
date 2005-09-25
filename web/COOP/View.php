@@ -377,7 +377,7 @@ class coopView extends CoopObject
                              $this->obj->N);
 
 
-            $title .= $this->yearTitle;		
+            $title .= ' ' . $this->yearTitle;		
 
 			$toptab = new HTML_Table(
 				'class="tablecontainer"');
@@ -558,7 +558,10 @@ function schoolYearChooser()
     //XXX HACK! can't compare objects
     $top =& $this->findTop();
     if($top->table != $this->table){
-        $this->yearTitle = "School Year {$top->chosenSchoolYear}";
+        //XXX stupid hack
+        if($top->chosenSchoolYear != '%'){
+            $this->yearTitle = "School Year {$top->chosenSchoolYear}";
+        }
         return;
     }
 
