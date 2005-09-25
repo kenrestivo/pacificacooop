@@ -1570,6 +1570,11 @@ having cash_donations > 0 or auction_purchases > 0 or auction_donations > 0 or i
 order by cash_donations desc, auction_purchases desc, 
     auction_donations desc, in_kind_donations desc 
 
-
+-- not very useful ad guess for 2003. i'd have to write more intelligent code
+-- or just manually enter them from the previous year
+select company_id, payment_amount, ad_size_description 
+from companies_income_join left join income using (income_id) 
+left join ad_sizes on ad_price = payment_amount 
+where account_number = 5 and income.school_year = '2003-2004';
 
 --- EOF

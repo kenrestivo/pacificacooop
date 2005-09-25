@@ -79,6 +79,8 @@ on upriv.realm_id = table_permissions.realm_id
 where user_id = %d and table_name = '%s'
 group by user_id,table_name,field_name";
     var $changes = array();  // array('field' => array('old'=>serialisedstuff, 'new'=> serialisedstuff))
+    var $chosenSchoolYear = ''; // the year to use by default, as chosen by user
+
 
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
 		{
@@ -462,23 +464,27 @@ group by user_id,table_name,field_name";
                 $this->inObject('family_id'))
              {
                  $this->page->printDebug("FORCING familyid for search, with wheraedd", 2);
-                 $this->obj->whereAdd('family_id = ' . $this->page->userStruct['family_id']);
+                 $this->obj->whereAdd(
+                     sprintf('family_id = %d',
+                             $this->page->userStruct['family_id']));
              }
             
 
-//             XXX have to do it man, and this is not the way to do it
-//             check ispermitted here too, just in case
-//             they shouldn't even *see* a chooser if they aren't permitted
-//             but i's like to be paranoid
-                                                                        
-              if($this->perms['year'] < ACCESS_VIEW && 
-                 $this->inObject('school_year'))
-              {
-                //TODO: use the GLOBAL or LOCAL POPUP!
-                //only use $sy if nothing is set
-                $this->obj->whereAdd(sprintf('school_year like "%s"',
-                                             $this->page->currentSchoolYear));
-            } 
+             //this code ought to be taken out and shot.
+             if($this->inObject('school_year')){
+                 if($this->perms[null]['year'] < ACCESS_VIEW) {
+                     $this->obj->whereAdd(
+                         sprintf('school_year = "%s"',
+                                 $this->page->currentSchoolYear));
+                 } else {
+                     $chosen = $this->getChosenSchoolYear();
+                     if($chosen){
+                         $this->obj->whereAdd(
+                             sprintf('school_year like "%s"', $chosen));
+                     }
+                 }
+             }
+              
 
 
 //             //TODO: maybe instead check path?
@@ -727,6 +733,17 @@ group by user_id,table_name,field_name";
             }
             $this->page->confessArray($all, "allLinks for {$this->table}", 4);
             return $all;
+        }
+
+
+    function getChosenSchoolYear()
+        {
+            if($this->chosenSchoolYear){
+                return $this->chosenSchoolYear;
+            }
+
+            $top =& $this->findTop();
+            return $top->chosenSchoolYear;
         }
 
 

@@ -39,7 +39,7 @@ class coopView extends CoopObject
                                'details' => ACCESS_VIEW);      
     var $viewActions = array('add' => ACCESS_ADD, 
                              'view'=> ACCESS_VIEW);     
-    var $chosenSchoolYear = ''; // the year to use by default, as chosen by user
+
 
     //chain up
 	function CoopView (&$page, $table, &$parentCO, $level = 0)
