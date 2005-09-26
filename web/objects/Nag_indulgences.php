@@ -34,7 +34,6 @@ class Nag_indulgences extends DB_DataObject
 		);
 var $fb_formHeaderText = 'Springfest Nag Indulgences';
 
-var $fb_usePage = 'indulgences.php';
 
 var $fb_shortHeader = 'Indulgences';
 

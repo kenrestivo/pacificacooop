@@ -149,7 +149,8 @@ function viewHack(&$atd)
     $tab->addRow(array(
                      'Family Name',
                      sprintf('Hours Completed %s',
-                             $sem == 'spring' ? "<br>(or carried over from fall)" : ""),
+                             $sem == 'spring' ? 
+                             "<br>(or carried over from fall)" : ""),
                      "Hours Required",
                      "Remaining Hours Owed",
                    'Session',
@@ -165,6 +166,7 @@ function viewHack(&$atd)
         $needed =  $en->owed[$sem] - $total;
         // TODO: if nagonly, show only the needed > 0's
         if($needed > 0 || $showall){
+            $atd->obj->family_id = $row['family_id']; // XXX recordbuttons HACK!
             $tab->addRow(array(
                              $row['name'],
                              $total,

@@ -1,5 +1,11 @@
 email subscription notes
 
+format for email
+	from: pacificacoop
+	subject: NEWS/ALERT/NOTICE [subject/title]
+	insert the regular content
+
+
 need hooks for new 
 	blog insertion or edit: 
 	any rasta-related table edit or add

@@ -26,7 +26,6 @@ class Flyer_deliveries extends DB_DataObject
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 
-var $fb_usePage = 'flyer_delivery.php';
 
 var $fb_formHeaderText = 'Springfest Flyer Deliveries';
 var $fb_shortHeader = 'Deliveries';

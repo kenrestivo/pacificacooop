@@ -39,7 +39,8 @@ class Families extends DB_DataObject
     var $fb_formHeaderText = "Co-Op Member Families";
     var $fb_shortHeader = "Families";
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
-
+    // XXX BROKEN! omplains about multiple joins to parents
+    //var $fb_extraDetails = array('parents:enhancement_hours');
 
  	function fb_linkConstraints(&$co)
 		{

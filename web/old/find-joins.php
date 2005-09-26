@@ -7,7 +7,6 @@
 chdir("../");                   // XXX only for "test" dir hack!
 require_once('CoopPage.php');
 require_once('CoopObject.php');
-require_once("members.inc");
 require_once("everything.inc");
 
 

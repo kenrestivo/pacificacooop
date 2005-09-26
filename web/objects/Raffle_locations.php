@@ -26,8 +26,6 @@ class Raffle_locations extends DB_DataObject
     ###END_AUTOCODE
 	var $fb_linkDisplayFields = array ('location_name');
 
-    var $fb_usePage = 'raffle_locations.php';
-    
     var $fb_shortHeader = 'Locations';
     
     var $fb_requiredFields = array(

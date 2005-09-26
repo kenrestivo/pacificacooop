@@ -69,6 +69,8 @@ class Enhancement_hours extends DB_DataObject
             //TODO: make the schoolyear chooser happen here
             $par = $this->factory('parents');
             $this->joinAdd($par);
+
+            /// TODO: use constrainfamily and constarinschoolyear!
             if($co->isPermittedField(NULL) < ACCESS_VIEW ){
                 /// XXX need to check that a familyid exists!
                 $this->whereAdd(sprintf('parents.family_id  = %d', 

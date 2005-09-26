@@ -84,6 +84,16 @@ var $fb_dupeIgnore = array(
 
 // set account_number check_jointo = families
 
+    function fb_linkConstraints(&$co)
+        {
+
+            ///XXX HIDEOUS HACK!! should *not* be companies always
+            $par = $this->factory('companies_income_join');
+            $this->joinAdd($par);
+            //$co->constrainFamily();
+            $co->constrainSchoolYear();
+            
+        }
 
 
 }
