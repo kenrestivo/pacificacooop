@@ -105,10 +105,10 @@ function viewHack(&$atd)
 				   left join kids on kids.family_id = families.family_id
 				   left join enrollment on kids.kid_id = enrollment.kid_id
 				where enrollment.school_year = '$year' 
-					and enrollment.dropout_date is null
+					and (enrollment.dropout_date is null 
+                        or enrollment.dropout_date < '1950-01-01')
 			group by families.family_id
 			order by enrollment.am_pm_session, families.name
-
 	");
 
 	$err = mysql_error();
@@ -172,7 +172,7 @@ function viewHack(&$atd)
                              $needed >0 ? $needed : "",
                              $row['am_pm_session'],
                              $row['phone'],
-                             recordButtons($row, $callbacks, $p, $u)));
+                             $atd->recordButtons($row)));
         }
     }
 
