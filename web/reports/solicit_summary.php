@@ -37,8 +37,7 @@ print $cp->pageTop();
 
 $atd = new CoopView(&$cp, 'companies', $none);
 
-$menu =& new CoopMenu();
-$menu->page =& $cp;				// XXX hack!
+$menu =& new CoopMenu(&$cp);
 print $menu->topNavigation();
 
 
