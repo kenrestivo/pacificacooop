@@ -253,7 +253,6 @@ switch($_REQUEST['action']){
 
      if(is_array($atd->obj->fb_extraDetails)){
          foreach($atd->obj->fb_extraDetails as $path){
-             print $path;
              // XXX this only handles one-degree-of-separation!
              list($join, $dest) = explode(':', $path);
              $co2 =& new CoopObject(&$atd->page, $join, &$atd);
