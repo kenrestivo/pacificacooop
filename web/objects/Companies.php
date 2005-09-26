@@ -116,10 +116,12 @@ var $fb_defaults = array(
   'flyer_ok' => 'Unknown'
 );
 
+    
+    var $fb_shortHeader = 'Contacts';
+    
 
-var $fb_shortHeader = 'Contacts';
-
-
+    var $fb_extraDetails = array('companies_income_join:income');
+    
     function fb_display_view(&$co)
         {
             $this->orderBy('company_name, last_name');
@@ -137,22 +139,6 @@ var $fb_shortHeader = 'Contacts';
      'country' => 10
    );
 
-function extraDetails(&$co)
-        {
-            
-            $co2 = new CoopObject(&$co->page, 'companies_income_join', &$co);
-            $co2->obj->whereAdd(sprintf('%s = %d', 
-                                        $co->pk, 
-                                        $this->{$co->pk}));
-            $real = new CoopView(&$co->page, 'income', &$co2);
-            $real->obj->orderBy('school_year desc');
-            $real->obj->joinadd($co2->obj);
-            $res .= $real->simpleTable();
-	
-
-            return $res;
-
-        }
 
 
 }

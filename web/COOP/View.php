@@ -94,7 +94,6 @@ class coopView extends CoopObject
 			}
 
 			$tab = new HTML_Table();	
-		
 			while($this->obj->fetch()){
 				if(!$rowcnt++){
 					// MUST do this *after* fetch, to handl custom queries
@@ -177,6 +176,8 @@ class coopView extends CoopObject
 			} else {
 				$found = $this->obj->N;
 			}
+
+            $this->page->printDebug("CoopView::find($find) $this->table found $found", 2);
             // ALSO. if i have "add" perms, then show the 'add new'
             // even if nothign was found, force TRUE, so i get my enter new
             return $found || $perms >= ACCESS_ADD;

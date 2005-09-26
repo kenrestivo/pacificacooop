@@ -9,6 +9,7 @@ function coopDebug($class, $message, $logtype = 0, $level = 1)
     if($level > 2){
         return;
     }
+    //print_r(debug_backtrace());
 
    if (!is_string($message)) {
         $message = print_r($message,true);

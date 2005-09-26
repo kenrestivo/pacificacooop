@@ -2,7 +2,7 @@
 
 //$Id$
 
-//$debug = 4;
+//$debug = -1;
 
 
 require_once('CoopPage.php');
@@ -236,7 +236,6 @@ switch($_REQUEST['action']){
 
      foreach($atd->allLinks() as $table => $ids){
          list($nearid, $farid) = $ids;
-         // for now, blow off the jointables
          $cp->printDebug("$atd->table  link for $nearid {$atd->obj->$nearid}  $table<br>", 4);
          $aud =& new CoopView(&$cp, $table, &$atd);
          $tabs = $aud->obj->table();
@@ -252,8 +251,20 @@ switch($_REQUEST['action']){
      }
 
 
-     if(is_callable(array(&$atd->obj, 'extraDetails'))){
-         print $atd->obj->extraDetails(&$atd);
+     if(is_array($atd->obj->fb_extraDetails)){
+         foreach($atd->obj->fb_extraDetails as $path){
+             print $path;
+             // XXX this only handles one-degree-of-separation!
+             list($join, $dest) = explode(':', $path);
+             $co2 =& new CoopObject(&$atd->page, $join, &$atd);
+             $co2->obj->whereAdd(sprintf('%s = %d', 
+                                         $atd->pk, 
+                                         $id));
+             $real =& new CoopView(&$atd->page, $dest, &$co2);
+             $real->obj->orderBy('school_year desc');
+             $real->obj->joinadd($co2->obj);
+             print $real->simpleTable();
+         }
      }
 
      // standard audit trail, for all details

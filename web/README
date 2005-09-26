@@ -20,6 +20,7 @@ fb_displayFormat  array (field => sprintffrormat)
 fb_displayCallabacks = array (field => cb)
 fb_viewActions = array  (action => level)
 fb_recordActions = array  (action => level)
+fb_extraDetails = array('path:to:other:details', 'path:to:more:details')
 
 in coopview
 fullText (do not truncate longtextfields)

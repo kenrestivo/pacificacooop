@@ -37,6 +37,7 @@ $dbhost =  "bc";
 
 //ONLY ON BC!!! don't push this live or you'll be in a world of shit.
 if($debug < 0) {
+    print 'YOU ARE USING APD!';
     apd_set_pprof_trace();
 }
 
