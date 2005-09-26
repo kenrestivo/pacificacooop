@@ -27,6 +27,7 @@ class Sponsorships extends DB_DataObject
     ###END_AUTOCODE
 	var $fb_enumFields = array ('entry_type');
 	var $fb_formHeaderText =  'Springfest Sponsorships';
+    var $fb_shortHeader = 'Sponsorships';
 	var $fb_linkDisplayFields = array('company_id', 'lead_id',
 									  'school_year');
 	var $fb_fieldLabels = array (
@@ -51,136 +52,7 @@ class Sponsorships extends DB_DataObject
 		);
 
 
-    function fb_display_details(&$co)
-        {
 
-            $top =& $co;      // make life sane!
-            $cp =& $co->page;
-
-            $top->obj->find(true);		//  XXX aack! need this for summary
-            print $top->horizTable();
-
-	
-            if($top->obj->company_id > 0){
-                $comp = new CoopView(&$cp, 'companies', &$top);
-                $comp->obj->{$comp->pk} = $top->obj->{$comp->pk};
-                print $comp->simpleTable();
-                // NOTE this is the stuff i use all below,
-                // which is from solicit_company.inc
-                $mi = $comp->pk;
-                $cid = $comp->obj->{$comp->pk};
-
-                foreach(array('flyer_deliveries', 
-                              'solicitation_calls', 'ads') as $table)
-                {
-                    $view = new CoopView(&$cp, $table, &$top);
-
-                    if(in_array('school_year', 
-                                array_keys(get_object_vars($view->obj)))){
-                        $view->obj->orderBy('school_year desc');
-                    }
-                    $view->obj->$mi = $cid;
-                    print $view->simpleTable();
-                }
-
-                $co = new CoopObject(&$cp, 'companies_income_join', &$comp);
-                $co->obj->$mi = $cid;
-                $real = new CoopView(&$cp, 'income', &$co);
-                $real->obj->orderBy('school_year desc');
-                $real->obj->joinadd($co->obj);
-                //$real->obj->fb_fieldsToRender[] = 'family_id';
-                print $real->simpleTable();
-	
-
-                $co = new CoopObject(&$cp, 'companies_auction_join', &$comp);
-                $co->obj->$mi = $cid;
-                $real = new CoopView(&$cp, 'auction_donation_items', &$co);
-                $real->obj->orderBy('school_year desc');
-                $real->obj->joinadd($co->obj);
-                print $real->simpleTable();
-
-                $co = new CoopObject(&$cp, 'companies_in_kind_join', &$comp);
-                $co->obj->$mi = $cid;
-                $real = new CoopView(&$cp, 'in_kind_donations', &$co);
-                $real->obj->joinadd($co->obj);
-                print $real->simpleTable();
-
-                //TODO put tickets in here!
-
-
-                $inv =& new CoopObject(&$cp, 'springfest_attendees', &$comp);
-                $inv->obj->$mi = $cid;
-                $inc = new CoopView(&$cp, 'auction_purchases', &$comp);
-                $inc->obj->joinAdd($inv->obj);
-                print $inc->simpleTable();
-
-            } // end company stuff
-
-            /// now the lead stuff
-            if($top->obj->lead_id > 0){
-
-                $real = new CoopView(&$cp, 'leads', &$top);
-                $real->obj->{$real->pk} = $top->obj->{$real->pk};
-                print $real->simpleTable();
-                // NOTE this is the stuff i use all below, which is from 10names.inc
-                $mi = $real->pk;
-                $cid = $real->obj->{$real->pk};
-
-                $invi = new CoopView(&$cp, 'invitations', &$real);
-                //print "CHECKING $table<br>";
-                $invi->obj->$mi = $cid;
-                $invi->obj->fb_fieldsToRender = array('relation', 'label_printed', 
-                                                      'school_year', 'family_id');
-                $invi->obj->orderBy('label_printed desc');
-                print $invi->simpleTable();
-
-                $view = new CoopView(&$cp, 'tickets', &$real);
-                //print "CHECKING $table<br>";
-                $view->obj->$mi = $cid;
-                $view->obj->whereAdd('ticket_quantity > 0');
-                print $view->simpleTable();
-
-                // income, direct
-                $inv =& new CoopObject(&$cp, 'leads_income_join', &$real);
-                $inv->obj->$mi = $cid;
-                $inc = new CoopView(&$cp, 'income', &$inv);
-                $inc->obj->joinAdd($inv->obj);
-                $inc->obj->orderBy('check_date desc');
-                print $inc->simpleTable();
-
-                // auction purchases
-                $inv =& new CoopObject(&$cp, 'springfest_attendees', &$real);
-                $inv->obj->$mi = $cid;
-                $inc = new CoopView(&$cp, 'auction_purchases', &$real);
-                $inc->obj->joinAdd($inv->obj);
-                $inc->obj->orderBy('school_year desc');
-                print $inc->simpleTable();
-
-
-            } // end lead stuff
-
-            // standard audit trail, for all details
-            $aud =& new CoopView(&$cp, 'audit_trail', &$top);
-            $aud->obj->table_name = $top->table;
-            $aud->obj->index_id = $_REQUEST[$top->pk];
-            $aud->obj->orderBy('updated desc');
-            print $aud->simpleTable();
-
-        }
-
-    function fb_display_view(&$co)
-        {
-             $cp =& $co->page;
-            $co =& new CoopObject(&$cp, 'sponsorship_types', &$co);
-            $this->joinAdd($co->obj);
-            $this->school_year = findSchoolYear();
-            $this->orderBy('sponsorship_price desc');
-            $this->fb_fieldsToRender = array('company_id', 'lead_id', 
-                                                 'sponsorship_type_id', 
-                                                 'entry_type');
-            return $co->simpleTable();
-
-        }
 
     function _onlyOne($vars)
         {
