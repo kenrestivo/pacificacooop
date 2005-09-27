@@ -1636,4 +1636,37 @@ order by users.user_id, realm_id;
 
 
 
+
+-- privs for all realms, all groups, ONLY enrolled users
+select enrolled.user_id, 
+max(user_level) as max_user, max(group_level) as max_group,
+user_privileges.realm_id
+from 
+(select distinct users.user_id, families.family_id, families.email
+   from users
+        left join families on families.family_id = users.family_id
+       left join kids on families.family_id = kids.family_id 
+       left join enrollment on kids.kid_id = enrollment.kid_id 
+   where enrollment.school_year = '2005-2006'
+   and (enrollment.dropout_date < '1900-01-01'
+       or enrollment.dropout_date is null)
+   group by families.family_id
+   order by families.name) as enrolled
+left join user_privileges
+   on enrolled.user_id = user_privileges.user_id
+       or user_privileges.group_id in 
+           (select group_id 
+           from users_groups_join 
+            where user_id = enrolled.user_id)
+group by enrolled.user_id, realm_id
+order by enrolled.user_id, realm_id;
+
+
+-- NOT YET ready...
+select realm_id, table_name
+from table_permissions
+where table_name = 'blog_entry'
+group by realm_id
+
+
 --- EOF
