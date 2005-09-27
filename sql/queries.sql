@@ -105,7 +105,7 @@ from families
     left join kids on families.family_id = kids.family_id 
     left join enrollment on kids.kid_id = enrollment.kid_id
 where enrollment.school_year = '2004-2005'
-    and (enrollment.dropout_date < '2000-01-01'
+    and (enrollment.dropout_date < '1900-01-01'
     or enrollment.dropout_date is null)
 group by families.family_id
 order by families.name;
@@ -1576,5 +1576,21 @@ select company_id, payment_amount, ad_size_description
 from companies_income_join left join income using (income_id) 
 left join ad_sizes on ad_price = payment_amount 
 where account_number = 5 and income.school_year = '2003-2004';
+
+
+
+-- the massive subscription query
+select distinct users.user_id, families.email
+from families
+    left join kids on families.family_id = kids.family_id 
+    left join enrollment on kids.kid_id = enrollment.kid_id
+    left join users on families.family_id = users.family_id
+where enrollment.school_year = '2005-2006'
+    and (enrollment.dropout_date < '1900-01-01'
+    or enrollment.dropout_date is null)
+    and families.email > ' '
+group by families.family_id
+order by families.name;
+
 
 --- EOF
