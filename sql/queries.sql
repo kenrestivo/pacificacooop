@@ -1621,15 +1621,18 @@ where user_privileges.realm_id = 23 ))
 
 
 -- privs for all realms, all users, all groups
-
-
-select users_groups_join.user_id, 
-user_level,group_level,
+select users.user_id, 
+user_level, group_level,
 user_privileges.realm_id
-from users_groups_join 
+from users
 left join user_privileges
-on user_privileges.group_id = users_groups_join.group_id
-order by users_groups_join.user_id, realm_id;
+on users.user_id = user_privileges.user_id
+    or user_privileges.group_id in 
+        (select group_id 
+        from users_groups_join 
+         where user_id = users.user_id)
+order by users.user_id, realm_id;
+
 
 
 --- EOF
