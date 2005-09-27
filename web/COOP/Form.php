@@ -411,19 +411,33 @@ class coopForm extends CoopObject
 			$this->obj->update($old);
 			$this->id = $this->obj->{$this->pk};
 
-            foreach($this->obj->table() as $key => $type){
-                if($this->obj->$key != $old->$key){
-                    $this->changes[$key] = array('old' => $old->$key,
-                                                 'new' => $this->obj->$key);
-                }
-            }
-            
+            // DO BEFORE SAVING AUDIT! 
+            $this->calcChanges(&$old);
 		
 			$this->saveAudit(false);
 		
 			return $this->id;
 		}
 
+
+    // populates $this->changes array, which saveaudit needs!
+    function calcChanges(&$old)
+        {
+            foreach($this->obj->table() as $key => $type){
+                if($this->obj->$key != $old->$key){
+                    if(is_array($this->obj->fb_textFields) &&
+                       in_array($key, $this->obj->fb_textFields))
+                    { 
+                        // TODO: do a text diff! wiki style?
+                        
+                    } else {
+                        $this->changes[$key] = array('old' => $old->$key,
+                                                     'new' => $this->obj->$key);
+                    }
+                }
+            }
+            
+        }
 
 	function insert()
 		{
