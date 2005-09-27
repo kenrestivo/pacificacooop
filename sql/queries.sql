@@ -1579,49 +1579,57 @@ where account_number = 5 and income.school_year = '2003-2004';
 
 
 
--- the massive subscription query
-select distinct users.user_id, families.email
+-- the currently enrolled users, dammit. do NOT mess with this!
+select distinct families.family_id, families.email
 from families
     left join kids on families.family_id = kids.family_id 
     left join enrollment on kids.kid_id = enrollment.kid_id 
-    left join users on families.family_id = users.family_id
-    left join subscriptions on users.user_id = subscriptions.user_id
-    left join table_permissions 
-        on subscriptions.realm_id = table_permissions.realm_id
-where families.email > ' '
-and enrollment.school_year = '2005-2006'
+where enrollment.school_year = '2005-2006'
 and (enrollment.dropout_date < '1900-01-01'
     or enrollment.dropout_date is null)
-and table_name = 'blog_entry' and changes = 1
 group by families.family_id
 order by families.name;
 
 
 
--- everyone who has this realm by way of a group
-select distinct users.user_id, users.family_id
-from users
-left join users_groups_join on users.user_id = users_groups_join.user_id
-left join user_privileges 
-on users_groups_join.group_id = user_privileges.group_id
-where user_privileges.realm_id = 23 
-
-
 
 -- everyone who has this realm by way of themselves or a group
-select distinct users.user_id, users.family_id
+select distinct users.user_id, users.family_id, enrolled.email
 from users
 left join user_privileges on users.user_id = user_privileges.user_id
-where user_privileges.realm_id = 23 
+left join
+(select distinct families.family_id, families.email
+from families
+    left join kids on families.family_id = kids.family_id 
+    left join enrollment on kids.kid_id = enrollment.kid_id 
+where enrollment.school_year = '2005-2006'
+and (enrollment.dropout_date < '1900-01-01'
+    or enrollment.dropout_date is null)
+group by families.family_id
+order by families.name
+) as enrolled on enrolled.family_id = users.family_id
+where 
+ enrolled.email > ' '
+and (user_privileges.realm_id = 23 
 or users.user_id in 
 (select distinct users_groups_join.user_id
 from users_groups_join 
 left join user_privileges 
 on users_groups_join.group_id = user_privileges.group_id
-where user_privileges.realm_id = 23 )
+where user_privileges.realm_id = 23 ))
 
 
 
+-- privs for all realms, all users, all groups
+
+
+select users_groups_join.user_id, 
+user_level,group_level,
+user_privileges.realm_id
+from users_groups_join 
+left join user_privileges
+on user_privileges.group_id = users_groups_join.group_id
+order by users_groups_join.user_id, realm_id;
 
 
 --- EOF
