@@ -1622,15 +1622,16 @@ where user_privileges.realm_id = 23 ))
 
 -- privs for all realms, all users, all groups
 select users.user_id, 
-user_level, group_level,
+max(user_level) as max_user, max(group_level) as max_group,
 user_privileges.realm_id
 from users
 left join user_privileges
-on users.user_id = user_privileges.user_id
-    or user_privileges.group_id in 
-        (select group_id 
-        from users_groups_join 
-         where user_id = users.user_id)
+   on users.user_id = user_privileges.user_id
+       or user_privileges.group_id in 
+           (select group_id 
+           from users_groups_join 
+            where user_id = users.user_id)
+group by users.user_id, realm_id
 order by users.user_id, realm_id;
 
 
