@@ -1,30 +1,37 @@
 email subscription notes
 
+?? PHP
+add hooks in new/update
+	just async trigger the update!
+		the audittrailid
+
+??? PHP
+how to call async emailing
+look around for a good example
+	shell_exec('nohup something')
+	or, ignore_user_abort
+
+
+??? PHP
+actually do the emailing!
+	calculate the body of the email
+		grab the audit details, 
+			format them
+		or if no details, the whole data record
+			use fieldstorender and fieldlabels
+	find all realms for that table
+		for each realm,
+			spam everyone who subscribed to it
+
+
 format for email
 	from: pacificacoop
 	subject: NEWS/ALERT/NOTICE [subject/title]
 	insert the regular content
 
 
-need hooks for new 
-	blog insertion or edit: 
-	any rasta-related table edit or add
 
-
-trigger an email
-	or, let the user do it manually?
-
-
-at insert time, SOME things will need to trigger email
-
-notify() trigger email function
-	look in subscription list
-	spam everyone who subscribed
-
-look around for a good example
-	shell_exec('nohup something')
-	or, ignore_user_abort
-
+??? PHP
 the tricky bit is alerts. they have to be checked, somehow
 	maybe those are manual
 	or maybe i save status of who has been alerted?

@@ -88,8 +88,10 @@ var $fb_dupeIgnore = array(
         {
 
             ///XXX HIDEOUS HACK!! should *not* be companies always
-            $par = $this->factory('companies_income_join');
-            $this->joinAdd($par);
+            if(!strstr($this->_join, 'companies_income_join')){
+                $par = $this->factory('companies_income_join');
+                $this->joinAdd($par);
+            }
             //$co->constrainFamily();
             $co->constrainSchoolYear();
             

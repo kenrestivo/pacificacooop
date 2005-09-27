@@ -21,6 +21,7 @@ fb_displayCallabacks = array (field => cb)
 fb_viewActions = array  (action => level)
 fb_recordActions = array  (action => level)
 fb_extraDetails = array('path:to:other:details', 'path:to:more:details')
+fb_allYears = 0/1 // show all years by default in schoolyearchooser
 
 in coopview
 fullText (do not truncate longtextfields)

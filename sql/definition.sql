@@ -959,5 +959,14 @@ baby_due_date date,
 baby_too_old_date date
 );
 
+create table subscriptions(
+subscription_id int(32) primary key not null unique auto_increment,
+realm_id int(32),
+alerts tinyint(1),
+new_entries tinyint(1),
+changes tinyint(1),
+user_id int(32)
+);
+
 
 -- EOF

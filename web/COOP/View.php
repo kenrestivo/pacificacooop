@@ -579,7 +579,11 @@ function schoolYearChooser()
     if($sid = thruAuthCore($this->page->auth)){
         $syform->addElement('hidden', 'coop', $sid); 
     }
-    $syform->setDefaults(array('gschoolyear' => $this->page->currentSchoolYear));
+    // this alllyears only makes sense if schoolyearchooser is ONLY
+    // called when user has view permissions on not-this-year
+    $syform->setDefaults(array('gschoolyear' => 
+                               $this->obj->fb_allYears ? '%' :
+                               $this->page->currentSchoolYear));
 
 
     // XXX temporary hacks until i get my savevars shit working
