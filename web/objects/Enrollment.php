@@ -169,7 +169,8 @@ class Enrollment extends DB_DataObject
         {
 
             $co->schoolYearChooser();
-            $chosen = $co->getChosenSchoolYear();
+            $chosen = $co->perms[null]['year'] < ACCESS_VIEW ?
+                $co->page->currentSchoolYear : $co->getChosenSchoolYear();
 
             // TODO: do not show dropped enrollment!
 
@@ -186,7 +187,7 @@ families.email,
 enrollment.monday, enrollment.tuesday, enrollment.wednesday, 
 enrollment.thursday, enrollment.friday, job_descriptions.summary as school_job,
 enrollment.am_pm_session, enrollment.start_date, enrollment.dropout_date,
-workers.workday, workers.epod, workers.am_pm_session
+workers.workday, workers.epod, workers.am_pm_session, "%s" as school_year
 from enrollment
 left join kids on enrollment.kid_id = kids.kid_id
 left join parents as dads 
@@ -235,6 +236,7 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             }
 
             $co->obj->query(sprintf($rastaquery, 
+                                 $chosen,
                                  $chosen,
                                  $chosen,
                                  $chosen, 
@@ -294,7 +296,9 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             $this->query(
                 sprintf(
                     'select  am_pm_session, sum(monday) as monday, sum(tuesday) as tuesday, sum(wednesday) as wednesday, sum(thursday) as thursday, sum(friday) as friday from enrollment where enrollment.school_year = "2005-2006" group by am_pm_session order by enrollment.am_pm_session',
-                    $co->getChosenSchoolYear()));
+                    $co->perms[null]['year'] < ACCESS_VIEW ?
+                    $co->page->currentSchoolYear : $co->getChosenSchoolYear()
+                    ));
             $res .= $co->simpleTable(false);
 
             return $res;
