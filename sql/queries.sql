@@ -1589,6 +1589,15 @@ where enrollment.school_year = '2005-2006'
     and (enrollment.dropout_date < '1900-01-01'
     or enrollment.dropout_date is null)
     and families.email > ' '
+and users.user_id in 
+(select user_id
+from subscriptions
+where subscriptions.realm_id in
+(select distinct realm_id 
+from table_permissions
+where table_name = 'blog_entry'
+)
+)
 group by families.family_id
 order by families.name;
 
