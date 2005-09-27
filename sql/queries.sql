@@ -1583,23 +1583,45 @@ where account_number = 5 and income.school_year = '2003-2004';
 select distinct users.user_id, families.email
 from families
     left join kids on families.family_id = kids.family_id 
-    left join enrollment on kids.kid_id = enrollment.kid_id
+    left join enrollment on kids.kid_id = enrollment.kid_id 
     left join users on families.family_id = users.family_id
-where enrollment.school_year = '2005-2006'
-    and (enrollment.dropout_date < '1900-01-01'
+    left join subscriptions on users.user_id = subscriptions.user_id
+    left join table_permissions 
+        on subscriptions.realm_id = table_permissions.realm_id
+where families.email > ' '
+and enrollment.school_year = '2005-2006'
+and (enrollment.dropout_date < '1900-01-01'
     or enrollment.dropout_date is null)
-    and families.email > ' '
-and users.user_id in 
-(select user_id
-from subscriptions
-where subscriptions.realm_id in
-(select distinct realm_id 
-from table_permissions
-where table_name = 'blog_entry'
-)
-)
+and table_name = 'blog_entry' and changes = 1
 group by families.family_id
 order by families.name;
+
+
+
+-- everyone who has this realm by way of a group
+select distinct users.user_id, users.family_id
+from users
+left join users_groups_join on users.user_id = users_groups_join.user_id
+left join user_privileges 
+on users_groups_join.group_id = user_privileges.group_id
+where user_privileges.realm_id = 23 
+
+
+
+-- everyone who has this realm by way of themselves or a group
+select distinct users.user_id, users.family_id
+from users
+left join user_privileges on users.user_id = user_privileges.user_id
+where user_privileges.realm_id = 23 
+or users.user_id in 
+(select distinct users_groups_join.user_id
+from users_groups_join 
+left join user_privileges 
+on users_groups_join.group_id = user_privileges.group_id
+where user_privileges.realm_id = 23 )
+
+
+
 
 
 --- EOF
