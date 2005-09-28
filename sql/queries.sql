@@ -1677,34 +1677,38 @@ table_permissions.menu_level is null),
 upriv.max_user, NULL)) as cooked_menu,
 max(if((upriv.max_year > table_permissions.user_level or table_permissions.year_level is null),
 upriv.max_year, table_permissions.year_level)) as cooked_year
-from table_permissions 
+from subscriptions
+left join table_permissions 
+    on table_permissions.realm_id = subscriptions.realm_id
 left join 
 (select enrolled.user_id, enrolled.family_id,
-max(user_level) as max_user, max(group_level) as max_group, 
-max(year_level) as max_year,
-user_privileges.realm_id
-from 
-(select distinct users.user_id, families.family_id, families.email
-   from users
-        left join families on families.family_id = users.family_id
-       left join kids on families.family_id = kids.family_id 
-       left join enrollment on kids.kid_id = enrollment.kid_id 
-   where enrollment.school_year = '2005-2006'
-   and (enrollment.dropout_date < '1900-01-01'
-       or enrollment.dropout_date is null)
-   group by families.family_id
-   order by families.name) as enrolled
-left join user_privileges
-   on enrolled.user_id = user_privileges.user_id
-       or user_privileges.group_id in 
-           (select group_id 
-           from users_groups_join 
-            where user_id = enrolled.user_id)
-group by enrolled.user_id, realm_id
-order by enrolled.user_id, realm_id) as upriv
-on upriv.realm_id = table_permissions.realm_id 
-where  table_name = 'blog_entry'
-group by user_id,table_name,field_name
+    max(user_level) as max_user, max(group_level) as max_group, 
+    max(year_level) as max_year,
+    user_privileges.realm_id
+    from 
+    (select distinct users.user_id, families.family_id, families.email
+        from users
+             left join families on families.family_id = users.family_id
+            left join kids on families.family_id = kids.family_id 
+            left join enrollment on kids.kid_id = enrollment.kid_id 
+        where enrollment.school_year = '2005-2006'
+        and (enrollment.dropout_date < '1900-01-01'
+            or enrollment.dropout_date is null)
+        group by families.family_id
+        order by families.name) as enrolled
+    left join user_privileges
+        on enrolled.user_id = user_privileges.user_id
+             or user_privileges.group_id in 
+                 (select group_id 
+                   from users_groups_join 
+                   where user_id = enrolled.user_id)
+     group by enrolled.user_id, realm_id
+     order by enrolled.user_id, realm_id) as upriv
+on upriv.realm_id = table_permissions.realm_id
+where  table_name = 'blog_entry' 
+    and field_name is null 
+    and subscription_id is not null
+group by user_id,table_name
 
 
 --- EOF
