@@ -1664,7 +1664,7 @@ order by enrolled.user_id, realm_id;
 
 
 -- YES! this is the massive perms query, for all enrolled users, for a table
-select upriv.user_id, upriv.family_id,
+select subscriptions.*, upriv.user_id, upriv.family_id,
 table_permissions.table_name, table_permissions.field_name,
 max(if((upriv.max_user <= table_permissions.user_level or
 table_permissions.user_level is null), 
@@ -1704,11 +1704,12 @@ left join
                    where user_id = enrolled.user_id)
      group by enrolled.user_id, realm_id
      order by enrolled.user_id, realm_id) as upriv
-on upriv.realm_id = table_permissions.realm_id
+on upriv.realm_id = table_permissions.realm_id 
+    and upriv.user_id = subscriptions.user_id
 where  table_name = 'blog_entry' 
     and field_name is null 
     and subscription_id is not null
-group by user_id,table_name
+group by subscriptions.user_id,table_name
 
 
 --- EOF
