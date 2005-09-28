@@ -1663,7 +1663,7 @@ group by enrolled.user_id, realm_id
 order by enrolled.user_id, realm_id;
 
 
--- YES! this is the massive perms query, for all enrolled users, for a table
+-- the massive perms query, for all enrolled users with subscriptions
 select subscriptions.*, upriv.user_id, upriv.family_id,
 table_permissions.table_name, table_permissions.field_name,
 max(if((upriv.max_user <= table_permissions.user_level or
