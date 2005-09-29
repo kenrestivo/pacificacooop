@@ -86,27 +86,22 @@ class EmailChanges
                 foreach($headers['keys'] as $key){
                     $val = array_shift($recformatted);
                     $title = array_shift($headers['titles']);
-                    $res .= sprintf("%s: %s\n\n", $title, $val);
+                    $res .= sprintf("   %s: %s\n\n", $title, $val);
                 }
             }
 
-            $res .= sprintf('http://%s%s?table=%s&%s=%d',
-                            $_SERVER['SERVER_NAME'],
-                            '/generic.php',
-                            $aud->obj->table_name,
-                            $rec->prependTable($rec->pk),
-                            $aud->obj->index_id);
-            
-//             $res .= $this->page->selfURL(
-//                 array('inside' => 
-//                       array('table' =>$aud->obj->table_name,
-//                             $rec->prependTable($rec->pk) => 
-//                             $aud->obj->index_id)));
-
-            //TODO: disclaimer? link? something?
+            ///XXX broken until i fix the REQUEST crap in generic
+            // REMEMBER! i can't use selfurl here: it adds SID
+//             $res .= sprintf('http://%s%s?table=%s&%s=%d',
+//                             $_SERVER['SERVER_NAME'],
+//                             '/generic.php',
+//                             $aud->obj->table_name,
+//                             $rec->prependTable($rec->pk),
+//                             $aud->obj->index_id);
             
 
-
+            $res .= sprintf('You have chosen to receive these updates via email. To change your settings, go to: http://%s/members/ under "Subscriptions"',
+                            $_SERVER['SERVER_NAME']);
             return $res;
         }
     
