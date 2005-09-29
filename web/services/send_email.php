@@ -21,33 +21,102 @@
 
 
 require_once('CoopPage.php');
-require_once('CoopObject.php');
+require_once('CoopView.php');
 
+
+class EmailChanges
+{
+    var $page; //cache of cooppage object
+
+
+    function EmailChanges(&$page)
+        {
+            $this->page =&$page;
+            
+        }
+
+    function mailIt($to, $body)
+        {
+            
+            $headers['From']    = 'members@pacificacoop.org';
+            $headers['To']      = 	$to;
+            $headers['Subject'] = $subject;
+            
+            $mail_object =& Mail::factory('smtp', $params);
+            
+            $mail_object->send($to, 
+                               $headers, 
+                               $body);
+        }
+    
+    function makeBody($audit_id)
+        {
+            $res = '';
+
+            $aud =& new CoopView(&$this->page, 'audit_trail', &$nothing);
+            $aud->obj->get($audit_id);
+            $aud->find(false);
+            // my find does not return the number
+            if($aud->obj->N < 1){
+                PEAR::raiseError("audit trail [$audit_id] doesn't exist!", 666);
+            }
+            $audformatted = $aud->toArray();
+
+            // TODO: get the formatted edit date and family, i.e. in public blog
+            //confessArray($audformatted, 'audformatted');
+            
+            $rec =& new CoopView(&$this->page, $aud->obj->table_name, 
+                                 &$nothing);
+            $rec->obj->get($aud->obj->index_id);
+            $res .= sprintf("NOTICE for %s: %s (%s)\n\n", 
+                            $rec->obj->fb_formHeaderText,
+                            $rec->concatLinkFields());
+            
+            
+            // NOTE! the formatted version may have 'no details found'
+            // so test the obj version
+            if($aud->obj->details){
+                $res .= $audformatted['details'];
+            } else {
+                $rec->fullText = 1; // XXX nasty hack!
+                $headers = $rec->makeHeader();
+                $recformatted = $rec->toArray($headers['keys']);
+                //confessArray($recformatted, 'recformatted');
+                foreach($headers['keys'] as $key){
+                    $val = array_shift($recformatted);
+                    $title = array_shift($headers['titles']);
+                    $res .= sprintf("%s: %s\n", $title, $val);
+                }
+            }
+            
+
+            //TODO: disclaimer? link? something?
+            
+
+
+            return $res;
+        }
+    
+} // END SENDEMAIL CLASS
+
+
+/////////MAIN
 
 $cp = new coopPage( $debug);
 
-$table = $_REQUEST['table'];
-$id = $_REQUEST['id'];
 
+//TODO: foreach through the users
+$em =& new EmailChanges (&$cp);
 
+// TODO: FORCE EACH USER! log them in forcibly
+$body = $em->makeBody($_REQUEST['audit_id']);
 
-function mailIt($to, $body)
-{
-    
-    $headers['From']    = 'subscriptions@pacificacoop.org';
-    $headers['To']      = 	$to;
-    $headers['Subject'] = $subject;
-    
-    $mail_object =& Mail::factory('smtp', $params);
-    
-    $mail_object->send($to, 
-                       $headers, 
-                       $body);
-}
-
-
+///XXX for testing
 global $coop_sendto;
 $to =  $coop_sendto['email_address'];
+print $body;
+
+
 
 
 ////KEEP EVERTHANG BELOW
