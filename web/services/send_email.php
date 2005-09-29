@@ -27,6 +27,8 @@ require_once('CoopView.php');
 class EmailChanges
 {
     var $page; //cache of cooppage object
+    var $body; //cache
+    var $subject; //cache
 
 
     function EmailChanges(&$page)
@@ -49,9 +51,9 @@ class EmailChanges
                                $body);
         }
     
-    function makeBody($audit_id)
+    function makeEmail($audit_id)
         {
-            $res = '';
+            $this->body = '';
 
             $aud =& new CoopView(&$this->page, 'audit_trail', &$nothing);
             $aud->obj->get($audit_id);
@@ -60,24 +62,38 @@ class EmailChanges
             if($aud->obj->N < 1){
                 PEAR::raiseError("audit trail [$audit_id] doesn't exist!", 666);
             }
-            $audformatted = $aud->toArray();
+            $audheaders = $aud->makeHeader();
+            $tmp = $aud->toArray($audheaders['keys']);
+            // fucking array_combine, dude
+            foreach($audheaders['keys'] as $key){
+                $audformatted[$key] = array_shift($tmp);
+            }
 
             // TODO: get the formatted edit date and family, i.e. in public blog
             //confessArray($audformatted, 'audformatted');
             
-            $rec =& new CoopView(&$this->page, $aud->obj->table_name, 
+            $rec =& new CoopView(&$this->page, $aud->obj->table_name,
                                  &$nothing);
             $rec->obj->get($aud->obj->index_id);
-            $res .= sprintf("NOTICE for %s: %s (%s)\n\n", 
-                            $rec->obj->fb_formHeaderText,
-                            $rec->concatLinkFields(),
-                            $aud->obj->updated);
+
+            $this->subject .= sprintf("%s NOTICE for %s: %s", 
+                                      $aud->obj->details ? 'CHANGE' : 'ADD',
+                                      $rec->obj->fb_formHeaderText,
+                                      $rec->concatLinkFields());
+
             
+            $this->body .= sprintf("%s (%s by %s)\n\n", 
+                                   $this->subject,
+                                   $audformatted['updated'],
+                                   $audformatted['audit_user_id']);
+            
+
             
             // NOTE! the formatted version may have 'no details found'
             // so test the obj version
             if($aud->obj->details){
-                $res .= $audformatted['details'];
+                $this->body .= 'The following changes were made: ';
+                $this->body .= $audformatted['details'];
             } else {
                 $rec->fullText = 1; // XXX nasty hack!
                 $headers = $rec->makeHeader();
@@ -86,13 +102,13 @@ class EmailChanges
                 foreach($headers['keys'] as $key){
                     $val = array_shift($recformatted);
                     $title = array_shift($headers['titles']);
-                    $res .= sprintf("   %s: %s\n\n", $title, $val);
+                    $this->body .= sprintf("   %s: %s\n\n", $title, $val);
                 }
             }
 
             ///XXX broken until i fix the REQUEST crap in generic
             // REMEMBER! i can't use selfurl here: it adds SID
-//             $res .= sprintf('http://%s%s?table=%s&%s=%d',
+//             $this->body .= sprintf('http://%s%s?table=%s&%s=%d',
 //                             $_SERVER['SERVER_NAME'],
 //                             '/generic.php',
 //                             $aud->obj->table_name,
@@ -100,9 +116,9 @@ class EmailChanges
 //                             $aud->obj->index_id);
             
 
-            $res .= sprintf('You have chosen to receive these updates via email. To change your settings, go to: http://%s/members/ under "Subscriptions"',
+            $this->body .= sprintf('%sYou have chosen to receive these updates via email. You may change or cancel this by visiting: http://%s/members/ under "Subscriptions:Settings"',
+                            "\n\n",
                             $_SERVER['SERVER_NAME']);
-            return $res;
         }
     
 } // END SENDEMAIL CLASS
@@ -117,13 +133,12 @@ $cp = new coopPage( $debug);
 $em =& new EmailChanges (&$cp);
 
 // TODO: FORCE EACH USER! log them in forcibly
-$body = $em->makeBody($_REQUEST['audit_id']);
+$em->makeEmail($_REQUEST['audit_id']);
 
 ///XXX for testing
 global $coop_sendto;
 $to =  $coop_sendto['email_address'];
-print '<pre>'.$body.'</pre>';
-
+print '<pre>'.$em->body.'</pre>';
 
 
 

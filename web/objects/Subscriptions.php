@@ -38,6 +38,26 @@ class Subscriptions extends DB_DataObject
 	var $fb_formHeaderText =  'Email Subscriptions';
     var $fb_shortHeader = 'Settings';
     var $fb_defaults = array('alerts' => 1);
+    var $fb_requiredFields = array ('realm_id', 'user_id');
+
+    function preGenerateForm($form)
+        {
+            // super butt ugly, with cheeze
+            $this->fb_defaults['user_id'] = $form->CoopForm->page->auth['uid'];
+        }
+
+
+    function fb_linkConstraints(&$co)
+        {
+            //TODO: make the schoolyear chooser happen here
+            $fam = $this->factory('users');
+            $this->joinAdd($fam);
+            if($co->isPermittedField(NULL) < ACCESS_VIEW ){
+                /// XXX need to check that a familyid exists!
+                $co->constrainFamily();
+            }
+             
+        }
 
 
 }

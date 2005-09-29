@@ -162,7 +162,7 @@ class Audit_trail extends DB_DataObject
                     $res .= sprintf(': %s changed to %s', 
                                     $oldformatted, $newformatted);
                 } else {
-                    $res .= "(Not Permitted)";
+                    $res .= " (Not Permitted) ";
                 }
                 $res .= '<br>';
             }

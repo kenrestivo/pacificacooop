@@ -1,20 +1,22 @@
 email subscription notes
 
+1 hour PHP
+make the userid behave like familyid in form and view!!
+	can i do it with perms alone? nasty, but possible.
+	i still need a pregenerate to do the defaults
+
+
+auugh. i need to know if this is an ADD or CHANGE
+	BEFORE i decide whether to send it!
 
 ??? PHP
 actually do the emailing!
-	calculate the body of the email
-		grab the audit details, 
-			format them
-				perms!!! i have to fake the user? or perms?
-		or if no details, the whole data record
-			use fieldstorender and fieldlabels
 	then send it, to all in query
 		if devsite, only send to ONE address: me
+				perms!!! i have to fake the user? or perms?
 
 
-subscriptions need a custom linkconstraint
-	i have to join to users in order to get familyid
+will need to handle deletions too
 
 this'll get ugly. i'll need special hacky things to add default subscriptions
 	i.e... for news, parent ed, enhancement, all the springfest realms, etc

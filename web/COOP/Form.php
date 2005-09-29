@@ -700,6 +700,7 @@ class coopForm extends CoopObject
 										$longtf,
 										$far->title(),
 										$options);
+                // XXX use $vars not _REQUEST
  				$el->setValue($this->isSubmitted ? $_REQUEST[$tf] : $incl);
 				
 			}
@@ -707,6 +708,7 @@ class coopForm extends CoopObject
 
 	function isSubmitted()
 		{
+            // XXX use $vars not _REQUEST
 			return isset($_REQUEST['_qf__' . $this->form->_attributes['name']]);
 		}
 
