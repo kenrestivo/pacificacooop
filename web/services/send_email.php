@@ -33,12 +33,18 @@ class EmailChanges
     var $audit_co; // cache of reference to the audit coopobject
     var $record_co; // cache of the referene to the actual changed record coopobject
 
-    function EmailChanges(&$page, $audit_id)
+    function EmailChanges(&$page)
         {
             $this->page =&$page;
 
+        }
+
+
+    function get($audit_id)
+        {
             // get audit details
-            $this->audit_co =& new CoopView(&$this->page, 'audit_trail', &$nothing);
+            $this->audit_co =& new CoopView(&$this->page, 'audit_trail', 
+                                            &$nothing);
             $this->audit_co->obj->get($audit_id);
             $this->audit_co->find(false);
             // my find does not return the number
@@ -49,11 +55,10 @@ class EmailChanges
             
             //now get the record that was changed/added
             $this->record_co =& new CoopView(&$this->page, 
-                                             $this->audit_co->obj->table_name, &$nothing);
+                                             $this->audit_co->obj->table_name, 
+                                             &$nothing);
             $this->record_co->obj->get($this->audit_co->obj->index_id);
-
-
-
+            
         }
 
     function mailIt($to, $body)
@@ -200,12 +205,18 @@ while($sub->obj->fetch()){
     $fam->obj->get($sub->obj->family_id); // or just add email into query?
     
 
-    $em =& new EmailChanges (&$cp, $_REQUEST['audit_id']);
+    $em =& new EmailChanges (&$cp);
+
+
     // TODO: FORCE EACH USER! log them in forcibly
     //$em->page->
-    $em->makeEmail();
+    $em->get($_REQUEST['audit_id']);
 
     // TODO: check if type is change/add, compare to subscription AND perms
+
+    // finally, if i should, let's do it.
+    $em->makeEmail();
+
 
     ///XXX for testing
     $em->body .= "----- FAKE MAILING TO  {$fam->obj->email} ({$fam->obj->name})---";
