@@ -77,21 +77,20 @@ class Kids extends DB_DataObject
             //$co->debugWrap(2);
 
 			// ugly, but consisent. only shows families for this year
-
-
-
+            
+            
+            
  		}
 
-
-        function fb_display_view(&$co)
+    
+    function fb_display_view(&$co)
         {
             // HMM. how to override for the coopform stuff too? pregenerate?
             $co->overrides['leads']['fb_linkDisplayFields'] = 
                 array('last_name', 'first_name', 'phone');
-
+            
             return $co->simpleTable();
         }
-
-
+    
 
 }

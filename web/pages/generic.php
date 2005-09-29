@@ -219,20 +219,21 @@ switch($_REQUEST['action']){
      // MUST DO THIS! FIRST! please find a better way, this sucks
      $atd->obj->{$atd->pk} = $_REQUEST[$atd->prependTable($atd->pk)]; 
 
+     // object-specific override if needed
      if(is_callable(array($atd->obj, 'fb_display_details'))){
          print $atd->obj->fb_display_details(&$atd);
          break;
      }
      
-     // TODO: in future, try to intelligently find all forward/backlinks
-     // or intermediately, adapt findfamily, and pass a list of tables
-     // let the code go fish out the path to 'em
 
 	 $id = $_REQUEST[$atd->prependTable($atd->pk)];
      $atd->obj->{$atd->pk} = $id;
      $atd->obj->find(true);		//  XXX aack! need this for summary
      print $atd->horizTable();
      
+     // try to intelligently find all forward/backlinks
+     // or intermediately, adapt findfamily, and pass a list of tables
+     // let the code go fish out the path to 'em
 
      foreach($atd->allLinks() as $table => $ids){
          list($nearid, $farid) = $ids;

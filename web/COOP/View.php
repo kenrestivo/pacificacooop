@@ -148,7 +148,10 @@ class coopView extends CoopObject
 	
 		}
 	
-	function find($find)
+    // the $find arg is whether to actually do the object find.
+    // note that it's default false (assuming the caller found already),
+    // BUT most of its callers default to true, so... it's ugly
+	function find($find = false)
 		{
 
 
@@ -354,8 +357,8 @@ class coopView extends CoopObject
 					if($this->obj->fb_fieldLabels[$key]){
 						$res[] = $this->obj->fb_fieldLabels[$key];
 					} else {
-						// TODO: uppercase this thing, replace _ with spaces
-						$res[] = $key;
+						// XXX moot... if it ain't in fieldlabels, doesn't show
+						$res[] = strtr(ucwords($key), '_', ' ');
 					}
 				}
 			}

@@ -222,13 +222,13 @@ class coopPage
 	
 
 
-	// USAGE: selfURL(
+	// USAGE: selfURL(array(
 	//					value="text to display",
 	//					inside="var=value&morevar=morevalue",
 	//							or an array of pairs
 	//					base="page.php"
     //                  popup if you want it to be a javascript popup)
-    //                  and par if you want paragraph separators (default)
+    //                  and par if you want paragraph separators (default) )
 	// all of which are optional
 	// without any args, returns just coop session var for use in Header()
 	function selfURL($args= false)

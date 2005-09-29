@@ -1,5 +1,32 @@
 email subscription notes
 
+
+??? PHP
+actually do the emailing!
+	calculate the body of the email
+		grab the audit details, 
+			format them
+				perms!!! i have to fake the user? or perms?
+		or if no details, the whole data record
+			use fieldstorender and fieldlabels
+	then send it, to all in query
+		if devsite, only send to ONE address: me
+
+
+subscriptions need a custom linkconstraint
+	i have to join to users in order to get familyid
+
+this'll get ugly. i'll need special hacky things to add default subscriptions
+	i.e... for news, parent ed, enhancement, all the springfest realms, etc
+
+
+hmm. what about teachers? there's no place for their email address. dammit.
+	maybe i should put some data for teachers in there.
+	putting email addresses into users is brain-dead. needs to be in rasta
+
+
+
+
 ?? PHP
 add hooks in new/update
 	just async trigger the update!
@@ -11,17 +38,6 @@ look around for a good example
 	shell_exec('nohup something')
 	or, ignore_user_abort
 
-
-??? PHP
-actually do the emailing!
-	calculate the body of the email
-		grab the audit details, 
-			format them
-		or if no details, the whole data record
-			use fieldstorender and fieldlabels
-	find all realms for that table
-		for each realm,
-			spam everyone who subscribed to it
 
 
 format for email

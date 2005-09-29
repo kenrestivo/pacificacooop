@@ -118,7 +118,8 @@ order by  workday',
                 );
 
             $co2->obj->query(
-                sprintf('select epod, sum(if(am_pm_session = "AM", 1,0 )) as AM, 
+                sprintf('select epod, 
+sum(if(am_pm_session = "AM", 1,0 )) as AM, 
 sum(if(am_pm_session = "PM", 1,0 )) as PM
 from workers 
 where school_year = "%s"

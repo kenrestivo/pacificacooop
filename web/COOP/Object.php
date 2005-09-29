@@ -748,7 +748,7 @@ group by user_id,table_name,field_name";
 
     function getChosenSchoolYear()
         {
-            $this->page->printDebug("CHECKING chosenschoolyear $this->table", 
+            $this->page->printDebug("CoopObject::getChosenSchoolYear({$this->table})", 
                                     3);
             if($this->chosenSchoolYear){
                 $this->page->printDebug(

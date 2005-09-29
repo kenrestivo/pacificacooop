@@ -930,3 +930,7 @@ year setup: required dates which *must* be entered!
 	all the parent ed meetings (or auto-enter?)
 
 -------
+tickets, round 2
+	they are printing tickets
+	need some table/flag 
+		to show which tickets have been sent out (date sent? by who?)

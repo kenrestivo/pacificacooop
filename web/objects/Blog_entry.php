@@ -38,7 +38,7 @@ class Blog_entry extends DB_DataObject
 	var $fb_fieldsToRender = array('family_id', 'short_title', 'body', 
                                    'show_on_members_page', 
 								   'show_on_public_page');
-	var $fb_formHeaderText =  'Breaking News';
+	var $fb_formHeaderText =  'Bulletin Board';
 	var $fb_shortHeader =  'Bulletin Board';
 	var $fb_textFields = array('body');
 	var $fb_requiredFields = array('family_id', 'short_title', 'body');
