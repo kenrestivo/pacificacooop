@@ -139,7 +139,9 @@ class coopPage
 
 			if($this->auth['state'] == 'loggedin'){
 				// pretty sure i need this here, in case i'm not using legacy
-				$this->userStruct =  getUser($this->auth['uid']);
+			 	$this->userStruct =  getUser($this->auth['uid']);
+                $this->confessArray($this->userStruct, 'CoopPage->userStruct',
+                                    4);
 			} else{
 				// show the login, then be done with this
 				done();
@@ -152,6 +154,12 @@ class coopPage
 
 
 		}
+
+    function forceUser($uid)
+        {
+            $this->auth['uid'] = $uid;
+            $this->userStruct =  getUser($this->auth['uid']);
+        }
 
 
 	// grab the legacy includes and index them

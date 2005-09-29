@@ -207,19 +207,27 @@ while($sub->obj->fetch()){
 
     $em =& new EmailChanges (&$cp);
 
-
-    // TODO: FORCE EACH USER! log them in forcibly
-    //$em->page->
+    // FORCE EACH USER! log them in forcibly. i don't like this at all.
+    $em->page->forceUser($sub->obj->user_id);
     $em->get($_REQUEST['audit_id']);
 
-    // TODO: check if type is change/add, compare to subscription AND perms
+    // check if type is change/add, compare to subscription
+    if(!(($em->type == 'change' && $sub->obj->changes) ||
+         ($em->type == 'add' && $sub->obj->new_entries)))
+    {
+        $em->page->printDebug("skipping {$fam->obj->name}: not subscribed for {$em->type} on {$em->record_co->table}", 
+                              2);
+        continue;
+    }
+
+    // TODO: if they don't have view perms for this record, outtahere
 
     // finally, if i should, let's do it.
     $em->makeEmail();
 
 
-    ///XXX for testing
-    $em->body .= "----- FAKE MAILING TO  {$fam->obj->email} ({$fam->obj->name})---";
+    ///for testing
+    $em->body .= "----- MAILING TO  {$fam->obj->email} ({$fam->obj->name})---";
     global $coop_sendto;
     $to =  $coop_sendto['email_address'];
     print '<pre>'.$em->body.'</pre>';
