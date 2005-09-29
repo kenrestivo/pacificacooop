@@ -70,7 +70,8 @@ class EmailChanges
             $rec->obj->get($aud->obj->index_id);
             $res .= sprintf("NOTICE for %s: %s (%s)\n\n", 
                             $rec->obj->fb_formHeaderText,
-                            $rec->concatLinkFields());
+                            $rec->concatLinkFields(),
+                            $aud->obj->updated);
             
             
             // NOTE! the formatted version may have 'no details found'
@@ -114,7 +115,7 @@ $body = $em->makeBody($_REQUEST['audit_id']);
 ///XXX for testing
 global $coop_sendto;
 $to =  $coop_sendto['email_address'];
-print $body;
+print '<pre>'.$body.'</pre>';
 
 
 
