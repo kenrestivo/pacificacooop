@@ -3,11 +3,12 @@ email subscription notes
 1 hour PHP
 make the userid behave like familyid in form and view!!
 	can i do it with perms alone? nasty, but possible.
-	i still need a pregenerate to do the defaults
 
 
 auugh. i need to know if this is an ADD or CHANGE
 	BEFORE i decide whether to send it!
+	compare it to what's in the subscription
+
 
 ??? PHP
 actually do the emailing!
@@ -15,11 +16,13 @@ actually do the emailing!
 		if devsite, only send to ONE address: me
 				perms!!! i have to fake the user? or perms?
 
+??? SQL/python?/PHP?
+this'll get ugly. i'll need special hacky things to add default subscriptions
+	i.e... for news, parent ed, enhancement, all the springfest realms, etc
+	for now, a nasty python or php hack
 
 will need to handle deletions too
 
-this'll get ugly. i'll need special hacky things to add default subscriptions
-	i.e... for news, parent ed, enhancement, all the springfest realms, etc
 
 
 hmm. what about teachers? there's no place for their email address. dammit.

@@ -76,7 +76,7 @@ class EmailChanges
                                  &$nothing);
             $rec->obj->get($aud->obj->index_id);
 
-            $this->subject .= sprintf("%s NOTICE for %s: %s", 
+            $this->subject = sprintf("%s NOTICE for %s: %s", 
                                       $aud->obj->details ? 'CHANGE' : 'ADD',
                                       $rec->obj->fb_formHeaderText,
                                       $rec->concatLinkFields());
@@ -119,6 +119,7 @@ class EmailChanges
             $this->body .= sprintf('%sYou have chosen to receive these updates via email. You may change or cancel this by visiting: http://%s/members/ under "Subscriptions:Settings"',
                             "\n\n",
                             $_SERVER['SERVER_NAME']);
+            $this->body .= "\n\n";
         }
     
 } // END SENDEMAIL CLASS
@@ -129,18 +130,78 @@ class EmailChanges
 $cp = new coopPage( $debug);
 
 
-//TODO: foreach through the users
-$em =& new EmailChanges (&$cp);
 
+
+$sub =& new CoopObject(&$cp, 'subscriptions', &$nothing);
+$sub->obj->query(
+    sprintf('
+select subscriptions.*, upriv.user_id, upriv.family_id,
+table_permissions.table_name, table_permissions.field_name,
+max(if((upriv.max_user <= table_permissions.user_level or
+table_permissions.user_level is null), 
+upriv.max_user, table_permissions.user_level)) as cooked_user,
+max(if((upriv.max_group >=  table_permissions.group_level or
+table_permissions.group_level is null), 
+upriv.max_group, NULL )) as cooked_group,
+ max(if((upriv.max_user > table_permissions.menu_level or
+table_permissions.menu_level is null), 
+upriv.max_user, NULL)) as cooked_menu,
+max(if((upriv.max_year > table_permissions.user_level or table_permissions.year_level is null),
+upriv.max_year, table_permissions.year_level)) as cooked_year
+from subscriptions
+left join table_permissions 
+    on table_permissions.realm_id = subscriptions.realm_id
+left join 
+(select enrolled.user_id, enrolled.family_id,
+    max(user_level) as max_user, max(group_level) as max_group, 
+    max(year_level) as max_year,
+    user_privileges.realm_id
+    from 
+    (select distinct users.user_id, families.family_id, families.email
+        from users
+             left join families on families.family_id = users.family_id
+            left join kids on families.family_id = kids.family_id 
+            left join enrollment on kids.kid_id = enrollment.kid_id 
+        where enrollment.school_year = "%s"
+        and (enrollment.dropout_date < "1900-01-01"
+            or enrollment.dropout_date is null)
+        group by families.family_id
+        order by families.name) as enrolled
+    left join user_privileges
+        on enrolled.user_id = user_privileges.user_id
+             or user_privileges.group_id in 
+                 (select group_id 
+                   from users_groups_join 
+                   where user_id = enrolled.user_id)
+     group by enrolled.user_id, realm_id
+     order by enrolled.user_id, realm_id) as upriv
+on upriv.realm_id = table_permissions.realm_id 
+    and upriv.user_id = subscriptions.user_id
+where  table_name = "blog_entry" 
+    and field_name is null 
+    and subscription_id is not null
+group by subscriptions.user_id,table_name
+', 
+            // assuming they'll never be able to choose, to go retroactive
+$sub->page->currentSchoolYear));
+while($sub->obj->fetch()){
+    //confessObj($sub, 'subs');
+    $fam =& new CoopObject(&$cp, 'families', &$sub);
+    $fam->obj->get($sub->obj->family_id);
+    
+
+    $em =& new EmailChanges (&$cp);
 // TODO: FORCE EACH USER! log them in forcibly
-$em->makeEmail($_REQUEST['audit_id']);
-
+    //$em->page->
+    $em->makeEmail($_REQUEST['audit_id']);
+    
 ///XXX for testing
-global $coop_sendto;
-$to =  $coop_sendto['email_address'];
-print '<pre>'.$em->body.'</pre>';
-
-
+    $em->body .= "----- FAKE MAILING TO  {$fam->obj->email} ({$fam->obj->name})---";
+    global $coop_sendto;
+    $to =  $coop_sendto['email_address'];
+    print '<pre>'.$em->body.'</pre>';
+ 
+}
 
 ////KEEP EVERTHANG BELOW
 

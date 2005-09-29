@@ -1691,8 +1691,8 @@ left join
              left join families on families.family_id = users.family_id
             left join kids on families.family_id = kids.family_id 
             left join enrollment on kids.kid_id = enrollment.kid_id 
-        where enrollment.school_year = '2005-2006'
-        and (enrollment.dropout_date < '1900-01-01'
+        where enrollment.school_year = "2005-2006"
+        and (enrollment.dropout_date < "1900-01-01"
             or enrollment.dropout_date is null)
         group by families.family_id
         order by families.name) as enrolled
@@ -1706,7 +1706,7 @@ left join
      order by enrolled.user_id, realm_id) as upriv
 on upriv.realm_id = table_permissions.realm_id 
     and upriv.user_id = subscriptions.user_id
-where  table_name = 'blog_entry' 
+where  table_name = "blog_entry" 
     and field_name is null 
     and subscription_id is not null
 group by subscriptions.user_id,table_name
