@@ -55,7 +55,8 @@ class Job_descriptions extends DB_DataObject
 									 'toTable' => 'families',
 									 'toField' => 'family_id',
 									 'type' => 'select'));
-
+    var $fb_defaults = array('free_tuition_start_month' => 'None',
+                             'free_tuition_end_month' => 'None');
 
 	// save it until i square away schoolyear
 //  	var $fb_crossLinks = array(array('table' => 'job_assignments', 
