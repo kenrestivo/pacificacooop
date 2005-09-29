@@ -44,19 +44,28 @@ class Subscriptions extends DB_DataObject
         {
             // super butt ugly, with cheeze
             $this->fb_defaults['user_id'] = $form->CoopForm->page->auth['uid'];
+
+            //XXX this is HIDEOUS!! injecting family_id in there by force. EVIL!
+            //but ispermittedfield needs this, so i've no choice
+            $fam = $this->factory('users');
+            $fam->user_id = $this->user_id;
+            $fam->find(true);
+            $this->family_id = $fam->family_id;
         }
 
 
     function fb_linkConstraints(&$co)
         {
-            //TODO: make the schoolyear chooser happen here
             $fam = $this->factory('users');
             $this->joinAdd($fam);
+            //$this->selectAdd('family_id');
             if($co->isPermittedField(NULL) < ACCESS_VIEW ){
-                /// XXX need to check that a familyid exists!
-                $co->constrainFamily();
+                //XXX constrainfamily won't work, because i use userid here
+                $this->whereAdd(
+                    sprintf('%s.user_id = %d',
+                            $co->table, $co->page->auth['uid']));
             }
-             
+            //$co->debugWrap(2);
         }
 
 

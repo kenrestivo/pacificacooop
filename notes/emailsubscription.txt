@@ -1,13 +1,9 @@
 email subscription notes
 
-1 hour PHP
-make the userid behave like familyid in form and view!!
-	can i do it with perms alone? nasty, but possible.
-
 
 auugh. i need to know if this is an ADD or CHANGE
 	BEFORE i decide whether to send it!
-	compare it to what's in the subscription
+	compare it to what's in the subscription AND perms
 
 
 ??? PHP

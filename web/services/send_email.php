@@ -29,12 +29,31 @@ class EmailChanges
     var $page; //cache of cooppage object
     var $body; //cache
     var $subject; //cache
+    var $type; // add, change, alert
+    var $audit_co; // cache of reference to the audit coopobject
+    var $record_co; // cache of the referene to the actual changed record coopobject
 
-
-    function EmailChanges(&$page)
+    function EmailChanges(&$page, $audit_id)
         {
             $this->page =&$page;
+
+            // get audit details
+            $this->audit_co =& new CoopView(&$this->page, 'audit_trail', &$nothing);
+            $this->audit_co->obj->get($audit_id);
+            $this->audit_co->find(false);
+            // my find does not return the number
+            if($this->audit_co->obj->N < 1){
+                PEAR::raiseError("audit trail [$this->audit_coit_id] doesn't exist!", 666);
+            }
+            $this->type = $this->audit_co->obj->details ? 'change' : 'add';
             
+            //now get the record that was changed/added
+            $this->record_co =& new CoopView(&$this->page, 
+                                             $this->audit_co->obj->table_name, &$nothing);
+            $this->record_co->obj->get($this->audit_co->obj->index_id);
+
+
+
         }
 
     function mailIt($to, $body)
@@ -51,17 +70,13 @@ class EmailChanges
                                $body);
         }
     
-    function makeEmail($audit_id)
+    function makeEmail()
         {
             $this->body = '';
+            // some shorthands to make typing easier
+            $aud =& $this->audit_co;
+            $rec =& $this->record_co;
 
-            $aud =& new CoopView(&$this->page, 'audit_trail', &$nothing);
-            $aud->obj->get($audit_id);
-            $aud->find(false);
-            // my find does not return the number
-            if($aud->obj->N < 1){
-                PEAR::raiseError("audit trail [$audit_id] doesn't exist!", 666);
-            }
             $audheaders = $aud->makeHeader();
             $tmp = $aud->toArray($audheaders['keys']);
             // fucking array_combine, dude
@@ -69,17 +84,12 @@ class EmailChanges
                 $audformatted[$key] = array_shift($tmp);
             }
 
-            // TODO: get the formatted edit date and family, i.e. in public blog
-            //confessArray($audformatted, 'audformatted');
-            
-            $rec =& new CoopView(&$this->page, $aud->obj->table_name,
-                                 &$nothing);
-            $rec->obj->get($aud->obj->index_id);
+
 
             $this->subject = sprintf("%s NOTICE for %s: %s", 
-                                      $aud->obj->details ? 'CHANGE' : 'ADD',
-                                      $rec->obj->fb_formHeaderText,
-                                      $rec->concatLinkFields());
+                                     strtoupper($this->type),
+                                     $rec->obj->fb_formHeaderText,
+                                     $rec->concatLinkFields());
 
             
             $this->body .= sprintf("%s (%s by %s)\n\n", 
@@ -91,7 +101,7 @@ class EmailChanges
             
             // NOTE! the formatted version may have 'no details found'
             // so test the obj version
-            if($aud->obj->details){
+            if($this->type == 'change'){
                 $this->body .= 'The following changes were made: ';
                 $this->body .= $audformatted['details'];
             } else {
@@ -187,15 +197,17 @@ $sub->page->currentSchoolYear));
 while($sub->obj->fetch()){
     //confessObj($sub, 'subs');
     $fam =& new CoopObject(&$cp, 'families', &$sub);
-    $fam->obj->get($sub->obj->family_id);
+    $fam->obj->get($sub->obj->family_id); // or just add email into query?
     
 
-    $em =& new EmailChanges (&$cp);
-// TODO: FORCE EACH USER! log them in forcibly
+    $em =& new EmailChanges (&$cp, $_REQUEST['audit_id']);
+    // TODO: FORCE EACH USER! log them in forcibly
     //$em->page->
-    $em->makeEmail($_REQUEST['audit_id']);
-    
-///XXX for testing
+    $em->makeEmail();
+
+    // TODO: check if type is change/add, compare to subscription AND perms
+
+    ///XXX for testing
     $em->body .= "----- FAKE MAILING TO  {$fam->obj->email} ({$fam->obj->name})---";
     global $coop_sendto;
     $to =  $coop_sendto['email_address'];
