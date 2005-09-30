@@ -321,6 +321,9 @@ group by user_id,table_name,field_name";
 
 			$aud->obj->audit_user_id = $this->page->auth['uid'];
 			$aud->obj->insert();
+            
+            $this->triggerNotices($this->lastInsertID());
+
 		}
     
     // key is the field. 
@@ -759,6 +762,19 @@ group by user_id,table_name,field_name";
 
             $top =& $this->findTop();
             return $top->chosenSchoolYear;
+        }
+
+function triggerNotices($audit_id)
+        {
+            $fp = fsockopen ($_SERVER['SERVER_NAME'], 80, $errno, $errstr, 1);
+            if (!$fp) {
+                $this->page->printDebug("$errstr ($errno)", 1);
+            } else {
+                //XXX fix this path!
+                fputs ($fp, "GET /coop-dev/send_email.php?audit_id={$audit_id} HTTP/1.0\r\nHost: {$_SERVER['SERVER_NAME']}\r\n\r\n");
+                fclose ($fp);
+            }
+
         }
 
 

@@ -97,7 +97,7 @@ class EmailChanges
                                      $rec->concatLinkFields());
 
             
-            $this->body .= sprintf("\n\n%s (%s by %s)\n\n", 
+            $this->body .= sprintf("%s\n\non %s by %s\n\n", 
                                    $this->subject,
                                    $audformatted['updated'],
                                    $audformatted['audit_user_id']);
@@ -107,7 +107,7 @@ class EmailChanges
             // NOTE! the formatted version may have 'no details found'
             // so test the obj version
             if($this->type == 'change'){
-                $this->body .= 'The following changes were made: ';
+                $this->body .= "The following changes were made:\n";
                 $this->body .= $audformatted['details'];
             } else {
                 $rec->fullText = 1; // XXX nasty hack!
@@ -117,7 +117,8 @@ class EmailChanges
                 foreach($headers['keys'] as $key){
                     $val = array_shift($recformatted);
                     $title = array_shift($headers['titles']);
-                    $this->body .= sprintf("   %s: %s\n\n", $title, $val);
+                    $this->body .= sprintf("   %s: %s\n\n", 
+                                           $title, $val);
                 }
             }
 
@@ -142,10 +143,13 @@ class EmailChanges
 
 /////////MAIN
 
+ignore_user_abort(); // IMPORTANT!
+
 $cp = new coopPage( $debug);
 
-
-
+/// THIS IS ONLY A HACK TO GET THE TABLENAME!
+$em =& new EmailChanges (&$cp);
+$em->get($_REQUEST['audit_id']);
 
 $sub =& new CoopObject(&$cp, 'subscriptions', &$nothing);
 $sub->obj->query(
@@ -192,19 +196,20 @@ left join
      order by enrolled.user_id, realm_id) as upriv
 on upriv.realm_id = table_permissions.realm_id 
     and upriv.user_id = subscriptions.user_id
-where  table_name = "blog_entry" 
+where  table_name = "%s" 
     and field_name is null 
     and subscription_id is not null
 group by subscriptions.user_id,table_name
 ', 
             // assuming they'll never be able to choose, to go retroactive
-$sub->page->currentSchoolYear));
+$sub->page->currentSchoolYear,
+$em->audit_co->obj->table_name));
+
 while($sub->obj->fetch()){
     //confessObj($sub, 'subs');
     $fam =& new CoopObject(&$cp, 'families', &$sub);
     $fam->obj->get($sub->obj->family_id); // or just add email into query?
     
-
     $em =& new EmailChanges (&$cp);
 
     // FORCE EACH USER! log them in forcibly. i don't like this at all.
@@ -226,15 +231,17 @@ while($sub->obj->fetch()){
     $em->makeEmail();
 
     ///for testing
-    $crap = "----- MAILING TO  {$fam->obj->email} ({$fam->obj->name})---";
+    $crap = "\n----- MAILED TO  {$fam->obj->email} ({$fam->obj->name})---\n";
 
     if(devSite()){
         global $coop_sendto;
         $to =  $coop_sendto['email_address'];
-    } else {
+        $em->body .= $crap;
+   } else {
         $to = $fam->obj->email;
-        PEAR::raiseError('dev only',888);
+        PEAR::raiseError('force dev only', 888);
     }
+
     $em->mailIt($to);
 
     if($cp->debug > 0){

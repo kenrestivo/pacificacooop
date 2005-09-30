@@ -1,9 +1,10 @@
 email subscription notes
 
-??? PHP
-actually do the emailing!
-	then send it, to all in query
-		if devsite, only send to ONE address: me
+?? PHP
+add hooks in new/update
+	just async trigger the update!
+		the audittrailid
+	deal with the fucking path to this file
 
 
 ??? SQL/python?/PHP?
@@ -11,27 +12,18 @@ this'll get ugly. i'll need special hacky things to add default subscriptions
 	i.e... for news, parent ed, enhancement, all the springfest realms, etc
 	for now, a nasty python or php hack
 
+
+
+
+
 will need to handle deletions too
 
 
-
+??? SQL
 hmm. what about teachers? there's no place for their email address. dammit.
 	maybe i should put some data for teachers in there.
 	putting email addresses into users is brain-dead. needs to be in rasta
 
-
-
-
-?? PHP
-add hooks in new/update
-	just async trigger the update!
-		the audittrailid
-
-??? PHP
-how to call async emailing
-look around for a good example
-	shell_exec('nohup something')
-	or, ignore_user_abort
 
 
 
