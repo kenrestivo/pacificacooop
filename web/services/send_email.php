@@ -61,18 +61,18 @@ class EmailChanges
             
         }
 
-    function mailIt($to, $body)
+    function mailIt($to)
         {
             
             $headers['From']    = 'members@pacificacoop.org';
             $headers['To']      = 	$to;
-            $headers['Subject'] = $subject;
+            $headers['Subject'] = $this->subject;
             
             $mail_object =& Mail::factory('smtp', $params);
             
             $mail_object->send($to, 
                                $headers, 
-                               $body);
+                               $this->body);
         }
     
     function makeEmail()
@@ -97,7 +97,7 @@ class EmailChanges
                                      $rec->concatLinkFields());
 
             
-            $this->body .= sprintf("%s (%s by %s)\n\n", 
+            $this->body .= sprintf("\n\n%s (%s by %s)\n\n", 
                                    $this->subject,
                                    $audformatted['updated'],
                                    $audformatted['audit_user_id']);
@@ -225,13 +225,21 @@ while($sub->obj->fetch()){
     // finally, if i should, let's do it.
     $em->makeEmail();
 
-
     ///for testing
-    $em->body .= "----- MAILING TO  {$fam->obj->email} ({$fam->obj->name})---";
-    global $coop_sendto;
-    $to =  $coop_sendto['email_address'];
-    print '<pre>'.$em->body.'</pre>';
- 
+    $crap = "----- MAILING TO  {$fam->obj->email} ({$fam->obj->name})---";
+
+    if(devSite()){
+        global $coop_sendto;
+        $to =  $coop_sendto['email_address'];
+    } else {
+        $to = $fam->obj->email;
+        PEAR::raiseError('dev only',888);
+    }
+    $em->mailIt($to);
+
+    if($cp->debug > 0){
+        print '<pre>' . $crap . $em->body . '</pre>';
+    }
 }
 
 ////KEEP EVERTHANG BELOW

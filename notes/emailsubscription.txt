@@ -1,16 +1,6 @@
 email subscription notes
 
 ??? PHP
-perms!!! i have to fake the user? or perms
-	how? looks like userstruct and auth[uid] are all i need.
-
-10 mins PHP
-i need to know if this is an ADD or CHANGE
-	BEFORE i decide whether to send it!
-	compare it to what's in the subscription AND perms
-
-
-??? PHP
 actually do the emailing!
 	then send it, to all in query
 		if devsite, only send to ONE address: me
