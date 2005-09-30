@@ -73,6 +73,7 @@ class EmailChanges
             $mail_object->send($to, 
                                $headers, 
                                $this->body);
+            user_error("sent email $to $this->subject", E_USER_NOTICE);
         }
     
     function makeEmail()
@@ -239,7 +240,7 @@ while($sub->obj->fetch()){
         $em->body .= $crap;
    } else {
         $to = $fam->obj->email;
-        PEAR::raiseError('force dev only', 888);
+        //PEAR::raiseError('force dev only', 888);
     }
 
     $em->mailIt($to);

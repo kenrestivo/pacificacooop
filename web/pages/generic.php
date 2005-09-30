@@ -237,7 +237,7 @@ switch($_REQUEST['action']){
 
      foreach($atd->allLinks() as $table => $ids){
          list($nearid, $farid) = $ids;
-         $cp->printDebug("$atd->table  link for $nearid {$atd->obj->$nearid}  $table<br>", 4);
+         $cp->printDebug("$atd->table  link for $nearid {$atd->obj->$nearid}  $table", 4);
          $aud =& new CoopView(&$cp, $table, &$atd);
          $tabs = $aud->obj->table();
          $farwhole = $farid;

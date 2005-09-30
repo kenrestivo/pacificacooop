@@ -766,12 +766,18 @@ group by user_id,table_name,field_name";
 
 function triggerNotices($audit_id)
         {
-            $fp = fsockopen ($_SERVER['SERVER_NAME'], 80, $errno, $errstr, 1);
+            //XXX fix this path!
+            $parth = parse_url($_SERVER['PHP_SELF']);
+            $inner = pathinfo($parth['path']);
+//             $this->page->confessArray($parth, 'parth', 4);
+//             $this->page->confessArray($inner, 'inner', 4);
+            $host = $_SERVER['SERVER_NAME'];
+
+            $fp = fsockopen($host, 80, $errno, $errstr, 1);
             if (!$fp) {
                 $this->page->printDebug("$errstr ($errno)", 1);
             } else {
-                //XXX fix this path!
-                fputs ($fp, "GET /coop-dev/send_email.php?audit_id={$audit_id} HTTP/1.0\r\nHost: {$_SERVER['SERVER_NAME']}\r\n\r\n");
+                fputs ($fp, "GET {$inner['dirname']}/send_email.php?audit_id={$audit_id} HTTP/1.0\r\nHost: {$host}\r\n\r\n");
                 fclose ($fp);
             }
 

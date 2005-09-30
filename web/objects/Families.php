@@ -85,12 +85,15 @@ class Families extends DB_DataObject
             $user->family_id = $co->id;
             $user->name = $this->name . ' Family';
             $user->insert();
+            $uid = $co->lastInsertID();
 
             //any new family you add? they are members. dammit.
             $ugj = $this->factory('users_groups_join');
-            $ugj->user_id = $co->lastInsertID();
+            $ugj->user_id = $uid;
             $ugj->group_id = 1; // MEMBERS
             $ugj->insert();
+
+            // TODO: user defaults... like subscriptions
 
             
         }

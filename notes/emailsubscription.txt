@@ -1,20 +1,49 @@
 email subscription notes
+		
+10 mins PHP
+	deal with the fucking path!!
+		path function in php
 
-?? PHP
-add hooks in new/update
-	just async trigger the update!
-		the audittrailid
-	deal with the fucking path to this file
+PUSH LIVE!
 
 
-??? SQL/python?/PHP?
+
+??? SQL/PHP
 this'll get ugly. i'll need special hacky things to add default subscriptions
 	i.e... for news, parent ed, enhancement, all the springfest realms, etc
 	for now, a nasty python or php hack
+	EVERYONE currently enrolled
+		alerts:
+			enhancement, attendance, calendar
+		new:
+			news
+			reminders
+			calendar
+		change:
+			news
+			calendar
+	add these at new-family time too!
+		where? a setdefaults class or function?
+				post-insert in families?? ooh!
+		should i store these things somewhere?
+			for now, in a class. i can always back it with db later on
+	i'll have to check to see if they have any entries FIRST
+		then add new. i'd so much prefer to do this in python... dammit...
+
+	group or chooser?
+		fucking just do it. nevermind doing it right for now. 
+		this'll eventually be a margolis-like thing, falling out of parented
+			all enrolled families, rows of subscription realm, checkboxen
+
+	THIS SUCKS. how can i change the defaults once i've set them?
+		i can't. this idea is brain-dead. i should use groups instead.
+			that means fucking with my query. that could, um, suck.
+
+	
 
 
-
-
+?? PHP
+translate br's to nl's
 
 will need to handle deletions too
 
@@ -23,14 +52,6 @@ will need to handle deletions too
 hmm. what about teachers? there's no place for their email address. dammit.
 	maybe i should put some data for teachers in there.
 	putting email addresses into users is brain-dead. needs to be in rasta
-
-
-
-
-format for email
-	from: pacificacoop
-	subject: NEWS/ALERT/NOTICE [subject/title]
-	insert the regular content
 
 
 

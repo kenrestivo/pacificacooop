@@ -218,7 +218,7 @@ class coopView extends CoopObject
 										 &$this);
 				$subview->obj->$farkey = $this->obj->$nearkey;
 				if($debug){
-					printf("linking %s.%s to %s.%s<br>", 
+					printf("linking %s.%s to %s.%s<br />", 
 						   $this->table, $this->pk, 
 						   $backtable, $farkey);
 				}
@@ -227,7 +227,7 @@ class coopView extends CoopObject
 				//confessObj($subview, "addSubTables(): $backtable obj");
 		
 				if($recursed){
-					$this->addSubTable(&$tab, sprintf('%s<br>%s', 
+					$this->addSubTable(&$tab, sprintf('%s<br />%s', 
 													  $backtable, 
 													  $recursed));
 				}
@@ -250,7 +250,7 @@ class coopView extends CoopObject
 								 $this->table, $tablename);
 				return 1;
 			}
-			$debug && printf("%s: %s  != %s, , checking up the line<br>", 
+			$debug && printf("%s: %s  != %s, , checking up the line<br />", 
 							 $this->table, $this->parentCO->table, 
 							 $tablename);
 			
