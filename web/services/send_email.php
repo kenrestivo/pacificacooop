@@ -63,9 +63,16 @@ class EmailChanges
 
     function mailIt($to)
         {
-            
-            $headers['From']    = 'Pacifica Co-Op Nursery School <members@pacificacoop.org>';
-            $headers['To']      = 	$to;
+            $user =& $this->audit_co->obj->getLink('audit_user_id');
+            $fam =& $user->getLink('family_id');
+
+
+            $headers['From'] = sprintf('%s <%s>',
+                                       $user->name ? $user->name :
+                                       'Pacifica Co-Op Nursery School',
+                                       $fam->email ? $fam->email : 
+                                       'members@pacificacoop.org');
+            $headers['To'] = 	$to;
             $headers['Subject'] = $this->subject;
             
             $mail_object =& Mail::factory('smtp', $params);
@@ -73,7 +80,7 @@ class EmailChanges
             $mail_object->send($to, 
                                $headers, 
                                $this->body);
-            user_error("sent email $to $this->subject", E_USER_NOTICE);
+            user_error("sent email to $to [{$this->subject}]", E_USER_NOTICE);
         }
     
     function makeEmail()
@@ -91,8 +98,7 @@ class EmailChanges
             }
 
 
-
-            $this->subject = sprintf("%s NOTICE for %s: %s", 
+            $this->subject = sprintf("[Pacifica Co-Op] %s to %s: %s", 
                                      strtoupper($this->type),
                                      $rec->obj->fb_formHeaderText,
                                      $rec->concatLinkFields());
@@ -212,6 +218,7 @@ while($sub->obj->fetch()){
     $fam =& new CoopObject(&$cp, 'families', &$sub);
     $fam->obj->get($sub->obj->family_id); // or just add email into query?
     
+    //might as well instantiate in loop. lightweight, and i need to get() anyway
     $em =& new EmailChanges (&$cp);
 
     // FORCE EACH USER! log them in forcibly. i don't like this at all.
@@ -227,7 +234,11 @@ while($sub->obj->fetch()){
         continue;
     }
 
-    // TODO: if they don't have view perms for this record, outtahere
+    // if they don't have view perms for this record, outtahere
+    if($em->record_co->isPermittedField() < ACCESS_VIEW){
+        $em->page->printDebug("user {$sub->obj->user_id} {$fam->obj->name} doesn't have perms to view this record at all, skipping", 4);
+        continue;
+    }
 
     // finally, if i should, let's do it.
     $em->makeEmail();

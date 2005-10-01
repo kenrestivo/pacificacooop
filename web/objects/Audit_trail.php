@@ -75,14 +75,64 @@ class Audit_trail extends DB_DataObject
 
     function fb_display_view(&$co)
         {
+            $res = '';
 
             //XXX move this to a session var or somethign. or provide a chooser
-            //have a look at schoolyearchooser
-            $limit = $_REQUEST['limit'] ? $_REQUEST['limit'] : 20;
+            //have a look at schoolyearchooser, in view or in solicitreport
+                        
+            
+            $syform =& new HTML_QuickForm('auditreport', false, false, 
+                                          false, false, true);
+            $el =& $syform->addElement('text', 'limit', 'Records to show', 
+                                       '20',
+                                       array('onchange' =>
+                                             'javascript:submitForm()'));
+
+            $sel =& $syform->addElement('select', 'realm_id', 'Realm', 
+                                       $nothing,
+                                       array('onchange' =>
+                                             'javascript:submitForm()'));
+            $sel->addOption('ALL', '%');
+            $realms =& new CoopView(&$co->page, 'realms', &$co);
+            $realms->find(true); // go get, including any constraints/sorts
+            $sel->loadDbResult($realms->obj->getDatabaseResult(), 
+                               'short_description', 'realm_id');
+
+            if($sid = thruAuthCore($co->page->auth)){
+                $syform->addElement('hidden', 'coop', $sid); 
+            }
+            $syform->addElement('hidden', 'table', $co->table); 
+
+
+            // need change button?
+            $syform->addElement('submit', 'savebutton', 'Change');
+                
+            
+            $syform->setDefaults(array('limit' =>20, 
+                                       'realm_id' => '0'));
+            
+
+            $foo = $sel->getValue();
+            $realm_id = $foo[0];
+
+            confessArray($foo, 'foo2');
+
+            $res .= $syform->toHTML();
+            
+            $limit = $el->getValue();
+
+            
+            /// OK, get and show it now
 
             $perm = $co->isPermittedField(NULL);
 
-            $res .= "<h3>An extensive audit trail of the last $limit items of activity on the site.</h3><p>This is still an experimental feature</p>";
+
+            $hack =& $this->factory('realms');
+            $hack->get($realm_id);
+
+            $res .= sprintf('<h3>An extensive audit trail of the last %s items of activity for the %s realm.</h3>', 
+                            $limit,
+                            $realm_id ? $hack->short_description : 'ALL');
             $res .= "<p>Times are in Mountain Time (Phoenix, AZ).</p>";
 
             // don't show details unless you're privileged.
