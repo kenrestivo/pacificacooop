@@ -776,6 +776,8 @@ function triggerNotices($audit_id)
             $fp = fsockopen($host, 80, $errno, $errstr, 1);
             if (!$fp) {
                 $this->page->printDebug("$errstr ($errno)", 1);
+                $this->page->mailError('SUBSCRIPTION TRIGGER FAILED ON LIVE SITE!', 
+                                       "ERRNO $errno, ERRSTR $errstr");
             } else {
                 fputs ($fp, "GET {$inner['dirname']}/send_email.php?audit_id={$audit_id} HTTP/1.0\r\nHost: {$host}\r\n\r\n");
                 fclose ($fp);
