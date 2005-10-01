@@ -77,10 +77,6 @@ class Audit_trail extends DB_DataObject
         {
             $res = '';
 
-
-            $res .= sprintf('<h3>An extensive audit trail of the last %s items of activity for the %s realm.</h3>', 
-                            $limit,
-                            $realm_id ? $hack->short_description : 'ALL');
             $res .= "<p>Times are in Mountain Time (Phoenix, AZ).</p>";
                         
             /// THE CHOOSER FORM
@@ -122,8 +118,8 @@ class Audit_trail extends DB_DataObject
             
             $limit = $el->getValue();
 
-            ///// CHOOSER OVER
-            /// OK, get and show it now
+
+            /// CONSTRAIN TO REALM
             $hack =& $this->factory('realms');
             $hack->get($realm_id);
 
@@ -137,9 +133,21 @@ class Audit_trail extends DB_DataObject
             count($tables) && $this->whereAdd(sprintf('table_name in (%s)',
                                     implode(',', $tables)));
 
+
+            /// DEAL WITH SUMMARY
+            array_push($this->fb_fieldsToRender, 'summary');
+            // XXX ugly hack to prepend it to the beginning of the array
+            $this->fb_fieldLabels = array_merge(
+                array('summary' => 'Record Edited'),
+                $this->fb_fieldLabels);
+            $this->selectAdd('index_id  as summary');
+            $this->fb_displayCallbacks['summary'] = 'summarizeLink';
+
+
+
+            /// FINALLY! show the damned thing
+
             $perm = $co->isPermittedField(NULL);
-
-
 
 
             // don't show details unless you're privileged.
@@ -212,6 +220,16 @@ class Audit_trail extends DB_DataObject
             return $sub->fb_formHeaderText;
             
         }
+
+    function summarizeLink(&$co, $val, $key)
+        {
+            //WARNING this can really suck if you change table names!!
+            // you must run the update if needed
+            $sub =& new CoopObject(&$co->page, $this->table_name, &$co);
+            $sub->obj->get($val);
+            return $sub->concatLinkFields();
+        }
+
 
 }
 
