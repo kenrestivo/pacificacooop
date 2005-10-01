@@ -130,10 +130,11 @@ class Audit_trail extends DB_DataObject
             $tb =& $this->factory('table_permissions');
             $tb->realm_id = $realm_id;
             $tb->find();
+            $tables = array();
             while($tb->fetch()){
                 $tables[] = "'{$tb->table_name}'";
             }
-            $this->whereAdd(sprintf('table_name in (%s)',
+            count($tables) && $this->whereAdd(sprintf('table_name in (%s)',
                                     implode(',', $tables)));
 
             $perm = $co->isPermittedField(NULL);

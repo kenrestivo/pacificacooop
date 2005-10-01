@@ -49,7 +49,8 @@ class EmailChanges
             $this->audit_co->find(false);
             // my find does not return the number
             if($this->audit_co->obj->N < 1){
-                PEAR::raiseError("audit trail [$this->audit_coit_id] doesn't exist!", 666);
+                PEAR::raiseError("audit trail [$this->audit_coit_id] doesn't exist!", 
+                                 666);
             }
             $this->type = $this->audit_co->obj->details ? 'change' : 'add';
             
