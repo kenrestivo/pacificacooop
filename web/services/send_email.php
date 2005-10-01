@@ -98,7 +98,7 @@ class EmailChanges
             }
 
 
-            $this->subject = sprintf("[Pacifica Co-Op] %s to %s: %s", 
+            $this->subject = sprintf("[Pacifica Co-Op] %s %s: %s", 
                                      strtoupper($this->type),
                                      $rec->obj->fb_formHeaderText,
                                      $rec->concatLinkFields());
