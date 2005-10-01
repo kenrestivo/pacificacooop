@@ -160,6 +160,8 @@ class Enrollment extends DB_DataObject
 
             $res .= '<p class="small">Legend: W=Worker, c=Child Attends, E=EPOD, B=Brings Baby</p>';
 
+            $res .= $this->_printoutDisclaimer(&$co);
+
             return $res; 
 
             
@@ -304,6 +306,34 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
 
             return $res;
 
+        }
+
+    function _printoutDisclaimer(&$co)
+        {
+            $res = '';
+
+            $ja =& $this->factory('job_assignments');
+            // NOT chosenyear! always the most current, don't bother alumni
+            $ja->whereAdd(sprintf('school_year = "%s"',
+                                  $co->page->currentSchoolYear));
+            //XXX constant! 8 = roster data entry
+            $ja->whereAdd('job_description_id = 9');
+            $ja->find(true);
+
+            //DAMN this is ugly
+            $fam =& $ja->getLink('family_id');
+            $par =& $this->factory('parents');
+            $wrk =& $this->factory('workers');
+            $wrk->joinAdd($par);
+            $wrk->whereAdd(sprintf('family_id = %d', $fam->family_id));
+            $wrk->find(true);
+                        
+            $res .= sprintf('<p class="small">NOTE: This report is designed for viewing on-screen and does not (yet) print out in a usable format. Hardcopies are still prepared manually, and should show up periodically in your Communications Folder at school. If your latest hardcopy Roster is older than this report, please contact the Roster Data Entry person for the %s year, %s %s (call %s, or <a href="mailto:%s">%s</a>.</p>',
+                            $co->page->currentSchoolYear,
+                            $wrk->first_name, $wrk->last_name,
+                            $fam->phone,
+                            $fam->email, $fam->email);
+            return $res;
         }
 
 
