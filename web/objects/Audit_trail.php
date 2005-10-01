@@ -209,20 +209,25 @@ class Audit_trail extends DB_DataObject
                     $field : $cho->obj->fb_fieldLabels[$field];
                 $res .= ": ";
                 
+                if($cho->isPermittedField($field) < ACCESS_VIEW){
+                    $res .= " (Not Permitted) ";
+                    continue;
+                }                    
+
                 // finally, SHOW the damned thing
-                if($cho->isPermittedField($field) >= ACCESS_VIEW){
-                    
+
+                if($this->fb_noHTML){        // for the emails
+                    $res .= sprintf(" %s changed to %s\n", 
+                                    $oldformatted, $newformatted);
+                } else {
                     $diff =& new Text_Diff(
                         explode("\n",$oldformatted), 
                         explode("\n", $newformatted));
                     $rend =& new Text_Diff_Renderer_inline();
                     //$co->page->confessArray($rend->getParams(), 'inline params', 4);
                     $res .= nl2br($rend->render($diff));
-                    
-                } else {
-                    $res .= " (Not Permitted) ";
                 }
-                $res .= '<br />';
+                $res .= $this->fb_noHTML ? "\n" :'<br />';
             }
             return $res;
         }

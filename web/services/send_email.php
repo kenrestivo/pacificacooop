@@ -91,6 +91,10 @@ class EmailChanges
             $aud =& $this->audit_co;
             $rec =& $this->record_co;
 
+            // need this, don't want html in here if i can avoid it
+            $aud->obj->fb_noHTML = 1;
+            $rec->obj->fb_noHTML = 1;
+
             $audheaders = $aud->makeHeader();
             $tmp = $aud->toArray($audheaders['keys']);
             // fucking array_combine, dude
