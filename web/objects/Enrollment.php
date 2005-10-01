@@ -328,7 +328,7 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             $wrk->whereAdd(sprintf('family_id = %d', $fam->family_id));
             $wrk->find(true);
                         
-            $res .= sprintf('<p class="small">NOTE: This report is designed for viewing on-screen and does not (yet) print out in a usable format. Hardcopies are still prepared manually, and should show up periodically in your Communications Folder at school. If your latest hardcopy Roster is older than this report, please contact the Roster Data Entry person for the %s year, %s %s (call %s, or <a href="mailto:%s">%s</a>.</p>',
+            $res .= sprintf('<p class="small">NOTE: This report is designed for viewing on-screen and does not (yet) print out in a usable format. Hardcopies are still prepared manually, and should show up periodically in your Communications Folder at school. If your latest hardcopy Roster is older than this report, please contact the Roster Data Entry person for the %s year, %s %s (call %s, or <a href="mailto:%s">%s</a>.<br/>If there are errors in your family\'s data, you may click on "Details" to edit much of it directly.</p>',
                             $co->page->currentSchoolYear,
                             $wrk->first_name, $wrk->last_name,
                             $fam->phone,
