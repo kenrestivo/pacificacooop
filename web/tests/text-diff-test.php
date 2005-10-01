@@ -46,9 +46,9 @@ confessArray($rend->getParams(), 'inline params');
 print $rend->render($diff);
 
 
-$rend2 =& new Text_Diff_Renderer_unified();
-confessArray($rend2->getParams(), 'unified params');
-print $rend2->render($diff);
+// $rend2 =& new Text_Diff_Renderer_unified();
+// confessArray($rend2->getParams(), 'unified params');
+// print $rend2->render($diff);
 
 $cp->done();
 

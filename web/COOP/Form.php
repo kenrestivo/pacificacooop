@@ -425,18 +425,12 @@ class coopForm extends CoopObject
         {
             foreach($this->obj->table() as $key => $type){
                 if($this->obj->$key != $old->$key){
-                    if(is_array($this->obj->fb_textFields) &&
-                       in_array($key, $this->obj->fb_textFields))
-                    { 
-                        // TODO: do a text diff! wiki style?
-                        
-                    } else {
-                        $this->changes[$key] = array('old' => $old->$key,
-                                                     'new' => $this->obj->$key);
-                    }
+                    // NOTE: i save the whole thing. i do formatting at display
+                    // even if it is a massive longtext. it's wasteful, but wtf
+                    $this->changes[$key] = array('old' => $old->$key,
+                                                 'new' => $this->obj->$key);
                 }
             }
-            
         }
 
 	function insert()

@@ -1383,14 +1383,15 @@ concat(moms.first_name, " ",
 moms.last_name) as mom,
 concat(dads.first_name, " ", dads.last_name) as dad, 
 kids.first_name as kid_first, 
-date_format(kids.date_of_birth, "%%m/%%d/%%Y") as human_date, 
+date_format(kids.date_of_birth, "%m/%d/%Y") as human_date, 
 families.address1, 
 families.phone, 
 families.email,
 enrollment.monday, enrollment.tuesday, enrollment.wednesday, 
 enrollment.thursday, enrollment.friday, job_descriptions.summary as school_job,
 enrollment.am_pm_session, enrollment.start_date, enrollment.dropout_date,
-workers.workday, workers.epod,  workers.am_pm_session
+workers.workday, workers.epod, workers.am_pm_session, "2005-2006" as school_year,
+(now() >= brings_baby.baby_due_date and now()< brings_baby.baby_too_old_date) as brings_baby
 from enrollment
 left join kids on enrollment.kid_id = kids.kid_id
 left join parents as dads 
@@ -1404,9 +1405,11 @@ and job_assignments.school_year = "2005-2006"
 left join job_descriptions 
 on job_descriptions.job_description_id = job_assignments.job_description_id
 left join workers on (workers.parent_id = moms.parent_id or workers.parent_id =dads.parent_id) and workers.school_year = "2005-2006"
+left join brings_baby on workers.worker_id = brings_baby.worker_id
 where enrollment.school_year = "2005-2006" and enrollment.am_pm_session = "AM"
 group by enrollment_id
 order by enrollment.am_pm_session, kids.last_name, kids.first_name
+            
 
 
 --- meetings to date

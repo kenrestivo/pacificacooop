@@ -8,6 +8,9 @@
  *
  * @package Text_Diff
  */
+require_once('Text/Diff/Renderer.php');
+
+
 class Text_Diff_Renderer_unified extends Text_Diff_Renderer {
 
     /**
