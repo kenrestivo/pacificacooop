@@ -77,10 +77,13 @@ class Audit_trail extends DB_DataObject
         {
             $res = '';
 
-            //XXX move this to a session var or somethign. or provide a chooser
-            //have a look at schoolyearchooser, in view or in solicitreport
+
+            $res .= sprintf('<h3>An extensive audit trail of the last %s items of activity for the %s realm.</h3>', 
+                            $limit,
+                            $realm_id ? $hack->short_description : 'ALL');
+            $res .= "<p>Times are in Mountain Time (Phoenix, AZ).</p>";
                         
-            
+            /// THE CHOOSER FORM
             $syform =& new HTML_QuickForm('auditreport', false, false, 
                                           false, false, true);
             $el =& $syform->addElement('text', 'limit', 'Records to show', 
@@ -115,25 +118,28 @@ class Audit_trail extends DB_DataObject
             $foo = $sel->getValue();
             $realm_id = $foo[0];
 
-            confessArray($foo, 'foo2');
-
             $res .= $syform->toHTML();
             
             $limit = $el->getValue();
 
-            
+            ///// CHOOSER OVER
             /// OK, get and show it now
+            $hack =& $this->factory('realms');
+            $hack->get($realm_id);
+
+            $tb =& $this->factory('table_permissions');
+            $tb->realm_id = $realm_id;
+            $tb->find();
+            while($tb->fetch()){
+                $tables[] = "'{$tb->table_name}'";
+            }
+            $this->whereAdd(sprintf('table_name in (%s)',
+                                    implode(',', $tables)));
 
             $perm = $co->isPermittedField(NULL);
 
 
-            $hack =& $this->factory('realms');
-            $hack->get($realm_id);
 
-            $res .= sprintf('<h3>An extensive audit trail of the last %s items of activity for the %s realm.</h3>', 
-                            $limit,
-                            $realm_id ? $hack->short_description : 'ALL');
-            $res .= "<p>Times are in Mountain Time (Phoenix, AZ).</p>";
 
             // don't show details unless you're privileged.
             // TODO: make thie a hell of a lot more sensible
@@ -149,16 +155,6 @@ class Audit_trail extends DB_DataObject
             $res .= $co->simpleTable();
 	 
 
-            $logins = new CoopView(&$co->page, 'session_info', $none);
-
-            $perm >  ACCESS_VIEW &&  
-                $logins->obj->fb_recordActions['details'] = ACCESS_VIEW;
-            $logins->obj->whereAdd('user_id > 0');
-            $logins->obj->orderBy('updated desc');
-            $logins->obj->limit($limit);
-            $logins->recordActions = array('details' => 'Details');
-            $res .= $logins->simpleTable();
-            
             return $res;
         }
 
