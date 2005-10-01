@@ -410,8 +410,10 @@ class coopPage
 
     function done()
         {
+            $this->confessArray(get_included_files(), 'file inclusion order', 
+                                4);
             $this->confessArray($_SESSION, 
-                                'CoopPage::saving SESSION  at END of page');
+                                'CoopPage::done() saving SESSION  at END of page');
             done();
         }
 

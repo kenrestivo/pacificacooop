@@ -105,7 +105,7 @@ print "\n</table>\n\n";
 ///////////////////////
 
 // NOTE! i don't end rightcol div, since done does that for me
-done();
+$cp->done();
 
 /// DO NOT DELETE
 ?>
