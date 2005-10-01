@@ -4,7 +4,8 @@
 
 // unit test for my vitally required includes. return an error if
 // the shit has hit the fan
-
+chdir('../');
+require_once('first.inc');
 require_once "HTML/QuickForm.php";
 require_once "HTML/QuickForm/group.php";
 require_once "HTML/QuickForm/group.php";
@@ -17,6 +18,7 @@ require_once('DB/DataObject.php');
 require_once('DB/DataObject/FormBuilder.php');
 require_once('Pager/Pager.php');
 require_once('Mail.php');
+require_once('Text/Diff.php');
 
 //require_once('FAIL-NOW.php');
 
