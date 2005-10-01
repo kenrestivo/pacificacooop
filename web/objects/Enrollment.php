@@ -189,7 +189,8 @@ families.email,
 enrollment.monday, enrollment.tuesday, enrollment.wednesday, 
 enrollment.thursday, enrollment.friday, job_descriptions.summary as school_job,
 enrollment.am_pm_session, enrollment.start_date, enrollment.dropout_date,
-workers.workday, workers.epod, workers.am_pm_session, "%s" as school_year
+workers.workday, workers.epod, workers.am_pm_session, "%s" as school_year,
+(now() >= brings_baby.baby_due_date and now()< brings_baby.baby_too_old_date) as brings_baby
 from enrollment
 left join kids on enrollment.kid_id = kids.kid_id
 left join parents as dads 
@@ -203,6 +204,7 @@ and job_assignments.school_year = "%s"
 left join job_descriptions 
 on job_descriptions.job_description_id = job_assignments.job_description_id
 left join workers on (workers.parent_id = moms.parent_id or workers.parent_id =dads.parent_id) and workers.school_year = "%s"
+left join brings_baby on workers.worker_id = brings_baby.worker_id
 where enrollment.school_year = "%s" and enrollment.am_pm_session = "%s"
 group by enrollment_id
 order by enrollment.am_pm_session, kids.last_name, kids.first_name';
@@ -253,10 +255,9 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
     function checkWorkday(&$co, $val, $key)
         {
             if(strtolower($this->workday) == $key){
-                // TODO: need to use the new baby stuff
-//                 if($this->brings_baby){
-//                     return 'B';
-//                 }
+                if($this->brings_baby){
+                    return 'B';
+                }
                 return 'W';
             }
             if(strtolower($this->epod) == $key){
