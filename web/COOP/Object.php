@@ -236,9 +236,11 @@ group by user_id,table_name,field_name";
 				// trying to YAGNI here. i don't need 2-level links yet
 				// so, i'm not coding that recursion in here now. sorry charlie.
 				if($this->obj->$linkfield){
-					// TODO: this is where i'd recursively czech these.
+					// this is where i'd recursively czech these.
 					// also, building an array and then imploding it
 					// might be more readable
+                    // TODO: make sure i don't show the - if nothing there
+                    // ALSO TODO: do the formatting i.e. coopview toArray!!
 					$val .= sprintf("%s%s", $val ? ' - ' : "", 
 									$this->checkLinkField($linkfield, 
                                                           $this->obj->$linkfield));

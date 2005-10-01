@@ -45,7 +45,7 @@ class Table_permissions extends DB_DataObject
     var $fb_displayCallbacks = array('table_name' => 'useLabel',
                                      'field_name' => 'useLabel');
 
-
+    var $fb_linkDisplayFields =  array('realm_id', 'table_name', 'field_name');
 
     function preGenerateForm(&$form)
         {

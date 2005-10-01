@@ -40,6 +40,7 @@ class User_privileges extends DB_DataObject
 	var $fb_formHeaderText = 'User and Group Permissions';
 	var $fb_shortHeader = 'User Permissions';
 	var $fb_requiredFields = array('realm_id');
+    var $fb_linkDisplayFields =  array('realm_id', 'user_id', 'group_id');
 
     
 }

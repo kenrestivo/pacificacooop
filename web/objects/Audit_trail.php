@@ -227,6 +227,9 @@ class Audit_trail extends DB_DataObject
             // you must run the update if needed
             $sub =& new CoopObject(&$co->page, $this->table_name, &$co);
             $sub->obj->get($val);
+            if($sub->isPermittedField() < ACCESS_VIEW){
+                return '(Not permitted)';
+            }
             return $sub->concatLinkFields();
         }
 
