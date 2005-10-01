@@ -7,9 +7,9 @@
 LOCAL="$1"
 
 if [ "$LOCAL" ] ; then
-	URL=http://www/coop-dev/tests/include-test.php 
+	URL=http://www/coop-dev/qa/include-test.php 
 else
-	URL=http://www.pacificacoop.org/members/tests/include-test.php 
+	URL=http://www.pacificacoop.org/members/qa/include-test.php 
 fi
 
 RES=`lynx -dump $URL`
