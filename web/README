@@ -55,6 +55,9 @@ to create a new table: est time per table: 1-2 hours
 	add it to table_privileges, with menu/usr/group level
 
 
+if you ever, *ever* rename a table:
+    update table_permissions set table_name = 'new_name' where table_name = 'old_name';
+    update audit_trail set table_name = 'new_name' where table_name = 'old_name';
 
 
 ---------------

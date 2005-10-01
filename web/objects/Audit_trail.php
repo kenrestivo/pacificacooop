@@ -29,7 +29,7 @@ class Audit_trail extends DB_DataObject
 	var $fb_shortHeader =  'Audit';
 	var $fb_linkDisplayFields = array();
 	var $fb_fieldLabels = array (
-		'table_name' => 'Name of Table',
+		'table_name' => 'Table',
 		'index_id' => 'Unique ID',
 		'audit_user_id' => 'Edited By',
 		'updated' => 'Edited On',
@@ -38,7 +38,8 @@ class Audit_trail extends DB_DataObject
 	var $fb_fieldsToRender = array ('audit_user_id', 'updated', 'details');
     var $fb_recordActions = array();
     var $fb_viewActions = array();
-    var $fb_displayCallbacks = array('details' => 'formatChanges');
+    var $fb_displayCallbacks = array('details' => 'formatChanges',
+                                     'table_name' => 'useLabel');
 
     function fb_display_details()
         {
@@ -69,20 +70,6 @@ class Audit_trail extends DB_DataObject
                     print $aud->simpleTable();
             }
 
-            //XXX maybe do only if privileged
-            if($_REQUEST[$session->prependTable($session->pk)]){
-                $session->obj->{$session->pk} = 
-                    $_REQUEST[$session->prependTable($session->pk)];
-                    print $session->horizTable();
-		 
-                    $this->audit_user_id = $session->obj->user_id;
-                    $this->orderBy('updated desc');
-                    $this->limit($limit);
-                    $this->fb_fieldsToRender = array('updated', 'index_id', 
-                                                     'table_name');
-                    $this->CoopView->recordActions = array('details' => 'Details');
-                    print $this->CoopView->simpleTable();
-            }
 
         }
 
@@ -90,6 +77,7 @@ class Audit_trail extends DB_DataObject
         {
 
             //XXX move this to a session var or somethign. or provide a chooser
+            //have a look at schoolyearchooser
             $limit = $_REQUEST['limit'] ? $_REQUEST['limit'] : 20;
 
             $perm = $co->isPermittedField(NULL);
@@ -167,6 +155,15 @@ class Audit_trail extends DB_DataObject
                 $res .= '<br>';
             }
             return $res;
+        }
+
+    function useLabel(&$co, $val, $key)
+        {
+            //WARNING this can really suck if you change table names!!
+            // you must run the update if needed
+            $sub =& $this->factory($val);
+            return $sub->fb_formHeaderText;
+            
         }
 
 }

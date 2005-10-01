@@ -42,7 +42,8 @@ class Table_permissions extends DB_DataObject
         );
 
 	var $fb_requiredFields = array('table_name', 'realm_id');
-
+    var $fb_displayCallbacks = array('table_name' => 'useLabel',
+                                     'field_name' => 'useLabel');
 
 
 
@@ -68,6 +69,22 @@ class Table_permissions extends DB_DataObject
             
         }
 
+  function useLabel(&$co, $val, $key)
+        {
+            //WARNING this can really suck if you change table names!!
+            // you must run the update if needed
+            $sub =& $this->factory($this->table_name);
+                
+            if($key == 'table_name'){
+                return $sub->fb_formHeaderText;
+            }
+
+            if($key == 'field_name'){
+                return $sub->fb_fieldLabels[$val] ? 
+                    $sub->fb_fieldLabels[$val] : $val;
+            }
+            
+        }
 
 
     function fb_display_summary(&$co)

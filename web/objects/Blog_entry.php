@@ -86,8 +86,10 @@ class Blog_entry extends DB_DataObject
                                 $this->short_title, $this->body, 
                                 $publiconly ? '' : 
                                 $co->recordButtons(&$this, false),
-                                $this->update_human, $this->name
+                                $this->update_human, 
+                                $this->name
                     );
+                // TODO: put a selfurl to the family details, IFF $clause members
             }
             return $res;
 

@@ -1,11 +1,23 @@
 email subscription notes
 		
-10 mins PHP
-	deal with the fucking path!!
-		path function in php
 
-PUSH LIVE!
+?? PHP
+translate br's to nl's
 
+will need to handle deletions too
+
+
+??? SQL
+hmm. what about teachers? there's no place for their email address. dammit.
+	maybe i should put some data for teachers in there.
+	putting email addresses into users is brain-dead. needs to be in rasta
+
+
+
+??? PHP
+the tricky bit is alerts. they have to be checked, somehow
+	maybe those are manual
+	or maybe i save status of who has been alerted?
 
 
 ??? SQL/PHP
@@ -41,21 +53,3 @@ this'll get ugly. i'll need special hacky things to add default subscriptions
 
 	
 
-
-?? PHP
-translate br's to nl's
-
-will need to handle deletions too
-
-
-??? SQL
-hmm. what about teachers? there's no place for their email address. dammit.
-	maybe i should put some data for teachers in there.
-	putting email addresses into users is brain-dead. needs to be in rasta
-
-
-
-??? PHP
-the tricky bit is alerts. they have to be checked, somehow
-	maybe those are manual
-	or maybe i save status of who has been alerted?
