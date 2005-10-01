@@ -135,7 +135,8 @@ class EmailChanges
 
             $this->body .= sprintf('%sYou have chosen to receive these updates via email. You may change or cancel this by visiting: http://%s/members/ under "Subscriptions:Settings"',
                             "\n\n",
-                            $_SERVER['SERVER_NAME']);
+                                   $_SERVER['HTTP_HOST']
+                                   );
             $this->body .= "\n\n";
         }
     
@@ -245,9 +246,9 @@ while($sub->obj->fetch()){
 
     $em->mailIt($to);
 
-    if($cp->debug > 0){
-        print '<pre>' . $crap . $em->body . '</pre>';
-    }
+    
+    print '<pre>' . $crap . $em->body . '</pre>';
+
 }
 
 ////KEEP EVERTHANG BELOW
