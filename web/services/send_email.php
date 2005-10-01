@@ -64,7 +64,7 @@ class EmailChanges
     function mailIt($to)
         {
             
-            $headers['From']    = 'members@pacificacoop.org';
+            $headers['From']    = 'Pacifica Co-Op Nursery School <members@pacificacoop.org>';
             $headers['To']      = 	$to;
             $headers['Subject'] = $this->subject;
             
