@@ -250,7 +250,8 @@ writeSess($sessid, $vars)
 		return(false);
 	}
 	
-	$auth = $_SESSION['auth']; //temp
+	$auth =& $_SESSION['auth']; //temp
+	$lastuid =& $_SESSION['lastuid']; //temp
 	$ip = getIpAddr();
 
 	user_error(sprintf("writeSess: writing session [%s] vars [%s] uid %d ip [%s]",
@@ -259,7 +260,9 @@ writeSess($sessid, $vars)
 	//TODO replace is WRONG. use update... and handle INSERT if new.
 	$query = sprintf("replace into session_info 
 			set vars = '%s' , session_id = '%s', user_id = %d, ip_addr = '%s'",
-			 mysql_escape_string($vars), $sessid, $auth['uid'], $ip);
+			 mysql_escape_string($vars), $sessid, 
+                     $auth['uid'] ? $auth['uid'] : $lastuid, 
+                     $ip);
 	if(mysql_query($query)){
 		$rows = mysql_affected_rows();
 	}

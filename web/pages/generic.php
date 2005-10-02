@@ -124,13 +124,15 @@ function genericView(&$cp)
     $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
     //$atd->debugWrap(2);
 
-    print '<div>';
+    print '<div><!-- status alert div -->';
+
     $atd2 =& new CoopView(&$cp, $_REQUEST['table'], $none);
+    // alert  and/or summary does a find, so i need a separate obj for it
+
     if(is_callable(array($atd2->obj, 'fb_display_summary'))){
         $atd2->page->printDebug('calling callback for summary', 2);
         print $atd2->obj->fb_display_summary(&$atd2);
     }
-    
     if(is_callable(array($atd2->obj, 'fb_display_alert'))){
         $atd2->page->printDebug('calling callback for alert', 2);
         print $atd2->obj->fb_display_alert(&$atd2);

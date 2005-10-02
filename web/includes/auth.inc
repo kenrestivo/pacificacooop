@@ -907,7 +907,7 @@ loggedOutState($auth, $states)
 		$uinfo = getUser($auth['uid']);
 		$olduser = sprintf("User '%s' logged out.", $uinfo['username']);
 	}
-
+    
 	//DO NOT destroy th session here!! just wipe auth. read docs.
 	$auth['uid']  = 0;
 	$_SESSION['auth'] = NULL;
@@ -1096,6 +1096,7 @@ loggedInState($auth, $states)
 {
 	$newauth =  changeState($auth, $states, 'loggedin', 1);
 	$_SESSION['auth'] = $newauth; // save it!
+    $_SESSION['lastuid'] = $newauth['uid'];  // cache it so i see who was there
 	return  $newauth;
 }/* END LOGGEDINSTATE */
 
