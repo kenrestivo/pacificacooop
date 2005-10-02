@@ -275,6 +275,16 @@ switch($_REQUEST['action']){
      print $aud->simpleTable();
 
 
+     if($cp->vars['last']['realm']){
+         $realm =& new CoopView(&$cp, 'realms', &$atd);
+         $realm->obj->get($cp->vars['last']['realm']);
+         print $cp->selfURL(
+             array('value' => "Click here for complete audit trail of all {$realm->obj->short_description}",
+                   'inside' => array('table' => 'audit_trail',
+                                     // XXX realm_id superflouos, using last!
+                                     'realm_id' => $cp->vars['last']['realm'])));
+     }
+
      print $cp->selfURL(
          array('value' => 'Click here for detailed view of Permissions',
                'inside' => array('table' => $atd->table,

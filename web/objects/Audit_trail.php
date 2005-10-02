@@ -110,8 +110,9 @@ class Audit_trail extends DB_DataObject
             $syform->addElement('submit', 'savebutton', 'Change');
                 
             
+            //COOL! this is the first place i am using vars->last
             $syform->setDefaults(array('limit' =>20, 
-                                       'realm_id' => '0'));
+                                       'realm_id' => $co->page->vars['last']['realm']));
             
 
             $foo = $sel->getValue();
@@ -217,7 +218,7 @@ class Audit_trail extends DB_DataObject
                 // finally, SHOW the damned thing
 
                 if($this->fb_noHTML){        // for the emails
-                    $res .= sprintf(" %s changed to %s\n", 
+                    $res .= sprintf(" '%s' changed to '%s'\n", 
                                     $oldformatted, $newformatted);
                 } else {
                     $diff =& new Text_Diff(
