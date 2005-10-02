@@ -1,0 +1,23 @@
+a cool nifty SEARCH BOX in all generic views!!
+
+
+??? PHP
+proper generic search feature!!
+	i.e. the beginning of what i have in audit trail!!
+	this would FUCKING RULE
+	maybe javascript hide the form, so it pops up only when needed!!
+	add records to show to it
+	put it in generic or coopview
+		i think generic is the most logical place for it
+	and an ALL button
+
+build a quickform, much like the standard build
+	subclass coopform? searchform?
+	slight differences
+		add all the fields the user has VIEW perms for (not edit/add)
+	actions will be different: not insert/update
+
+
+the generic view and/or constraints and/or simple table will need to change
+	it already constrains based on id supplied. needs to do others too
+	and "like" for non-numeric fields.... hmm, could get ugly
