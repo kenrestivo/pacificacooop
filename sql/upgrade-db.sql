@@ -3,6 +3,7 @@
 
 -- add to reports, enhancement-summry
 
+-- add to tables, session info
 
 
 

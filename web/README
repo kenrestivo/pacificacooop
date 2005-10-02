@@ -21,6 +21,7 @@ fb_displayCallabacks = array (field => cb)
 fb_viewActions = array  (action => level)
 fb_recordActions = array  (action => level)
 fb_extraDetails = array('path:to:other:details', 'path:to:more:details')
+    // basically, backlinked tables i want to display
 fb_allYears = 0/1 // show all years by default in schoolyearchooser
 fb_noHTML = 0/1  // use text, not html
 

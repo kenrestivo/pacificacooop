@@ -29,9 +29,9 @@ class Session_info extends DB_DataObject
 									  'user_id');
 
 	var $fb_fieldLabels = array (
+		'updated' => 'Last Page View',
 		'session_id' => 'PHP SessionID',
 		'ip_addr' => 'IP Address',
-		'updated' => 'Last Page View',
 		'user_id' => 'User ID',
 		'vars' => 'Serialised PHP vars saved'
 		);
@@ -41,10 +41,68 @@ class Session_info extends DB_DataObject
 		'user_id'
 		);
 	var $fb_formHeaderText =  'Login History';
+	var $fb_shortHeader =  'Logins';
 
     // details appear to be broken on this
     var $fb_recordActions = array();
     var $fb_viewActions = array();
+
+
+ 	function fb_linkConstraints(&$co)
+		{
+            $fam = $this->factory('users');
+            $this->joinAdd($fam);
+            if($co->isPermittedField(NULL) < ACCESS_VIEW ){
+                //XXX constrainfamily won't work, because i use userid here
+                $this->whereAdd(
+                    sprintf('%s.user_id = %d',
+                            $co->table, $co->page->auth['uid']));
+            }
+            //$co->debugWrap(2);
+            
+            $this->whereAdd(sprintf('%s.user_id > 0', $co->table));
+            $this->orderBy('updated desc');
+        }
+
+
+    function fb_display_view(&$co)
+        {
+            $res = '';
+
+            $res .= "<p>Times are in Mountain Time (Phoenix, AZ).</p>";
+                        
+            /// THE CHOOSER FORM
+            $syform =& new HTML_QuickForm('sessioninfo', false, false, 
+                                          false, false, true);
+            $el =& $syform->addElement('text', 'limit', 'Records to show', 
+                                       '20',
+                                       array('onchange' =>
+                                             'javascript:submitForm()'));
+
+            if($sid = thruAuthCore($co->page->auth)){
+                $syform->addElement('hidden', 'coop', $sid); 
+            }
+            $syform->addElement('hidden', 'table', $co->table); 
+
+
+            // need change button?
+            $syform->addElement('submit', 'savebutton', 'Change');
+                
+            
+            //COOL! this is the first place i am using vars->last
+            $syform->setDefaults(array('limit' =>20));
+            
+            $limit = $el->getValue();
+            $this->limit($limit);
+            
+
+            $res .= $syform->toHTML();
+            
+            $res .= $co->simpleTable();
+            
+            return $res;
+            
+        }
 
 
 }

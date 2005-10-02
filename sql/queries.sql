@@ -80,13 +80,6 @@ select max(ins.expiration_date) as exp, parents.family_id, families.name,
     order by exp desc;
     -- note: in an actualy scripted query, i'll add where parents.family_id =
 
---- THIS IS THE ROSTER!
- select kids.last_name, kids.first_name, enrollment.* 
-    from kids 
-        left join enrollment using (kid_id) 
-	where enrollment.school_year = '2004-2005' 
-	order by enrollment.am_pm_session, kids.last_name, kids.first_name;
-
 
 -- show all springfest payments
 select families.name, sum(income.payment_amount) as total

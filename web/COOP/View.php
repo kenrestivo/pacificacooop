@@ -101,7 +101,7 @@ class coopView extends CoopObject
                     $header = $this->makeHeader();
                     $this->page->confessArray($header, 'header', 2);
 					$tab->addRow(array_values($header['titles']), 
-							 'class="tabletitles"', 'TH'); 
+							 'class="tableheaders"', 'TH'); 
                 }
 				//$tab->addRow(array_values($this->obj->toArray()));
                 if($this->isPermittedField() < ACCESS_VIEW){
@@ -137,7 +137,7 @@ class coopView extends CoopObject
 
 			while($this->obj->fetch()){
 				$tab->addCol($this->toArray($header['keys']),
-                             'class="tableheader"' );
+                             'class="tabletitles"' );
 			
 			}
 			if($this->extraRecordButtons){

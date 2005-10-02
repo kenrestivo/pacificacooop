@@ -21,3 +21,7 @@ build a quickform, much like the standard build
 the generic view and/or constraints and/or simple table will need to change
 	it already constrains based on id supplied. needs to do others too
 	and "like" for non-numeric fields.... hmm, could get ugly
+
+
+sort by too. make column headings clickable
+	this is basically SDG, but SDG has... issues...
