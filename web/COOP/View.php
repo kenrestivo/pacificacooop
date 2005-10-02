@@ -281,13 +281,18 @@ class coopView extends CoopObject
                     $res[] = '';
                 } else if(is_array($this->obj->fb_displayCallbacks) &&
                           in_array($key, 
-                                   array_keys($this->obj->fb_displayCallbacks)) &&
-                          is_callable(array($this->obj, 
-                                            $this->obj->fb_displayCallbacks[$key])))
+                                   array_keys($this->obj->fb_displayCallbacks)))
                 {
+                    if(!is_callable(array($this->obj, 
+                                          $this->obj->fb_displayCallbacks[$key])))
+                    {
+                        PEAR::raiseError("'{$this->obj->fb_displayCallbacks[$key]}' is set as display callback for $key, but IT IS NOT CALLABLE! typo?", 666);
+                    }
+                    
                     $res[] = call_user_func(
                         array($this->obj, $this->obj->fb_displayCallbacks[$key]),
                         &$this, $val, $key);
+                    
                 } else if($table[$key] & DB_DATAOBJECT_MYSQLTIMESTAMP){ 
                     $res[] = timestamp_db_php($val);
                 } else if ($table[$key] &  DB_DATAOBJECT_TIME) {

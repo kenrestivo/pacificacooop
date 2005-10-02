@@ -33,7 +33,7 @@ class Session_info extends DB_DataObject
 		'session_id' => 'PHP SessionID',
 		'ip_addr' => 'IP Address',
 		'user_id' => 'User ID',
-		'vars' => 'Serialised PHP vars saved'
+		'vars' => 'Last Activity'
 		);
 	var $fb_fieldsToRender = array (
 		'ip_addr',
@@ -46,6 +46,7 @@ class Session_info extends DB_DataObject
     // details appear to be broken on this
     var $fb_recordActions = array();
     var $fb_viewActions = array();
+    var $fb_displayCallbacks = array('vars' => 'formatVars');
 
 
  	function fb_linkConstraints(&$co)
@@ -104,5 +105,12 @@ class Session_info extends DB_DataObject
             
         }
 
+    function formatVars(&$co, $val, $key)
+        {
+            /// XXX THIS DOESN'T WORK! the SESSION must be in a weird format?
+            $vars = unserialize($val);
+            return $val;
+            return print_r($vars, 1);
+        }
 
 }
