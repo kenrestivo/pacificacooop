@@ -30,6 +30,11 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             //XXX didn't i do this somewhere else already?
             $sub =& new CoopObject(&$cf->page, $target, &$cf);
             
+            $sub =& new CoopObject(&$cf->page, $target, &$cf);
+            if($sub->isPermittedField() < ACCESS_ADD){
+                return  parent::toHTML(); // the actual {element}!
+            }
+
 			return 
                 sprintf('%s <div class="sublink">&nbsp;%s</div>',
                         parent::toHTML(), // the actual {element}!

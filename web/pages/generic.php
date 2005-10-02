@@ -60,28 +60,28 @@ print '<div id="centerCol">';
 /////////////////////////////////////////////// END PSEUDO-MAIN
 
 //TODO: move this to coopobject? coopview?
-function bruteForceDeleteCheck(&$atd)
+function bruteForceDeleteCheck(&$cp)
 {
     global $_DB_DATAOBJECT;
     // go get em
 
-    $atd =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
-    $id = $_REQUEST[$atd->prependTable($atd->pk)];
-    $atd->obj->{$atd->pk} = $id;
-    $atd->obj->find(true);		//  XXX aack! need this for summary
+    $vatd =& new CoopView(&$cp, $_REQUEST['table'], $none);
+    $id = $_REQUEST[$vatd->prependTable($vatd->pk)];
+    $vatd->obj->{$vatd->pk} = $id;
+    $vatd->obj->find(true);		//  XXX aack! need this for summary
     
     
     //NOTE! i do *not* use backlinks/forwardlinks here
     //because some of these fields may not show up as actual links
     //i.e. if they're not PK's! but i still want to prevent orphans
-    $links =& $_DB_DATAOBJECT['LINKS'][$atd->obj->database()];
+    $links =& $_DB_DATAOBJECT['LINKS'][$vatd->obj->database()];
     foreach($links as $table=> $link){
         foreach($link as $nearcol => $farpair){
-            if($atd->pk == $nearcol && $table != $atd->table){
+            if($vatd->pk == $nearcol && $table != $vatd->table){
                 $checkme[] = $table;
             }
             list($fartab, $farcol) = explode(':', $farpair);
-            if($atd->pk == $farcol && $fartab != $atd->table){
+            if($vatd->pk == $farcol && $fartab != $vatd->table){
                 $checkme[] = $fartab;
             }
         }
@@ -92,13 +92,13 @@ function bruteForceDeleteCheck(&$atd)
     $checkme = array_unique($checkme);
     // now check 'em
     foreach($checkme as $checktab){
-        $atd->page->printDebug(
+        $vatd->page->printDebug(
             sprintf('confirmdelete link checking %s => %s [%d]', 
-                    $atd->table, $checktab, $id), 
+                    $vatd->table, $checktab, $id), 
             4);
-        $check =& new CoopView(&$atd->page, $checktab, &$atd);
+        $check =& new CoopView(&$vatd->page, $checktab, &$vatd);
         $check->debugWrap(7);
-        $check->obj->{$atd->pk} = $id;
+        $check->obj->{$vatd->pk} = $id;
         $found = $check->obj->find();
         if($found){
             $totalfound += $found;
@@ -107,7 +107,7 @@ function bruteForceDeleteCheck(&$atd)
     }
     
     if($totalfound){
-        $restop = $atd->horizTable();
+        $restop = $vatd->horizTable();
         return $restop . '<p class="error">YOU CANNOT DELETE THIS RECORD because the records below depend on it. Fix these first.</p>' .  $res;
         
     }
@@ -118,14 +118,14 @@ function bruteForceDeleteCheck(&$atd)
 
 
 
-function genericView(&$atd)
+function genericView(&$cp)
 {
 
-    $atd =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
+    $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
     //$atd->debugWrap(2);
 
     print '<div>';
-    $atd2 =& new CoopView(&$atd->page, $_REQUEST['table'], $none);
+    $atd2 =& new CoopView(&$cp, $_REQUEST['table'], $none);
     if(is_callable(array($atd2->obj, 'fb_display_summary'))){
         $atd2->page->printDebug('calling callback for summary', 2);
         print $atd2->obj->fb_display_summary(&$atd2);
@@ -139,7 +139,7 @@ function genericView(&$atd)
     
 
     if(is_callable(array($atd->obj, 'fb_display_view'))){
-        $atd->page->printDebug('calling callback for view', 2);
+        $cp->printDebug('calling callback for view', 2);
         return $atd->obj->fb_display_view(&$atd);
     }
     
@@ -177,7 +177,7 @@ function formaggio(&$cp){
 		 print $atdf->form->process(array(&$atdf, 'process'));
          // only go back to view if previous state was 'edit'
          if($_REQUEST['action'] == 'edit'){
-             print genericView(&$atdf);
+             print genericView(&$cp);
          }else {
              //SUCCESSFUL, display a new blank entry
              $atdf->page->confessArray($_REQUEST, 
@@ -299,7 +299,7 @@ switch($_REQUEST['action']){
 ////CONFIRMDELETE
  case 'confirmdelete':
 
-     if($res = bruteForceDeleteCheck(&$atd)){
+     if($res = bruteForceDeleteCheck(&$cp)){
          print $res;
          break;
      }
@@ -339,7 +339,7 @@ switch($_REQUEST['action']){
 	 $atdf = new CoopForm(&$cp, $_REQUEST['table'], $none); 
 	 $atdf->build($_REQUEST);
 	 $atdf->obj->delete();
-	 print genericView(&$atd);
+	 print genericView(&$cp);
 
 	 break;
 
@@ -349,7 +349,7 @@ switch($_REQUEST['action']){
 
 //// DEFAULT (VIEW) //////
  default:
-	 print genericView(&$atd);
+	 print genericView(&$cp);
 	 break;
 }
 
