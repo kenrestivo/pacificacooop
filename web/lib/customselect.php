@@ -42,6 +42,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                             array(
                                 'value' =>sprintf('Add New %s &gt;&gt;',
                                                   $sub->obj->fb_shortHeader),
+                                'par' => false,
                                 'inside' => array('table' => $target,
                                                   'action' => 'add',
                                                   'push' => $this->getName())

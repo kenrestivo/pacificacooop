@@ -60,7 +60,7 @@ class Session_info extends DB_DataObject
                             $co->table, $co->page->auth['uid']));
             }
             //$co->debugWrap(2);
-            
+            // don't show the homepage visits, only members
             $this->whereAdd(sprintf('%s.user_id > 0', $co->table));
             $this->orderBy('updated desc');
         }

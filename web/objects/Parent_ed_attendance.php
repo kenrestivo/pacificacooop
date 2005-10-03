@@ -101,6 +101,56 @@ class Parent_ed_attendance extends DB_DataObject
 
 
     /// custom displayview here
+    function fb_display_view(&$co)
+        {
+            $res = '';
 
+            /// THE CHOOSER FORM
+            $syform =& new HTML_QuickForm($cp->table . 'chooser', false, false, 
+                                          false, false, true);
+
+            $meetings[0] ='ALL';
+            $cal =& new CoopView(&$co->page, 'calendar_events', &$co);
+            $cal->obj->whereAdd('event_id = 2'); ///XXX HARDCODED! parent ed
+            $cal->find(true); // go get, including any constraints/sorts
+            while($cal->obj->fetch()){
+                $nice = $cal->toArrayWithKeys();
+                // NOTE the id will not be in toarraywithkeys, use obj
+                $meetings[$cal->obj->calendar_event_id] = $nice['event_date'];
+            }
+
+            $sel =& $syform->addElement('select', 'calendar_event_id', 
+                                        'Meeting', 
+                                       $meetings,
+                                       array('onchange' =>
+                                             'javascript:submitForm()'));
+
+            if($sid = thruAuthCore($co->page->auth)){
+                $syform->addElement('hidden', 'coop', $sid); 
+            }
+            $syform->addElement('hidden', 'table', $co->table); // XXX hack
+
+            // need change button?
+            $syform->addElement('submit', 'savebutton', 'Change');
+                
+            
+            //COOL! this is the first place i am using vars->last
+            $syform->setDefaults(array('calendar_event_id' => $co->page->vars['last']['calendar_event_id']));
+            
+
+            $foo = $sel->getValue();
+            $cal_id = $foo[0];
+
+            $res .= $syform->toHTML();
+
+            
+            $cal_id && $this->whereAdd(sprintf('%s.calendar_event_id = %d', 
+                                    $co->table,
+                                    $cal_id));
+
+            $res .= $co->simpleTable();
+
+            return $res;
+        }
 
 }

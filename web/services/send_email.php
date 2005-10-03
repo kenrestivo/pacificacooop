@@ -95,13 +95,7 @@ class EmailChanges
             $aud->obj->fb_noHTML = 1;
             $rec->obj->fb_noHTML = 1;
 
-            $audheaders = $aud->makeHeader();
-            $tmp = $aud->toArray($audheaders['keys']);
-            // fucking array_combine, dude
-            foreach($audheaders['keys'] as $key){
-                $audformatted[$key] = array_shift($tmp);
-            }
-
+            $audformatted = $aud->toArrayWithKeys();
 
             $this->subject = sprintf("[Pacifica Co-Op] %s %s: %s", 
                                      strtoupper($this->type),

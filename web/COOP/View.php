@@ -374,6 +374,19 @@ class coopView extends CoopObject
 
 		}
 
+    // gives me an assoc array of the values, formatted all nicely like
+    function toArrayWithKeys($headers = false)
+        {
+            if(!is_array($headers)){
+                $headers =   $this->makeHeader();
+            }
+            $tmp = $this->toArray($headers['keys']);
+            // fucking array_combine, dude
+            foreach($headers['keys'] as $key){
+                $audformatted[$key] = array_shift($tmp);
+            }
+            return $audformatted;
+        }
 
 	function tableTitle($contents)
 		{

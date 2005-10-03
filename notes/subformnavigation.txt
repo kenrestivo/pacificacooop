@@ -1,12 +1,12 @@
 notes on subform navigation, flipping between screens
 
-ok i notice something odd. i'm pushing the TO DO item,
-	i should be pushing the LAST item
-	if there is anything on the stack, use that INSTEAD OF REQUEST!
-		handling auto-fillign the added sub-added item will be interesting
-			maybe let it override?
-	so how do i pop?
-		they are the same thing. think of them as one.
+
+first, simple step:
+	do NOT use REQUEST for anything except form
+	everything else, use last	
+	work the bugs outta that first
+
+
 	if i'm supposed to push, i save PREVIOUS LAST onto stack
 		i save my current into last
 		i also need to save my FORM VARS
@@ -15,6 +15,14 @@ ok i notice something odd. i'm pushing the TO DO item,
 	if no push, i look on stack
 		if there's something there, i pop that and save those into last
 		and last is what i then use instead of request
+
+
+	if there is anything on the stack, use that INSTEAD OF REQUEST!
+		handling auto-fillign the added sub-added item will be interesting
+			maybe let it override?
+		hmm. i can put something in as REQUEST[cpvars][thing] and it'll merge
+			there are a couple places i need that
+				requestorsession() too
 
 
 i can now go bopping around to different things!

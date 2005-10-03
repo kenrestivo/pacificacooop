@@ -41,7 +41,7 @@ $formatted = array('table'=>$_REQUEST['table'],
                           $cp->vars['last']['realm']);
 
 if(isset($_REQUEST['push'])){
-    $cp->vars['stack'][] = $formatted;
+    // not yet. $cp->vars['stack'][] = $formatted;
 }
 $cp->vars['last'] = $formatted;
 
