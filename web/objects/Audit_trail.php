@@ -81,7 +81,8 @@ class Audit_trail extends DB_DataObject
             $res = '';
 
             $res .= "<p>Times are in Mountain Time (Phoenix, AZ).</p>";
-                        
+                  
+
             /// THE CHOOSER FORM
             $syform =& new HTML_QuickForm('auditreport', false, false, 
                                           false, false, true);
@@ -109,10 +110,16 @@ class Audit_trail extends DB_DataObject
             // need change button?
             $syform->addElement('submit', 'savebutton', 'Change');
                 
-            
+
+            /// XXX NASTY NASTY NASTY HACK!
+            $url = parse_url($_SERVER['HTTP_REFERER']);
+            $base = basename($url['path']);
+
             //COOL! this is the first place i am using vars->last
-            $syform->setDefaults(array('limit' =>20, 
-                                       'realm_id' => $co->page->vars['last']['realm']));
+            $syform->setDefaults(
+                array('limit' =>20, 
+                      'realm_id' => $base == 'index.php' ? 0 : 
+                      $co->page->vars['last']['realm'] ));
             
 
             $foo = $sel->getValue();
