@@ -181,6 +181,13 @@ class Parent_ed_attendance extends DB_DataObject
             $family_id && $this->whereAdd(sprintf('parents.family_id = %d', 
                                     $family_id));
 
+            $this->fb_fieldLabels =  array_merge(array('name' => 'Co-Op Family'),
+                                                 $this->fb_fieldLabels);
+
+
+
+            $this->selectAdd('families.name');
+            //$co->debugWrap(2);
             $res .= $co->simpleTable();
 
             return $res;
