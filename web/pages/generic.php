@@ -33,14 +33,14 @@ $formatted = array('table'=>$_REQUEST['table'],
                           $cp->vars['last']['realm']);
 
 
-if(isset($cp->vars['stack']) && count($cp->vars['stack'])){
-    $cp->printDebug('popping vars off of the stack!', 1);
-    $previous = array_pop($cp->vars['stack']);  
-}
 if(isset($_REQUEST['push'])){
     $cp->printDebug('PUSHING onto the stack!', 1);
     $cp->vars['stack'][] = $cp->vars['last'];
+} else if(isset($cp->vars['stack']) && count($cp->vars['stack'])){
+    $cp->printDebug('popping off of the stack!', 1);
+    $previous = array_pop($cp->vars['stack']);  
 }
+
 // yes, if anything is on the stack, and i'm not pushing,
 // i throw away the stuff in the middle.
 // well not completely. some of it is merged in....
