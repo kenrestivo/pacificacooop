@@ -1,8 +1,19 @@
 notes on subform navigation, flipping between screens
 
 
+stack stuff
+	i can get a constipated stack. how to cleanse?
+
+
 
 test with views, details. make that work
+	notverken. why?
+	familyid not passing
+
+
+well first of all, THE VIEW/DETAILS SHOUDL PUSH!
+	the actionbuttons (not recordbuttons) should all be pushers.
+		EXCEPT when they're on their own page, i.e. at top
 
 
 first, simple step:
@@ -15,9 +26,6 @@ first, simple step:
 			basically, use the old stuff, but for each, override with any new
 
 
-
-stack stuff
-	i can get a constipated stack. how to cleanse?
 
 
 

@@ -791,6 +791,13 @@ function triggerNotices($audit_id)
         }
 
 
+    function isTop()
+        {
+            $top = $this->findTop();
+            return $top->table == $this->table;
+        }
+
+
 } // END COOP OBJECT CLASS
 
 

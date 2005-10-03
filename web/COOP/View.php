@@ -522,32 +522,45 @@ class coopView extends CoopObject
             //i HACK HACK HACK and force it to my family,
             //because, at least SOME records (mine) i can do these actions to
             $permitted = $this->isPermittedField(null, true, true);
+
             $va = is_array($this->obj->fb_viewActions) ? 
                 $this->obj->fb_viewActions : $this->viewActions;
+
             foreach($va as $action => $needlevel){
                 //print "asking: $pair[1] $level,  i have: $permitted<br>";
-                if($permitted >= $needlevel) {
-                    $in = array( 
-                        'action' => $action,
-                        'table' => $this->table);
-                    $par = $this->getParent(); // NOT  parentCO, _join!
-                    if(is_object($par) && is_a(&$par, 'CoopObject')){
-                        //print "HEY!!! {$this->table} GOT ONE!!!";
-                        $in[$this->prependTable($par->pk)] = 
-                            $this->obj->{$par->pk};
-                    }
-                    $res .= $this->page->selfURL(array(
-						'value' =>$this->actionnames[$action], 
-						'inside' => $in,
+                if($permitted < $needlevel) {
+                    continue;
+                }
+                $in = array( 
+                    'action' => $action,
+                    'table' => $this->table);
+
+                // XXX what exactly is this doing??
+                $par = $this->getParent(); // NOT  parentCO, _join!
+                if(is_object($par) && is_a(&$par, 'CoopObject')){
+                    //print "HEY!!! {$this->table} GOT ONE!!!";
+                    $in[$this->prependTable($par->pk)] = 
+                        $this->obj->{$par->pk};
+                }
+
+                if(!$this->isTop()){
+                    $in['push'] = $this->table;
+                }
+                
+                
+                $res .= $this->page->selfURL(
+                    array(
+                        'value' =>$this->actionnames[$action], 
+                        'inside' => $in,
                         'base' => $this->obj->fb_usePage ? 
                         $this->obj->fb_usePage :
                         'generic.php'));
- //                     confessObj($this->obj, 'this obj');
+                //                     confessObj($this->obj, 'this obj');
 //                     confessObj($this->obj, 'parent obj');
-                }
+                
 			}
             return $res;
-
+            
             //XXX why doesn't the below actually hide?
             //return "<div class=\"actionbuttons\">$res</div>";
 
