@@ -139,7 +139,7 @@ class Parent_ed_attendance extends DB_DataObject
                 $families[$fam->obj->family_id] = $fam->obj->name;
             }
 
-            if($co->perms[null]['year'] >= ACCESS_VIEW){
+            if($co->perms[null]['group'] >= ACCESS_VIEW){
                 $famsel =& $syform->addElement('select', 'family_id', 
                                                'Family', 
                                                $families,
