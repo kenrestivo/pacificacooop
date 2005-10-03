@@ -487,10 +487,10 @@ group by user_id,table_name,field_name";
 		}
 
 
-    function constrainSchoolYear()
+    function constrainSchoolYear($force = false)
         {
              //this code ought to be taken out and shot.
-            if($this->perms[null]['year'] < ACCESS_VIEW) {
+            if($this->perms[null]['year'] < ACCESS_VIEW || $force) {
                 $this->obj->whereAdd(
                     sprintf('school_year = "%s"',
                             $this->page->currentSchoolYear));
@@ -508,9 +508,10 @@ group by user_id,table_name,field_name";
 
 
 
-    function constrainFamily()
+    function constrainFamily($force = false)
         {
-            if($this->isPermittedField(null, false, true) < ACCESS_VIEW &&
+            if(($this->isPermittedField(null, false, true) < ACCESS_VIEW  || 
+                $force) &&
                $co->page->userStruct['family_id'] &&
                $this->inObject('family_id'))
             {

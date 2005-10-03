@@ -109,6 +109,8 @@ class Parent_ed_attendance extends DB_DataObject
             $syform =& new HTML_QuickForm($cp->table . 'chooser', false, false, 
                                           false, false, true);
 
+
+            ///meetings
             $meetings[0] ='ALL';
             $cal =& new CoopView(&$co->page, 'calendar_events', &$co);
             $cal->obj->whereAdd('event_id = 2'); ///XXX HARDCODED! parent ed
@@ -125,6 +127,26 @@ class Parent_ed_attendance extends DB_DataObject
                                        array('onchange' =>
                                              'javascript:submitForm()'));
 
+
+            // families
+            $families[0] ='ALL';
+            $fam =& new CoopView(&$co->page, 'families', &$co);
+            $fam->constrainSchoolYear(true);
+            //$fam->debugWrap(2);
+            $fam->find(true); // go get, including any constraints/sorts
+            while($fam->obj->fetch()){
+                $families[$fam->obj->family_id] = $fam->obj->name;
+            }
+
+            $famsel =& $syform->addElement('select', 'family_id', 
+                                        'Family', 
+                                       $families,
+                                       array('onchange' =>
+                                             'javascript:submitForm()'));
+
+
+
+
             if($sid = thruAuthCore($co->page->auth)){
                 $syform->addElement('hidden', 'coop', $sid); 
             }
@@ -137,9 +159,12 @@ class Parent_ed_attendance extends DB_DataObject
             //COOL! this is the first place i am using vars->last
             $syform->setDefaults(array('calendar_event_id' => $co->page->vars['last']['calendar_event_id']));
             
-
+            // fucking PHP sucks. i so wish it allowed $sel->getValue()[0] here.
             $foo = $sel->getValue();
             $cal_id = $foo[0];
+
+            $bar = $famsel->getValue();
+            $family_id = $bar[0];
 
             $res .= $syform->toHTML();
 
@@ -147,6 +172,10 @@ class Parent_ed_attendance extends DB_DataObject
             $cal_id && $this->whereAdd(sprintf('%s.calendar_event_id = %d', 
                                     $co->table,
                                     $cal_id));
+            // XXX i hard-code parents in here
+            // because i know not how else to dismbiguate it
+            $family_id && $this->whereAdd(sprintf('parents.family_id = %d', 
+                                    $family_id));
 
             $res .= $co->simpleTable();
 
