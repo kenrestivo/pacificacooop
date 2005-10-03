@@ -1,10 +1,21 @@
 notes on subform navigation, flipping between screens
 
+stack stuff
+	i can get a constipated stack. how to cleanse?
+
+
+test with views, details. make that work
+
 
 first, simple step:
 	do NOT use REQUEST for anything except form
 	everything else, use last	
 	work the bugs outta that first
+	i gotta deal with form. how?
+		if it's a pop
+			feed coopform the merged request and history, if applicable
+			basically, use the old stuff, but for each, override with any new
+
 
 
 	if i'm supposed to push, i save PREVIOUS LAST onto stack

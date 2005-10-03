@@ -57,7 +57,7 @@ class Kids extends DB_DataObject
             // HACK! this is presuming VIEW, but in popup it could be EDIT
 
 
-            $this->joinAdd($enrollment);
+            $this->joinAdd($enrollment, 'left');
 
             // IMPORTANT! otherwise it matches old year
             $this->selectAdd("max(enrollment.school_year) 
@@ -85,6 +85,7 @@ class Kids extends DB_DataObject
     
     function fb_display_view(&$co)
         {
+            // for doctors
             // HMM. how to override for the coopform stuff too? pregenerate?
             $co->overrides['leads']['fb_linkDisplayFields'] = 
                 array('last_name', 'first_name', 'phone');

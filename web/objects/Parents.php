@@ -65,7 +65,7 @@ class Parents extends DB_DataObject
             
 
             //confessObj($co, 'sure it is an objec');
-            //r$co->debugWrap(5);
+            //$co->debugWrap(4);
 
 			// ugly, but consisent. only shows families for this year
 

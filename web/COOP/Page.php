@@ -49,7 +49,7 @@ function dump($data)
     //XXX DAMMIT!  NFSN does *not* like me doing this
 	// the getcwd is kind of redundant
 	$fname = sprintf("%s/logs/%s-debug.html", 
-					 getcwd(), date("YmdU"));
+					 getcwd(), date("Ymdhis"));
 	static $fp;
 	if(!$fp){
 		$fp = fopen($fname, 'w');

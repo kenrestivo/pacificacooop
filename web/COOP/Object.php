@@ -453,6 +453,7 @@ group by user_id,table_name,field_name";
 	
 	// by default, i want to constrain join/finds in this way:
 	// this callback is executed BEFORE stuffing choices in a SELECT box
+	// it also does the orderBy stuff. this function is insanely important
 	function linkConstraints()
 		{
 
@@ -500,7 +501,8 @@ group by user_id,table_name,field_name";
                 // so that  linkfields properly show all years
                 if($chosen){
                     $this->obj->whereAdd(
-                        sprintf('school_year like "%s"', $chosen));
+                        sprintf('(school_year like "%s" or school_year is null or school_year < "1900-01-01")', 
+                                $chosen));
                     $this->obj->orderBy('school_year desc');
                 }
             }

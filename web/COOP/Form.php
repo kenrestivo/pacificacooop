@@ -43,7 +43,7 @@ class coopForm extends CoopObject
 	// i got disgusted with FB. fuck that. i roll my own here.
 	function &build($vars = false)
 		{
-			$this->page->confessArray($vars, "$this->table build vars", 3);
+			$this->page->confessArray($vars, "CoopForm::build({$this->table})", 3);
 			$this->id = (int)$vars[$this->prependTable($this->pk)];
 			if($this->id > 0){
 				$this->obj->get($this->id);
@@ -177,7 +177,7 @@ class coopForm extends CoopObject
                     $type = (!is_array($this->obj->fb_addNewLinkFields) ||
                              in_array($key, $this->obj->fb_addNewLinkFields)) 
                         ? 'customselect' : 'select';
-                    $type = 'select';  // XXX FORCE until i square shit away
+                    //$type = 'select';  // XXX FORCE until i square shit away
                     $el =& $this->form->addElement(
                         $type, 
                         $fullkey, false, 
@@ -283,12 +283,6 @@ class coopForm extends CoopObject
             
             $sub->linkConstraints();
 
-			//TODO add linkorderfields
-			//XXX this will fuck up the linkconstraints won't it?
-			foreach($sub->obj->fb_linkDisplayFields as $field){
-				$ldf[] = sprintf("%s.%s", $sub->table, $field);
-			}
-			$sub->obj->orderBy(implode(', ', $ldf));
             //$this->debugWrap(2);
 			$sub->obj->find();
 			while($sub->obj->fetch()){

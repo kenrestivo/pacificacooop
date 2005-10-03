@@ -24,51 +24,16 @@ print $menu->topNavigation();
 
 
 
-////////////////{{{STACK HANDLING. move to cooppage?
-$atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
-$formatted = array('table'=>$_REQUEST['table'], 
-                          'action' =>$_REQUEST['action'], 
-                          'id' =>$_REQUEST[$atd->prependTable($atd->pk)],
-                          'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
-                          $cp->vars['last']['realm']);
 
-
-if(isset($_REQUEST['push'])){
-    $cp->printDebug('PUSHING onto the stack!', 1);
-    $cp->vars['stack'][] = $cp->vars['last'];
-} else if(isset($cp->vars['stack']) && count($cp->vars['stack'])){
-    $cp->printDebug('popping off of the stack!', 1);
-    $previous = array_pop($cp->vars['stack']);  
-}
-
-// yes, if anything is on the stack, and i'm not pushing,
-// i throw away the stuff in the middle.
-// well not completely. some of it is merged in....
-$cp->vars['last'] = $previous ? $previous : $formatted;
-
-if($sp= $cp->stackPath()){
-    print "<p>YOUR NAVIGATION: $sp</p>";
-}
-
-//////////////}}} END STACK HANDLING
-
-
-//in case of bug
-if(!$cp->vars['last']['table']){
-    print $cp->selfURL(array('value' =>'Unspecified table. Go back to home.', 
-                             'inside' =>'nothing', 
-                             'base' =>'index.php'));
-    done();
+function popOff(&$cp)
+{
+    if(isset($cp->vars['stack']) && count($cp->vars['stack'])){
+        $cp->printDebug('popping off of the stack!', 1);
+        $cp->vars['last'] = array_pop($cp->vars['stack']);  
+    }
 }
 
 
-printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
-
-
-print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
-print '<div id="centerCol">';
-
-/////////////////////////////////////////////// END PSEUDO-MAIN
 
 //TODO: move this to coopobject? coopview?
 function bruteForceDeleteCheck(&$cp)
@@ -177,7 +142,7 @@ function formaggio(&$cp){
 	 $atdf->build($_REQUEST);
 
 
-	 // ugly assthrus for my cheap dispatcher
+	 // ugly assthrus for my cheap newDispatcher
 	 $atdf->form->addElement('hidden', 'action', $cp->vars['last']['action']); 
 	 $atdf->form->addElement('hidden', 'table', $cp->vars['last']['table']); 
 
@@ -193,12 +158,16 @@ function formaggio(&$cp){
 		 print $atdf->form->process(array(&$atdf, 'process'));
          // only go back to view if previous state was 'edit'
          if($cp->vars['last']['action'] == 'edit'){
-             print genericView(&$cp);
+             //force it
+             $cp->vars['last']['action'] = 'view';
+             popOff(&$cp);
+             newDispatcher(&$cp);
          } else {
              //SUCCESSFUL, display a new blank entry
              $atdf->page->confessArray($cp->vars['last'], 
                                        'recursive request before redisplay',
                                        2);
+             //XXX this is dumb. 
              print '<p>You may add another below, or click below to go back to viewing</p>';
              print  $atdf->page->selfURL(
                  array('value' => 'View',
@@ -207,7 +176,8 @@ function formaggio(&$cp){
              
              // XXX bug lurking here. if i want to keep the seeded ID
              // from the page->vars->last, i got problems here.
-             formaggio(&$cp);// to recurse, divine
+             popOff(&$cp); 
+             newDispatcher(&$cp);
          }
 	 } else {
 		 print $atdf->form->toHTML();
@@ -216,162 +186,216 @@ function formaggio(&$cp){
 
 
 
+function newDispatcher(&$cp)
+{
+    $atd =& new CoopView(&$cp, $cp->vars['last']['table'], $none);
 
-// cheap dispatcher
+// cheap newDispatcher
 //confessArray($cp->vars['last'],'req');
-switch($cp->vars['last']['action']){
+    switch($cp->vars['last']['action']){
 //// EDIT AND NEW //////
- case 'new':
- case 'add':					//  for OLD menu system
- case 'edit':
-     formaggio(&$cp);
-	 //confessArray($_DB_DATAOBJECT_FORMBUILDER, 'dbdofb');
-	 break;
+    case 'new':
+    case 'add':					//  for OLD menu system
+    case 'edit':
+        formaggio(&$cp);
+        //confessArray($_DB_DATAOBJECT_FORMBUILDER, 'dbdofb');
+        break;
 
 //// DETAILS //////
- case 'details':
+    case 'details':
 
-     $atd->fullText = true;    // force details to show all
-     // MUST DO THIS! FIRST! please find a better way, this sucks
-     $atd->obj->{$atd->pk} = $cp->vars['last']['id'];
+        $atd->fullText = true;    // force details to show all
+        // MUST DO THIS! FIRST! please find a better way, this sucks
+        $atd->obj->{$atd->pk} = $cp->vars['last']['id'];
 
-     // object-specific override if needed
-     if(is_callable(array($atd->obj, 'fb_display_details'))){
-         print $atd->obj->fb_display_details(&$atd);
-         break;
-     }
+        // object-specific override if needed
+        if(is_callable(array($atd->obj, 'fb_display_details'))){
+            print $atd->obj->fb_display_details(&$atd);
+            break;
+        }
      
 
-	 $id = $cp->vars['last']['id'];
-     $atd->obj->{$atd->pk} = $id;
-     $atd->obj->find(true);		//  XXX aack! need this for summary
-     print $atd->horizTable();
+        $id = $cp->vars['last']['id'];
+        $atd->obj->{$atd->pk} = $id;
+        $atd->obj->find(true);		//  XXX aack! need this for summary
+        print $atd->horizTable();
      
-     // try to intelligently find all forward/backlinks
-     // or intermediately, adapt findfamily, and pass a list of tables
-     // let the code go fish out the path to 'em
+        // try to intelligently find all forward/backlinks
+        // or intermediately, adapt findfamily, and pass a list of tables
+        // let the code go fish out the path to 'em
 
-     foreach($atd->allLinks() as $table => $ids){
-         list($nearid, $farid) = $ids;
-         $cp->printDebug("$atd->table  link for $nearid {$atd->obj->$nearid}  $table", 4);
-         $aud =& new CoopView(&$cp, $table, &$atd);
-         $tabs = $aud->obj->table();
-         $farwhole = $farid;
-         if(!empty($tabs[$farid])){
-             $farwhole = "{$aud->table}.$farid";
-         }
-         $aud->obj->whereAdd(sprintf('%s = %d', 
-                                     $farwhole, $atd->obj->{$nearid}));
-         //confessObj($aud, 'aud');
-         $aud->debugWrap(5);
-         print $aud->simpleTable();
-     }
-
-
-     if(is_array($atd->obj->fb_extraDetails)){
-         foreach($atd->obj->fb_extraDetails as $path){
-             // XXX this only handles one-degree-of-separation!
-             list($join, $dest) = explode(':', $path);
-             $co2 =& new CoopObject(&$atd->page, $join, &$atd);
-             $co2->obj->whereAdd(sprintf('%s = %d', 
-                                         $atd->pk, 
-                                         $id));
-             $real =& new CoopView(&$atd->page, $dest, &$co2);
-             $real->obj->orderBy('school_year desc');
-             $real->obj->joinadd($co2->obj);
-             print $real->simpleTable();
-         }
-     }
-
-     // standard audit trail, for all details
-     $aud =& new CoopView(&$cp, 'audit_trail', &$atd);
-     $aud->obj->table_name = $atd->table;
-     $aud->obj->index_id = $id;
-     $aud->obj->orderBy('updated desc');
-     print $aud->simpleTable();
+        foreach($atd->allLinks() as $table => $ids){
+            list($nearid, $farid) = $ids;
+            $cp->printDebug("$atd->table  link for $nearid {$atd->obj->$nearid}  $table", 4);
+            $aud =& new CoopView(&$cp, $table, &$atd);
+            $tabs = $aud->obj->table();
+            $farwhole = $farid;
+            if(!empty($tabs[$farid])){
+                $farwhole = "{$aud->table}.$farid";
+            }
+            $aud->obj->whereAdd(sprintf('%s = %d', 
+                                        $farwhole, $atd->obj->{$nearid}));
+            //confessObj($aud, 'aud');
+            $aud->debugWrap(5);
+            print $aud->simpleTable();
+        }
 
 
-     if($cp->vars['last']['realm']){
-         $realm =& new CoopView(&$cp, 'realms', &$atd);
-         $realm->obj->get($cp->vars['last']['realm']);
-         print $cp->selfURL(
-             array('value' => "Click here for complete audit trail of all {$realm->obj->short_description}",
-                   'inside' => array('table' => 'audit_trail',
-                                     // XXX realm_id superflouos, using last!
-                                     'realm_id' => $cp->vars['last']['realm'])));
-     }
+        if(is_array($atd->obj->fb_extraDetails)){
+            foreach($atd->obj->fb_extraDetails as $path){
+                // XXX this only handles one-degree-of-separation!
+                list($join, $dest) = explode(':', $path);
+                $co2 =& new CoopObject(&$atd->page, $join, &$atd);
+                $co2->obj->whereAdd(sprintf('%s = %d', 
+                                            $atd->pk, 
+                                            $id));
+                $real =& new CoopView(&$atd->page, $dest, &$co2);
+                $real->obj->orderBy('school_year desc');
+                $real->obj->joinadd($co2->obj);
+                print $real->simpleTable();
+            }
+        }
 
-     print $cp->selfURL(
-         array('value' => 'Click here for detailed view of Permissions',
-               'inside' => array('table' => $atd->table,
-                                 'action' => 'perms')));
- 	 break;
+        // standard audit trail, for all details
+        $aud =& new CoopView(&$cp, 'audit_trail', &$atd);
+        $aud->obj->table_name = $atd->table;
+        $aud->obj->index_id = $id;
+        $aud->obj->orderBy('updated desc');
+        print $aud->simpleTable();
+
+
+        if($cp->vars['last']['realm']){
+            $realm =& new CoopView(&$cp, 'realms', &$atd);
+            $realm->obj->get($cp->vars['last']['realm']);
+            print $cp->selfURL(
+                array('value' => "Click here for complete audit trail of all {$realm->obj->short_description}",
+                      'inside' => array('table' => 'audit_trail',
+                                        // XXX realm_id superflouos, using last!
+                                        'realm_id' => $cp->vars['last']['realm'])));
+        }
+
+        print $cp->selfURL(
+            array('value' => 'Click here for detailed view of Permissions',
+                  'inside' => array('table' => $atd->table,
+                                    'action' => 'perms')));
+        break;
  
- case 'perms':
-     print $atd->showPerms();
-     break;
+    case 'perms':
+        print $atd->showPerms();
+        break;
 
 
 ////CONFIRMDELETE
- case 'confirmdelete':
+    case 'confirmdelete':
 
-     if($res = bruteForceDeleteCheck(&$cp)){
-         print $res;
-         break;
-     }
+        if($res = bruteForceDeleteCheck(&$cp)){
+            print $res;
+            break;
+        }
 
-	 print "<p>Are you sure you wish to delete this? Click 'Delete' or 'Cancel' to go back.</p>";	 
-     $atdf = new CoopForm(&$cp, $cp->vars['last']['table'], $none); 
-	 $atdf->build($_REQUEST);
+        print "<p>Are you sure you wish to delete this? Click 'Delete' or 'Cancel' to go back.</p>";	 
+        $atdf = new CoopForm(&$cp, $cp->vars['last']['table'], $none); 
+        $atdf->build($_REQUEST);
 
-	 $atdf->form->addElement('hidden', 'action', 'delete'); 
-	 $atdf->form->addElement('hidden', 'table', $cp->vars['last']['table']); 
+        $atdf->form->addElement('hidden', 'action', 'delete'); 
+        $atdf->form->addElement('hidden', 'table', $cp->vars['last']['table']); 
 
-	 $atdf->legacyPassThru();
+        $atdf->legacyPassThru();
 
-	 $atdf->addRequiredFields();
+        $atdf->addRequiredFields();
 
 
-	 // change the save button and action to delete
- 	 $el =& $atdf->form->getElement('savebutton');
- 	 $el->setValue('Delete');
+        // change the save button and action to delete
+        $el =& $atdf->form->getElement('savebutton');
+        $el->setValue('Delete');
 
 	 
-	 //TODO and add a cancel button
-	 //$atdf->form->addElement('button', 'cancelbutton', 'Cancel');
+        //TODO and add a cancel button
+        //$atdf->form->addElement('button', 'cancelbutton', 'Cancel');
 
-	 $atdf->form->freeze();
+        $atdf->form->freeze();
 
-	 print $atdf->form->toHTML();
+        print $atdf->form->toHTML();
 
-	 break;
+        break;
 
 
 
 
 //// DELETE ////
- case 'delete':
- // hack , but it works. why reinvent the wheel?
-	 $atdf = new CoopForm(&$cp, $cp->vars['last']['table'], $none); 
-	 $atdf->build($_REQUEST);
-	 $atdf->obj->delete();
-	 print genericView(&$cp);
+    case 'delete':
+        // hack , but it works. why reinvent the wheel?
+        $atdf = new CoopForm(&$cp, $cp->vars['last']['table'], $none); 
+        $atdf->build($_REQUEST);
+        $atdf->obj->delete();
+        print genericView(&$cp);
 
-	 break;
+        break;
 
 
 
 
 
 //// DEFAULT (VIEW) //////
- default:
-	 print genericView(&$cp);
-	 break;
+    default:
+        print genericView(&$cp);
+        break;
+    }
+
+} // END NEWDISPATCHER
+
+
+
+
+/////////////////////// MAIN ////////////
+
+
+
+////////////////{{{STACK HANDLING. move to cooppage?
+$atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
+$formatted = array('table'=>$_REQUEST['table'], 
+                          'action' =>$_REQUEST['action'], 
+                          'id' =>$_REQUEST[$atd->prependTable($atd->pk)],
+                          'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
+                          $cp->vars['last']['realm']);
+
+
+if(isset($_REQUEST['push'])){
+    $cp->printDebug('PUSHING onto the stack!', 1);
+    $cp->vars['stack'][] = $cp->vars['last'];
+} 
+$cp->vars['last'] =  $formatted;
+
+
+
+if($sp= $cp->stackPath()){
+    print "<p>YOUR NAVIGATION: $sp</p>";
+}
+
+//////////////}}} END STACK HANDLING
+
+
+//in case of bug
+if(!$cp->vars['last']['table']){
+    print $cp->selfURL(array('value' =>'Unspecified table. Go back to home.', 
+                             'inside' =>'nothing', 
+                             'base' =>'index.php'));
+    done();
 }
 
 
+printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
 
-$cp->done ();
+
+print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
+print '<div id="centerCol">';
+
+
+newDispatcher(&$cp);
+
+
+
+$cp->done();
 
 ////KEEP EVERTHANG BELOW
 
