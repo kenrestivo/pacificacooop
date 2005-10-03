@@ -114,6 +114,7 @@ class Parent_ed_attendance extends DB_DataObject
             $meetings[0] ='ALL';
             $cal =& new CoopView(&$co->page, 'calendar_events', &$co);
             $cal->obj->whereAdd('event_id = 2'); ///XXX HARDCODED! parent ed
+            $cal->obj->whereAdd('event_date <= now()');
             $cal->find(true); // go get, including any constraints/sorts
             while($cal->obj->fetch()){
                 $nice = $cal->toArrayWithKeys();
@@ -138,13 +139,13 @@ class Parent_ed_attendance extends DB_DataObject
                 $families[$fam->obj->family_id] = $fam->obj->name;
             }
 
-            $famsel =& $syform->addElement('select', 'family_id', 
-                                        'Family', 
-                                       $families,
-                                       array('onchange' =>
-                                             'javascript:submitForm()'));
-
-
+            if($co->perms[null]['year'] >= ACCESS_VIEW){
+                $famsel =& $syform->addElement('select', 'family_id', 
+                                               'Family', 
+                                               $families,
+                                               array('onchange' =>
+                                                     'javascript:submitForm()'));
+            }
 
 
             if($sid = thruAuthCore($co->page->auth)){
@@ -162,9 +163,11 @@ class Parent_ed_attendance extends DB_DataObject
             // fucking PHP sucks. i so wish it allowed $sel->getValue()[0] here.
             $foo = $sel->getValue();
             $cal_id = $foo[0];
-
-            $bar = $famsel->getValue();
-            $family_id = $bar[0];
+            
+            if($famsel){
+                $bar = $famsel->getValue();
+                $family_id = $bar[0];
+            }
 
             $res .= $syform->toHTML();
 
@@ -174,6 +177,7 @@ class Parent_ed_attendance extends DB_DataObject
                                     $cal_id));
             // XXX i hard-code parents in here
             // because i know not how else to dismbiguate it
+            // NOTE: you'll be in a world of hurt if they have view group perms
             $family_id && $this->whereAdd(sprintf('parents.family_id = %d', 
                                     $family_id));
 
