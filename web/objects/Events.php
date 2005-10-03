@@ -35,6 +35,7 @@ class Events extends DB_DataObject
         'notes' => 'Details'
         );
 
-
+    // for now
+    var $fb_fieldsToUnRender = array('url');
 
 }

@@ -113,6 +113,10 @@ class Enhancement
             
             $this->startdrop = array('start' => $enrol->obj->startdate, 
                          'drop' => $enrol->obj->dropdate);
+
+            if(!$enrol->obj->startdate){
+                PEAR::raiseError("blank start date for familyid {$this->familyID}!", 666);
+            }
             return $this->startdrop;
 
         }
