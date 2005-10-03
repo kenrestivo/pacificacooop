@@ -22,34 +22,45 @@ $menu =& new CoopMenu(&$cp);
 print $menu->topNavigation();
 
 
-//in case of bug
-if(!$_REQUEST['table']){
-    print $cp->selfURL(array('value' =>'Unspecified table. Go back to home.', 
-                             'inside' =>'nothing', 
-                             'base' =>'index.php'));
-    done();
-}
 
-
-$atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
 
 ////////////////{{{STACK HANDLING. move to cooppage?
+$atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
 $formatted = array('table'=>$_REQUEST['table'], 
                           'action' =>$_REQUEST['action'], 
                           'id' =>$_REQUEST[$atd->prependTable($atd->pk)],
                           'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
                           $cp->vars['last']['realm']);
 
-if(isset($_REQUEST['push'])){
-    // not yet. $cp->vars['stack'][] = $formatted;
+
+if(isset($cp->vars['stack']) && count($cp->vars['stack'])){
+    $cp->printDebug('popping vars off of the stack!', 1);
+    $previous = array_pop($cp->vars['stack']);  
 }
-$cp->vars['last'] = $formatted;
+if(isset($_REQUEST['push'])){
+    $cp->printDebug('PUSHING onto the stack!', 1);
+    $cp->vars['stack'][] = $cp->vars['last'];
+}
+// yes, if anything is on the stack, and i'm not pushing,
+// i throw away the stuff in the middle.
+// well not completely. some of it is merged in....
+$cp->vars['last'] = $previous ? $previous : $formatted;
 
 if($sp= $cp->stackPath()){
     print "<p>YOUR NAVIGATION: $sp</p>";
 }
 
 //////////////}}} END STACK HANDLING
+
+
+//in case of bug
+if(!$cp->vars['last']['table']){
+    print $cp->selfURL(array('value' =>'Unspecified table. Go back to home.', 
+                             'inside' =>'nothing', 
+                             'base' =>'index.php'));
+    done();
+}
+
 
 printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
 
@@ -65,8 +76,8 @@ function bruteForceDeleteCheck(&$cp)
     global $_DB_DATAOBJECT;
     // go get em
 
-    $vatd =& new CoopView(&$cp, $_REQUEST['table'], $none);
-    $id = $_REQUEST[$vatd->prependTable($vatd->pk)];
+    $vatd =& new CoopView(&$cp, $cp->vars['last']['table'], $none);
+    $id = $cp->vars['last']['id'];
     $vatd->obj->{$vatd->pk} = $id;
     $vatd->obj->find(true);		//  XXX aack! need this for summary
     
@@ -121,12 +132,12 @@ function bruteForceDeleteCheck(&$cp)
 function genericView(&$cp)
 {
 
-    $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
+    $atd =& new CoopView(&$cp, $cp->vars['last']['table'], $none);
     //$atd->debugWrap(2);
 
     print '<div><!-- status alert div -->';
 
-    $atd2 =& new CoopView(&$cp, $_REQUEST['table'], $none);
+    $atd2 =& new CoopView(&$cp, $cp->vars['last']['table'], $none);
     // alert  and/or summary does a find, so i need a separate obj for it
 
     if(is_callable(array($atd2->obj, 'fb_display_summary'))){
@@ -158,31 +169,34 @@ function genericView(&$cp)
 }
 
 function formaggio(&$cp){
+
 	 // NOT the coopView above!
-	 $atdf = new CoopForm(&$cp, $_REQUEST['table'], $none); 
+	 $atdf = new CoopForm(&$cp, $cp->vars['last']['table'], $none); 
 
 
 	 $atdf->build($_REQUEST);
 
 
 	 // ugly assthrus for my cheap dispatcher
-	 $atdf->form->addElement('hidden', 'action', $_REQUEST['action']); 
-	 $atdf->form->addElement('hidden', 'table', $_REQUEST['table']); 
+	 $atdf->form->addElement('hidden', 'action', $cp->vars['last']['action']); 
+	 $atdf->form->addElement('hidden', 'table', $cp->vars['last']['table']); 
 
 	 $atdf->legacyPassThru();
 
 	 $atdf->addRequiredFields();
-	 
+
+	 $cp->vars['last']['submitvars'] = $atdf->form->getSubmitValues();
+     //confessArray($cp->vars['last'], 'lastHACK');
 
 	 if ($atdf->validate()) {
 		 print "saving...";
 		 print $atdf->form->process(array(&$atdf, 'process'));
          // only go back to view if previous state was 'edit'
-         if($_REQUEST['action'] == 'edit'){
+         if($cp->vars['last']['action'] == 'edit'){
              print genericView(&$cp);
-         }else {
+         } else {
              //SUCCESSFUL, display a new blank entry
-             $atdf->page->confessArray($_REQUEST, 
+             $atdf->page->confessArray($cp->vars['last'], 
                                        'recursive request before redisplay',
                                        2);
              print '<p>You may add another below, or click below to go back to viewing</p>';
@@ -204,8 +218,8 @@ function formaggio(&$cp){
 
 
 // cheap dispatcher
-//confessArray($_REQUEST,'req');
-switch($_REQUEST['action']){
+//confessArray($cp->vars['last'],'req');
+switch($cp->vars['last']['action']){
 //// EDIT AND NEW //////
  case 'new':
  case 'add':					//  for OLD menu system
@@ -219,7 +233,7 @@ switch($_REQUEST['action']){
 
      $atd->fullText = true;    // force details to show all
      // MUST DO THIS! FIRST! please find a better way, this sucks
-     $atd->obj->{$atd->pk} = $_REQUEST[$atd->prependTable($atd->pk)]; 
+     $atd->obj->{$atd->pk} = $cp->vars['last']['id'];
 
      // object-specific override if needed
      if(is_callable(array($atd->obj, 'fb_display_details'))){
@@ -228,7 +242,7 @@ switch($_REQUEST['action']){
      }
      
 
-	 $id = $_REQUEST[$atd->prependTable($atd->pk)];
+	 $id = $cp->vars['last']['id'];
      $atd->obj->{$atd->pk} = $id;
      $atd->obj->find(true);		//  XXX aack! need this for summary
      print $atd->horizTable();
@@ -307,11 +321,11 @@ switch($_REQUEST['action']){
      }
 
 	 print "<p>Are you sure you wish to delete this? Click 'Delete' or 'Cancel' to go back.</p>";	 
-     $atdf = new CoopForm(&$cp, $_REQUEST['table'], $none); 
+     $atdf = new CoopForm(&$cp, $cp->vars['last']['table'], $none); 
 	 $atdf->build($_REQUEST);
 
 	 $atdf->form->addElement('hidden', 'action', 'delete'); 
-	 $atdf->form->addElement('hidden', 'table', $_REQUEST['table']); 
+	 $atdf->form->addElement('hidden', 'table', $cp->vars['last']['table']); 
 
 	 $atdf->legacyPassThru();
 
@@ -338,7 +352,7 @@ switch($_REQUEST['action']){
 //// DELETE ////
  case 'delete':
  // hack , but it works. why reinvent the wheel?
-	 $atdf = new CoopForm(&$cp, $_REQUEST['table'], $none); 
+	 $atdf = new CoopForm(&$cp, $cp->vars['last']['table'], $none); 
 	 $atdf->build($_REQUEST);
 	 $atdf->obj->delete();
 	 print genericView(&$cp);
