@@ -398,7 +398,8 @@ class coopView extends CoopObject
 							 "for " . $par->getSummary() : "",
                              $this->obj->N);
 
-
+            // TODO: store the built form in coopview->somwhere
+            // and just tohtml it here, or display currentschoolyear if no form
             $title .= ' ' . $this->yearTitle;		
 
 			$toptab = new HTML_Table(
@@ -535,7 +536,7 @@ class coopView extends CoopObject
                     'action' => $action,
                     'table' => $this->table);
 
-                // XXX what exactly is this doing??
+                // XXX what exactly is this doing?? why not findTop?
                 $par = $this->getParent(); // NOT  parentCO, _join!
                 if(is_object($par) && is_a(&$par, 'CoopObject')){
                     //print "HEY!!! {$this->table} GOT ONE!!!";
@@ -590,11 +591,11 @@ function schoolYearChooser()
         return;
     }
 
-    //XXX HACK! can't compare objects
-    $top =& $this->findTop();
-    if($top->table != $this->table){
-        //XXX stupid hack
-        if($top->chosenSchoolYear != '%'){
+
+
+    if(!$this->isTop())
+        //TODO: when yeartitle goes away, just return here
+        if($this->getChosenSchoolYear() != '%'){
             $this->yearTitle = "School Year {$top->chosenSchoolYear}";
         }
         return;

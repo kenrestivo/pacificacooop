@@ -794,7 +794,8 @@ function triggerNotices($audit_id)
     function isTop()
         {
             $top = $this->findTop();
-            return $top->table == $this->table;
+            //XXX HACK! can't compare objects. so instead compare table name!
+          return $top->table == $this->table;
         }
 
 

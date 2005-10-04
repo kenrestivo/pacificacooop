@@ -359,11 +359,12 @@ $formatted = array('table'=>$_REQUEST['table'],
                           'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
                           $cp->vars['last']['realm']);
 
-
 if(isset($_REQUEST['push'])){
     $cp->printDebug('PUSHING onto the stack!', 1);
     $cp->vars['stack'][] = $cp->vars['last'];
 } 
+
+// ALWAYS use formatted as last. 
 $cp->vars['last'] =  $formatted;
 
 
