@@ -1,5 +1,39 @@
 a cool nifty SEARCH BOX in all generic views!!
 
+task:
+	turn the schoolyearchooser into a proper search/sort interface
+		look at audit trail and/or parent ed for inspiration
+		wrap it in javascript hiding. click here to search/sort.
+		LO: metacharacters and/or !=, > , <
+	save/restore the state of the search.
+	support LIMIT box
+	LO: eventually support pager
+
+special cases:
+	table_name link to realms		
+
+how?
+	a search-interface form
+		takes a list of fields to allow search on
+		build a form, similar to COopForm (subclass?)
+			handling schoolyear and familyid specially, as coopform already does
+			by default, just as in coopform, default SY=current, family=mine
+	instead of insert/update, build MORE CONSTRAINTS!
+		use 'like' for any non-numeric fields
+			i'll have to deal with table() to check that
+		make sure it doesn't collide with linkconstraints
+			override them? check them?
+	save/restore the state
+		i also have to deal with chosenschoolyear too
+			it and getChosenSchoolYear will be obsolete
+		HOW? WHERE?
+	inserting the form into the coopview
+		dump it into coopview->yeartitle ?
+			change name to searchsortchooer?
+		or, just store a reference to the BUILT FORM in coopview
+			and tohtml() it at rendering time. probably smarter.
+
+what about sorting?
 
 ??? PHP
 proper generic search feature!!
