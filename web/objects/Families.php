@@ -101,6 +101,15 @@ class Families extends DB_DataObject
             
         }
 
+    function fb_display_summary(&$co)
+        {
+
+            $co->find(true); // MY find
+            return $co->obj->N . ' families total (for Jefferson Adult Ed purposes).';
+
+        }
+
+
     // NOTE i don't override delete because my confirmdelete link checks should find that
     
 }
