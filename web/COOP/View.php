@@ -39,7 +39,7 @@ class coopView extends CoopObject
                                'details' => ACCESS_VIEW);      
     var $viewActions = array('add' => ACCESS_ADD, 
                              'view'=> ACCESS_VIEW);     
-    var $yearTitle = '';  // NASTY hack to deal with order of action
+    var $searchForm; // cache of search form interface
 
 
     //chain up
@@ -398,9 +398,13 @@ class coopView extends CoopObject
 							 "for " . $par->getSummary() : "",
                              $this->obj->N);
 
-            // TODO: store the built form in coopview->somwhere
-            // and just tohtml it here, or display currentschoolyear if no form
-            $title .= ' ' . $this->yearTitle;		
+
+            if($this->searchForm){
+                $title .= ' ' . $this->searchForm->toHTML();
+            } else {
+                $title .=  ' School Year '. $this->getChosenSchoolYear(true);
+            }
+            
 
 			$toptab = new HTML_Table(
 				'class="tablecontainer"');
@@ -587,26 +591,20 @@ function schoolYearChooser()
 
     if($this->perms[NULL]['year'] < ACCESS_VIEW)
     {
-        $this->yearTitle = "School Year {$this->page->currentSchoolYear}";
         return;
     }
 
 
 
-    if(!$this->isTop())
-        //TODO: when yeartitle goes away, just return here
-        if($this->getChosenSchoolYear() != '%'){
-            $this->yearTitle = "School Year {$top->chosenSchoolYear}";
-        }
+    if(!$this->isTop()){
         return;
     }
 
     
-    $res ='';
  
-    $syform =& new HTML_QuickForm('schoolyearchooser', false, false, 
+    $syform =& new HTML_QuickForm($this->table . '-search', false, false, 
                                   false, false, true);
-    $el =& $syform->addElement('select', 'gschoolyear', 'School Year', 
+    $el =& $syform->addElement('select', 'school_year', 'School Year', 
                                //TODO check ispermittedfield for allyears!
                                $this->getSchoolYears(null, true),
                                array('onchange' =>'javascript:submitForm()'));
@@ -616,7 +614,7 @@ function schoolYearChooser()
     }
     // this alllyears only makes sense if schoolyearchooser is ONLY
     // called when user has view permissions on not-this-year
-    $syform->setDefaults(array('gschoolyear' => 
+    $syform->setDefaults(array('school_year' => 
                                $this->obj->fb_allYears ? '%' :
                                $this->page->currentSchoolYear));
 
@@ -629,13 +627,14 @@ function schoolYearChooser()
     $syform->addElement('hidden', 'realm', $this->page->vars['last']['realm']); 
 
 
-
-    $res .= $syform->toHTML();
+    $this->searchForm =& $syform;
     
+
+    // TODO: move getchosenschoolyear back here again, and do this in it!
+    // and getelement(school_year) to get $el
     $foo = $el->getValue();
     $this->chosenSchoolYear = $foo[0];
-    $this->page->printDebug("{$this->table} setting chosen schoolyear to {$this->chosenSchoolYear}", 3);
-    $this->yearTitle = $res;
+
 
     return;
 }

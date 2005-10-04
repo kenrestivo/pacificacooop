@@ -754,7 +754,8 @@ group by user_id,table_name,field_name";
         }
 
 
-    function getChosenSchoolYear()
+    // TODO: this belongs in coopview. really. go put it back!
+    function getChosenSchoolYear($orcurrent = false)
         {
             $this->page->printDebug("CoopObject::getChosenSchoolYear({$this->table})", 
                                     3);
@@ -762,11 +763,13 @@ group by user_id,table_name,field_name";
                 $this->page->printDebug(
                     "getChosenSchoolyear {$this->table} found {$this->chosenSchoolYear}", 
                                         3);
-                return $this->chosenSchoolYear;
+                return $this->chosenSchoolYear ? $this->chosenSchoolYear : 
+                    $this->page->currentSchoolYear;
             }
 
             $top =& $this->findTop();
-            return $top->chosenSchoolYear;
+            return $top->chosenSchoolYear ? $top->chosenSchoolYear : 
+                $this->page->currentSchoolYear;
         }
 
 function triggerNotices($audit_id)

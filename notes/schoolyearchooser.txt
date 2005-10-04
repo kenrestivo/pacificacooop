@@ -1,14 +1,17 @@
 schoolyear choooser notes
 
-make it reado for searchable/sortable
-	store the form, not the HTML. yank yeartitle
-	change name to searchsortchooer?
-		or, just store a reference to the BUILT FORM in coopview
-			and tohtml() it at rendering time. probably smarter.
-	shitcan co->chosenschoolyear, and make getchosenschoolyear use the form
+check details
 
-searchableviews will supercede this.
-	chosenschoolyear seems silly. i can instead use the stored value of search
+make it reado for searchable/sortable
+	shitcan co->chosenschoolyear, and make getchosenschoolyear use the form
+		it's highly redundant. think it through
+
+
+now integrate the parented and possibly audittrail searchers into this!
+	just add elements to the form!
+
+finally searchableviews will supercede this. merge remaining actions into there.
+
 
 ----------
 
