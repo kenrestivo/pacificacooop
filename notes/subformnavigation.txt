@@ -1,14 +1,49 @@
 notes on subform navigation, flipping between screens
 
+situations to handle (unit test?):
+	from details,  inject the pk of the SOURCE object,
+		to be used as the default value of a popup
+		this is a push
+	from a subform, after saving, i need to grab the pk of the CURRENT obj
+		and insert it into the SOURCE object retroactively
+			the submitvars of the backstack item?
+		this is a pop
+	anything else???!
+
+
+then, save the value of vars at push time
+	change my link to a javascript submit or a actual button
+		see the old subform shit for reference
+	save submitvars into last, then do the PUSH!
+		where to do this?! right now i do push nowhere near form
+		save them into last-pushed stack?
+
+
+
+
+
+
+ok, push is stupid.
+	instead, directly inject the values... somewhere
+	for back-filling, inject into last on stack
+	for forward-filling (i.e. from details)... what should i do??
+		this is the override question
+		i can't override if i have popped. ONLY if push!!
+
+test with views, details. make that work
+	ok, i push, but...
+	pushed ID is not getting used, despite the fact that REQUEST is getting fed
+	perhaps push should stick the stuff into last?
+
+
+make the push a button, or a javascript submit
+	look at my old subform patch
+
 
 stack stuff
 	i can get a constipated stack. how to cleanse?
 
 
-
-test with views, details. make that work
-	notverken. why?
-	familyid not passing
 
 
 well first of all, THE VIEW/DETAILS SHOUDL PUSH!

@@ -4,9 +4,10 @@ task:
 	turn the schoolyearchooser into a proper search/sort interface
 		look at audit trail and/or parent ed for inspiration
 		wrap it in javascript hiding. click here to search/sort.
+		an ALL button to hide it and wipe out the form data
 		LO: metacharacters and/or !=, > , <
 	save/restore the state of the search.
-	support LIMIT box
+	support LIMIT box, which is *NOT* in the dbdo!
 	LO: eventually support pager
 
 special cases:

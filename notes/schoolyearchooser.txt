@@ -1,5 +1,26 @@
 schoolyear choooser notes
 
+make it reado for searchable/sortable
+	store the form, not the HTML. yank yeartitle
+	change name to searchsortchooer?
+		or, just store a reference to the BUILT FORM in coopview
+			and tohtml() it at rendering time. probably smarter.
+	shitcan co->chosenschoolyear, and make getchosenschoolyear use the form
+
+searchableviews will supercede this.
+	chosenschoolyear seems silly. i can instead use the stored value of search
+
+----------
+
+what to do about places where schoolyear makes no sense?
+	there are only a few: perms, for instance
+	can i designate this? this is *not* allyears... allyears means DEFAULT
+		or do i expand allyears to be 'always' or 'default'?
+
+
+10 minutes PHP
+let all members view year for membership! they can see all rastas now
+	maybe best to wait until search/sort is done too
 
 fix details EVERYWHERE that use currentschoolyear. it's fucked
 	i think i broke horiztable: in enrollment anyway
@@ -34,18 +55,9 @@ test EVERYTHING
 		 parented attendance: may have collision here with schoolyear?
 
 
-what to do about places where schoolyear makes no sense?
-	there are only a few: perms, for instance
-	can i designate this? allyears maybe?
-
 ??? PHP
 	when i flip back and forth i'll need to store/recover storevars too
 		it'll stay with the top-level object/table
-
-10 minutes PHP
-let all members view year for membership! they can see all rastas now
-
-
 		i save/restore it from session, and use save/restored version 
 			i.e. it sets itself from $cp->vars
 			it's its own weirdo form, so it can only work with view then
