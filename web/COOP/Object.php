@@ -79,7 +79,6 @@ on upriv.realm_id = table_permissions.realm_id
 where user_id = %d and table_name = '%s'
 group by user_id,table_name,field_name";
     var $changes = array();  // array('field' => array('old'=>serialisedstuff, 'new'=> serialisedstuff))
-    var $chosenSchoolYear = ''; // the year to use by default, as chosen by user
 
 
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
@@ -496,7 +495,12 @@ group by user_id,table_name,field_name";
                     sprintf('school_year = "%s"',
                             $this->page->currentSchoolYear));
             } else {
-                $chosen = $this->getChosenSchoolYear();
+                // if i am a coopview subclass, use the chosenschoolyear
+                if(is_callable(array($this, 'getChosenSchoolYear'))){
+                    $chosen = $this->getChosenSchoolYear();
+                } else {
+                    $chosen = $this->page->currentSchoolYear;
+                }
                 // yes, i only constrain IFF something is chosen
                 // so that  linkfields properly show all years
                 if($chosen){
@@ -754,23 +758,6 @@ group by user_id,table_name,field_name";
         }
 
 
-    // TODO: this belongs in coopview. really. go put it back!
-    function getChosenSchoolYear($orcurrent = false)
-        {
-            $this->page->printDebug("CoopObject::getChosenSchoolYear({$this->table})", 
-                                    3);
-            if($this->chosenSchoolYear){
-                $this->page->printDebug(
-                    "getChosenSchoolyear {$this->table} found {$this->chosenSchoolYear}", 
-                                        3);
-                return $this->chosenSchoolYear ? $this->chosenSchoolYear : 
-                    $this->page->currentSchoolYear;
-            }
-
-            $top =& $this->findTop();
-            return $top->chosenSchoolYear ? $top->chosenSchoolYear : 
-                $this->page->currentSchoolYear;
-        }
 
 function triggerNotices($audit_id)
         {

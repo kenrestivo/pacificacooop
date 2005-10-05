@@ -1,7 +1,5 @@
 schoolyear choooser notes
 
-check details
-
 make it reado for searchable/sortable
 	shitcan co->chosenschoolyear, and make getchosenschoolyear use the form
 		it's highly redundant. think it through

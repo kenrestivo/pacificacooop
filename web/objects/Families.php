@@ -101,13 +101,26 @@ class Families extends DB_DataObject
             
         }
 
-    function fb_display_summary(&$co)
+    function juhsdTotal(&$co)
         {
-
+            $res = '';
+            $this->whereAdd('am_pm_session = "AM"');
             $co->find(true); // MY find
-            return $co->obj->N . ' families total (for Jefferson Adult Ed purposes).';
+            $res .= 'AM Families: ' .$co->obj->N ;
 
+            $co2 =& new CoopView($co->page, $co->table, $none);
+            $co2->obj->whereAdd('am_pm_session = "PM"');
+            $co2->find(true); // MY find
+            $res .= '<br>PM Families: ' .$co2->obj->N ;
+            return $res;
         }
+
+
+    // TODO: a neat summary of kids, parents, etc
+//     function fb_display_summary(&$co)
+//         {
+
+//         }
 
 
     // NOTE i don't override delete because my confirmdelete link checks should find that
