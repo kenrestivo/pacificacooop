@@ -630,39 +630,15 @@ function schoolYearChooser()
     $this->searchForm =& $syform;
     
 
+    // TODO: move getchosenschoolyear back here again, and do this in it!
+    // and getelement(school_year) to get $el
+    $foo = $el->getValue();
+    $this->chosenSchoolYear = $foo[0];
 
 
     return;
 }
 
-
-    function getChosenSchoolYear($orcurrent = false)
-        {
-            $this->page->printDebug("CoopObject::getChosenSchoolYear({$this->table})", 
-                                    3);
-
-            if(!$this->searchForm || 
-               !$this->searchForm->elementExists('school_year'))
-            {
-                return $this->page->currentSchoolYear;
-            }
-            $el= $this->searchForm->getelement('school_year');
-            $foo = $el->getValue();
-            $chosen  = $foo[0];
-            
-
-            if($chosen){
-                $this->page->printDebug(
-                    "getChosenSchoolyear {$this->table} found {$chosen}", 
-                                        3);
-                return $chosen ? $chosen : 
-                    $this->page->currentSchoolYear;
-            }
-
-            $top =& $this->findTop();
-            $topchosen = $top->getChosenSchoolYear();
-            return  $topchosen ? $topchosen: $this->page->currentSchoolYear;
-        }
 
 
 
