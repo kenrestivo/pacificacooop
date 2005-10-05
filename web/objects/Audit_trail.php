@@ -190,6 +190,15 @@ class Audit_trail extends DB_DataObject
             $res = '';
             
             if(!$val){
+                $newaud = $this->factory($co->table);
+                $newaud->table_name = $this->table_name;
+                $newaud->index_id = $this->index_id;
+                $newaud->orderBy('updated desc');
+                $newaud->limit(1);
+                $newaud->find(true);
+                if($newaud->{$co->pk} == $this->{$co->pk}){
+                    return 'New record added';
+                }
                 return 'No details saved';
             }
 
