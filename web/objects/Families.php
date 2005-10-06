@@ -42,6 +42,15 @@ class Families extends DB_DataObject
     // XXX BROKEN! omplains about multiple joins to parents
     //var $fb_extraDetails = array('parents:enhancement_hours');
 
+
+
+    function postGenerateForm(&$form)
+        {
+            $form->addRule($form->CoopForm->prependTable('email'), 
+                           'Email address must be valid', 'email');
+        }
+
+
  	function fb_linkConstraints(&$co)
 		{
 
@@ -73,8 +82,6 @@ class Families extends DB_DataObject
             //$co->debugWrap(4);
 
 			// ugly, but consisent. only shows families for this year
-
-
 
  		}
 
