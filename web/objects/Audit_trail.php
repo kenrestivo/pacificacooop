@@ -95,7 +95,7 @@ class Audit_trail extends DB_DataObject
                                        $nothing,
                                        array('onchange' =>
                                              'javascript:submitForm()'));
-            $sel->addOption('ALL', '%');
+            $sel->addOption('ALL', '0');
             $realms =& new CoopView(&$co->page, 'realms', &$co);
             $realms->find(true); // go get, including any constraints/sorts
             $sel->loadDbResult($realms->obj->getDatabaseResult(), 
