@@ -32,7 +32,61 @@ class CoopNewDispatcher
 			$this->page = $page;
 		}
 
-} // END COOP DISPATCHER CLASS
+
+
+
+    function view()
+        {
+            
+            $atd =& new CoopView(&$this->page, 
+                                 $this->page->vars['last']['table'], $none);
+            //$atd->debugWrap(2);
+            
+            $res .= '<div><!-- status alert div -->';
+            
+            $atd2 =& new CoopView(&$this->page, 
+                                  $this->page->vars['last']['table'], $none);
+            // alert  and/or summary does a find, so i need a separate obj for it
+            
+            if(is_callable(array($atd2->obj, 'fb_display_summary'))){
+                $atd2->page->printDebug('calling callback for summary', 2);
+                $res .= $atd2->obj->fb_display_summary(&$atd2);
+            }
+            if(is_callable(array($atd2->obj, 'fb_display_alert'))){
+                $atd2->page->printDebug('calling callback for alert', 2);
+                $res .= $atd2->obj->fb_display_alert(&$atd2);
+            }
+            $res .= '</div><!-- end status alert div -->';
+            
+
+            if(is_callable(array($atd->obj, 'fb_display_view'))){
+                $this->page->printDebug('calling callback for view', 2);
+                return $atd->obj->fb_display_view(&$atd);
+            }
+            
+
+            //TODO: some variation on the old "perms display" from auth.inc
+            //maybe at or top of doc? with editor to change them? ;-)
+            
+            $res .= $atd->simpleTable();
+            
+            return $res;
+         			
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+} // END NEW COOP DISPATCHER CLASS
 
 
 ////KEEP EVERTHANG BELOW
