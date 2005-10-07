@@ -97,7 +97,8 @@ class EmailChanges
 
             $audformatted = $aud->toArrayWithKeys();
 
-            $this->subject = sprintf("[Pacifica Co-Op] %s %s: %s", 
+            $this->subject = sprintf("[%s] %s %s: %s", 
+                                     devSite() ? 'TESTING': 'Pacifica Co-Op',
                                      strtoupper($this->type),
                                      $rec->obj->fb_formHeaderText,
                                      $rec->concatLinkFields());
@@ -116,6 +117,7 @@ class EmailChanges
                 $this->body .= "The following changes were made:\n";
                 $this->body .= $audformatted['details'];
             } else {
+                // it's an add!
                 $rec->fullText = 1; // XXX nasty hack!
                 $headers = $rec->makeHeader();
                 $recformatted = $rec->toArray($headers['keys']);
