@@ -1,5 +1,8 @@
 notes on subform navigation, flipping between screens
 
+time for header:location. seriously
+	redo the whole fucking generic with header:location
+
 time to merge in the shit at request time first!
 	basically, array-merge last
 	step through this code in GREAT, BRUTAL DETAIL

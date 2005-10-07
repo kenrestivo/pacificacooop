@@ -448,6 +448,24 @@ class coopPage
             return $this->vars['stack'][count($this->vars['stack']) - 1];
         } 
 
+
+    // destroys vars[last] and replaces it with last on stack
+    function &popOff()
+        {
+            if(isset($this->vars['stack']) && count($this->vars['stack'])){
+                $this->confessArray($this->vars, 'popping off of this stack', 1);
+                $this->vars['last'] = array_pop($this->vars['stack']);  
+            }
+            return $this->vars['last'];
+        }
+    
+    function mergeRequest()
+        {
+            return array_merge_recursive($_REQUEST, 
+                                         $this->vars['last']['submitvars']);
+        }
+
+
 } // END COOP PAGE CLASS
 
 ////KEEP EVERTHANG BELOW

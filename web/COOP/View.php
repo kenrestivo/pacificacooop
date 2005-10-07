@@ -640,6 +640,63 @@ function schoolYearChooser()
 }
 
 
+function bruteForceDeleteCheck()
+{
+    global $_DB_DATAOBJECT;
+    // go get em
+
+    $vatd =& new CoopView(&$this->page, $this->page->vars['last']['table'], $none);
+    $id = $this->page->vars['last']['id'];
+    $vatd->obj->{$vatd->pk} = $id;
+    $vatd->obj->find(true);		//  XXX aack! need this for summary
+    
+    
+    //NOTE! i do *not* use backlinks/forwardlinks here
+    //because some of these fields may not show up as actual links
+    //i.e. if they're not PK's! but i still want to prevent orphans
+    $links =& $_DB_DATAOBJECT['LINKS'][$vatd->obj->database()];
+    foreach($links as $table=> $link){
+        foreach($link as $nearcol => $farpair){
+            if($vatd->pk == $nearcol && $table != $vatd->table){
+                $checkme[] = $table;
+            }
+            list($fartab, $farcol) = explode(':', $farpair);
+            if($vatd->pk == $farcol && $fartab != $vatd->table){
+                $checkme[] = $fartab;
+            }
+        }
+    }
+    if(!is_array($checkme)){
+        return false;
+    }
+    $checkme = array_unique($checkme);
+    // now check 'em
+    foreach($checkme as $checktab){
+        $vatd->page->printDebug(
+            sprintf('confirmdelete link checking %s => %s [%d]', 
+                    $vatd->table, $checktab, $id), 
+            4);
+        $check =& new CoopView(&$vatd->page, $checktab, &$vatd);
+        $check->debugWrap(7);
+        $check->obj->{$vatd->pk} = $id;
+        $found = $check->obj->find();
+        if($found){
+            $totalfound += $found;
+            $res .= $check->simpleTable(false);
+        }
+    }
+    
+    if($totalfound){
+        $restop = $vatd->horizTable();
+        return $restop . '<p class="error">YOU CANNOT DELETE THIS RECORD because the records below depend on it. Fix these first.</p>' .  $res;
+        
+    }
+
+    return false;
+}
+
+
+
 
 
     // MOVE THIS TO TABLE PERMISSIONS. as details, perhapsxs?
