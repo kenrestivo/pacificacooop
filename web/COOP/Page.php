@@ -312,7 +312,7 @@ class coopPage
 	function mailError($subject, $body)
 		{
 
-			$body .= sprintf("--- BACKTRACE--\n%s", 
+			$body .= sprintf("\n\n--- BACKTRACE--\n%s", 
 							 print_r(debug_backtrace(), true));
 
 
