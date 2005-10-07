@@ -1,15 +1,10 @@
 schoolyear choooser notes
 
-make it reado for searchable/sortable
-	shitcan co->chosenschoolyear, and make getchosenschoolyear use the form
-		it's highly redundant. think it through
-
-
-now integrate the parented and possibly audittrail searchers into this!
-	just add elements to the form!
 
 finally searchableviews will supercede this. merge remaining actions into there.
+	rename schoolyearchooser to searchchooser
 
+USE THE saearchfeature.txt FILE, NOT THIS ONE
 
 ----------
 

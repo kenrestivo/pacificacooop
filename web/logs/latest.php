@@ -7,14 +7,15 @@ if ($handle = opendir('.')) {
     /* This is the correct way to loop over the directory. */
     while (false !== ($file = readdir($handle))) {
         if(strstr($file, 'html')){
+            $prev = $saver;
             $saver = $file;
         }
     }
     closedir($handle);
 
-    echo "LATEST.php: $saver is most recent<br>";
+    printf('LATEST.php: %s is most recent. <a href="%s">%s</a> is previous.<br>',
+           $saver, $prev, $prev);
     $fd = fopen($saver, 'r');
-    $contents = "";
     do {
         $data = fread($fd, 8192);
         if (strlen($data) == 0) {

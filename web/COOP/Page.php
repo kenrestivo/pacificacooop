@@ -355,7 +355,7 @@ class coopPage
 				exit(1);
 			}
 			$this->mailError('PEAR error on live site!',
-							 print_r($this));
+							 print_r($obj, true));
 			exit(1);
 		}
 
@@ -436,11 +436,17 @@ class coopPage
                           'inside' => $stack,
                           'par' => false,
                           'base' => $co->obj->usePage));
-        }
+            }
             return count($res) ? '': implode('&gt; ', $res);
-
+            
         }
- 
+
+    // gets the last stack item, IN PLACE t
+    // this is so you can insert things into  it to be popped off later
+    function &getPreviousStack()
+        {
+            return $this->vars['stack'][count($this->vars['stack']) - 1];
+        } 
 
 } // END COOP PAGE CLASS
 

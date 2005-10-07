@@ -1,7 +1,7 @@
 a cool nifty SEARCH BOX in all generic views!!
 
 task:
-	turn the schoolyearchooser into a proper search/sort interface
+	turn the schoolyearchooser into a generic search/sort interface
 		look at audit trail and/or parent ed for inspiration
 		wrap it in javascript hiding. click here to search/sort.
 		an ALL button to hide it and wipe out the form data
@@ -60,3 +60,12 @@ the generic view and/or constraints and/or simple table will need to change
 
 sort by too. make column headings clickable
 	this is basically SDG, but SDG has... issues...
+
+
+??? PHP
+now integrate the parented and possibly audittrail searchers into this!
+	add elements to the form!
+	how to override?
+	the hack is setdefaults i can only do it at the END, right before rendiring
+	always put in, even if no schoolyear perms?
+

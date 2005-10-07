@@ -28,7 +28,7 @@ print $menu->topNavigation();
 function popOff(&$cp)
 {
     if(isset($cp->vars['stack']) && count($cp->vars['stack'])){
-        $cp->printDebug('popping off of the stack!', 1);
+        $cp->confessArray($cp->vars, 'popping off of this stack', 1);
         $cp->vars['last'] = array_pop($cp->vars['stack']);  
     }
 }
@@ -135,11 +135,14 @@ function genericView(&$cp)
 
 function formaggio(&$cp){
 
+    $cp->confessArray($cp->vars, 'vars prior to merge', 4);
+
 	 // NOT the coopView above!
 	 $atdf = new CoopForm(&$cp, $cp->vars['last']['table'], $none); 
 
 
-	 $atdf->build($_REQUEST);
+	 $atdf->build(array_merge_recursive($_REQUEST, 
+                                        $cp->vars['last']['submitvars']));
 
 
 	 // ugly assthrus for my cheap newDispatcher
@@ -150,12 +153,17 @@ function formaggio(&$cp){
 
 	 $atdf->addRequiredFields();
 
+     // XXX THIS CLOBBERS PREVIOUS!
 	 $cp->vars['last']['submitvars'] = $atdf->form->getSubmitValues();
      //confessArray($cp->vars['last'], 'lastHACK');
 
 	 if ($atdf->validate()) {
 		 print "saving...";
 		 print $atdf->form->process(array(&$atdf, 'process'));
+         // 0-based stack
+         $previous =& $cp->getPreviousStack();
+         $previous['submitvars'][$previous['table'].'-'.$atdf->pk] = $atdf->id;
+         $cp->confessArray($previous, 'thevars', 4);
          // only go back to view if previous state was 'edit'
          if($cp->vars['last']['action'] == 'edit'){
              //force it
@@ -295,7 +303,8 @@ function newDispatcher(&$cp)
 
         print "<p>Are you sure you wish to delete this? Click 'Delete' or 'Cancel' to go back.</p>";	 
         $atdf = new CoopForm(&$cp, $cp->vars['last']['table'], $none); 
-        $atdf->build($_REQUEST);
+        $atdf->build(array_merge_recursive($_REQUEST, 
+                                           $cp->vars['last']['submitvars']));
 
         $atdf->form->addElement('hidden', 'action', 'delete'); 
         $atdf->form->addElement('hidden', 'table', $cp->vars['last']['table']); 
@@ -326,7 +335,9 @@ function newDispatcher(&$cp)
     case 'delete':
         // hack , but it works. why reinvent the wheel?
         $atdf = new CoopForm(&$cp, $cp->vars['last']['table'], $none); 
-        $atdf->build($_REQUEST);
+        $atdf->build(array_merge_recursive($_REQUEST, 
+                                           $cp->vars['last']['submitvars']));
+;
         $atdf->obj->delete();
         print genericView(&$cp);
 

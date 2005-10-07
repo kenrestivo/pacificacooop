@@ -10,7 +10,7 @@ require_once('CoopPage.php');
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
-$recipients = 'ken@restivo.org';
+$recipients = 'ken@restivo.org,krestivo@restivo.org';
 
 $headers['From']    = 'Test User <test@pacificacoop.org>';
 $headers['To']      = 'ken@restivo.org';

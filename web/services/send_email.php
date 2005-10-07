@@ -218,6 +218,12 @@ while($sub->obj->fetch()){
     //confessObj($sub, 'subs');
     $fam =& new CoopObject(&$cp, 'families', &$sub);
     $fam->obj->get($sub->obj->family_id); // or just add email into query?
+
+    if(!$fam->obj->email){
+        $em->page->printDebug("skipping {$fam->obj->name}: no email address!", 
+                              2);
+        continue;
+    }
     
     //might as well instantiate in loop. lightweight, and i need to get() anyway
     $em =& new EmailChanges (&$cp);

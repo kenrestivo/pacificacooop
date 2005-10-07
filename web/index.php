@@ -18,7 +18,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-//$debug = 6;
+//$debug = -1;
 
 require_once("first.inc");
 require_once("shared.inc");

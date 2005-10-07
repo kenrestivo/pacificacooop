@@ -1,15 +1,31 @@
 notes on subform navigation, flipping between screens
 
+time to merge in the shit at request time first!
+	basically, array-merge last
+	step through this code in GREAT, BRUTAL DETAIL
+	hmm. use header location
+
+
 situations to handle (unit test?):
-	from details,  inject the pk of the SOURCE object,
-		to be used as the default value of a popup
-		this is a push
 	from a subform, after saving, i need to grab the pk of the CURRENT obj
 		and insert it into the SOURCE object retroactively
 			the submitvars of the backstack item?
-		this is a pop
+		last array (hack it: count)
+		put this in process.
+		this is a pop, and at pop time generic needs to pull off any old values
+			and deposit them into build, merge them
+			tricky thing is going to be deciding which are new
+				i.e. you don't want to merge if it's a NEW
+					enema the old one?
+	from details, inject the pk of the SOURCE object,
+		WHERE?
+		to be used as the default value of a popup
+		then do a push
 	anything else???!
 
+
+in general i'll need to enema last, not just request.
+	header location won't help
 
 then, save the value of vars at push time
 	change my link to a javascript submit or a actual button
@@ -17,9 +33,6 @@ then, save the value of vars at push time
 	save submitvars into last, then do the PUSH!
 		where to do this?! right now i do push nowhere near form
 		save them into last-pushed stack?
-
-
-
 
 
 
@@ -37,7 +50,7 @@ test with views, details. make that work
 
 
 make the push a button, or a javascript submit
-	look at my old subform patch
+	look at my old subform patch?
 
 
 stack stuff
