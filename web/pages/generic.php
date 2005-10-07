@@ -14,11 +14,11 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
 
 $cp = new coopPage( $debug);
-print $cp->pageTop();
+$cp->buffer($cp->pageTop());
 
 
 $menu =& new CoopMenu(&$cp);
-print $menu->topNavigation();
+$cp->buffer($menu->topNavigation());
 
 
 
@@ -42,7 +42,7 @@ $cp->vars['last'] =  $formatted;
 
 
 if($sp= $cp->stackPath()){
-    print "<p>YOUR NAVIGATION: $sp</p>";
+   $cp->buffer("<p>YOUR NAVIGATION: $sp</p>");
 }
 
 //////////////}}} END STACK HANDLING
@@ -53,22 +53,22 @@ if(!$cp->vars['last']['table']){
     if(devSite()){
         PEAR::raiseError('unspecified table', 555);
     }
-    print $cp->selfURL(array('value' =>'Unspecified table. Go back to home.', 
+    $cp->buffer($cp->selfURL(array('value' =>'Unspecified table. Go back to home.', 
                              'inside' =>'nothing', 
-                             'base' =>'index.php'));
+                             'base' =>'index.php')));
     $cp->done();
 }
 
 
-printf("<h3>%s</h3>",$atd->obj->fb_formHeaderText);
+$cp->buffer(sprintf("<h3>%s</h3>",$atd->obj->fb_formHeaderText));
 
 
-print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
-print '<div id="centerCol">';
+$cp->buffer("\n<hr></div><!-- end header div -->\n"); //ok, we're logged in. show the rest of the page
+$cp->buffer('<div id="centerCol">');
 
 $disp =& new CoopNewDispatcher(&$cp);
-print $disp->dispatch();
-
+$cp->buffer($disp->dispatch());
+print $cp->flushBuffer();
 
 $cp->done();
 

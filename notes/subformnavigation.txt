@@ -2,10 +2,11 @@ notes on subform navigation, flipping between screens
 
 time for header:location. seriously
 	redo the whole fucking generic with header:location
+	buffer output in generic. and... that should do it, really.
 
-time to merge in the shit at request time first!
-	basically, array-merge last
-	step through this code in GREAT, BRUTAL DETAIL
+	time to merge in the shit at request time first!
+		basically, array-merge last
+		step through this code in GREAT, BRUTAL DETAIL
 	hmm. use header location
 
 

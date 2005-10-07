@@ -344,8 +344,8 @@ function confirmDelete()
 function dispatch()
 {
 
-// cheap newDispatcher
-//confessArray($this->page->vars['last'],'req');
+    // cheap newDispatcher
+    //confessArray($this->page->vars['last'],'req');
     switch($this->page->vars['last']['action']){
 
     case 'new':
