@@ -445,6 +445,9 @@ class coopPage
     // this is so you can insert things into  it to be popped off later
     function &getPreviousStack()
         {
+            if(empty($this->vars['stack'][count($this->vars['stack']) - 1])){
+                return;
+            }
             return $this->vars['stack'][count($this->vars['stack']) - 1];
         } 
 
