@@ -77,10 +77,13 @@ class EmailChanges
             $headers['Subject'] = $this->subject;
             
             $mail_object =& Mail::factory('smtp', $params);
-            
+
+            // trap ugly adresses
+            PEAR::expectError(); // BEGINNING OF TRY
             $mail_object->send($to, 
                                $headers, 
                                $this->body);
+            PEAR::popExpect(); // not really catch, more like END OF TRY
             user_error("sent email to $to [{$this->subject}]", E_USER_NOTICE);
         }
     
