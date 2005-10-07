@@ -28,9 +28,23 @@ $mail_object->send($recipients, $headers, $body);
 
 print "RAW test OK\n";
 
+
+
 $cp = new CoopPage(4);
 $cp->mailError('testing through cooppage', 
                'this is a test thru cooppage mailerror');
 print "COOPAGE test OK\n";
+
+
+// trap ugly adresses
+PEAR::pushErrorHandling(PEAR_ERROR_RETURN); // BEGINNING OF TRY
+$return = $mail_object->send('invalid address', $headers, $body);
+PEAR::popErrorHandling(); // not really catch, more like END OF TRY
+
+confessObj($return, "return value [ $err ]");
+
+print "Expect error test OK";
+
+//PEAR::raiseError('testing that error handling returns now', 111);
 
 ?>
