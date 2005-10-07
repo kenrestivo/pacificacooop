@@ -78,14 +78,16 @@ class EmailChanges
             
             $mail_object =& Mail::factory('smtp', $params);
 
+            /// XXX both expecterror and popexpect generate warnings
+
             // trap ugly adresses
-            PEAR::expectError(); // BEGINNING OF TRY
+            PEAR::pushErrorHandling(PEAR_ERROR_RETURN); // BEGINNING OF TRY
             $rv = $mail_object->send($to, 
                                $headers, 
                                $this->body);
-            PEAR::popExpect(); // not really catch, more like END OF TRY
+            PEAR::popErrorHandling(); // not really catch, more like END OF TRY
             user_error("sent email to $to [{$this->subject}]", E_USER_NOTICE);
-            // catch
+            // catch XXX this doesn't seem to work, i don't know why.
             if(PEAR::isError($rv)){
                 confessObj($rv, 'mail error');
                 $this->page->mailError('BAD EMAIL ADDRESS', print_r($rv, true));
@@ -222,6 +224,9 @@ group by subscriptions.user_id,table_name
 $sub->page->currentSchoolYear,
 $em->audit_co->obj->table_name));
 
+
+// TODO: if it is devsite, only fetch a few. really, limit is what i want
+// unless i need the N to check that my query was ok
 while($sub->obj->fetch()){
     //confessObj($sub, 'subs');
     $fam =& new CoopObject(&$cp, 'families', &$sub);
