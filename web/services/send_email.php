@@ -80,11 +80,16 @@ class EmailChanges
 
             // trap ugly adresses
             PEAR::expectError(); // BEGINNING OF TRY
-            $mail_object->send($to, 
+            $rv = $mail_object->send($to, 
                                $headers, 
                                $this->body);
             PEAR::popExpect(); // not really catch, more like END OF TRY
             user_error("sent email to $to [{$this->subject}]", E_USER_NOTICE);
+            // catch
+            if(PEAR::isError($rv)){
+                confessObj($rv, 'mail error');
+                $this->page->mailError('BAD EMAIL ADDRESS', print_r($rv, true));
+            }
         }
     
     function makeEmail()
