@@ -82,6 +82,7 @@ class CoopMenu extends HTML_Menu
 
 	function topNavigation()
 		{
+            $res = '';
 
 			// i don't user this->page->userStruct
 			// since it requires createlegacy adn i may not have that!

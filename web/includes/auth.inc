@@ -567,71 +567,71 @@ logIn($vars)
 		description = some debug/explanatory text. not used right now
 	*/
 	$states = array(
-		unknown => array (
-					func => "unknownState",
-					wanted => array ( "uid", "pwd", "confirm"), //XXX token?
-					description => "Indeterminate state."
+		'unknown' => array (
+					'func' => "unknownState",
+					'wanted' => array ( "uid", "pwd", "confirm"), //XXX token?
+					'description' => "Indeterminate state."
 					),
-		needlogin => array (
-					func => "needLoginState",
-					wanted => array ( "uid", 'pwd'),
-					description => "You must log in, but you haven't yet"
+		'needlogin' => array (
+					'func' => "needLoginState",
+					'wanted' => array ( "uid", 'pwd'),
+					'description' => "You must log in, but you haven't yet"
 					),
-		loggedout => array (
-					func => "loggedOutState",
-					description => "Forcibly and deliberately logged out"
+		'loggedout' => array (
+					'func' => "loggedOutState",
+					'description' => "Forcibly and deliberately logged out"
 					),
-		nullpass => array (
-					func => "nullPassState",
-					required => array ( "uid"),
-					wanted => array ( "pwd", "confirm"),
-					description => "User has no password in database"
+		'nullpass' => array (
+					'func' => "nullPassState",
+					'required' => array ( "uid"),
+					'wanted' => array ( "pwd", "confirm"),
+					'description' => "User has no password in database"
 					),
-		checklogin => array (
-					func => "checkLoginState",
-					required => array ("uid"),
-					wanted => array ("pwd"),
-					description => "Checking password"
+		'checklogin' => array (
+					'func' => "checkLoginState",
+					'required' => array ("uid"),
+					'wanted' => array ("pwd"),
+					'description' => "Checking password"
 					),
-		verifytoken => array (
-					func => "verifyTokenState",
-					required => array ( "uid", "token"),
-					description => "Checking token"
+		'verifytoken' => array (
+					'func' => "verifyTokenState",
+					'required' => array ( "uid", "token"),
+					'description' => "Checking token"
 					),
-		wrongpass => array (
-					func => "wrongPassState",
-					required => array ( "uid"),
-					description => "Wrong password"
+		'wrongpass' => array (
+					'func' => "wrongPassState",
+					'required' => array ( "uid"),
+					'description' => "Wrong password"
 					),
-		nouser => array (
-					func => "noUserState",
-					required => array ( "uid"),
-					description => "No such user"
+		'nouser' => array (
+					'func' => "noUserState",
+					'required' => array ( "uid"),
+					'description' => "No such user"
 					),
-		needconfirm => array (
-					func => "needConfirmState",
-					required => array ( "uid", "pwd"),
-					description => "Need new password confirmed"
+		'needconfirm' => array (
+					'func' => "needConfirmState",
+					'required' => array ( "uid", "pwd"),
+					'description' => "Need new password confirmed"
 					),
-		confirmwrong => array (
-					func => "confirmWrongState",
-					required => array ( "uid"),
-					description => "Confirmation password doesn't match"
+		'confirmwrong' => array (
+					'func' => "confirmWrongState",
+					'required' => array ( "uid"),
+					'description' => "Confirmation password doesn't match"
 					),
-		insecurepass => array (
-					func => "insecurePassState",
-					required => array ( "uid", "pwd"),
-					description => "New password doesn't meet minimums"
+		'insecurepass' => array (
+					'func' => "insecurePassState",
+					'required' => array ( "uid", "pwd"),
+					'description' => "New password doesn't meet minimums"
 					),
-		loggedin => array (
-					terminus => "yes",
-					func => "loggedInState",
-					required => array ( "uid", "token"),
-					description => "User is logged in"
+		'loggedin' => array (
+					'terminus' => "yes",
+					'func' => "loggedInState",
+					'required' => array ( "uid", "token"),
+					'description' => "User is logged in"
 					),
-		needinput => array (
-					terminus => "yes",
-					description => "UI needs input. Exit state machine."
+		'needinput' => array (
+					'terminus' => "yes",
+					'description' => "UI needs input. Exit state machine."
 					)
 	);
 
@@ -745,7 +745,7 @@ sanityCheck($auth, $states)
 function
 changeState($auth, $states, $newstate, $wanted = 0, $savedauth = NULL)
 {
-	$newauth = array( state => $newstate );
+	$newauth = array( 'state' => $newstate );
 
 	if($states[$newstate]['required']){
 		while (list($key, $val) = each($states[$newstate]['required'])){

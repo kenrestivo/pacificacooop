@@ -23,7 +23,7 @@ $cp->buffer($menu->topNavigation());
 
 
 ////////////////{{{STACK HANDLING. move to cooppage?
-if($_REQUEST['table']){
+if(!empty($_REQUEST['table'])){
     $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
     $formatted = array('table'=>$_REQUEST['table'], 
                        'action' =>$_REQUEST['action'], 
@@ -38,7 +38,7 @@ if(isset($_REQUEST['push'])){
 
 // ALWAYS use formatted as last.... if it exists, that is
 // it won't exist in cases where i'm coming back from a header location
-if($formatted){
+if(!empty($formatted)){
     $cp->vars['last'] =  $formatted;
 }
 
@@ -61,7 +61,9 @@ if(!$cp->vars['last']['table']){
     $cp->done();
 }
 
-
+if(empty($atd)){
+    $atd =& new CoopView(&$cp, $cp->vars['last']['table'], $none);
+}
 $cp->buffer(sprintf("<h3>%s</h3>",$atd->obj->fb_formHeaderText));
 
 

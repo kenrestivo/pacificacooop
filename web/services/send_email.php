@@ -76,7 +76,7 @@ class EmailChanges
             $headers['To'] = 	$to;
             $headers['Subject'] = $this->subject;
             
-            $mail_object =& Mail::factory('smtp', $params);
+            $mail_object =& Mail::factory('smtp', &$params);
 
             /// XXX both expecterror and popexpect generate warnings
 
@@ -224,6 +224,11 @@ group by subscriptions.user_id,table_name
 $sub->page->currentSchoolYear,
 $em->audit_co->obj->table_name));
 
+
+// XXX hack to deal with my slow spamassassin
+if(devSite()){
+    sleep(20);
+}
 
 // TODO: if it is devsite, only fetch a few. really, limit is what i want
 // unless i need the N to check that my query was ok

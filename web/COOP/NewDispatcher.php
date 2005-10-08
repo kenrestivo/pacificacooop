@@ -43,6 +43,8 @@ class CoopNewDispatcher
     function view()
         {
             
+            $res = '';
+
             $atd =& new CoopView(&$this->page, 
                                  $this->page->vars['last']['table'], $none);
             //$atd->debugWrap(2);

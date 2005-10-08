@@ -113,7 +113,7 @@ group by user_id,table_name,field_name";
 
 			// read the overrides now
 			$top =& $this->findTop();
-			$this->page->confessArray($top->overrides[$this->table], 
+			$this->page->confessArray(@$top->overrides[$this->table], 
 									  "processing overrides for $this->table, top is $top->table", 3);
 			// i clobber here.
 			$this->readConf(&$top->overrides[$this->table], true, false);
@@ -179,7 +179,7 @@ group by user_id,table_name,field_name";
 			$this->page->confessArray($this->forwardLinks, 
 									  "isLInkField($key): links for $this->table", 4);
 
-			if(!($this->forwardLinks && $this->forwardLinks[$key])){
+			if(empty($this->forwardLinks[$key])){
 				return false;
 			}
 			
@@ -343,7 +343,7 @@ group by user_id,table_name,field_name";
 			//we don't show if not in fieldstorender
 			//NOTE: it could not be in the db itself,
 			//but if it's in fieldstorender, then we show it anyway
-			if($this->obj->fb_fieldsToRender && $key &&
+			if(!empty($this->obj->fb_fieldsToRender) && $key &&
 			   !in_array($key, $this->obj->fb_fieldsToRender))
             {
 				$this->page->printDebug(
@@ -363,7 +363,7 @@ group by user_id,table_name,field_name";
             }
 			
 
-            if(is_array($this->obj->fb_fieldsToUnRender)  &&
+            if(!empty($this->obj->fb_fieldsToUnRender)  &&
 			   in_array($key, $this->obj->fb_fieldsToUnRender))
             {
             	$this->page->printDebug(
@@ -380,7 +380,8 @@ group by user_id,table_name,field_name";
 
 
             if($forceuser || 
-               $this->page->userStruct['family_id'] == $this->obj->family_id)
+               (!empty($this->obj->family_id) && 
+                $this->page->userStruct['family_id'] == $this->obj->family_id))
             {
             	$this->page->printDebug(
                     "ispermitted($this->table : $key) MINE, using max of group/user", 
@@ -409,7 +410,11 @@ group by user_id,table_name,field_name";
 
 
             $this->page->printDebug(
-                "ispermitted($this->table : $key) RETURNING for OBJ famid {$this->obj->family_id}, my famid {$this->page->userStruct['family_id']}, force [$forceuser] perms [$res]",
+                sprintf('ispermitted(%s : %s) RETURNING for OBJ famid [%s] , my famid [%d], force [%s] perms [%s]', 
+                        $this->table, $key, empty($this->obj->family_id) ? 
+                        'NO SUCH FIELD' : $this->obj->family_id, 
+                        $this->page->userStruct['family_id'], 
+                        $forceuser, $res),
                 4);
              
             return $res;
@@ -473,7 +478,7 @@ group by user_id,table_name,field_name";
             }
              
              
-             if(is_array($this->obj->fb_linkDisplayFields) && 
+             if(!empty($this->obj->fb_linkDisplayFields) && 
                 count($this->obj->fb_linkDisplayFields) > 0)
              {
                  $this->obj->orderBy(
@@ -645,7 +650,7 @@ group by user_id,table_name,field_name";
 
     function doJoins()
         {
-            if(!is_array($this->obj->fb_joinPaths)){
+            if(empty($this->obj->fb_joinPaths)){
                 return;
             }
 
@@ -667,7 +672,7 @@ group by user_id,table_name,field_name";
 
     function reorder($things)
         {
-            if(!is_array($this->obj->fb_fieldLabels)){
+            if(empty($this->obj->fb_fieldLabels)){
                 return $things;
             }
 

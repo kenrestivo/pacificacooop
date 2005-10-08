@@ -494,7 +494,7 @@ class coopForm extends CoopObject
 // 					user_error("CoopForm::addRequiredFields($fieldname)", 
 // 							   E_USER_NOTICE);
 					$this->form->addRule($this->prependTable($fieldname), 
-										 "$key mustn't be empty.", 
+										 "{$this->obj->fb_fieldLabels[$fieldname]} mustn't be empty.", 
                                          'customrequired');
 				}
 			}

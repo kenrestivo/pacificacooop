@@ -116,7 +116,7 @@ function confessVars()
 ###############
 function confessArray($fields, $message, $return = false)
 {
-	$res .= "<pre>";
+	$res = "<pre>";
 	$res .= "DEBUG $message\n";
 //$res .=_r( debug_backtrace());
 	if(is_array($fields)){
@@ -172,7 +172,8 @@ function done()
 	print "</div><!-- end footer div -->"; // closes out bottom div
 	
 	print"</body></html> ";
-    
+
+    // TODO: only flush if there's somethign in there
 	ob_end_flush();
 	session_write_close();		// redundant?
 	exit;

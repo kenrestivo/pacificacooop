@@ -50,7 +50,7 @@ class coopView extends CoopObject
 
             $this->joinTo('family_id');
             $this->joinTo('school_year');
-            $page->confessArray($this->obj->fb_joinPaths,
+            $page->confessArray(&$this->obj->fb_joinPaths,
                                       'coopView() joinpaths found', 3);
             // reset debuglevel in obj, which may bave been set by save!
             $this->debugWrap(5);
@@ -87,7 +87,8 @@ class coopView extends CoopObject
 	// formats object is current in this object, um, as a table
 	function simpletable($find= true)
 		{
-
+            $rowcnt = 0;
+            
 			// NOTE. this object's find, not the DBDO find
 			if(!$this->find($find)){
 				return;
@@ -269,7 +270,7 @@ class coopView extends CoopObject
 
 				// this is where the fun begins.
 
-				if(is_array($headerkeys) && !in_array($key, $headerkeys)){
+				if(!empty($headerkeys) && !in_array($key, $headerkeys)){
                     //skip those not in header. MUST BE IN SYNC WITH HEADER!
                     continue;
                 }
@@ -279,7 +280,7 @@ class coopView extends CoopObject
                     //for USERLEVEL. mask the data. but put placeholder
                     //so that it's in sync with header
                     $res[] = '';
-                } else if(is_array($this->obj->fb_displayCallbacks) &&
+                } else if(!empty($this->obj->fb_displayCallbacks) &&
                           in_array($key, 
                                    array_keys($this->obj->fb_displayCallbacks)))
                 {
@@ -299,22 +300,22 @@ class coopView extends CoopObject
                     $res[] = timestamp_db_php($val);
                 } else if ($table[$key] &  DB_DATAOBJECT_DATE){
                     $res[] = sql_to_human_date($val);
-                } else if(is_array($this->obj->fb_displayFormat) &&
+                } else if(!empty($this->obj->fb_displayFormat) &&
                           in_array($key, 
                                    array_keys($this->obj->fb_displayFormat))) 
                 {
                     $res[] = sprintf($this->obj->fb_displayFormat[$key], $val);
-                } else if(is_array($this->obj->fb_URLFields) &&
+                } else if(!empty($this->obj->fb_URLFields) &&
                           in_array($key, $this->obj->fb_URLFields)) 
                 {
                     $res[] = sprintf('<a href="%s">%s</a>',
                                      $this->page->fixURL($val), $val);
-                } else if(is_array($this->obj->fb_currencyFields) &&
+                } else if(!empty($this->obj->fb_currencyFields) &&
                           in_array($key, $this->obj->fb_currencyFields)) 
                 {
                     //TODO: store thecurrency fmt in the conf file. yeah right.
                     $res[] = sprintf('$%0.02f', $val);
-                } else if(is_array($this->obj->fb_textFields) &&
+                } else if(!empty($this->obj->fb_textFields) &&
                           in_array($key, $this->obj->fb_textFields)) 
                 {
                     $res[] = $this->fullText ? $val : 
@@ -347,7 +348,7 @@ class coopView extends CoopObject
 			///confessArray($this->obj->toArray(), 'makeheader:toarray');
 			// get the fieldnames out the dataobject
 
-            $labels = is_array($this->obj->fb_fieldLabels) ? 
+            $labels = !empty($this->obj->fb_fieldLabels) ? 
                 array_keys($this->obj->fb_fieldLabels) : array();
 
 			foreach($this->reorder($this->obj->toArray()) as $key => $trash){
@@ -471,6 +472,8 @@ class coopView extends CoopObject
 	// NOTE! row is deprciated, it's not used for dbdo-based stuff, only old
 	function recordButtons(&$row, $par = true)
 		{
+            $res = '';
+
             // handle the simple case first: i have old callbacks
 			if($this->legacyCallbacks){
 				return recordButtons($row, $this->legacyCallbacks, 
@@ -484,7 +487,7 @@ class coopView extends CoopObject
 
 			//confessObj($this, 'this');
 			// the new style!
-            $ra = is_array($this->obj->fb_recordActions) ? 
+            $ra = !empty($this->obj->fb_recordActions) ? 
                 $this->obj->fb_recordActions : $this->recordActions;
 
             foreach($ra as $action => $needlevel){
@@ -497,7 +500,8 @@ class coopView extends CoopObject
 							'table' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}),
-                              'base' =>$this->obj->fb_usePage ? $this->obj->fb_usePage :
+                              'base' =>!empty($this->obj->fb_usePage) ? 
+                              $this->obj->fb_usePage :
                               'generic.php', 
                               'par' => $par)); 
                     $par || $res .= '&nbsp;';
@@ -511,6 +515,7 @@ class coopView extends CoopObject
 
 	function actionButtons($showview = 0)
 		{
+            $res = '';
 			
 			// handle the simple case first: i have old callbacks
 			if($this->legacyCallbacks){
@@ -528,7 +533,7 @@ class coopView extends CoopObject
             //because, at least SOME records (mine) i can do these actions to
             $permitted = $this->isPermittedField(null, true, true);
 
-            $va = is_array($this->obj->fb_viewActions) ? 
+            $va = !empty($this->obj->fb_viewActions) ? 
                 $this->obj->fb_viewActions : $this->viewActions;
 
             foreach($va as $action => $needlevel){
@@ -557,9 +562,8 @@ class coopView extends CoopObject
                     array(
                         'value' =>$this->actionnames[$action], 
                         'inside' => $in,
-                        'base' => $this->obj->fb_usePage ? 
-                        $this->obj->fb_usePage :
-                        'generic.php'));
+                        'base' => empty($this->obj->fb_usePage) ? 
+                        'generic.php' : $this->obj->fb_usePage));
                 //                     confessObj($this->obj, 'this obj');
 //                     confessObj($this->obj, 'parent obj');
                 
@@ -639,61 +643,6 @@ function schoolYearChooser()
     return;
 }
 
-
-function bruteForceDeleteCheck()
-{
-    global $_DB_DATAOBJECT;
-    // go get em
-
-    $vatd =& new CoopView(&$this->page, $this->page->vars['last']['table'], $none);
-    $id = $this->page->vars['last']['id'];
-    $vatd->obj->{$vatd->pk} = $id;
-    $vatd->obj->find(true);		//  XXX aack! need this for summary
-    
-    
-    //NOTE! i do *not* use backlinks/forwardlinks here
-    //because some of these fields may not show up as actual links
-    //i.e. if they're not PK's! but i still want to prevent orphans
-    $links =& $_DB_DATAOBJECT['LINKS'][$vatd->obj->database()];
-    foreach($links as $table=> $link){
-        foreach($link as $nearcol => $farpair){
-            if($vatd->pk == $nearcol && $table != $vatd->table){
-                $checkme[] = $table;
-            }
-            list($fartab, $farcol) = explode(':', $farpair);
-            if($vatd->pk == $farcol && $fartab != $vatd->table){
-                $checkme[] = $fartab;
-            }
-        }
-    }
-    if(!is_array($checkme)){
-        return false;
-    }
-    $checkme = array_unique($checkme);
-    // now check 'em
-    foreach($checkme as $checktab){
-        $vatd->page->printDebug(
-            sprintf('confirmdelete link checking %s => %s [%d]', 
-                    $vatd->table, $checktab, $id), 
-            4);
-        $check =& new CoopView(&$vatd->page, $checktab, &$vatd);
-        $check->debugWrap(7);
-        $check->obj->{$vatd->pk} = $id;
-        $found = $check->obj->find();
-        if($found){
-            $totalfound += $found;
-            $res .= $check->simpleTable(false);
-        }
-    }
-    
-    if($totalfound){
-        $restop = $vatd->horizTable();
-        return $restop . '<p class="error">YOU CANNOT DELETE THIS RECORD because the records below depend on it. Fix these first.</p>' .  $res;
-        
-    }
-
-    return false;
-}
 
 
 

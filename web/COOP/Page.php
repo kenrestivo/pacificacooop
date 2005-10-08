@@ -148,7 +148,7 @@ class coopPage
 			}
 
 			$output = ob_get_clean();
-			ob_end_flush();
+			$output && ob_end_flush();
 
 			return $output;
 
@@ -251,6 +251,8 @@ class coopPage
             $title = isset($args['title']) ? $args['title'] :false;
             //1confessArray($args, 'args');
             
+            $res = '';
+            
 			if(!$base){
                 if($host){
                     $base = 'http://' . $_SERVER['HTTP_HOST'];
@@ -289,7 +291,8 @@ class coopPage
 
 	function formatURLVars($base, $inside = false)
 		{
-			
+			$res = '';
+            
 			if($inside){
 				if(is_array($inside)){
 					foreach($inside as $var => $val){
@@ -380,9 +383,9 @@ class coopPage
 		{
 			$res = $this->bufferedOutput;
 			dump("flushing buffered output\n");
-			if($clean){
+			if($clean && $res){
 				ob_end_flush();
-				unset($this->bufferedOutput);
+				$this->bufferedOutput = '';
 			}
 			return $res;
 		}
@@ -409,6 +412,7 @@ class coopPage
     function mergeSessionVars()
         {
             //OLD STUFF FIRST, THEN NEW STUFF. so REQ overrides SESSION!
+            //TODO: empty() guards around this
             $_SESSION['cpVars'] =  array_merge($_SESSION['cpVars'], 
                                                $_REQUEST['cpVars']);
             $this->vars =& $_SESSION['cpVars'];
@@ -471,6 +475,9 @@ class coopPage
     
     function mergeRequest()
         {
+            if(empty($this->vars['last']['submitvars'])){
+                return $_REQUEST;
+            }
             return array_merge_recursive($_REQUEST, 
                                          $this->vars['last']['submitvars']);
         }
