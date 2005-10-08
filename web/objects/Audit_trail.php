@@ -44,29 +44,29 @@ class Audit_trail extends CoopDBDO
     var $fb_displayCallbacks = array('details' => 'formatChanges',
                                      'table_name' => 'useLabel');
 
-    function fb_display_details()
+    function fb_display_details(&$co)
         {
             //XXX move this to a session var or somethign. or provide a chooser
             $limit = $_REQUEST['limit'] ? $_REQUEST['limit'] : 20;
 	 
-            $session = new CoopView(&$this->CoopView->page, 'session_info', $none);
+            $session = new CoopView(&$co->page, 'session_info', $none);
 
             // this is an interesting pseudo sub-dispatcher
-            if($_REQUEST[$this->CoopView->prependTable($this->CoopView->pk)]){
-                $this->{$this->CoopView->pk} = 
-                    $_REQUEST[$this->CoopView->prependTable(
-                                  $this->CoopView->pk)];
+            if($_REQUEST[$co->prependTable($co->pk)]){
+                $this->{$co->pk} = 
+                    $_REQUEST[$co->prependTable(
+                                  $co->pk)];
                     //array_push($this->fb_fieldsToRender, 'table_name', 'index_id');
                     $this->find(true);
-                    //print $this->CoopView->horizTable();
+                    //print $co->horizTable();
 			 
                     // basically the stuff in genericdetails.
-                    $thing = new CoopView(&$this->CoopView->page, $this->table_name, &$nothing);
+                    $thing = new CoopView(&$co->page, $this->table_name, &$nothing);
                     $thing->obj->{$thing->pk} = $this->index_id;
                     print $thing->horizTable();
 			 
                     // standard audit trail, for all details
-                    $aud =& new CoopView(&$this->CoopView->page, 'audit_trail', &$thing);
+                    $aud =& new CoopView(&$co->page, 'audit_trail', &$thing);
                     $aud->obj->table_name = $this->table_name;
                     $aud->obj->index_id = $this->index_id;
                     $aud->obj->orderBy('updated desc');

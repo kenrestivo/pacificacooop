@@ -89,7 +89,7 @@ class Auction_donation_items extends CoopDBDO
 
 	// form that blasts over to the packages::new, to create a new one
 	// just generates a CREATE NEW button with all the shit inside
-	function newPackageForm(&$cp)
+	function newPackageForm(&$co)
 		{
 			$form =& new HTML_QuickForm('newpackageform', 'post', 
 										'packages.php');
@@ -98,23 +98,23 @@ class Auction_donation_items extends CoopDBDO
 			$form->addElement('header', 'newpackageheader', 
 							  'Create a new Package starting with this Auction Item?');
 				 // donated by! first guess families...
-			//$this->CoopView->debugWrap(2);
-			$aifj =& new CoopObject(&$cp, 
+			//$co->debugWrap(2);
+			$aifj =& new CoopObject(&$co->page, 
 									'auction_items_families_join', &$top);
 			$aifj->obj->auction_donation_item_id = 
 				$this->auction_donation_item_id; 
-			$fam =& new CoopObject(&$cp, 'families', &$aifj);
+			$fam =& new CoopObject(&$co->page, 'families', &$aifj);
 			$fam->obj->joinAdd($aifj->obj);
 			if($fam->obj->find(true)){
 				$donatedby = $fam->obj->name . " Family";
 			}
 			
 			// now guess companies. blah
-			$caj =& new CoopObject(&$cp, 
+			$caj =& new CoopObject(&$co->page, 
 								   'companies_auction_join', &$top);
 			$caj->obj->auction_donation_item_id = 
 				$this->auction_donation_item_id; 
-			$co =& new CoopObject(&$cp, 'companies', &$caj);
+			$co =& new CoopObject(&$co->page, 'companies', &$caj);
 			$co->obj->joinAdd($caj->obj);
 			if($co->obj->find(true)){
 				$donatedby = $co->obj->company_name;
@@ -141,7 +141,7 @@ class Auction_donation_items extends CoopDBDO
 			}
 
 			// legacy
-			if($sid = thruAuthCore($cp->auth)){
+			if($sid = thruAuthCore($co->page->auth)){
 				$form->addElement('hidden', 'coop', $sid); 
 			}
 

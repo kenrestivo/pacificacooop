@@ -85,7 +85,7 @@ class CoopNewDispatcher
 
     function add_edit(){
 
-        $this->page->confessArray($this->page->vars, 'vars prior to merge', 4);
+        $this->page->confessArray($this->page->vars, 'CoopNewDispatcher::add_edit() vars prior to merge', 4);
 
         // NOT the coopView above!
         $atdf = new CoopForm(&$this->page, 

@@ -1,6 +1,5 @@
 notes on subform navigation, flipping between screens
 
-
 test my header location shit!
 	AUIUGH! blanks aren't working. i can't delete a field.
 		that is wrong, so wrong.

@@ -46,7 +46,6 @@ class coopView extends CoopObject
 	function CoopView (&$page, $table, &$parentCO, $level = 0)
 		{
 			parent::CoopObject(&$page, $table, &$parentCO, $level);
-            $this->obj->CoopView =& $this;  //used by funcs in dbdo
 
             $this->joinTo('family_id');
             $this->joinTo('school_year');

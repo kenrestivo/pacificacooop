@@ -58,7 +58,46 @@ class CoopDBDO extends DB_DataObject {
         }
         return $this->_debuglevel;
     }  
-}
+
+
+
+    function setFrom(&$from)
+    {
+
+        global $_DB_DATAOBJECT;
+        $keys  = $this->keys();
+        $items = $this->table();
+        $fields = array_keys($items);
+        if (!$items) {
+            $this->raiseError(
+                "setFrom:Could not find table definition for {$this->__table}", 
+                DB_DATAOBJECT_ERROR_INVALIDCONFIG);
+            return;
+        }
+
+        
+        foreach($from as $key => $val){
+            if(in_array($key, $keys)){
+                $this->CoopObject->page->printDebug(
+                    "CoopDBDO::setFrom($key) cowardly refusing to set primary key to $from[$key]", 2); 
+                continue;
+            }
+
+            if(!in_array($key, $fields)){
+                $this->CoopObject->page->printDebug(
+                    "CoopDBDO::setFrom($key) $from[$key] isn't in the dbdo, skipping", 2);
+                continue;
+            }
+            // finally, DO IT
+            $this->$key = $val;
+        }
+
+        return true;
+    }
+
+
+
+} /// END COOPDBDO CLASS
 
 
 ?>

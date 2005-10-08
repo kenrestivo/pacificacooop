@@ -103,6 +103,9 @@ group by user_id,table_name,field_name";
 							$this->obj->getMessage(),
 							E_USER_ERROR);
 			}
+
+            $this->obj->CoopObject =& $this;  //used by funcs in dbdo
+
 			//confessObj($this->obj, "CONSTRUCTOR object for $this->table");
 
 			$this->setPK(); // must this be after find? rather constructor.

@@ -304,7 +304,6 @@ class coopForm extends CoopObject
 	function process($vars)
 		{
 			
-            
 			$this->page->confessArray($vars, 
 									  sprintf('CoopForm::process(vars): %s', 
 											  $this->table), 
@@ -312,8 +311,10 @@ class coopForm extends CoopObject
 
 			$old = $this->obj->__clone($this->obj); // copy, not ref!
 
-			$this->obj->setFrom($this->scrubForSave($vars));
-
+            $from =$this->scrubForSave($vars);
+			$this->obj->setFrom(&$from);
+            confessObj($this->obj, 'CoopForm::process() after being setfrom', 
+                       4);
 
             // NOTE! this is very different from fb. here the OBJ does the
             // work, not the vars
@@ -383,6 +384,8 @@ class coopForm extends CoopObject
 				}
 
 			}
+            $this->page->confessArray($cleanvars, 
+                                      'CoopForm::scrubForSave() cleaned', 4);
 			return $cleanvars;
 
 		}
@@ -398,8 +401,8 @@ class coopForm extends CoopObject
 				$this->debugWrap(2);
 			}
 			if($this->page->debug > 2){
-				confessObj($old, 'OLD data');
-				confessObj($this->obj, 'NEW data');
+				confessObj($old, 'CoopForm::update() OLD data');
+				confessObj($this->obj, 'CoopForm::update() NEW data');
 			}
 
 			$this->obj->update($old);
@@ -725,7 +728,7 @@ class coopForm extends CoopObject
 			$ov = $foo->keys();
             // let scrubforsave do the work, instead of duplicatinghere
             foreach($this->scrubForSave($vars) as $key => $val){
-                if(!is_array($this->obj->fb_dupeIgnore) ||
+                if(empty($this->obj->fb_dupeIgnore) ||
                        in_array($key, $this->obj->fb_dupeIgnore))
                 {
                     $scrubbed[$key] = $val;
@@ -762,6 +765,10 @@ class coopForm extends CoopObject
 	// cleans out REQUEST after a save! vital for re-displaying new.
 	function enema($vars)
 		{
+            //brutally squash all submitvars
+            $this->page->vars['last']['submitvars'] = array();
+
+            // now more daintily wipe out the REQUESTS
 			//$ov = $this->obj->keys();
 			$ov = array_keys(get_object_vars($this->obj));
  			foreach($ov as $key){
