@@ -237,6 +237,7 @@ class coopPage
 	//					base="page.php"
     //                  popup if you want it to be a javascript popup)
     //                  and par if you want paragraph separators (default) )
+    //                  host = use http host, for headerlocation
 	// all of which are optional
 	// without any args, returns just coop session var for use in Header()
 	function selfURL($args= false)
@@ -246,11 +247,15 @@ class coopPage
             $base = isset($args['base']) ? $args['base'] :false;
             $popup = isset($args['popup']) ? $args['popup'] :false;
             $par = isset($args['par']) ? $args['par'] :true;
+            $host = isset($args['host']) ? $args['host'] :false;
             $title = isset($args['title']) ? $args['title'] :false;
             //1confessArray($args, 'args');
             
 			if(!$base){
-				$base = $_SERVER['PHP_SELF'];
+                if($host){
+                    $base = 'http://' . $_SERVER['HTTP_HOST'];
+                }
+				$base .= $_SERVER['PHP_SELF'];
 			}
 			 if(($pos = strpos($base, '?')) !== false) {
 				 $base = substr($base, 0, $pos);

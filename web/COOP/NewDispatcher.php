@@ -111,15 +111,16 @@ class CoopNewDispatcher
             $res .= "saving...";
             $res .= $atdf->form->process(array(&$atdf, 'process'));
             // 0-based stack
-            $previous =& $this->page->getPreviousStack();
-            $previous['submitvars'][$previous['table'].'-'.$atdf->pk] = $atdf->id;
-            $this->page->confessArray($previous, 'thevars', 4);
+            if($previous =& $this->page->getPreviousStack()){
+                $previous['submitvars'][$previous['table'].'-'.$atdf->pk] = 
+                    $atdf->id;
+                $this->page->confessArray($previous, 'thevars', 4);
+            }
             // only go back to view if previous state was 'edit'
             if($this->page->vars['last']['action'] == 'edit'){
                 //force it
                 $this->page->vars['last']['action'] = 'view';
-                $this->page->popOff();
-                newDispatcher(&$this->page);
+                // TODO: i can instead, send a POP here with header location!
             } else {
                 //SUCCESSFUL, display a new blank entry
                 $atdf->page->confessArray($this->page->vars['last'], 
@@ -134,9 +135,19 @@ class CoopNewDispatcher
              
                 // XXX bug lurking here. if i want to keep the seeded ID
                 // from the page->vars->last, i got problems here.
-                $this->page->popOff(); 
-                newDispatcher(&$this->page);
             }
+            $res .=  $this->page->selfURL(
+                array('value' => 'Entry was successful! Click here to continue.'));
+            $this->page->buffer($res); // XXX wrong!
+            $this->page->popOff(); 
+            
+            $url = $this->page->selfURL(
+                array('par' => false,
+                      'host' => true,
+                             'inside' => 'refresh'));
+            print $url;
+            header("Location: $url");
+            //print $this->page->flushBuffer();
         } else {
             $res .= $atdf->form->toHTML();
             return $res;

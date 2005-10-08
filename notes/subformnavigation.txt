@@ -1,8 +1,21 @@
 notes on subform navigation, flipping between screens
 
+gah. i have to contend with the DBDO debug shit now
+
+header location does not appear do be doing jack shit
+	use http_host
+	look at it under the microscope
+
+
+
+clean out submitvars after edit/add?
+
+
+
+
+
 time for header:location. seriously
 	redo the whole fucking generic with header:location
-	buffer output in generic. and... that should do it, really.
 
 	time to merge in the shit at request time first!
 		basically, array-merge last

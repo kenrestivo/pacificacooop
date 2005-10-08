@@ -21,7 +21,7 @@ $menu =& new CoopMenu(&$cp);
 $cp->buffer($menu->topNavigation());
 
 
-
+///XXX ok, the table thign is braindead if i'm coming back from a header
 
 ////////////////{{{STACK HANDLING. move to cooppage?
 $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
