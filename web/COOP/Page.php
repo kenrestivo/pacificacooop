@@ -361,6 +361,7 @@ class coopPage
 			}
 			$this->mailError('PEAR error on live site!',
 							 print_r($obj, true));
+            $this->done();
 			exit(1);
 		}
 
@@ -378,7 +379,7 @@ class coopPage
 	function flushBuffer($clean = true)
 		{
 			$res = $this->bufferedOutput;
-			dump("flushing buffered output");
+			dump("flushing buffered output\n");
 			if($clean){
 				ob_end_flush();
 				unset($this->bufferedOutput);
@@ -419,7 +420,8 @@ class coopPage
                                 4);
             $this->confessArray($_SESSION, 
                                 'CoopPage::done() saving SESSION  at END of page');
-            done();
+            print $this->flushBuffer();
+            done(); // the legacy utils.inc version
         }
 
 
@@ -471,6 +473,18 @@ class coopPage
         {
             return array_merge_recursive($_REQUEST, 
                                          $this->vars['last']['submitvars']);
+        }
+
+
+    // NON LOCAL EXIT! basically.
+    function headerLocation($url)
+        {
+            if(headers_sent($file, $line)){
+                PEAR::raiseError("headers already sent! at $file line# $line", 666);
+            }
+            $this->printDebug("redirecting to $url", 1);
+            $this->flushBuffer();
+            header("Location: $url");
         }
 
 

@@ -1,31 +1,9 @@
 notes on subform navigation, flipping between screens
 
-gah. i have to contend with the DBDO debug shit now
-	someone is manually setting debuglevel on the object
-	ah. no. someone is static factory'ing dataobject!
-	AUUGH!! it's EVERYWHERE!
-		the fucking generator! it has ALL the objects extending DB_DataObject
-
-	force debug to 'coopDebug', and don't let the ini override it
-		maybe take the ini file's value and set that to cooppage->debug?
-
-
-
-
-header location does not appear do be doing jack shit
-	use http_host
-	look at it under the microscope
-
-
+test my header location shit!
 
 clean out submitvars after edit/add?
 
-
-
-
-
-time for header:location. seriously
-	redo the whole fucking generic with header:location
 
 	time to merge in the shit at request time first!
 		basically, array-merge last

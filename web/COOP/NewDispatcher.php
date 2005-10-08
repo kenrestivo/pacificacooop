@@ -132,22 +132,15 @@ class CoopNewDispatcher
                     array('value' => 'View',
                           'inside' => array('action' => 'view',
                                             'table' => $atdf->table)));
-             
-                // XXX bug lurking here. if i want to keep the seeded ID
-                // from the page->vars->last, i got problems here.
             }
             $res .=  $this->page->selfURL(
                 array('value' => 'Entry was successful! Click here to continue.'));
             $this->page->buffer($res); // XXX wrong!
             $this->page->popOff(); 
             
-            $url = $this->page->selfURL(
-                array('par' => false,
-                      'host' => true,
-                             'inside' => 'refresh'));
-            print $url;
-            header("Location: $url");
-            //print $this->page->flushBuffer();
+            $this->page->headerLocation($this->page->selfURL(
+                                        array('par' => false,
+                                              'host' => true)));
         } else {
             $res .= $atdf->form->toHTML();
             return $res;
@@ -285,9 +278,13 @@ function confirmDelete()
             $atdf->build($this->page->mergeRequest());
             ;
             $atdf->obj->delete();
-            
-            ///XXX NO. do header location here
-            return $this->view();
+
+            // IMPORTANT! i'm done deleting. set the next action
+            $this->page->vars['last']['action'] = 'view';
+
+            $this->page->headerLocation($this->page->selfURL(
+                                        array('par' => false,
+                                              'host' => true)));
         }
 
 
@@ -400,6 +397,3 @@ function dispatch()
 ////KEEP EVERTHANG BELOW
 
 ?>
-<!-- END NEW COOP DISPATCHER -->
-
-

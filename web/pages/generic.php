@@ -21,24 +21,26 @@ $menu =& new CoopMenu(&$cp);
 $cp->buffer($menu->topNavigation());
 
 
-///XXX ok, the table thign is braindead if i'm coming back from a header
 
 ////////////////{{{STACK HANDLING. move to cooppage?
-$atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
-$formatted = array('table'=>$_REQUEST['table'], 
-                   'action' =>$_REQUEST['action'], 
-                   'id' =>$_REQUEST[$atd->prependTable($atd->pk)],
-                   'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
-                   $cp->vars['last']['realm']);
-
+if($_REQUEST['table']){
+    $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
+    $formatted = array('table'=>$_REQUEST['table'], 
+                       'action' =>$_REQUEST['action'], 
+                       'id' =>$_REQUEST[$atd->prependTable($atd->pk)],
+                       'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
+                       $cp->vars['last']['realm']);
+}
 if(isset($_REQUEST['push'])){
     $cp->printDebug('PUSHING onto the stack!', 1);
     $cp->vars['stack'][] = $cp->vars['last'];
 } 
 
-// ALWAYS use formatted as last. 
-$cp->vars['last'] =  $formatted;
-
+// ALWAYS use formatted as last.... if it exists, that is
+// it won't exist in cases where i'm coming back from a header location
+if($formatted){
+    $cp->vars['last'] =  $formatted;
+}
 
 
 if($sp= $cp->stackPath()){

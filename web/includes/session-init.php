@@ -54,12 +54,17 @@ function
 setupErrors()
 {
 	global $dbhost;
+    global $debug;
 
 	// global error stuff that we'll need
 	$errlevel = E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR ;
 	if($dbhost == 'bc'){ // can't use this crap on nfsn
-		$errlevel = $errlevel | E_USER_WARNING | E_USER_NOTICE;
+		$errlevel = $errlevel | E_USER_WARNING | E_USER_NOTICE | E_NOTICE;
 	}
+    if($debug > 4){
+        $errlevel = $errlevel | E_ALL;
+    }
+
 	error_reporting($errlevel );
 	//error_reporting(0);
 
