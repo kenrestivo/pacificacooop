@@ -2,9 +2,9 @@
 /**
  * Table Definition for territories_families_join
  */
-require_once 'DB/DataObject.php';
+require_once 'CoopDBDO.php';
 
-class Territories_families_join extends DB_DataObject 
+class Territories_families_join extends CoopDBDO 
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */

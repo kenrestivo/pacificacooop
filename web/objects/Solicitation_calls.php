@@ -4,7 +4,7 @@
  */
 require_once 'DB/DataObject.php';
 
-class Solicitation_calls extends DB_DataObject 
+class Solicitation_calls extends CoopDBDO 
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */

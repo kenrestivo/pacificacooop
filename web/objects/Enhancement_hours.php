@@ -5,7 +5,7 @@
 require_once 'DB/DataObject.php';
 require_once 'Enhancement.php';
 
-class Enhancement_hours extends DB_DataObject 
+class Enhancement_hours extends CoopDBDO 
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */

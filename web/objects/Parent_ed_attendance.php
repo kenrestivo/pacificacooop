@@ -4,7 +4,7 @@
  */
 require_once 'DB/DataObject.php';
 
-class Parent_ed_attendance extends DB_DataObject 
+class Parent_ed_attendance extends CoopDBDO 
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */

@@ -4,7 +4,7 @@
  */
 require_once 'DB/DataObject.php';
 
-class Drivers_licenses extends DB_DataObject 
+class Drivers_licenses extends CoopDBDO 
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */

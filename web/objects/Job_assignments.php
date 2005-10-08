@@ -4,7 +4,7 @@
  */
 require_once 'DB/DataObject.php';
 
-class Job_assignments extends DB_DataObject 
+class Job_assignments extends CoopDBDO 
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */

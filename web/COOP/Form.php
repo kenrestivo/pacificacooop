@@ -395,7 +395,7 @@ class coopForm extends CoopObject
 			}
 
 			if($this->page->debug > 1){
-				$this->obj->debugLevel(2);
+				$this->debugWrap(2);
 			}
 			if($this->page->debug > 2){
 				confessObj($old, 'OLD data');
@@ -430,7 +430,7 @@ class coopForm extends CoopObject
 	function insert()
 		{
 			if($this->page->debug > 1){
-				$this->obj->debugLevel(2);
+				$this->debugWrap(2);
 			}
 			$this->obj->insert();
 			$this->id = $this->lastInsertID();
@@ -541,7 +541,7 @@ class coopForm extends CoopObject
 			if(!is_array($this->obj->fb_crossLinks)){
 				return;
 			}
-			//$this->obj->debugLevel(0); 
+			//$this->debugWrap(0); 
 			// for everything in crosslinks, 
 			foreach($this->obj->fb_crossLinks as $la){
 				$tf = $la['toField'];
@@ -580,7 +580,7 @@ class coopForm extends CoopObject
 										  2);
 
 
-				//$this->obj->debugLevel(2);
+				//$this->debugWrap(2);
 				// save
 				if(is_array($toSave)){
 					foreach($toSave as $saveme){

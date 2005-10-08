@@ -4,7 +4,7 @@
  */
 require_once 'DB/DataObject.php';
 
-class Ticket_type extends DB_DataObject 
+class Ticket_type extends CoopDBDO 
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */

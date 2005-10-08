@@ -4,7 +4,7 @@
  */
 require_once 'DB/DataObject.php';
 
-class Auction_purchases extends DB_DataObject 
+class Auction_purchases extends CoopDBDO 
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */

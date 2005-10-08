@@ -4,7 +4,7 @@
  */
 require_once 'DB/DataObject.php';
 
-class Calendar_events extends DB_DataObject 
+class Calendar_events extends CoopDBDO 
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */

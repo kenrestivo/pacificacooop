@@ -2,9 +2,9 @@
 /**
  * Table Definition for families
  */
-require_once 'DB/DataObject.php';
+require_once 'CoopDBDO.php';
 
-class Families extends DB_DataObject 
+class Families extends CoopDBDO
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */

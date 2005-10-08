@@ -4,7 +4,7 @@
  */
 require_once 'DB/DataObject.php';
 
-class Packages extends DB_DataObject 
+class Packages extends CoopDBDO 
 {
 	var $textFields = array ('package_description');
     ###START_AUTOCODE

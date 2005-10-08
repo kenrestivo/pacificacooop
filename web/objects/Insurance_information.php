@@ -4,7 +4,7 @@
  */
 require_once 'DB/DataObject.php';
 
-class Insurance_information extends DB_DataObject 
+class Insurance_information extends CoopDBDO 
 {
     ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
