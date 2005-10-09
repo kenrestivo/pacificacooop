@@ -75,7 +75,7 @@ class coopForm extends CoopObject
 
 			$this->addAndFillVars($vars);
 
-			// my hidden tracking stuff
+            // my hidden tracking stuff
 			if($sid = thruAuthCore($this->page->auth)){
 				$this->form->addElement('hidden', 'coop', $sid); 
 			}
@@ -223,13 +223,15 @@ class coopForm extends CoopObject
                            $fullkey, 
                             'Date must be in format MM/DD/YYYY HH:MM', 
                            'regex', 
-                           '/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s*?((\d{1,2}):(\d{2})(:\d{1,2})*)*\s*(\w{2})*$/');
+                           '/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s*?((\d{1,2}):(\d{2})(:\d{1,2})*)*\s*(\w{2})*$/',
+                           'client');
                         $val && $val = timestamp_db_php($val);
                     }else{
                         $this->form->addRule(
                             $fullkey, 
                             'Date must be in format MM/DD/YYYY', 
-                            'regex', '/^\d{2}\/\d{2}\/\d{2,4}$/');
+                            'regex', '/^\d{2}\/\d{2}\/\d{2,4}$/',
+                            'client');
                         $val && $val = sql_to_human_date($val);
                     }
 
@@ -514,9 +516,11 @@ class coopForm extends CoopObject
 // 					user_error("CoopForm::addRequiredFields($fieldname)", 
 // 							   E_USER_NOTICE);
 					$this->form->addRule(
+                        /// NOTE! this validation does not work server-side
+                        /// must do it client side
                         $this->prependTable($fieldname), 
                         "{$this->obj->fb_fieldLabels[$fieldname]} mustn't be empty.", 
-                        'CustomRequired');
+                        'CustomRequired', NULL, 'client');
 				}
 			}
 			//confessObj($this->form, 'ahc');
