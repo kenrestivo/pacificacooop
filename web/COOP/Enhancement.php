@@ -272,6 +272,3 @@ class Enhancement
 ////KEEP EVERTHANG BELOW
 
 ?>
-<!-- END ENHANCEMENT -->
-
-

@@ -119,6 +119,11 @@ class coopForm extends CoopObject
                     "calling {$this->table}::postgenerateForm", 2);
                 $this->obj->postGenerateForm(&$this->form);
             }
+            
+            $this->page->confessArray($this->form->_rules, 
+                                      'built  rules', 5);
+            $this->page->confessArray($this->form->_formRules, 
+                                      'built  formrules', 5);
 
 			return $this->form;	// XXX not really necessary?
 		}
@@ -340,7 +345,7 @@ class coopForm extends CoopObject
 			
 			$this->enema($vars); // necessary. *sigh*
 					
-			return "<h3>Entry was successful!</h3>";
+			return true;
 		}
 
 
@@ -352,6 +357,11 @@ class coopForm extends CoopObject
 			// hack around nulls
 			foreach($vars as $fullkey => $val){
 				
+                // skip non-full-keys
+                if(!strstr($fullkey, '-')){
+                    continue;
+                }
+
 				// XXX is this the right place to strip off the prefix?
 				list($table, $key) = explode('-', $fullkey);
 
@@ -490,7 +500,7 @@ class coopForm extends CoopObject
 	// the passthrus aren't in here. they should be, arguably tho
 	function addRequiredFields()
 		{
-			if(is_array($this->obj->fb_requiredFields)){
+			if(!empty($this->obj->fb_requiredFields)){
 
 
 				foreach($this->obj->fb_requiredFields as $fieldname){
@@ -718,6 +728,13 @@ class coopForm extends CoopObject
 				return true;	// i'm editing. no dupecheck on edit.
 			}
 
+            // i don't want to even think about dupechecking
+            // if there are other errors, it most CERTAINLY is not a dupe!
+            if(count($this->form->_errors)){
+                return true;
+            }
+
+
 			//TODO check for a dupecheck function in the object, and use that
 			// then revert to this as a default
 			// also check for a list of dupeignore fields. hmm. which easier?
@@ -800,15 +817,21 @@ class coopForm extends CoopObject
     // wrapper so that i can see when it doesn't validate. this is silly
 	function validate()
 		{
-
-			$vals =& $this->form->getSubmitValues();
-			
+            $this->page->confessArray($this->form->_rules, 
+                                      'validate  rules', 5);
+            $this->page->confessArray($this->form->_formRules, 
+                                      'validate  formrules', 5);
+            $this->page->confessArray($this->form->_required, 
+                                      'validate  required fields', 5);
+  
 			$temp  = $this->form->validate(); // FORM!
 			if($temp == false){
-                $this->page->confessArray($this->form->_errors, 
-                                          "CoopForm::validate({$this->table}) didn't validate", 3);
+                $this->page->confessArray(
+                    $this->form->_errors, 
+                    "CoopForm::validate({$this->table}) didn't validate", 3);
 			}
             
+
 
 			return  $temp;
 		}

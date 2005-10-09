@@ -105,50 +105,35 @@ class CoopNewDispatcher
 
         $atdf->addRequiredFields();
 
-        // XXX THIS CLOBBERS PREVIOUS!
+        // XXX THIS CLOBBERS WHATEVER WAS THERE!
         $this->page->vars['last']['submitvars'] = $atdf->form->getSubmitValues();
-        //confessArray($this->page->vars['last'], 'lastHACK');
 
         if ($atdf->validate()) {
-            $res .= "saving...";
             $res .= $atdf->form->process(array(&$atdf, 'process'));
-            // 0-based stack
+            $this->page->vars['result'] = 1; // to display success message
+            // put my saved ID back on the stack for later popping!
             if($previous =& $this->page->getPreviousStack()){
                 $previous['submitvars'][$previous['table'].'-'.$atdf->pk] = 
                     $atdf->id;
-                $this->page->confessArray($previous, 'thevars', 4);
             }
-            // only go back to view if previous state was 'edit'
+            // force back to view if previous state was 'edit'
             if($this->page->vars['last']['action'] == 'edit'){
-                //force it
                 $this->page->vars['last']['action'] = 'view';
-                // TODO: i can instead, send a POP here with header location!
-            } else {
-                //SUCCESSFUL, display a new blank entry
-                $atdf->page->confessArray($this->page->vars['last'], 
-                                          'recursive request before redisplay',
-                                          2);
-                //XXX this is dumb. 
-                $res .= '<p>You may add another below, or click below to go back to viewing</p>';
-                $res .=  $atdf->page->selfURL(
-                    array('value' => 'View',
-                          'inside' => array('action' => 'view',
-                                            'table' => $atdf->table)));
-            }
-            $res .=  $this->page->selfURL(
-                array('value' => 'Entry was successful! Click here to continue.'));
-            $this->page->buffer($res); // XXX wrong!
+            } 
+
             $this->page->popOff(); 
             
             $this->page->headerLocation($this->page->selfURL(
                                         array('par' => false,
                                               'host' => true)));
         } else {
-            $res .= $atdf->form->toHTML();
+             $res .= $atdf->form->toHTML();
             return $res;
         }
     }
 
+
+ 
 
     function details()
         {
@@ -238,6 +223,8 @@ class CoopNewDispatcher
 
 function confirmDelete()
         {
+            //TODO: put on a permissions condom here
+
 
             if($res = $this->bruteForceDeleteCheck()){
                 return $res;
@@ -274,6 +261,9 @@ function confirmDelete()
 
     function delete()
         {
+
+            //TODO: put on a permissions condom here
+
             // hack , but it works. why reinvent the wheel?
             $atdf = new CoopForm(&$this->page, 
                                  $this->page->vars['last']['table'], $none); 

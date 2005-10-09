@@ -1,18 +1,12 @@
 notes on subform navigation, flipping between screens
 
-test my header location shit!
-	AUIUGH! blanks aren't working. i can't delete a field.
-		that is wrong, so wrong.
-
-test/fix confirmdelete and delete
-
-clean out submitvars after edit/add?
+it's not validating dates!!
+	look at rules. wtf is going on??
 
 
-	time to merge in the shit at request time first!
-		basically, array-merge last
-		step through this code in GREAT, BRUTAL DETAIL
-	hmm. use header location
+put in a "entry successful" message.
+
+required dates in babies
 
 
 situations to handle (unit test?):

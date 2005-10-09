@@ -492,6 +492,9 @@ class coopPage
             $this->printDebug("redirecting to $url", 1);
             $this->flushBuffer();
             header("Location: $url");
+            // just in case!
+            printf('<a href="%s">Click here</a> if you are not redirected.', 
+                   $url);
         }
 
 

@@ -278,8 +278,8 @@ human_to_sql_date($dt)
 	}
 	if($dt && preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/", 
 						 $dt, $cleaned) < 1){
-		user_error("human_to_sql_date($dt) was passed an invalid value!!",
-				   E_USER_ERROR);
+		PEAR::raiseError("human_to_sql_date($dt) was passed an invalid value!!",
+                         666);
 	}
 
     // handle non y2k dates
@@ -317,7 +317,7 @@ human_to_sql_timestamp($dt)
 						 $dt, $cleaned) < 1 )
     {
         $err = "human_to_sql_time($dt) was passed an invalid value!!";
-		PEAR::raiseError($err, E_USER_ERROR);
+		PEAR::raiseError($err, 666);
         //user_error($err, E_USER_NOTICE);
 	}
 	//confessArray($cleaned, "human_to_sql_timestamp($dt)");
