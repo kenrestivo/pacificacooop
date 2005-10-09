@@ -110,7 +110,10 @@ class CoopNewDispatcher
 
         if ($atdf->validate()) {
             $res .= $atdf->form->process(array(&$atdf, 'process'));
-            $this->page->vars['result'] = 1; // to display success message
+
+            // to display success message
+            $this->page->vars['last']['result'] = 1; 
+
             // put my saved ID back on the stack for later popping!
             if($previous =& $this->page->getPreviousStack()){
                 $previous['submitvars'][$previous['table'].'-'.$atdf->pk] = 

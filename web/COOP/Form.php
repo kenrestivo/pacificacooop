@@ -502,13 +502,21 @@ class coopForm extends CoopObject
 		{
 			if(!empty($this->obj->fb_requiredFields)){
 
+                $this->form->registerRule('customrequired', NULL, 
+                                          'CustomRequired', 
+                                          'lib/customrequired.php');
+                if(!$this->form->isRuleRegistered('customrequired')){
+                    PEAR::raiseError('customrequired rule did not register',
+                                     666);
+                }
 
 				foreach($this->obj->fb_requiredFields as $fieldname){
 // 					user_error("CoopForm::addRequiredFields($fieldname)", 
 // 							   E_USER_NOTICE);
-					$this->form->addRule($this->prependTable($fieldname), 
-										 "{$this->obj->fb_fieldLabels[$fieldname]} mustn't be empty.", 
-                                         'customrequired');
+					$this->form->addRule(
+                        $this->prependTable($fieldname), 
+                        "{$this->obj->fb_fieldLabels[$fieldname]} mustn't be empty.", 
+                        'CustomRequired');
 				}
 			}
 			//confessObj($this->form, 'ahc');
@@ -818,12 +826,16 @@ class coopForm extends CoopObject
 	function validate()
 		{
             $this->page->confessArray($this->form->_rules, 
-                                      'validate  rules', 5);
+                                      'validate  rules', 4);
             $this->page->confessArray($this->form->_formRules, 
                                       'validate  formrules', 5);
             $this->page->confessArray($this->form->_required, 
                                       'validate  required fields', 5);
   
+            $this->page->confessArray($this->form->getRegisteredRules(), 
+                                      'validate  registeredrules', 4);
+            
+            
 			$temp  = $this->form->validate(); // FORM!
 			if($temp == false){
                 $this->page->confessArray(

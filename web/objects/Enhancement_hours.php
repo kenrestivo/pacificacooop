@@ -70,15 +70,8 @@ class Enhancement_hours extends CoopDBDO
             $par = $this->factory('parents');
             $this->joinAdd($par);
 
-            /// TODO: use constrainfamily and constarinschoolyear!
-            if($co->isPermittedField(NULL) < ACCESS_VIEW ){
-                /// XXX need to check that a familyid exists!
-                $this->whereAdd(sprintf('parents.family_id  = %d', 
-                                $co->page->userStruct['family_id']));
-            }
-            $this->whereAdd(sprintf('school_year = "%s"',
-                                    $co->page->currentSchoolYear));
-            
+            $co->constrainFamily();
+            $co->constrainSchoolYear();
         }
 
 

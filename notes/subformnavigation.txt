@@ -5,8 +5,17 @@ it's not validating dates!!
 
 
 put in a "entry successful" message.
+	now, that's not easy.
+	save result. check result in gaspacho
+		also check result in form-- if add
+	wipe result
 
-required dates in babies
+if i save result in last, then when i pop off, last gets clobbered
+	including its result. shit.
+	unless i save last when i pop off
+
+
+required dates in everywhere
 
 
 situations to handle (unit test?):

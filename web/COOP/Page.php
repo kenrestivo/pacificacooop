@@ -466,10 +466,14 @@ class coopPage
     // destroys vars[last] and replaces it with last on stack
     function &popOff()
         {
+            /// only if there's something there
             if(isset($this->vars['stack']) && count($this->vars['stack'])){
-                $this->confessArray($this->vars, 'popping off of this stack', 1);
+                $this->confessArray($this->vars, 'popping off of this stack', 
+                                    1);
+                //$prev = $this->vars['last']; ///COPY not ref
                 $this->vars['last'] = array_pop($this->vars['stack']);  
             }
+            // the "old", popped last which is now current
             return $this->vars['last'];
         }
     
