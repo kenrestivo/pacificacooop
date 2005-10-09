@@ -40,8 +40,9 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                         parent::toHTML(), // the actual {element}!
                         $cf->page->selfURL(
                             array(
-                                'value' =>sprintf('Add New %s &gt;&gt;',
-                                                  $sub->obj->fb_shortHeader),
+                                'value' =>sprintf(
+                                    'Add New %s &gt;&gt;',
+                                    $this->_parentForm->CoopForm->obj->fb_fieldLabels[$field]),
                                 'par' => false,
                                 'inside' => array('table' => $target,
                                                   'action' => 'add',
