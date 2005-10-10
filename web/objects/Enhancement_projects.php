@@ -25,9 +25,14 @@ class Enhancement_projects extends CoopDBDO
     ###END_AUTOCODE
 	
 	var $fb_linkDisplayFields = array ('project_name');
+    
+ 	var $fb_fieldLabels = array ('project_name' => 'Name of Project' ,
+                                 'project_description' => 'Project Notes' ,
+                                 'project_complete' => 'Project Completed on');
 
     
     var $fb_shortHeader = 'Projects';
+    var $fb_formHeaderText = 'Enhancement Projects';
     
     var $fb_requiredFields = array(
         'project_name'
