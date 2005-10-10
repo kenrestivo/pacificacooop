@@ -1,74 +1,28 @@
 notes on subform navigation, flipping between screens
 
 
-required dates in everywhere
-
-situations to handle (unit test?):
-	from a subform, after saving, i need to grab the pk of the CURRENT obj
-		and insert it into the SOURCE object retroactively
-			the submitvars of the backstack item?
-		last array (hack it: count)
-		put this in process.
-		this is a pop, and at pop time generic needs to pull off any old values
-			and deposit them into build, merge them
-			tricky thing is going to be deciding which are new
-				i.e. you don't want to merge if it's a NEW
-					enema the old one?
-	from details, inject the pk of the SOURCE object,
-		WHERE?
-		to be used as the default value of a popup
-		then do a push
-	anything else???!
-
-
-in general i'll need to enema last, not just request.
-	header location won't help
-
-then, save the value of vars at push time
+make the push a button, or a javascript submit
+	look at my old subform patch?
+	then, save the value of vars at push time
 	change my link to a javascript submit or a actual button
 		see the old subform shit for reference
 	save submitvars into last, then do the PUSH!
 		where to do this?! right now i do push nowhere near form
 		save them into last-pushed stack?
-
-
-
-ok, push is stupid.
-	instead, directly inject the values... somewhere
-	for back-filling, inject into last on stack
-	for forward-filling (i.e. from details)... what should i do??
-		this is the override question
-		i can't override if i have popped. ONLY if push!!
-
-test with views, details. make that work
-	ok, i push, but...
-	pushed ID is not getting used, despite the fact that REQUEST is getting fed
-	perhaps push should stick the stuff into last?
-
-
-make the push a button, or a javascript submit
-	look at my old subform patch?
-
-
+  save the status of what i was working on!
+  	instead of a link, make the push button a submit with a temp set
+  		only exportvalues? or submitvars (note the crosslinks!)
+  	don't validate if i am saving!
+  
+  
 stack stuff
 	i can get a constipated stack. how to cleanse?
 
 
-
-
 well first of all, THE VIEW/DETAILS SHOUDL PUSH!
-	the actionbuttons (not recordbuttons) should all be pushers.
+	the recordbuttons (not actiondbuttons) should all be pushers.
 		EXCEPT when they're on their own page, i.e. at top
-
-
-first, simple step:
-	do NOT use REQUEST for anything except form
-	everything else, use last	
-	work the bugs outta that first
-	i gotta deal with form. how?
-		if it's a pop
-			feed coopform the merged request and history, if applicable
-			basically, use the old stuff, but for each, override with any new
+	wait, why not actionbuttons too? if they are in a details view!
 
 
 
@@ -79,47 +33,20 @@ first, simple step:
 		i also need to save my FORM VARS
 			how to do that? it's a selfurl... it's not a save
 				make it a save button then
-	if no push, i look on stack
-		if there's something there, i pop that and save those into last
-		and last is what i then use instead of request
-
-
-	if there is anything on the stack, use that INSTEAD OF REQUEST!
-		handling auto-fillign the added sub-added item will be interesting
-			maybe let it override?
-		hmm. i can put something in as REQUEST[cpvars][thing] and it'll merge
-			there are a couple places i need that
-				requestorsession() too
-
-
-
-header location
-
-i can now go bopping around to different things!
-	at page load, if there is anything on the stack, pop it, use that
-
-
-	at validate time, simulate a page load, remember i'm not using header
-	how to deal with edit? i'll have an id in there. will it be on the stack?
-
-
-
-	aha. it doesn't push the LAST one, just the CURRENT onw
-
-
 
 
 
 
 
 	might even have a cool javascript edit thing, to go EDIT one that is shown
+		in a popup. then come back.
+			s/b easy, actually.
+
 	hmm, i have to know what table i came from if i'm going to push
 	put "push" into ALL menu and recordbuttons IFF there is a parencot
 
 
 	this is pretty straightforwards for views, which only go one way
-
-	qf issues:
 
 
 

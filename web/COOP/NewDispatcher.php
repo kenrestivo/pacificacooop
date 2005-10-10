@@ -106,6 +106,7 @@ class CoopNewDispatcher
         $atdf->addRequiredFields();
 
         // XXX THIS CLOBBERS WHATEVER WAS THERE!
+        // also, shouldn't i use exportValues(), to get only thos in the QF?
         $this->page->vars['last']['submitvars'] = $atdf->form->getSubmitValues();
 
         if ($atdf->validate()) {

@@ -541,19 +541,30 @@ class coopForm extends CoopObject
                                                  'setDefaults: coop page');
 
             // gah. have to prepend table here
-
-            $prepended[$this->prependTable('school_year')] = 
-                $this->page->currentSchoolYear;
+            // my two special cases: shcoolyear and family
+            if($this->form->elementExists($this->prependTable('school_year'))
+               && !$this->form->exportValue($this->prependTable('school_year')))
+            {
+                $prepended[$this->prependTable('school_year')] = 
+                    $this->page->currentSchoolYear;
+            }
             
-            // XXX DUH! otherwise it won't let a new family go in there.
-            if($this->pk != 'family_id'){
+            // DUH! otherwise it won't let a new family go in there.
+            if($this->pk != 'family_id' && 
+               $this->form->elementExists($this->prependTable('family_id')) &&
+               !$this->form->exportValue($this->prependTable('family_id')))
+            {
                 $prepended[$this->prependTable('family_id')] = 
                     $this->page->userStruct['family_id'];
             }
             
-            //NOTE this overrides the above
+            //NOTE this overrides the above. but defers to submit/set vars
 			foreach($this->obj->fb_defaults as $key => $val){
-				$prepended[$this->prependTable($key)] = $val;
+                if($this->form->elementExists($this->prependTable($key)) 
+                   && !$this->form->exportValue($this->prependTable($key)))
+                {            
+                    $prepended[$this->prependTable($key)] = $val;
+                }
 			}
             $this->page->confessArray($prepended, 
                                       "CoopForm::setDefaults({$this->table}))", 
@@ -719,15 +730,16 @@ class coopForm extends CoopObject
 										$far->title(),
 										$options);
                 // XXX THIS IS TOTALLY BROKEN IN MY NEW last[] thing!
- 				$el->setValue($this->isSubmitted ? $vars[$tf] : $incl);
+ 				$el->setValue($this->isSubmitted() ? $vars[$tf] : $incl);
 				
 			}
 		}
 
 	function isSubmitted()
 		{
-            // XXX use $vars not _REQUEST
-			return isset($_REQUEST['_qf__' . $this->form->_attributes['name']]);
+            // use $vars not _REQUEST
+            $sv= $this->form->getSubmitValues();
+			return isset($sv['_qf__' . $this->form->_attributes['name']]);
 		}
 
 	function legacyPassThru()

@@ -43,7 +43,6 @@ class Parents extends CoopDBDO
 
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
 
-
 	function fb_linkConstraints(&$co)
 		{
 
