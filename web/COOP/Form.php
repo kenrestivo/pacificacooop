@@ -521,11 +521,15 @@ class coopForm extends CoopObject
 // 					user_error("CoopForm::addRequiredFields($fieldname)", 
 // 							   E_USER_NOTICE);
 					$this->form->addRule(
-                        /// NOTE! this validation does not work server-side
-                        /// must do it client side
                         $this->prependTable($fieldname), 
                         "{$this->obj->fb_fieldLabels[$fieldname]} mustn't be empty.", 
                         'CustomRequired', NULL, 'client');
+                    // NOTE! must do regular required *AND* custom required
+                    // customrequired doesn't "qualify" as a required
+					$this->form->addRule(
+                        $this->prependTable($fieldname), 
+                        "{$this->obj->fb_fieldLabels[$fieldname]} mustn't be empty.", 
+                        'required');
 				}
 			}
 			//confessObj($this->form, 'ahc');

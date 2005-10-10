@@ -39,10 +39,10 @@ class CustomRequired extends HTML_QuickForm_Rule_Required
     {
         //PEAR::raiseError('why isntthis getting callled??!', 111);
 		if($value == '' || (is_numeric($value) && $value < 1)){
-            user_error("HEY [$value] is EMPTY", E_USER_NOTICE);
+            //user_error("HEY [$value] is EMPTY", E_USER_NOTICE);
             return false;
         }
-        user_error("HEY [$value] is NOT EMPTY", E_USER_NOTICE);
+        //user_error("HEY [$value] is NOT EMPTY", E_USER_NOTICE);
         return true;
     } // end func validate
 
