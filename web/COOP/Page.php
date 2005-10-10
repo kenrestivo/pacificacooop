@@ -444,12 +444,10 @@ class coopPage
 
             foreach($this->vars['stack'] as $stack){
                 $co =& new CoopObject(&$this, $stack['table'], &$this);
-                foreach($stack as $var => $val){
-                    // arrays aren't allowed in selfurl!
-                    if(!is_string($val)){
-                        unset($stack[$var]);
-                    }
-                }
+//TODO: add a title (can i do that without a link?) with the concatlink
+//                 if(is_numeric($stack['id']){
+//                     $co->get($stack['id']);
+//                 }
                 $res[] = sprintf('%s %s',
                                  $co->actionnames[$stack['action']],
                                  $co->obj->fb_shortHeader ? 
@@ -521,6 +519,7 @@ class coopPage
             // just in case!
             printf('<a href="%s">Click here</a> if you are not redirected.', 
                    $url);
+            $this->done();
         }
 
 

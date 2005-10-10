@@ -71,10 +71,11 @@ if(!$cp->vars['last']['table']){
     if(devSite()){
         PEAR::raiseError('unspecified table', 555);
     }
-    $cp->buffer($cp->selfURL(array('value' =>'Unspecified table. Go back to home.', 
-                             'inside' =>'nothing', 
-                             'base' =>'index.php')));
-    $cp->done();
+    $cp->headerLocation(
+                $this->page->selfURL(
+                    array('par' => false,
+                          'host' => true,
+                          'value'=> 'Unspecified table. Go back to home.')));
 }
 
 if(empty($atd)){

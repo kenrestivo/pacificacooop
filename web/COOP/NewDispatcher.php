@@ -127,9 +127,9 @@ class CoopNewDispatcher
             $this->page->vars['last']['result'] = 1; 
 
             
-            $this->page->headerLocation($this->page->selfURL(
-                                        array('par' => false,
-                                              'host' => true)));
+            $this->page->headerLocation(
+                $this->page->selfURL(array('par' => false,
+                                           'host' => true)));
         } else {
              $res .= $atdf->form->toHTML();
             return $res;
