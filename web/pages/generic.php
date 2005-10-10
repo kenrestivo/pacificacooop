@@ -22,11 +22,15 @@ $cp->buffer($menu->topNavigation());
 
 
 
+
 ////////////////{{{STACK HANDLING. move to cooppage?
 if(!empty($_REQUEST['table'])){
     $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
     $formatted = array('table'=>$_REQUEST['table'], 
-                       'action' =>$_REQUEST['action'], 
+                       'action' =>$_REQUEST['action'] ? 
+                       $_REQUEST['action'] : 
+                       'view', 
+                       'pop' =>$_REQUEST['pop'], 
                        'id' =>$_REQUEST[$atd->prependTable($atd->pk)],
                        'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
                        $cp->vars['last']['realm']);
@@ -42,10 +46,22 @@ if(!empty($formatted)){
     $cp->vars['last'] =  $formatted;
 }
 
-
-if($sp= $cp->stackPath()){
-   $cp->buffer("<p>YOUR NAVIGATION: $sp</p>");
+/// XXX this is wrong. last should EQUAL request at this stage!
+if(isset($cp->vars['last']['pop']) || isset($_REQUEST['pop'])){
+    $prev = $cp->popOff();
 }
+
+/// XXX i think this is the WRONG place for this
+if($sp= $cp->stackPath()){
+   $cp->buffer(sprintf('<p>Navigation: %s %s</p>',
+                       $sp, 
+                       $cp->selfURL(
+                           array('value'=>'Go Back',
+                                 'par' => false,
+                                 'inside' => array(
+                                     'pop' => 'true')))));
+}
+
 
 //////////////}}} END STACK HANDLING
 

@@ -1,6 +1,18 @@
 notes on subform navigation, flipping between screens
 
 
+put in a "entry successful" message.
+	now, that's not easy.
+	save result. check result in gaspacho
+		also check result in form-- if add
+	wipe result
+    if i save result in last, then when i pop off, last gets clobbered
+    	including its result. shit.
+    	unless i save last when i pop off
+			maybe i don't pop off! i do it automatically at reload time?
+
+
+
 make the push a button, or a javascript submit
 	look at my old subform patch?
 	then, save the value of vars at push time

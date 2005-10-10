@@ -105,7 +105,7 @@ class coopForm extends CoopObject
                     $this->page->selfURL(
                         array('value' => 'Cancel',
                               'inside' => array(
-                                  'table' => $this->table))));
+                                  'pop' => $this->table))));
 			}
 
 			$this->form->applyFilter('__ALL__', 'trim');

@@ -112,8 +112,6 @@ class CoopNewDispatcher
         if ($atdf->validate()) {
             $res .= $atdf->form->process(array(&$atdf, 'process'));
 
-            // to display success message
-            $this->page->vars['last']['result'] = 1; 
 
             // put my saved ID back on the stack for later popping!
             if($previous =& $this->page->getPreviousStack()){
@@ -122,10 +120,12 @@ class CoopNewDispatcher
             }
             // force back to view if previous state was 'edit'
             if($this->page->vars['last']['action'] == 'edit'){
-                $this->page->vars['last']['action'] = 'view';
+                $this->page->vars['last']['pop'] = $atdf->table; 
             } 
+            
+            // to display success message
+            $this->page->vars['last']['result'] = 1; 
 
-            $this->page->popOff(); 
             
             $this->page->headerLocation($this->page->selfURL(
                                         array('par' => false,
@@ -275,8 +275,9 @@ function confirmDelete()
             ;
             $atdf->obj->delete();
 
-            // IMPORTANT! i'm done deleting. set the next action
-            $this->page->vars['last']['action'] = 'view';
+            // to display success message
+            $this->page->vars['last']['result'] = 1; 
+            $this->page->vars['last']['pop'] = $atdf->table; 
 
             $this->page->headerLocation($this->page->selfURL(
                                         array('par' => false,

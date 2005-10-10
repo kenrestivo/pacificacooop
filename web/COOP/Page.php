@@ -296,6 +296,10 @@ class coopPage
 			if($inside){
 				if(is_array($inside)){
 					foreach($inside as $var => $val){
+                        if(is_array($val)){
+                            // non fatal
+                            $this->mailError("$var value is an array");
+                        }
 						$pairs[] = sprintf('%s=%s', $var, 
 										   htmlentities($val));
 					}
@@ -317,7 +321,7 @@ class coopPage
 		}
 
 
-	function mailError($subject, $body)
+	function mailError($subject, $body = 'no body')
 		{
 
 			$body .= sprintf("\n\n--- BACKTRACE--\n%s", 
@@ -440,15 +444,20 @@ class coopPage
 
             foreach($this->vars['stack'] as $stack){
                 $co =& new CoopObject(&$this, $stack['table'], &$this);
-                $res[] = $this->selfURL(
-                    array('value' =>$co->obj->fb_shortHeader ? 
-                                              $co->obj->fb_shortHeader : 
-                          $co->table,
-                          'inside' => $stack,
-                          'par' => false,
-                          'base' => $co->obj->usePage));
+                foreach($stack as $var => $val){
+                    // arrays aren't allowed in selfurl!
+                    if(!is_string($val)){
+                        unset($stack[$var]);
+                    }
+                }
+                $res[] = sprintf('%s %s',
+                                 $co->actionnames[$stack['action']],
+                                 $co->obj->fb_shortHeader ? 
+                                 $co->obj->fb_shortHeader : 
+                                 $co->table);
+
             }
-            return count($res) ? '': implode('&gt; ', $res);
+            return count($res) ? implode(' &gt; ', $res) : '';
             
         }
 
@@ -464,17 +473,21 @@ class coopPage
 
 
     // destroys vars[last] and replaces it with last on stack
-    function &popOff()
+    // returns a copy of what was clobbered, or nothing if nothing popped
+    function popOff()
         {
             /// only if there's something there
             if(isset($this->vars['stack']) && count($this->vars['stack'])){
-                $this->confessArray($this->vars, 'popping off of this stack', 
-                                    1);
-                //$prev = $this->vars['last']; ///COPY not ref
+                $this->confessArray(
+                    $this->vars, 
+                    'popping off of the stack (replacing last with stack[0])', 
+                    1);
+                ///COPY not ref, the old one i'm about to clobber
+                $prev = array_reverse(array_reverse($this->vars['last'])); 
                 $this->vars['last'] = array_pop($this->vars['stack']);  
+                return $prev;
             }
-            // the "old", popped last which is now current
-            return $this->vars['last'];
+            return; // return nothing if i didn't pop anything.
         }
     
     function mergeRequest()

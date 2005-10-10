@@ -497,6 +497,7 @@ class coopView extends CoopObject
 						'inside' => array( 
 							'action' => $action,
 							'table' => $this->table,
+							'push' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}),
                               'base' =>!empty($this->obj->fb_usePage) ? 
@@ -540,6 +541,14 @@ class coopView extends CoopObject
                 if($permitted < $needlevel) {
                     continue;
                 }
+                
+                // skip current action
+                if($action == $this->page->vars['last']['action'] &&
+                    $this->table == $this->page->vars['last']['table'])
+                {
+                    continue;
+                }
+                
                 $in = array( 
                     'action' => $action,
                     'table' => $this->table);
@@ -552,11 +561,8 @@ class coopView extends CoopObject
                         $this->obj->{$par->pk};
                 }
 
-                if(!$this->isTop()){
-                    $in['push'] = $this->table;
-                }
-                
-                
+                $in['push'] = $this->table;
+                                
                 $res .= $this->page->selfURL(
                     array(
                         'value' =>$this->actionnames[$action], 
