@@ -282,7 +282,6 @@ group by user_id,table_name,field_name";
             if (DB::isError($data)) {
                 die($data->getMessage());
             }
-            $this->id = $data;
             return $data;
         }
 

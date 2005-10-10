@@ -57,7 +57,7 @@ class CoopNewDispatcher
             
             if(is_callable(array($atd2->obj, 'fb_display_summary'))){
                 $atd2->page->printDebug('calling callback for summary', 2);
-                $res .= $atd2->obj->fb_display_summary(&$atd2);
+                $res .= '<p>' . $atd2->obj->fb_display_summary(&$atd2) . '</p>';
             }
             if(is_callable(array($atd2->obj, 'fb_display_alert'))){
                 $atd2->page->printDebug('calling callback for alert', 2);

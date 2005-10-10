@@ -143,7 +143,8 @@ class coopForm extends CoopObject
 			foreach($this->obj->toArray() as $key => $dbval){
 				// deal with tablenamign these thigns
 				$fullkey = $this->prependTable($key);
-
+                $this->page->printDebug(
+                    "--- starting addandfillvars for $fullkey--", 4);
 
                 $perms = $this->isPermittedField($key, !$this->id, !$this->id);
 
@@ -154,6 +155,8 @@ class coopForm extends CoopObject
 				if(isset($vars[$fullkey])){ 
 					// setting from USER INPUT
 					// what does QF do to pre-process?
+                    $this->page->printDebug(
+                        "CoopForm::addandfillvars() setting [$fullkey] to [{$vars[$fullkey]}] from user input vars passed to build()",  4);
 					$val = strtr($vars[$fullkey], $trans_tbl);  
 				} else {
 					// setting from SQL DATABASE VALUES
@@ -173,33 +176,32 @@ class coopForm extends CoopObject
 					continue;
 				}
 
-				if(is_array($this->obj->fb_preDefElements) && 
-				   in_array($key, array_keys($this->obj->fb_preDefElements))){
+				if(!empty($this->obj->fb_preDefElements) && 
+				   in_array($key, array_keys($this->obj->fb_preDefElements)))
+                {
 					$el =& $this->obj->fb_preDefElements[$key];
 					$this->form->addElement(&$el);
 					$el->setName($fullkey); 
 				} else if($this->isLinkField($key)) {
-                    $type = (!is_array($this->obj->fb_addNewLinkFields) ||
+                    $type = (empty($this->obj->fb_addNewLinkFields) ||
                              in_array($key, $this->obj->fb_addNewLinkFields)) 
                         ? 'customselect' : 'select';
-                    //$type = 'select';  // XXX FORCE until i square shit away
                     $el =& $this->form->addElement(
                         $type, 
                         $fullkey, false, 
                         $this->selectOptions($key));
                     $el->_parentForm =& $this->form;
 						
-				} else if(is_array($this->obj->fb_textFields) &&
+				} else if(!empty($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{
-                    $cols = (is_array($this->obj->fb_sizes) &&
-                             !empty($this->obj->fb_sizes[$key])) ?
+                    $cols = !empty($this->obj->fb_sizes[$key]) ?
                         $this->obj->fb_sizes[$key] : 40;
 					$el =& $this->form->addElement('textarea', 
                                                    $fullkey, false, 
                                                    array('rows' => 10,  //??
                                                          'cols' => $cols));
-				} else if(is_array($this->obj->fb_enumFields) &&
+				} else if(!empty($this->obj->fb_enumFields) &&
 						  in_array($key, $this->obj->fb_enumFields))
 				{
 					$el =& $this->form->addElement('select', $fullkey, false, 
@@ -211,7 +213,7 @@ class coopForm extends CoopObject
 											 $this->getSchoolYears($val));
 
 
-				} else if(is_array($this->obj->fb_booleanFields) &&
+				} else if(!empty($this->obj->fb_booleanFields) &&
 						  in_array($key, $this->obj->fb_booleanFields))
 				{
 					$el =& $this->form->addElement('advcheckbox', $fullkey);
@@ -255,6 +257,9 @@ class coopForm extends CoopObject
 				
 				
 				// finally, pas through default or editable vals
+                $this->page->printDebug(
+                    'addandfillvars() calling '. $el->getName() .
+                    "->setvalue($val)", 2);
 				$el->setValue($val);
 
 				if(is_array($this->obj->fb_userEditableFields) &&
@@ -713,8 +718,8 @@ class coopForm extends CoopObject
 										$longtf,
 										$far->title(),
 										$options);
-                // XXX use $vars not _REQUEST
- 				$el->setValue($this->isSubmitted ? $_REQUEST[$tf] : $incl);
+                // XXX THIS IS TOTALLY BROKEN IN MY NEW last[] thing!
+ 				$el->setValue($this->isSubmitted ? $vars[$tf] : $incl);
 				
 			}
 		}

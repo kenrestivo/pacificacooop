@@ -480,10 +480,19 @@ class coopPage
     function mergeRequest()
         {
             if(empty($this->vars['last']['submitvars'])){
+                $this->printDebug(
+                    'CoopPage::mergeRequest(): nothing in submitvars! usign request', 2);
                 return $_REQUEST;
             }
-            return array_merge_recursive($_REQUEST, 
+            $this->confessArray($this->vars['last']['submitvars'], 
+                                'CoopPage::mergeRequest() submitvars', 4);
+            $this->confessArray($_REQUEST, 
+                                'CoopPage::mergeRequest() REQUEST', 4);
+            $merged = array_merge_recursive($_REQUEST, 
                                          $this->vars['last']['submitvars']);
+            $this->confessArray($merged, 
+                                'CoopPage::mergeRequest() MERGED', 4);
+            return $merged;
         }
 
 

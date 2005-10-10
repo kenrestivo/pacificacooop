@@ -24,6 +24,8 @@ fb_extraDetails = array('path:to:other:details', 'path:to:more:details')
     // basically, backlinked tables i want to display
 fb_allYears = 0/1 // show all years by default in schoolyearchooser
 fb_noHTML = 0/1  // use text, not html
+fb_addNewLinkFields = array() of fields that i want "ADD NEW>>" subforms for
+                        if nothing in here, all linkfields will be addnew
 
 in coopview
 fullText (do not truncate longtextfields)
