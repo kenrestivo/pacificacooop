@@ -16,6 +16,7 @@ class Audit_trail extends CoopDBDO
     var $audit_user_id;                   // int(32)  
     var $updated;                         // timestamp(19)  not_null unsigned zerofill binary timestamp
     var $details;                         // blob(16777215)  blob
+    var $email_sent;                      // int(1)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

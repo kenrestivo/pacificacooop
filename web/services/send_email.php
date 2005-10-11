@@ -173,10 +173,11 @@ class EmailChanges
         }
 
     // saves flag in audit trail, showing that the email was in fact sent.
-    function emailDone()
+    function saveStatus()
         {
+            $old = $this->audit_co->obj;
             $this->audit_co->obj->email_sent = 1;
-            $this->audit_co->obj->update();
+            $this->audit_co->obj->update($old);
         }
     
 } // END SENDEMAIL CLASS
@@ -314,8 +315,8 @@ while($sub->obj->fetch()){
 
 }
 
-$em->emailDone();
-
+$em->saveStatus();
+print "<p>--- DONE---</p>";
 
 ////KEEP EVERTHANG BELOW
 
