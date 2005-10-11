@@ -62,6 +62,21 @@ class EmailChanges
             
         }
 
+
+    // returns TRUE if this is a valid audit,
+    // FALSE if email has already been sent
+    // other sanity checks may (should!) be added here later
+    function sanityCheck()
+        {
+            if($this->audit_co->obj->email_sent){
+                printf("<p>THIS AUDIT %d HAS ALREADY BEEN EMAILED! skipping.</p>",
+                       $this->audit_co->obj->{$this->audit_co->pk});
+                return false;
+            }
+            return true;
+        }
+
+
     function mailIt($to)
         {
             $user =& $this->audit_co->obj->getLink('audit_user_id');
@@ -176,6 +191,11 @@ $cp = new coopPage( $debug);
 /// THIS IS ONLY A HACK TO GET THE TABLENAME!
 $em =& new EmailChanges (&$cp);
 $em->get($_REQUEST['audit_id']);
+
+/// put on the condom!
+if(!$em->sanityCheck()){
+    exit(1);
+}
 
 $sub =& new CoopObject(&$cp, 'subscriptions', &$nothing);
 $sub->obj->query(
