@@ -87,16 +87,13 @@ class CoopNewDispatcher
     function add_edit()
         {
             $res = '';
-            $this->page->confessArray(
-                $this->page->vars, 
-                'CoopNewDispatcher::add_edit() vars prior to merge', 4);
 
             // NOT the coopView above!
             $atdf = new CoopForm(&$this->page, 
                                  $this->page->vars['last']['table'], $none); 
 
 
-            $atdf->build($this->page->mergeRequest());
+            $atdf->build($this->page->mergeRequest(&$atdf));
 
 
             // ugly assthrus for my cheap newDispatcher

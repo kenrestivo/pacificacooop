@@ -45,7 +45,7 @@ class Audit_trail extends CoopDBDO
     var $fb_displayCallbacks = array('details' => 'formatChanges',
                                      'table_name' => 'useLabel');
 
-    function fb_display_details(&$co)
+    function FOOfb_display_details(&$co)
         {
             //XXX move this to a session var or somethign. or provide a chooser
             $limit = $_REQUEST['limit'] ? $_REQUEST['limit'] : 20;
@@ -264,6 +264,7 @@ class Audit_trail extends CoopDBDO
 
     function summarizeLink(&$co, $val, $key)
         {
+
             //WARNING this can really suck if you change table names!!
             // you must run the update if needed
             $sub =& new CoopObject(&$co->page, $this->table_name, &$co);

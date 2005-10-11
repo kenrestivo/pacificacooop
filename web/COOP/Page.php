@@ -488,7 +488,10 @@ class coopPage
             return; // return nothing if i didn't pop anything.
         }
     
-    function mergeRequest()
+    // the lastco is the coopobject(coopform) of the last['table']
+    // i've already dedided what table to use well before calling mergerequest
+    // last['table'] takes precedence over verything. it's magickal.
+    function mergeRequest(&$lastco)
         {
             if(empty($this->vars['last']['submitvars'])){
                 $this->printDebug(
@@ -503,6 +506,15 @@ class coopPage
                                          $this->vars['last']['submitvars']);
             $this->confessArray($merged, 
                                 'CoopPage::mergeRequest() MERGED', 4);
+
+            // let the last id override! for edits.
+            if($this->vars['last']['id'] && 
+               !$merged[$lastco->prependTable($lastco->pk)])
+            {
+                $merged[$lastco->prependTable($lastco->pk)] = 
+                $this->vars['last']['id'];
+            }
+
             return $merged;
         }
 
