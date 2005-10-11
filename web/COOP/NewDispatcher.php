@@ -31,7 +31,7 @@ require_once('CoopForm.php');
 class CoopNewDispatcher
 {
 	var $page;  				// cached coopPage object
-    var $previous_status; // cache of previous 'last' in case of popoff
+
 
 	function CoopNewDispatcher(&$page)
 		{

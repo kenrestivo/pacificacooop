@@ -107,7 +107,6 @@ $cp->buffer("\n<hr></div><!-- end header div -->\n"); //ok, we're logged in. sho
 $cp->buffer('<div id="centerCol">');
 
 $disp =& new CoopNewDispatcher(&$cp);
-$disp->previous_status =& $prev;
 $cp->buffer($disp->dispatch());
 print $cp->flushBuffer();
 
