@@ -45,7 +45,7 @@ class Audit_trail extends CoopDBDO
     var $fb_displayCallbacks = array('details' => 'formatChanges',
                                      'table_name' => 'useLabel');
 
-    function FOOfb_display_details(&$co)
+    function BORKENfb_display_details(&$co)
         {
             //XXX move this to a session var or somethign. or provide a chooser
             $limit = $_REQUEST['limit'] ? $_REQUEST['limit'] : 20;

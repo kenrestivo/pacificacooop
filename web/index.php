@@ -100,7 +100,9 @@ foreach($menu->alertme as $table){
 print "\n</table>\n\n";
 
 
-
+///XXX every visit to home page wipes out the whole stack
+///i suspect this is a bad idea, but it beats confusing people
+$cp->initStack();
 
 ///////////////////////
 

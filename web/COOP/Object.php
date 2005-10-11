@@ -812,6 +812,28 @@ function triggerNotices($audit_id)
           return $top->table == $this->table;
         }
 
+    // joinobj is a  ccopobject object! 
+    // you'll need this to make linkconstraints coexist with extradetails
+    // XXX it checks interal DBDO variables like _join. DANGEROUS!
+    function protectedJoin(&$joinco)
+        {
+            if(strstr($this->obj->_join, $joinco->table)){
+                $this->page->printDebug(
+                    sprintf('protectedJoin(%s) already contains join for %s, skipping',
+                            $this->table, 
+                            $joinco->table),
+                    2);
+                return;
+            }
+            $this->page->printDebug(
+                sprintf('protectedJoin(%s)  joining for %s',
+                        $this->table, 
+                        $joinco->table),
+                1);
+
+            $this->obj->joinAdd($joinco->obj);
+        }
+
 
 } // END COOP OBJECT CLASS
 

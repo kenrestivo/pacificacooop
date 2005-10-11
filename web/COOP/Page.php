@@ -487,9 +487,18 @@ class coopPage
             }
             return; // return nothing if i didn't pop anything.
         }
+
+    // cleans off teh whole stack
+    function initStack()
+        {
+            $this->printDebug('initialising stack', 2);
+            $this->vars['stack'] = array();
+        }
+
     
     // the lastco is the coopobject(coopform) of the last['table']
     // i've already dedided what table to use well before calling mergerequest
+    // XXX so move this to a coopobj or dispatcher, turn $lastco to $this!
     // last['table'] takes precedence over verything. it's magickal.
     function mergeRequest(&$lastco)
         {

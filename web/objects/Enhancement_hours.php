@@ -66,9 +66,8 @@ class Enhancement_hours extends CoopDBDO
 
     function fb_linkConstraints(&$co)
         {
-            //TODO: make the schoolyear chooser happen here
-            $par = $this->factory('parents');
-            $this->joinAdd($par);
+            $par = new CoopObject(&$co->page, 'parents', &$co);
+            $co->protectedJoin($par);
 
             $co->constrainFamily();
             $co->constrainSchoolYear();
