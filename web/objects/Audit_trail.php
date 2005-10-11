@@ -14,7 +14,7 @@ class Audit_trail extends CoopDBDO
     var $table_name;                      // string(255)  
     var $index_id;                        // int(32)  
     var $audit_user_id;                   // int(32)  
-    var $updated;                         // timestamp(19)  not_null unsigned zerofill binary timestamp
+    var $updated;                         // datetime(19)  not_null binary
     var $details;                         // blob(16777215)  blob
     var $email_sent;                      // int(1)  
 

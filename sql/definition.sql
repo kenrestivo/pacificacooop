@@ -60,7 +60,7 @@ CREATE TABLE audit_trail (
   table_name varchar(255) default NULL,
   index_id int(32) default NULL,
   audit_user_id int(32) default NULL,
-  updated timestamp(14) NOT NULL,
+  updated datetime NOT NULL,
   details longtext,
     email_sent tinyint(1),
   PRIMARY KEY  (audit_trail_id),

@@ -59,6 +59,13 @@ class Blog_entry extends CoopDBDO
             $el->setCols(80);
         }
 
+
+//     function linkConstraints(&$co)
+//         {
+//             $aud =& $this->factory('audit_trail');
+//             $this->orderBy('updated desc');
+//         }
+
     function fb_display_summary(&$co, $publiconly = false)
         {
             if($co->page->auth['token'] && !$publiconly){

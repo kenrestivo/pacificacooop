@@ -1,9 +1,8 @@
 
 --- do it
 
--- add to reports, enhancement-summry
+-- add to reports, enhancement-summry DONE?
 
 alter table audit_trail add column     email_sent tinyint(1);
-update audit_trail set email_sent = 1;
-
+alter table audit_trail change column updated updated datetime NOT NULL;
 

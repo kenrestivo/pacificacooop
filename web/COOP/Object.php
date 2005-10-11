@@ -323,7 +323,11 @@ group by user_id,table_name,field_name";
                 $aud->obj->details = serialize($this->changes);
             }
 
+            $aud->obj->updated = date('Y-m-d H:i:s');
+
 			$aud->obj->audit_user_id = $this->page->auth['uid'];
+
+            $aud->debugWrap(2);
 			$aud->obj->insert();
             
             $this->triggerNotices($this->lastInsertID());
