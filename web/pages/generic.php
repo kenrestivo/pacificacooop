@@ -30,7 +30,7 @@ if(!empty($_REQUEST['table'])){
                        'action' =>$_REQUEST['action'] ? 
                        $_REQUEST['action'] : 
                        'view', 
-                       'pop' =>$_REQUEST['pop'], 
+                       'pop' => @$_REQUEST['pop'], 
                        'id' =>$_REQUEST[$atd->prependTable($atd->pk)],
                        'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
                        $cp->vars['last']['realm']);
@@ -46,33 +46,15 @@ if(!empty($formatted)){
     $cp->vars['last'] =  $formatted;
 }
 
+
 /// XXX this is wrong. last should EQUAL request at this stage!
 if(isset($cp->vars['last']['pop']) || isset($_REQUEST['pop'])){
     $prev = $cp->popOff();
 }
 
-// if i popped, my result gets clobberd. so keep track of it here
-if($prev){
-    $status =& $prev;
-} else {
-    $status =& $cp->vars['last'];
-}
-
-
-
-/// XXX i think this is the WRONG place for this
-if($sp= $cp->stackPath()){
-   $cp->buffer(sprintf('<p>Navigation: %s %s</p>',
-                       $sp, 
-                       $cp->selfURL(
-                           array('value'=>'Go Back',
-                                 'par' => false,
-                                 'inside' => array(
-                                     'pop' => 'true')))));
-}
-
-
 //////////////}}} END STACK HANDLING
+
+
 
 // TODO: Move to cooppage. and call it everywhere
 //in case of bug
@@ -87,6 +69,34 @@ if(!$cp->vars['last']['table']){
                           'value'=> 'Unspecified table. Go back to home.')));
 }
 
+/// XXX i think this is the WRONG place for this
+if($sp= $cp->stackPath()){
+   $cp->buffer(sprintf('<p>Navigation: %s %s</p>',
+                       $sp, 
+                       $cp->selfURL(
+                           array('value'=>'Go Back',
+                                 'par' => false,
+                                 'inside' => array(
+                                     'pop' => 'true')))));
+}
+
+
+/// SHOW STATUS
+// if i popped, my result gets clobberd. so keep track of it here
+if(!empty($prev)){
+    $status =& $prev;
+} else {
+    $status =& $cp->vars['last'];
+}
+
+if(!empty($status['result'])){
+    $cp->buffer("<p>STATUS: {$status['result']}</p>");
+}
+
+
+
+
+/////// FINALLY, the page
 if(empty($atd)){
     $atd =& new CoopView(&$cp, $cp->vars['last']['table'], $none);
 }
@@ -97,6 +107,7 @@ $cp->buffer("\n<hr></div><!-- end header div -->\n"); //ok, we're logged in. sho
 $cp->buffer('<div id="centerCol">');
 
 $disp =& new CoopNewDispatcher(&$cp);
+$disp->previous_status =& $prev;
 $cp->buffer($disp->dispatch());
 print $cp->flushBuffer();
 

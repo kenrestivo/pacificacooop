@@ -344,15 +344,19 @@ class coopForm extends CoopObject
 			// better way to guess?
 			if($vars[$this->prependTable($this->pk)]){		
 				$this->update($old);
+                $type = 'edit';
 			} else {
 				$this->insert();
+                $type = 'add';
 			}
 			
 			$this->processCrossLinks($vars);
 			
 			$this->enema($vars); // necessary. *sigh*
 					
-			return true;
+			return sprintf('%s %s was successful!',
+                           $this->actionnames[$type], 
+                           $this->obj->fb_formHeaderText);
 		}
 
 
@@ -739,11 +743,17 @@ class coopForm extends CoopObject
 			}
 		}
 
+    /// XXXXX have to use REQUEST here!
+    /// not getsubmitvalues because it doesn't show __qf!
+    /// i suspect Trouble with this approach
 	function isSubmitted()
 		{
-            // use $vars not _REQUEST
-            $sv= $this->form->getSubmitValues();
-			return isset($sv['_qf__' . $this->form->_attributes['name']]);
+            $sv= $_REQUEST;
+            $submitted = isset($sv['_qf__' . $this->form->_attributes['name']]);
+            $this->page->confessArray($sv, 
+                                      "CoopForm::isSubmitted(): [$submitted]", 
+                                      2);
+            return $submitted; 
 		}
 
 	function legacyPassThru()

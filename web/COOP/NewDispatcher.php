@@ -31,6 +31,7 @@ require_once('CoopForm.php');
 class CoopNewDispatcher
 {
 	var $page;  				// cached coopPage object
+    var $previous_status; // cache of previous 'last' in case of popoff
 
 	function CoopNewDispatcher(&$page)
 		{
@@ -83,62 +84,70 @@ class CoopNewDispatcher
 
 
 
-    function add_edit(){
-
-        $this->page->confessArray(
-            $this->page->vars, 
-            'CoopNewDispatcher::add_edit() vars prior to merge', 4);
-
-        // NOT the coopView above!
-        $atdf = new CoopForm(&$this->page, 
-                             $this->page->vars['last']['table'], $none); 
-
-
-        $atdf->build($this->page->mergeRequest());
-
-
-        // ugly assthrus for my cheap newDispatcher
-        $atdf->form->addElement('hidden', 'action', 
-                                $this->page->vars['last']['action']); 
-        $atdf->form->addElement('hidden', 'table', 
-                                $this->page->vars['last']['table']); 
-
-        $atdf->legacyPassThru();
-
-        $atdf->addRequiredFields();
-
-        // XXX THIS CLOBBERS WHATEVER WAS THERE!
-        // also, shouldn't i use exportValues(), to get only thos in the QF?
-        $this->page->vars['last']['submitvars'] = $atdf->form->getSubmitValues();
-
-        if ($this->page->vars['last']['result'] = $atdf->validate()) 
+    function add_edit()
         {
-            $res .= $atdf->form->process(array(&$atdf, 'process'));
+            $res = '';
+            $this->page->confessArray(
+                $this->page->vars, 
+                'CoopNewDispatcher::add_edit() vars prior to merge', 4);
+
+            // NOT the coopView above!
+            $atdf = new CoopForm(&$this->page, 
+                                 $this->page->vars['last']['table'], $none); 
 
 
-            // put my saved ID back on the stack for later popping!
-            if($previous =& $this->page->getPreviousStack()){
-                $previous['submitvars'][$previous['table'].'-'.$atdf->pk] = 
-                    $atdf->id;
-            }
-            // force back to view if previous state was 'edit'
-            // or previous table is DIFFERENT (XXX NASTY hack!)
-            $prev =& $this->page->getPreviousStack();
-            if($this->page->vars['last']['action'] == 'edit' ||
-                (!empty($prev['table']) && 
-                 $this->page->vars['last']['table'] != $prev['table']))
+            $atdf->build($this->page->mergeRequest());
+
+
+            // ugly assthrus for my cheap newDispatcher
+            $atdf->form->addElement('hidden', 'action', 
+                                    $this->page->vars['last']['action']); 
+            $atdf->form->addElement('hidden', 'table', 
+                                    $this->page->vars['last']['table']); 
+
+            $atdf->legacyPassThru();
+
+            $atdf->addRequiredFields();
+
+            // XXX THIS CLOBBERS WHATEVER WAS THERE!
+            // also, shouldn't i use exportValues(), to get only thos in the QF?
+            $this->page->vars['last']['submitvars'] = $atdf->form->getSubmitValues();
+
+            if ($atdf->validate()) 
             {
-                $this->page->vars['last']['pop'] = $atdf->table; 
-            } 
+
+                $this->page->vars['last']['result'] = 
+                    $atdf->form->process(array(&$atdf, 'process'));
+
+                // put my saved ID back on the stack for later popping!
+                if($previous =& $this->page->getPreviousStack()){
+                    $previous['submitvars'][$previous['table'].'-'.$atdf->pk] = 
+                        $atdf->id;
+                }
+                // force back to view if previous state was 'edit'
+                // or previous table is DIFFERENT (XXX NASTY hack!)
+                $prev =& $this->page->getPreviousStack();
+                if($this->page->vars['last']['action'] == 'edit' ||
+                   (!empty($prev['table']) && 
+                    $this->page->vars['last']['table'] != $prev['table']))
+                {
+                    $this->page->vars['last']['pop'] = $atdf->table; 
+                } 
             
-            $this->page->headerLocation(
-                $this->page->selfURL(array('par' => false,
-                                           'host' => true)));
-        } else {
-             $res .= $atdf->form->toHTML();
-            return $res;
+                $this->page->headerLocation(
+                    $this->page->selfURL(array('par' => false,
+                                               'host' => true)));
+            } else {
+                if($atdf->isSubmitted()){
+                    $res .= $this->page->vars['last']['result'] = 
+                        sprintf('%s %s has errors. Please correct.',
+                                $atdf->actionnames[$this->page->vars['last']['action']],
+                                $atdf->obj->fb_formHeaderText);
+                }
+                $res .= $atdf->form->toHTML();
+                return $res;
+            }
         }
-    }
 
 
  
