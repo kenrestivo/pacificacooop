@@ -51,6 +51,15 @@ if(isset($cp->vars['last']['pop']) || isset($_REQUEST['pop'])){
     $prev = $cp->popOff();
 }
 
+// if i popped, my result gets clobberd. so keep track of it here
+if($prev){
+    $status =& $prev;
+} else {
+    $status =& $cp->vars['last'];
+}
+
+
+
 /// XXX i think this is the WRONG place for this
 if($sp= $cp->stackPath()){
    $cp->buffer(sprintf('<p>Navigation: %s %s</p>',

@@ -85,7 +85,9 @@ class CoopNewDispatcher
 
     function add_edit(){
 
-        $this->page->confessArray($this->page->vars, 'CoopNewDispatcher::add_edit() vars prior to merge', 4);
+        $this->page->confessArray(
+            $this->page->vars, 
+            'CoopNewDispatcher::add_edit() vars prior to merge', 4);
 
         // NOT the coopView above!
         $atdf = new CoopForm(&$this->page, 
@@ -109,7 +111,8 @@ class CoopNewDispatcher
         // also, shouldn't i use exportValues(), to get only thos in the QF?
         $this->page->vars['last']['submitvars'] = $atdf->form->getSubmitValues();
 
-        if ($atdf->validate()) {
+        if ($this->page->vars['last']['result'] = $atdf->validate()) 
+        {
             $res .= $atdf->form->process(array(&$atdf, 'process'));
 
 
@@ -119,13 +122,14 @@ class CoopNewDispatcher
                     $atdf->id;
             }
             // force back to view if previous state was 'edit'
-            if($this->page->vars['last']['action'] == 'edit'){
+            // or previous table is DIFFERENT (XXX NASTY hack!)
+            $prev =& $this->page->getPreviousStack();
+            if($this->page->vars['last']['action'] == 'edit' ||
+                (!empty($prev['table']) && 
+                 $this->page->vars['last']['table'] != $prev['table']))
+            {
                 $this->page->vars['last']['pop'] = $atdf->table; 
             } 
-            
-            // to display success message
-            $this->page->vars['last']['result'] = 1; 
-
             
             $this->page->headerLocation(
                 $this->page->selfURL(array('par' => false,
