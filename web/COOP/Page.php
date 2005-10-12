@@ -237,7 +237,7 @@ class coopPage
 	//					base="page.php"
     //                  popup if you want it to be a javascript popup)
     //                  and par if you want paragraph separators (default) )
-    //                  host = use http host, for headerlocation
+    //                  host = use SERVER[http host], for headerlocation
 	// all of which are optional
 	// if you do not specify inside, NO AUTH VARS ARE PASSED THROUGH! XXX
 	// without any args, returns just coop session var for use in Header()
@@ -263,7 +263,16 @@ class coopPage
 
 
             if($host){
-                $base = 'http://' . $base;
+                $selfurl = parse_url($_SERVER['PHP_SELF']);
+                $hostname = $selfurl['host'];
+                $path = pathinfo($selfurl['path']);
+                $dir = $path['dirname'];
+
+                $this->confessArray($selfurl, 'php self', 5);
+                $this->confessArray($path, 'pathinfo', 5);
+
+                $base = sprintf('http://%s%s/%s', 
+                                $_SERVER['HTTP_HOST'], $dir, $base);
             }
             
 
