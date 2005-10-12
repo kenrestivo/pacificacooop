@@ -61,7 +61,7 @@
 
 (define (test-generic wtc family)
   (choose-family wtc family "generic.php")
-  (7enter-password wtc)
+  (enter-password wtc)
   (main-page-ok wtc))             
 
 
