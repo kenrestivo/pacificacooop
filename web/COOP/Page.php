@@ -443,7 +443,7 @@ class coopPage
         //                    $this->vars['stack']);
 
             foreach($this->vars['stack'] as $stack){
-                if(!count($stack) || !empty($stack['table'])){
+                if(!count($stack) || empty($stack['table'])){
                     continue;
                 }
                 $co =& new CoopObject(&$this, $stack['table'], &$this);
