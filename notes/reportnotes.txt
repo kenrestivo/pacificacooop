@@ -1,6 +1,41 @@
 report notes
 $Id$
 
+
+
+test the enhancement summary!
+	and thorough test on hours. that'll be the next bit of entry
+	the show all thing is fubared?
+	also, the chooseschoolyear can crash Enrollment.php
+		blank start date for familyid 10 (2004-2005)
+	maybe attach report to a table? so it's table/report?
+
+
+
+report ideas
+	add the reports to the object?
+		i.e. some number of report_foo callbacks
+		add a 'table' to reports? so reportname, table?
+		how to dispatch? report state!
+		how to stack pop/push?
+			a report state (as opposed to view!)
+			AND THE NAME OF THE REPORT!
+	my current page-based thingus (for now)?
+		perms as they are, basically	
+		how to dispatch?
+		how to stack pop/push?
+			if there is a report block?
+    stack needs to handle reports
+    	things like chosenschoolyear and show/hide all need to be in last
+    		add url to the 'last' glob?
+    		or, in a subthing. searchsettings?
+    cache chosen things in reports
+      	search/sort
+      		fall/spring, schoolyear, showall, in report
+      	report varliable?
+      		if blank, use 'view',otherwise a custom 
+
+
 list of families, and how many names have been entered so far
 	um, by certain dates?
 	only the delinquent ones?

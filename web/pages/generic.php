@@ -59,14 +59,10 @@ if(isset($cp->vars['last']['pop']) || isset($_REQUEST['pop'])){
 // TODO: Move to cooppage. and call it everywhere
 //in case of bug
 if(!$cp->vars['last']['table']){
-    if(devSite()){
-        PEAR::raiseError('unspecified table', 555);
-    }
     $cp->headerLocation(
-                $this->page->selfURL(
+                $cp->selfURL(
                     array('par' => false,
-                          'host' => true,
-                          'value'=> 'Unspecified table. Go back to home.')));
+                          'host' => true)));
 }
 
 /// XXX i think this is the WRONG place for this

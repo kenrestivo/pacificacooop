@@ -249,8 +249,9 @@ class coopPage
             $par = isset($args['par']) ? $args['par'] :true;
             $host = isset($args['host']) ? $args['host'] :false;
             $title = isset($args['title']) ? $args['title'] :false;
-            //1confessArray($args, 'args');
-            
+
+
+
             $res = '';
             
 			if(!$base){
@@ -285,6 +286,10 @@ class coopPage
 				 $res .= sprintf('>%s</a>', $value);
                  $par && $res .= '</p>';
 			 }
+
+             $this->confessArray($args, 
+                                 "CoopPage::selfURL() returning [$res]", 
+                                 4);
 			 return $res; 
 		}
 

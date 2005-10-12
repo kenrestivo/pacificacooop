@@ -1,15 +1,14 @@
 json select box notes
 
-2 hours javascript/php/python?
+
+??? javascript/php/python?
 json selectbox
 	use linkdisplayfields as search entry boxes (with _manglednames)
 	js to search based on what the user types in (find button)
 	populate scrolling selectbox (x lines) with results
-	similar to existing customselect, or the add/remove select with js tricks
+		similar to existing customselect,
+			the add/remove select with js tricks
 	for goodies, a 'details' box next to the select
 		showing more info on the selected item, javascript-refreshed
-	this is basically a search screen built into a custom element
-		consider starting off with all this shit in a separate window instead
-			and populating on back, using my back/forward navigation
-	have a look at the PEAR AJAX package!!
+
 
