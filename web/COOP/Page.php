@@ -263,8 +263,11 @@ class coopPage
 
 
             if($host){
+                // this is NOT redundant and i to NOT want to parse $base!
+                // my toal here is to get the $PATH of selfurl.
+                // fucking PHP can't
+                // path_info(parse_url($_SERVER['PHP_SELF'])['path'])['dirname']
                 $selfurl = parse_url($_SERVER['PHP_SELF']);
-                $hostname = $selfurl['host'];
                 $path = pathinfo($selfurl['path']);
                 $dir = $path['dirname'];
 
