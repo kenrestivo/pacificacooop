@@ -13,8 +13,8 @@
 (invoke gtc 'setBaseUrl "http://www/coop-dev")
 
 ;; choose family
-(define (choose-family wtc family)
-  (invoke wtc 'beginAt "/")
+(define (choose-family wtc family start-page)
+  (invoke wtc 'beginAt start-page)
   ;; TODO add asserts that this is the RIGHT page
   (invoke wtc 'assertTextPresent "</html>")
   (invoke wtc 'assertFormPresent )
@@ -54,9 +54,15 @@
 
 ;; go as far as you can, so far.
 (define (get-to-main-page wtc family)
-  (choose-family wtc family)
+  (choose-family wtc family "/")
   (enter-password wtc)
   (main-page-ok wtc))
+
+
+(define (test-generic wtc family)
+  (choose-family wtc family "generic.php")
+  (7enter-password wtc)
+  (main-page-ok wtc))             
 
 
 ;; holder for things i'm still experimenting with.
@@ -107,8 +113,8 @@
   (get-to-main-page wtc family)
   (let ((links (vector->list (invoke (get-response wtc) 'getLinks)) )
 		(run-number (random 1000)))
-    (check-sublinks links 0)
-	))
+    (check-sublinks links 0))
+  (test-generic wtc family))
 
 ;;or http://validator.w3.org/check
 (define (validate-html wtc)

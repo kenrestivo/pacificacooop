@@ -239,6 +239,7 @@ class coopPage
     //                  and par if you want paragraph separators (default) )
     //                  host = use http host, for headerlocation
 	// all of which are optional
+	// if you do not specify inside, NO AUTH VARS ARE PASSED THROUGH! XXX
 	// without any args, returns just coop session var for use in Header()
 	function selfURL($args= false)
 		{
@@ -254,45 +255,52 @@ class coopPage
 
             $res = '';
             
-			if(!$base){
-                if($host){
-                    $base = 'http://' . $_SERVER['HTTP_HOST'];
-                }
-				$base .= $_SERVER['PHP_SELF'];
-			}
-			 if(($pos = strpos($base, '?')) !== false) {
-				 $base = substr($base, 0, $pos);
-			 }
-			 if($value){
-                 $par && $res .= '<p>';
-				 $res .= '<a href="';
-			 }
+			$base = $base ? $base : $_SERVER['PHP_SELF'];
 
-			 if(!$popup){
+            if(($pos = strpos($base, '?')) !== false) {
+                $base = substr($base, 0, $pos);
+            }
+
+
+            if($host){
+                $base = 'http://' . $base;
+            }
+            
+
+
+            if($value){
+                $par && $res .= '<p>';
+                $res .= '<a href="';
+            }
+            
+            
+            if(!$popup){
 				 $res .= $this->formatURLVars($base, $inside);
-			 }
-
-			 if($value){
-				 $res .= '" ';
-				 if($popup){
+            }
+            
+            if($value){
+                $res .= '" ';
+                if($popup){
 					 $res .= sprintf('onClick="popUp(\'%s\')"',
 									 $this->formatURLVars($base, $inside));
-				 }
+                }
+                
+                if($title){
+                    $res .= sprintf(' title = "%s" ', 
+                                    htmlentities($title));
+                }
+                $res .= sprintf('>%s</a>', $value);
+                $par && $res .= '</p>';
+            } 
 
-                 if($title){
-                     $res .= sprintf(' title = "%s" ', 
-                                           htmlentities($title));
-                 }
-				 $res .= sprintf('>%s</a>', $value);
-                 $par && $res .= '</p>';
-			 }
-
-             $this->confessArray($args, 
-                                 "CoopPage::selfURL() returning [$res]", 
-                                 4);
-			 return $res; 
+            
+            $this->confessArray($args, 
+                                sprintf('CoopPage::selfURL() returning [%s]',
+                                        htmlspecialchars($res)), 
+                                5);
+            return $res; 
 		}
-
+    
 
 	function formatURLVars($base, $inside = false)
 		{

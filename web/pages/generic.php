@@ -62,6 +62,8 @@ if(!$cp->vars['last']['table']){
     $cp->headerLocation(
                 $cp->selfURL(
                     array('par' => false,
+                          'base' => 'index.php',
+                          'inside' => array('coop' => $_REQUEST['coop']),
                           'host' => true)));
 }
 
