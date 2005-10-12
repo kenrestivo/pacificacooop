@@ -443,6 +443,9 @@ class coopPage
         //                    $this->vars['stack']);
 
             foreach($this->vars['stack'] as $stack){
+                if(!count($stack) || !empty($stack['table'])){
+                    continue;
+                }
                 $co =& new CoopObject(&$this, $stack['table'], &$this);
 //TODO: add a title (can i do that without a link?) with the concatlink
 //                 if(is_numeric($stack['id']){
