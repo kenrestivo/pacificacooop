@@ -68,7 +68,7 @@ function grabCallback(result) {
 // note that replace currently always works using Sync AJAX calls, an option to perform this with Async calls may become an option at some further time
 // both usages are shown below
 
-HTML_AJAX.defaultServerUrl = 'ajax-server.php';
+HTML_AJAX.defaultServerUrl = '<?php echo $target; ?>';
 
 function replaceUrl() {
 	HTML_AJAX.replace('target',url);
