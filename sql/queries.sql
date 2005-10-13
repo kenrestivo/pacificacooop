@@ -1708,4 +1708,24 @@ where  table_name = "blog_entry"
 group by subscriptions.user_id,table_name
 
 
+---- last enrolled year for currently-enrolled families
+select families.family_id, families.name,
+max(enrollment.school_year) as last_enrolled_year
+from  families
+      left join kids on families.family_id = kids.family_id 
+          left join enrollment on kids.kid_id = enrollment.kid_id
+                and enrollment.school_year <> '2005-2006'
+        left join (select distinct families.family_id
+                from families
+                    left join kids on families.family_id = kids.family_id 
+                    left join enrollment on kids.kid_id = enrollment.kid_id 
+                where enrollment.school_year = "2005-2006"
+                and (enrollment.dropout_date < "1900-01-01"
+                    or enrollment.dropout_date is null)
+                group by families.family_id
+                order by families.name) as enrolled
+            on enrolled.family_id = families.family_id     
+where enrolled.family_id is not null        
+group by family_id
+
 --- EOF
