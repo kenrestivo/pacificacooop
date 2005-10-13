@@ -1709,7 +1709,11 @@ group by subscriptions.user_id,table_name
 
 
 
-select lead_id, invitations.family_id, previous.name
+---- grab all of last years's invitations, and invite them this year!
+insert into invitations
+(school_year, lead_id, family_id, relation)
+-- all the most recent years' invitations
+(select '2005-2006', lead_id, invitations.family_id, relation
 from invitations
     left join
     ---- last enrolled year for currently-enrolled families
@@ -1735,6 +1739,8 @@ from invitations
     on previous.family_id = invitations.family_id 
         and previous.last_enrolled_year = invitations.school_year
 where previous.family_id > 0
-order by previous.name
+order by previous.family_id)
     
+
+
 --- EOF

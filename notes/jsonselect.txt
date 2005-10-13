@@ -1,6 +1,39 @@
 json select box notes
 
 
+things
+	select box
+	fields (with manglednames) for each linkdisplay in select object
+	search button
+
+actions
+	search: run json query, fill box with results
+	possibly: on select, show full record in displaybox
+		i.e. horiztable
+
+
+
+
+will need to deal with auth/session
+	how does the ajaxserver auth? will it get the same cookie? COOKIE!
+		or do i need to pass a coop=SID to it?
+	same thing with SESSION. i want to use the same session id
+		hell, i *have* to
+	try this autoserver
+	
+
+what exactly will i call?
+	instantiate the sub object
+	populate it
+
+
+understand selectbox updating
+	i.e. my advmultiselect
+
+
+
+
+
 ??? javascript/php/python?
 json selectbox
 	use linkdisplayfields as search entry boxes (with _manglednames)

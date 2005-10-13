@@ -1,8 +1,8 @@
 
 --- do it
 
--- add to reports, enhancement-summry DONE?
+-- the massive import of names.
 
-alter table audit_trail add column     email_sent tinyint(1);
-alter table audit_trail change column updated updated datetime NOT NULL;
+alter table leads drop column school_year;
 
+delete from table_permissions where field_name in ('school_year', 'family_id');

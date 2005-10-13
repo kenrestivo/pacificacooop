@@ -358,16 +358,6 @@ group by user_id,table_name,field_name";
 				return false;
 			}
             
-            //XXX this is totally wrong still. is it really separate from below?
-            if($key == 'school_year' && 
-               $this->perms[NULL]['year'] < ACCESS_VIEW)
-            {
-            	$this->page->printDebug(
-                    "ispermitted($this->table : $key) is school_year and you don't have year permissions", 
-                    4);
-			    return false;
-            }
-			
 
             if(!empty($this->obj->fb_fieldsToUnRender)  &&
 			   in_array($key, $this->obj->fb_fieldsToUnRender))
@@ -378,6 +368,7 @@ group by user_id,table_name,field_name";
 			    return false;  // i am very, very sorry for this
             }
 
+
             // i'm looking in perms calc. choose what to use now.
             // remember! the db needs to give separate perms for fields/tables
             $usethese = isset($this->perms[$key]) ? 
@@ -385,9 +376,9 @@ group by user_id,table_name,field_name";
 
 
 
-            if($forceuser || 
+            if($key != 'family_id' && ($forceuser || 
                (!empty($this->obj->family_id) && 
-                $this->page->userStruct['family_id'] == $this->obj->family_id))
+                $this->page->userStruct['family_id'] == $this->obj->family_id)))
             {
             	$this->page->printDebug(
                     "ispermitted($this->table : $key) MINE, using max of group/user", 
@@ -398,10 +389,11 @@ group by user_id,table_name,field_name";
                 $res = $usethese['group'];
             }
 
-            /// TODO: use chooser global, not currentschoolyear
+            /// decide if this is ANOTHER year
             if(!$forceyear &&  
-               $this->inObject('school_year') &&
-               $this->page->currentSchoolYear != $this->obj->school_year)
+               (($this->inObject('school_year') &&
+                 $this->page->currentSchoolYear != $this->obj->school_year)
+                || $key == 'school_year'))
             {
                 
             	$this->page->printDebug(
