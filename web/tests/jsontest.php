@@ -1,23 +1,33 @@
 <?php
-
-chdir('../'); // for damned test folder
-
-include('first.inc');
-
 /**
 $Id$
  */
-print "<html> <head>";
 
-$target = 'jsonservertest.php';
+
+chdir('../'); // for damned test folder
+
+include('CoopPage.php');
+
+$cp = new CoopPage($debug);
+print $cp->pageTop();
+
+print $cp->selfURL(array('value' => 'Refresh'));
+
+$target = $cp->selfURL(array('base'=>'jsonservertest.php',
+                             'inside' => 'nothing',
+                             'host' => true));
+/// XXX NASTY HACK AROUND BUGS IN SELFURL!
+$qm = strpos($target, '?');
+$qm && $target = substr($target, 0, $qm);
+
+printf('<p>%s</p>',$target);
+
 foreach(array('main', 'dispatcher', 'HttpClient', 'Request', 'json') as $client){
     printf('<script type="text/javascript" src="%s?client=%s"></script>',
            $target, $client);
      }
 ?>
 
-</head>
-<body>
 <script type="text/javascript">
 function clearTarget() {
 	document.getElementById('target').innerHTML = 'clear';
@@ -26,7 +36,7 @@ function clearTarget() {
 
 // Grab is the simplest usage of HTML_AJAX you use it to perform a request to a page and get its results back
 // It can be used in either Sync mode where it returns directory or with a call back, both methods are shown below
-var url = 'coop-dev/README';
+var url = 'http://www/coop-dev/tests/junk.php';
 function grabSync() {
 	document.getElementById('target').innerHTML = HTML_AJAX.grab(url);
 }
@@ -78,6 +88,15 @@ function callCallback(result) {
 	document.getElementById('target').innerHTML = result;
 }
 
+
+function getUser() {
+	//HTML_AJAX.defaultEncoding = 'Null'; // set encoding to no encoding method
+	document.getElementById('target').innerHTML = 
+        HTML_AJAX.call('test','getUser','useless arg');
+	HTML_AJAX.defaultEncoding = 'JSON'; // return it to default which is JSON
+}
+
+
 </script>
 <ul>
 	<li><a href="javascript:clearTarget()">Clear Target</a></li>
@@ -87,6 +106,7 @@ function callCallback(result) {
 	<li><a href="javascript:replaceFromMethod()">Replace with content from a method call</a></li>
 	<li><a href="javascript:callSync()">Sync Call</a></li>
 	<li><a href="javascript:callAsync()">ASync Call</a></li>
+	<li><a href="javascript:getUser()">get user struct</a></li>
 </ul>
 
 <div style="white-space: pre; padding: 1em; margin: 1em; width: 600px; 

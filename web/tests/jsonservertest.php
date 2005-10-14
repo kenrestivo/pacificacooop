@@ -18,27 +18,39 @@
 
 chdir('../'); // for test folder
 
-include('first.inc');
+include('CoopPage.php');
 
  // include the server class
 include 'HTML/AJAX/Server.php';
 
 
+$cp = new CoopPage($debug);
+$cp->pageTop(); /// HAVE TO DO THIS TO FISH OUT THE AUTH STUFF FROM SESSION!
+
 // extend HTML_AJAX_Server creating our own custom one with init{ClassName} methods for each class it supports calls on
 class TestServer extends HTML_AJAX_Server {
+    var $page; // cache of coop page
+
 	// this flag must be set to on init methods
 	var $initMethods = true;
+
+    function TestServer(&$cp)
+        {
+            $this->page =& $cp;
+            HTML_AJAX_Server::HTML_AJAX_Server();
+        }
+
 
 	// init method for the test class, includes needed files an registers it for ajax
 	function initTest() {
 		include 'test.class.php';
-		$this->registerClass(new test());
+		$this->registerClass(new test(&$this->page));
 	}
 	
 }
 
 // create an instance of our test server
-$server = new TestServer();
+$server = new TestServer(&$cp);
 
 // handle requests as needed
 $server->handleRequest();

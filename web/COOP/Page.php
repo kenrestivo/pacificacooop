@@ -506,7 +506,7 @@ class coopPage
             if(isset($this->vars['stack']) && count($this->vars['stack'])){
                 $this->confessArray(
                     $this->vars, 
-                    'popping off of the stack (replacing last with stack[0])', 
+                    'popping off of the stack (replacing last with stack[n-1])', 
                     1);
                 ///COPY not ref, the old one i'm about to clobber
                 $prev = array_reverse(array_reverse($this->vars['last'])); 

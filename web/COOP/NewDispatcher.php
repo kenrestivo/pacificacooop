@@ -62,7 +62,8 @@ class CoopNewDispatcher
             }
             if(is_callable(array($atd2->obj, 'fb_display_alert'))){
                 $atd2->page->printDebug('calling callback for alert', 2);
-                $res .= $atd2->obj->fb_display_alert(&$atd2);
+                //TODO: put this in RED or something. maybe a ! icon?
+                $res .= '<p>' . $atd2->obj->fb_display_alert(&$atd2) . '</p>';
             }
             $res .= '</div><!-- end status alert div -->';
             

@@ -2,24 +2,20 @@ json select box notes
 
 
 things
-	select box
+20 minutes PHP
+	select box 
 	fields (with manglednames) for each linkdisplay in select object
 	search button
 
+
 actions
+1 hour PHP
 	search: run json query, fill box with results
 	possibly: on select, show full record in displaybox
 		i.e. horiztable
 
 
 
-
-will need to deal with auth/session
-	how does the ajaxserver auth? will it get the same cookie? COOKIE!
-		or do i need to pass a coop=SID to it?
-	same thing with SESSION. i want to use the same session id
-		hell, i *have* to
-	try this autoserver
 	
 
 what exactly will i call?
@@ -45,3 +41,37 @@ json selectbox
 		showing more info on the selected item, javascript-refreshed
 
 
+
+
+nice to have
+	autocomplete with javascript
+
+ * Example of Using HTML_AJAX in proxyless operation
+ *
+ * This is the simplest way to use HTML_AJAX if your just using grab and replace functions you don't even need a server
+ * You need every javascript file except JSON which is optional and is only needed if your using that encoding
+ *
+ * The proxyless api is provided by Main.js
+ *
+ * There are 3 main methods and 2 properties to the proxyless api, they all exist as static methods on HTML_AJAX
+ *	HTML_AJAX.grab(url)
+
+ *	HTML_AJAX.replace(id,url) 
+	or HTML_AJAX.replace(id,class,method,arg1,arg2,etc)
+
+ *	HTML_AJAX.call(class,method,callback,arg1,arg2,etc)
+
+ *
+ *	HTML_AJAX.defaultServerUrl = 'serverurl';
+
+ *	HTML_AJAX.defaultEncoding = 'Null';
+
+
+
+??? JAVASXCRIPT
+make ajax deal with nocookies
+	pass SID through 
+	the js will need to contend with this
+
+
+maybe render subforms by shipping them (minus their form tags) via json?
