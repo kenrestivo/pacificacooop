@@ -5,34 +5,11 @@ chdir('../'); // for damned test folder
 include('first.inc');
 
 /**
- * Example of Using HTML_AJAX in proxyless operation
- *
- * This is the simplest way to use HTML_AJAX if your just using grab and replace functions you don't even need a server
- * You need every javascript file except JSON which is optional and is only needed if your using that encoding
- *
- * The proxyless api is provided by Main.js
- *
- * There are 3 main methods and 2 properties to the proxyless api, they all exist as static methods on HTML_AJAX
- *	HTML_AJAX.grab(url)
- *	HTML_AJAX.replace(id,url) or HTML_AJAX.replace(id,class,method,arg1,arg2,etc)
- *	HTML_AJAX.call(class,method,callback,arg1,arg2,etc)
- *
- *	HTML_AJAX.defaultServerUrl = 'serverurl';
- *	HTML_AJAX.defaultEncoding = 'Null';
- *
- * The api is demonstrated below, server.php is used for call examples and to load the needed js files
- *
- * @category   HTML
- * @package    AJAX
- * @author     Joshua Eichorn <josh@bluga.net>
- * @copyright  2005 Joshua Eichorn
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    Release: @package_version@
- * @link       http://pear.php.net/package/HTML_AJAX
+$Id$
  */
 print "<html> <head>";
 
-$target = 'ajax-auto_server.php';
+$target = 'jsonservertest.php';
 foreach(array('main', 'dispatcher', 'HttpClient', 'Request', 'json') as $client){
     printf('<script type="text/javascript" src="%s?client=%s"></script>',
            $target, $client);
@@ -49,7 +26,7 @@ function clearTarget() {
 
 // Grab is the simplest usage of HTML_AJAX you use it to perform a request to a page and get its results back
 // It can be used in either Sync mode where it returns directory or with a call back, both methods are shown below
-var url = '../README';
+var url = 'coop-dev/README';
 function grabSync() {
 	document.getElementById('target').innerHTML = HTML_AJAX.grab(url);
 }
