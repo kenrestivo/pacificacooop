@@ -173,6 +173,9 @@ class coopView extends CoopObject
 	
             $this->debugWrap(5);
 
+
+            $this->page->printDebug("CoopView::find({$this->table})", 1);
+
             //// finally, go get 'em!
             if($find){
 				$found = $this->obj->find();

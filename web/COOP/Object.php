@@ -334,7 +334,7 @@ group by user_id,table_name,field_name";
 
 		}
     
-    // key is the field. 
+    // key is the field. leave blank to get ispermittedRECORD, basically.
     //forceuser means assume the record belongs to this user even if it does not (useful in menus, or where you want a best case situation)
     // forceyear is to assume that the record is this year's-- best case, i.e. in menus
 	function isPermittedField($key = NULL, $forceuser = false, 
@@ -410,7 +410,7 @@ group by user_id,table_name,field_name";
             $this->page->printDebug(
                 sprintf('ispermitted(%s : %s) RETURNING for OBJ famid [%s] , my famid [%d], force [%s] perms [%s]', 
                         $this->table, $key, empty($this->obj->family_id) ? 
-                        'NO SUCH FIELD' : $this->obj->family_id, 
+                        'NO FAMILY ID IN OBJECT' : $this->obj->family_id, 
                         $this->page->userStruct['family_id'], 
                         $forceuser, $res),
                 4);
@@ -464,12 +464,12 @@ group by user_id,table_name,field_name";
                 return $this->obj->fb_linkConstraints(&$this);
             } 
 
-// NONE of this works. fuckers.
-  //           //XXX if it's a subview, it may be for the *above* family.
-//             /// note the permitted here is NOT forcing family, for lookup
-// i'm also forcing this schoolyear, which is stupid. fix that later.
             
-            $this->constrainFamily();
+// XXX  you goddamned better have a path to family, everywhere
+// unless you have permissions to see all
+
+           $this->constrainFamily();
+
               
             if($this->inObject('school_year')){
                 $this->constrainSchoolYear();
@@ -517,8 +517,7 @@ group by user_id,table_name,field_name";
         {
             if(($this->isPermittedField(null, false, true) < ACCESS_VIEW  || 
                 $force) &&
-               $co->page->userStruct['family_id'] &&
-               $this->inObject('family_id'))
+               $this->page->userStruct['family_id'])
             {
                 $this->page->printDebug("FORCING familyid for search, with wheraedd", 2);
                 $this->obj->whereAdd(
@@ -641,7 +640,7 @@ group by user_id,table_name,field_name";
             // i get OBJECT vars here, not class vars. if i've set it
             $this->page->confessArray(array_keys(get_object_vars($this->obj)), 
                          "inobject($key, $type, $isset) in $this->table = $res", 
-                                      5);
+                                      4);
             //shows whether this thing is part of this object!
              return $res;
         }

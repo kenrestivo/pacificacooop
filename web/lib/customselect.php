@@ -19,8 +19,6 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			list($table, $field) = explode('-', $this->getName());
             //confessArray($values, 'values');
 
-            // TODO: go get the object or name of the linkfield
-
             if(isset($cf->forwardLinks[$field])){
                 $link =$cf->forwardLinks[$field];
             } else {
@@ -28,14 +26,9 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             }
             list($target, $targfield) = explode(':', $link);
 
-            //XXX didn't i do this somewhere else already?
+            //need for perms
             $sub =& new CoopObject(&$cf->page, $target, &$cf);
             
-            $sub =& new CoopObject(&$cf->page, $target, &$cf);
-            if($sub->isPermittedField() < ACCESS_ADD){
-                return  parent::toHTML(); // the actual {element}!
-            }
-
             //  need these for edit link
             $vals = $this->getValue();
             $target_id = sprintf('%s-%s', $target, $targfield);
@@ -46,33 +39,41 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                       "processCustomSelect(this, '{$target_id}')"));
             
 
+            /// FINALLY, build the result
             $res .= $this->_getJs();
             $res .= parent::toHTML(); // the actual {element}!
             
-            $res .= '&nbsp;' . $cf->page->selfURL(
-                array(
-                    'value' =>sprintf(
-                        'Edit',
-                        $cf->obj->fb_fieldLabels[$field]),
-                    'par' => false,
-                    'elementid' => 'subedit-' . $this->getName(),
-                    'inside' => array('table' => $target,
-                                      'action' => 'edit',
-                                       $target_id => $vals[0],
-                                      'push' => $this->getName())));
-            
+            if($sub->isPermittedField() >= ACCESS_EDIT){
+                $res .= '&nbsp;' . $cf->page->selfURL(
+                    array(
+                        'value' =>sprintf(
+                            'Edit',
+                            $cf->obj->fb_fieldLabels[$field]),
+                        'par' => false,
+                        'elementid' => 'subedit-' . $this->getName(),
+                        'inside' => array('table' => $target,
+                                          'action' => 'edit',
+                                          $target_id => $vals[0],
+                                          'push' => $this->getName())));
+            }            
 
-            $res .= sprintf('<div>&nbsp;%s</div>',
-                            $cf->page->selfURL(
-                                array(
-                                    'value' =>sprintf(
-                                        'Add New %s &gt;&gt;',
-                                        $cf->obj->fb_fieldLabels[$field]),
-                                    'par' => false,
-                                    'inside' => array('table' => $target,
-                                                      'action' => 'add',
-                                                      'push' => $this->getName())))
-                );
+            if($sub->isPermittedField() >= ACCESS_ADD){
+                //XXX do i really need to wrap it in a div? or just use ID?
+                $res .= sprintf(
+                    '<div>&nbsp;%s</div>',
+                    $cf->page->selfURL(
+                        array(
+                            'value' =>sprintf(
+                                'Add New %s &gt;&gt;',
+                                $cf->obj->fb_fieldLabels[$field]),
+                            'par' => false,
+                            'inside' => array('table' => $target,
+                                              'action' => 'add',
+                                              'push' => $this->getName())))
+                    );
+                
+            }
+
             return $res;
         }
     } //end func toHtml
