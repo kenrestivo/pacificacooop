@@ -27,5 +27,7 @@ document.getElementById('target').innerHTML = 'foo bar baz';
 
 
 a.call('test','echo_string',false,'this rules');
-a.call('test','userinfo', false, 'useless arg');
 
+uinfo=a.call('test','userinfo', false, 'useless arg');
+
+pid=document.getElementsByName('enhancement_hours-parent_id')

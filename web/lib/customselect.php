@@ -35,9 +35,26 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                 return  parent::toHTML(); // the actual {element}!
             }
 
+            // it's an array! need this for edit
+            $vals = $this->getValue();
+
 			return 
-                sprintf('%s <div class="sublink">&nbsp;%s</div>',
+                sprintf('%s <span id="%s">%s</span> 
+                                <div class="sublink">&nbsp;%s</div>',
                         parent::toHTML(), // the actual {element}!
+                        'subedit-' . $this->getName() ,
+                        $cf->page->selfURL(
+                            array(
+                                'value' =>sprintf(
+                                    'Edit',
+                                    $this->_parentForm->CoopForm->obj->fb_fieldLabels[$field]),
+                                'par' => false,
+                                'inside' => array('table' => $target,
+                                                  'action' => 'edit',
+                                                  sprintf('%s-%s',
+                                                          $target, $targfield) => 
+                                                  $vals[0],
+                                                  'push' => $this->getName()))),
                         $cf->page->selfURL(
                             array(
                                 'value' =>sprintf(
@@ -46,8 +63,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                                 'par' => false,
                                 'inside' => array('table' => $target,
                                                   'action' => 'add',
-                                                  'push' => $this->getName())
-                                )));
+                                                  'push' => $this->getName())))
+                    );
 
         }
     } //end func toHtml
