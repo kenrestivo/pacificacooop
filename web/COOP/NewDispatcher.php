@@ -303,7 +303,9 @@ function confirmDelete()
             $atdf->obj->delete();
 
             // to display success message
-            $this->page->vars['last']['result'] = 1; 
+            $this->page->vars['last']['result'] = 
+                sprintf('Successfully deleted %s entry.',
+                        $atdf->obj->fb_formHeaderText); 
             $this->page->vars['last']['pop'] = $atdf->table; 
 
             $this->page->headerLocation($this->page->selfURL(

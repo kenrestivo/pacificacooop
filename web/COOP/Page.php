@@ -547,14 +547,18 @@ class coopPage
             $merged = array_merge_recursive($_REQUEST, 
                                          $this->vars['last']['submitvars']);
 
-            // let the last id override! for edits.
-            if($this->vars['last']['id'] && 
-               !$merged[$lastco->prependTable($lastco->pk)])
-            {
-                $merged[$lastco->prependTable($lastco->pk)] = 
-                $this->vars['last']['id'];
-            }
 
+            // let the last id override! for edits.
+            if($this->vars['last']['table']){
+                $lastco = new CoopObject(&$this, 
+                                          $this->vars['last']['table'], &$this);
+                $last_long_pk = $lastco->prependTable($lastco->pk);
+                
+                if($this->vars['last']['id'] && !$merged[$last_long_pk])
+                {
+                    $merged[$last_long_pk] = $this->vars['last']['id'];
+                }
+            }
             $this->confessArray($merged, 
                                 'CoopPage::mergeRequest() MERGED', 4);
             return $merged;
