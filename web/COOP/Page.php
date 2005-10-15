@@ -536,19 +536,16 @@ class coopPage
     // last['table'] takes precedence over verything. it's magickal.
     function mergeRequest(&$lastco)
         {
-            if(empty($this->vars['last']['submitvars'])){
-                $this->printDebug(
-                    'CoopPage::mergeRequest(): nothing in submitvars! usign request', 2);
-                return $_REQUEST;
-            }
+
             $this->confessArray($this->vars['last']['submitvars'], 
                                 'CoopPage::mergeRequest() submitvars', 4);
             $this->confessArray($_REQUEST, 
                                 'CoopPage::mergeRequest() REQUEST', 4);
+
+            // note! submitvars OVERRIDES REQUEST!
+            // necessary for pop's/push's
             $merged = array_merge_recursive($_REQUEST, 
                                          $this->vars['last']['submitvars']);
-            $this->confessArray($merged, 
-                                'CoopPage::mergeRequest() MERGED', 4);
 
             // let the last id override! for edits.
             if($this->vars['last']['id'] && 
@@ -558,6 +555,8 @@ class coopPage
                 $this->vars['last']['id'];
             }
 
+            $this->confessArray($merged, 
+                                'CoopPage::mergeRequest() MERGED', 4);
             return $merged;
         }
 

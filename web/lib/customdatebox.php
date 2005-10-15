@@ -7,7 +7,8 @@
    {
        function toHtml()
        {
-		   		   if ($this->_flagFrozen) {
+           $res  = "";
+           if ($this->_flagFrozen) {
 			   return $this->getFrozenHtml();
 		   } 
 		   $res .= $this->_getTabs();
