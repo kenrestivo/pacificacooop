@@ -99,14 +99,14 @@ function getUser() {
 
 </script>
 <ul>
-	<li><a href="javascript:clearTarget()">Clear Target</a></li>
-	<li><a href="javascript:grabSync()">Run Sync Grab Example</a></li>
-	<li><a href="javascript:grabAsync()">Run Async Grab  Example</a></li>
-	<li><a href="javascript:replaceUrl()">Replace with content from a url</a></li>
-	<li><a href="javascript:replaceFromMethod()">Replace with content from a method call</a></li>
-	<li><a href="javascript:callSync()">Sync Call</a></li>
-	<li><a href="javascript:callAsync()">ASync Call</a></li>
-	<li><a href="javascript:getUser()">get user struct</a></li>
+	<li><a href="javascript:void()" onClick="clearTarget()">Clear Target</a></li>
+	<li><a href="javascript:void()" onClick="grabSync()">Run Sync Grab Example</a></li>
+	<li><a href="javascript:void()" onClick="grabAsync()">Run Async Grab  Example</a></li>
+	<li><a href="javascript:void()" onClick="replaceUrl()">Replace with content from a url</a></li>
+	<li><a href="javascript:void()" onClick="replaceFromMethod()">Replace with content from a method call</a></li>
+	<li><a href="javascript:void()" onClick="callSync()">Sync Call</a></li>
+	<li><a href="javascript:void()" onClick="callAsync()">ASync Call</a></li>
+	<li><a href="javascript:void()" onClick="getUser()">get user struct</a></li>
 </ul>
 
 <div style="white-space: pre; padding: 1em; margin: 1em; width: 600px; 
