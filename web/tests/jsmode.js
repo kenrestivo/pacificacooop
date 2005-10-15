@@ -31,3 +31,6 @@ a.call('test','echo_string',false,'this rules');
 uinfo=a.call('test','userinfo', false, 'useless arg');
 
 pid=document.getElementsByName('enhancement_hours-parent_id')
+
+
+'enhancement_hours-enhancement_project_id=10&'.replace(/(enhancement_hours-enhancement_project_id=)\d+&/, "$1666&")

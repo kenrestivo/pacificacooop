@@ -250,6 +250,7 @@ class coopPage
             $par = isset($args['par']) ? $args['par'] :true;
             $host = isset($args['host']) ? $args['host'] :false;
             $title = isset($args['title']) ? $args['title'] :false;
+            $elementid = isset($args['elementid']) ? $args['elementid'] :false;
 
 
 
@@ -301,6 +302,11 @@ class coopPage
                     $res .= sprintf(' title = "%s" ', 
                                     htmlentities($title));
                 }
+
+                if($elementid){
+                    $res .= sprintf(' id = "%s" ', $elementid);
+                }
+
                 $res .= sprintf('>%s</a>', $value);
                 $par && $res .= '</p>';
             } 

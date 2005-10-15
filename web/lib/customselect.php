@@ -13,6 +13,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
+            $res = "";
             $cf =& $this->_parentForm->CoopForm; // save typing
             $values = $this->_parentForm->exportValues();
 			list($table, $field) = explode('-', $this->getName());
@@ -42,35 +43,35 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             // it's an array! need this for edit
             $vals = $this->getValue();
 
-			return 
-                sprintf('%s %s <span id="%s">%s</span> 
-                                <div class="sublink">&nbsp;%s</div>',
-                        $this->_getJs(),
-                        parent::toHTML(), // the actual {element}!
-                        'subedit-' . $this->getName() ,
-                        $cf->page->selfURL(
-                            array(
-                                'value' =>sprintf(
-                                    'Edit',
-                                    $this->_parentForm->CoopForm->obj->fb_fieldLabels[$field]),
-                                'par' => false,
-                                'inside' => array('table' => $target,
-                                                  'action' => 'edit',
-                                                  sprintf('%s-%s',
-                                                          $target, $targfield) => 
-                                                  $vals[0],
-                                                  'push' => $this->getName()))),
-                        $cf->page->selfURL(
-                            array(
-                                'value' =>sprintf(
-                                    'Add New %s &gt;&gt;',
-                                    $this->_parentForm->CoopForm->obj->fb_fieldLabels[$field]),
-                                'par' => false,
-                                'inside' => array('table' => $target,
-                                                  'action' => 'add',
-                                                  'push' => $this->getName())))
-                    );
+            $res .= $this->_getJs();
+            $res .= parent::toHTML(); // the actual {element}!
+            
+            $res .= '&nbsp;' . $cf->page->selfURL(
+                array(
+                    'value' =>sprintf(
+                        'Edit',
+                        $cf->obj->fb_fieldLabels[$field]),
+                    'par' => false,
+                    'elementid' => 'subedit-' . $this->getName(),
+                    'inside' => array('table' => $target,
+                                      'action' => 'edit',
+                                      sprintf('%s-%s',
+                                              $target, $targfield) => $vals[0],
+                                      'push' => $this->getName())));
+            
 
+            $res .= sprintf('<div>&nbsp;%s</div>',
+                            $cf->page->selfURL(
+                                array(
+                                    'value' =>sprintf(
+                                        'Add New %s &gt;&gt;',
+                                        $cf->obj->fb_fieldLabels[$field]),
+                                    'par' => false,
+                                    'inside' => array('table' => $target,
+                                                      'action' => 'add',
+                                                      'push' => $this->getName())))
+                );
+            return $res;
         }
     } //end func toHtml
 
