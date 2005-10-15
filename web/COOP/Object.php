@@ -484,7 +484,7 @@ group by user_id,table_name,field_name";
                              array_map(
                                  create_function(
                                      '$item',
-                                     "return(sprintf('%s.%s', $this->table, \$item));"),
+                                     "return(sprintf('%s.%s', '{$this->table}', \$item));"),
                                  $this->obj->fb_linkDisplayFields)));
              }
 

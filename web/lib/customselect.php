@@ -35,12 +35,17 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                 return  parent::toHTML(); // the actual {element}!
             }
 
+            $this->_parentForm->updateElementAttr(
+                $this->getName(), 
+                array('onchange' => 'processCustomSelect(this)'));
+            
             // it's an array! need this for edit
             $vals = $this->getValue();
 
 			return 
-                sprintf('%s <span id="%s">%s</span> 
+                sprintf('%s %s <span id="%s">%s</span> 
                                 <div class="sublink">&nbsp;%s</div>',
+                        $this->_getJs(),
                         parent::toHTML(), // the actual {element}!
                         'subedit-' . $this->getName() ,
                         $cf->page->selfURL(
@@ -68,6 +73,38 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
         }
     } //end func toHtml
+
+
+       function _getJs()
+       {
+           // Generate the javascript code needed to handle this element
+           $js = '';
+           if (!defined('HTML_QUICKFORM_CUSTOMSELECT_EXISTS')) {
+			   // We only want to include the javascript code once per form
+               define('HTML_QUICKFORM_CUSTOMSELECT_EXISTS', true);
+
+               $js .= '
+/* begin javascript for HTML_QuickForm_customselect */
+function processCustomSelect(selectbox)
+{
+   edlink = document.getElementById("subedit-" + selectbox.name);
+   if(selectbox.value > 0){ 
+        edlink.className = "";
+   } else {
+        edlink.className = "hidden";
+   }
+
+}
+/* end javascript for HTML_QuickForm_customselect */
+               ';
+				
+			   // wrap wrap wrap wrap it up. i'll take it. up the ying-yang.
+               $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
+				   $js . "//]]>\n</script>";
+           }
+           return $js;
+       }
+
 
 
 	   

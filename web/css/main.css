@@ -220,6 +220,7 @@ p.error {
   margin: 0;
  }
 
+.hidden { display:none }
 
 @media print { 	
 	#header { display:none }	
