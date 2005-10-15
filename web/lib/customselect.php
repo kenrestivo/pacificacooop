@@ -36,12 +36,15 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                 return  parent::toHTML(); // the actual {element}!
             }
 
+            //  need these for edit link
+            $vals = $this->getValue();
+            $target_id = sprintf('%s-%s', $target, $targfield);
+
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
-                array('onchange' => 'processCustomSelect(this)'));
+                array('onchange' => 
+                      "processCustomSelect(this, '{$target_id}')"));
             
-            // it's an array! need this for edit
-            $vals = $this->getValue();
 
             $res .= $this->_getJs();
             $res .= parent::toHTML(); // the actual {element}!
@@ -55,8 +58,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                     'elementid' => 'subedit-' . $this->getName(),
                     'inside' => array('table' => $target,
                                       'action' => 'edit',
-                                      sprintf('%s-%s',
-                                              $target, $targfield) => $vals[0],
+                                       $target_id => $vals[0],
                                       'push' => $this->getName())));
             
 
@@ -86,11 +88,15 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
                $js .= '
 /* begin javascript for HTML_QuickForm_customselect */
-function processCustomSelect(selectbox)
+function processCustomSelect(selectbox, target_id)
 {
    edlink = document.getElementById("subedit-" + selectbox.name);
    if(selectbox.value > 0){ 
         edlink.className = "";
+        // NOTE the THREE GODDAMNED BACKSLASHES HERE IN THE SOURCE CODE!!
+        // to keep PHP from mangling it
+        re= new RegExp("(" + target_id + "=)\\\d*?(&)", "g");
+        edlink.href = edlink.href.replace(re, "$1" + selectbox.value + "$2");
    } else {
         edlink.className = "hidden";
    }

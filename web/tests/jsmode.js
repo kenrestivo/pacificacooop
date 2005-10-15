@@ -34,3 +34,28 @@ pid=document.getElementsByName('enhancement_hours-parent_id')
 
 
 'enhancement_hours-enhancement_project_id=10&'.replace(/(enhancement_hours-enhancement_project_id=)\d+&/, "$1666&")
+
+
+re = new RegExp('foo', "g");
+'foo bar baz'.replace(re, 'burp');
+
+
+re= new RegExp('(enhancement_hours-enhancement_project_id=)\\d+&', "g");
+'enhancement_hours-enhancement_project_id=10&'.replace(re, "$1foo&");
+
+target_id='enhancement_hours-enhancement_project_id';
+re= new RegExp('(' + target_id + '=)\\d+&', 'g');
+'enhancement_hours-enhancement_project_id=10&'.replace(re, "$1foo&");
+
+target_id='enhancement_hours-enhancement_project_id';
+repval=666;
+re= new RegExp("(" + target_id + "=)\\d*?(&)", "g");
+'enhancement_hours-enhancement_project_id=10&'.replace(re, "$1" + repval + "$2");
+
+function foobar(){
+    target_id='enhancement_hours-enhancement_project_id';
+    repval=666;
+    re= new RegExp("(" + target_id + "=)\\d*?(&)", "g");
+    return 'enhancement_hours-enhancement_project_id=10&'.replace(re, "$1" + repval + "$2");
+}
+
