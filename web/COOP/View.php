@@ -616,7 +616,7 @@ function schoolYearChooser()
     $el =& $syform->addElement('select', 'school_year', 'School Year', 
                                //TODO check ispermittedfield for allyears!
                                $this->getSchoolYears(null, true),
-                               array('onchange' =>'javascript:submitForm()'));
+                               array('onchange' =>'this.form.submit()'));
 
     if($sid = thruAuthCore($this->page->auth)){
         $syform->addElement('hidden', 'coop', $sid); 

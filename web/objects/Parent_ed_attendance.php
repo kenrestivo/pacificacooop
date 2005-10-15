@@ -126,7 +126,7 @@ class Parent_ed_attendance extends CoopDBDO
                                         'Meeting', 
                                        $meetings,
                                        array('onchange' =>
-                                             'javascript:submitForm()'));
+                                             'this.form.submit()'));
 
 
             // families
@@ -144,7 +144,7 @@ class Parent_ed_attendance extends CoopDBDO
                                                'Family', 
                                                $families,
                                                array('onchange' =>
-                                                     'javascript:submitForm()'));
+                                                     'this.form.submit()'));
             }
 
 

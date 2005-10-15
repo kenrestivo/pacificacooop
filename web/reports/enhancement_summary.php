@@ -43,7 +43,6 @@ print $menu->topNavigation();
 
 print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div id="centerCol">';
-javaSubmit();
 
 /// XXX DUPLICATE OF THE SOLICIT SUMMARY ONE!!
 /// immediately either create a coop report class, or use the chooser in coopobj
@@ -58,7 +57,7 @@ function schoolYearChooser(&$atd, $table)
     $el =& $syform->addElement('select', 'gschoolyear', 'Choose School Year', 
                                //TODO check ispermittedfield for allyears!
                                $at->getSchoolYears(null, true),
-                               array('onchange' =>'javascript:submitForm()'));
+                               array('onchange' =>'this.form.submit()'));
 
     if($sid = thruAuthCore($at->page->auth)){
         $syform->addElement('hidden', 'coop', $sid); 
@@ -125,12 +124,11 @@ function viewHack(&$atd)
     $en =& new Enhancement(&$atd->page, 1);
 	$sem = $en->guessSemester();
 
-	//javaSubmit();
 
 	$form =& new HTML_QuickForm('htmlsucks');
 	$form->addElement('select', 'semester_html_sucks', 'Choose Semester:',
 					  array('fall'=> 'Fall', 'spring' => 'Spring'),
-					  'onchange="javascript:submitForm()"');
+					  'onchange="this.form.submit()"');
 	// semester is semester(from popup), or semesterhtmlsucks, or default
 	$sem = $_REQUEST['semester_html_sucks'] ? 
 		$_REQUEST['semester_html_sucks'] : $sem; 

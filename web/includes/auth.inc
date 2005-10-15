@@ -441,10 +441,9 @@ accessLevelString($privnum, $callbacks)
 ******************/
 function loginPopup($uid)
 {
-	javaSubmit();
 
 	print "<select name='auth[uid]'
-				onchange='javascript:submitForm()'>\n";
+				onchange='this.form.submit()'>\n";
 	print "<option value='0'>CHOOSE ONE</option>\n";
 	
 	$sy = findSchoolYear();

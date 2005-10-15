@@ -196,24 +196,6 @@ warnDev()
 	
 }/* END WARNDEV */
 
-/*******************
-	JAVASUBMIT
-	does that wacky bit of javascript to auto-submit a form
-	outputs: javascript for auto-sumbitting a form
-******************/
-function
-javaSubmit()
-{
-	// wrapped in comments to make old browsems ignore it
-	print '<script type="text/javascript" language="javascript">
-			<!-- Begin 
-			function submitForm() {
-				document.forms[0].submit(); 
-				return(true); 
-			} 
-			// End -->
-			</script>';
-} /* END JAVASUBMIT */
 
 /*******************
 	TIMESTAMPDBPHP

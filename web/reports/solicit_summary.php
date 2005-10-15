@@ -43,7 +43,6 @@ print $menu->topNavigation();
 
 print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div id="centerCol">';
-javaSubmit();
 
 function schoolYearChooser(&$atd, $table)
 {
@@ -56,7 +55,7 @@ function schoolYearChooser(&$atd, $table)
     $el =& $syform->addElement('select', 'gschoolyear', 'Choose School Year', 
                                //TODO check ispermittedfield for allyears!
                                $at->getSchoolYears(null, true),
-                               array('onchange' =>'javascript:submitForm()'));
+                               array('onchange' =>'this.form.submit()'));
 
     if($sid = thruAuthCore($at->page->auth)){
         $syform->addElement('hidden', 'coop', $sid); 

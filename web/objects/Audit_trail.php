@@ -90,12 +90,12 @@ class Audit_trail extends CoopDBDO
             $el =& $syform->addElement('text', 'limit', 'Records to show', 
                                        '20',
                                        array('onchange' =>
-                                             'javascript:submitForm()'));
+                                             'this.form.submit()'));
 
             $sel =& $syform->addElement('select', 'realm_id', 'Realm', 
                                        $nothing,
                                        array('onchange' =>
-                                             'javascript:submitForm()'));
+                                             'this.form.submit()'));
             $sel->addOption('ALL', '0');
             $realms =& new CoopView(&$co->page, 'realms', &$co);
             $realms->find(true); // go get, including any constraints/sorts

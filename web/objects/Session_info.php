@@ -78,7 +78,7 @@ class Session_info extends CoopDBDO
             $el =& $syform->addElement('text', 'limit', 'Records to show', 
                                        '20',
                                        array('onchange' =>
-                                             'javascript:submitForm()'));
+                                             'this.form.submit()'));
 
             if($sid = thruAuthCore($co->page->auth)){
                 $syform->addElement('hidden', 'coop', $sid); 
