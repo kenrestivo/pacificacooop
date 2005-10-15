@@ -71,7 +71,8 @@ class coopForm extends CoopObject
             if(is_callable(array($this->obj, 'preGenerateForm'))){
                 $this->obj->preGenerateForm(&$this->form);
             }
-
+            
+            
 
 			$this->addAndFillVars($vars);
 

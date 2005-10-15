@@ -550,8 +550,9 @@ class coopPage
 
             // let the last id override! for edits.
             if($this->vars['last']['table']){
-                $lastco = new CoopObject(&$this, 
-                                          $this->vars['last']['table'], &$this);
+                $lastco =& new CoopObject(&$this, 
+                                          $this->vars['last']['table'], 
+                                         &$nothing);
                 $last_long_pk = $lastco->prependTable($lastco->pk);
                 
                 if($this->vars['last']['id'] && !$merged[$last_long_pk])
