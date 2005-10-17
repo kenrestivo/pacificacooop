@@ -1,6 +1,15 @@
 json select box notes
 
-ok, do mine now
+
+integrate flexac
+	auth properly on the FLEXAC.PHP file!
+	move the fucking plugins dir.
+		or, put it in the PEAR OBJECT! instead of loading plugins!
+		things that make me crazy: subclass FlexacPlugin in plugins!
+	check for css fuckup: the box extends longer than the form!
+	make it use a large selectbox, not a CSS popup
+
+
 
 4 hours javascript/php
 json selectbox
@@ -13,13 +22,6 @@ json selectbox
 		showing more info on the selected item, javascript-refreshed
 
 
-
-integrate flexac
-	move the fucking plugins dir.
-		or, put it in the PEAR OBJECT! instead of loading plugins!
-		things that make me crazy: subclass FlexacPlugin in plugins!
-	check for css fuckup: the box extends longer than the form!
-	make it use a large selectbox, not a CSS popup
 
 test with FF, and exploiter too!
 	before pushing live, make sure exploiter is ok with it
