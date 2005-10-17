@@ -60,7 +60,7 @@ $menu->createNew();
 	
 $u = $cp->userStruct; // cached by createlegacy
 
-print $menu->topNavigation();
+print $cp->topNavigation();
 print "\n<hr></div> <!-- end header div -->\n";
 //confessObj($menu, 'menu');
 

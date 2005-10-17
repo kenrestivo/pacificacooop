@@ -1,32 +1,28 @@
 json select box notes
 
-understand this index, _id thing in the province names
-	is it a hidden field? that's weird. yes, it's weird. but it works.
+ok, do mine now
+
+4 hours javascript/php
+json selectbox
+	use linkdisplayfields as search entry boxes (with _manglednames)
+	js to search based on what the user types in (find button)
+	populate scrolling selectbox (x lines) with results
+		similar to existing customselect,
+			the add/remove select with js tricks
+	for goodies, a 'details' box next to the select
+		showing more info on the selected item, javascript-refreshed
+
 
 
 integrate flexac
-	make it deal with my auth and cooppage
-		look at packet capture.
-	escape characters in query!! terrible bug!
-	make a test page of my own, using the leads db!
-		database
-		remember to turn off autocomplete in the item!
-		make it use my css, not its.
-	check for css fuckup: i don't like the unreadable select box in ff
 	move the fucking plugins dir.
 		or, put it in the PEAR OBJECT! instead of loading plugins!
-	newer/better browser should be link to firefox!!
-	things that make me crazy: subclass FlexacPlugin in plugins!
+		things that make me crazy: subclass FlexacPlugin in plugins!
+	check for css fuckup: the box extends longer than the form!
 	make it use a large selectbox, not a CSS popup
 
 test with FF, and exploiter too!
 	before pushing live, make sure exploiter is ok with it
-
-things
-20 minutes PHP
-	select box 
-	fields (with manglednames) for each linkdisplay in select object
-	search button
 
 
 WHAT should i do with searching?
@@ -36,11 +32,8 @@ start out with a pregenerateform
 
 
 actions
-1 hour PHP
-	search: run json query, fill box with results
 	possibly: on select, show full record in displaybox
 		i.e. horiztable
-
 
 	
 
@@ -49,10 +42,8 @@ what exactly will i call?
 	populate it
 
 
-
-how to call remote methods?
-	like in xmlrpc is there some way to query available methods?
-		and function calls
+	pass auth through for no-cookies
+		a parameter to config, no doubt
 
 
 in coopform->addAndFillVars
@@ -62,16 +53,6 @@ in coopform->addAndFillVars
 				load the javascript needed.
 		otherwise use old customselect
 
-
-??? javascript/php/python?
-json selectbox
-	use linkdisplayfields as search entry boxes (with _manglednames)
-	js to search based on what the user types in (find button)
-	populate scrolling selectbox (x lines) with results
-		similar to existing customselect,
-			the add/remove select with js tricks
-	for goodies, a 'details' box next to the select
-		showing more info on the selected item, javascript-refreshed
 
 
 
@@ -130,3 +111,4 @@ AHA! eval(returndata) is how you turn json back into a javascript data structure
 understand selectbox updating
 	i.e. my advmultiselect
 
+	newer/better browser should be link to firefox!!

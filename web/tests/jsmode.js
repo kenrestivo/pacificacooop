@@ -90,3 +90,28 @@ bar={"AG":"Agrigento","AL":"Alessandria"};
 f=flexac;
 f.config.script='../lib/flexac/flexac.php';
 
+
+encodeURIComponent('foo^b=ar&baz?');
+
+['foo','bar'].join(', ')
+
+qo={};
+qo['q'] = 'foo';
+qo.bah = 'baz';
+
+
+qo= {};
+qa = [];
+
+qo.q = 'bar'
+qo.p = 'baz';
+qo.l = 'blah';
+qo.b = 'foo';
+
+for(x in qo){
+    qa.push(x + '=' + encodeURIComponent(qo[x]));
+}
+query = qa.join('&');
+
+
+

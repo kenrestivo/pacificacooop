@@ -17,8 +17,7 @@ $cp = new coopPage( $debug);
 $cp->buffer($cp->pageTop());
 
 
-$menu =& new CoopMenu(&$cp);
-$cp->buffer($menu->topNavigation());
+$cp->buffer($cp->topNavigation());
 
 
 

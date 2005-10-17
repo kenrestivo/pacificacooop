@@ -24,6 +24,7 @@ require_once("first.inc");
 require_once("shared.inc");
 require_once("auth.inc");
 require_once('Mail.php');
+require_once 'HTML/Table.php';
 
 
 function confessObj($obj, $text, $outofband = true)
@@ -118,6 +119,38 @@ class coopPage
 					   E_USER_NOTICE);
 
 		}
+
+
+	function topNavigation()
+		{
+            $res = '';
+
+			// i don't user this->page->userStruct
+			// since it requires createlegacy adn i may not have that!
+			$u = getUser($this->auth['uid']);	// ugh.
+
+            /// TODO: yank HTML table and use CSS instead!
+			$tab =& new HTML_Table('width="100%"');
+
+			$tab->addCol(array(
+							 sprintf("<h3>Welcome %s!</h3>", $u['username'])));
+			$tab->addCol(array($this->selfURL(array(
+								   'value' => "Back to Main Menu", 
+                                   'inside' =>"action=menu", 
+								   'base' => "index.php")))
+						 ); // TODO: maybe make that backbutton hilighted?
+			$tab->addCol(array($this->selfURL(array('value' =>"Log Out", 
+													'inside' =>'action=logout'))));
+			
+			
+						 
+			$res .= $tab->toHTML();
+
+			return $res;
+		}
+	
+
+
 
 	function debugCrap()
 	{

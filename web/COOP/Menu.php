@@ -42,7 +42,12 @@ class CoopMenu extends HTML_Menu
             $this->page =& $page;
         }
 
-
+    function topNavigation()
+        {
+            // DEPRECATED!
+            $this->page->printDebug('WARNING! you are using the old topnav', 0);
+            return $this->page->topNavigation();
+        }
 
 
 	function kenRender($type = 'sitemap')
@@ -80,34 +85,6 @@ class CoopMenu extends HTML_Menu
 		}
 
 
-	function topNavigation()
-		{
-            $res = '';
-
-			// i don't user this->page->userStruct
-			// since it requires createlegacy adn i may not have that!
-			$u = getUser($this->page->auth['uid']);	// ugh.
-
-
-			$tab =& new HTML_Table('width="100%"');
-
-			$tab->addCol(array(
-							 sprintf("<h3>Welcome %s!</h3>", $u['username'])));
-			$tab->addCol(array($this->page->selfURL(array(
-								   'value' => "Back to Main Menu", 
-                                   'inside' =>"action=menu", 
-								   'base' => "index.php")))
-						 ); // TODO: maybe make that backbutton hilighted?
-			$tab->addCol(array($this->page->selfURL(array('value' =>"Log Out", 
-													'inside' =>'action=logout'))));
-			
-			
-						 
-			$res .= $tab->toHTML();
-
-			return $res;
-		}
-	
 
 
     //$i is the running total, MUST propogate it,it must be unique
