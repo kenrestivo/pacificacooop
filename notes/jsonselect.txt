@@ -1,5 +1,27 @@
 json select box notes
 
+understand this index, _id thing in the province names
+	is it a hidden field? that's weird. yes, it's weird. but it works.
+
+
+integrate flexac
+	make it deal with my auth and cooppage
+		look at packet capture.
+	escape characters in query!! terrible bug!
+	make a test page of my own, using the leads db!
+		database
+		remember to turn off autocomplete in the item!
+		make it use my css, not its.
+	check for css fuckup: i don't like the unreadable select box in ff
+	move the fucking plugins dir.
+		or, put it in the PEAR OBJECT! instead of loading plugins!
+	newer/better browser should be link to firefox!!
+	things that make me crazy: subclass FlexacPlugin in plugins!
+	make it use a large selectbox, not a CSS popup
+
+test with FF, and exploiter too!
+	before pushing live, make sure exploiter is ok with it
+
 things
 20 minutes PHP
 	select box 
@@ -7,14 +29,11 @@ things
 	search button
 
 
-understand selectbox updating
-	i.e. my advmultiselect
+WHAT should i do with searching?
 
-decompose and understand the autocomplete box i just found
-	where is it? IT'S JPSPAN!
-	that might get me where i need to go, anyway.
+start out with a pregenerateform
+	then integrate it into a customjsonselect
 
-FUCK getting this into customselect or jsonselect
 
 actions
 1 hour PHP
@@ -40,6 +59,7 @@ in coopform->addAndFillVars
 	if linkdisplay, break out the dispatching
 		do the link find
 			if N > 50 or so, use jsoneselectbox
+				load the javascript needed.
 		otherwise use old customselect
 
 
@@ -103,3 +123,10 @@ json notes
 		it does *not* specify how to send
 	Services_JSON seems to reccomend  $GLOBALS['HTTP_RAW_POST_DATA'];
 		which is probably how jsolait sends stuff
+
+AHA! eval(returndata) is how you turn json back into a javascript data structure
+	that's what makes it an object
+
+understand selectbox updating
+	i.e. my advmultiselect
+

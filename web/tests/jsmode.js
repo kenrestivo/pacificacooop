@@ -79,3 +79,14 @@ server = new jsonrpc.ServiceProxy(
     'http://www/coop-dev/tests/simplejsonserver.php', 
     ['foo']);
 r=server.foo('bar baz');
+
+
+///////// raw json
+
+foo='{"AG":"Agrigento","AL":"Alessandria"}'
+bar={"AG":"Agrigento","AL":"Alessandria"};
+
+//// flexac xhl stuff
+f=flexac;
+f.config.script='../lib/flexac/flexac.php';
+

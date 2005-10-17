@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+<title>Autocomplete control with dropdown</title>
+<script src="../lib/flexac/flexac.js"></script>
+<style type="text/css">
+@import url(../lib/flexac/flexac.css);
+</style>
+
+<style type="text/css">
+input {
+  font-size: 12px;
+  font-family: verdana;
+  }
+  
+form {
+  border: 1px solid silver;
+  width: 400px;
+  padding: 10px;
+  margin: 0 auto;
+  background: #f1f1ee;
+}
+body {
+  width: 60%; 
+  margin: 0 auto; 
+  margin-top: 30px; 
+  text-align: justify;
+  font-family: Verdana, sans-serif;
+  font-size: 75%;
+}
+
+h3 {
+  font-family: Georgia, Times, serif;
+}
+</style>
+</head>
+
+<body onload="flexac.configure(); flexac.config.script='../lib/flexac/flexac.php';">
+<h3>
+This is a demo for the <a href="http://www.flexer.it/flexac/">Flexac</a> system
+</h3>
+<p>
+This is an <em>autocomplete system</em> based on the XMLHTTPRequest object.
+<p>How to use it: simply enter at least 2 characters to trigger the autocomplete feature of each field. While flexac is searching the input field will have red borders but you can continue to type to refine your search.
+<p>
+</p>
+When a search has been completed, a drop down box will appear. You can select the correct entry with the mouse or with the up and down arrows and the enter key. When you select an item, the input field background color will switch to gray to indicate that the field has a valid chosen entry.
+You can then move to the next field.
+</p> 
+<p>
+Note that this system has been designed to be used (mostly) on local network, as it intrisicly suffers from network latency. The first field does the lookup on a bunch of 13000 planetoid names. And yes, it is slow. The second field completes the name of an italian province. It searches ~100 items only and it is usable (it also cached).
+</p>
+<p>
+There is also a 250ms artificially a
+dded delay between a keypress and the system to react. This is almost unnoticeable, but useful. Trust me.
+</p>
+<form method="post" action="/phpwork/generaldebug.php">
+<p>
+<label>Choose a Planetoid:</label>
+<input type="text" name="pianeta" id="first" onfocus="flexacOn(this, 'planets', false);">
+</p>
+<p>
+<label>Choose a Province:</label>
+<input type="text" name="provincia" onfocus="flexacOn(this, 'province', false);">
+</p>
+<p>
+<input type="submit" value="Press here">
+</p>
+<p id="debug"></p>
+<p>
+And what does happen when you, finally, click that "Press here" button? You'll be presented with
+a data dump of the item you inserted. Note the *_id fields. They are set (and even created,
+if they don't exists) by Flexac.
+</p>
+</form>
+</body>
+
+</html>
