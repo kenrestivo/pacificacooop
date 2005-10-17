@@ -825,6 +825,29 @@ function triggerNotices($audit_id)
             $this->obj->joinAdd($joinco->obj);
         }
 
+    function &getData($query, $limit, $beginsWith)
+        {
+            foreach($this->obj->fb_linkDisplayFields as $ldf){
+                $this->obj->whereAdd(sprintf('%s like "%s%s%%"',
+                                             $ldf, 
+                                             $beginsWith ? '' : '%',
+                                             $query), 
+                                     'OR');
+            }
+            
+
+            $this->linkConstraints();
+            
+            $this->debugWrap(2);
+			$this->obj->find();
+			while($this->obj->fetch()){
+				$options[(string)$this->obj->{$this->pk}] = 
+    $this->concatLinkFields();
+			}
+            
+            return $options;
+        }
+    
 
 } // END COOP OBJECT CLASS
 

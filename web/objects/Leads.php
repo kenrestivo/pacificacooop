@@ -46,7 +46,8 @@ class Leads extends CoopDBDO
 									'zip', 'country', 'phone', 
 									'do_not_contact');
 	var $fb_enumFields = array ('relation', 'source'); // make this a link
-	var $fb_linkDisplayFields = array ('last_name', 'first_name', 'address1');
+	var $fb_linkDisplayFields = array ('last_name', 'first_name', 'company', 
+                                       'address1');
 	var $fb_selectAddEmpty = array ('source_id', 'family_id');
 	var $fb_fieldLabels = array( 'lead_id' => "Response Code", 
 								 'last_name' => "Last Name", 

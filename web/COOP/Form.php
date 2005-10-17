@@ -296,6 +296,8 @@ class coopForm extends CoopObject
             
             $sub->linkConstraints();
 
+            /// TODO: replace all of the below with getData from coopobject?
+
             //$this->debugWrap(2);
 			$sub->obj->find();
 			while($sub->obj->fetch()){

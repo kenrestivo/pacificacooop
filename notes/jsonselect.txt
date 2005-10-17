@@ -1,116 +1,59 @@
 json select box notes
 
-
-integrate flexac
-	auth properly on the FLEXAC.PHP file!
-	move the fucking plugins dir.
-		or, put it in the PEAR OBJECT! instead of loading plugins!
-		things that make me crazy: subclass FlexacPlugin in plugins!
-	check for css fuckup: the box extends longer than the form!
-	make it use a large selectbox, not a CSS popup
-
-
-
-4 hours javascript/php
-json selectbox
-	use linkdisplayfields as search entry boxes (with _manglednames)
-	js to search based on what the user types in (find button)
-	populate scrolling selectbox (x lines) with results
-		similar to existing customselect,
-			the add/remove select with js tricks
-	for goodies, a 'details' box next to the select
-		showing more info on the selected item, javascript-refreshed
-
-
+yank the html escaping. unescape()?
 
 test with FF, and exploiter too!
 	before pushing live, make sure exploiter is ok with it
 
 
-WHAT should i do with searching?
-
-start out with a pregenerateform
-	then integrate it into a customjsonselect
+how to deal with duplicates?
+	guess. then use it instead of inserting?
 
 
+integrate flexac
+	check for css fuckup: the box extends longer than the form!
+	make it use a large selectbox, not a CSS popup
+	  understand selectbox updating
+  		i.e. my advmultiselect
+	this is problematic! people will think they are ENTERING  
+
+
+integrate with QF and CoopForm!
+	start out with a pregenerateform
+		then integrate it into a customjsonselect
+    in coopform->addAndFillVars
+    	if linkdisplay, break out the dispatching
+    		do the link find
+    			if N > 50 or so, use jsoneselectbox
+    				load the javascript needed.
+    		otherwise use old customselect
+
+
+PUSH LIVE
+
+    
 actions
-	possibly: on select, show full record in displaybox
-		i.e. horiztable
-
-	
-
-what exactly will i call?
-	instantiate the sub object
-	populate it
-
-
 	pass auth through for no-cookies
 		a parameter to config, no doubt
+		if SID through set, i.e. no cookies
+	
 
-
-in coopform->addAndFillVars
-	if linkdisplay, break out the dispatching
-		do the link find
-			if N > 50 or so, use jsoneselectbox
-				load the javascript needed.
-		otherwise use old customselect
-
-
-
-
-how to deal with duplicates?
-	guess. then use it instead of inserting
-
-
-nice to have
-	autocomplete with javascript
-
-
-
- * Example of Using HTML_AJAX in proxyless operation
- *
- * This is the simplest way to use HTML_AJAX if your just using grab and replace functions you don't even need a server
- * You need every javascript file except JSON which is optional and is only needed if your using that encoding
- *
- * The proxyless api is provided by Main.js
- *
- * There are 3 main methods and 2 properties to the proxyless api, they all exist as static methods on HTML_AJAX
- *	HTML_AJAX.grab(url)
-
- *	HTML_AJAX.replace(id,url) 
-	or HTML_AJAX.replace(id,class,method,arg1,arg2,etc)
-
- *	HTML_AJAX.call(class,method,callback,arg1,arg2,etc)
-
- *
- *	HTML_AJAX.defaultServerUrl = 'serverurl';
-
- *	HTML_AJAX.defaultEncoding = 'Null';
-
-
-
-??? JAVASXCRIPT
-make ajax deal with nocookies
-	pass SID through 
-	the js will need to contend with this
+make the box bigger
+	auto-grow, maybe? js?
 
 
 maybe render subforms by shipping them (minus their form tags) via json?
 
-other json things
-	jpspan IS NOT JSON! it uses php for serialising. ugh.
 
 
-json notes
-	aha! json is just a way of seralising things. 
-		it does *not* specify how to send
-	Services_JSON seems to reccomend  $GLOBALS['HTTP_RAW_POST_DATA'];
-		which is probably how jsolait sends stuff
+Services_JSON seems to reccomend  $GLOBALS['HTTP_RAW_POST_DATA'];
+	which  how jsolait sends stuff
+		
 
-AHA! eval(returndata) is how you turn json back into a javascript data structure
-	that's what makes it an object
 
-understand selectbox updating
-	i.e. my advmultiselect
-
-	newer/better browser should be link to firefox!!
+4 hours javascript/php
+json selectbox
+	for goodies, a 'details' box next to the select
+		showing more info on the selected item, javascript-refreshed
+		possibly: on select, show full record in displaybox
+			i.e. horiztable

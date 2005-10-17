@@ -28,9 +28,9 @@ flexac.configure(); flexac.config.script="%s/flexac.php";
 
 print '<form method="post" action="/phpwork/generaldebug.php">
 <p>
-<label>Choose a Province:</label>
-<input type="text" name="provincia" autocomplete="off" 
-        onfocus="flexacOn(this, \'province\', false);">
+<label>Choose a Contact:</label>
+<input type="text" name="lead" autocomplete="off" size="50"
+        onfocus="flexacOn(this, \'leads\', false);">
 </p>
 <p>
 <input type="submit" value="Press here">
