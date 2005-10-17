@@ -137,7 +137,7 @@ function
 sessionSetup()
 {
 
-	user_error("sessionSetup(): setting up session", E_USER_NOTICE);
+	user_error("-------- NEW SESSION ----------------\nsessionSetup(): setting up session", E_USER_NOTICE);
 
 	/* magic quotes aren't magic, they're evil! turn them off!!
 	ini_set('magic_quotes_gpc', 0);

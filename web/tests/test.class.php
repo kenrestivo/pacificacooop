@@ -26,6 +26,13 @@ class test {
         $this->page->printDebug("echo string $string", 2);
 		return $string;
 	}
+
+
+ 	function list_methods() {
+		return get_class_methods($this);
+	}
+
+
 	function slow_echo_string($string) {
 		sleep(2);
 		return $string;
@@ -34,13 +41,29 @@ class test {
 		trigger_error($string);
 	}
 
-	function userinfo($string) {
+	function getUserInfo() {
         //confessObj($this->page, 'page');
         $this->page->confessArray($_SESSION,
                                   "session", 2);
 		//return $this->page->userStruct;
-		return $this->page;
+		return $this->page->userStruct;
+	}
+
+	function foo() {
+		return 'bar';
 	}
 
 }
+
+class AnotherTest {
+    
+	function foo() {
+		return 'bar';
+	}
+    
+
+}
+
+
+
 ?>

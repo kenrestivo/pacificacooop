@@ -28,7 +28,7 @@ document.getElementById('target').innerHTML = 'foo bar baz';
 
 a.call('test','echo_string',false,'this rules');
 
-uinfo=a.call('test','userinfo', false, 'useless arg');
+uinfo=a.call('test','getUserInfo', false);
 
 pid=document.getElementsByName('enhancement_hours-parent_id')
 
@@ -59,3 +59,23 @@ function foobar(){
     return 'enhancement_hours-enhancement_project_id=10&'.replace(re, "$1" + repval + "$2");
 }
 
+//uinfo.printDebug('foo bar baz!', 2);
+
+a.call('test','list_methods',false);
+a.call('test','error_test',false,'this rules');
+
+//a.call('CoopPage','printDebug',false,'testing printdebug', 2);
+a.call('test','foo',false);
+a.call('anotherTest','foo',false);
+
+
+///////// JSOLAIT STUFF
+
+j=jsolait
+j.baseURL='http://www/lib/jsolait';
+j.libURL='http://www/lib/jsolait';
+jsonrpc = importModule("jsonrpc");
+server = new jsonrpc.ServiceProxy(
+    'http://www/coop-dev/tests/simplejsonserver.php', 
+    ['foo']);
+r=server.foo('bar baz');

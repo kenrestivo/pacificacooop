@@ -122,7 +122,11 @@ class coopPage
 	function debugCrap()
 	{
 		$this->confessArray($_REQUEST, "test REQUEST");
-		$this->confessArray($_SESSION, "test SESSION (prior to request being processed)");
+		$this->confessArray($GLOBALS['HTTP_RAW_POST_DATA'], "RAW HTTP POST");
+		$this->confessArray($_GET, "test GET");
+		$this->confessArray($_POST, "test POST");
+		$this->confessArray($_SESSION, 
+                            "test SESSION (prior to request being processed)");
 		$this->confessArray($_SERVER, "test SERVER", 4);
 				
 	}
@@ -184,7 +188,15 @@ class coopPage
 				return;
 			}
 			// NOTE no need to print confessarray, $outofband tells it to
-			$res = confessArray($array, $message, $outofband);
+			if(is_array($array)){
+                $res = confessArray($array, $message, $outofband);
+            } else if(is_object($array)) {
+                // XXX ALWAYS out of band, however!
+                $res = $outofband ? '' : 'dumping object out of band. hack.';
+                confessObj($array, $message);
+            } else {
+                $res = "<pre>====== $message ==========\n[$array]</pre>";
+            }
 			if($outofband){
 				dump(&$res);
 			} 
@@ -395,11 +407,12 @@ class coopPage
 		{
 			if(devSite()){
 				confessObj($obj, 'pear error. bummer.');
-				exit(1);
+                dump('PEAR ERROR DONE BEING DUMPED');
+                user_error('PEAR ERROR, saving to debug', E_USER_NOTICE);
+				$this->done();
 			}
 			$this->mailError('PEAR error on live site!',
 							 print_r($obj, true));
-            $this->done();
 			exit(1);
 		}
 

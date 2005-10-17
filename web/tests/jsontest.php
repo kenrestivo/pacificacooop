@@ -89,10 +89,10 @@ function callCallback(result) {
 }
 
 
-function getUser() {
+function getUserInfo() {
 	//HTML_AJAX.defaultEncoding = 'Null'; // set encoding to no encoding method
 	document.getElementById('target').innerHTML = 
-        HTML_AJAX.call('test','getUser','useless arg');
+        HTML_AJAX.call('test','getUserInfo','useless arg');
 	HTML_AJAX.defaultEncoding = 'JSON'; // return it to default which is JSON
 }
 
@@ -112,5 +112,4 @@ function getUser() {
 <div style="white-space: pre; padding: 1em; margin: 1em; width: 600px; 
 height: 300px; border: solid 2px black; overflow: auto;" 
 id="target">Target</div>
-</body>
-</html>
+print $cp->done();

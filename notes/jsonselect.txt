@@ -1,6 +1,5 @@
 json select box notes
 
-
 things
 20 minutes PHP
 	select box 
@@ -8,12 +7,20 @@ things
 	search button
 
 
+understand selectbox updating
+	i.e. my advmultiselect
+
+decompose and understand the autocomplete box i just found
+	where is it? IT'S JPSPAN!
+	that might get me where i need to go, anyway.
+
+FUCK getting this into customselect or jsonselect
+
 actions
 1 hour PHP
 	search: run json query, fill box with results
 	possibly: on select, show full record in displaybox
 		i.e. horiztable
-
 
 
 	
@@ -23,11 +30,17 @@ what exactly will i call?
 	populate it
 
 
-understand selectbox updating
-	i.e. my advmultiselect
+
+how to call remote methods?
+	like in xmlrpc is there some way to query available methods?
+		and function calls
 
 
-
+in coopform->addAndFillVars
+	if linkdisplay, break out the dispatching
+		do the link find
+			if N > 50 or so, use jsoneselectbox
+		otherwise use old customselect
 
 
 ??? javascript/php/python?
@@ -42,9 +55,14 @@ json selectbox
 
 
 
+how to deal with duplicates?
+	guess. then use it instead of inserting
+
 
 nice to have
 	autocomplete with javascript
+
+
 
  * Example of Using HTML_AJAX in proxyless operation
  *
@@ -75,3 +93,13 @@ make ajax deal with nocookies
 
 
 maybe render subforms by shipping them (minus their form tags) via json?
+
+other json things
+	jpspan IS NOT JSON! it uses php for serialising. ugh.
+
+
+json notes
+	aha! json is just a way of seralising things. 
+		it does *not* specify how to send
+	Services_JSON seems to reccomend  $GLOBALS['HTTP_RAW_POST_DATA'];
+		which is probably how jsolait sends stuff

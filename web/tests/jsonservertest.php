@@ -45,7 +45,16 @@ class TestServer extends HTML_AJAX_Server {
 	function initTest() {
 		include 'test.class.php';
 		$this->registerClass(new test(&$this->page));
-	}
+    }
+
+// 	function initCoopPage() {
+//         $this->registerClass(&$cp);
+//     }
+
+	function initAnotherTest() {
+		$this->registerClass(new AnotherTest());
+    }
+
 	
 }
 
@@ -54,4 +63,7 @@ $server = new TestServer(&$cp);
 
 // handle requests as needed
 $server->handleRequest();
+
+print $cp->done();
+
 ?>
