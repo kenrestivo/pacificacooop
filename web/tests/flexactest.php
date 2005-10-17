@@ -8,6 +8,9 @@ $cp = new CoopPage($debug);
 print $cp->pageTop(); 
 print $cp->topNavigation(); 
 
+
+print $cp->selfURL(array('value'=> 'Refresh'));
+
 //XXX STUPID ../ only for test dir
 $flexacpath = '../lib/flexac';
 
