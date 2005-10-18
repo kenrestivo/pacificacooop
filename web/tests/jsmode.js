@@ -114,4 +114,4 @@ for(x in qo){
 query = qa.join('&');
 
 
-
+'foo&foo'

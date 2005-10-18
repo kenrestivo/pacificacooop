@@ -841,10 +841,11 @@ function triggerNotices($audit_id)
             $this->debugWrap(2);
 			$this->obj->find();
 			while($this->obj->fetch()){
-				$options[(string)$this->obj->{$this->pk}] = 
-    $this->concatLinkFields();
+				$options[(string)$this->obj->{$this->pk}] =
+ $this->concatLinkFields();
 			}
             
+            $this->page->confessArray($options, 'getData options', 4);
             return $options;
         }
     

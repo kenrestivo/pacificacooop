@@ -1,6 +1,8 @@
 URL: http://paccoop.cust.nearlyfreespeech.net/ or           
 http://paccoop.nfshost.com/
 
+DNS  Customer #: 2634076
+
 FTP Username: paccoop_paccoop
 FTP Password: nofifgyq
 FTP Hostname: ftp.phx.nearlyfreespeech.net

@@ -40,7 +40,7 @@ function confessObj($obj, $text, $outofband = true)
 	}
 }
 
-function dump($data)
+function dump($data, $close = false)
 {
 
     if(!devSite()){
@@ -58,8 +58,13 @@ function dump($data)
 							$_SERVER['REQUEST_URI'], 
 							$_SERVER['REQUEST_METHOD'], 
 							$_SERVER['HTTP_REFERER']));
+        fflush($fp);
 	}
 	fwrite($fp, $data);
+    if($close){
+        fflush($fp);
+        fclose($fp);
+    }
 }
 
 //////////////////////////////////////////
@@ -444,6 +449,7 @@ class coopPage
 			}
 			$this->mailError('PEAR error on live site!',
 							 print_r($obj, true));
+            dump('done', true);
 			exit(1);
 		}
 
@@ -505,6 +511,7 @@ class coopPage
                                 'CoopPage::done() saving SESSION  at END of page');
             print $this->flushBuffer();
             done(); // the legacy utils.inc version
+            dump('all done' , true);
         }
 
 

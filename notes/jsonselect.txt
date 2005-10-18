@@ -1,8 +1,19 @@
 json select box notes
 
-yank the html escaping. unescape()?
+know what? Do It Right.
+	use a selectbox, dammit. i can do it.
 
-test with FF, and exploiter too!
+yank the html escaping. unescape()?
+	interestingly, it unescapes in the popup, but not in the selectbox
+	it's raw coming back in json. flac is fuckign itup
+
+don't let the flexac.css override my font. keep what's already there!
+
+why won't it submit?
+
+the flexacChoose shouldn't fuck with my bg color. keep system colour!
+
+test with FF, and exploiter too
 	before pushing live, make sure exploiter is ok with it
 
 
