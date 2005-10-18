@@ -14,26 +14,17 @@ print $cp->selfURL(array('value'=> 'Refresh'));
 //XXX STUPID ../ only for test dir
 $flexacpath = '../lib/flexac';
 
-printf('<script src="%s/kenflex.js"></script>
-<style type="text/css">
-@import url(%s/flexac.css);
-</style>', $flexacpath, $flexacpath);
-
-// IMPORTANT! go set up the paths in the flexac object
-printf('<script type="text/javascript">
-flexac.configure(); flexac.config.script="%s/flexac.php";
-</script>', $flexacpath);
-
+printf('<script src="%s/kenflex.js"></script>' , 
+       $flexacpath);
 
 
 print '<form method="post" action="/phpwork/generaldebug.php">
 <p>
-<label>Choose a Contact:</label>
-
-<input type="text" name="lead" autocomplete="off" size="50"
-        onfocus="flexacOn(this, \'leads\', false);">
-
-<select name="lead_id[]" size=10 multiple>
+<label>Contact:</label>
+<div><input type="text" name="search-invitations-lead_id" autocomplete="off" />
+<input  type="button" onClick="populateBox(this, \'search-invitations-lead_id\', \'invitations-lead_id[]\')" value="Search"/>
+<br>
+<select name="invitations-lead_id[]" size=10 multiple></div>
 </select>
 
 </p>

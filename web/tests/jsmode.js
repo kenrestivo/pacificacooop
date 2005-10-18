@@ -115,3 +115,20 @@ query = qa.join('&');
 
 
 'foo&foo'
+
+
+testobj= {
+    bar:'baz',
+    fee:'foo',
+    blah: function (x)
+    {
+        return x;
+    }
+}
+
+testobj.foo='bar';
+
+function foo()
+{
+    return testobj;
+}

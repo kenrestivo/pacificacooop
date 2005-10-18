@@ -443,13 +443,14 @@ class coopPage
 		{
 			if(devSite()){
 				confessObj($obj, 'pear error. bummer.');
-                dump('PEAR ERROR DONE BEING DUMPED');
-                user_error('PEAR ERROR, saving to debug', E_USER_NOTICE);
-				$this->done();
+                $this->finalDebug();
+                dump('PEAR ERROR DONE BEING DUMPED', true);
+                // THIS EXITS SO MY QA SCRIPTS WILL CATCH IT!
+                user_error('PEAR ERROR, saving to debug', E_USER_ERROR);
 			}
 			$this->mailError('PEAR error on live site!',
 							 print_r($obj, true));
-            dump('done', true);
+            $this->done();
 			exit(1);
 		}
 
@@ -503,12 +504,18 @@ class coopPage
             $this->vars =& $_SESSION['cpVars'];
         }
 
-    function done()
+    function finalDebug()
         {
+            // things i always want to see at theend of a debug trace
             $this->confessArray(get_included_files(), 'file inclusion order', 
                                 4);
             $this->confessArray($_SESSION, 
                                 'CoopPage::done() saving SESSION  at END of page');
+        }
+
+    function done()
+        {
+            $this->finalDebug();
             print $this->flushBuffer();
             done(); // the legacy utils.inc version
             dump('all done' , true);

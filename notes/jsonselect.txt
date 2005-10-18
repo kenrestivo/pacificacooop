@@ -1,15 +1,28 @@
 json select box notes
 
 
-integrate flexac
-	check for css fuckup: the box extends longer than the form!
-	make it use a large selectbox, not a CSS popup
-	  understand selectbox updating
-  		i.e. my advmultiselect
-	this is problematic! people will think they are ENTERING  
+re-do, simpler
+	and a SEARCH fucking button-- none of this fancy autocomplete
+		on search, go get the data, and stuff it in the select. duh.
+	what do do at edit time?
 
 
-why won't it submit?
+integrate with QF and CoopForm!
+	start out with a pregenerateform
+		then integrate it into a customjsonselect
+    in coopform->addAndFillVars
+    	if linkdisplay, break out the dispatching
+    		do the link find
+    			if N > 50 or so, use jsoneselectbox
+    				load the javascript needed.
+    		otherwise use old customselect
+
+
+PUSH LIVE
+
+do over from scratch
+	maybe using only the
+	a selectbox
 
 the flexacChoose shouldn't fuck with my bg color. keep system colour!
 
@@ -25,18 +38,7 @@ how to deal with duplicates?
 
 
 
-integrate with QF and CoopForm!
-	start out with a pregenerateform
-		then integrate it into a customjsonselect
-    in coopform->addAndFillVars
-    	if linkdisplay, break out the dispatching
-    		do the link find
-    			if N > 50 or so, use jsoneselectbox
-    				load the javascript needed.
-    		otherwise use old customselect
 
-
-PUSH LIVE
 
     
 actions
