@@ -467,9 +467,9 @@ group by user_id,table_name,field_name";
             
 // XXX  you goddamned better have a path to family, everywhere
 // unless you have permissions to see all
-            //if($this->inObject('family_id')){
+            if($this->inObject('family_id')){
                 $this->constrainFamily();
-            //}
+            }
               
             if($this->inObject('school_year')){
                 $this->constrainSchoolYear();

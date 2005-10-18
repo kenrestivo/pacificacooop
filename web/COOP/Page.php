@@ -447,6 +447,7 @@ class coopPage
                 dump('PEAR ERROR DONE BEING DUMPED', true);
                 // THIS EXITS SO MY QA SCRIPTS WILL CATCH IT!
                 user_error('PEAR ERROR, saving to debug', E_USER_ERROR);
+                exit(1);
 			}
 			$this->mailError('PEAR error on live site!',
 							 print_r($obj, true));
