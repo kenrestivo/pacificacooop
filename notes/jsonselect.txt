@@ -1,13 +1,13 @@
 json select box notes
 
-know what? Do It Right.
-	use a selectbox, dammit. i can do it.
 
-yank the html escaping. unescape()?
-	interestingly, it unescapes in the popup, but not in the selectbox
-	it's raw coming back in json. flac is fuckign itup
+integrate flexac
+	check for css fuckup: the box extends longer than the form!
+	make it use a large selectbox, not a CSS popup
+	  understand selectbox updating
+  		i.e. my advmultiselect
+	this is problematic! people will think they are ENTERING  
 
-don't let the flexac.css override my font. keep what's already there!
 
 why won't it submit?
 
@@ -19,14 +19,10 @@ test with FF, and exploiter too
 
 how to deal with duplicates?
 	guess. then use it instead of inserting?
+	this is a bigger problem in ANY record, if i insert a dupe or near dupe
+		i should show a choose dialogue!
+			a, b, c, or NEW entry
 
-
-integrate flexac
-	check for css fuckup: the box extends longer than the form!
-	make it use a large selectbox, not a CSS popup
-	  understand selectbox updating
-  		i.e. my advmultiselect
-	this is problematic! people will think they are ENTERING  
 
 
 integrate with QF and CoopForm!
@@ -68,3 +64,5 @@ json selectbox
 		showing more info on the selected item, javascript-refreshed
 		possibly: on select, show full record in displaybox
 			i.e. horiztable
+
+don't let the flexac.css override my font. keep what's already there!
