@@ -126,9 +126,23 @@ testobj= {
     }
 }
 
+testobj[4] = 'aah';
+
 testobj.foo='bar';
 
 function foo()
 {
     return testobj;
 }
+
+
+
+foo = [1, 2, 3]
+foo[3] = 'blh';
+foo.push('ecch');
+
+
+///////////
+
+combobox.selectBox = document.getElementsByName(selectBoxName)[0];tester
+

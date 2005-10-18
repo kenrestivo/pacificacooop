@@ -21,11 +21,15 @@ printf('<script src="%s/kenflex.js"></script>' ,
 print '<form method="post" action="/phpwork/generaldebug.php">
 <p>
 <label>Contact:</label>
+
 <div><input type="text" name="search-invitations-lead_id" autocomplete="off" />
-<input  type="button" onClick="populateBox(this, \'search-invitations-lead_id\', \'invitations-lead_id[]\')" value="Search"/>
+
+<input  type="button" onClick="coopSearch(this, \'search-invitations-lead_id\', \'invitations-lead_id\')" value="Search"/>
 <br>
-<select name="invitations-lead_id[]" size=10 multiple></div>
+
+<select name="invitations-lead_id" size=10>
 </select>
+</div>
 
 </p>
 <p>

@@ -1,5 +1,8 @@
 json select box notes
 
+ok, shall i make the calling form have the field name of the linkfield?
+	do i know that at page-generation time (i.e. in qf customselect? i should!)
+
 
 re-do, simpler
 	and a SEARCH fucking button-- none of this fancy autocomplete

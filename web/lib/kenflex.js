@@ -25,7 +25,7 @@
 */
 
 //GLOBALS
-combobox.serverPage = '../lib/kenflex.php';
+combobox.serverPage = '../lib/flexac/kenflex.php';
 
 
 // loop through matches, put them in the box
@@ -52,13 +52,20 @@ function(data)
     alert("Can't connect [" + data.status.toString() + "]");
     return;
   }
+
+  if(!data.responseText){
+      //XXX is this right?
+      alert("No data returned.");
+      return;
+  }
+
     
   //XXX this is global! should it be? or should i have multiple comboboxes?
   eval("combobox.matches = " + data.responseText);
 
   if (!combobox.matches)
   {
-      // TODO: what?
+      // TODO: what? clear box?
       return;
   }
   
@@ -69,6 +76,11 @@ function(data)
 combobox.fetchData = 
 function ()
 {
+    // XXX is this right?
+    if(!combobox.searchBox.value){
+        return;
+    }
+
     if (combobox.xhr)
     {
         combobox.xhr.abort();
@@ -84,7 +96,7 @@ function ()
 
     qo= {};
     qo.q = combobox.searchBox.value;
-    qo.f = combobox.searchBox.name;
+    qo.f = combobox.selectBox.name;
 
     qa = [];
     for(x in qo){
@@ -103,11 +115,13 @@ function ()
 
 ///////////////
 // GLOBAL functions
-function coopSearch(searchButton, searchBoxName, selectBoxName)
+function coopSearch(caller, searchBoxName, selectBoxName)
 {
     // TODO: create a NEW combobox here, with above params
 
     // fetch the fields i need
+    // TODO: make this use caller.form.getelements, no?
+    // to handle more than one
     combobox.searchBox = document.getElementsByName(searchBoxName)[0];
     combobox.selectBox = document.getElementsByName(selectBoxName)[0];
 
