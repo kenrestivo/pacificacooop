@@ -24,7 +24,7 @@ print '<form method="post" action="/phpwork/generaldebug.php">
 
 <div><input type="text" name="search-invitations-lead_id" autocomplete="off" />
 
-<input  type="button" onClick="coopSearch(this, \'search-invitations-lead_id\', \'invitations-lead_id\')" value="Search"/>
+<input  type="button" onClick="coopSearch(this, \'search-invitations-lead_id\', \'invitations-lead_id\', \'leads\')" value="Search"/>
 <br>
 
 <select name="invitations-lead_id" size=10>

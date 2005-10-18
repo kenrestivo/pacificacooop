@@ -35,8 +35,8 @@ function ()
     i=0;
     for (match in combobox.matches)
     {
-        combobox.selectBox.options[i] =
-            new Option(match, combobox.matches[match]);
+        combobox.selectBox.options[i++] =
+            new Option(combobox.matches[match], match);
     }
 
 }
@@ -96,7 +96,7 @@ function ()
 
     qo= {};
     qo.q = combobox.searchBox.value;
-    qo.f = combobox.selectBox.name;
+    qo.f = combobox.linkTableName;
 
     qa = [];
     for(x in qo){
@@ -115,15 +115,17 @@ function ()
 
 ///////////////
 // GLOBAL functions
-function coopSearch(caller, searchBoxName, selectBoxName)
+function coopSearch(caller, searchBoxName, selectBoxName, linkTableName)
 {
     // TODO: create a NEW combobox here, with above params
+    // this is a damned constructor
 
     // fetch the fields i need
     // TODO: make this use caller.form.getelements, no?
     // to handle more than one
     combobox.searchBox = document.getElementsByName(searchBoxName)[0];
     combobox.selectBox = document.getElementsByName(selectBoxName)[0];
+    combobox.linkTableName = linkTableName;
 
     // just to be sure
     combobox.searchBox.autocomplete = 'off';
