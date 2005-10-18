@@ -24,11 +24,99 @@
  * +-------------------------------------------------------------------+
 */
 
-serverPage = '../lib/kenflex.php';
+//GLOBALS
+combobox.serverPage = '../lib/kenflex.php';
 
-function populateBox(searchButton, searchBox, selectBox)
+
+// loop through matches, put them in the box
+combobox.populateBox =
+function ()
 {
+    i=0;
+    for (match in combobox.matches)
+    {
+        combobox.selectBox.options[i] =
+            new Option(match, combobox.matches[match]);
+    }
 
+}
+
+
+
+// temporarily store the data in the object, then call populateBox to insert it
+combobox.fetchDataCallback = 
+function(data)
+{
+  if (data.status.toString() != "200")
+  {
+    alert("Can't connect [" + data.status.toString() + "]");
+    return;
+  }
+    
+  //XXX this is global! should it be? or should i have multiple comboboxes?
+  eval("combobox.matches = " + data.responseText);
+
+  if (!combobox.matches)
+  {
+      // TODO: what?
+      return;
+  }
+  
+  combobox.populateBox();
+
+}
+
+combobox.fetchData = 
+function ()
+{
+    if (combobox.xhr)
+    {
+        combobox.xhr.abort();
+        delete combobox.xhr;
+    }
+    
+    combobox.xhr = new XHConn();
+  
+    if (!combobox.xhr){
+        alert("Your browser is too old. Install Firefox (http://www.getfirefox.com).");
+    }
+  
+
+    qo= {};
+    qo.q = combobox.searchBox.value;
+    qo.f = combobox.searchBox.name;
+
+    qa = [];
+    for(x in qo){
+        qa.push(x + '=' + encodeURIComponent(qo[x]));
+    }
+    query = qa.join('&');
+
+    if (!combobox.xhr.connect(combobox.serverPage, 
+                              'GET', 
+                              query,
+                              combobox.fetchDataCallback))
+    alert("Failed connecting");
+ 
+}
+
+
+///////////////
+// GLOBAL functions
+function coopSearch(searchButton, searchBoxName, selectBoxName)
+{
+    // TODO: create a NEW combobox here, with above params
+
+    // fetch the fields i need
+    combobox.searchBox = document.getElementsByName(searchBoxName)[0];
+    combobox.selectBox = document.getElementsByName(selectBoxName)[0];
+
+    // just to be sure
+    combobox.searchBox.autocomplete = 'off';
+
+    //  fetch data
+    combobox.fetchData(combobox.selectBox);
+    
 
 }
 
@@ -73,6 +161,7 @@ function XHConn()
   this.abort = function()
   {
     try {
+        /// XXX why is this commented out?
       //xmlhttp.abort();
     }
     catch(z) { return false; }
@@ -95,6 +184,8 @@ function debug(msg)
   document.getElementById("debug").innerHTML = msg;
 }
 
-function flexac()
+/// WHYis this necessary?
+function combobox()
 {
+
 }
