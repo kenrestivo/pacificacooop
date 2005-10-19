@@ -494,6 +494,7 @@ group by user_id,table_name,field_name";
     function constrainSchoolYear($force = false)
         {
              //this code ought to be taken out and shot.
+             // XXX for starters, use ispermittedfied, not perms[null]
             if($this->perms[null]['year'] < ACCESS_VIEW || $force) {
                 $this->obj->whereAdd(
                     sprintf('school_year = "%s"',
@@ -653,8 +654,9 @@ group by user_id,table_name,field_name";
 
             // each LINKID/PATH
             foreach ($this->obj->fb_joinPaths as $key => $path){
+                // TODO: this is a stub. change debuglevel here to 4 when done
                 $this->page->printDebug("joining {$this->table} path to $key", 
-                                        4);
+                                        5);
                 $this->recurseJoin($path);
             }
 
@@ -764,14 +766,16 @@ group by user_id,table_name,field_name";
             if($this->chosenSchoolYear){
                 $this->page->printDebug(
                     "getChosenSchoolyear {$this->table} found {$this->chosenSchoolYear}", 
-                                        3);
-                return $this->chosenSchoolYear ? $this->chosenSchoolYear : 
-                    $this->page->currentSchoolYear;
-            }
+                    3);
+                return $this->chosenSchoolYear;
+            } 
 
             $top =& $this->findTop();
-            return $top->chosenSchoolYear ? $top->chosenSchoolYear : 
-                $this->page->currentSchoolYear;
+            if(!$this->isTop(&$top)){
+                return $top->getChosenSchoolYear();
+            }
+            
+            return $this->page->currentSchoolYear;
         }
 
 function triggerNotices($audit_id)
@@ -796,9 +800,11 @@ function triggerNotices($audit_id)
         }
 
 
-    function isTop()
+    function isTop(&$top)
         {
-            $top = $this->findTop();
+            if(!$top){
+                $top =& $this->findTop();
+            }
             //XXX HACK! can't compare objects. so instead compare table name!
           return $top->table == $this->table;
         }

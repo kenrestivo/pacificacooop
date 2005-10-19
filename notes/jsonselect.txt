@@ -7,6 +7,8 @@ deal with back/forward push/pop stuff! could be interesting
 		for each in selection (usually just one), go fetch 'em
 
 edit link must go away if there is nothing in the box!
+	why is edit link not hidden, when nothing selected?
+	javascript tweekage, execution order issue
 
 
 PUSH LIVE

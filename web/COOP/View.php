@@ -607,12 +607,10 @@ function schoolYearChooser()
     }
 
 
-
     if(!$this->isTop()){
         return;
     }
 
-    
  
     $syform =& new HTML_QuickForm($this->table . '-search', false, false, 
                                   false, false, true);

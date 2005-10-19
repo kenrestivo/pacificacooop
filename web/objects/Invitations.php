@@ -43,8 +43,6 @@ class Invitations extends CoopDBDO
     var $fb_requiredFields = array('family_id', 'lead_id', 
                                    'relation', 'school_year');
 
-	var $fb_linkDisplayFields = array('company', 'last_name',
-									  'first_name');
 	var $fb_fieldLabels = array (
 		'lead_id' => 'Contact',
 		'school_year' => 'School Year',
@@ -55,19 +53,6 @@ class Invitations extends CoopDBDO
 
     var $fb_searchSelects = array('lead_id');
 
-    function fb_linkConstraints(&$co)
-        {
-            $par = $this->factory('leads');
-            $this->joinAdd($par);
-            if($co->isPermittedField(NULL) < ACCESS_VIEW){
-                /// XXX need to check that a familyid exists!
-                $this->whereAdd(sprintf('family_id  = %d', 
-                                $co->page->userStruct['family_id']));
-            }
-            $this->whereAdd(sprintf('invitations.school_year = "%s"',
-                                    $co->page->currentSchoolYear));
-            
-        }
 
 
 
