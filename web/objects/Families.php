@@ -68,12 +68,9 @@ class Families extends CoopDBDO
             // FORCE the familyid! so i don't grab the crap from elswhere
             $this->selectAdd('families.family_id as family_id');
     
-            $co->constrainSchoolYear();
-
             $this->orderBy('families.name');
             $this->groupBy('families.name');
             
-
             // XXX broken! in previous years, i need to see dropouts
             if($co->perms[NULL]['year'] < ACCESS_VIEW){
                 $enrollment->whereAdd(
@@ -81,8 +78,6 @@ class Families extends CoopDBDO
             }
             
             //$co->debugWrap(4);
-
-			// ugly, but consisent. only shows families for this year
 
  		}
 

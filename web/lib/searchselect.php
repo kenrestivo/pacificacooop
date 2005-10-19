@@ -16,6 +16,10 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
                 array('onClick' => "setStatus('')"));
+
+            //TODO: if there is a value present, and it's NOT in options,
+            //then go fetch the option and add it here
+
         }
 
     function toHtml()
