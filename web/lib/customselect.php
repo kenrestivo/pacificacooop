@@ -7,67 +7,77 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 {
 
 	var $_parentForm;			// cache
+    var $cf; // cache of coopform
+    var $field; //cache of short field name
+    var $target; //cache of target table
+    var $target_id; // cache of table-targetfield
+    var $sub; // cache of sub object
+    var $vals; // cache selected values. NEED BECAUSE PHP CAN'T getvalues()[0]!
+
+    function _prepare()
+        {
+
+            $this->cf =& $this->_parentForm->CoopForm; // save typing
+			list($table, $this->field) = explode('-', $this->getName());
+
+
+            list($this->target, $targfield) = $this->cf->getLink($this->field);
+
+            //need for perms
+            $this->sub =& new CoopObject(&$this->cf->page, $this->target, 
+                                         &$this->cf);
+            
+            //  need these for edit link
+            $this->vals = $this->getValue();
+            $this->target_id = sprintf('%s-%s', $this->target, $targfield);
+
+            $this->_parentForm->updateElementAttr(
+                $this->getName(), 
+                array('onchange' => 
+                      "processCustomSelect(this, '{$this->target_id}')"));
+
+        }
+
+
 
     function toHtml()
     {
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            $res = "";
-            $cf =& $this->_parentForm->CoopForm; // save typing
-            $values = $this->_parentForm->exportValues();
-			list($table, $field) = explode('-', $this->getName());
-            //confessArray($values, 'values');
+            $this->_prepare();
 
-            if(isset($cf->forwardLinks[$field])){
-                $link =$cf->forwardLinks[$field];
-            } else {
-                $link = $cf->backLinks[$field];
-            }
-            list($target, $targfield) = explode(':', $link);
-
-            //need for perms
-            $sub =& new CoopObject(&$cf->page, $target, &$cf);
-            
-            //  need these for edit link
-            $vals = $this->getValue();
-            $target_id = sprintf('%s-%s', $target, $targfield);
-
-            $this->_parentForm->updateElementAttr(
-                $this->getName(), 
-                array('onchange' => 
-                      "processCustomSelect(this, '{$target_id}')"));
-            
 
             /// FINALLY, build the result
+            $res = "";
             $res .= $this->_getJs();
             $res .= parent::toHTML(); // the actual {element}!
             
-            if($sub->isPermittedField() >= ACCESS_EDIT){
-                $res .= '&nbsp;' . $cf->page->selfURL(
+            if($this->sub->isPermittedField() >= ACCESS_EDIT){
+                $res .= '&nbsp;' . $this->cf->page->selfURL(
                     array(
                         'value' =>sprintf(
                             'Edit',
-                            $cf->obj->fb_fieldLabels[$field]),
+                            $this->cf->obj->fb_fieldLabels[$this->field]),
                         'par' => false,
                         'elementid' => 'subedit-' . $this->getName(),
-                        'inside' => array('table' => $target,
+                        'inside' => array('table' => $this->target,
                                           'action' => 'edit',
-                                          $target_id => $vals[0],
+                                          $this->target_id => $this->vals[0],
                                           'push' => $this->getName())));
             }            
 
-            if($sub->isPermittedField() >= ACCESS_ADD){
+            if($this->sub->isPermittedField() >= ACCESS_ADD){
                 //XXX do i really need to wrap it in a div? or just use ID?
                 $res .= sprintf(
                     '<div>&nbsp;%s</div>',
-                    $cf->page->selfURL(
+                    $this->cf->page->selfURL(
                         array(
                             'value' =>sprintf(
                                 'Add New %s &gt;&gt;',
-                                $cf->obj->fb_fieldLabels[$field]),
+                                $this->cf->obj->fb_fieldLabels[$this->field]),
                             'par' => false,
-                            'inside' => array('table' => $target,
+                            'inside' => array('table' => $this->target,
                                               'action' => 'add',
                                               'push' => $this->getName())))
                     );
@@ -92,6 +102,9 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 function processCustomSelect(selectbox, target_id)
 {
    edlink = document.getElementById("subedit-" + selectbox.name);
+   if(!edlink){
+        return;
+   }
    if(selectbox.value > 0){ 
         edlink.className = "";
         // NOTE the THREE GODDAMNED BACKSLASHES HERE IN THE SOURCE CODE!!

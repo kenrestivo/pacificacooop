@@ -1,31 +1,22 @@
 json select box notes
 
-some hack
 
 
-ok, how to integrate with the other features.... add new, edit, etc?
-	new things
-		the input, the button, and the script!
-	change/add
-		attributes to selectbox: size=10 and onClick setstatus
-	great. how to decide which to use??
-		for now, manually.
-			WHERE?
-	ooh, can i subclass it??! i think so!
-	
-
-integrate with QF and CoopForm!
-	start out with a pregenerateform
-		then integrate it into a customjsonselect
-    in coopform->addAndFillVars
-    	if linkdisplay, break out the dispatching
-    		do the link find
-    			if N > 50 or so, use jsoneselectbox
-    				load the javascript needed.
-    		otherwise use old customselect
+deal with back/forward push/pop stuff! could be interesting
+	if there's a value, go fetch it?
+	that'd require a backfetch: search by ID!
+		for each in selection (usually just one), go fetch 'em
 
 
 PUSH LIVE
+
+make 'enter' in the field do the search
+	tab works, but the arrows, etc, would be nice too
+
+note i have an onchange/onclick collision!
+	customselect has processcustomselect, i have setstatus
+	addeventlistener!
+
 
 
 test with FF, and exploiter too
@@ -62,5 +53,14 @@ json selectbox
 
 don't let the flexac.css override my font. keep what's already there!
 
-make 'enter' in the field do the search
-	tab works, but the arrows, etc, would be nice too
+
+integrate with QF and CoopForm!
+	start out with a pregenerateform
+		then integrate it into a customjsonselect
+    in coopform->addAndFillVars
+    	if linkdisplay, break out the dispatching
+    		do the link find
+    			if N > 50 or so, use jsoneselectbox
+    				load the javascript needed.
+    		otherwise use old customselect
+

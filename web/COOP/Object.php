@@ -852,6 +852,20 @@ function triggerNotices($audit_id)
             return $options;
         }
     
+    
+    //used in coopform customselectboxes mostly
+    // returns targettable and field
+    function getLink($field)
+        {
+            if(isset($this->forwardLinks[$field])){
+                $link =$this->forwardLinks[$field];
+            } else {
+                $link = $this->backLinks[$field];
+            }
+            return explode(':', $link);
+        }
+
+
 
 } // END COOP OBJECT CLASS
 

@@ -201,8 +201,11 @@ class coopForm extends CoopObject
                     }
                     $el =& $this->form->addElement(
                         $type, 
-                        $fullkey, false, 
-                        $this->selectOptions($key));
+                        $fullkey, false);
+                    if($type != 'searchselect'){
+                        $el->loadArray($this->selectOptions($key));
+                    }
+                    //XXX parentform isn't available at add, only at toHTML
                     $el->_parentForm =& $this->form;
 						
 				} else if(!empty($this->obj->fb_textFields) &&
@@ -297,6 +300,7 @@ class coopForm extends CoopObject
 
 	function selectOptions($key)
 		{
+            // I can't use loaddbresult here. i need concatlinkfields
 
 			// i ALWAYS want a choose onez. always. screw FB.
 			$options[] = "-- CHOOSE ONE --";
@@ -805,7 +809,7 @@ class coopForm extends CoopObject
             // let scrubforsave do the work, instead of duplicatinghere
             foreach($this->scrubForSave($vars) as $key => $val){
                 if(empty($this->obj->fb_dupeIgnore) ||
-                       in_array($key, $this->obj->fb_dupeIgnore))
+                       !in_array($key, $this->obj->fb_dupeIgnore))
                 {
                     $scrubbed[$key] = $val;
                 }

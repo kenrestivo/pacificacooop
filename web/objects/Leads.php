@@ -90,9 +90,7 @@ class Leads extends CoopDBDO
         'state',
         'zip',
         'country',
-        'source_id',
-        'relation',
-        'school_year'
+        'source_id'
         );
 
     var $fb_defaults = array(
