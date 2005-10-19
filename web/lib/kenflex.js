@@ -111,6 +111,9 @@ function ()
     for(x in qo){
         qa.push(x + '=' + encodeURIComponent(qo[x]));
     }
+    if(combobox.SID){
+        qa.push(combobox.SID);
+    }
     query = qa.join('&');
 
     if (!combobox.xhr.connect(combobox.serverPage, 

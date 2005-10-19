@@ -1,8 +1,11 @@
 json select box notes
 
 ok, how to integrate with the other features.... add new, edit, etc?
-	it's only two new things!
-	the input, the button, and the script!
+	new things
+		the input, the button, and the script!
+	change/add
+		attributes to selectbox: size=10 and onClick setstatus
+	
 
 integrate with QF and CoopForm!
 	start out with a pregenerateform
@@ -17,11 +20,6 @@ integrate with QF and CoopForm!
 
 PUSH LIVE
 
-do over from scratch
-	maybe using only the
-	a selectbox
-
-the flexacChoose shouldn't fuck with my bg color. keep system colour!
 
 test with FF, and exploiter too
 	before pushing live, make sure exploiter is ok with it
@@ -33,16 +31,7 @@ how to deal with duplicates?
 		i should show a choose dialogue!
 			a, b, c, or NEW entry
 
-
-
-
-
     
-actions
-	pass auth through for no-cookies
-		a parameter to config, no doubt
-		if SID through set, i.e. no cookies
-	
 
 make the box bigger
 	auto-grow, maybe? js?

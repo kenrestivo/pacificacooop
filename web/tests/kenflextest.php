@@ -15,8 +15,12 @@ print $cp->selfURL(array('value'=> 'Refresh'));
 $flexacpath = '../lib/flexac';
 
 printf('<script src="%s/kenflex.js"></script>
-<script type="text/javascript">combobox.serverPage="%s/kenflex.php"</script>' , 
-       $flexacpath, $flexacpath);
+<script type="text/javascript">
+combobox.serverPage="%s/kenflex.php";
+%s;
+</script>' , 
+       $flexacpath, $flexacpath,
+       SID ? 'combobox.SID = "' . SID .'"' : '');
 
 
 print '<form method="post" action="/phpwork/generaldebug.php">
