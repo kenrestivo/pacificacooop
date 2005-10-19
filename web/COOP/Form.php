@@ -205,7 +205,12 @@ class coopForm extends CoopObject
                         $type, 
                         $fullkey, false);
                     if($type != 'searchselect'){
-                        $el->loadArray($this->selectOptions($key));
+                        $tmp = $this->findLinkOptions($key);
+                        // TODO: check $tmp[0]->obj->N,
+                        //  call searchselect if > lots
+                        $el->loadArray(call_user_func_array(
+                                           array($this, 'getLinkOptions'),
+                                           $tmp));
                     }
                     //XXX parentform isn't available at add, only at toHTML
                     $el->_parentForm =& $this->form;
@@ -300,13 +305,8 @@ class coopForm extends CoopObject
 			$this->form->freeze($frozen);
 		}
 
-	function selectOptions($key)
+	function findLinkOptions($key)
 		{
-            // I can't use loaddbresult here. i need concatlinkfields
-
-			// i ALWAYS want a choose onez. always. screw FB.
-			$options[] = "-- CHOOSE ONE --";
-			//confessObj($this, 'this');
 			$link = explode(':', $this->forwardLinks[$key]);
 			$sub =& new CoopObject(&$this->page, $link[0], &$this);
 
@@ -314,22 +314,34 @@ class coopForm extends CoopObject
             
             $sub->linkConstraints();
 
-            /// TODO: replace all of the below with getData from coopobject?
-
             //$this->debugWrap(2);
 			$sub->obj->find();
+
+			return array(&$sub, $link);
+		}
+
+	function getLinkOptions(&$sub, $link)
+		{
+
+            //XXX check to make sure find has been called, error out if not
+
+            // NOTE!!! you must first do the finding outside of here!
+
+			// i ALWAYS want a choose one. always. screw FB.
+			$options[] = "-- CHOOSE ONE --";
+
+            // I can't use loaddbresult here. i need concatlinkfields
+            //$this->debugWrap(2);
 			while($sub->obj->fetch()){
                 //$link[1], NOT pk! in custom link, it MIGHT NOT be the pk!
 				$options[(string)$sub->obj->$link[1]] = 
 					$sub->concatLinkFields();
 			}
 
-			//TODO: try grabbing the dbresult object instead?
 			$this->page->confessArray($options, 
-                                      "CoopForm::selectOptions($key)", 6);
+                                      "CoopForm::getLinkOptions($key)", 6);
 			return $options;
 		}
-
 
 
 

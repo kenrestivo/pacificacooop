@@ -1,6 +1,6 @@
 <?php
 
-   // $Id$
+// $Id$
 
 require_once('HTML/QuickForm/select.php');
 class HTML_QuickForm_customselect extends HTML_QuickForm_select
@@ -41,63 +41,63 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
 
     function toHtml()
-    {
-        if ($this->_flagFrozen) {
-            return $this->getFrozenHtml();
-        } else {
-            $this->_prepare();
+        {
+            if ($this->_flagFrozen) {
+                return $this->getFrozenHtml();
+            } else {
+                $this->_prepare();
 
 
-            /// FINALLY, build the result
-            $res = "";
-            $res .= $this->_getJs();
-            $res .= parent::toHTML(); // the actual {element}!
+                /// FINALLY, build the result
+                $res = "";
+                $res .= $this->_getJs();
+                $res .= parent::toHTML(); // the actual {element}!
             
-            if($this->sub->isPermittedField() >= ACCESS_EDIT){
-                $res .= '&nbsp;' . $this->cf->page->selfURL(
-                    array(
-                        'value' =>sprintf(
-                            'Edit',
-                            $this->cf->obj->fb_fieldLabels[$this->field]),
-                        'par' => false,
-                        'elementid' => 'subedit-' . $this->getName(),
-                        'inside' => array('table' => $this->target,
-                                          'action' => 'edit',
-                                          $this->target_id => $this->vals[0],
-                                          'push' => $this->getName())));
-            }            
-
-            if($this->sub->isPermittedField() >= ACCESS_ADD){
-                //XXX do i really need to wrap it in a div? or just use ID?
-                $res .= sprintf(
-                    '<div>&nbsp;%s</div>',
-                    $this->cf->page->selfURL(
+                if($this->sub->isPermittedField() >= ACCESS_EDIT){
+                    $res .= '&nbsp;' . $this->cf->page->selfURL(
                         array(
                             'value' =>sprintf(
-                                'Add New %s &gt;&gt;',
+                                'Edit',
                                 $this->cf->obj->fb_fieldLabels[$this->field]),
                             'par' => false,
+                            'elementid' => 'subedit-' . $this->getName(),
                             'inside' => array('table' => $this->target,
-                                              'action' => 'add',
-                                              'push' => $this->getName())))
-                    );
+                                              'action' => 'edit',
+                                              $this->target_id => $this->vals[0],
+                                              'push' => $this->getName())));
+                }            
+
+                if($this->sub->isPermittedField() >= ACCESS_ADD){
+                    //XXX do i really need to wrap it in a div? or just use ID?
+                    $res .= sprintf(
+                        '<div>&nbsp;%s</div>',
+                        $this->cf->page->selfURL(
+                            array(
+                                'value' =>sprintf(
+                                    'Add New %s &gt;&gt;',
+                                    $this->cf->obj->fb_fieldLabels[$this->field]),
+                                'par' => false,
+                                'inside' => array('table' => $this->target,
+                                                  'action' => 'add',
+                                                  'push' => $this->getName())))
+                        );
                 
+                }
+
+                return $res;
             }
-
-            return $res;
-        }
-    } //end func toHtml
+        } //end func toHtml
 
 
-       function _getJs()
-       {
-           // Generate the javascript code needed to handle this element
-           $js = '';
-           if (!defined('HTML_QUICKFORM_CUSTOMSELECT_EXISTS')) {
-			   // We only want to include the javascript code once per form
-               define('HTML_QUICKFORM_CUSTOMSELECT_EXISTS', true);
-
-               $js .= '
+    function _getJs()
+        {
+            // Generate the javascript code needed to handle this element
+            $js = '';
+            if (!defined('HTML_QUICKFORM_CUSTOMSELECT_EXISTS')) {
+                // We only want to include the javascript code once per form
+                define('HTML_QUICKFORM_CUSTOMSELECT_EXISTS', true);
+                
+                $js .= '
 /* begin javascript for HTML_QuickForm_customselect */
 function processCustomSelect(selectbox, target_id)
 {
@@ -119,17 +119,18 @@ function processCustomSelect(selectbox, target_id)
 /* end javascript for HTML_QuickForm_customselect */
                ';
 				
-			   // wrap wrap wrap wrap it up. i'll take it. up the ying-yang.
-               $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
+                // wrap wrap wrap wrap it up. i'll take it. up the ying-yang.
+                   $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
 				   $js . "//]]>\n</script>";
-           }
-           return $js;
-       }
+            }
+ $js .= '<noscript><h1>WARNING! This page WILL NOT work without Javascript. You must enable Javascript in your browser first. Sorry about that.</h1></noscript>';
+ return $js;
+        }
 
 
 
 	   
-}
+    }
 
 // took this code from advmultiselect
 if (class_exists('HTML_QuickForm')) {
