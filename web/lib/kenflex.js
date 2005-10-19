@@ -28,20 +28,30 @@
 combobox.serverPage = 'lib/flexac/kenflex.php';
 
 
+combobox.cleanBox =
+function (box)
+{
+    for ( i=box.length; box.length> 0; i--) {
+        box.remove(i);
+    }
+
+}
+
+
 // loop through matches, put them in the box
 combobox.populateBox =
 function ()
 {
-    i=0;
+    combobox.cleanBox(combobox.selectBox);
+    
     for (match in combobox.matches)
     {
-        combobox.selectBox.options[i++] =
-            new Option(combobox.matches[match], match);
+        combobox.selectBox.options.add(new Option(combobox.matches[match], 
+                                                  match));
     }
 
     combobox.selectBox.focus();
 }
-
 
 
 // temporarily store the data in the object, then call populateBox to insert it

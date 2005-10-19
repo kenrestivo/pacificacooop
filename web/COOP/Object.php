@@ -841,7 +841,7 @@ function triggerNotices($audit_id)
 
             $this->linkConstraints();
             
-            $this->debugWrap(2);
+            //$this->debugWrap(2);
 			$this->obj->find();
 			while($this->obj->fetch()){
 				$options[(string)$this->obj->{$this->pk}] =

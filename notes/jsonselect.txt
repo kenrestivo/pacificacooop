@@ -1,10 +1,16 @@
 json select box notes
 
+clear out matches/selectbox on each search
+
 ok, how to integrate with the other features.... add new, edit, etc?
 	new things
 		the input, the button, and the script!
 	change/add
 		attributes to selectbox: size=10 and onClick setstatus
+	great. how to decide which to use??
+		for now, manually.
+			WHERE?
+	ooh, can i subclass it??! i think so!
 	
 
 integrate with QF and CoopForm!

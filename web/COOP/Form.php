@@ -301,6 +301,7 @@ class coopForm extends CoopObject
             //$this->debugWrap(2);
 			$sub->obj->find();
 			while($sub->obj->fetch()){
+                //$link[1], NOT pk! in custom link, it MIGHT NOT be the pk!
 				$options[(string)$sub->obj->$link[1]] = 
 					$sub->concatLinkFields();
 			}
