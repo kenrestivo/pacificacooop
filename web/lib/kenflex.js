@@ -157,7 +157,7 @@ function coopSearch(caller, searchBoxName, selectBoxName, linkTableName)
     combobox.status = document.getElementById('status-' + selectBoxName);
     combobox.linkTableName = linkTableName;
 
-    ///combobox.searchBox.onClick = 'clearthething';
+    ///combobox.searchBox.addEventListener[onchange] = setStatus('');
 
     // just to be sure
     combobox.searchBox.autocomplete = 'off';

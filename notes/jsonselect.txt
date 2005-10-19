@@ -1,11 +1,12 @@
 json select box notes
 
 
-
 deal with back/forward push/pop stuff! could be interesting
 	if there's a value, go fetch it?
 	that'd require a backfetch: search by ID!
 		for each in selection (usually just one), go fetch 'em
+
+edit link must go away if there is nothing in the box!
 
 
 PUSH LIVE

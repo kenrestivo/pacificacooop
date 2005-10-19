@@ -383,7 +383,6 @@ CREATE TABLE leads (
   phone varchar(255) default NULL,
   relation enum('Relative','Friend','Coworker','Alumni','Other') default NULL,
   source_id int(32) default NULL,
-  family_id int(32) default NULL,
   company_id int(32) default NULL,
   do_not_contact date default NULL,
   PRIMARY KEY  (lead_id),
