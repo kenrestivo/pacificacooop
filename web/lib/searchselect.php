@@ -13,7 +13,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            
+            $res = parent::toHtml();
             return $res;
         }
     } //end func toHtml

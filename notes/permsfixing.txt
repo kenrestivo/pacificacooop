@@ -23,6 +23,9 @@ to
 
 ???
 build a unit test of the existing permissions results
+	for every combination of user, realm, table, field
+		save the getperms for it
+
 	matrix: user/group/realm/table/field/userlevel/grouplevel/menulevel/yearlevel		check that before and after results are EXACTLY the same!
 	perm-modification-harness
 	nice: the *only* functions which query the perms db are
