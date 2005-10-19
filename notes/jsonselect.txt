@@ -1,6 +1,7 @@
 json select box notes
 
-clear out matches/selectbox on each search
+some hack
+
 
 ok, how to integrate with the other features.... add new, edit, etc?
 	new things

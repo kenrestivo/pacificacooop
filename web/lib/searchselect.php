@@ -14,6 +14,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
             return $this->getFrozenHtml();
         } else {
             $res = parent::toHtml();
+            $res .= 'FOO!';
             return $res;
         }
     } //end func toHtml

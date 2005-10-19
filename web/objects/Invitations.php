@@ -50,6 +50,8 @@ class Invitations extends CoopDBDO
 		'label_printed' => 'Mailing Label Printed On'
 		);
 
+    var $fb_searchSelects = array('lead_id');
+
     function fb_linkConstraints(&$co)
         {
             $par = $this->factory('leads');

@@ -28,6 +28,7 @@ require_once('object-config.php');
 require_once('DB/DataObject/Cast.php');
 require_once('lib/advmultselect.php');
 require_once('lib/customselect.php');
+require_once('lib/searchselect.php');
 require_once('lib/customdatebox.php');
 require_once('lib/customrequired.php');
 
@@ -184,9 +185,20 @@ class coopForm extends CoopObject
 					$this->form->addElement(&$el);
 					$el->setName($fullkey); 
 				} else if($this->isLinkField($key)) {
-                    $type = (empty($this->obj->fb_addNewLinkFields) ||
-                             in_array($key, $this->obj->fb_addNewLinkFields)) 
-                        ? 'customselect' : 'select';
+                    $type = 'select';
+                    // default all linkfields are customeselect, unless i hack
+                    if(empty($this->obj->fb_addNewLinkFields) ||
+                       in_array($key, $this->obj->fb_addNewLinkFields))
+                    { 
+                        $type = 'customselect';
+                        //XXX hack until i test for N found
+                        if(!empty($this->obj->fb_searchSelects) &&
+                            in_array($key, $this->obj->fb_searchSelects))
+                        {
+                            $type = 'searchselect';
+                        }
+                        $this->page->printDebug("$key is a $type", 4);
+                    }
                     $el =& $this->form->addElement(
                         $type, 
                         $fullkey, false, 
