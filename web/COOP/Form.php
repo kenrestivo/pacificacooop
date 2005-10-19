@@ -502,11 +502,11 @@ class coopForm extends CoopObject
 									  4);
 			preg_match('/enum\((.+?)\)/', $data['Type'], $matches);
 			$options = explode(',', ereg_replace("'", "", $matches[1]));
-			//array_unshift($options, '-- CHOOSE ONE --');
 			
 			// TODO set default to , um, default
 			
 			// selects must stutter: key => val. bah, give me LISP!
+			$doubleopt[''] =  '-- CHOOSE ONE --';
 			foreach($options as $opt){
 				$doubleopt[$opt]  = $opt;
 			}

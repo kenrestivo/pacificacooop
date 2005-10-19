@@ -58,7 +58,7 @@ function ()
 combobox.fetchDataCallback = 
 function(data)
 {
-  if (data.status.toString() != "200")
+  if (!data || data.status.toString() != "200")
   {
     combobox.status.innerHTML= "Can't connect [" + data.status.toString() + "]";
     return;
