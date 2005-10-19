@@ -222,6 +222,8 @@ p.error {
 
 .hidden { display:none }
 
+.inline { display:inline }
+
 @media print { 	
 	#header { display:none }	
 	#footer { display:none }	

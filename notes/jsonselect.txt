@@ -1,14 +1,8 @@
 json select box notes
 
-ok, shall i make the calling form have the field name of the linkfield?
-	do i know that at page-generation time (i.e. in qf customselect? i should!)
+a "searching.." status box
 
-
-re-do, simpler
-	and a SEARCH fucking button-- none of this fancy autocomplete
-		on search, go get the data, and stuff it in the select. duh.
-	what do do at edit time?
-
+maybe wrap these damned things in a div? then i can search div elements to get 'em?
 
 integrate with QF and CoopForm!
 	start out with a pregenerateform
@@ -71,3 +65,6 @@ json selectbox
 			i.e. horiztable
 
 don't let the flexac.css override my font. keep what's already there!
+
+make 'enter' in the field do the search
+	tab works, but the arrows, etc, would be nice too

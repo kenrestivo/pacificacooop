@@ -25,7 +25,7 @@
 */
 
 //GLOBALS
-combobox.serverPage = '../lib/flexac/kenflex.php';
+combobox.serverPage = 'lib/flexac/kenflex.php';
 
 
 // loop through matches, put them in the box
@@ -49,13 +49,13 @@ function(data)
 {
   if (data.status.toString() != "200")
   {
-    alert("Can't connect [" + data.status.toString() + "]");
+    combobox.status.innerHTML= "Can't connect [" + data.status.toString() + "]";
     return;
   }
 
   if(!data.responseText){
       //XXX is this right?
-      alert("No data returned.");
+      combobox.status.innerHTML= 'No data returned.';
       return;
   }
 
@@ -65,9 +65,11 @@ function(data)
 
   if (!combobox.matches)
   {
-      // TODO: what? clear box?
+      combobox.status.innerHTML= 'No matches for "' + combobox.searchBox.value + '".';
       return;
   }
+  
+  combobox.status.innerHTML = 'Done';
   
   combobox.populateBox();
 
@@ -80,6 +82,8 @@ function ()
     if(!combobox.searchBox.value){
         return;
     }
+
+    combobox.status.innerHTML = 'Searching..';
 
     if (combobox.xhr)
     {
@@ -125,6 +129,7 @@ function coopSearch(caller, searchBoxName, selectBoxName, linkTableName)
     // to handle more than one
     combobox.searchBox = document.getElementsByName(searchBoxName)[0];
     combobox.selectBox = document.getElementsByName(selectBoxName)[0];
+    combobox.status = document.getElementById('status-' + selectBoxName);
     combobox.linkTableName = linkTableName;
 
     // just to be sure
