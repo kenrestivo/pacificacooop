@@ -392,8 +392,8 @@ group by user_id,table_name,field_name";
             /// decide if this is ANOTHER year
             if(!$forceyear &&  
                (($this->inObject('school_year') &&
-                 $this->page->currentSchoolYear != $this->obj->school_year)
-                || $key == 'school_year'))
+                 $this->page->currentSchoolYear != $this->obj->school_year))
+               || $key == 'school_year')
             {
                 
             	$this->page->printDebug(
@@ -408,11 +408,11 @@ group by user_id,table_name,field_name";
 
 
             $this->page->printDebug(
-                sprintf('ispermitted(%s : %s) RETURNING for OBJ famid [%s] , my famid [%d], force [%s] perms [%s]', 
+                sprintf('ispermitted(%s : %s) RETURNING for OBJ famid [%s] , my famid [%d], force user [%s] force year [%s] perms [%s]', 
                         $this->table, $key, empty($this->obj->family_id) ? 
                         'NO FAMILY ID IN OBJECT' : $this->obj->family_id, 
                         $this->page->userStruct['family_id'], 
-                        $forceuser, $res),
+                        $forceuser, $forceyear, $res),
                 4);
              
             return $res;

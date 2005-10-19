@@ -40,6 +40,9 @@ class Invitations extends CoopDBDO
 		'label_printed'
 		);
 
+    var $fb_requiredFields = array('family_id', 'lead_id', 
+                                   'relation', 'school_year');
+
 	var $fb_linkDisplayFields = array('company', 'last_name',
 									  'first_name');
 	var $fb_fieldLabels = array (

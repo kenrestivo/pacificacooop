@@ -166,13 +166,15 @@ class coopForm extends CoopObject
 					$val = $dbval;
 				}
 
-                // jeez, this is byzantine.
+                // rememebr !id means it is a NEW/ADD
                 if($perms < ACCESS_VIEW || 
-                   (!$this->id && $perms < ACCESS_EDIT))
+                   (!$this->id && $perms < ACCESS_ADD))
                 {
-					// the hidden thing. i think  i need to do hidden here
-					if(is_array($this->obj->fb_requiredFields) && 
-					   in_array($key, $this->obj->fb_requiredFields)){
+					// required, OR the special magic fields schoolyear/familyid
+					if((!empty($this->obj->fb_requiredFields) && 
+					   in_array($key, $this->obj->fb_requiredFields)) ||
+                        $key == 'school_year' || $key == 'family_id')
+                    {
 						$this->form->addElement('hidden', $fullkey, $val);
 					}
 					continue;
