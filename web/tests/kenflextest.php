@@ -30,8 +30,10 @@ onchange="coopSearch(this, \'search-invitations-lead_id\', \'invitations-lead_id
 &nbsp;<p class="inline" id="status-invitations-lead_id"></p>
 <br>
 
-<select name="invitations-lead_id" size=10>
+<!-- this is the only part that is already in my qf -->
+<select name="invitations-lead_id" onClick="setStatus(\'\')" size=10>
 </select>
+<!-- end what was already in QF -->
 </div>
 
 </p>

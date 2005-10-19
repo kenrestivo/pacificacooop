@@ -39,6 +39,7 @@ function ()
             new Option(combobox.matches[match], match);
     }
 
+    combobox.selectBox.focus();
 }
 
 
@@ -65,7 +66,10 @@ function(data)
 
   if (!combobox.matches)
   {
-      combobox.status.innerHTML= 'No matches for "' + combobox.searchBox.value + '".';
+      combobox.status.innerHTML= 'No matches for "' + 
+          combobox.searchBox.value + '".';
+      combobox.searchBox.focus();
+      combobox.searchBox.select();
       return;
   }
   
@@ -120,6 +124,13 @@ function ()
 
 ///////////////
 // GLOBAL functions
+function setStatus(text)
+{
+    combobox.status.innerHTML = text;
+
+}
+
+
 function coopSearch(caller, searchBoxName, selectBoxName, linkTableName)
 {
     // TODO: create a NEW combobox here, with above params

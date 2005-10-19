@@ -1,6 +1,8 @@
 json select box notes
 
-after selecting, blank the statusbox
+ok, how to integrate with the other features.... add new, edit, etc?
+	it's only two new things!
+	the input, the button, and the script!
 
 integrate with QF and CoopForm!
 	start out with a pregenerateform
