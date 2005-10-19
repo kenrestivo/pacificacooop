@@ -1,8 +1,6 @@
 json select box notes
 
-a "searching.." status box
-
-maybe wrap these damned things in a div? then i can search div elements to get 'em?
+after selecting, blank the statusbox
 
 integrate with QF and CoopForm!
 	start out with a pregenerateform

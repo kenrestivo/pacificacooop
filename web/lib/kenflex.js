@@ -79,7 +79,8 @@ combobox.fetchData =
 function ()
 {
     // XXX is this right?
-    if(!combobox.searchBox.value){
+    if(!combobox.searchBox.value || combobox.searchBox.value.length < 2){
+        combobox.status.innerHTML = 'Type at least 2 characters to search.';
         return;
     }
 
@@ -131,6 +132,8 @@ function coopSearch(caller, searchBoxName, selectBoxName, linkTableName)
     combobox.selectBox = document.getElementsByName(selectBoxName)[0];
     combobox.status = document.getElementById('status-' + selectBoxName);
     combobox.linkTableName = linkTableName;
+
+    ///combobox.searchBox.onClick = 'clearthething';
 
     // just to be sure
     combobox.searchBox.autocomplete = 'off';
