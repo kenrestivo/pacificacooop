@@ -168,7 +168,7 @@ class coopForm extends CoopObject
 
                 // rememebr !id means it is a NEW/ADD
                 if($perms < ACCESS_VIEW || 
-                   (!$this->id && $perms < ACCESS_ADD))
+                   (!$this->id && $perms < ACCESS_EDIT))
                 {
 					// required, OR the special magic fields schoolyear/familyid
 					if((!empty($this->obj->fb_requiredFields) && 
@@ -320,7 +320,7 @@ class coopForm extends CoopObject
 			return array(&$sub, $link);
 		}
 
-	function getLinkOptions(&$sub, $link)
+	function getLinkOptions(&$sub, $link, $chooseone = true)
 		{
 
             //XXX check to make sure find has been called, error out if not
@@ -328,7 +328,9 @@ class coopForm extends CoopObject
             // NOTE!!! you must first do the finding outside of here!
 
 			// i ALWAYS want a choose one. always. screw FB.
-			$options[] = "-- CHOOSE ONE --";
+			if($chooseone){
+                $options[] = "-- CHOOSE ONE --";
+            }
 
             // I can't use loaddbresult here. i need concatlinkfields
             //$sub->debugWrap(2);

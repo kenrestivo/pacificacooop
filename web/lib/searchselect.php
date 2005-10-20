@@ -6,8 +6,8 @@ require_once('customselect.php');
 class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
 {
 
-
-    function _prepare()
+    // XXX HACK! instead, i shoudl be doing some kind of multi-inclusion guard
+    function _prepareSearchSelect()
         {
             parent::_prepare();
             $this->setSize(10);
@@ -26,8 +26,12 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
             if(array_sum($this->vals)){
                 $this->sub->obj->{$targfield} = $this->vals[0];
                 $this->sub->obj->find();
-                $this->loadArray($this->cf->getLinkOptions($this->sub, 
-                                                            $this->link));
+                $options = $this->cf->getLinkOptions($this->sub, 
+                                                     $this->link, 
+                                                     false);
+                $this->cf->page->confessArray(
+                    $options, "CoopForm::Link options($table $targfield)", 4);
+                $this->loadArray($options);
             }
         }
 
@@ -36,7 +40,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            $this->_prepare();
+            $this->_prepareSearchSelect();
             
             list($target, $targfield) = $this->link;
             $target_id =  $target . '-'. $targfield;

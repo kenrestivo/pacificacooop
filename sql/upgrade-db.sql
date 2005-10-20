@@ -8,3 +8,5 @@ alter table leads drop column family_id;
 -- the import 2004-2005 invitations query (queries.sql)
 
 update table_permissions set user_level = null, group_level = null, menu_level = null, year_level = null where table_name = 'invitations';
+
+-- perms for label_printed:  view/delete
