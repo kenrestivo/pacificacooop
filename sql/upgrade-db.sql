@@ -9,4 +9,4 @@ alter table leads drop column family_id;
 
 update table_permissions set user_level = null, group_level = null, menu_level = null, year_level = null where table_name = 'invitations';
 
--- perms for label_printed:  view/delete
+-- perms for label_printed:  view/view
