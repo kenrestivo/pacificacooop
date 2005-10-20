@@ -11,6 +11,10 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
         {
             parent::_prepare();
             $this->setSize(10);
+
+            list($target, $targfield) = $this->link;
+            $target_id =  $target . '-'. $targfield;
+
             // XXX this is BROKEN! parent has its own onchange,
             // use addeventlistener instead, maybe even do it in kenflex.js
             $this->_parentForm->updateElementAttr(
@@ -19,7 +23,12 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
 
             //TODO: if there is a value present, and it's NOT in options,
             //then go fetch the option and add it here
-
+            if(array_sum($this->vals)){
+                $this->sub->obj->{$targfield} = $this->vals[0];
+                $this->sub->obj->find();
+                $this->loadArray($this->cf->getLinkOptions($this->sub, 
+                                                            $this->link));
+            }
         }
 
     function toHtml()
@@ -28,6 +37,10 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
             return $this->getFrozenHtml();
         } else {
             $this->_prepare();
+            
+            list($target, $targfield) = $this->link;
+            $target_id =  $target . '-'. $targfield;
+
 
             $res = sprintf(
                 '<input type="text" name="search-%s" autocomplete="off" 
@@ -40,7 +53,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
                 $this->getName(),
                 $this->getName(),
                 $this->getName(),
-                $this->target,
+                $target,
                 $this->getName(),
                 $this->getName(),
                 $target,

@@ -331,7 +331,7 @@ class coopForm extends CoopObject
 			$options[] = "-- CHOOSE ONE --";
 
             // I can't use loaddbresult here. i need concatlinkfields
-            //$this->debugWrap(2);
+            //$sub->debugWrap(2);
 			while($sub->obj->fetch()){
                 //$link[1], NOT pk! in custom link, it MIGHT NOT be the pk!
 				$options[(string)$sub->obj->$link[1]] = 

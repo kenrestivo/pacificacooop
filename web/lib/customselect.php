@@ -9,8 +9,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 	var $_parentForm;			// cache
     var $cf; // cache of coopform
     var $field; //cache of short field name
-    var $target; //cache of target table
-    var $target_id; // cache of table-targetfield
+    var $link; //cache of the link array
     var $sub; // cache of sub object
     var $vals; // cache selected values. NEED BECAUSE PHP CAN'T getvalues()[0]!
 
@@ -21,20 +20,24 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			list($table, $this->field) = explode('-', $this->getName());
 
 
-            list($this->target, $targfield) = $this->cf->getLink($this->field);
+            $this->link = $this->cf->getLink($this->field);
+
+            list($target, $targfield) = $this->link;
+            $target_id =  $target . '-'. $targfield;
 
             //need for perms
-            $this->sub =& new CoopObject(&$this->cf->page, $this->target, 
+            $this->sub =& new CoopObject(&$this->cf->page, $target, 
                                          &$this->cf);
+
+
             
             //  need these for edit link
             $this->vals = $this->getValue();
-            $this->target_id = sprintf('%s-%s', $this->target, $targfield);
 
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
                 array('onchange' => 
-                      "processCustomSelect(this, '{$this->target_id}')"));
+                      "processCustomSelect(this, '{$target_id}')"));
 
         }
 
@@ -47,6 +50,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             } else {
                 $this->_prepare();
 
+                list($target, $targfield) = $this->link;
+                $target_id =  $target . '-'. $targfield;
 
                 /// FINALLY, build the result
                 $res = "";
@@ -61,9 +66,9 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                                 $this->cf->obj->fb_fieldLabels[$this->field]),
                             'par' => false,
                             'elementid' => 'subedit-' . $this->getName(),
-                            'inside' => array('table' => $this->target,
+                            'inside' => array('table' => $target,
                                               'action' => 'edit',
-                                              $this->target_id => $this->vals[0],
+                                              $target_id => $this->vals[0],
                                               'push' => $this->getName())));
                 }            
 
@@ -77,7 +82,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                                     'Add New %s &gt;&gt;',
                                     $this->cf->obj->fb_fieldLabels[$this->field]),
                                 'par' => false,
-                                'inside' => array('table' => $this->target,
+                                'inside' => array('table' => $target,
                                                   'action' => 'add',
                                                   'push' => $this->getName())))
                         );
