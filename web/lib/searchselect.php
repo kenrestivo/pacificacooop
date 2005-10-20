@@ -9,7 +9,11 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
     // XXX HACK! instead, i shoudl be doing some kind of multi-inclusion guard
     function _prepareSearchSelect()
         {
+            // needed before callign parent's prepare!
+            $this->showEditText = 1;
+
             parent::_prepare();
+
             $this->setSize(10);
 
             list($target, $targfield) = $this->link;
@@ -20,6 +24,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
                 array('onClick' => "setStatus('')"));
+
 
             //TODO: if there is a value present, and it's NOT in options,
             //then go fetch the option and add it here

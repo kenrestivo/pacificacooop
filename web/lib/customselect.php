@@ -12,6 +12,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
     var $link; //cache of the link array
     var $sub; // cache of sub object
     var $vals; // cache selected values. NEED BECAUSE PHP CAN'T getvalues()[0]!
+    var $showEditText = 0; // the edit link show the text USE 1/0 NOT TRUE/FALSE
 
     function _prepare()
         {
@@ -37,7 +38,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
                 array('onchange' => 
-                      "processCustomSelect(this, '{$target_id}')"));
+                      "processCustomSelect(this, '{$target_id}', 
+                                                {$this->showEditText})"));
 
         }
 
@@ -104,7 +106,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                 
                 $js .= '
 /* begin javascript for HTML_QuickForm_customselect */
-function processCustomSelect(selectbox, target_id)
+function processCustomSelect(selectbox, target_id, showtext)
 {
    edlink = document.getElementById("subedit-" + selectbox.name);
    if(!edlink){
@@ -116,6 +118,10 @@ function processCustomSelect(selectbox, target_id)
         // to keep PHP from mangling it
         re= new RegExp("(" + target_id + "=)\\\d*?(&)", "g");
         edlink.href = edlink.href.replace(re, "$1" + selectbox.value + "$2");
+        if(showtext){
+               edlink.innerHTML = "Edit " + 
+                        selectbox.options[selectbox.selectedIndex].text;
+        }
    } else {
         edlink.className = "hidden";
    }
