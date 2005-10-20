@@ -2,6 +2,7 @@ php_flag magic_quotes_runtime 0
 php_flag magic_quotes_gpc 0
 php_value  max_execution_time 240
 php_value  memory_limit 80M
+php_value  display_errors Off
 
 AddCharset iso-8859-1 .php .inc .html
 

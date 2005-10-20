@@ -94,7 +94,7 @@ class CoopNewDispatcher
                                  $this->page->vars['last']['table'], $none); 
 
 
-            $atdf->build($this->page->mergeRequest(&$atdf));
+            $atdf->build($this->page->mergeRequest());
 
 
             // ugly assthrus for my cheap newDispatcher

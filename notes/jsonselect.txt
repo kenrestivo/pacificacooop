@@ -1,17 +1,11 @@
 json select box notes
 
 
-deal with back/forward push/pop stuff! could be interesting
-	if there's a value, go fetch it?
-	that'd require a backfetch: search by ID!
-		for each in selection (usually just one), go fetch 'em
-
 edit link must go away if there is nothing in the box!
 	why is edit link not hidden, when nothing selected?
 	javascript tweekage, execution order issue
 
 
-PUSH LIVE
 
 make 'enter' in the field do the search
 	tab works, but the arrows, etc, would be nice too

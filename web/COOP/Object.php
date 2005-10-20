@@ -800,7 +800,7 @@ function triggerNotices($audit_id)
         }
 
 
-    function isTop(&$top)
+    function isTop($top = false)
         {
             if(!$top){
                 $top =& $this->findTop();

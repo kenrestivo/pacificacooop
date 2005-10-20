@@ -593,7 +593,7 @@ class coopPage
     // i've already dedided what table to use well before calling mergerequest
     // XXX so move this to a coopobj or dispatcher, turn $lastco to $this!
     // last['table'] takes precedence over verything. it's magickal.
-    function mergeRequest(&$lastco)
+    function mergeRequest()
         {
 
             $this->confessArray($this->vars['last']['submitvars'], 

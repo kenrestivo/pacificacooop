@@ -55,7 +55,7 @@ class Parents extends CoopDBDO
             
             $this->joinAdd($families->obj);
         
-            //$co->constrainSchoolYear();
+            $co->constrainSchoolYear();
     
             
             $this->selectAdd();
