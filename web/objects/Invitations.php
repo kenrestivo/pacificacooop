@@ -54,7 +54,4 @@ class Invitations extends CoopDBDO
     var $fb_searchSelects = array('lead_id');
 
 
-
-
-
 }

@@ -167,9 +167,8 @@ class CoopNewDispatcher
      
 
             $id = $this->page->vars['last']['id'];
-            $atd->obj->{$atd->pk} = $id;
-            $atd->obj->find(true);		//  XXX aack! need this for summary
-            $res .= $atd->horizTable();
+            $atd->obj->get($id);
+            $res .= $atd->horizTable(false);
      
             // try to intelligently find all forward/backlinks
             // or intermediately, adapt findfamily, and pass a list of tables
@@ -364,7 +363,7 @@ function confirmDelete()
             }
             
             if($totalfound){
-                $restop = $vatd->horizTable();
+                $restop = $vatd->horizTable(false);
                 return $restop . '<p class="error">YOU CANNOT DELETE THIS RECORD because the records below depend on it. Fix these first.</p>' .  $res;
                 
             }

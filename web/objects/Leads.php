@@ -146,6 +146,7 @@ class Leads extends CoopDBDO
 			return $address;
 		}
 
+    // XXX is this cruft??? yes it probably is. make it go away.
 	function constrainedInvitePopup($schoolyear = false)
 		{
 			$schoolyear = $schoolyear ? $schoolyear : findSchoolYear();
@@ -184,9 +185,18 @@ class Leads extends CoopDBDO
 
 	function fb_linkConstraints(&$co)
 		{
+            // XXX ONLY if perms permit!
 			$this->whereAdd("do_not_contact is null or do_not_contact< '2000-01-01'");
-            $this->orderBy(implode(',', $this->fb_linkDisplayFields));
 		}	
+
+    function fb_display_view(&$co)
+        {
+
+            $invites =& new CoopObject(&$co->page, 'invitations', &$co);
+            $invites->linkConstraints();
+            $co->protectedJoin($invites);
+            return $co->simpleTable();
+        }
 
 
 

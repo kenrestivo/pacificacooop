@@ -131,15 +131,20 @@ class coopView extends CoopObject
 				return;
 			}
 
+
 			$tab =& new HTML_Table();
             $header = $this->makeHeader();
 			$tab->addCol($header['titles'], 'align=right', 'TH');
 
+            /// XXX fetch will return false if get() used, so i hack
+            if(!$find){ 
+                $tab->addCol($this->toArray($header['keys']));
+            }
+
 			while($this->obj->fetch()){
-				$tab->addCol($this->toArray($header['keys']),
-                             'class="tabletitles"' );
-			
+                $tab->addCol($this->toArray($header['keys']));
 			}
+
 			if($this->extraRecordButtons){
 				$tab->addRow(array("", $this->extraRecordButtons));
 			}
