@@ -605,7 +605,13 @@ function todaysDate(datefield) {
 
 } // END DATEJAVA
  
-
+function unObject($val)
+{
+    if(is_object($val)){
+        return '';
+    }
+    return $val;
+}
  
 
 //EOF!!!  DON'T DELETE PAST HERE, I NEED THAT STUFF

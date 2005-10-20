@@ -163,7 +163,7 @@ function coopSearch(caller, searchBoxName, selectBoxName, linkTableName)
     combobox.searchBox.autocomplete = 'off';
 
     //  fetch data
-    combobox.fetchData(combobox.selectBox);
+    combobox.fetchData();
     
 
 }

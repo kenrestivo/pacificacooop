@@ -481,8 +481,9 @@ class coopForm extends CoopObject
                 if($this->obj->$key != $old->$key){
                     // NOTE: i save the whole thing. i do formatting at display
                     // even if it is a massive longtext. it's wasteful, but wtf
-                    $this->changes[$key] = array('old' => $old->$key,
-                                                 'new' => $this->obj->$key);
+                    $this->changes[$key] = array(
+                        'old' => unObject($old->$key),
+                        'new' => unObject($this->obj->$key));
                 }
             }
         }
