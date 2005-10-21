@@ -70,7 +70,7 @@ class CoopNewDispatcher
 
             if(is_callable(array($atd->obj, 'fb_display_view'))){
                 $this->page->printDebug('calling callback for view', 2);
-                return $atd->obj->fb_display_view(&$atd);
+                return $res . $atd->obj->fb_display_view(&$atd);
             }
             
 

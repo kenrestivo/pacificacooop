@@ -641,6 +641,15 @@ class coopPage
         }
 
 
+    function yearNotSetupYet()
+        {
+            // TODO: just take them to year setup!
+            PEAR::raiseError("You do not have this year set up correctly.",
+                             666);
+
+        }
+
+
 } // END COOP PAGE CLASS
 
 ////KEEP EVERTHANG BELOW
