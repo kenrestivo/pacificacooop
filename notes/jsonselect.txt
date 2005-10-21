@@ -1,10 +1,35 @@
 json select box notes
 
 
+??JS/PHP
+fix combobox to make it OOP, add keydown events
+	don't use the global, make it a proper constructor
+	construct one for each combo, named after the selectbox
+		in tohtml, not getjs. why? because it'll be one for each
+		make sure getjs is getting called first, so its settings get set.
+	onchange methods should just call nameofglobal.fetchData() or something
+	the constructor is where keydown/up events get added!
+
+
+??JS/PHP
+don't let them hit return to initiate a search?
+	on key? look at flexac
+	when hitting return before running a search
+Error: [Exception... "Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIXMLHttpRequest.status]"  nsresult: "0x80040111 (NS_ERROR_NOT_AVAILABLE)"  location: "JS frame :: http://www/coop-dev/lib/flexac/kenflex.js :: anonymous :: line 61"  data: no]
+Source File: http://www/coop-dev/lib/flexac/kenflex.js
+Line: 61
+	STUCK: got to redesign combobox, make it OOP, in BELOW THE LINE!
+
+
+
 edit link must go away if there is nothing in the box!
 	why is edit link not hidden, when nothing selected?
 	javascript tweekage, execution order issue
 
+??? PHP/JS
+make edit javascript check (using json) the perms for this particular record
+	i.e. if you have edit privs on some records, only show edit on those you do
+	so, for family, if it's your family, edit it! otherwise hide away
 
 
 make 'enter' in the field do the search

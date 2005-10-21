@@ -54,70 +54,19 @@ class Invitations extends CoopDBDO
 		'label_printed' => 'Mailing Label Printed On'
 		);
 
+    /// XXX temporary hack, until i make coopform check N
     var $fb_searchSelects = array('lead_id');
 
 
     function fb_display_alert(&$co)
         {
 
-            $fid =  $co->page->userStruct['family_id'];
-            if(!$fid){
-                return; // give up, it's a teacher
-            }
 
-            $res = '';
-
-            // this code ought to be taken out and shot
-            $cv = new CoopObject(&$co->page, 'families_income_join', $nothing);
-            $cv->obj->family_id = $fid;
-            $inc = new CoopObject(&$co->page, 'income', $nothing);
-            $inc->obj->school_year = $co->page->currentSchoolYear;
-            $inc->obj->account_number = COOP_NAMES_FORFEIT_FEE; 
-            $cv->obj->joinAdd($inc->obj);
-            $found = $cv->obj->find(true);
+            list($ok, $res) = $this->_alert_or_status(&$co);
             
-            //confessObj($cv);
-            if($found){  
+            if($ok){
                 return '';
             }
-			// check for indulgences
-            $cv = new CoopObject(&$co->page, 'nag_indulgences', $nothing);
-            $cv->obj->family_id = $fid;
-            $cv->obj->school_year = $co->page->currentSchoolYear;
-            $cv->obj->whereAdd('(indulgence_type = "Invitations" or indulgence_type = "Everything")');
-            $found = $cv->obj->find(true);
-		
-//		confessObj($cv);
-            if($found){  
-                return '';
-            }
-	
-            $ev = $this->factory('calendar_events');
-            $ev->event_id = COOP_NAMES_DUE_EVENT;
-            $ev->school_year = $co->page->currentSchoolYear;
-            if($ev->find(true) < 1){
-                $co->page->yearNotSetupYet();
-            }
-
-            // count 'em!
-            $inv = $this->factory($co->table);
-            $inv->family_id = $fid;
-            $inv->school_year = $co->page->currentSchoolYear;
-            $count = $inv->find();
-            
-            if($count >= COOP_NAMES_QUANTITY_REQUIRED){
-                return '';
-            }
-
-
-            $res .= sprintf("You have entered %d name%s thus far. 
-				You must enter %d more before %s.",
-                            $count, 
-                            $count == 1 ? "" : "s",
-                            COOP_NAMES_QUANTITY_REQUIRED - $count,
-                            timestamp_db_php($ev->event_date)
-                );
-            
             
             return $res; //XXX temporary hack till i get sandbox first. 
 
@@ -150,6 +99,95 @@ class Invitations extends CoopDBDO
             
         }
 
+
+    function fb_display_summary(&$co)
+        {
+            list($ok, $res) = $this->_alert_or_status(&$co);
+            if($ok){
+                return $res;
+            }
+        }
+
+
+    function _alert_or_status(&$co)
+        {
+            $res = '';
+
+            $fid = $co->page->userStruct['family_id'];
+
+            if(!$fid){
+                return array(true, ''); // give up, it's a teacher
+            }
+
+
+
+            // this code ought to be taken out and shot
+            $cv = new CoopObject(&$co->page, 'families_income_join', $nothing);
+            $cv->obj->family_id = $fid;
+            $inc = new CoopObject(&$co->page, 'income', $nothing);
+            $inc->obj->school_year = $co->page->currentSchoolYear;
+            $inc->obj->account_number = COOP_NAMES_FORFEIT_FEE; 
+            $cv->obj->joinAdd($inc->obj);
+            $found = $cv->obj->find(true);
+            
+            // TODO: check amount is correct. duh.
+            if($found){  
+                $cv->obj->getLinks();
+                return array(true, 
+                             sprintf("Congratulations! 
+						You have paid your forfeit fee of $%0.2f . 
+						You don't need to enter any names this year.", 
+                                    $cv->obj->_income_id->payment_amount));
+            }
+
+			// check for indulgences
+            $cv = new CoopObject(&$co->page, 'nag_indulgences', $nothing);
+            $cv->obj->family_id = $fid;
+            $cv->obj->school_year = $co->page->currentSchoolYear;
+            $cv->obj->whereAdd('(indulgence_type = "Invitations" or indulgence_type = "Everything")');
+            $found = $cv->obj->find(true);
+		
+//		confessObj($cv);
+            if($found){  
+                $cv->obj->getLinks();
+                return array(
+                    true,
+                    sprintf("You were granted a special Indulgence on %s (%s).
+						You don't need to enter any names this year.", 
+                            sql_to_human_date($cv->obj->granted_date), 
+                            $cv->obj->note));
+            }
+	
+            $ev = $this->factory('calendar_events');
+            $ev->event_id = COOP_NAMES_DUE_EVENT;
+            $ev->school_year = $co->page->currentSchoolYear;
+            if($ev->find(true) < 1){
+                $co->page->yearNotSetupYet();
+            }
+
+            // count 'em!
+            $inv = $this->factory($co->table);
+            $inv->family_id = $fid;
+            $inv->school_year = $co->page->currentSchoolYear;
+            $count = $inv->find();
+            
+            if($count >= COOP_NAMES_QUANTITY_REQUIRED){
+                return array(true, 
+                             sprintf("Congratulations! You have entered %d names.  
+				You're welcome to enter more below if you wish.", 
+                                     $count));
+            }
+
+
+            $res .= sprintf("You have entered %d name%s thus far. 
+				You must enter %d more before %s.",
+                            $count, 
+                            $count == 1 ? "" : "s",
+                            COOP_NAMES_QUANTITY_REQUIRED - $count,
+                            timestamp_db_php($ev->event_date)
+                );
+            return array(false, $res);
+        }
 
 
 }

@@ -1,11 +1,13 @@
 fix the money shit, make it do invoicing properly
 
 
+
 30 minutes
 	have a look throuth the SQL schema of, what? ARIA?
 
 the right way to do this is income -> invoices -> line_items.acct_number
-
+	what about situations where i have no invoice?
+	what are line items? a multijoin table? (invoice/acctnumber/amount)
 
 i need to add payment to ad, somehow. apply payment to ad
 	add income_id to ads
