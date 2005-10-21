@@ -146,9 +146,10 @@ foo.push('ecch');
 
 combobox.selectBox = document.getElementsByName(selectBoxName)[0];tester
 
-fubarsettings = {another : 'haw haw'};
+
  
 /// playing with oject
+fubarsettings = {another : 'haw haw'};
 Fubar = function (myprop)
 {
     this.myprop = myprop;
