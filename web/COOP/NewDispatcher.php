@@ -27,7 +27,7 @@ require_once('CoopForm.php');
 
 
 //////////////////////////////////////////
-/////////////////////// COOP DISPATCHER CLASS
+/////////////////////// NEW COOP DISPATCHER CLASS
 class CoopNewDispatcher
 {
 	var $page;  				// cached coopPage object
@@ -138,7 +138,7 @@ class CoopNewDispatcher
             } else {
                 if($atdf->isSubmitted()){
                     $res .= $this->page->vars['last']['result'] = 
-                        sprintf('%s %s has errors. Please correct.',
+                        sprintf('<span class="error">%s %s has errors. Please correct.</span>',
                                 $atdf->actionnames[$this->page->vars['last']['action']],
                                 $atdf->obj->fb_formHeaderText);
                 }
@@ -153,7 +153,9 @@ class CoopNewDispatcher
     function details()
         {
 
-            $atd =& new CoopView(&$this->page, $this->page->vars['last']['table'], $none);
+            $atd =& new CoopView(&$this->page, 
+                                 $this->page->vars['last']['table'], 
+                                 $none);
 
             $atd->fullText = true;    // force details to show all
             // MUST DO THIS! FIRST! please find a better way, this sucks
@@ -305,6 +307,7 @@ function confirmDelete()
             $this->page->vars['last']['result'] = 
                 sprintf('Successfully deleted %s entry.',
                         $atdf->obj->fb_formHeaderText); 
+            //XXX is this the right way to do this?
             $this->page->vars['last']['pop'] = $atdf->table; 
 
             $this->page->headerLocation($this->page->selfURL(

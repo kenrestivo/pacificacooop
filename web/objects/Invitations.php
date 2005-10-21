@@ -173,13 +173,14 @@ class Invitations extends CoopDBDO
             
             if($count >= COOP_NAMES_QUANTITY_REQUIRED){
                 return array(true, 
-                             sprintf("Congratulations! You have entered %d names.  
+                             sprintf("Congratulations! You invited %d person%s.  
 				You're welcome to enter more below if you wish.", 
-                                     $count));
+                                     $count, 
+                                     $count == 1 ? '' : 's'));
             }
 
 
-            $res .= sprintf("You have entered %d name%s thus far. 
+            $res .= sprintf("You have invited %d person%s thus far. 
 				You must enter %d more before %s.",
                             $count, 
                             $count == 1 ? "" : "s",
