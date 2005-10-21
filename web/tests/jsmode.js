@@ -146,17 +146,23 @@ foo.push('ecch');
 
 combobox.selectBox = document.getElementsByName(selectBoxName)[0];tester
 
-
+fubarsettings = {another : 'haw haw'};
+ 
 /// playing with oject
 Fubar = function (myprop)
 {
     this.myprop = myprop;
+    this.another = 'old value';
     this.blah = function ()
     {
         return this.myprop;
     }
+    for(i in fubarsettings){
+        eval('this.' +i+ ' = fubarsettings.' +i);
+    }
     return this;
 }
 
+Fubar.another = 'bar';
 f = new Fubar('yay');
 
