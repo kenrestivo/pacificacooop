@@ -1,6 +1,12 @@
 email subscription notes
 		
 
+??? PHP
+the tricky bit is alerts. they have to be checked, somehow
+	maybe those are manual
+	or maybe i save status of who has been alerted?
+
+
 ?? PHP
 translate br's to nl's
 
@@ -13,11 +19,6 @@ hmm. what about teachers? there's no place for their email address. dammit.
 	putting email addresses into users is brain-dead. needs to be in rasta
 
 
-
-??? PHP
-the tricky bit is alerts. they have to be checked, somehow
-	maybe those are manual
-	or maybe i save status of who has been alerted?
 
 
 ??? SQL/PHP

@@ -74,6 +74,19 @@ print '</div><!-- end leftcol div -->';
 print '<div id="rightCol">';
 
 print "\n\n<table border=0>\n";
+//TODO: put this in as a generic function, in an object, using HTML_TABLE!
+foreach($menu->alertme as $table){
+    $alert =& new CoopView(&$cp, $table, &$nothing);
+    if(is_callable(array($alert->obj, 'fb_display_alert'))){
+        $alertbody =  $alert->obj->fb_display_alert(&$alert);
+        if($alertbody){
+            print rawMenuRow($alert->obj->fb_formHeaderText,
+                             $alertbody,
+                             $alert->actionButtons());
+        }
+    }
+}
+
 // TODO: let the user configure what to show?
 $blog =& new CoopView(&$cp, 'blog_entry', &$nothing);
 print rawMenuRow($blog->obj->fb_formHeaderText,
@@ -85,18 +98,6 @@ print rawMenuRow($cal->obj->fb_formHeaderText,
                  $cal->obj->fb_display_summary(&$cal),
                  $cal->actionButtons());
 
-//TODO: put this in as a generic function, in an object, using HTML_TABLE!
-foreach($menu->alertme as $table){
-    $alert =& new CoopView(&$cp, $table, &$nothing);
-    if(is_callable(array($alert->obj, 'fb_display_alert'))){
-        $alertbody =     $alert->obj->fb_display_alert(&$alert);
-        if($alertbody){
-            print rawMenuRow($alert->obj->fb_formHeaderText,
-                             $alertbody,
-                             $alert->actionButtons());
-        }
-    }
-}
 print "\n</table>\n\n";
 
 
