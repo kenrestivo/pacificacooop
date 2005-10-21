@@ -119,6 +119,7 @@ function ()
 
     qa = [];
     for(x in qo){
+        //XXX note! this encodeuricomponent is not available in IE < 5.5!
         qa.push(x + '=' + encodeURIComponent(qo[x]));
     }
     if(combobox.SID){

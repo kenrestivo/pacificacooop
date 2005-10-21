@@ -138,7 +138,7 @@ class CoopNewDispatcher
             } else {
                 if($atdf->isSubmitted()){
                     $res .= $this->page->vars['last']['result'] = 
-                        sprintf('<span class="error">%s %s has errors. Please correct.</span>',
+                        sprintf('<p class="error">%s %s has errors. Please correct.</p>',
                                 $atdf->actionnames[$this->page->vars['last']['action']],
                                 $atdf->obj->fb_formHeaderText);
                 }
