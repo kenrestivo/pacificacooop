@@ -1,0 +1,4047 @@
+
+coop web database
+
+MY agenda! dammit, mine! for a change....
+	fix money: make it INVOICES and income (invoicing.txt) SQL
+	sortable/searchable reports (searchfeature.txt)
+	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
+	normalise and clean up permissions (permsfixing.txt) SQL
+	normalise people/companies/parents/families (databasenormalisation.txt) SQL
+	in-fucking-surance, dammit PHP
+	read greenspun's sql book
+
+
+
+my agenda
+	redo the javascript thing, make it a proper object
+		STUCK: doesn't quite work.
+
+
+springfest priorities
+ 	add in the nag report!!!
+	paypal
+  	
+
+  man i GOT to go through and dick with dupeignores!
+  	make sure it works
+		i.e. leads.
+  	also, make it smarter about checking for dupes
+
+
+alert icon
+	float: left
+
+BUGS
+	have to have some way to allfamilies!
+	refreshing on a push, continues to push. don't do that.
+		can't NOT push, because sometimes you want to push again...
+	check crosslinks (i.e. groups? jobdescriptions?)
+		this will be utterly broken with my new system
+	backbutton behaves strangely
+
+there is one XXX i need to check: a javascript function that may not exist?
+	encodeuricomponent
+
+----------------
+STUCK - behind things that are either prerequisites or MORE IMPORTANT
+
+?? PHP/SQL
+fix table perms! MUST HAVE NULL IN THERE!!
+	maybe the access levels should be strings, 'null', etc
+	just numerify them
+
+selfurl needs help
+	it needs unit testing
+	and, i need to be able to avoid this 'nothing' crap!
+	if !$inner, then just print the url anyway, even if no ->value
+
+
+check for javascript in some more places.
+
+margolisreport
+
+report arch
+
+to read:
+	pear traps/catch
+
+
+1 hour PHP
+fix global audit trail, it needs to show NEW records
+	IFF it is the first entry for that record. bah.
+	yes, i do want to know what was originally saved. it's important.
+	SAVE the new record as-is, in saveaudittrail
+
+??? SQL
+add shirley to the audit trail mailing list!
+	umm. need a teachers table, with email. then add them to the query  
+
+details view of audit trail is busted-- didn't i fix this already?
+
+
+the debug stuff is still broken
+	it's not printing out ALL of it, in certain situations. flush?
+		find out how/where to duplicate it!
+
+BUG
+	adapt and test confirmdelete and delete with new cpvarslast thing!
+		test thoroughly. this is KINDA SCARY!
+	watch out for linkconstraints without any orderby!
+		look through all objects for linkconstraints without orderby!
+
+
+
+??? PHP
+parent ed attendance report that makes sense
+	using adddefaultfamilyperms, as a model
+
+2 hours PHP
+link to new record from popups... PUT IT BACK!
+	it doesn't have to work perfectly. just do it!
+	shitcan the push/pop stuff for now.
+
+
+???  PHP
+	shirley's summary
+	first, all enrolled families (like in sandyreport?)
+	all enrollment totals (days)
+		by family and kid
+	make both reports group view only? 
+
+
+??? PHP/SQL
+raiseError in case of my linkconstraint warnings.
+	then do a total QA script run on it. fix any mistakes.
+
+
+??? PHP
+parent ed and subscriptions margolis UI (parented.txt)
+	search feature will be crucial to this!!
+
+
+nifty stuff FOR ME for a change (below the line)
+	just PLAY!
+
+
+30 minutes PHP
+list-id in email
+
+does concatlinkfields deal with perms?? don't want to leak data here...
+
+
+move leads to some other realm.. i dunno where
+	make invitations go where leads was, under springfest
+	YANK contacts! it's too big (it's so *big*!)
+
+
+
+10 mins PHP
+	go through job assignments, and add perms for these fine folks
+
+
+
+BUGS
+	horiztable in enrollment details is b0rken. but only there. why? 
+		compare to, say, generic. see what's different?
+	enhancement summary DETAILS is broken.... it does *not* show enhancement details	
+	i will need to move the ampmsession from workers back to enrollment	
+		SESSION SHOULD FOLLOW ENROLLMENT! it doesn't belong in there.
+		it's idiotic that someone can switch to mornign but keep pm workday!
+		if the student switches, the parent's workday should too
+	
+
+
+2 hours
+	bring the solicitatoin and general springfest stuff back from the dead
+		lisa wants a report by territory
+	USE THE NEW LEADS STUFF!
+
+???
+	recursive linkdisplay
+
+weird. linkdisplay shoudl be directional: if i'm linking from x, don't show it
+	i.e. job assignments: if i'm linking from families, don't show family
+		if i'm linking from job descr, don't show job descr
+
+scary linkconstraint stuff
+	i don't like whacking all linkconstraints for multi-year
+		it seems stupid . in parents, enrol, etc
+
+2 hours PHP
+	fix the sponsorships. i gutted it, look up the old version, and fix.
+
+
+
+fix families fb_extraDetails... it won't show enhancement hours
+
+CRUFT
+
+
+???
+hmm. how to give springfest chairs perms to post to HOME page?
+	i.e. what is the level there?
+	this is where the level thing makes no sense! 
+		i need a "post to public site" right
+	and to calendar
+	perms in calendar are gonnna be weird. i have to test based on not realm of page, but realm of EVENT. whoa.... do i have that there?
+
+
+???
+things which need yearperms view SQL
+	everything in userprivs
+	can i think of anywhere that i would *not* want year view?
+	select * from user_privileges where (user_level >= 200 or group_level >= 200) and (year_level is null or year_level < 100);
+	only 27 rows have anything in yearlevel at all.
+
+???
+fix the logs thing. i really could use that. PHP/UNIX
+	safe mode, nfsn, etc. works on restivo.org. what's up with /mnt?
+	fix the mailerror shit! it's supposed to mail errors to me... 
+		test it here. make sure it works!
+
+proper permissions on job descr: users can change own description, and summary, but NOT THE NUMBER OF DAYS TUITION!, board, or new/returning.
+
+actually SHOW the invitations now!!
+	i can do that.
+
+
+job alert, or, show which families do *not* have job assignmetns yet
+
+
+
+
+??? rasta PHP
+	make dropout/start dates a field for only the roster people to see
+		and only show the undropped ones for regular users
+
+
+
+
+fix all the details views!!
+	they do their own hokey joins which MAY CONFLICT with joinConstraints!
+		in target obj's. 
+	joinconstraints should always beat a path to familyid and schoolyear
+		and anything else, shoudl be custom done elsewhere
+
+
+
+strange stuff like files not showing up at all, but others (blog_entry) does?
+
+
+menu helptext
+ STUCK: the htmlmenu has no place for me to put this stuff
+
+
+
+???
+use WHEREADD for familyid (and possibly schoolyear) in linkconstraints!
+	so that you're not INJECTING DATA into it!
+	this is huge
+	do this everywhere!
+	i can also WIPE WHEREADD's whereadd(), whereadd(stuff)
+		to block any familyid constraints added by default linkconstraints
+		useful for reprts
+
+???
+	sponsorships, also not right. umm. wha's wrong?
+
+
+
+	debug rule: with w3m, i should *never* be able to use subform.
+		it'll probably show up, but should never be in validate/process
+			because it'll never show up in requestedsubforms
+
+
+saving/choosing 0 from selects  is terribly fucked up.
+	select, adds --CHOOSE ONE--, and qf has [] different from [0] none
+		if i let it. but
+		when i save, it's always none.
+		null. it also won't save it if it's null, which is probably what i want
+
+
+let them edit the fucking thankyou template
+	new simple edit page for that
+
+
+
+
+check steenkin nearlyfreespeech.net, renew domainnames
+	expires in october; fix before that
+
+fix css shit in display
+	the coopview inside coopview is weeeird
+
+also, get blogs going too!
+	maybe email subscription? 
+	or, a button: email to current membership?
+
+check that all numeric fields get a validation type of 'numeric'
+	
+	OK. I CANNOT inject a familyid. if the table i'm viewing is families..
+		it'll insert some random family?
+
+
+checklist for job functions-- catherine's new job
+
+
+when i add a new teacher or user, i'll need to add their group too
+
+
+	into overrides, add fieldtodisplay(?) and requiredfields too!
+
+
+	an import. all the txt files.
+		stuck: works ah. the converter.
+
+
+the files uplaod is utterly, totally fucked
+	it shows too many fields at edit time. don't do that! those are all r/o
+	add to perms
+	and, it's puking at insert time. i don't understand why exactly.
+	whack it from menu, it's not worth wasting time on right now.	
+
+
+
+
+??? joinpaths
+do the actual joining from the join, so that values get constrained
+	i'm going to joinadd through the paths, iteratively (i have the whole thing)
+		then when i pull data, it'll go fetch the relevant thingamabob
+	look and see what it does
+		maybe a test script to try all of them
+		yes! add it to my existing one
+	DO do it in view and form
+		at instantiation? at link?
+		wherever i call dolinks! which is in view, iirc
+	when done, go back and sort the damned rasta by kids last name!
+	then put the kids last/first into rasta!		
+
+	oh shit. i'm so fucked. 
+
+
+WATCH OUT! the popup link constraints needs to check the parent's allyears!!
+	if the parent has allyears, DO NOT do any linkconstriants, esp by year!
+	i found this out in users. ultimately, users needs to be year constrained
+
+
+move teh family fees to the database! they're hard coded, taht is stupid
+
+
+----------------
+BELOW THE LINE
+
+wrap audit stuff in details view in a CSS so it doesn't print!
+
+i think my tohtml neglects to include the error text. fix that will ya?  
+
+
+??? PHP
+it need instructions! put some in there, somehow
+	need overrides, store instructions in a dataabse table
+	add instructions, edit instructions, view instructions
+
+
+
+??PHP 
+show details link in *all* fields?
+	i.e. each record, each field, each has its own URL, which is subdetail?
+	would that be confusing? i.e. you wouldn't know what you are editing?
+
+
+make delete in bulletin board not actually delete, just wipe out 'show on'
+
+move topnavigation out of coopmenu class, and into cooppage
+	i shouldn't need to load all that shit for every page!
+
+encodeuricomponent wrapper for older browsas
+	in htmlgeneral
+
+
+1 hour PHP/CSS
+make the status, navigation, and warning areas CSS anchors
+	and make the code in generic, newdispatcher, elsewhere javascript in there!
+
+
+20 mins PHP
+custom view. at view time, if nothing there for this year
+	import! for now, no fancy chooser. just fucking import them!
+	if NOTHING THERE for this year,
+		my massive query, but with this family id
+	this should be simple
+
+in actionbuttons (and record buttons?!) suppress circular operations
+	i.e. if that table/action combo is in the stack, DON'T DO IT!
+	this could get ugly in details
+
+
+?? PHP/QA
+allow some fields to be NO NOTIFY
+	fb_dontNotify
+	so that blasts aren't sent out regarding these changes
+
+now that i have a subclassed DBDO, start moving stuff into it!
+	i.e. the checklink/concatlink  perhaps?
+
+2 hours PHP
+extra EPOD and work days
+	throw in a second epod and work day in workers field
+	show it as e and w in roster
+		in the workday display callback
+
+??? QA
+selfurl wants a unit test harness! all the possible kinds of URL's
+	have a look at all the selfurl's that are present. 
+		maybe run many-visit-hack, and dump them all to a file
+	actually, dumping every URL sent, with get/posts, is a GREAT IDEA!
+		start with a known state, then run the script!
+
+check all those E_NOTICE errors
+
+
+30 minutes PHP
+show total families and parents in the shirley summary
+
+
+??? PHP
+generic.php should use header(location) redirect too
+
+
+?? PHP
+audit
+	link to the record details!!
+
+??? PHP
+add an email type fb_emailFields, and do email checking on them
+	remove the pregenerate in families
+
+customise fckeditor text thing, to make it show/backout changes from the Past
+
+birthdays report
+	for this and next month, am/pm
+	where to put it? students?
+
+link to family details, on blog
+
+move job assignments to membership? or just remind susan et all to subscribe to it
+
+baby report: how many babies per workday and epod day
+
+delegate perms editing?
+	wouldn't be hard to put a linkconstraint in for userprivs
+		check for 800 perms. only allow edit on those with 800 perms?
+			only *show* those with 800 perms?
+		perm model might not work with this. read liveuser?
+
+
+20 minutes PHP
+fix concatlinkfields to NOT show any EMPTY ones!
+
+fix schoolyearchoosers in a few places, and let all members see it (schoolyearchooser.txt)
+
+
+1 hour PHP
+show what they did in login history
+	serialized vars not coming back, for some weird reason?
+	when i get that fixed, also show whether they logged out too
+		i.e. if auth[uid] =! lastuid
+
+perms: set free_tuition_[start|end]_month to superuser-only?
+	when i get a chance to make the job-assignments editing shit work
+
+??? PHP
+	look at the sandyreport IT IS BORKEN
+	the fucking linkconstraints... they're getting called when i don't want!
+		how to override them?
+
+
+
+kudos system
+	put the sandy report into that realm
+
+
+30 mins PHP
+fix recordbuttons in coopview
+	remove the $row argument, and see if anything breaks!
+		nobody uses it anymore, and it wastes time (toarray)
+
+
+accounting system!!! it's too late, i have to do this
+	i am *not* going to create an accounting system from scratch
+
+
+fix enhancement summary report to allow multiyear
+	the date is broken in enhancement.php, 'bad date'
+
+
+finish up the schoolyearchooser churn and bugfixen
+	which specifically?
+
+
+
+BUGS
+	reorder is a bit weird. it shows fields that there's no data for
+		did i fix this?
+	this trecroci familyid 125 is a little strange. it seems like an orphan.
+	after confirmdeletign (and editing too?) on FRONT page, pop chokes
+		it can't handle popping back to main page.
+
+
+???
+	i'd REALLY like a cancel button, make it default
+	understand groups
+
+30 mins
+	a nice family summary! which shows roster line:  SQL
+		kids (with days?), parents, job, enrollment, workday, epod, springfest, etc
+
+
+instead of my fb_extraDetails, automatically go find them
+
+audit trail nicetites (autittrailnotes.txt)
+
+show perms for a particular table. i.e., if the user doesn't have privs for it
+	show the realm and table permissions for it, and who *does* have perms
+	people will want to know that.
+
+create a coopreport class, stick getreportperms into it
+	make it a paralell of coopobject, probably not inheriting from it
+	genericise some of the reports
+
+i think i can yank menulevel (and maybe year level?) from the table permissions table
+	have another look through and inventory the fields actually used
+		if it's not in getperms, or menu getreportperms or ispermittedfield, i don't need it.
+
+
+
+editing job decriptions based on job assignments
+	ah. i MUST dick with the familyid. unconstrain it!! important.
+		because past years, gotta have it
+	remember to add the table too!
+
+MINE!
+
+the Enhancemnt hours linkconstraints is the sanest of them all.
+	use as a model for the generic one!
+
+
+parent ed attendance (parentedattentance.txt)
+
+it'd be really nice to put that little star (or bold text?) in workers column
+	i do know it anyway, in that query, IIRC
+
+springfest jobs: day of, and regular job
+
+	details are wrong.
+		sprigfest contacts, details
+		crashes now, with yearperms in there
+		i'll need to do that dispatch thing
+		ah. i may need schoolyearify. the stuff is from OLD school years
+
+sort the stuff
+
+
+??? CSS/browser weirdness
+ditch the colours in printing
+	also, try to wrap the header in a non-printing css
+
+
+make the httpunit test go clicking through the first Details and Enter New
+	on each subpage. remember, my new pages don't have that!
+
+so the tricky bit is, those who MUST see with constraints, 
+	versus those who WANT TO! those who can see all, should also NOT HAVE TO!
+	think more.
+
+	manually hack these
+		jobdscr -- ALMOST. they can edit in recordbuttons...
+			but then when they get to form, everything is not theirs
+			link in coopform now! try it, if it doesn't work, cut it loose.
+		enhancement -- LATER
+		leads -- LATER
+
+	will it show up in $this->obj->field? or in $this->obj->_subtable->field?
+		well, go find out!
+	i think this'd be a nice place for a test case, really. 
+
+
+move the perms-checking in genericview in to the coopview/simpletable itself?
+	it seems redundant to have it in both places, and subviews might need it
+		can i override it then?
+
+a lot of the seturl inner shit is now redundant, since i am setting/getting last
+
+
+
+??? PHP/JS
+table/field select
+	hmm. this really wants to be a heirselect!
+	try my broken heirselect patch, on a pure qf
+		might need my own custom heirselect element!
+		which doesn't use groups. and which uses js like hierselect
+
+
+??
+	the perms summary at the top of the page, yo
+		like the old one
+
+
+the thing i don't like about hard-coding the join paths is what if i NORMALIZE!
+	if i change the db structure, i'm fucked.
+
+heh. the leads for other families are showing up as BLANK LINES!
+
+this is interesting. in the details menu, i should only show the enter new
+	IFF there is a PATH to a familyd and i chase it, and have edit perms on it.
+	that's a scary-looking decision tree!
+
+
+back/forward links are fucked in realm, because if the recursion
+	fix that.
+
+
+2 hours UNIX/PHP
+get local pear installed, for text diff and html ajax!
+	and, basically, everything else too. that'll suck
+	where to put the path? hardcode somewhere? in dbhost.inc?
+	and TEST IT SOMEHOW!
+		a simple includetest, possibly
+
+
+??? constraints
+	only a very few will need to be decided dynamically, based on content
+		auctiondonation
+		income
+		ads	
+		in-kind
+		tickets
+		calendar events, possibly. events that are enhancement/springfest,etc
+	this means jaavscript, or wizards
+		heirselect, likely
+
+
+	popups will always need to be constrained?
+		i.e. they are different from views or forms!
+		well, no. they need to be set based on the perms
+			if the user has ALLYEARS perms on the LINKED table, AND on the field
+				then i think we're ok
+
+hmm. i'm starting to realise what table perms userlevel means
+	you may NOT do this to your own data, UNLESS you have that perm for GROUP!
+
+	do same with reports too? look for familyid/schoolyear?
+
+last date for old v0_94 schema seems to be 17 Jul 2005 23:47:35 -0000
+
+
+why do i have proper headings in table_perms but not in user_perms??
+	join those to show names not numbers
+
+the backlinks/forwardlinks auto-display
+	group details should show all USERS who are members of this group
+	realms should show all users/tables/reports members of it
+
+
+my old view/edit/delete was nicer than the new "view"
+	how can i do that again? at least for actionbuttons
+		
+
+
+	hmm, neat. i can decide by what TABLE i came from, what to join
+		i.e. auction donation, if i come from companies...
+
+		check for dupes too. family name should be unique? or is dupe ok?
+
+login history is showing too many people.
+	just constrain for *this* user: me
+		link userid not familyid. i need a pathtofamilyid here, see above.
+
+	others?
+		what do i do about reports!?
+		table can have a view, but also some number of reports.
+		HEY! how about one report for each realm!
+		pick a generic report file, somewhere store all the reports!
+			there must be *some* way of registering them.
+			fuck it, stick a struct in a file and be done with it
+			that's for *storing* the new ones.
+
+
+ok, NEW FAMILY ADD WIZARD!
+	new kid/enrollment for existing family
+	simple stupid new family adder
+	family, 2 parents,  1 kid, and 1 enrollment 
+		group them? so i know what to save?
+	and... try not to break shit ;-)
+	simple approach: a custom selectbox
+		which, will add a 'new' button if it isnt in the db
+			launch a 'new' for that sub record
+			and return, dispatcher-like, to the original screen
+			with the correct id selected.
+		OR, i like the javascript approach, and/or add to page
+	
+then finish the jobdescription rasta import: finally some python fun!
+	if i don't, no prob
+
+	file attachments
+
+
+	AH! really SERIOUS bug in families! 
+		it only shows families who have EVER been enrolled! DUH!
+		otherwise, it refuses to show it in the sort. dumbass
+
+
+add "tuition due" to calendar (first of the month)
+
+	new family/rasta wizard, with multi-parent add too
+
+things i'm not ready for yet: files. i need a files-to-people join
+things i need to add: calendar events needs to be owned by a user
+	for add/delete, eventuallyR
+
+
+
+more tableperms for all the user stuff: don't show to everyone?
+	what is this?
+
+
+finally, either hide the schoolyear in calendarevents, or put a chooser there.
+
+heh. blog comments. why not? it's easy. link to blog_entry.
+
+hmm. joinpaths is broken. it's not getting any more than 1 degree of separation
+	do it manually in a bunch of places (linkconstrints), then genericise
+
+
+made up parent ed meetings? how to track that?
+	paid? how to track that either?
+
+details actions on audits *does* make sense, to see what else they did
+	only if priv'ed tho
+
+i now remember why i'm doing count!
+	so that i don't show view menuitem 
+		if there is nothing in there that i can see
+
+blog stuff
+	create a css for "small": on local and livesite
+		after i get the summary integrated into some kind of menu
+
+hey! how about in my search for all the realms/tables, i do a count?
+	any tables that appear in >1 realm, put it somewhere else!
+	i.e. at toplevel, misc, something.
+
+
+
+	then do the joins at view/form time
+		what about duplicates? how will that get handled?
+			shall i do a deep array merge?
+			i.e. all joins at once
+				build an array 
+					then traverse it recursively?
+				this could get WAY more complicated than necessary!
+
+possibly others:
+RSVPWizard.php:2
+ThankYou.php:12
+TicketWizard.php:1
+
+	click on them to see details on them, ideally.
+	i'd love to do this administrative thign in XUL, frinstance
+
+go set all the "set blank to blank" shit. postgenerateform, i'd suppose
+
+
+
+	i will need more subrealms, alas
+		to deal with things like solicit_money. don't want separate menu!
+		or mixin realms
+
+
+constrain the income tho: only want non-family income
+	in the pop-up list
+	HOW the fuck can i do that??!
+	well, in cases where there are multiple joins to a familyid
+		i'll have to write code to choose which to use! based on data
+		looks like a callback brewing
+	i have fb_linkConstraints too
+
+fix the audittrail and session details
+
+jointo is *only* used in chartofaccounts
+	hack the chartofaccounts object to use it now.
+
+hmm. blog will need to show "more", and more details too. gah.
+
+
+
+	STATUS
+		maybe a status page?
+	i will need to deal with count and such
+		genericcount is an easy port
+
+
+
+	nice. will have perms by field *and* realm. 
+		useful for auction stuff, ads, etc
+		ok, gotta ADD those! it's not in there right now. problem.
+
+
+		details actions everywhere too, put in object
+			hmm. there are LOTS of these scattered all over...
+
+
+		in this case, aren't i traversing the backlinks and forwardlinks?
+			yes, but don't try to get too clever!!
+
+
+i suspect that the workers table is not properly normalised
+	duplication of schoolyear AND ampmsession there!
+	should be tied to a kid's enrollment. the kid moves to pm, parent does, worker does too!
+
+permissions editing
+
+	the selectbox for perms is WRONG. it needs a --choose one--
+		why isn't there one in there? i discussed this elsewhere. i can't.
+			this is broken. i'd have to change all my constants.
+
+	i have to cumulatise the perms. not edit, but summarise, view, edit.
+		custom shit? yes, in pregenerate form. similar to auth.inc, copy/paste
+
+
+	perhaps i do need a gui perms editor: or a perms DEBUGGER at least!
+
+
+	now, the fun will be setting the permissions for the user_privileges table!
+		the realm is irrelevant. perms are based on the realm of the PERM
+			i.e. the realm of what you're editing at the time
+
+	use admin.php shell?
+		user perms: user, realm, userlevel, grouplevel
+		table perms: table,realm, user, group
+			field: realm, user, group
+	
+
+	this is REALLY COOL. i can create groups. groups like: board member
+		all board members will have group delete perms on job descriptions.
+			hmm, have to get recursive editing going first tho	
+
+
+		i should override the field_name and table_name and make them selects
+			i.e. query the db to get them. store them in obj so i don't re-do
+				i.e. so i'm not re-querying at every damned line
+
+
+	instead of all this passthrough crap, try saving table in session!
+		then reading it! cp->requestorsession, but, it's kinda flaky
+
+
+	hmm. maybe ease up on fieldsToRender now?
+		instead, use the perms to decide that!
+		where can i test that?
+		well, but there are times i DON'T want things in fieldstorender, 
+			for display. like... long text.
+		NO! i can't! because when i link, i'll end up with a huge spew!
+			but sometimes i *do* want everything to show up. dammit.
+		usefieldstounrender
+
+
+how can i remove some tables from the menu, which are simply NOT for public consumption?
+	yank them from perms entirely? THIS SUCKS. i don't like it.
+
+
+	also! email subscription!!! so new entries go to them.
+
+files-- with new interface
+	hiding/showing fields
+	add family_id
+	filesize is b0rken too
+	how to show a hyperlink to that field?
+		will have to hack predef. i have fb_URLFields, but i have to change DATA
+			i.e. tweeek it to be an actual url, not a filename
+	integrating with legacy menu?
+	why are the fields not showing up, they're in the db, for chrissakes
+
+
+also, some actions make no fucking sense. like, details on audit trail
+		where can i put in some kind of fb_actions?
+			it'd need to override the defaults in coopview tho
+
+	showall is cool, but it's in the wrong place
+		if i were to dynamically linkdisplay, i'd do it in the FROM object!
+		it's a neat idea. i should consider it.
+		basically, steal from shared.inc. show unique, unless force showall
+		don't bother with it for now. just show everything
+
+menu orpahhs
+		  maint/reset-passwords.php
+		  maint/make-packages.php
+		  maint/find-orphaned.php
+		  audit.php
+
+
+
+	which pages DO NOT use CoopView->createlegacy, which do?
+
+
+	new-style pages hacked into legacy framework, which need a-fixin'
+		auction_purchases
+		job_descriptions
+			job-editing, only for those whose job it is?
+			presumes, ah, that i enter what their fucking job is
+
+	
+	stuff that eventually needs help
+		maint/edit-springfest-attendees.php
+		 tests/roster.php
+	  	tests/simple-formbuilder.php
+	 	 tests/parents.php
+	 	tests/add-drop-packages.php
+
+
+
+	doctor/people ACK! wish i had a people table
+		name
+	nicer after saving: go back to view/edit? or to a new entry?
+		phone
+
+
+
+what's up with this old "all" realm? i don't like that.
+
+
+		handle loose matching
+			if get raises nonefound, 
+				do another try/wrap with loose
+					if *that* raises nonefound, then add
+
+	turn all realms into groups
+
+	not there?
+		match more loosely, recursively throw too many if too many found
+
+
+items by source: where they came from!
+	solicitation, family, etc
+	hmm. put it in the summary perhaps?
+
+
+add the details to the jane report: link to details page
+		shoud i hackypoo it? or extract out the details functoin?	
+
+	then, yearify it!
+		i think i'm going to write my own QFC-like func for doing this
+		look at enhancement summary html_sucks.
+		basically, don't pass through or setdefaults from REQUEST
+			request is evil anyway
+
+	might need to average it too
+
+	all the other reports requiested in teh post-mortem meeting
+
+use not ken but nfsn login/passwd. easier
+
+another simple text entry for at-door-purchase tickets
+	finally, dammit
+
+	simple entry qf? (intriguing...)
+		income
+			edit lines for purchases (add/remove/edit)
+		tricky, this is like a QFC thing: 
+			i need to store/retrieve from $_SESSION
+
+
+add a thing to look at enhancement hours and rasta from previous years
+	a year chooser, basically. in enhancement, in roster too
+
+get auction item requirement outta there for teachers, dammit
+
+desperately needed! need at least to get the goddamned webmaster or board.
+	there should be some kind of failsafe.
+	add to procedures for webmaster: add next year's kids and board SOON!
+		before the year ends, otherwise you'll find yourselves locked out
+
+
+silly little tool to do the new-year dates
+	new year setup, basically
+	a couple key dates, then save them. goddammit.
+	maybe show all the dates for that year, letting them edit the calendar
+	look at the calendar.
+
+the count
+	gah. ugly sql query?
+		add value received calculation to the massive query
+			ads
+			attendees
+				weird because this needs to link to tickets
+					basically yet another subquery underneath it
+		basically, you need to know at top level, where Total is
+	or, just hack around it for now?
+
+
+		
+
+try putting in a hidden form elemet wrapped in noscript!
+	then checking it and refusing to show the page.
+
+	try updating to NOT subclass coopcontroller::isvalid()
+		intstead, use the coopform's validate() method as a FORMRULE!
+		makes so much more sense!
+
+look at reverselinks. what does it do??!
+	hmm. can i use select not checkboxes? might be useful!
+
+make TODAY button into a link, "insert today's date"
+	also hide it from non-js browsers, i.e. the <sript type> stuff?
+
+	huh. what's with the contorller's exportvalues function??! where is it used?
+
+
+interesting! element::prevalidationcallback()!
+
+hmm. javascript:void() in href for link that onclicks
+
+
+do NOT do automatic web-based thank-you's for tickets
+	because... you don't know whether they received any goods or services
+	until they actually show up or not. fuck me.
+
+	BETTER idea. just use the ticket as the common thing
+		and write a custom process method
+			which switches to leads_income if necessary
+		yeah, some other time
+
+	write a bringvaluesforward function
+		tricky. lots of prepending of tables, possibly
+
+	integrate the coopview-type actions with the QFC actions
+		basically, _qf_pagename_action
+		ok, it's tricky
+			unset _qf_default?
+		gotta blow this off, sonny
+
+hey, neat thing about wrapping view in qfc, is that i can put checkboxes!
+	for actions like, delete?
+	or, in the case of paddles, for SHOWED UP!
+		create checkboxes with name id-yadda
+			this gets near to my spreadsheet-like entry stuff
+				theoretically can do it with *lots* of data: popups, etc
+				fb_editableViews?
+		i'll have to have a process action for the view page. totally possible.
+		this process action will cycle through all records and update them
+	create a QF cache in coopview
+		and if it's present, check fb_editableViews and do it!
+			just add elements basically, just like coopForm
+			which means that addandfillvars might have to move to coopobject
+
+also, who the fuck is settign PHPSESSID??! is it coopmeny?
+
+	this manual nav-button shit sucks
+		can i make common buildform elements for *all* forms
+		in controller?
+		i.e., after pagebuildform is called, can i do other things?
+		worst case, i can create an addNav function, and use it
+
+		fix the "onlyone" in sponsorships
+
+
+try adding 'client' to addrule wherever it appears
+	mostly in coopform in addrequiredfields, no?
+		also use customrequired class?
+			will it use getValidationScript??!
+
+
+
+
+make orderBy->('school_year desc') default in all coopview, 
+	if object var present, and remove from individual instances
+
+		either way, i'm going to HAVE to integrate perms!
+			because there's no way fieldstorender can be generic
+				for both forms *and* reports/details
+
+
+gah, justin's right. freeze is a pain in the ass!
+	same as above: it's html not an object
+		i think i need recursive freeze too
+	naw, make it easy. in the subform function, check parent's FROZEN status
+
+
+other invoincing things
+	phpcodegenie -- bah, uses adodb
+	propel -- bah, uses creole and requires php5
+
+TOP priorities
+	edit/delete for lisa
+		might fall out of paddles, actually
+
+
+maybe add make-tickets in the ticketwizard, in the member section
+
+add a "show first/last name" in either companies, leads, or sponsorships
+	so that the duplication is gone
+
+some way to ADD a new paddle!!
+	i.e. to add a lead, and have it go into a paddle
+		s/b easy, actually. similar to ticketwizard
+	though it has to make sure it's not > ticket_quantity
+
+change the few places i created a constrained popup to fb_linkConstraints instead
+ok, families *purchasing* reservations. that's gonna be interesting
+	how?
+	nice to have it as a button online, if possible
+		buy 'em with paypal
+
+	treat tickets like packages!
+		paddle is a lead, or a parent, or a compamny
+		will have to do the same trick as in rsvp
+			choose from db, or enter new
+
+	edit brings up the TICKET details.. all of the data for it.
+		from there you add/remove individual leads
+		umm, no. paddles are their own thing. going to be slightly different
+			maybe list the paddles, and let them edit them?
+
+put currently-enrolled family constraint in Families::fb_linkConstraints
+	basically, copy the parents one
+		DONE, but test it.
+
+dynamic show/hide: for sponsorships and probably paddles too
+	have a look at heirselect!
+		for cases where i need to 
+	entering will be interesting tho.
+
+put the springfest logo in on the pretty page and on the homepage
+	and ideally stick the paypal link back in there: a simple ticket one
+
+i'll neeed an "attended" flag.
+
+move the maketickets from make-tickets.php to ... where? the TicketWizard?
+		or objects/Tickets.php?
+
+find orphaned incomes
+	using backlinks
+	a fixer/editor that uses backlinks to populate a faked crosslinks thing
+		really, what this country needs, is a group of conditional crosslinks
+			one select chooses which crosslink to use
+			show them as one big thing
+
+what is thank_you_id 45, and why was it null on my dev system
+
+sponsorship edit niceties
+
+	tweek for weblink-only
+		it's not a sponsorship level. do it elsewhere!
+			but it's included with sponsorship, of course. yet more tweakage.
+
+should add my crosslink-entry buttons to all popups
+	subclass select, much as i did with the date one
+	add my crap to the tohtml
+
+	gah. conditional thankyouletter motherfucker.
+		different if tickets?
+		look at lauri's shit, and do something simple
+		wait up on this. needs input from eileen, bethany, lauri
+
+allow for more manual links entries
+	a file coop.manual.links
+	and >> it after doing make-links
+
+
+remember to add the ticket chooser back into paddles edit, 
+	after i'm done with recursive linkdisplay
+
+MUST stop and look at ways to integrate new things into menu
+	menuthings in object itself? or in an intermediate file?
+	merging shouldn't be that difficult. my recursive array merg2e.
+	the challenge will be dispatching.
+		instead of x.php, it'll be newengine.php
+		which will run the new dispatcher.
+		it'll need an arg for which TABLE i'm after, and which REALM
+		and it'll need to pick views based on perms
+
+
+look at saving into SESSION not passing state around in selfURL
+	some way of overriding. array merge?
+
+empty select box with no options is not legal html, apparently.
+	can i do this without fucking everything up?
+
+
+it's time to do the rasta shit. really. i can't avoid it anymore.
+	or manually add just that one
+	
+	FAMILY tickets!
+		SEPARATE wizard! it's not a lead, it's a family
+	deal with tickets getting PASSED ALONG TO OTHERS!
+		lead
+		well, attendees. i have to make x * ticket_quantity of them.
+			i have to keep them straight too.
+				my add/remove box?
+
+	
+
+	summary reports: totals
+
+
+editing for tickets!!!!
+	this could get very fucking ugly, almost as bad as thankyous.
+
+
+re-do the donation.php to handle response code and lid:!
+	regression test the old DONATE stuff!
+		may need company_id stuff in there too
+		the tickets are CERTAINLY broken now.
+	
+remember, i'm going to have to do all this thankyou shit again for LEADS!
+	the enter new... tricky
+	also! all leads where	income_id is not null
+		rsvps/tickets
+	didn't i do this already? i thought i did.
+
+	call the selfurl, with what? table and id?
+		bah. i see now. there are uglinesses at work here.
+		the form has its OWN statemachine! remember, after you sumbit it!
+	STUCK: fb bugs. bah.
+
+
+thank yous
+	use the right stylesheet
+		and/or hardcode stuff with SPAN's?
+		hmm.it seems to be ignoring my print stylesheet. why?
+			class, not id?
+			only in moz! looks ok in ff.
+		check that it works with exploiter.... looks ok so far
+			knwo what? this is a total new scratch install from cdrom
+
+
+fucking rastaimport: workers is broken, as is email
+	re-write in PEAR? might be easier to deal with
+
+hmm. selfurl is stuttering? whutup?
+	try with moz and/or firefox
+
+	friday midnite cutoff for paypal
+
+PEOPLE as linktable
+
+grab stuff out of old structs. sort arrays?
+
+
+bug fix: schoolyear setdefaults suddenly broken. why?
+	is it really?
+	
+remove auto-add session shit! it's annoying. double coop's
+	did i fix this?
+
+programmatically hiding fields, i.e. based on perms
+	in pregenerate, set to predefined hidden if no perms (pdf)
+	i'll have to generate my own perms structure.
+	markus suggests subclassing quickform not fb... i disagree
+
+new gui stuff
+	postgenerate to add my rules/validation!
+		stick my dupechecking into validate, somewhere
+		filter all fields all the time? if so, put it in toplevel, not class
+	i like my array method better. where to put it?
+		data object? conf file (attractive idea!)?
+	for nifty weird multi-combined forms, overload fb::getForm()
+
+check that companies aren't companies... i don't want crap in there
+	but, i can't do anything about that
+
+do the invitations screen using the NEW gui!
+	formatted table (somehow!) ideally w/o that horizontal crap
+		subclass the view i already created? maybe return a table obj
+			and add this stuff to the first cell?
+	do it like the delete buttons in frontend
+	show *all* the leads for that family, in a table
+		if i must do any glueing, glue in the postprocess?
+	put a checkbox on left of each, to dick with invitations for schoolyear
+	edit buttons and new buttons so they can add. 
+		perhaps a postprocess to autocheck
+	once new invitations system is up,
+		fix the familyid in leads: yank all familyid's if not companyid!
+			overloaded: familyid means it *is* a family, not came from one
+	this is similar to thank you notes! in fact i can and should use the same gui
+		subaction under add, basically.
+	and... perhaps this is a candidate for the add/drop interface?
+
+nested show/edit of links!
+	recursively search linked tables, and list them
+		how to *find* out what they are?
+	capture heirarchy
+		test manually, hard-coded i.e. for leads/invitations
+		user-specifyable.. in session?
+		or from schema, sorting thru links conf struct for related ones
+		scrub url's of extra ? stuff, at each PHP_SELF
+
+when you add a new thing, put its id into the session for all above!
+	i.e. whatever "called" it. this is for heirarchal adding i.e. rasta!
+
+for saving pages... do i have to force the session to close?
+
+the crosslinks, and format?.
+	bug, goddammit. in the actual code!
+
+add screen for in-kind donation to the PUBLIC page (paypal.php) ugh.
+
+link display make it happen! i.e. ... the cross-link stuff new/edit/view
+	this should be redundant... or maybe it's an #anchor tag.
+
+strange, tickets on web don't add up to what's in db
+	check query
+
+
+linkdisplay in audit? why is it numbers??! how/when did this break?
+	bah. recursive linkdisplayfields
+
+quick unsent-invitations report for lauri and bethany
+	nice thing: this advselect will be helpful for invitations
+
+hmm. i'll need to put the pk in pkginventory, but frozen. how?
+
+	
+
+integrate make-packages into new packages
+	tricky. HOW? i still want to let them do new manually.
+	maybe a "show only orphans" thing on pkg_checkin
+		and then add the MAKE NEW button to the coopview.
+			should be interesting. maybe use js and plain links onlick instead?
+
+hide the packagechooser if the item hasn't been received yet.
+	this has been broken since last year, so it's low priority
+
+should check for valid dates in validation.
+	and, subclass text for my insert today's date thing.
+
+deadlines in calendar
+	and filter out the deadline-not-passed-yet ones from the "need to be nagged"
+
+packages
+	allow make multiple packages
+		add a quantity field in packages, and override process!
+		tricky bit: the unique names! i.e. package names.
+			do i guess?
+
+	would be nice to check quantity and not allow in > quantity pkgs
+
+	finally: a copy-paste hook?
+		for description, and familyname or sponsor
+		this'll need to happen via javascript, i fear. FEAR!
+		better still: a pop-up or tooltip with the data.
+			so when you click on the item, you can see what it is!
+
+	shared-family basket-split i.e. new interface
+		add families_auction_join to crosslinks
+		in addcrosslink code, check ispermittedfield
+			and add the xlink to fieldstorender where appropriate: pkg,packges.
+		also add it to check required fields!  must have at least one!
+		and the perms stuff! should i allow families other than yours?
+		also if i use new perms code, simpletable needs to check familyid too
+
+	can i use links instead of buttons for add/remove? buttons are ugly.
+
+	cascade delete hook, i need to yank all the auction item links.
+		basically anything that DIRECTLY backlinks it
+			i.e. my old glue thing
+			do it automatically? might be dangerous.
+			create a cascade thing
+				this is starting to look a LOT liek thank-you's!
+			hmm. shall i NULL or DELETE the records?
+				it'll make a difference. i.e. in thankyou's i null them out
+				in auction_package, i'll delete them out
+		useful for erin/lisa too
+
+	auctionitems
+		with deletecheck: don't allow delete if it's in a pkg.
+
+try getSubmitValues() in the hairy process stuff in ticket/rsvp wizards?
+
+	hmm. it's late, and addtopackage is broken
+		my id starts out at 279, and ends up as 2. duh.
+
+maybe put up the graphics? or should i not mess with that?
+	ok if you shell it out, OOP abstract the public stuff
+	keep the gui separate from the code.
+
+MUST FIX
+	update the carriereport
+		bad address stuff! again by relation, source, and type
+			STUCK: first must fix the way i handle these
+			have to do this  B4 lisa starts do-not-contacting!
+
+		HOW the hell will i deal with do_not_contact vs. duplicates?
+			manually look at all do_not_contacts after 8/2004 and before 2/2005
+			create a merge-duplicates field 
+				a pop-up of lead_id! so you can pick which one it dupes with!
+					possibly exclude this same one from the pop-up. duh.
+			then a function that merges all its data
+				everywhere a lead_id appears!
+					in each of those tables, 
+					find all that match this lead_id,
+						forward and backlinks (one level)
+					change the lead_id to the NEW one
+			all remainign do-not-contacts will THEREFORE actually be dnc's!
+			do this for solicit companies too ;-)
+		note delete/uninvite/do-not-contact behaviour will be strange
+			basically you can:
+				merge with a duplicate (see above for wacky procedure)
+					chooser popup... with soundex probably
+				mark as do-not-contact/bad address
+					or leave it as it is
+				uninvite for this year (checkbox? link?)
+					ONLY if label_printed = null or < 2000 and this schoolyear!
+
+a rule to enforce properly-formatted url's AND EMAILS!
+	there is already an email rule in qf
+
+add details to pkgcheckin. copy from auction, basically, or merge.
+	also solicit auction details. bah.
+	there's a non-workign auctionDetails() in auctionfuncs.inc
+
+relation and family on new, not required tho
+	bah! needs to be invitation dammit. can i punt this?
+		no, i can't fucking punt it. it needs to be dealt with.
+	save an invite for this newuser, for this year.
+		let someone manually deal with print-date later.
+
+surfbpard/drink tix at event
+
+check solicit edit/add privs! all solicit should have it!
+
+that empty element in leads qf! wtf is it?
+
+weird. caching issue with modrewrite?
+
+	verify in rsvpdata, if paymentamount >0 && ticket quantity * price > paymentamount
+		flag it? wrong amount?  
+			you'd need to show the tickettype though.
+			and make a custom rule
+		or set ticket type to freebie? easier. 
+
+	show interface!
+		umm. how the fuck will i EDIT these nested beasties?
+			details? it'll have to be.
+			hmm. maybe experiment with using backlinks to do the lincoln
+			details is gonna be interesting. i don't know which table?
+				this is at least as complex as thankyous!
+		isn't it already there?
+
+	order by in the selects
+
+		hmm. i have an elementindex there that is empty. in leads's qf
+			what the hell is it?
+
+	dupe checking!
+		important! validate on process. don't i already?
+			i think i do
+
+	repurpose my import report, to show actuals for auction
+		and that's the right place to put jane's report too: packaging section
+		auction package sales!
+
+	goodies: add sponsorships as a table!
+		the levels certainly are!
+
+aggh. fbhideprimarykey. used to be default behaviour. me no like.
+	why can't i hide primary keys ALL the time!? i don't want them!
+
+have the enumoptions and other field check DEFAULTS in database too!
+	and preselect/setdefaults
+
+	the "insert today's date" code is needed!
+		add link to field, AFTER it!
+			hmm. group, static, that fucking thing
+		i'll have to subclass the renderer. this group thing is bullshit
+
+	hmm. i could solve the statemachine problem with sub-wizards!
+		wizard for rsvp (so i can use it in several places)
+		wizard for acctnum/income entry (will need that in severalplaces too)
+			a friendly interface for bethany/lauri
+
+			bonus: popup for sponsorship level?
+				pre populate based on amount of donation?
+
+make some selects have a default query or function to populate their options
+	and stick it in the dataobject of the linked field
+	huh? i mean like for familyid and parentid, it should always yearify tru enrollment
+		so throw a function for yearifying into Familes and Parents object
+		and make my CoopForm check it first
+
+i should be able to display the ticket_type chooser. hmm.
+
+		find that missing $1k in sponsor, $100 in tickets?
+			my sum?
+
+pre-save the family_id?
+	i don't think i'll need it. yet.
+
+can dispatch with joinadd($grabtablefromcb, "field:id")
+
+dispatcher knows what state it is, IFF it was passed around without a refresh
+		smarter way to do this would be to store state as a session var instead of object var
+			or store the whole object
+		then whenever i need to read the state, pull it out of session!
+			getter/setter? getCurrentState(), setCurrentState()?
+			this makes the states totally independent of pageloads
+		there may be multiple dispatchers though. so i'd need to save the state of each.
+
+aha! the invitations table IS IMPORTANT
+	it is a record of who was sent an invitation last year, 
+		and who they were invited by. crucial!
+
+nicety. in packagages edit:
+	basically, subclass QuickForm_select to do this! it returns a regular multi-select
+   http://examples.php-tools.net/patForms/examples/example_element_pool.php
+   http://www.mkaz.com/reference/js/selmenu.html
+
+		
+	and to make new package out of it too
+
+
+autosave family_id in coopform. hmm. from $this->page->something?
+
+
+ThankYou: if there's no address in the object, DON'T SHOW THOSE LINES!
+	or, grab the income associated with it and back out to address!
+		i.e. through lead, company, or some such
+	this will happen with paypal return.
+
+		deciding which state.
+			the action passed in
+			the functions need a way to bump the state higher
+				WITHOUT it conflicting with action
+				difference is whether or not it goes back to client first
+
+		make these things return $res not print to screen homeboiee!
+			so i can stick 'em inside things.
+	
+goodies: show donation/sponsor amount in confirmation
+
+db corruption risk!
+	browser reloading issues! could be very ugly.
+		try reloading on delete or save
+	header() in dispatcher... if possible. or js reloading
+
+the fuckign alignment. i want left not right
+
+client-side verification not workign on required/numeric for getcode?
+	hmm. client side not workign at all! why?
+
+
+
+		popup/other self-populating or hiding via javascript?
+
+	modify ThankYou to generate a thank-you page for leads!
+		for online, might not have to change it at all: paypal will fix
+		but for printouts: this may REALLY get ugly
+			it will be time to keep arrays of objects
+				check for thankyous: dump the array of object
+				save them: grab them out of the array of objects
+			guessing will have to take a different path
+				or multiple paths. what a fucking mess.
+
+	
+	it is imperative to separate out sales to FAMILIES vs to leads!
+		we mostly ripped each other off, or our local businesses.
+
+	hmm re-guess tickets!
+		there are duplicates out the ass here.
+		i suspect LOTS of people who got invites but no response codes!
+
+a night-of vs. before summary would be nice too!
+	plus total us vs. them
+
+generify the csv export stuff? import isn't good for generic, but export is.
+	naw, i need import too! for fixen! 
+	and both are in edit-springfest-attedees.
+
+also generify the "doit"/areyousure stuff too
+
+add/remove interface for packages, tickets too? kids? everywhere?
+	fine as long as i don't use FB :-/
+	i think i'm really close on that, actually.
+
+		should i integrate form and view? might be easier! i *want* that.
+			subclass qf or dbdo and put qf/dbdo related funcs in there?
+
+		with an array somewhere in the object of actions
+			or magick method names.
+			this can be used for an actionbuttons thing!
+
+one more check: to look for EMPTY thankou's
+	at orphan-check time
+		delete dead thankyou's, and report them.
+
+check the whole back-button thing
+
+nested links?
+	i kind of have that with audittrail
+	
+watch out for the actionbuttons!
+	some tabs like auction... i should override actionbuttons in nag!
+
+
+the only way for enter new to pre-populate is if i use fb for new
+	that means... porting at least some of the shit over!
+
+
+	finally make it kewl looking. or try anyway
+
+have $this->actionbuttons and $this->recordbuttons use the NEW STUFF!
+	if it exists! it'll call the new add form
+
+how to replace my perms thing!?
+	AND linktables will differ too
+		or, should the caller specify which linktable to use?
+			families_x
+			companies_x
+	
+
+just play with quickform
+	ah cool! preprocess() callback can be used to CHECK FOR DUPLICATES!
+		i.e. before it even processes. or, can do it  *in* process method
+			overriding it.
+	rasta form
+		family. choose. append "Other.." onchange js it
+			if Other... put up a screen for new family entry
+				the whole thing: maybe using FB!
+				on process, save its info, 
+					and dump its lastinsert into a hidden var
+					is the processhafunction a form thing or an fb thing?
+				and display a frozen or horiztable version of it, 
+					with an "enter" button
+				poking other into the select might be tricky
+			actually, this is a method of coopform!
+				of course! show a selectbox with the fblinkdisplay fields
+					don't suppress pk, i think
+				interesting, because it will then dump into global vars, 
+					that id!
+		proceed to the *next* thing to add... based on the above			
+			next thing won't add unless its prerequisite ID is set, 
+				i.e. familid
+			basically, it will *show*, like a simpletable
+				what about enter new? am i back to square 1 again??!
+		maybe keep track of all of the things so i can back out of it?
+		and on down the line. each step is a save, so the data is present
+			in fact, it *must* be.
+		maybe it's both:
+			an enrollment, that backs in to a new kid
+				that backs into a new family that requires all the components
+					i.e.  the fucking form i am supposed to be designing
+					so enrollment, select kid.
+					kid screen. fill it out and get details incl enrollment?
+						or up to families, with all its details: parents, etc
+
+		add to every selectbox/linkfield, an "add new" button
+			much like i have it now in my framework
+			bummer about that is it'd need to save state
+				in case other things were entered.
+				push onto stack?
+					that'd mean the "NEW" links were BUTTONS
+					or, my "Other..." hack might work too.
+						could always make a js that put Other... in
+						other would require poking shit into the select
+							afterbuildform, i guess
+					it'd also mean i need to check stack b4 drawing form!
+						and grab stack contents instead of from db
+						possibly... if indexid isn't present
+			nice thing is it'd be incredibly generic!
+				maybe. there's a lot of backlinking up the stack.
+
+
+
+
+wacky challenges
+	dealing with NONE,NONE fields that are required
+		i'll need to predeffields them as hidden, but ONLY IF PERMS!!
+	may have to $builder->forcequerytype(), if add/edit
+
+remove the "ignore" type from packages
+	alter table packages change column package_type   package_type enum('Unknown','Live','Silent','Balloon','Flat Fee') ;
+	add families in-kind join!
+	fix in-kind summary in solicit report. itbe broken!
+
+hmm. think about schoolyear. what about bugschool??
+
+try $var = <<<END for html quoting!
+
+
+import the bitchen 20-year alumni rasta!
+	bummer: lots of work
+	first i have to yearify the roster form
+		so as to yank edit's out of ALL previous-year enrollments!
+	i need a new table for board members
+		links to parents and officers, basically
+	then i have to clean up the spreadsheet
+		empty lines are whatever was previous
+			do it MANUALLY? there are uglinessen
+		fix the 2-digit dates: manually, most likely
+			naw. easy in php. explode, then guess > 50 < 50
+		make the former-board-member stuff logical: manually? too	
+	at import time, need to check for duplicate last-names/family names
+		search db first, avoid collisions but also let merges happen!
+			soundexes on parent names? auugh.
+	i will need to deal with joins here if mult kids!
+		basically, if parent lines above are same, use same familyid 
+	finally the address hacks from alumni-hack.php
+		but different: there are no zipcodes?
+	then once it's in, got to reconcile with the "alumni" leads list!
+
+new FB stuff
+	upgrade fb on nfsn
+		prolly have to use my local shit. find out how to do that!
+	go thru and predeforder these like in the old-style array
+	in huge lists, put a default and "change" button/js 
+		so the whole scrolllist doesn't have to come up.
+	i don't like useform. try something else?
+
+neat! can pass an object to setCellContents, as long as the obj has ->toHTML()
+
+deal with the ul/li defaults! 
+	they're great for the menu, but cause GRIEF elsewhere.
+
+
+expand the test harness
+	see TODO
+
+stagger the nag stuff, so that next year only the things they are supposed to be nagged for actually show on the report
+	i.e. check the cutoff dates
+
+check/fix donate.php. make sure it be valid html too.
+
+	yet another qemu windoze install
+		ahck. b0rken.
+		install ie6, finally
+	or, put it online for someone else to look at
+
+fix invitatoin_rsvps. it's fucking TICKETS it is!
+	
+use CAPTION element instead of subtables
+	i.e. in um, horiztable, and showrawquery
+	is it legal in old html browsers?
+
+onchange for schoolyearpopup in carriereport
+	pain in the ass?
+
+	why is invisibull used in showfield?
+that javascript in href for my thankyouform is crap.
+	use an onclick (what'sthat?) and put a non-js default there in the href
+	i.e. a target _new!
+
+automate validator 
+	try posting: works with w3m
+		try with guile and/or skij/httpunit
+		or possibly php? which lang to use?
+
+the enhancement stuff
+	also, cutoffs not relevant if they leave b4 11/15 or 4/15
+		auugh. i will have to deal with drop dates too
+		meaning, what? they are excused? or they are not excused?
+			re-read bylaws, dammit
+
+improve performance of enhancemnet summary
+	do getcutoffs manually. not at constructor time!
+	
+the roster details, dude! i never finished it.
+	use new stuff?
+
+
+MAY need a families-in-kind-join!!
+	because... families are going do donate stuff that isn't going to be auctioned
+
+		add 2003 startdates!
+		mora = jan
+		smith = march
+		solano = feb
+		sulpizio = march
+		kaitz = march
+		walker = march
+
+
+bug/crash when  milch views packages
+	weird. not a terribly common problem. but worth investigating
+	maybe hack logout to go back to main menu?
+
+	summarise details in view/edit
+		at least the fucking company name.
+		would require backlinks, no?
+		i don't have *any* means of doing this
+			unless i roll my own table/toarray method.
+
+		maybe user agent conditional? if it supports CSS,  or doesn't have js?
+		later. keep it simple for now.
+
+for flyers, a variation on oneline which 
+	shows an OK for people who need flyers
+
+calendar: add TIME, and location. duh.
+
+stop. and do a project for *me* for a change!
+ 	take a break and re-visit SICP or something. recharge brain.	
+	password reset crap
+		simplest: just the table and an edit
+		and email the user when it is done
+
+	grab the year start/end dates, from SOMEWHERE (ideally, the 
+			year (xxxx-xxxx), start date, d date, what else?
+			didn't i have some plan for events/dates/schedules?
+				i.e. calendar?
+
+stop for a moment. think about OOP'ing either states, the dispatcher, or the callback/fieldspec files
+	what do i need
+		perms added to fields- duh. that should be relatively easy
+		some kind of dispatcher, or adaptation of the existing one
+		some way to specify which *table* to go to, since it won't be a separate page
+			remember there will be different views of same tables
+			a master list... or ability to subclass tables
+	dispatcher would be *very* simple
+		simply take action, and tablename, and call $tableobj->action();
+		would make subclassing easy too!
+
+replace the damned bgcolor specs with class/styles in css
+	iff it won't jack me up with older browsers... check first
+
+
+enhancement cutoffs and per-semester summaries, finally!
+	yes, it's time to do it!
+	need a cutoff field.  doodn't i do this ?
+
+auction multi-add interface, at last!
+	two multi-select boxes: choices and add/remove buttons
+		if add, take selecteds on left, add them to the right
+		if remove, take selections on right, and remove from it
+		weird hack: removing ones already on right from left
+		in case of auction, don't allow them to remove their own family
+			have to add another before removing your own.
+	if i do this, i'll need to update packaging checkin
+
+
+
+tickets!
+	will need a response code, AND a kind of search form too.		
+
+go through all coopview/object pages, checking for warnings
+	and... doign validation!! automated test script!
+
+a way to make simpletable not add all those extra tables/fields
+	nice to know dbdo fills them in if i joinadd, though
+ 
+neat: can use backlinks/forwardslinks to check b4 deleting a record!
+	if there's anything there with those links, disallow the delete
+
+one more guileism i need to do:
+	go through all the table names in audit_trail, and update!
+		per the list. didn't i do this? or did i leave a few out (i.e. inc)
+
+fix solicit auctions too. perms, display, ecch
+	this is a TOTAL BOTCH!!! unprivileged users don't get the ability to edit
+	the perms system is *not* set up to do this.
+
+	
+family overallview
+	make it a summary for *everyone* to see
+	this is, yes, the details view of the the ROSTER screen
+		springfest people can view all kinds of details
+		most can just view roster info
+
+reports infrastructure review
+	simpletable is a good start, but need some functionality of showraw
+	should i have reports that follow the object? so i can get to them
+		i.e. i may want to use them elsewhere?
+	solicit nag report, add to solicit_summary
+		show all the contacts who have *NOT* donated anything
+			esp if they donated last year
+	add in-kind to the summary reports, i.e. the carriereport
+		also to the sponsorship report too
+	nifty little report showing solicitation performace by family
+		using... object stuff
+
+an invitation summary, with a few reports in it
+	invitations by family (similar to nag report)
+		including no-family: the alumni list
+	make sure to make it only show up on invitation grouplevel
+
+	add date printed, dammit
+		and set date printed in the save, when printing, not date sent?
+
+
+	not controversial.... but tricky:
+		and automatic saving of them too, in paypal order form
+			actually, email it once we get the IPN. easier.
+			put the email in the actual thankyou form itself
+				and the saving function.. for the thank you
+				grab its lastinsertid, keep in obj
+			then i have the income insertid in the paypalobj, update that
+
+
+		onbeforeprint / onafterprint
+	css hide print stuff
+	note to turn off header/footer in browser
+
+	AUGH! for some reason, i'm sending fs not fields to showreport
+		i'd *like* to send fs instead... if i can do that w/o breaking shit
+
+that parentsumary isn't quite right. it needs to know about parents
+	so that it can SUPPRESS displaying the parent primary index!
+		i.e. so we don't go around in circles.
+	what the fuck? *which* parent summary?
+
+thank-you note class fixes
+	and figure out how to send it too!
+	finally, once it is sent, add the auto-enter for it
+	make it print nicey, dammit. ugh. stuck. css issues	
+
+
+
+browser testing? 
+	browsercam.com! try the free trial, and make sure my shit fuckign works!
+	put the side menu back?
+	will need to write test scripts at last! every single fucking page and/or command!
+
+would be good to fix the NEW button
+	include indexid in NEW button too... so it gets pre-populated
+	if there is a parent, use that parent's pk, basically
+		will this work?
+		this could be *huge* later on, i.e. "back" or next action
+
+auction by received and non-received, in solicit summary
+	instead of in-kind's. make those separate
+
+
+bah. take the schoolyearifying out of the foreaches in nag/solicit/package/etc
+	and use the schoolyearify var, do it in view somewhere. 
+		simpletable? legacy? where?
+
+ roster details editable
+	will need edit form not related to legacy stuff. BIG JOB.
+
+
+backing needs help
+	make the urhere allow refresh or back too. urhere is urfucked.
+		ultimately, it doesn't know about what i'm doing: 
+			commands, states, views, etc
+	ahck. cancel buttons in edit and add screens will need to take you back
+		to wherever you came from. this all needs serious re-thinking.
+
+add this new single-line view to things like the 10names.
+		tricky... lots of joins and where's
+
+
+
+play with the object interface a bit
+	selectadd to put in sums? cool.
+
+a live link to detail the oneLineTables!!
+	legacy link? or shall i finally get serious about the new edit screens?
+
+
+an alphabetical pager, goddammit
+	select left(last_name, 1) as letter from leads group by letter order by letter;
+
+coop-dev database
+
+	ok, manually build something like the details form, for parents
+	families
+		parents
+		kids
+			enrollment
+	THIS DOESN'T HAVE TO BE HARD!
+				
+
+make coopobject a subclass of DBDO?
+
+	ack. recursetable doesn't recurse more than once. this is a problem.
+		but not a big one. deal with it later
+ok, now make the links recursive!
+	simple wish list for packages
+		it's already there! i just need to do the report/pick part of it.
+			just a simple form with a popup. choose from wish list.
+				all it does is populate the fields, and refresh. 
+				maybe use js?
+
+
+
+md5 is fucked why?
+	i have to override input and update methods
+
+fix old popuputil to check for schoolyear --- didn't i do this??
+
+DB changes!
+	write some quick guile
+		take all 2003-2004 where family is *currently* enrolled... 
+			and invite them again for 2004! 
+
+make the paypal donate form into *one* thing, with radio buttons
+	target php_self, then parse out all the stuff
+		change cmd = _cart
+		add hidden var upload = 1
+	and add a "choose one" element: nothing there
+		wasn't there a hack in formbuilder?
+	also, need to number these ON THE FLY!
+		foreach element, number them
+		how shall i name the fields? formame[field]? array'd be cool
+			can do this with groups
+			or fieldname_formname?
+understand this savealways stuff
+
+i need to add payment to ad, somehow. apply payment to ad
+	where is themaintable? ads? money? invites?
+
+
+
+dick with datagrid?
+
+do the companies as a jointable too. enough. using old code.
+
+
+and ads, same deal: old code time!
+
+recursive report. try it.
+
+
+addEmptyOption, emptyOptionValue, emptyOptionText... all in form:date attrib
+make solicit_companies a linktable
+	ack, massive hack, no?
+	well, it'd be nasty.
+
+
+allow dateformat to be blank by default
+	and familyid, and a BUNCH of select's! 
+		in fact, i want them ALL! to be empty by default!
+	a pre-generate callback perhaps? fish out link fields, and selectadd?
+
+
+
+if action = new, i need to shitcan all the id's
+
+new nifty menu system?
+	create shortname instead: better
+
+then, the money entry!
+	user-friendly front-end
+	'onchange' => "javascript:this.form.submit();"
+
+button for families to pay fee via paypal. yes, this must happen
+
+add ticket type: see notes: vip, etc
+cosmetics
+	make the pager stuff use my styles. it's ignoring them.
+	css stuff for tables
+
+learn new gui
+	study quickformcontroller. wizard? could be useful	
+	read and understand processform in formbuilder
+
+
+widgets to create/update
+	how? preGenerateForm/preDefElements?
+	in userprivs, make pre-form custom select for privs
+	show text description for auth levels
+	schoolyearpopup, put it in everywhere that schoolyear appears!
+	and, for realms, a custom select that group by's all
+		i think formbuilder::_getSelectOptions() does this!
+		or, autocomplete??
+	fix the date popup, so that it defaults to and maintains blank dates!
+
+audit nifty!
+$inventory = DB_DataObject::factory('inventory');
+$inventory->get(1);
+$category = $inventory->getLink('itemid', $inventory->categoryname, 'id');
+
+
+	the sort order, which is *not* in the array, it's in display
+		though i like using the order listed in fblinkdisplay as sortorder
+		the display order too
+
+
+make sandbox for bethany and lauri
+	copy db over
+
+what to do about required fields? is there an override?
+	right now it looks to the db (not null) to determine this
+	shall i set this policy in the schema instead?
+	there is. fb_requiredFields. use it. prepopulate from old
+
+	move invitation_rsvp's to tickets HEY.. it *is* tickets!
+		maybe rename it... who knows, who cares
+
+	how can i do sort-order? __order_fields in dataobject?
+		read dataobject docs
+
+this enum for sources is bullshit. sources should be a table, like COA
+	or enhancement projects. and yearify it too, perhaps
+
+nested forms!
+	fb::useForm(), basically
+	understand how it does its joining and insert_id'ing!
+		debuglevel 5
+	hmm. i don't understand how it does its keys and linking
+	ack. it's a clusterfuck. blow it off.
+
+	read the qf_dynamic all the way through
+
+	i need to be careful. dupeignore on school_year tables
+		by default, it will *not* dupecheck across years.
+		in a few case, i may *want* it to not allow dupes across years
+
+nice!!!! dynamic field-building in qf, i am *so* there!
+
+gripes with dataobjectbuildform
+	nothign for dates, just blank	 
+		but works in formcontroller class, read that first
+
+	fieldsToRender is key! so/ i can block out non-good ones
+		hmm. will need to check perms/privs here for most
+		likewise, freeze. in post or prebuild?
+
+	test cases:
+		invitation entry (important! deadline!)
+		check entry (also important! deadline!)
+		roster input/view
+		drivers license stuff
+		report with sortable headers
+		users and privs! so i don't have to edit this.
+		calendar
+
+
+	also, a "notices" view: things that you owe or have to do, with links
+		cull them from the objects themselves
+
+
+in first.inc write callback: 
+	ugly replace code and ip address with EACH page write
+	that seems... excessive. and expensive. must be a better way.
+	is 'replace' the right sql command in session?
+		how can i tell FIRST time versus update?
+			may have to to query first, then update iff present
+
+now, when they enter 5 names, let's say, do they need to be 5 NEW names?
+	or are dupe's OK? i'd imagine dupes SHOULD be OK, since they may have
+	been entered before
+	so, enter a name, then verification code must DUPE CHECK it
+		and present the duplicates to the user
+	this is OK in the gui! it's ok to "wizard" them through mult tables
+			especially if i have nested display and/or nested forms.
+			enter first/last.
+			bring up possible duplicates, with data
+			enter or choose addresses
+				dupe checking here too
+			or, let them enter them all as one, then custom dupe-check
+				the save function will need to be smart too: multi-glues
+			this is where to use the ebay paradigm
+
+
+redesign the database in a sensible way 
+	build another coop-fakeery, so i can test the script
+
+	you know what? i'm not gonna be able to get to this. i'm fucked.
+
+	schema changes! dramatic ones too, perhaps
+		adding id's:
+		definitely deleted columns
+		deleted tables?
+	
+
+	open questions
+		move fax to sites? email to people?
+		do people have many sites? is orgs a many-to-many join?
+		hmm. where to put flyer_ok? in sites? people? orgs?
+		now, how to join these all back again? as below
+		also, things that used to join to old tables, now to new ones??
+			i.e. companies now organisations
+
+	invitations-people-join needs year, and familyid
+
+
+
+
+thread callbacks all the way thru to the showField() dispatch functions
+	didn't i already do this?
+
+deal with DELETES in audit too!
+	i.e. when something is deleted, i need to DELETE from audit_trail?
+		or, keep a record of it having been deleted?
+
+i think reconciliation is bottched... new-style nested array of joins?
+
+have it ignore .fixed files! duh... list-filter?
+
+	draw this all out? plot it with dia?		
+
+bah. there has to be a way to deal with multiple selections
+	i think i have to wire all that up myself. not worth it right now.
+
+key commands i need:
+	also, make the up and down arrows select. spacebar is annoying
+	though, it would seriously fuck with multiple-selections. dammit.
+
+deal with colors... use the style colors instead of specifying them flatly
+	i think the gtk book has examples of this
+
+bare words to fix!
+	name -> user_name, family_name, etc!
+	description -> many...
+	*way* too over-used. 
+		look thru schema, and fix this!!
+		and in the code, too, it's a mess!
+	i don't like "type" either. bareword in some lang's? parent_type?
+	optionally turn of debug. this is crazy
+	any stragging audituserid's anywhere?
+
+maybe use someone else's auth
+	steal ideas/code from b2evolution
+		huh? where? how? i'm looking...
+		http://b2evolution.net/demo/blogs/admin/b2edit.php?log=demouser
+	or liveuser/pear
+	
+define the functions in the module global let
+
+understand what "fold" means
+
+
+
+
+rasta CHANGES
+	abstract out the find-existing method (in the let) from the check-for
+		will need to fold choose-dupes into them: just return db-ref-last
+	make either an lol or an alist of field/table/excelheader
+	make a method to batch-get (name, name,name) = (value, value value)
+		using fold or map or alist, READ UP on this and play with it
+		also to batch-update/replace
+			check whether '%d' is valid in sql... moot maybe?
+	estimate: 2 days of work
+
+	check phone, or do soundexes on last AND first names!
+		BOTH if possible, tho prolly not
+		test it, make sure this works.
+
+
+	manually fix cresci 
+		update kids set last = "Cresci de la Torre" where last like "%cresci%";
+		update families set name = "Cresci de la Torre" where name like "%cresci%";
+
+ not showing new parents, just last year
+ 	BUG should have error'ed out if selects fail!
+	DO check for sql errors in the selects!
+
+write a script to check for no worker for family, and make it the mom default
+	i think i had one, in perl, a while back
+
+
+		deal with drops:
+			find all currently enrolled, and drop them if they're not in rasta
+
+
+		
+		temporarily save associations in header: kidsid, familyid, parentsid!
+			or, re-use new-kid, new-family as needed?
+			if there are duplicates, i will *definitely* want to anchor these!
+
+
+	deal with last-name ugliness
+		(if (not (equal? lastname familyname))
+			(prompt-user-what-to-do))
+				 use a), b), or leave alone
+
+i'll need to deal with the spelling error/soundex problem
+	for cases where i *want* one match, but may get > 1
+	maybe i can create a meta-query function
+		some fields are exact OR like OR soundex
+		run the query three times, with each of above
+		report back: no exact match. should i use x or y?
+		let their answer be the result of the query function
+		similar to the guess.pl useonly() stuff
+
+models:
+	do all the easy ones first: match exactly
+
+
+	try object slots
+		separate objects for am/pm
+		a join/merge/append method that glues them together with am/pm
+
+hey! neat pleac fix-style! it's a search-and-replace algorithm
+	the kind that'd be perfect for my db schema search/replace in source code!
+
+		maybe yearify
+			flyer_deliveries? 
+			leads?
+			raffle_locations?
+			invitation_rsvps?
+				or, link to income
+					nag_indulgences, of course, and nags
+			user_privs!
+				this could be hugely disruptive. or, just have someone modify?
+				don't want previous board members going in and changing history
+
+a script to update privs based on current school year
+	i.e. whack userid's (hey, how?!) for users who are not currently enrolled
+	
+write an sql-diff script, to diff and patch two versions of db
+	update/upgrade my guile fixschema script to make changes from a diff!
+		or from a definition
+	objectify/modularise the schema: only things that are related to it
+		populating its individual chunks
+		getting data out of it
+		utilities and range/sanity checking
+		maybe?
+			populating it from a definition?
+			renaming/altering a database based on it?
+		note: i was storing tables in the object, that's ridiculous
+	
+
+hmm. i would like the edit/delete to be smart enough, 
+	to NOT allow delete on auctions, IFF the item has already been received. duh.
+	how to do that? subclass showreportform?
+
+bug will show up when teachers start using this!
+	in all checks for familyid = $u['familyid'], must also check for null or 0!
+		i.e. where familyid is not null and familyid = yadda
+
+she will want a FAMILY SUMMARY VIEW
+	different from the main menu. 
+	a heirarchal thing... showing ALL things for a family.
+		a super report. 10names, auctions, money, solicitation, raffles, audit, etc.
+		and, you know what? families themselves will want this.
+	it'll be a home page, basically
+
+all money in one place... i knew this'd happen.
+
+fix reports: split it up (webinterface)
+
+she'll probably want to see responses by TYPE of response
+	i.e. counts of tickets, moneytypes, etc.
+	so... relation on one axis, and count of x purchase on other
+
+ad report for program people
+	money report: but just show ads.
+	they may want that in excel too
+
+put in saveglue or some other field in callbacks
+	instead of having save/delete functions in each thing
+	make it an array, for future use!
+
+for dispatching, i will need a right_join table in the COA
+	so i know what realm to dispatch to. also for reporting back.
+	and for coalescing certain reports.
+
+
+check ALL the states! make sure they work with the new dispatching/escaping!
+
+likewise, i think inputtofieldstruct needs to ONLY grab what's provided!
+	i.e. not the WHOLE fieldstruct, just the user-input!
+	didn't i DO that already?
+
+possibly MORE merging of perms-testing: displayfield and showfield!
+
+
+
+just do the ads, and sponsorships, and don't worry about the checks yet!
+	no can do. HAVE to think through the checks!
+
+then, the multi-displatch stuff for check-entering
+	this is HIGH PRIORITY!!
+
+
+make acctnum 6 by default, on invitations.
+	hmm. does popuputil/poprecurse no longer check def??!! that'd SUCK!
+		it does on EDIT, but not on add?
+		that tells me it's a fieldspec-passing issue.
+	test this. it's OK if it's NOT 6 by default, but i want it to work.
+
+
+cool! can i coalesce() on joins!!!
+	i.e. where inc.incid = coalesce(thing1.incid, thing2.incid, thing3.incid)
+	that could help the reporting a LOT
+
+the RIGHT way to handle donations
+	family and solicitation donations are ONE THING!
+	they are DONATIONS. and, they can come from families, or companies.
+	if they are linked to a company, they are SOLICITATION
+	change nag report such that solicitation donations count towards family
+		this is a POLICY CHANGE from the way we originally did it.
+
+sort invitation income by list type
+
+	hmm. a new CLASS of button/input: recursive?
+		with a "refresh" button for no-javascript?
+		this would bring the whole screen back, but with this one button
+		good: because this is totally different from "save"
+
+
+thank you and tax-receipt screen
+	what they provided (i.e. donated), donated, or bought.
+	thank-you base. who NEEDS thank you's, and flag for when it was sent
+		and by whom, perhaps??
+	doing this right means MERGING the contact information!!!
+	this may be a problem. i may have to do ugly merges to get it right.
+			
+
+pdflib for gift certificates
+	fpdf lib
+	add tag on PACKAGE page (auction too?) for gift cert or "real" thing
+	check it
+then, the 'details' heirarchal report stuff. DO IT SOON!!
+	details just SHOWS everything: subview or not.
+		edit buttons for each subview (if appropriate).
+
+make the perl report form be smart about where it is located
+	and choose it's db accordingly.
+	server, and URI. -dev, bc, etc
+	look in my php code. didn't i deal with this already?
+	how to get the ENV stuff out?
+
+fucking upgrade this idiotic solicit_cash and invitations_cash shit
+	so it is a PROPER PERMS ARRAY!
+	just like a field: i can globablly allow/disallow add/view based on perms
+	and toss away the xxx_cash realms!
+
+have the summary show EVERYONE's count, if $admin.
+
+ok... exports!
+	hmm. freeze panes isn't workign
+	and i SHOULD let the db name get passed in via env, or get PICKED by env!
+	what's with the fucking FREEZEPANES!!?
+
+back up PROPERLY!
+	using mysqldump.
+	HAVE to do this! the new session crap breaks my text-export shit.
+		plus.. the text export was brain-dead anyway. use sql!
+	STUCK: can't do it the normal ssh way, password issues
+	can i call mysqldump from php, on wheelhouse's site?
+
+
+then the territories, at least basic entry/delete
+	there will have to be a families-to-territories multijoin.
+		many families, one territory
+
+grmmn. login should check for input from states that aren't needed
+	i.e. instead fo silently discarding, it should bitch. could be a hack attempt
+
+and adjust timeouts too. GCsess()
+	how exactly does this work? re-read.
+
+Update the roster-import script so that it automatically adds user-logins for any new families it finds in Ann's spreadsheet.
+
+NOTE! should user accounts be ephemeral? 
+	shouldn't they go away when kid graduates?
+	i.e. why are there still peopel with userid's who are dropped?
+	UPDATE the populateusers to NOT add users for any families that have dropped
+		AND to WHACK any userid's for parents who have!
+	ANYTHING i'll need history for... link it to FAMILIES!!!
+		families NEVER go away, but userid's do. so... be careful.
+
+eventually show indulgences on FRONT page, for each user, so they can see why
+	i.e., they shouldn't be reminded on their homepage if they've been excused
+
+
+
+callbacks shoudl REALLY include fields. this is getting ridiculous
+	wait until i get unit testing, though. this is an invasive change!
+
+remember to give the packaging people add/edit privs on auctions!
+	solicit AND family
+	but... not YET!
+
+
+
+put the $olduser back in to loginscreen? just for debugging if anything.
+
+
+showXXX should, if $admin, also show the total of ALL of them!
+
+the confirmdelete is ALMOST ready for genericisation
+		
+make some perl scripts use STRICT! these "my" collisions are ugly.
+
+import committee script
+	surf thru rows
+	grab committee name from row 2
+	grab family name from row 3
+		and remove first names (second word)
+	check for "Chair": these are superusers
+	give all users r/w on their own, and r/o on group
+		except superusers, who get r/w on group
+	shall i show BOTH buttons? can i find out if js isn't present?
+		not until i figure out howw to TEST for javascript.
+
+
+there will be a HUGE upgrade needed next year, to handle semester-specific items!
+	territories. families. EVERYTHING.
+		i will want to save history, but not TOO much history...
+
+nifty. add actionbuttons to the form, so the user can back without cancelling.
+
+replace the silly calls to library functions with OBJECT-ORIENTED library functions
+	which know their own args.
+
+fix the BACKUP script! it's not properly escapnig escape chars, and that could be a serious problem if i actually have to RESTORE from a backup!!
+
+
+if i dare, see if the globals can be removed from the db stuff in first.inc
+
+can/should i garbage-collect duplicate sessions for same userid?
+
+scheme-based gui rasta editor. seriously. this adding parents shit is getting old.
+
+update all input (rastaimport, gtk stuff, etc) to use the dbh->quote() operator!
+
+then nuke the extremely verbose logging for fieldperms and calls to it!
+
+add an automatic sync and merge to the upload live stuff!! SAVE MATT'S STUFF!
+
+
+also, try the gtkrepl! i'm so entranced by its possbilities....
+
+some way of making the BACK dynamic! (see webinterface)
+
+add .# to cvsignore, and hopefully to rsync ignore too.
+	borken
+
+
+i MAY want to have datereceived as access_add. users may enter stuff on the fly
+
+shared.inc is getting too big!
+	move some of it out into reports.inc and forms.inc
+	all inc's will need to include it anyway, but wtf.
+
+replace all those realmns and count/summaries in .inc files with CALLBACKS!
+	i'm TIRED of all these typo's!
+
+i am sooner or later going to have to set auction to NOT accept edits after item has been received. we received it, it's done. you can no longer edit or delete it.
+
+make 'menu' the default action, not 'view'.
+
+
+update the rastaimport to add default privs for new families!!
+
+put the insurance stuff online. really.
+	need the getworkers, showparents code from perl
+
+create a root user?
+	it may behave strangely.. with familid 0...!
+
+MUST now deal with syncing better!
+	i.e., make the LIVE version the real thing, and sync mine up from it!
+		back up ALL tables.
+
+check referer _SERVER? matches... don't want people pasting url's around
+
+make auctions, 10names, and insurance use the calendar functions!
+	WHAT shall i use as a BASIS for all dates?
+		they are STORED as sql dates, and always will be
+		they will be DISPLAYED several different ways
+		do i use unixtimestamps? or just the sql-format date?
+	will need some date calculation utilities!
+		calculate now() in PST
+		calculate differences in dates (x days left.... etc)
+		a displayField() function to dispatch out report fields
+			viewcallback, if any
+			and a displayurl, a displaydate that deals with date/time
+
+
+run it thru the wdg html validator!
+	on bc: www/bc/wdg
+
+wow. handling multiple family last names!
+	there WILL be another smith/jones/etc in the future.
+	now to deal with that?
+		in roster. roster person will have to make something up.
+
+calendar
+	can show nifty calendar interface too
+
+replace that nag-checked links with gif's?
+
+update the user-checking code to check perms on THIS user?
+	and not report perms if they don't have >= 200?
+	i.e. quicklevelcheck assumes that grouplevel + userlevel
+		i MAY NOT WANT THAT! i.e. in things like money
+
+the cash incomeSummary SHOULD show EACH of the things they need to pay;
+	i.e. the nag stuff. 
+
+write an ORPHAN check script
+	to, uh look for orphans, in all areas where there are glue's
+		faglue, figlue, attendance... where else?
+
+sooner or later: getvars to use ?&= url's!
+	should be fun...
+
+add editedby (uid) to money (and possibly other) tables that have timestamp
+
+	must do quickauthcheck() in all edit/save's before allowing them!!
+		at a point where i KNOW what familyid they are editing/saving!
+
+or, fancy multilevel array?
+
+CHANGE password: i think this will be easy now that we have sessions
+
+can i log to a file somewhere? in the site?
+	test it.
+
+finish abstracting out the deleteconfirm too. TRICKY and lower on pri list
+
+also, it's fun to have a header.
+	eventually abstract that out into a nav bar, in header.inc
+
+recover from possibly glue-key corruption! if save/delete fails, RETURN ERR
+	is there commit/rollback in mysql?
+	i.e. if the FIRST part of double-entry fails, i exit(1), so i'm ok
+		but if the SECOND part fails, I NEED TO ROLL BACK THE 1st part!!
+	how shall i do this?
+
+export niftiness
+	accept HTTPVARS args with
+		start and end date (reasonable defaults)
+		excel or text output (excel default)
+		perhaps db host!! so i can test internally
+		auth (urp.. yes, i have to rewrite auth.php in perl too)
+
+excel rasta: import things i don't have
+	do the checkupdates function too
+		and use $ws (if i can get it) to check the formatting (i.e. bold=worker)
+		most important things:
+			attendance.enrolid/dropout
+			family.phone
+			parents.email
+			parents.worker
+	it would be GREAT if it came up with a list of changes
+		and let the user decide
+		or just spit out a bunch of sql queries, and let the user edit/delete?
+			for everything execpt NEW entries, this is possible.
+			i.e. query the db, get the id, and check for differences
+				spit out the query (update z set z.p=q where z.zid = y)
+	bring in new fields i forgot
+		address
+		dob
+
+that little stats report: by date
+
+
+check that the url isn't HTTPSERVERVARSSCRIPTNAME] or __FILE__
+	i.e. for security
+
+somehow record the ones that i nagged by phone, in a nag table.
+	per the reports/nag*txt file modified dates
+
+rename getlicenseinfo to getparentlicenseinfo
+	rename parentlicensehack to getlicenseinfo
+
+1) don't hidden-pass it through. it's neither editable nor saveable
+	aha. incorrect use of invisiBULL. may be harmful.
+		well, look into this. i don't think it's dangerous.
+		because... i MAY need it for ERROR HANDLING
+			i.e. processoneentry may want it.
+
+report/email
+	fix the email
+		even though it seems most people don't even bother to check theirs...
+	also, what about checking for nags?
+
+
+dress up guess.pl with gtk
+	gtklist: with insurance/license name, and popup with choices
+	most of the no-clue ones with no pre-chosen alternative!!!
+	the @multis as pre-chosen with best one, but could choose ANY one as needed
+	save on changed
+		i remember having some question as to how to do that, in gtk.
+
+a call-db interface!
+	clist: family max insexp, max licexp
+	i'll need to use similar code to my gtkkre app:
+		can't edit in place: has to be a set of fields at bottom.
+		for now, maybe just SHOW the data from the email report, in text fmt
+		a phone nag button, and an email nag button
+
+change $HTTP_GET_VARS to $_GET/$_POST!
+
+fix the copy key: do NOT use ctl-c, because the edit box grabs it! duh!
+
+ack! the whole copy-check thing is wrong in the ins entry
+	when i copy, it should re-associate the parentsid.
+		and then un-associate it if the fields were changed
+		either that, or YELL at me before i try to save with no parentsid!
+
+web 10names
+	adjust sql makefile to make a transferrable dump
+		excluding veh, ins, lic, AND leads
+		AND NOT including leads in the create definition (i don't want to drop it!)
+	a date calculation would be nice
+		i.e. how many days left
+
+it would be nice to do some strtoftime shit and show days until cutoff!
+
+milestonedates?
+	session(link)
+	due
+	type(freeform? set?)
+
+it'd be nice to have the listitem labels left-justified
+	gtkstyle?
+
+ok, format the report information a little more NICELY. it's way ugly
+	yes, families want to be in a tree or list in gtk. with click to edit!
+		drill down to parents (tree? list?)
+			then to possible insurances and licenses (lists)
+				lists or drag and drop
+					hey! /usr/share/doc/libgtk-perl/examples/test.pl 
+						has WORKING examples of drag and drop!
+
+general gui questions
+	do i have window for each X, then drag things into it?
+		test.pl!
+	or, a list/popup/tree for each X, and click on things to "join" them?
+	or, dialog boxes, popping up, with choices for each?
+
+tab order! i do not like how it goes from last editable to list, and not to editable IN the list
+	after last item in $f, i shoudl skip to first in $vidlist
+	how?
+		focus in handler on the list itself?
+		or just blow away the list, and use vbox instead?
+
+you know, a gnome date widgie would be nice, instead of 2003-00-00
+	i'd have to do date conversions, tho
+
+report niceys
+	it'd be nicer still to have a gui, clist, and checkbox for email!
+
+manually double-check the parents worker info
+	this would be REALLY nice to have as a gui thing with checkbox!
+	tree?
+		note: tree lets you do buttons, radios, etc
+			but ctree is ONLY for editables and pixmaps! not even popups
+	actually, radio button?
+
+ok, how to shrink the appbar back down to size, after clearing it?
+
+curious... do i want localtime or gmtime?
+
+emit focusout in activate handler
+	um, how? i try, and i crash.
+
+niac 5 digits. constrain it in gtk? not until i have a hash
+
+what about viewing/editing/changing?
+	clist? gstatg/gtkkre like?
+	know what? this wants DRAG AND DROP!
+		um, oh shit. how does that work?
+		heh. i sort of have it started
+			just need to know 
+				Gtk::Gdk::ModifierType (button type)
+				Gtk::Gdk::DragAction  (flags)
+				what $actions should have!
+
+add "changed" signals, and handlers, like in my gtkkre app
+	light/grey the save button/menu based on whether there's anything 2 save
+		how? sensitive? what's the gtk trick here?
+		also note the gtkrctest.pl example
+
+a "same" button, though, to populate ins with lic, and/or vice versa!
+
+adjust the email script 
+	to NOT bother anyone nagged after a certain date!
+
+dialogue box. needed?
+	use gnome!
+		ah shit, HOW?
+			Gnome::reference
+			nice! ok_cancel_dialog_modal, ->ok, ->ok_cancel_dialog
+			->question_dialog_parented, ->warning
+
+husband and wife on policy, prolly need both. grr.
+	fairly major redesign! i'd need "insureds" table, 
+		and key to... policy number?
+		and insureds would have the link to parentsid
+	visually, it'd be a clist: last, first, middle
+	all my selects would get that much more hairy, though.
+		yuck.
+
+nicer display names than all lowercase
+	hashes, most likely.
+
+hmm. store scans too? as data objects?
+
+
+i do however WANT to be able to copy the insurance info in!
+	ok, how do i want to USE this?
+	do i want the entry to clear at save time?	
+	scenarios:
+		enter insurance, then save, then copy, then enter license, then save
+			safe. but... where does the copying happen? at save time?
+			ah, FUCK! don't i lose the parent lookup info? dammit!
+		enter insurance only: this already works, i won't break it
+		enter license only: this already works, i won't break it.
+		enter insurance, then enter license, then save both
+			more complicated, i'd need to keep track of what hasn't been saved
+			and what if parent lookups are different? eckh.
+	keep the parent-link popup outside the notebook? or inside
+	ACK! THIS IS BRAIN-DEAD!
+		do i want these linked or not?
+			enter lic, with no ins
+			enter ins, with no lic
+			enter both at same time.
+		affects:
+			parent popup
+			save
+			new
+		how?rj9
+			when i switch away, can i note that i have unsaved data there?
+				i.e. flag, when data changed and not-saved?
+		concerns
+			losing data
+				unsaved, but switch
+			mis-linking data
+				i.e. parent popup
+
+----------------
+NOWHERE
+	after edit, it's not going back to view. why?
+
+test with FF, and exploiter too
+	before pushing live, make sure exploiter is ok with it
+
+
+30 mins PHP
+linkconstraints for the masterdb
+	in view, i really only want to see people i've invited in the past
+	but NOT for popups or searches... 
+	so, add constraints in view, on masterdb: only those who have been invited
+		maybe, just those who ARE invited?? cleaner/simpler
+	but what about people who need to edit it all?
+		same thing. view all perms use the perms as intended
+	just change the link to familyid to go through invitations. easy.
+	maybe override the constrainfamily?
+
+	weird. master contacts are not in same realm as invitations, really
+
+
+wrap it all (incl subclass) in a div?
+
+why won't it submit?
+	it's that stinkin onsubmit. why? what?
+
+the flexacChoose shouldn't fuck with my bg color. keep system colour!
+
+integrate flexac
+	check for css fuckup: the box extends longer than the form!
+		that's just to do with the size of the css popup
+	make it use a large selectbox, not a CSS popup
+	  understand selectbox updating
+  		i.e. my advmultiselect
+	this is problematic! people will think they are ENTERING  
+
+know what? Do It Right.
+	use a selectbox, dammit. i can do it.
+
+
+	ahhh shit. apparently concatlinkfields does this? or does it?
+		hard to say!
+		no. it's raw text coming back!
+
+other json things
+	jpspan IS NOT JSON! it uses php for serialising. ugh.
+
+WHAT should i do with searching?
+
+how to call remote methods?
+	like in xmlrpc is there some way to query available methods?
+		and function calls
+
+
+FUCK getting this into customselect or jsonselect
+
+decompose and understand the autocomplete box i just found
+	where is it? IT'S JPSPAN!
+	that might get me where i need to go, anyway.
+
+??? PHP
+will need to deal with auth/session
+	how does the ajaxserver auth? will it get the same cookie? COOKIE!
+		or do i need to pass a coop=SID to it?
+	same thing with SESSION. i want to use the same session id
+		hell, i *have* to
+	try this autoserver
+	get and keep cooppage stuff
+	hmm. i'm going to proliferate debug pages with every damned call!
+		that might be OK though.
+	aah! cooppage DOES NOT CHECK SESSION! it doesn't seem to. weird.
+		session has a valid auth in it.
+		or, wait, maybe pagetop does this
+	it does
+
+bah. maybe try jsolait instead?
+
+for new fams, a button/chooser to insert old names or pick new
+	dno. do it automatically! the first time you launch the view!
+constraints are wrong?
+	this is basically a search screen built into a custom element
+		consider starting off with all this shit in a separate window instead
+			and populating on back, using my back/forward navigation
+		no
+
+audit details are broken
+
+	index in stack? dangerous.
+
+	at validate time, simulate a page load, remember i'm not using header
+	how to deal with edit? i'll have an id in there. will it be on the stack?
+
+
+ok, push is stupid.
+	instead, directly inject the values... somewhere
+	for back-filling, inject into last on stack
+	for forward-filling (i.e. from details)... what should i do??
+		this is the override question
+		i can't override if i have popped. ONLY if push!!
+
+hmm. maybe if it is add, just wipe and redisplay?
+	NO. i may be adding from elsewhere. i need to pop
+	why is the new record BLANK!!??
+and also for email purposes!
+	if it doesn't do that already, i've got Trouble
+		no, it does it already. 
+
+	so how do i pop?
+		they are the same thing. think of them as one.
+go back and wipe out or otherwise cleanse the damned audits for textfields
+	it's too detailed
+
+
+wsywig html editors for job descriptions, handbook, etc
+	ogham
+	fckeditor?
+	whizzywig
+	rtwedit
+	tinymce (easy to integrate?)
+
+wiki/cms
+	silva? kupu? python... cool
+	cmssimple? NO, license
+	ncaster?
+	kupu by itself? looks damned good...
+		try that article!
+	back to fckeditor?
+
+	quick audit trail of all in realm, i.e. for rasta
+		all tables in realm, all changes??! or last 20
+	what is this? where do i put it?
+	it's a system report?
+	NO. there's a default summary, recent-changes
+	holy shit, it's already there, in audit!
+
+do tahe perm checking separately, after. otherwise i will flip the fuck out.
+	it's nonsensical but i have no choice. i'll go apeshit otherwise.
+			i opted for apeshit
+
+		AND HAS PERMISSIONS TO VIEW!!! AUUGH!
+
+	no no no. 
+
+at insert time, SOME things will need to trigger email
+trigger an email
+	or, let the user do it manually?
+surf through all the tables, look for ZERO pk records
+
+huh? someone is doing SELECT * FROM income INNER JOIN companies_income_join ON
+companies_income_join.income_id=income.income_id WHERE ( company_id = 142) AND
+school_year like "%" ORDER BY school_year desc , school_year desc ,
+payer,payment_amount,check_date
+	weird. no view perms, but it is STILL running the query. wtf?
+	must be happening because of the familyid stuff? i don't know!
+
+it's me. problem= userlevel 0. fucking FIX THAT willya?
+	no, the problem is that I AM AN IDIOT. i was $res'ing, should print
+
+	the joins are going to be veeerrry interesting!
+		do i try to do it automatically? or manually via details?
+			manually has issues. i suggest trying to put it in income
+		maybe decide based on the parent? or what's in it?
+		moot. details won't show it automagically
+			can i *append* things to details?
+
+	fix workets
+
+backfill ads for 2003-2004!
+	i.e. any companiesincome in coa ads
+
+
+so. the popup needs to SAVE chosenschoolyear
+	and i need to check it in linkconstraints
+	THIS WILL SUCK!!! in popupmenus! it'll always have the wrong shit in there
+	ah. so only check schoolyear if it is chosen. otherwise, all
+
+??? PHP
+if the top has no schoolyear, go recurse through it
+	steal code from generic/details and put into $this->allLinks()
+	surf through all the fw/bw links looking for LINKED years
+		i'll need to do the joins, whereadd, eventually
+		array_merge then asort all the years found from each
+	fuck this. always use enrollment.
+
+	AAUUGHH!! WHAT IF THE TOP-LEVEL HAS NO FUCKING SCHOOLYEAR!!!!
+		as is the case in almost all of the situations here. dammit.
+		quick hack: get it from somewhere else, like i already do
+			NO! how can i know where to get it from??! look at all xlinks?
+				that's what it should do, actually. getschoolyears on all
+					and merge them.
+			i.e. if getschoolyear is called on a table with nothing
+	AAUUGHH!! WHAT IF THE TOP-LEVEL HAS NO FUCKING SCHOOLYEAR!!!!
+		as is the case in almost all of the situations here. dammit.
+		quick hack: get it from somewhere else, like i already do
+			NO! how can i know where to get it from??! look at all xlinks?
+				that's what it should do, actually. getschoolyears on all
+					and merge them.
+			i.e. if getschoolyear is called on a table with nothing
+
+		should not need the chooser for this exercise
+
+	and a territories SCREEN. let her edit, add, even remove
+		add the crosslinks so she can add/remove companies from territories?
+			i don't think so. not crosslinks 1-many: xlinks are many-many
+			fucking details will do
+	the right thing is to stick the damned function into the DBDO, subclass
+		but! i need a replacement for isLinkField. it checks forwardlinks
+	ah, $obj->links()! gets the forward links
+		ok, now, move it all into the drink here
+
+	fucking great. class Foo_bar extends DB_DataObjects GODDAMMIT!
+		how do i get it to extend MY class, not its?
+		look at fb FUCK. fb doesn't do that at all
+	 doctor info!
+	the crosslinks to leads, the popup ain't a-workin'
+		do i really show the ENTIRE leads db? there has to be a better way
+		maybe only those with 'Dr.' in the title? hmm.
+		fuck it, show them all for now
+	i think i'm pregenerating the form here
+		i have group 100 perms on leads, and that's sad
+			make it 600/600-- i don't want them deleting any!
+		gah. but... i DO want invitations constrained 600/100
+			ok, then just limit that table then
+	also, it's not actually adding the doctor for the kid
+
+OLD abuild backlinks table
+	on edit:
+	recursively add them to the SESSION vars
+		i may need to add an output var, dump all these in there b4 display
+	remove them when detail over?
+	this is trouble. i find this stuff midway through (i.e. in detail form)
+		i need to change globals, and restart engine? what do i do?
+	i should store a heirarchal array of tables displayed
+		top, and subs.
+		if the action changes at top, refresh all the subs
+	this still doesn't answer what to do about *where* to show forms?
+		inside the object? new/cloned objects?
+tedium which *must* get done:
+	selectAddEmpty!... for link fields that i don't want a default on
+		my framework makes selectaddempty the default. i like that.
+
+	do it in php, use unique php features
+		$workdays[$row['workday']]++
+		$epods[yadda...]
+	no, use sql, it's easy
+
+	THIS MEANS ABANDONING SIMPLETABLE THOUGH!
+		or, running the query twice? BUT THEN WHY NOT SUM IT!
+		i.e. group by workday to get total for each day
+		separate query to sum up all the attendance days
+	no, dumbass, it's simple. custom query.			
+
+httpunit death? wtf?
+	on walker. something to do with link-clicking
+	nekopaaaarser pukng
+	but only on dev site! only on walker, and on the auction.php link. weird.
+		parses fine in checky. odd.
+	SAVE THE GIBLETS!
+		umm. i dunno. weird. i'm punting this.
+
+the right thing to do is to javascript this
+	put the subform in as a hidden field
+	switch using JS, IFF client verification
+	only use the roundtrip if i'm on my shitty dispatcher
+
+	integrate with the roster page, just for grunts
+
+	javascript
+		the button can have a post and an onclick action
+			if js present, the onlick will get executed.
+		justin patrin message 2513!
+
+
+deal with the default school_year... show previous schoolyears in details
+	do any other join tables have schoolyear in 'em? i.e. pkg? how do i deal?
+	it's not really a join table then
+	where to do that? addcrosslinks? processcrosslinks?
+	overrides, fb_defaults maybe?
+		naw, only used in form
+	create an invisible field, attached to the linktable?
+		maybe it'll get sucked in? no it won't! xlinks don't check defaults!x
+	i could throw a manual hack in there, but where? 
+		looks like SAVING it belongs in tosave/todelete in processvars
+		and SETTING it would have to be a manual hack?
+			or a setdefault (if present) or hidden (if not) in addcrosslinks?
+		WAIT!!!! i create coopobjects for the linktables!!
+			i could just check their fbdefaults first?
+			and overrides from top, perhaps, as i do now?
+	then, show all previous people who had the job, in school year, details
+
+	try the lead_id editor
+		existing "enter rsvp code here"
+		maybe neat js onEnter, to select the popup!
+		also add a pop-up... 
+			eventually that popup will also have a subform
+				use coopform? or manually create it?
+					could do a useform, perhaps
+		processing/validating will be interesting
+			a chance to play with group?
+			either must validate.
+
+	do the callback now
+		checksubformrules is there as a form rule, whether i want it or not
+			should it be? should i use it?
+		yes. shitcan the custom validate, or stub it out with a warning
+
+	ok, so only validate the customselect IFF subform is not set
+		how the fuck can i do that?
+		so and so. 
+		group rule that checks subform?
+		only ADD it IFF
+
+
+	look. at. how. fb. does. it!
+		how *do* they do it?
+		they validate the subform stuff first. then the other
+		but HOW DO THEY ADD REQUIRED RULES for things STUCK IN GROUPS!!
+			i.e. the subform?
+			do they label it? what the fuck??
+
+
+	what the fuck is the difference between addgrouprule and addrule for group?
+		neither appears to be working
+
+	so. add required rule for GROUP, if possible
+		if the hidden is set, rule and validate only subform
+		otherwise rule and validate only for popup
+
+	don't even bother validating the subform unless the hiddenname is set
+
+	saving this should be interesting!
+
+	add group ruuules: either or (check FB)
+		where??! see docs
+			justin's
+			qf's
+
+	test my required-fields hack!!
+		find one that's required.8
+		ah. it's trying to add a rule for an element that's not there.
+			so... it's fucked.
+		gah! what about javascript!!!!?
+			i can't do this. 
+			how did fb do it!?
+			wait, i can. maybe. buttons don't show in javascript, no?
+			this is gonna be tricky in javascript. i'll basically need hidden
+
+try to integrate this with the LEGACY shit now!
+	a whole new raft of new bugs, i'm sure
+
+subforms AT LAST! it is time. procrastinate no longer, homeboy. JUST DO IT
+	you have 2 days. haul ass.
+
+
+	and if you ever delete a family, same thing? NO, let the linkcheck do it
+
+fix rastaimport code AGAIN, not or, but AND with soundex last name
+	looks like bad phone number in column for kaitz/devry
+		i think i fixed this already.
+
+fix the family_id hack in coopview::toarray()! 
+	make it check forward and/or backlinks!
+
+
+	new families
+		will need some way to require that families be unique when rasta-enterin
+			add this to the rasta screen, when done.
+
+
+
+
+rasta
+	yearify, like the springfest report, so you can look at previous years
+		do NOT allow editing of previous years, even if superuser.
+			how to do *that*?
+
+	showing tinyints in my display framework
+		blow off old framework for showreportform
+		MUST add perms to new framework... can't avoid this
+
+maybe a cheap dispatcher class? for my few odd pages
+	hmm. isn't this the controller?
+	vars
+		recordactions
+		title
+		realm
+	methods
+		one for each possible action
+			new/add/edit, view, details, delete, confirmdelete, etc
+	add to class
+		all the page building
+		view/new with perm checking
+	pages to use it:
+		sponsorship
+		various maint pages
+		that's all?
+	then i can later replace this with a coopcontroller dispatcher?! cool!
+		it'd be transparent to my code... maybe
+
+importing rasta from excel
+	maybe a "fix" function, that corrects or replaces any missing data?
+		missing/wrong spellings
+		changes in am/pm
+	store or print the ones that DON'T match?
+		ask on all of them?
+	handle name collisions (esp with loose matching)
+		for loose matching use soundex and levenshein stored procedure
+
+
+	old-fashioned style single-page perms editor tho, for legacy
+		realms -> users -> group/user (as would be for that page, perhaps)
+		users -> (all possible)realms -> group/user (for users)
+		simplest would be a separate view/add. no buttons on the page
+			can only edit of course if you have admin(800) rights for that realm
+		but that could be painful. maybe also multi-edit?
+	maybe on each page/view, where it *shows* perms, instead let them EDIT them!
+		makes sense! ditch this realm shit, perhaps? on each page, edit perms
+		how to deal with new year though?
+			defaults for each?
+	it doesn't matter, as long as it works.
+
+simple. don't conditionalise using qfc statemachine. do it in buildform
+	i.e. it's buildform, and i decide what to build based on what's there
+		use my code from old ticketwizard
+
+	now, my cheap dispatcher conflicts with qfc. it's jump header location!!
+			gah, the recordactions WILL KILL ME		
+				i'd have to translate from REQUEST[action] to ... what?
+					handle should do it
+					but the id will be the tough part
+			try it. life may be easier with it than without it.
+			it's kinda cool
+				what SUCKS though, is i can't nest form buttons
+					i.e. the paypal stuff. that may be a problem later
+
+
+			from the menu? i'm already iterating anyway...
+		seems weird but, use the menu! surf thru its structure
+		do i need the heirarchy?
+			for now, flatten it out
+
+
+and... only SOME job descriptions are showing up, not all
+	beezaaaro
+	try to duplicate this. or did i fix it already?
+
+family oudkerkpool fix? i think they're already in there (insurance)
+	hmm guess not
+	my is null thing may fix it
+
+well, get ready to ship
+	umm. what the fuck? the am/pm sort is now broken
+	and, is the family count correct? 56?
+		real rostar has 28 pm, 32 am
+	THAT IS 60!! I HAVE ISSUES.
+	sort it and compare.
+		gramling not weatherston?
+	hmm, am has 32
+		pm has 27. who is missing and why?
+			i have griffin back. but no names.
+			likewise saupe
+		waz up with davidson?
+	AHA. import script doesn't deal with  no-dads, no-moms
+		it is a bad assumption.
+
+
+do NOT show the add-new link in subform, if the form isFrozen! doh.
+			addnewlinkfields: check perms on the new table?
+
+
+ok. i must create a custom group element, fuckers
+			which produces this goddamned customselect
+		always make it a group. all selects will be groups, unf
+			gah. i was having issues with subclassing group. why?
+		things i need to have in there that are coop-form-specific
+			obj->linknewfield
+			assumption of prepend?
+			the options (pass in?)
+			table name
+			my stinking addsubtable func
+			required fields
+		i can add grouprules, but i won't know about the form
+
+
+
+wrap setting of debuglevel, so that i KNOW WHO DID IT!
+	everywhere?
+	STUCK: debuglevels are all fucked up. i can't seem to stop them
+
+processing!
+	well, try a *simple* process, with no weird popups. what happens?
+	umm. validation is fucked, is what happens.
+
+
+rasta import
+	job assignments too!!
+		might need to add some new jobs that aren't in there. soundex?
+			fuzzy matching for CERTAIN here!
+		or just report the jobs not in db, so's i can add's em
+
+the last little bit of importation -- job assignments
+h 	wait.. why is this a showstopper?
+	the only person who has allyears on ANYTHING is betsy
+
+mm. can i ship it with the joins not in there?
+	WRONG: families, parents, wrong. everywhere. in popups, in display
+		and without joins, the schoolyearpopup is moot
+	enrollment not in alpha order (except for hack)
+
+
+bugs
+	betsy needs allyears on family too? or does she have it on realm?
+		or, si there a linkconstraint getting in my way?
+		no, her perms make no sense. she shoudl have year VIEW on all the realm	
+		looks like a fuckup in getperms query: [] is year NULL
+		umm.. no, she just doesn't have perms? what's up there
+		to test: add/edit a kid. lookee.... only these families. wazyp?
+
+
+	now, am i joining, or setting, or both?
+
+
+BUG: why is my ampm sort not getting in there anymore?
+	duh, because i don't have joins in there yet
+	??
+	i think isobject is fucked. somewhere i needed classvars, objectvars, what?
+	i'm so fucked
+	no school year in realms, asshole
+
+	similar to that in carriereport, but much more generic and simpler
+		maybe if they have groupperms, let them choose this, prev/next, or ALL
+			BUT! i have to be careful to NOT allow editing of old history!
+		in *some* cases (fb_allyears?) it may be ok to edit past history
+		SO. SCHOOLYEAR WILL AFFECT ISPERMITTTEDFIELD!
+			or at least, i have to check it before allowing edits/adds.
+				pfui.
+		ultimately map them to rights: user, group, allyears
+			so: user (view/menu/edit/delete), 
+				allrealm(view/menu/edit/delete), 
+				allyears(view/menu/edit/delete)
+	so, everywhere that school_year perms are user/group
+		change it to year?? 
+		so, do i handle schoolyear specially? i.e. look at yearperms?
+			in FORM, that is. i really should be consistent with view, no?
+	AH! so, if record's schoolyear != this year, check YEAR perms
+		otherwise use current year's user/group
+		THAT. is ugly.
+	YES! i do have to do it that way. same with familyid. these are *special*
+		so, anyone who doesn't have group privs, CANNOT see familyid.
+	take those massive familyid/schoolyear things out of table_perms
+		and instead, do tests.
+	i suppose this needs to happen inside is_permittedfield.
+		special case: familyid? return GROUP perms not user.
+			THIS IS WHY I HAVE THEM SPLIT UP!
+			schoolyear? return some combination of year and user/gropu
+				WHAT combination, exactly?
+	have a quick look for that schoolyearchooser
+		where? didn't i write one, and i was pretty proud of it too
+		it's mentioned in 6/03/05 changelogeashe t
+
+	or look at date coerce library? pear?
+
+	ah. i CANNOT use timestamp_db_php in form, IT RETURNS NBSP AND AM/PM!
+bugs to fix
+	tables really don't need to be menulevel anyone, do they?
+		confusing.
+
+	pages i hack roun by using old 
+		carrie
+		enhancement summary
+
+i don't think i'm going to get out of the schoolyear thing alive.
+	i think the :: is braindead. array merge is the right way to do this.
+	but but but. what if i need to join through two different paths??
+		in that case, you'd need a weird custom sql join,
+			selecting ULTIMATETARGET.familyid instead.
+		i think this is how it is done in shared.inc
+			DO THAT! 
+		can i do it with arraymerge?
+			a ->b->c
+			a->f->c ... sure
+		NO! i can use my crosslink javasript thing!!
+			in a pinch, anyway.
+
+	i MUST constrain stuff like parents/kids. too much shit showing up there	
+	do the joins!
+	also, i must backlink for some paths to familyid/schoolyear
+	i.e. auction donations. it's a backwards link
+	where is an example of this?
+
+
+	fuck joinpaths. manualy add these things.
+
+	ok i see the problem. i have no perms for that realm.
+			so, my query returns nothing. that's correct, i have no perms.
+		the problem is my defaults in ispermitted. if no perms, i assume 700/200
+			hence, 700/200 on solicit calls. really, wtf? 91 is packaging.
+		try going restrictive.
+
+		figure out how to iterate through showtables
+			huh. i need to add a REALM first.
+				or shoudl i update my permchecking to look for norealm?
+					if nothing present for realm?
+				no. it produces wrong shit. 200/177 for field. who says?
+
+it is time to break out selfurl into its own class. getting crazy here.
+	it needs named attributes, desperately!
+
+	this will cause tsuris, when i get to schoolyearchooser though.
+		though, that may be a different value: constrainschoolyear
+			and, it'll only be in reports.
+
+		familyid should be 0/500 in all forms it is.
+mo bugs. kids/parents/workers should NOT be enter new
+	family *should* be editable though
+	ok, ispermitted is showing 800 level for parents!!?
+		THAT IS WRONG!!
+		it's showing up as 500/200 in db. so, wtf?
+			coopopbject fuckup viw fuckup? at force 1
+		ok. the query through coopobject, getperms gives me 800/200
+			BUT. same query in db, is 500/200. wtf?
+			uid? 8
+
+
+10names.inc:7
+CoopView.php:2
+admin.php:1
+auction_purchases.php:3
+auctionfuncs.inc:5
+audit.php:7
+enhancement_summary.inc:3
+invitation_cash.inc:2
+invitation_summary.inc:4
+nag.inc:8
+newroster.inc:5
+packages.inc:4
+paddles.inc:1
+print_popup.php:1
+program_ads.inc:3
+sandyreport.php:6
+solicit_company.inc:10
+sponsorships.php:15
+thank_you_notes.inc:11
+ticket_sales.inc:6
+
+cases where dupecheck,  confirmdelete, delete, and are not default?
+	nevermind. i'll need to go through each and every one of these *anyway*v
+
+look at them
+	things i might need to move into obj:
+		by default, search for only this school year.
+		might have to do silly things like findfamilyid, if link
+
+
+ok. pathtoschoolyear is used for every parents and family instance. sux0rs
+RR
+
+	print out all the joins in the old system. have a look.
+	shortnames
+	joins
+	PAGE!
+this is a BIG job
+	there are joins in fields too
+	OR. make the menu use the DESCRIPTION to sort on!
+			it does, dumbass.
+
+		make a hack to integrate these new generic items into old menu system.
+			it ain't going away, not this week, sorry :-(
+			jobdescriptions
+			jobassignments
+			blog
+			auction_purchases
+			sandyreport?
+			would be NICE if there was a way to integrate both together, merged
+		well, maybe i will abandon the old menusystem. it appears to be b0rken
+			it does *not* like having multiple callbacks in one file
+
+	and, yank some dumb things from menu. i.e. events.
+		huh? why is that dumb?
+		oh, you mean perms for nonpriv users
+		well, that'll mean fixing the menu, duh.
+
+	IFF... it's not obvious. maybe only the ones that don't make sense
+	methinks i may need this in form as well as view, too
+		in which case, do it in object?
+
+create a function (in coopobj?) to generate selfurl with table and generic.php
+	or whatever's in the obj. duplication in view and menu elswhere maybe
+
+
+the recursive thing works great if the familyid's are ONE level away
+	but it seems to die if they are 2 levels away. why?
+	ah. enrollment has no backlinks??! wtf?
+		maybe i need to look at forward links too. gah.
+		ALAS and goddamn. i do.
+	it forward-links to kids.
+	hmm. i may not be able to escape doing this manually, 
+		as i did in the old system!
+		put it in the dataobject, or maybe in a conf file
+
+	i *must* beat a path to familyid, in order to understand perms
+			i used to do it manually, now i can do it with back/forward links
+		traverse backlinks (deep, then wide)
+			if i find a familyid, then LINK THIS BASTARD IN!
+			i need to know the path of tables to get to this one
+			perhaps have a look at fb. i think it does this to guess links
+		recursive traversal
+			save paths on a stack, somewhere
+				object var? global? static var?
+		maybe practice with python first ;-)
+		problem is, i only want to join IFF this path leads to where i want
+			but i have no way of knowing, until i'm done!!!
+		do i want to forwardlink too??
+		note: do not LINK all of them, just find the path!
+			because, i may want to override them. table:table:table:familyid
+
+	decision tree tool
+	leads and blogs work just fine. calendar events does not
+		WHAT is different?
+			in tableperms, eventhidden is 0/200, leadid is 0/200!
+			in calendar, is 200/200. eventhidden is  0/NULL
+			in leads, i have 700/100.  leadid is 0/NULL
+			but ispermitted returns 0 for leadid, but 200 for eventhidden
+				WHY?
+			in db query, leadid is 0/null, but eventhidden shows up as 0/700!!!!
+				WTF?!
+
+				but, if i do that, i get BUPKIS!, same behaviour
+					it STILL shows up in query as 0/700. WHY??!!
+		so, this sucks. it's not like behaviour of old system. BUG!
+	ok getting close. userperms are ok.
+
+bug in leads familyid. PATH TO FUCKING FAMILYID DAMMIT!
+	i'll have to manually haque it. i need to go through invitations.
+
+	AHA! it uses PHP_SELF to determine its current url
+		that's why my HERE stuff never worked, i think
+
+	do i have a 1-to-1 table to page?
+		NO!
+			rsvp's are a composite of 2 tables
+		splits, (1 table in 2 separate views) that should be together:
+			auction stuff is 2 views: package checkin is separate
+			ad sales != ad status 
+			reservations != rsvps too
+			income is split into THREE different places:
+				family, solicit, raffle
+		then, page gets listed in object
+
+		sux0rs. i have to instantiate everything, to know what's in it!		
+			NO I DON'T! R	yes i do
+
+play with python on my little recursive thing
+	gah, it was guile code. will it even work now?
+
+	try beautifulsoup IFF these are tables  NO its not
+
+						i think there are other places i need to do that too NO
+	default sort is familyid=me
+		my public site shit is showing up again. alas...
+	ok, go fix the table menulevel
+		it was supposed to be a floor. only users with GROUP perms here or above
+			can even see this table
+	what's broken now is the TITLES are all fucked up, in toarray
+	and... recordbuttons too. why no details buttons? i s/b able to view all no?
+		in blog, anyway
+		and in jobdescriptions
+		and in leads
+	so. either set default menulevels, and change what they mean
+		or set the code to ignore NULL perms for rows with no fieldname
+			gah! nasty hack. me no likey.
+	another interesting thing, is that NULL is not 0 in mysql.
+		so i can use 0 to mean, NO WAY. and NULL to mean, ignore.
+	still totally fucking broken.
+		now, it's all or nothing. shit is showing up, it's not supposed to.
+		auction items, frinstance, it's letting me EDIT shit. why?
+
+	the new worker stuff
+			i don't know which is the worker. it's bolded, isn't it? gah. guess.
+			how are "baby" people identified? or worker for donation?
+
+	why not? where should this happen? SETDEFAULTS IS NOT GETTING HONOURED!
+	does it not work on hiddens?
+	wait, bullshit! i see it right there: family is correctly set.
+
+				be nice to have a delete feature?
+					NO! do not delete, only do not show any longer.
+
+			and, figure out if you can dhtml include a php file
+
+			ok, put the blog stuff up
+				put an updated/entered field in there. i'll need it for sorting.
+					updated, no doubt. if it is "breaking" news.
+					or put both and punt ;-)
+					ah, or just use audittrail
+
+		file date: stat the tempfile? pointless. it doesn't keep its original date anyway
+	AHA! do i need default perms, with null realm?
+			user can edit his own, can view nobody's
+			not really
+
+
+		i had this pretty well sorted out
+
+what's with this events table? update to use new realmjoin
+	not needed
+
+	parent? family? really, that's where it belongs. NO IT IS NOT!
+			because it changes every fucking year.
+			but, it doesn't belong in enrollment either. twins/siblings.
+			NEW TABLE.
+
+	a pear rewrite of populate-users.pl
+ok, now TEST this new perms stuff.
+	how?
+	maybe blog stuff too?
+	
+
+this will be interesting.
+	no. i do need default perms, because new users don't need ALL perms!
+		i need a "nobody" user, basically
+	by realm. dig them out of the populateusers.pl
+	may need groups here. teachers have different default perms, no?
+		yes, they do. dammit.
+	seed the default perms now.
+	i'll need to YANK the default perms too... i.e. populateusers in reverse
+	OK. so "realms" are groups of DATA
+		"groups" are groups of USERS
+	if i'm going to do this right, i need to check group perms at perm time
+		ug-LAY sql dude
+	can i ever combine these?
+		i'll even have meta-meta privilege groups, like springfest
+			remember, people who have meta-privileges, can assign them
+	i'm going to hack around this. family defaults, and non-family defaults
+	ok, keep realms. just make them db-friendly
+		create a realms table, user realm_id in various places
+			a realmify program in python? cool
+
+	i know at call-time what action i want to do: view, edit, etcNO
+	and, perhaps into the legacy stuff too? or should i even bother?
+	this is a clusterfuck. 
+		i have to check userid, familyid (yes!) and realm
+		so for all the realms present in this table/field,
+			find aggregate level, and compare it to the user's level
+		or, for all the realms this user belongs to, do a checkauthlevel
+	i think it will be one big mysql join query
+
+		or, better yet, can i actually *use* fieldperms?
+			no, it doesn't ahve the table/fieldname. oh well.
+
+	this is way too fucking complicated
+
+change the way privs are calculated.
+	put the default privs INTO the system
+		when checking perms, check defaults *first*, then the db
+		db will override defaults
+	if there's a familyid for this user, use default family privs
+		otherwise, use "other" privs: i.e. teachers
+	only privs in db will be "special" admin privs.
+		at the end of a school year, delete those! then put new ones.
+	problem with this idea: the interface screen for adding/changing privs
+	i'm sorry, i will need group perms. alas and goddamn
+
+before anything: new permissons
+rethink entirely!
+	maybe have perms follow THE DATA
+		so, i have for each table/field, my set of realm/userlevel/grouplevel
+	and, turn realms into groups. perms follow data, and are assigned to PEOPLE
+		or groups of people. this whole realm idea is bullshit
+need to totally rework the perms thing
+	certain views MUST be the same! 
+		not different pages/views jsut because of p	test my header location shit!
+		AUIUGH! blanks aren't working. i can't delete a field.
+			that is wrong, so wrong.
+		at process time, email is empty. it's getting filled before update()!
+			at scrubforsave, email is still blank
+		setfrom is borken		
+	clean out submitvars after edit/add?shall i fuck with jython some more?
+JAVA=/usr/local/java/bin/java JAVAHOME=/usr/local/java JAVA_HOME=/usr/local/java JYTHON_WRAPPER_DEBUG=true jython
+ JW=jreload.makeLoadSet('JW', ['/usr/share/jewbunit/jwebunit.jar', '/usr/share/jwebunit/lib/httpunit.jar', '/usr/share/jwebunit/lib/nekohtml.jar', '/usr/share/jwebunit/xercesImpl.jar', '/usr/share/jwebunit/lib/junit.jar', '/usr/share/jwebunit/lib/xml-apis.jar', '/usr/share/jwebunit/lib/js.jar'])
+
+	time to merge in the shit at request time first!
+		basically, array-merge last
+		step through this code in GREAT, BRUTAL DETAIL
+	hmm. use header location
+	why are allergies showing up in email as (not permitted) for dpreist/ambrose??	duh, pems
+		scrubforsave is trying to humantosql an invalid date
+		because dupecheck requires it. goddammit.
+		so dupecheck (form rule) is being called BEFORE the individual rules!
+			don't dupecheck if there's other errors	test/fix confirmdelete and delete	enhancement hours not working! it's showing just current family
+it's not validating dates!!
+	look at rules. wtf is going on??
+		yes it is.it's not validating dates!!
+	look at rules. wtf is going on??
+	YAY!! pilot error!
+	validation not working
+		neither the subject/body in bulletin board
+		date fields are not being required.
+			they are, however, being CHECKED
+		why?
+			because i need to put CLASSNAME in there, not rule namein the addnew, use not the fb_shortheader, use fbfieldlabel
+BUGS:
+	blank blog entries are allowed??! why? 
+		my isblank test is wrong
+required dates in everywhere
+can i get the recent choice inserted, dammit?
+	well, it's in submitvars. why doesn't it get merged?
+	because the number MAKES NO SENSE!! 5172???! what the fuck is 5172??
+		the audit trail id??! yes.
+		REALLY NASTY bug in lastinsertid: it was inserting into $this->id
+	back insertion isn't working with families, for some reason
+		or maybe it's the degrees of separation
+			try from one level: parents maybe
+			setdefaults! on family_id. looks like something is setting it
+				doesn't setvalue override defaults?
+			no. setconstant perhaps?
+		ah. move setdefaults to BEFORE addandfillvars
+	gah! setdefaults doesn't work if i do it BEFORE creating the elements
+		but it clobbers values if i do it AFTER
+		so, what is the heirarchy i want?
+			setvalues, absolutely, first
+			defaults is called only on new. make it NOT clobber existing
+			exportvalue! check to make sure it exists
+		and insert it into the SOURCE object retroactively
+			the submitvars of the backstack item?
+		last array (hack it: count)
+		put this in process.
+		this is a pop, and at pop time generic needs to pull off any old values
+			and deposit them into build, merge them
+			tricky thing is going to be deciding which are new
+				i.e. you don't want to merge if it's a NEW
+					enema the old one?
+	from details, inject the pk of the SOURCE object,
+		WHERE?
+		to be used as the default value of a popup
+		then do a push
+	anything else???!
+situations to handle (unit test?):
+	from a subform, after saving, i need to grab the pk of the CURRENT obj
+
+in general i'll need to enema last, not just request.
+	header location won't help
+test with views, details. make that work
+	ok, i push, but...
+	pushed ID is not getting used, despite the fact that REQUEST is getting fed
+	perhaps push should stick the stuff into last?
+first, simple step:
+	do NOT use REQUEST for anything except form
+	everything else, use last	
+	work the bugs outta that first
+	i gotta deal with form. how?
+		if it's a pop
+			feed coopform the merged request and history, if applicable
+			basically, use the old stuff, but for each, override with any new
+	if no push, i look on stack
+		if there's something there, i pop that and save those into last
+		and last is what i then use instead of request
+
+	if there is anything on the stack, use that INSTEAD OF REQUEST!
+		handling auto-fillign the added sub-added item will be interesting
+			maybe let it override?
+		hmm. i can put something in as REQUEST[cpvars][thing] and it'll merge
+			there are a couple places i need that
+				requestorsession() too
+header location
+
+
+i can now go bopping around to different things!
+	at page load, if there is anything on the stack, pop it, use that
+
+
+
+
+	aha. it doesn't push the LAST one, just the CURRENT onw
+
+	qf issues:
+
+make stack links somehow revert back to wherever i was
+	maybe just a BACK link! let the user deal
+when to pop?
+	all the time? whenever there is somethign on the stack?
+	only when 'pop' in request?
+	whenever NOT pushing?
+	well i DEFINITELY want to pop
+		after successful form entry
+		after CANCEL form entry
+	basically, after any successful operation
+		except add, which will repeat until cancel
+	and every CANCEL (explicit pop?)
+
+update families set email = 'egam@sbcglobal.net' where name like '%oudkerk%';gah! it's not popping on insert, and it should
+	because if i go in, and come back, i need to get it back
+	HACK. check for table mismatch
+alter table audit_trail add column     email_sent tinyint(1);
+
+GAH! mail not getting sent out? wtf?
+	test, reproduce
+	i really need to NOTE if notice was sent
+		save it?
+aha. don't even bother validating if i have just poppeed back!
+	use REQUEST
+entry successful
+	a 'show status' function
+		if result = 1	
+			look at action and show the appropriate message based on that.
+				i.e. add, edit, delete
+			then unset result
+	where to do it? in generic? in dispatcher?
+		current or previous? how do i knoooowww? how do i knoooow?
+		i'll need access to the $previous
+			that's how
+		is this only relevant in the case of a pop?
+		how do i know if a pop has occurred?
+	in a normal entry, result is in the last
+AH SHIT! the fucking blog audit stuff is totally broken now.
+	why? because, i am an idiot
+AUUUGH!!! EDITS ARE BROKEN!!!!
+	when you come back from an edit, it's a NEW, everything is wiped out!
+	no id. i need to either yank it out of last[id], or... something
+		do it
+put in a "entry successful" message.
+	now, that's not easy.
+	save result. check result in gaspacho
+		also check result in form-- if add
+	wipe result
+    if i save result in last, then when i pop off, last gets clobbered
+    	including its result. shit.
+    	unless i save last when i pop off
+			maybe i don't pop off! i do it automatically at reload time?
+		yesadd enhancement to familydetails
+	get the enhancement_hours-parent_id into the action button!
+	stack/flipping between subforms for data entry (subformnavigation.txt) PHP
+blank stacks! fix, in stackpath. fix.
+	have a look at the PEAR AJAX package!!
+		use the fucking installer, dammit
+	selfurl is TOTALLY FUCKED UP! inside base does not work at all, it's a loop
+
+	query to bring back all the previous names for this family
+		find last enrolled year
+		grab all names invited, 
+	and invite them this year
+normalise this familyid/schoolyear thing from the perms
+	do NOT let override
+	so, famiyid doesn't show up unles you have group perms for this action
+
+	show all last year's invites, and, um, invite them	in addition to Add New>> i also need an EDIT!
+		must be javascript, because it needs to read what's selected
+	on change, fish out the id
+		create a standard edit push link, like anywhere
+	what sucks most about this is creating a version of selfURL in JS :-(
+		or, do i use selfurl, and just search/replace it?
+	also interesting is going to be checking the perms!
+		i.e. if you can't edit it, make that go away!
+	ok, write the damned javascript then!
+		onchange, 
+			locate the edit url, 
+				based on what? name of element?
+				if you can get the name of the element, it's 'subedit-' + name
+			if the selected value is 0, hide the edit url
+2 hours PHP/JS
+edit url!
+			and regexp it
+				replace the id with value selected
+
+	if you edit, then push, then pop, it doesn't honour the id
+		always merge
+	VALIDATION NOT GETTING CALLED!!
+		not on customrequired anyway, and ONLY ON TEXT FIELDS. what the FUCK?
+		i can hack around this by using client validation
+	my email notification of pearerror
+		test it by raising an error
+		on live site
+	that "unknown table" crap
+	get it into my tree, and make sure it can HANDLE that
+		the path to flexac.php is just stupid
+		do it in js in the page? so i don't have to hardcodt it in flexac.js
+	make it use my local services_json
+understand this index, _id thing in the province names
+	is it a hidden field? that's weird. yes, it's weird. but it works.
+
+		look at packet capture.
+	escape characters in queyery!! terrible bug!
+		encodeURIComponent?
+	make a test page of my own, using the leads db!
+		database
+		remember to turn off autocomplete in the item!
+		make it use my css, not its.
+	make it deal with my auth and cooppage
+things
+20 minutes PHP
+	select box 
+	fields (with manglednames) for each linkdisplay in select object
+	search button
+
+1 hour PHP
+	search: run json query, fill box with results
+	auth properly on the FLEXAC.PHP file!
+	move the fucking plugins dir.
+		or, put it in the PEAR OBJECT! instead of loading plugins!
+		things that make me crazy: subclass FlexacPlugin in plugins!
+well, i need same shit i go get in any linkdisplay!
+	use linkdisplayfields as search entry boxes (with _manglednames)
+	js to search based on what the user types in (find button)
+	populate scrolling selectbox (x lines) with results
+		similar to existing customselect,
+			the add/remove select with js tricks
+	newer/better browser should be link to firefox!!
+what exactly will i call?
+	instantiate the sub object
+	populate it
+
+nice to have
+	autocomplete with javascript
+	json/ajax selectbox for huge leads (or income?) db
+
+yank the html escaping. unescape()?
+	interestingly, it unescapes in the popup, but not in the selectbox
+	it's raw coming back in json. flac is fuckign itup
+	ah, he was removing the strong. i say, fuck the strong.	just a SIMPLE entry box
+	and a selectbox
+re-do, simpler
+	and a SEARCH fucking button-- none of this fancy autocomplete
+		on search, go get the data, and stuff it in the select. duh.
+	what do do at edit time?
+
+ok, shall i make the calling form have the field name of the linkfield?
+	do i know that at page-generation time (i.e. in qf customselect? i should!)
+	yes
+maybe wrap these damned things in a div? then i can search div elements to get 'em?
+
+
+after selecting, blank the statusbox
+	onlick? probably the best.
+	for simplicity, do it in the roa
+after selecting, blank the statusbox
+	onlick? probably the best.
+	for simplicity, do it in the road
+do over from scratch
+	maybe using only the
+	a selectbox
+actions
+	pass auth through for no-cookies
+		a parameter to config, no doubt
+		if SID through set, i.e. no cookies
+	PHP/javascript: print 'combobox.SID ='.  SID;
+	then in js, add SID to the qa
+clear out matches/selectbox on each search
+aha. don't do the options, except in the prepare stuff
+	i.e. don't do it in addandfillvars. it's TOO MUCH SHIT
+	and we don't need it for searchselect, only custom/regular select
+ok, how to integrate with the other features.... add new, edit, etc?
+	new things
+		the input, the button, and the script!
+	change/add
+		attributes to selectbox: size=10 and onClick setstatus
+	great. how to decide which to use??
+		for now, manually.
+			WHERE? ah. fb_foo thing
+	ooh, can i subclass it??! i think so!
+
+i have an edlink collision. i broke it. why?
+	no, just perms issue
+2 hours PHP/JAVASCRIPT
+json box (jsonselect.txt)
+	integrate!
+      
+      i have required fields that no longer exist. fix.
+      i'm getting duplicate entry complaints, 
+		AND THEY'RE NOT! oh man that code was broken
+		ah. it's only dupechecking nulls WHAT??!
+      i'm saving invitations, AND NOTHING IS GETTING SAVED!
+      	though, i am getting a success code back from process
+		IT IS NOT SAVING THE FUCKIGN FAMILYID!!! THIS IS DEADLY!!!
+			doesn't setdefaults do this?
+			NOT IF IT'S NOT REQUIRED!
+				dumb dumb dumb. it should save familyid always
+			fixed, i think.
+      schoolyear perms on invitation: broken. s/b read only
+      	wait.. doesn't my new thing do that??!!
+      	WHY IS THIS FUCKED?
+			because i had a misplaced parens in coopobject. ALWAYS check schoolyear if hte field name IS SCHOOLYEAR. so, forceyear doesn't apply to schoolyear
+
+don't enums have a '--choose one--'? if not, why not?
+	they didn't BAH BUGS!
+      perms on leads are b0rken
+      	move it to new people realm
+      	everyone can edit everything
+      TOTALLY BROKEN SCHOOLYEARCHOOSER!!!
+      	for invites, anyway. 
+      	no matter what i put in there, i'm still getting 2005-2006
+		ah, i was linkconstraining, stupidly      
+	gah! betsy's familypopup is only showing currently-enrolled. WRONG!
+		constrainschoolyear stray
+?? PHP/JS 
+deal with back/forward push/pop stuff! could be interesting
+	i.e. coming back from a pop, or dealing with an EDIT!
+	the value is in vars. it was inserted
+	if there's a value, go fetch it?
+		cause remember, i'm NOT FETCHING. (and how!)
+	that'd require a backfetch: search by ID!
+		for each in selection (usually just one), go fetch 'em
+	schoolyearchooser is broken everywhere: parents, elsewhere
+		well i had no constraint there!
+warnings break header location!
+	on nfsn, at least
+	display_errors = off?
+
+	it's stuttering. it's stuttering.
+		why loading twice? why loading twice?
+		look at options. look at options.
+		ah. tohtml is getting called twice. that's stupid
+			very odd. tohtml getting called from the SAME PLACE?
+		i've superclassed _prepare. and i call paref tlynt tohtml!
+		look at how homeboy does his deal in subform
+			ok,i hacked around it
+PHP/JS
+	on my searchselect, insert the value into the innerhtml of the edit
+20 mins PHP
+perms for label printed: read only
+	audit trail showing Object. wtf? how did this break?
+		is it in db (at save time) or in display?
+		it's at save time. cast's getting saved. duh.
+		unobject it
+	linkconstraints ok as is?
+		but in view, DO NOT SHOW ALL! use custom linkconstraints.
+		done, with protected join too	deleteconfirm is broken.. on leads
+		hbox is broken  on invites: contact not showing. why?
+			fruzen. searchselect is not freezing properly
+			but only on confirmdelete! works great on details. what's diff?
+			ah. get.vs fetch in dbdo
+
+30 minutes PHP
+also, what about the contacts thing?
+	yank invitation contacts?
+	details are broken, as are (maybe) confirmdelete?
+
+why is mailing label not showing up?
+	look at ispermitted logs again. ah, see group. i get it
+one more test run-through, CHECK FOR WARNINGS!
+PUSH LIVE
+
+  	count the number of invites. put those in. look at enhancemnt for ideas
+		actually i just ripped it out of 10namesinc  ???PHP
+  time to do alerts for invitations
+
+  hmm. delete and confirmdelete NEED TO HEADER LOCATION!pg
+	they do
+	add alerts to HOME PAGE!
+		just loop through in menu
+		duh, i'd done that long ago
