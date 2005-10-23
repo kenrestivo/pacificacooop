@@ -19,11 +19,6 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
             list($target, $targfield) = $this->link;
             $target_id =  $target . '-'. $targfield;
 
-            // XXX this is BROKEN! parent has its own onchange,
-            // use addeventlistener instead, maybe even do it in kenflex.js
-            $this->_parentForm->updateElementAttr(
-                $this->getName(), 
-                array('onClick' => "setStatus('')"));
 
 
             //TODO: if there is a value present, and it's NOT in options,
@@ -47,62 +42,63 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
         } else {
             $this->_prepareSearchSelect();
             
-            list($target, $targfield) = $this->link;
-            $target_id =  $target . '-'. $targfield;
 
 
             $res = sprintf(
                 '<input type="text" name="search-%s" autocomplete="off" 
-                onchange="coopSearch(this, \'search-%s\', \'%s\', \'%s\')"/>
+                onchange="combobox_%s.fetchData()"/>
 
                 <input  type="button" 
-                      onClick="coopSearch(this, \'search-%s\', \'%s\', \'%s\')"
+                      onClick="combobox_%s.fetchData()"
                         value="Search"/> &nbsp;
                 <p class="inline" id="status-%s"></p><br>',
                 $this->getName(),
-                $this->getName(),
-                $this->getName(),
-                $target,
-                $this->getName(),
-                $this->getName(),
-                $target,
+                strtr($this->getName(), '-', '_'),
+                strtr($this->getName(), '-', '_'),
                 $this->getName()
                 );
 
             $res .= parent::toHtml();
+            $res .= $this->getSearchSelectJs();
             return $res;
         }
     } //end func toHtml
 
 
-       function _getJs()
+       function getSearchSelectJs()
        {
            $jspath = 'lib/flexac';
-           // Generate the javascript code needed to handle this element
+           // guard ONLY for the inclusion. the rest must always be done
            $res = '';
            if (!defined('HTML_QUICKFORM_SEARCHSELECT_EXISTS')) {
 			   // We only want to include the javascript code once per form
                define('HTML_QUICKFORM_SEARCHSELECT_EXISTS', true);
 
-               // first chain up
-               $res  = parent::_getJs();
-
                $res .= sprintf('<script src="%s/kenflex.js"></script>' , 
                                 $jspath);
+           }
+
+
+            list($target, $targfield) = $this->link;
+            $target_id =  $target . '-'. $targfield;
 
                $js .= sprintf('
 /* begin javascript for HTML_QuickForm_searchselect */
-combobox.serverPage="%s/kenflex.php";
-%s;
+comboboxsettings.serverPage="%s/kenflex.php";
+%s
+combobox_%s = new Combobox(\'search-%s\', \'%s\', \'%s\');
 /* end javascript for HTML_QuickForm_searchselect */
                ',
                               $jspath,
-                              SID ? 'combobox.SID = "' . SID .'"' : '');
+                          SID ? 'comboboxsettings.SID = "' . SID .'";p' : '',
+                          strtr($this->getName(), '-' , '_'),
+                          $this->getName(),
+                          $this->getName(),
+                          $target);
 				
 			   // wrap wrap wrap wrap it up. i'll take it. up the ying-yang.
                $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
 				   $js . "//]]>\n</script>";
-           }
            return $res . $js;
        }
 

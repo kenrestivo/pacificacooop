@@ -1,7 +1,7 @@
 /*
         $Id$
         Copyright (c) 2005 ken restivo <ken@restivo.org>
-        based on flexac
+        based on flexac, but thorougly re-done
 
  * +-------------------------------------------------------------------+
  * | This file was part of flexac                                       |
@@ -25,149 +25,153 @@
 */
 
 //GLOBALS
-combobox.serverPage = 'lib/flexac/kenflex.php';
+comboboxsettings = {serverPage: 'lib/flexac/kenflex.php'};
 
-
-combobox.cleanBox =
-function (box)
+function Combobox (searchBoxName, selectBoxName, linkTableName)
 {
-    for ( i=box.length; box.length> 0; i--) {
-        box.remove(i);
-    }
-
-}
-
-
-// loop through matches, put them in the box
-combobox.populateBox =
-function ()
-{
-    combobox.cleanBox(combobox.selectBox);
     
-    for (match in combobox.matches)
-    {
-        combobox.selectBox.options.add(new Option(combobox.matches[match], 
-                                                  match));
-    }
-
-    combobox.selectBox.focus();
-}
-
-
+    // loop through matches, put them in the box
+    this.populateBox =
+        function ()
+        {
+            this.selectBox.cleanBox();
+            
+            for (match in this.matches)
+            {
+                this.selectBox.options.add(new Option(this.matches[match], 
+                                                      match));
+            }
+            
+            this.selectBox.focus();
+        }
+    
+    
 // temporarily store the data in the object, then call populateBox to insert it
-combobox.fetchDataCallback = 
-function(data)
-{
-  if (!data || data.status.toString() != "200")
-  {
-    combobox.status.innerHTML= "Can't connect [" + data.status.toString() + "]";
+    this.fetchDataCallback = 
+        function(data)
+        {
+            if (!data || data.status.toString() != "200")
+            {
+                this.status.innerHTML= "Can't connect [" + data.status.toString() + "]";
     return;
-  }
+            }
+            
+            if(!data.responseText){
+                //XXX is this right?
+                this.status.innerHTML= 'No data returned.';
+                return;
+            }
+            
+            //NOTE! must eval the this.matches too, otherwise 'invalid label'
+            eval('this.matches = ' + data.responseText);
+            
+            
+            if (!this.matches)
+            {
+                this.status.innerHTML= 'No matches for "' + 
+                    this.searchBox.value + '".';
+                this.searchBox.focus();
+                this.searchBox.select();
+                return;
+            }
+            
+            //TODO: put the count found in here
+            this.status.innerHTML = 'Done';
+            
+            this.populateBox();
+            
+        }
 
-  if(!data.responseText){
-      //XXX is this right?
-      combobox.status.innerHTML= 'No data returned.';
-      return;
-  }
-
+  
     
-  //XXX this is global! should it be? or should i have multiple comboboxes?
-  eval("combobox.matches = " + data.responseText);
-
-  if (!combobox.matches)
-  {
-      combobox.status.innerHTML= 'No matches for "' + 
-          combobox.searchBox.value + '".';
-      combobox.searchBox.focus();
-      combobox.searchBox.select();
-      return;
-  }
-  
-  combobox.status.innerHTML = 'Done';
-  
-  combobox.populateBox();
-
-}
-
-combobox.fetchData = 
-function ()
-{
-    // XXX is this right?
-    if(!combobox.searchBox.value || combobox.searchBox.value.length < 2){
-        combobox.status.innerHTML = 'Type at least 2 characters to search.';
-        return;
+    this.fetchData = 
+        function ()
+        {
+            var self = this; // CRITICAL for callbacks!
+            
+            // XXX is this right?
+            if(!this.searchBox.value || this.searchBox.value.length < 2){
+                this.status.innerHTML = 'Type at least 2 characters to search.';
+                return;
+            }
+            
+            this.status.innerHTML = 'Searching..';
+            
+            if (this.xhr)
+            {
+                this.xhr.abort();
+                delete this.xhr;
     }
-
-    combobox.status.innerHTML = 'Searching..';
-
-    if (combobox.xhr)
-    {
-        combobox.xhr.abort();
-        delete combobox.xhr;
-    }
+            
+            this.xhr = new XHConn();
+            
+            if (!this.xhr){
+                alert("Your browser is too old. Install Firefox (http://www.getfirefox.com).");
+            }
+            
+            
+            qo= {};
+            qo.q = this.searchBox.value;
+            qo.f = this.linkTableName;
+            
+            qa = [];
+            for(x in qo){
+                //XXX note! this encodeuricomponent is not available in IE < 5.5!
+                qa.push(x + '=' + encodeURIComponent(qo[x]));
+            }
+            if(this.SID){
+                qa.push(this.SID);
+            }
+            query = qa.join('&');
+            
+            if (!this.xhr.connect(this.serverPage, 
+                                  'GET', 
+                                  query,
+                                  function(data){ self.fetchDataCallback(data)} ))
+            this.status.innerHTML = "Failed connecting";
+            
+        }
     
-    combobox.xhr = new XHConn();
-  
-    if (!combobox.xhr){
-        alert("Your browser is too old. Install Firefox (http://www.getfirefox.com).");
-    }
-  
-
-    qo= {};
-    qo.q = combobox.searchBox.value;
-    qo.f = combobox.linkTableName;
-
-    qa = [];
-    for(x in qo){
-        //XXX note! this encodeuricomponent is not available in IE < 5.5!
-        qa.push(x + '=' + encodeURIComponent(qo[x]));
-    }
-    if(combobox.SID){
-        qa.push(combobox.SID);
-    }
-    query = qa.join('&');
-
-    if (!combobox.xhr.connect(combobox.serverPage, 
-                              'GET', 
-                              query,
-                              combobox.fetchDataCallback))
-    alert("Failed connecting");
- 
-}
-
-
-///////////////
-// GLOBAL functions
-function setStatus(text)
-{
-    combobox.status.innerHTML = text;
-
-}
-
-
-function coopSearch(caller, searchBoxName, selectBoxName, linkTableName)
-{
-    // TODO: create a NEW combobox here, with above params
-    // this is a damned constructor
-
-    // fetch the fields i need
-    // TODO: make this use caller.form.getelements, no?
-    // to handle more than one
-    combobox.searchBox = document.getElementsByName(searchBoxName)[0];
-    combobox.selectBox = document.getElementsByName(selectBoxName)[0];
-    combobox.status = document.getElementById('status-' + selectBoxName);
-    combobox.linkTableName = linkTableName;
-
-    ///combobox.searchBox.addEventListener[onchange] = setStatus('');
-
-    // just to be sure
-    combobox.searchBox.autocomplete = 'off';
-
-    //  fetch data
-    combobox.fetchData();
     
+    
+// to handle more than one
+    this.searchBox = document.getElementsByName(searchBoxName)[0];
+    this.selectBox = document.getElementsByName(selectBoxName)[0];
+    this.status = document.getElementById('status-' + selectBoxName);
+    this.linkTableName = linkTableName;
+    
+    
+// just to be sure
+    this.searchBox.autocomplete = 'off';
+    
+    
+//get the settings!
+    for(i in comboboxsettings){
+        eval('this.' +i+ ' = comboboxsettings.' +i);
+    }
 
-}
+    // utility function i'll need later
+    this.selectBox.cleanBox = function ()
+        {
+            for ( i=this.length; this.length> 0; i--) {
+                this.remove(i);
+            }
+            
+        }
+    var self = this; // needed for callbacks!
+
+/*     if(this.selectBox.attachEvent){ */
+/*         this.selectBox.attachEvent('onchange',  */
+/*                                    function(){self.status.innerHTML = '' }); */
+/*     } else if(this.selectBox.addEventListener){ */
+/*         this.selectBox.addEventListener('onchange',  */
+/*                                    function(){self.status.innerHTML = '' },  */
+/*                                    false); */
+/*     } */
+
+} // end Combobox constructor
+
+
 
 
 
@@ -176,65 +180,62 @@ function coopSearch(caller, searchBoxName, selectBoxName, linkTableName)
  ** http://creativecommons.org/licenses/by-sa/2.0/                           **/
 function XHConn()
 {
-  var xmlhttp;
-  var active;
-  try { xmlhttp = new ActiveXObject("Msxml2.XMLHTTP"); }
-  catch (e) { try { xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); }
-  catch (e) { try { xmlhttp = new XMLHttpRequest(); }
-  catch (e) { xmlhttp = false; }}}
-  if (!xmlhttp) return null;
-  this.connect = function(sURL, sMethod, sVars, fnDone)
-  {
-    if (!xmlhttp) return false;
-    sMethod = sMethod.toUpperCase();
+    var xmlhttp;
+    var active;
+    try { xmlhttp = new ActiveXObject("Msxml2.XMLHTTP"); }
+    catch (e) { try { xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); }
+    catch (e) { try { xmlhttp = new XMLHttpRequest(); }
+    catch (e) { xmlhttp = false; }}}
+    if (!xmlhttp) return null;
+    this.connect = function(sURL, sMethod, sVars, fnDone)
+        {
+            if (!xmlhttp) return false;
+            sMethod = sMethod.toUpperCase();
 
-    try {
-      if (sMethod == "GET")
-      {
-        xmlhttp.open(sMethod, sURL+"?"+sVars, true);
-        sVars = "";
-      }
-      else
-      {
-        xmlhttp.open(sMethod, sURL, true);
-        xmlhttp.setRequestHeader("Method", "POST "+sURL+" HTTP/1.1");
-        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      }
-      xmlhttp.onreadystatechange = function(){ if (xmlhttp.readyState == 4) {
-        fnDone(xmlhttp); }};
-      xmlhttp.send(sVars);
-    }
-    catch(z) { return false; }
-    return true;
-  };
-  this.abort = function()
-  {
-    try {
-        /// XXX why is this commented out?
-      //xmlhttp.abort();
-    }
-    catch(z) { return false; }
-  }
+            try {
+                if (sMethod == "GET")
+                {
+                    xmlhttp.open(sMethod, sURL+"?"+sVars, true);
+                    sVars = "";
+                }
+                else
+                {
+                    xmlhttp.open(sMethod, sURL, true);
+                    xmlhttp.setRequestHeader("Method", "POST "+sURL+" HTTP/1.1");
+                    xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                }
+                xmlhttp.onreadystatechange = function(){ if (xmlhttp.readyState == 4) {
+                    fnDone(xmlhttp); }};
+                xmlhttp.send(sVars);
+            }
+            catch(z) { return false; }
+            return true;
+        };
+    this.abort = function()
+        {
+            try {
+                /// XXX why is this commented out?
+                //xmlhttp.abort();
+            }
+            catch(z) { return false; }
+        }
   
-  return this;
+    return this;
 }
 
 // From
 // http://www.developingskills.com/ds.php?article=jstrim&page=1
+//yeah, that's nice. wtf is it necessary for?
+//he doesn't appear to use it anywhere!
 function strtrim() 
 {
-  return this.replace(/^\s+/,'').replace(/\s+$/,'');
+    return this.replace(/^\s+/,'').replace(/\s+$/,'');
 }
 
 String.prototype.trim = strtrim;
 
 function debug(msg)
 {
-  document.getElementById("debug").innerHTML = msg;
+    document.getElementById("debug").innerHTML = msg;
 }
 
-/// WHYis this necessary?
-function combobox()
-{
-
-}

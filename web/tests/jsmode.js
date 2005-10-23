@@ -163,7 +163,5 @@ Fubar = function (myprop)
     }
     return this;
 }
-
-Fubar.another = 'bar';
 f = new Fubar('yay');
 
