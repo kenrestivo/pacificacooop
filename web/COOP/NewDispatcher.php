@@ -111,6 +111,16 @@ class CoopNewDispatcher
             // also, shouldn't i use exportValues(), to get only thos in the QF?
             $this->page->vars['last']['submitvars'] = $atdf->form->getSubmitValues();
 
+            //try to make it more userfriendly by specifying commit action
+            if($atdf->form->elementExists('savebutton')){
+                $sbtn =& $atdf->form->getElement('savebutton');
+                if($this->page->vars['last']['action'] == 'add'){
+                    $sbtn->setValue('Add');
+                } else {
+                    $sbtn->setValue('Save Changes');
+                }
+            }
+
             if ($atdf->validate()) 
             {
 
