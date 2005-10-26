@@ -1743,4 +1743,8 @@ order by previous.family_id)
     
 
 
+--- last audit. used often
+select * from audit_trail 
+where audit_trail_id = (select max(audit_trail_id) from audit_trail) \G
+
 --- EOF

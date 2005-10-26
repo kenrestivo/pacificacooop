@@ -68,6 +68,14 @@ class EmailChanges
     // other sanity checks may (should!) be added here later
     function sanityCheck()
         {
+
+            // XXX should i check ->N instead?
+            if(!$this->audit_co->obj->updated){
+                printf("<p>THIS AUDIT %d IS INVALID! skipping.</p>",
+                       $this->audit_co->obj->{$this->audit_co->pk});
+                return false;
+            }
+
             if($this->audit_co->obj->email_sent){
                 printf("<p>THIS AUDIT %d HAS ALREADY BEEN EMAILED! skipping.</p>",
                        $this->audit_co->obj->{$this->audit_co->pk});
@@ -179,6 +187,12 @@ class EmailChanges
             $this->audit_co->obj->email_sent = 1;
             $this->audit_co->obj->update($old);
         }
+
+    function finish()
+        {
+            return; // XXX cruft. i'm using popups instead
+            //return $this->page->selfURL(array('value' => 'Back to main menu'));
+        }
     
 } // END SENDEMAIL CLASS
 
@@ -195,8 +209,11 @@ $em->get($_REQUEST['audit_id']);
 
 /// put on the condom!
 if(!$em->sanityCheck()){
+    print $em->finish();
     exit(1);
 }
+
+print "<p>--- Starting email notification... ---</p>";
 
 $sub =& new CoopObject(&$cp, 'subscriptions', &$nothing);
 $sub->obj->query(
@@ -317,6 +334,7 @@ while($sub->obj->fetch()){
 
 $em->saveStatus();
 print "<p>--- DONE---</p>";
+print $em->finish();
 
 ////KEEP EVERTHANG BELOW
 

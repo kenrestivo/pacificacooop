@@ -142,6 +142,9 @@ class CoopNewDispatcher
                     $this->page->vars['last']['pop'] = $atdf->table; 
                 } 
             
+				//TODO: if previous state was ADD, and something was inserted here
+				// (how can i tell?) then freeze whatever was inserted
+
                 $this->page->headerLocation(
                     $this->page->selfURL(array('par' => false,
                                                'host' => true)));

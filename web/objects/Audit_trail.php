@@ -37,13 +37,16 @@ class Audit_trail extends CoopDBDO
 		'index_id' => 'Unique ID',
 		'audit_user_id' => 'Edited By',
 		'updated' => 'Edited On',
-        'details' => 'What changed'
+        'details' => 'What changed',
+        'email_sent' => 'Email notification sent?'
 		);
-	var $fb_fieldsToRender = array ('audit_user_id', 'updated', 'details');
+	var $fb_fieldsToRender = array ('audit_user_id', 'updated', 
+                                    'email_sent', 'details');
     var $fb_recordActions = array();
     var $fb_viewActions = array();
     var $fb_displayCallbacks = array('details' => 'formatChanges',
                                      'table_name' => 'useLabel');
+                                     
 
     function BORKENfb_display_details(&$co)
         {
@@ -273,6 +276,17 @@ class Audit_trail extends CoopDBDO
                 return '(Not permitted)';
             }
             return $sub->concatLinkFields();
+        }
+
+
+
+    function sendNow(&$co, $val, $key)
+        {
+            if($val){
+                return 'Email sent';
+            } 
+            
+            //TODO: a JSON thing here.
         }
 
 

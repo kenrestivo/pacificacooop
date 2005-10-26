@@ -1,4 +1,3 @@
-
 coop web database
 
 MY agenda! dammit, mine! for a change....
@@ -7,15 +6,25 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
-	in-fucking-surance, dammit PHP
+	insurance, dammit PHP
 	read greenspun's sql book
 
+??? PHP
+if i'm an add, after poppping from an add in this form, FREEZE IT!
+	so they know they next step is to save it.
+	the age-old problem: how do i know?
+		it's in add_edit, where i pop
+		only if i'm on an add too.
+	have a look at my debug trail to see
 
 
-my agenda
-	redo the javascript thing, make it a proper object
-		STUCK: doesn't quite work.
-
+??? PHP
+expose the "email sent" status, and a button to goose it 
+	(send_email.php?audit_id=xxx)
+	where? on posting page? audit?
+	add it to audit trail. i hate to add shit in there but, why not
+	or maybe a report, in subscriptions area?
+	hmm. use ajax here? instead of sending shit, just do selfurl?
 
 springfest priorities
  	add in the nag report!!!
@@ -28,11 +37,11 @@ springfest priorities
   	also, make it smarter about checking for dupes
 
 
-alert icon
-	float: left
 
 BUGS
 	have to have some way to allfamilies!
+	font on frontpage looks like shit in IE
+		post it to #web
 	refreshing on a push, continues to push. don't do that.
 		can't NOT push, because sometimes you want to push again...
 	check crosslinks (i.e. groups? jobdescriptions?)
@@ -40,7 +49,7 @@ BUGS
 	backbutton behaves strangely
 
 there is one XXX i need to check: a javascript function that may not exist?
-	encodeuricomponent
+	encodeuricomponent. wrap it!
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
@@ -329,6 +338,10 @@ move teh family fees to the database! they're hard coded, taht is stupid
 
 ----------------
 BELOW THE LINE
+
+alert icon
+	float: left
+
 
 wrap audit stuff in details view in a CSS so it doesn't print!
 
@@ -4045,3 +4058,10 @@ PUSH LIVE
 	add alerts to HOME PAGE!
 		just loop through in menu
 		duh, i'd done that long ago
+		STUCK: doesn't quite work. does now!change SAVE to ADD
+
+my agenda
+	redo the javascript thing, make it a proper object
+		push that live!
+		get java and skij and all that shit loaded on bc!
+			i think i have it on vaio. no i don't!

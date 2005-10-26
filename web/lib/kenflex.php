@@ -19,7 +19,7 @@
  * | Authors: Claudio Cicali <claudio@cicali.org>                      |
  * +-------------------------------------------------------------------+
 */
-chdir('../../');
+chdir('../');
 require_once('CoopPage.php');
 require_once('CoopView.php');
 require_once('Services/JSON.php');

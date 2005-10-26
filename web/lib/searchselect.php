@@ -67,7 +67,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
 
        function getSearchSelectJs()
        {
-           $jspath = 'lib/flexac';
+           $jspath = 'lib';
            // guard ONLY for the inclusion. the rest must always be done
            $res = '';
            if (!defined('HTML_QUICKFORM_SEARCHSELECT_EXISTS')) {
