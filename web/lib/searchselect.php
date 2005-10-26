@@ -37,12 +37,12 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
 
     function toHtml()
     {
+        $this->_prepareSearchSelect();
+
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            $this->_prepareSearchSelect();
             
-
 
             $res = sprintf(
                 '<input type="text" name="search-%s" autocomplete="off" 

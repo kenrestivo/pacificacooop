@@ -865,12 +865,28 @@ function triggerNotices($audit_id)
         {
             if(isset($this->forwardLinks[$field])){
                 $link =$this->forwardLinks[$field];
-            } else {
-                $link = $this->backLinks[$field];
-            }
-            return explode(':', $link);
+                return explode(':', $link);
+            } 
+            
+            //XXX is this even necessary? is it daaangerous???
+            $flipped = array_flip($this->backLinks);
+            if(isset($flipped[$field])){
+                return array($flipped[$field], $field);
+            } 
+            
         }
 
+
+    function getLinkField($table)
+        {
+            foreach ($this->forwardLinks as $nearfield => $far){
+                list($fartable, $farfield) = explode(':', $far);
+                if($fartable == $table){
+                    return $nearfield;
+                }
+            }
+
+        }
 
 
 } // END COOP OBJECT CLASS

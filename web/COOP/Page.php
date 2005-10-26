@@ -576,6 +576,7 @@ class coopPage
                 ///COPY not ref, the old one i'm about to clobber
                 $prev = array_reverse(array_reverse($this->vars['last'])); 
                 $this->vars['last'] = array_pop($this->vars['stack']);  
+                $this->vars['prev'] = $prev;
                 return $prev;
             }
             return; // return nothing if i didn't pop anything.

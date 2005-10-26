@@ -105,6 +105,9 @@ $cp->buffer('<div id="centerCol">');
 
 $disp =& new CoopNewDispatcher(&$cp);
 $cp->buffer($disp->dispatch());
+
+unset($cp->vars['prev']); // XXX WHERE is the right place for this??
+
 print $cp->flushBuffer();
 
 $cp->done();

@@ -142,8 +142,6 @@ class CoopNewDispatcher
                     $this->page->vars['last']['pop'] = $atdf->table; 
                 } 
             
-				//TODO: if previous state was ADD, and something was inserted here
-				// (how can i tell?) then freeze whatever was inserted
 
                 $this->page->headerLocation(
                     $this->page->selfURL(array('par' => false,
@@ -155,6 +153,30 @@ class CoopNewDispatcher
                                 $atdf->actionnames[$this->page->vars['last']['action']],
                                 $atdf->obj->fb_formHeaderText);
                 }
+
+				//if previous state was ADD, and it popped,
+				// something was inserted here
+				// (how can i tell?) then freeze whatever was inserted
+                if($this->page->vars['prev']['action'] == 'add' &&
+                   !empty($this->page->vars['prev']['pop']))
+                {
+                    // i'm assuming it's always gonna be a backlink!
+                    $localfield = 
+                        $atdf->getLinkField($this->page->vars['prev']['table']);
+                    if($atdf->form->elementExists(
+                           $atdf->prependTable($localfield)))
+                    {
+                        
+                        $fr =& $atdf->form->getElement(
+                            $atdf->prependTable($localfield));
+                        $fr->freeze();
+                        $this->page->confessArray($this->page->vars, 
+                                                  "$localfield vars just before tohtml",
+                                                  4);
+                    }
+                    
+                }
+                
                 $res .= $atdf->form->toHTML();
                 return $res;
             }

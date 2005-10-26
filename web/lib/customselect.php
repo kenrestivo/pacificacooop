@@ -21,7 +21,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 			list($table, $this->field) = explode('-', $this->getName());
 
 
-            $this->link = $this->cf->getLink($this->field);
+            $this->link = explode(':', $this->cf->forwardLinks[$this->field]);
 
             list($target, $targfield) = $this->link;
             $target_id =  $target . '-'. $targfield;
@@ -35,6 +35,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             //  need these for edit link
             $this->vals = $this->getValue();
 
+
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
                 array('onchange' => 
@@ -47,10 +48,11 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
     function toHtml()
         {
+            $this->_prepare();
+
             if ($this->_flagFrozen) {
-                return $this->getFrozenHtml();
+                return $this->getFrozenHTML();
             } else {
-                $this->_prepare();
 
                 list($target, $targfield) = $this->link;
                 $target_id =  $target . '-'. $targfield;

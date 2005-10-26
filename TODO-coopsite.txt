@@ -9,22 +9,6 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit PHP
 	read greenspun's sql book
 
-??? PHP
-if i'm an add, after poppping from an add in this form, FREEZE IT!
-	so they know they next step is to save it.
-	the age-old problem: how do i know?
-		it's in add_edit, where i pop
-		only if i'm on an add too.
-	have a look at my debug trail to see
-
-
-??? PHP
-expose the "email sent" status, and a button to goose it 
-	(send_email.php?audit_id=xxx)
-	where? on posting page? audit?
-	add it to audit trail. i hate to add shit in there but, why not
-	or maybe a report, in subscriptions area?
-	hmm. use ajax here? instead of sending shit, just do selfurl?
 
 springfest priorities
  	add in the nag report!!!
@@ -50,6 +34,10 @@ BUGS
 
 there is one XXX i need to check: a javascript function that may not exist?
 	encodeuricomponent. wrap it!
+
+
+??PHP
+write a little script to goose the emails
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
@@ -2809,6 +2797,16 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+??? PHP
+expose the "email sent" status, and a button to goose it 
+	(send_email.php?audit_id=xxx)
+	where? on posting page? audit?
+	add it to audit trail. i hate to add shit in there but, why not
+	or maybe a report, in subscriptions area?
+	hmm. use ajax here? instead of sending shit, just do selfurl?
+
+
 	after edit, it's not going back to view. why?
 
 test with FF, and exploiter too
@@ -4065,3 +4063,15 @@ my agenda
 		push that live!
 		get java and skij and all that shit loaded on bc!
 			i think i have it on vaio. no i don't!
+
+??? PHP
+if i'm an add, after poppping from an add in this form, FREEZE IT!
+	so they know they next step is to save it.
+	the age-old problem: how do i know?
+		it's in add_edit, where i pop
+		only if i'm on an add too.
+	have a look at my debug trail to see
+	where to shitcan the prev!!? have to do it or it'll sit there forever!
+		at end of cooppage? 
+	the frozen thing is showing up as nothing.
+		really, frozen values of customselects shoudl be linkdisplays!	
