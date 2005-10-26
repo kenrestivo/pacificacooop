@@ -6,8 +6,44 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
-	insurance, dammit PHP
+	insurance, dammit
 	read greenspun's sql book
+
+2 hours PHP/JS/DOM
+move the status on pushes to the subordinate section
+	yank it out of generic completely
+	reset it at set time! or at set-check time at least
+	add it to view/delete/whatever
+	in add/edit, only show it at top if no pop. otherwise show it in field
+	statichtml that is insertelementbefore?
+
+2 hours PHP
+add instructions!
+instruction table: tablename, action (add/edit/delete/view?), text
+	perms decided based on the tablename, i suppose
+	don't think i'll need separate instructions for each realm, but maybe so
+stick them in the top of each dispatcher
+	i don't think i want them in coopview/form.
+
+1 hour PHP/SQL
+write a little script to goose all  emails
+
+
+
+----------------
+STUCK - behind things that are either prerequisites or MORE IMPORTANT
+
+
+??? PHP/JS
+goose emails individually
+also for sending them as reminders, in nag report!
+just use the simple XHTML crap from kenflex.js
+same as what's in coopobject: go hit the URL, with audit_id!
+	the function to call takes the id as arg?
+
+
+
+fix edwige's entries
 
 
 springfest priorities
@@ -36,11 +72,6 @@ there is one XXX i need to check: a javascript function that may not exist?
 	encodeuricomponent. wrap it!
 
 
-??PHP
-write a little script to goose the emails
-
-----------------
-STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
 ?? PHP/SQL
 fix table perms! MUST HAVE NULL IN THERE!!
@@ -2797,6 +2828,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+		how/where to add it? error? CSS/javascript (+=? on somediv?)
+		have to play with DOM
 
 ??? PHP
 expose the "email sent" status, and a button to goose it 
@@ -4075,3 +4108,8 @@ if i'm an add, after poppping from an add in this form, FREEZE IT!
 		at end of cooppage? 
 	the frozen thing is showing up as nothing.
 		really, frozen values of customselects shoudl be linkdisplays!	
+test my changes!
+
+push live
+pushlive
+

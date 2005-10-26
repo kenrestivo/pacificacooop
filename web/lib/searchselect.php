@@ -83,14 +83,14 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
             $target_id =  $target . '-'. $targfield;
 
                $js .= sprintf('
-/* begin javascript for HTML_QuickForm_searchselect */
+/* begin javascript for THIS PARTICULAR HTML_QuickForm_searchselect */
 comboboxsettings.serverPage="%s/kenflex.php";
 %s
 combobox_%s = new Combobox(\'search-%s\', \'%s\', \'%s\');
-/* end javascript for HTML_QuickForm_searchselect */
+/* end javascript for THIS PARTICULAR HTML_QuickForm_searchselect */
                ',
                               $jspath,
-                          SID ? 'comboboxsettings.SID = "' . SID .'";p' : '',
+                          SID ? 'comboboxsettings.SID = "' . SID .'";' : '',
                           strtr($this->getName(), '-' , '_'),
                           $this->getName(),
                           $this->getName(),
