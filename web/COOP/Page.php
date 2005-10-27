@@ -673,6 +673,16 @@ class coopPage
             }
         }
 
+    // silly utility function for getting previous or some number back years
+    function decrementSchoolYear($numyears = 1, $fromyear = false)
+        {
+            $year = $fromyear ? $fromyear : $this->currentSchoolYear;
+            list($fall, $spring) = explode('-', $year);
+            return sprintf('%d-%d', 
+                           $fall - $numyears, 
+                           $spring - $numyears);
+        }
+
 
 } // END COOP PAGE CLASS
 
