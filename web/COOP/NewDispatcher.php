@@ -86,7 +86,8 @@ class CoopNewDispatcher
         }
 
 
-
+    /// this is the ugliest code i've ever been embarrassed to have written
+    /// and yet, this convoluted mess is the core of the entire damned website. 
     function add_edit()
         {
             $res = '';
@@ -105,6 +106,7 @@ class CoopNewDispatcher
             $atdf->form->addElement('hidden', 'table', 
                                     $this->page->vars['last']['table']); 
 
+            // XXX do i really need this anymore? it gets in the way of leads
             $atdf->legacyPassThru();
 
             $atdf->addRequiredFields();
@@ -137,7 +139,7 @@ class CoopNewDispatcher
                 // force back to view if previous state was 'edit'
                 // or previous table is DIFFERENT (XXX NASTY hack!)
                 $prev =& $this->page->getPreviousStack();
-                if($this->page->vars['last']['action'] == 'edit' ||
+                if($this->page->vars['last']['action'] != 'add' ||
                    (!empty($prev['table']) && 
                     $this->page->vars['last']['table'] != $prev['table']))
                 {

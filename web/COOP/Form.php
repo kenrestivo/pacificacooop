@@ -797,9 +797,12 @@ class coopForm extends CoopObject
 		{
 			// ugly assthrus for my old-style dispatcher
 			// XXX these conflict with the new dispatcher!
-			$this->form->addElement('hidden', $this->prependTable($this->pk), 
-									$this->obj->{$this->pk}); 
-
+            if(!$this->form->elementExists($this->prependTable($this->pk)))
+            {
+                $this->form->addElement('hidden', 
+                                        $this->prependTable($this->pk), 
+                                        $this->obj->{$this->pk}); 
+            }
 		}
 	
 	function dupeCheck($vars)

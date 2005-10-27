@@ -9,14 +9,12 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 	read greenspun's sql book
 
+BUGS
+	legacypassthrough is fuced up
+	
 
-make menu printable, add to print css
 
-???PHP
-what's up with the was successful at the top, with no <p> around it?
-	it shows up in add/edit
-	and, was successful still showing up if it was cancelled?? bah.
-
+post what i got so far
 
 2 hours PHP
 add instructions!
@@ -32,6 +30,8 @@ write a little script to goose all  emails
 select all the audits after such a day with no email
 run it off of a cronjob
 
+??? CSS
+make menu printable, add to print css
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
@@ -360,6 +360,13 @@ move teh family fees to the database! they're hard coded, taht is stupid
 
 ----------------
 BELOW THE LINE
+
+?? PHP/JS
+ooh, maybe a cool ajax thing
+	a link on all items in reports, which are editable
+	turns the link into an INPUT BOX!
+		or a popup or whatever is appropriate (use PHP side to determine)
+	upon losing focus, save the changes
 
 alert icon
 	float: left
@@ -4125,3 +4132,12 @@ move the status on pushes to the subordinate section
 	  	where to check which status to use (popped versus last?)
   			isn't it so that only in pop land do i need the old one?
   	in add/edit, only show it at top if no pop. otherwise show it in field
+
+???PHP
+what's up with the was successful at the top, with no <p> around it?
+	it shows up in add/edit
+	and, was successful still showing up if it was cancelled?? bah.
+
+30 minutes PHP/SQL
+invite last years' alumni. hell, invite ALL the alumni!
+	i think i have a script to do this? did i not already?
