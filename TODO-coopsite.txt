@@ -10,6 +10,8 @@ MY agenda! dammit, mine! for a change....
 	read greenspun's sql book
 
 
+make menu printable, add to print css
+
 ???PHP
 what's up with the was successful at the top, with no <p> around it?
 	it shows up in add/edit

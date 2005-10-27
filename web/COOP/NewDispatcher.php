@@ -178,19 +178,11 @@ class CoopNewDispatcher
                         $this->page->confessArray($this->page->vars, 
                                                   "$localfield vars just before tohtml",
                                                   4);
-
-                        // now the status, insert it there.
-                        // XXX this confuses people. don't do it.
-//                         $stat =& $atdf->form->createElement(
-//                             'static',
-//                             'status-' . $localfield,
-//                             '',
-//                             $this->page->getStatus());
-//                         $atdf->form->insertElementBefore(
-//                             &$stat, 
-//                             $atdf->prependTable($localfield));
                     }
                     
+                } else {
+                    // no pop, show status
+                    $res .= '<p>' . $this->page->getStatus() . '</p>';
                 }
                 
                 $res .= $atdf->form->toHTML();
