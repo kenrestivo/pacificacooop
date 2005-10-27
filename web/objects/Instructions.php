@@ -32,34 +32,26 @@ class Instructions extends CoopDBDO
         'action'  => 'Action the instructions apply to',
         'instruction' => 'Instructions for this action'
 		);
+    var $fb_textFields = array ('instruction');
+    var $fb_enumFields = array ('action');
+    var $fb_requiredFields  = array('instruction', 'action', 'table_name');
 
     var $fb_displayCallbacks = array('table_name' => 'useLabel');
 
-    // TODO: genericie this! it's used in table_permissions, and elsewhere!
+
     function preGenerateForm(&$form)
         {
-
-            // TODO: heirselect!
-            $foo = $this->factory('table_permissions');
-			$foo->query('show tables');
-			$options[] = '-- CHOOSE ONE --';
-            confessObj($this, 'this');
-            $thing='Tables_in_'.$this->_database;
-			while($foo->fetch()){
-                $tab = $this->factory($foo->$thing);
-				$options[$foo->$thing] = 
-                    $tab->fb_formHeaderText ? $tab->fb_formHeaderText : strtr(ucwords($foo->$thing), '_', ' ');
-			}
+            $tab = $this->factory('table_permissions'); // for usehuman below
 			$el =& HTML_QuickForm::createElement(
                 'select', 
                 $form->CoopForm->prependTable('table_name'), 
-                $this->fb_fieldLabels['table_name'], 
-                &$options);
+                $co->obj->fb_fieldLabels['table_name'], 
+                $tab->_useHumanTableNameSelect(&$this));
             $this->fb_preDefElements['table_name'] = $el;
-			return $el;
-            
         }
 
+
+    // TODO: genericie this! it's used in table_permissions, and elsewhere!
     // THIS TOO! duplicate of elsewhere
   function useLabel(&$co, $val, $key)
         {

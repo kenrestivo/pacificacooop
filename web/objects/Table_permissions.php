@@ -47,26 +47,34 @@ class Table_permissions extends CoopDBDO
 
     var $fb_linkDisplayFields =  array('realm_id', 'table_name', 'field_name');
 
+
     function preGenerateForm(&$form)
         {
-
-            // TODO: heirselect!
-            $foo = $this->factory('table_permissions');
-			$foo->query('show tables');
-			$options[] = '-- CHOOSE ONE --';
-            confessObj($this, 'this');
-            $thing='Tables_in_'.$this->_database;
-			while($foo->fetch()){
-				$options[$foo->$thing] = $foo->$thing;
-			}
 			$el =& HTML_QuickForm::createElement(
                 'select', 
                 $form->CoopForm->prependTable('table_name'), 
-                $this->fb_fieldLabels['table_name'], 
-                &$options);
-            $this->fb_preDefElements['table_name'] = $el;
-			return $el;
+                $co->obj->fb_fieldLabels['table_name'], 
+                $this->_useHumanTableNameSelect(&$this));
+            $co->obj->fb_preDefElements['table_name'] = $el;
             
+        }
+
+    // returns options suitable for a select
+    function _useHumanTableNameSelect(&$obj)
+        {
+            $foo = $this->factory('table_permissions');
+			$foo->query('show tables');
+			$options[] = '-- CHOOSE ONE --';
+            $thing='Tables_in_'.$obj->_database;
+			while($foo->fetch()){
+                $tab = $this->factory($foo->$thing);
+				$options[$foo->$thing] = 
+                    $tab->fb_formHeaderText ? $tab->fb_formHeaderText : 
+                    ucwords(strtr($foo->$thing, '_', ' '));
+			}
+            // nice. asort sorts on the value not the index.
+            asort($options);
+			return $options;
         }
 
   function useLabel(&$co, $val, $key)
