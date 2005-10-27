@@ -748,6 +748,11 @@ short_title = "Fall Session starts September 12",
 body = "There may still be a very few openings for Fall. Call 355-3272 for more information. You may also fill out a wait-list application.",
 show_on_public_page  = 'yes';
 
+-- instructions
+insert into instructions 
+(table_name, action, instruction)
+values
+('invitations', 'add', 'Every family must provide the names of people who should be invited to attend or donate to Springfest. These can be family, friends, business associates, etc. They will be sent formal invitations on behalf of the School. Only those names you invite (plus alumni) will be invited this year. The people you invite will not be invited ever again, unless you return to the school and re-invite them. First try the search feature below, if the name is already in the database it helps to keep it clean without duplicates. If the name is not already in there, then click "Add New Contact>>" to enter it. Also try to invite family and friends; alumni will be automatically invited anyway.');
 
 
 -- EOF

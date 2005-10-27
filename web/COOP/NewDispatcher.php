@@ -321,7 +321,12 @@ function confirmDelete()
             if($res = $this->bruteForceDeleteCheck()){
                 return $res;
             }
-            
+
+            // am i sure i want to use coopform here?
+            // why not horiztable instead?
+            // the only buttons/action in need here are delete/cancel
+            // could do those as links (GET) not form buttons (POST), no?
+
             $res .= "<p>Are you sure you wish to delete this? Click 'Delete' or 'Cancel' to go back.</p>";	 
             $atdf = new CoopForm(&$this->page, 
                                  $this->page->vars['last']['table'], $none); 

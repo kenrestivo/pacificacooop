@@ -9,12 +9,7 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 	read greenspun's sql book
 
-
-2 hours PHP
-stick them in the top of each dispatcher
-	i don't think i want them in coopview/form.
-add the things i need in there.
-
+ok, push it live!
 
 1 hour PHP/SQL
 write a little script to goose all  emails
@@ -351,6 +346,22 @@ move teh family fees to the database! they're hard coded, taht is stupid
 
 ----------------
 BELOW THE LINE
+
+
+2 hours PHP/JS
+add the things i need in there.
+	hmm. how to handle duplicates?
+		if the name is invited this year, it's a dupe
+		i should check it at select time! i.e. a javascript addhook!
+			i.e. if it's already invited, then throw up a dialogue box
+	on add, on some items, check dynamically (autocomplete) for dupes
+		after each field? only if two or more fields?
+	json, show a select menu: do you mean this?
+
+??? PHP
+instructions
+	fish out the rest of them, and stick them in seeds
+
 
 ??? PHP/SQL
 	instruction perms decided based on the tablename, i suppose
@@ -4148,3 +4159,6 @@ instruction table: tablename, action (add/edit/delete/view?), text
 add instructions!
 build the table
 perms for it-- sysadmin
+stick them in the top of each dispatcher
+	i don't think i want them in coopview/form.
+	start out with just the invitations-- needed most desperately

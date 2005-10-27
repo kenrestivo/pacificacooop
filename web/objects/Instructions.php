@@ -35,6 +35,7 @@ class Instructions extends CoopDBDO
     var $fb_textFields = array ('instruction');
     var $fb_enumFields = array ('action');
     var $fb_requiredFields  = array('instruction', 'action', 'table_name');
+    var $fb_dupeIgnore  = array('instruction');
 
     var $fb_displayCallbacks = array('table_name' => 'useLabel');
 
