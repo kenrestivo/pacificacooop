@@ -45,7 +45,7 @@ class Instructions extends CoopDBDO
 			$el =& HTML_QuickForm::createElement(
                 'select', 
                 $form->CoopForm->prependTable('table_name'), 
-                $co->obj->fb_fieldLabels['table_name'], 
+                $this->fb_fieldLabels['table_name'], 
                 $tab->_useHumanTableNameSelect(&$this));
             $this->fb_preDefElements['table_name'] = $el;
         }

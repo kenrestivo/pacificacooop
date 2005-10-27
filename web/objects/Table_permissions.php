@@ -53,9 +53,9 @@ class Table_permissions extends CoopDBDO
 			$el =& HTML_QuickForm::createElement(
                 'select', 
                 $form->CoopForm->prependTable('table_name'), 
-                $co->obj->fb_fieldLabels['table_name'], 
+                $this->fb_fieldLabels['table_name'], 
                 $this->_useHumanTableNameSelect(&$this));
-            $co->obj->fb_preDefElements['table_name'] = $el;
+            $this->fb_preDefElements['table_name'] = $el;
             
         }
 
