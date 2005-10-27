@@ -66,7 +66,6 @@ while($top->obj->fetch()){
 		if($family->address1){
 			$lead->obj->source_id = 7; // ken's  temporary alumni hack
 			$lead->obj->school_year = $cp->currentSchoolYear;
-			$lead->obj->relation = "Alumni";
 
             // add parents first/last instead
             $firsts = array();
@@ -125,6 +124,14 @@ while($top->obj->fetch()){
 			$total++;
 			if($doit){
 				$lead->obj->insert();
+                
+                // now invite them too!
+                $leadid = $lead->lastInsertID();
+                $invite =& $lead->obj->factory('invitations');
+                $invite->lead_id = $leadid;
+                $invite->school_year = $cp->currentSchoolYear;
+                $invite->relation = "Alumni";
+                $invite->insert();
 			}
 
 		}
