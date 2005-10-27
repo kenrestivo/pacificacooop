@@ -899,7 +899,10 @@ function triggerNotices($audit_id)
             $inst->table_name = $this->table;
             
             $inst->action = $action;
-            $inst->find(true);
+            $found = $inst->find(true);
+            if($found < 1){
+                return ;
+            }
             return '<div class="instructions">' . $inst->instruction . '</div>';
             }
     

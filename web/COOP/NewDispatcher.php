@@ -321,7 +321,6 @@ function confirmDelete()
             if($res = $this->bruteForceDeleteCheck()){
                 return $res;
             }
-            $res .= $atd->getInstructions('delete');
             
             $res .= "<p>Are you sure you wish to delete this? Click 'Delete' or 'Cancel' to go back.</p>";	 
             $atdf = new CoopForm(&$this->page, 
@@ -346,6 +345,8 @@ function confirmDelete()
             //$atdf->form->addElement('button', 'cancelbutton', 'Cancel');
             
             $atdf->form->freeze();
+
+            $res .= $atdf->getInstructions('delete');
             
             $res .= $atdf->form->toHTML();
 
