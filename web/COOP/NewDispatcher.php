@@ -79,6 +79,8 @@ class CoopNewDispatcher
             //TODO: some variation on the old "perms display" from auth.inc
             //maybe at or top of doc? with editor to change them? ;-)
             
+            $res .= $atd->getInstructions('view');
+            
             $res .= $atd->simpleTable();
             
             return $res;
@@ -187,6 +189,12 @@ class CoopNewDispatcher
                     $res .= '<p>' . $this->page->getStatus() . '</p>';
                 }
                 
+
+                // last thing before i show it: instructions
+                // WARNIGN! FRAGILE! assume action hasn't been mangled!
+                $res .= $atdf->getInstructions(
+                    $this->page->vars['last']['action']);
+
                 $res .= $atdf->form->toHTML();
                 return $res;
             }
@@ -212,7 +220,10 @@ class CoopNewDispatcher
             if(is_callable(array($atd->obj, 'fb_display_details'))){
                 $res .= $atd->obj->fb_display_details(&$atd);
                 break;
+
             }
+
+            $res .= $atd->getInstructions('details');
      
 
             $id = $this->page->vars['last']['id'];
@@ -310,6 +321,7 @@ function confirmDelete()
             if($res = $this->bruteForceDeleteCheck()){
                 return $res;
             }
+            $res .= $atd->getInstructions('delete');
             
             $res .= "<p>Are you sure you wish to delete this? Click 'Delete' or 'Cancel' to go back.</p>";	 
             $atdf = new CoopForm(&$this->page, 

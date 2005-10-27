@@ -889,6 +889,20 @@ function triggerNotices($audit_id)
         }
 
 
+    function getInstructions($action = false)
+        {
+            if(!$action){
+                $this->page->mailError('get instructions called with no action');
+                return;
+            }
+            $inst = $this->obj->factory('instructions');
+            $inst->table_name = $this->table;
+            
+            $inst->action = $action;
+            $inst->find(true);
+            return '<div class="instructions">' . $inst->instruction . '</div>';
+            }
+    
 } // END COOP OBJECT CLASS
 
 

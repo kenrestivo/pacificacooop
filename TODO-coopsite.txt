@@ -11,12 +11,9 @@ MY agenda! dammit, mine! for a change....
 
 
 2 hours PHP
-add instructions!
-build the table
-	add the things i need in there.
-perms for it-- sysadmin
 stick them in the top of each dispatcher
 	i don't think i want them in coopview/form.
+add the things i need in there.
 
 
 1 hour PHP/SQL
@@ -4148,3 +4145,6 @@ post what i got so far
 ??? SQL
 fix edwige's entries
 instruction table: tablename, action (add/edit/delete/view?), text
+add instructions!
+build the table
+perms for it-- sysadmin
