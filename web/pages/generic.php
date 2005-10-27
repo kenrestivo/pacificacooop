@@ -22,7 +22,7 @@ $cp->buffer($cp->topNavigation());
 
 
 
-////////////////{{{STACK HANDLING. move to cooppage?
+////////////////{{{STACK HANDLING. move to cooppage? or dispatcher?
 if(!empty($_REQUEST['table'])){
     $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
     $formatted = array('table'=>$_REQUEST['table'], 
@@ -45,11 +45,9 @@ if(!empty($formatted)){
     $cp->vars['last'] =  $formatted;
 }
 
+// critical to do this here. 
+$prev = $cp->popOff();
 
-/// XXX this is wrong. last should EQUAL request at this stage!
-if(isset($cp->vars['last']['pop']) || isset($_REQUEST['pop'])){
-    $prev = $cp->popOff();
-}
 
 //////////////}}} END STACK HANDLING
 
@@ -78,21 +76,6 @@ if($sp= $cp->stackPath()){
 }
 
 
-/// SHOW STATUS
-// if i popped, my result gets clobberd. so keep track of it here
-if(!empty($prev)){
-    $status =& $prev;
-} else {
-    $status =& $cp->vars['last'];
-}
-
-if(!empty($status['result'])){
-    $cp->buffer("<p>STATUS: {$status['result']}</p>");
-}
-
-
-
-
 /////// FINALLY, the page
 if(empty($atd)){
     $atd =& new CoopView(&$cp, $cp->vars['last']['table'], $none);
@@ -106,7 +89,6 @@ $cp->buffer('<div id="centerCol">');
 $disp =& new CoopNewDispatcher(&$cp);
 $cp->buffer($disp->dispatch());
 
-unset($cp->vars['prev']); // XXX WHERE is the right place for this??
 
 print $cp->flushBuffer();
 

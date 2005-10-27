@@ -9,13 +9,12 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 	read greenspun's sql book
 
-2 hours PHP/JS/DOM
-move the status on pushes to the subordinate section
-	yank it out of generic completely
-	reset it at set time! or at set-check time at least
-	add it to view/delete/whatever
-	in add/edit, only show it at top if no pop. otherwise show it in field
-	statichtml that is insertelementbefore?
+
+???PHP
+what's up with the was successful at the top, with no <p> around it?
+	it shows up in add/edit
+	and, was successful still showing up if it was cancelled?? bah.
+
 
 2 hours PHP
 add instructions!
@@ -25,9 +24,11 @@ instruction table: tablename, action (add/edit/delete/view?), text
 stick them in the top of each dispatcher
 	i don't think i want them in coopview/form.
 
+
 1 hour PHP/SQL
 write a little script to goose all  emails
-
+select all the audits after such a day with no email
+run it off of a cronjob
 
 
 ----------------
@@ -2828,6 +2829,7 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	statichtml that is insertelementbefore?
 		how/where to add it? error? CSS/javascript (+=? on somediv?)
 		have to play with DOM
 
@@ -4113,3 +4115,11 @@ test my changes!
 push live
 pushlive
 
+	yank it out of generic completely
+	reset it at set time! or at set-check time at least
+2 hours PHP/JS/DOM
+move the status on pushes to the subordinate section
+	add it to view/delete/whatever
+	  	where to check which status to use (popped versus last?)
+  			isn't it so that only in pop land do i need the old one?
+  	in add/edit, only show it at top if no pop. otherwise show it in field

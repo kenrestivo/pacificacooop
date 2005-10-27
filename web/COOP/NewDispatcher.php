@@ -52,6 +52,8 @@ class CoopNewDispatcher
             
             $res .= '<div><!-- status alert div -->';
             
+            $res .= '<p>' . $this->page->getStatus() . '</p>';
+
             $atd2 =& new CoopView(&$this->page, 
                                   $this->page->vars['last']['table'], $none);
             // alert  and/or summary does a find, so i need a separate obj for it
@@ -140,13 +142,16 @@ class CoopNewDispatcher
                     $this->page->vars['last']['table'] != $prev['table']))
                 {
                     $this->page->vars['last']['pop'] = $atdf->table; 
-                } 
+                } else {
+                    $this->page->vars['last']['result'] .= ' Add another below if you like.';
+                }
             
 
                 $this->page->headerLocation(
                     $this->page->selfURL(array('par' => false,
                                                'host' => true)));
             } else {
+                // didn't validate. there are errors or it's not done (push/pop)
                 if($atdf->isSubmitted()){
                     $res .= $this->page->vars['last']['result'] = 
                         sprintf('<p class="error">%s %s has errors. Please correct.</p>',
@@ -173,6 +178,17 @@ class CoopNewDispatcher
                         $this->page->confessArray($this->page->vars, 
                                                   "$localfield vars just before tohtml",
                                                   4);
+
+                        // now the status, insert it there.
+                        // XXX this confuses people. don't do it.
+//                         $stat =& $atdf->form->createElement(
+//                             'static',
+//                             'status-' . $localfield,
+//                             '',
+//                             $this->page->getStatus());
+//                         $atdf->form->insertElementBefore(
+//                             &$stat, 
+//                             $atdf->prependTable($localfield));
                     }
                     
                 }
@@ -187,6 +203,8 @@ class CoopNewDispatcher
 
     function details()
         {
+
+            $res .= '<p>' . $this->page->getStatus() . '</p>';
 
             $atd =& new CoopView(&$this->page, 
                                  $this->page->vars['last']['table'], 
@@ -290,7 +308,9 @@ class CoopNewDispatcher
 
 function confirmDelete()
         {
+            $res = '';
             //TODO: put on a permissions condom here
+            $res .= '<p>' . $this->page->getStatus() . '</p>';
 
 
             if($res = $this->bruteForceDeleteCheck()){
@@ -408,8 +428,6 @@ function confirmDelete()
             
             return false;
         }
-
-
 
 
 function dispatch()

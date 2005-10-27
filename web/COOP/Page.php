@@ -567,8 +567,15 @@ class coopPage
     // returns a copy of what was clobbered, or nothing if nothing popped
     function popOff()
         {
+            // ALWAYS unset this here
+            unset($this->vars['prev']); 
+
             /// only if there's something there
-            if(isset($this->vars['stack']) && count($this->vars['stack'])){
+            /// XXX the isset(REQUEST[pop]) is wrong.
+            /// last should EQUAL request at this stage!
+            if(isset($this->vars['stack']) && count($this->vars['stack']) &&
+                (isset($this->vars['last']['pop']) || isset($_REQUEST['pop'])))
+            {
                 $this->confessArray(
                     $this->vars, 
                     'popping off of the stack (replacing last with stack[n-1])', 
@@ -648,6 +655,22 @@ class coopPage
             PEAR::raiseError("You do not have this year set up correctly.",
                              666);
 
+        }
+
+
+    // returns the REAL last status: guesses based on prev. Hack hack hack!
+    // if i popped, my result gets clobberd. so i have to use prev.
+    function getStatus() 
+        {
+            if(!empty($this->vars['prev'])){
+                $status =& $this->vars['prev'];
+            } else {
+                $status =& $this->vars['last'];
+            }
+            
+            if(!empty($status['result'])){
+                return $status['result'];
+            }
         }
 
 
