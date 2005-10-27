@@ -969,4 +969,13 @@ user_id int(32)
 );
 
 
+create table instructions(
+instruction_id int(32) primary key not null unique auto_increment,
+table_name varchar(255) default NULL,
+action enum('Add', 'Edit', 'Delete', 'View') default null,
+instruction longtext
+);
+
+
+
 -- EOF

@@ -9,18 +9,12 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 	read greenspun's sql book
 
-BUGS
-	legacypassthrough is fuced up
-	
-
-
-post what i got so far
 
 2 hours PHP
 add instructions!
-instruction table: tablename, action (add/edit/delete/view?), text
-	perms decided based on the tablename, i suppose
-	don't think i'll need separate instructions for each realm, but maybe so
+build the table
+	add the things i need in there.
+perms for it-- sysadmin
 stick them in the top of each dispatcher
 	i don't think i want them in coopview/form.
 
@@ -32,6 +26,8 @@ run it off of a cronjob
 
 ??? CSS
 make menu printable, add to print css
+
+show the whole leads detail for invitations
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
@@ -45,8 +41,6 @@ same as what's in coopobject: go hit the URL, with audit_id!
 	the function to call takes the id as arg?
 
 
-
-fix edwige's entries
 
 
 springfest priorities
@@ -360,6 +354,11 @@ move teh family fees to the database! they're hard coded, taht is stupid
 
 ----------------
 BELOW THE LINE
+
+??? PHP/SQL
+	instruction perms decided based on the tablename, i suppose
+	don't think i'll need separate instructions for each realm, but maybe so
+
 
 ?? PHP/JS
 ooh, maybe a cool ajax thing
@@ -4141,3 +4140,11 @@ what's up with the was successful at the top, with no <p> around it?
 30 minutes PHP/SQL
 invite last years' alumni. hell, invite ALL the alumni!
 	i think i have a script to do this? did i not already?
+	legacypassthrough is fuced up. also probably unnecessary too!
+BUGS
+	cancel is still showing crap
+post what i got so far
+
+??? SQL
+fix edwige's entries
+instruction table: tablename, action (add/edit/delete/view?), text

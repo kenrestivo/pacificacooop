@@ -1747,4 +1747,8 @@ order by previous.family_id)
 select * from audit_trail 
 where audit_trail_id = (select max(audit_trail_id) from audit_trail) \G
 
+-- one-off to fix invites stuff
+select distinct leads.lead_id from audit_trail left join leads on leads.lead_id = index_id left join invitations on index_id = invitations.lead_id where audit_user_id = 118 and table_name = 'leads' and invitation_id is null;
+
+
 --- EOF
