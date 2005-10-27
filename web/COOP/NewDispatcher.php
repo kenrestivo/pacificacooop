@@ -142,8 +142,9 @@ class CoopNewDispatcher
                     $this->page->vars['last']['table'] != $prev['table']))
                 {
                     $this->page->vars['last']['pop'] = $atdf->table; 
-                } else {
-                    $this->page->vars['last']['result'] .= ' Add another below if you like.';
+                } else if ($this->page->vars['last']['action'] == 'add'){
+                    $this->page->vars['last']['result'] .= 
+                        ' Add another below if you like.';
                 }
             
 
@@ -179,9 +180,8 @@ class CoopNewDispatcher
                                                   "$localfield vars just before tohtml",
                                                   4);
                     }
-                    
                 } else {
-                    // no pop, show status
+                    // no pop, so OK to show status
                     $res .= '<p>' . $this->page->getStatus() . '</p>';
                 }
                 
