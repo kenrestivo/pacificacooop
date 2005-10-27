@@ -26,7 +26,8 @@ printf("<p>This script %s the following updates:</p>",
 $top = new CoopObject(&$cp, 'enrollment', $none);
 // i hope i fix the db schema so i'll never have do to this again
 // but if i did, the right thing would be to search for "not this year"
-$top->obj->school_year = '2003-2004';
+
+$top->obj->school_year = $cp->decrementSchoolYear();
 $top->obj->find();
 //print $top->simpleTable();
 
@@ -36,7 +37,7 @@ while($top->obj->fetch()){
 	$kids =& $top->obj->_kid_id;
 
  	$newenrol = new CoopObject(&$cp, 'enrollment', $none);
- 	$newenrol->obj->school_year = '2004-2005';
+ 	$newenrol->obj->school_year = $cp->currentSchoolYear;
 
  	$newkid = new CoopObject(&$cp, 'kids', $none);
  	$newkid->obj->family_id = $kids->family_id;
@@ -51,8 +52,8 @@ while($top->obj->fetch()){
 		// families that weren't here last year
 		//now add their addresses to leads!
 		
-		$top->obj->_kid_id->getlinks();
-		$family =& $top->obj->_kid_id->_family_id;
+		$kid =& $top->obj->getlink('kid_id');
+		$family =& $kid->getLink('family_id');
 		//confessObj($family, "alumni-family");
 
 		//XXX! i'm assuming they're not already in leads db. fuck.
@@ -64,10 +65,32 @@ while($top->obj->fetch()){
 		// got one! now... let's dump all the info in
 		if($family->address1){
 			$lead->obj->source_id = 7; // ken's  temporary alumni hack
-			$lead->obj->school_year = "2004-2005";
+			$lead->obj->school_year = $cp->currentSchoolYear;
 			$lead->obj->relation = "Alumni";
-			$lead->obj->last_name = sprintf("%s Family", $family->name);
-			$lead->obj->address1 = $family->address1;
+
+            // add parents first/last instead
+            $firsts = array();
+            $lasts = array();
+            $par =& $family->factory('parents');
+            confessObj($par, 'yo yo');
+            $par->family_id = $family->family_id;
+            $par->orderBy('type asc');
+            $par->find();
+            while($par->fetch()){
+                $firsts[] = $par->first_name;
+                $lasts[] = $par->last_name;
+            }
+            
+            if($lasts[0] == $lasts[1]){
+                $last = $lasts[0];
+            } else {
+                $last = implode(' and ' , $lasts);
+            }
+            $first = implode(' and ' , $firsts);
+            
+            $lead->obj->first_name = $first;
+            $lead->obj->last_name = $last;
+            $lead->obj->address1 = $family->address1;
 			$lead->obj->email_address = $family->email;
 			$lead->obj->phone = $family->phone;
 			$lead->obj->state = "CA";
@@ -91,9 +114,10 @@ while($top->obj->fetch()){
 			
 			
 	
-			printf("Insert%s %s with %s %s %s %s<br>",
+			printf("Insert%s %s %s with [%s] %s %s %s<br>",
 				   $doit ? 'ed' : "",
 				   $lead->obj->first_name,
+				   $lead->obj->last_name,
 				   $lead->obj->address1,
 				   $lead->obj->city,
 				   $lead->obj->zip,
@@ -111,10 +135,12 @@ while($top->obj->fetch()){
 
 
 if(!$doit){
-	print $cp->selfURL("YES Click here to approve and commit these $total changes",
-				   "do_it=yes");
-	print $cp->selfURL("NO Click here to CANCEL",
-					   false, "index.php");
+	print $cp->selfURL(
+        array(
+            'value' => 
+            "YES Click here to approve and commit these $total changes",
+            'inside' => "do_it=yes"));
+	print $cp->selfURL(array('value' => "NO Click here to CANCEL"));
 }
 done ();
 
