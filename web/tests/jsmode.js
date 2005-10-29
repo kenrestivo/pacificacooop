@@ -165,3 +165,4 @@ Fubar = function (myprop)
 }
 f = new Fubar('yay');
 
+c.status.innerHTML= '<input type="text" name="foobarbaz">';

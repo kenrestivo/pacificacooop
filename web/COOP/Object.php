@@ -903,7 +903,7 @@ function triggerNotices($audit_id)
             if($found < 1){
                 return ;
             }
-            return '<div class="instructions">' . $inst->instruction . '</div>';
+            return '<p class="instructions">' . $inst->instruction . '</p>';
             }
     
 } // END COOP OBJECT CLASS

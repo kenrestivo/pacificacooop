@@ -7,19 +7,53 @@ MY agenda! dammit, mine! for a change....
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
-	read greenspun's sql book
 
-ok, push it live!
+
+
+springfest priorities
+ 	add in the nag report!!!
+		umm, whyzit not showing up?
+			bah, works for system user. wtf?
+	paypal!!!!!!!!!!
+
+
+10 mins PHP
+show the whole lead info in invitations. override linkdisplayfields, basically
+
 
 1 hour PHP/SQL
-write a little script to goose all  emails
-select all the audits after such a day with no email
+write a little script to goose all emails
+select all the audits after 10/5/2005 with no email
 run it off of a cronjob
+
+
+??? PHP/JS
+attempt to implement subform.. as an ajax
+	write a simple test that poots out a subform, possibly stripped of its FORM
+	i.e., um, subform!
+	what to do at save time?
+		i suppose i need a hidden, with the names of all the subforms i've created
+		populate it via js
+	my validate needs to be recursive
+		umm. what about javascript validation? does it break now?
 
 ??? CSS
 make menu printable, add to print css
 
 show the whole leads detail for invitations
+
+
+??? PHP
+try the auction item stuff?
+	ack. i'm fucked. family vs solicit join still!
+	until i redo the entire database. HOW TO GET AROUND IT!??
+
+
+-----------
+READING (when too burnt out to do actual work)
+
+	read greenspun's sql book
+
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
@@ -31,13 +65,9 @@ also for sending them as reminders, in nag report!
 just use the simple XHTML crap from kenflex.js
 same as what's in coopobject: go hit the URL, with audit_id!
 	the function to call takes the id as arg?
+	nice: js to insert a spinning progress gif
 
 
-
-
-springfest priorities
- 	add in the nag report!!!
-	paypal
   	
 
   man i GOT to go through and dick with dupeignores!
@@ -2845,6 +2875,23 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+    [] => Array
+        (
+            [user] => 200
+            [group] => 200
+            [menu] => 200
+            [year] => 0
+        )
+
+
+    [] => Array
+        (
+            [user] => 200
+            [group] => 200
+            [menu] => 200
+            [year] => 0
+
 	statichtml that is insertelementbefore?
 		how/where to add it? error? CSS/javascript (+=? on somediv?)
 		have to play with DOM
@@ -4162,3 +4209,5 @@ perms for it-- sysadmin
 stick them in the top of each dispatcher
 	i don't think i want them in coopview/form.
 	start out with just the invitations-- needed most desperately
+ok, push it live!
+	can i insert html via js? YES!!

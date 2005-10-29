@@ -219,8 +219,7 @@ class CoopNewDispatcher
             // object-specific override if needed
             if(is_callable(array($atd->obj, 'fb_display_details'))){
                 $res .= $atd->obj->fb_display_details(&$atd);
-                break;
-
+				return $res;
             }
 
             $res .= $atd->getInstructions('details');

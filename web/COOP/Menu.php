@@ -196,15 +196,16 @@ upriv.max_group, NULL)) as cooked_menu
 from report_permissions 
 left join 
 (select max(user_level) as max_user, max(group_level) as max_group, 
+max(year_level) as max_year,
 %d as user_id, realm_id
 from user_privileges 
 where user_id = %d 
-or (user_id is null and group_id in 
+or ((user_id < 1 or user_id is null) and group_id in 
 (select group_id from users_groups_join 
 where user_id = %d)) 
 group by realm_id 
 order by realm_id) as upriv
-on upriv.realm_id = report_permissions.realm_id 
+on upriv.realm_id = report_permissions.realm_id
 where user_id = %d and report_permissions.realm_id = %d
 group by report_permissions.realm_id',
                                       $this->page->auth['uid'],
@@ -216,7 +217,7 @@ group by report_permissions.realm_id',
             $res = $rp->obj->getDatabaseResult();
             while ($row =& $res->fetchRow(DB_FETCHMODE_ASSOC)) {
                 $menu  = $row['cooked_menu'];
-                //confessArray($row, 'row');
+                $this->page->confessArray($row, 'getReportPerms', 2);
             }
             return $menu;
         }
