@@ -255,7 +255,8 @@ class CoopNewDispatcher
                     // XXX this only handles one-degree-of-separation!
                     list($join, $dest) = explode(':', $path);
                     $co2 =& new CoopObject(&$atd->page, $join, &$atd);
-                    $co2->obj->whereAdd(sprintf('%s = %d', 
+                    $co2->obj->whereAdd(sprintf('%s.%s = %d', 
+                                                $co2->table,
                                                 $atd->pk, 
                                                 $id));
                     $real =& new CoopView(&$atd->page, $dest, &$co2);
