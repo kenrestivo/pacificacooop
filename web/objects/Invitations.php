@@ -72,6 +72,19 @@ class Invitations extends CoopDBDO
         }
 
 
+    function fb_display_view(&$co)
+        {
+
+            $co->overrides['leads']['fb_linkDisplayFields'] = 
+                array('last_name', 'first_name', 'company', 
+                      'title', 'address1', 'address2', 'city', 'state', 'zip',
+                      'country', 'phone');
+            
+            return $co->simpleTable();
+        }
+
+
+
     function fb_display_alert(&$co)
         {
 
