@@ -105,7 +105,7 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
             
             this.xhr = new XHConn();
             
-            if (!this.xhr){
+            if (!this.xhr || typeof encodeURIComponent == 'undefined'){
                 alert("Your browser is too old. Install Firefox (http://www.getfirefox.com).");
             }
             
