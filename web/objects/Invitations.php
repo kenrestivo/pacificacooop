@@ -58,23 +58,17 @@ class Invitations extends CoopDBDO
     var $fb_searchSelects = array('lead_id');
 
 
-    function fb_linkConstraints(&$co)
+
+
+    function fb_display_view(&$co)
         {
+
             $leads =  new CoopObject(&$co->page, 'leads', &$co);
             
             $this->orderBy('last_name, first_name, company');
             
             $co->protectedJoin($leads, 'left');
             
-            $co->constrainSchoolYear();
-            $co->constrainFamily();
-
-        }
-
-
-    function fb_display_view(&$co)
-        {
-
             $co->overrides['leads']['fb_linkDisplayFields'] = 
                 array('last_name', 'first_name', 'company', 
                       'title', 'address1', 'address2', 'city', 'state', 'zip',
