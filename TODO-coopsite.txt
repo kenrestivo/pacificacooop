@@ -11,6 +11,12 @@ MY agenda! dammit, mine! for a change....
 
 
 
+1 hour PHP/SQL
+write a little script to goose all emails
+select all the audits after 10/5/2005 with no email
+run it off of a cronjob
+
+
 ?? PHP
 back is broken in details! really, this is seriously fucked up.
 	i'll need to deal with report, not just table. 
@@ -21,15 +27,6 @@ back is broken in details! really, this is seriously fucked up.
 ??? PHP/QA/bureaucracy
 	paypal back to life
 
-
-10 mins PHP
-show the whole lead info in invitations. override linkdisplayfields, basically
-
-
-1 hour PHP/SQL
-write a little script to goose all emails
-select all the audits after 10/5/2005 with no email
-run it off of a cronjob
 
 
 
@@ -50,6 +47,11 @@ READING (when too burnt out to do actual work)
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
+
+
+10 mins PHP
+show the whole lead info in invitations. override linkdisplayfields, basically
+	shoule i really do this?
 
 
 1 hour PHP
@@ -87,10 +89,6 @@ BUGS
 	check crosslinks (i.e. groups? jobdescriptions?)
 		this will be utterly broken with my new system
 	backbutton behaves strangely
-
-there is one XXX i need to check: a javascript function that may not exist?
-	encodeuricomponent. wrap it!
-
 
 
 ?? PHP/SQL
@@ -4207,3 +4205,12 @@ slam details into the nag report
 	enrollment, oddly, isn't?
 why doesn't enrollment show up in family details?				
 	because it was horrifically broken. it shows up now. yay.counts wrong on invites in nagreport. go fix.
+
+there is one XXX i need to check: a javascript function that may not exist?
+	encodeuricomponent. wrap it!
+	ok i punted: it'll puke if they don't have it
+
+??? PHP
+carriereport is totally, completely fucking broken
+	but qa didn't catch it! it shows html just fine
+	ah, migrated it and fixed it

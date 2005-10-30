@@ -65,7 +65,7 @@ function viewHack(&$cp)
     $res = $chooser; // hack
 
 	
-	print "<h2>Totals for $schoolyear </h2>";
+	$res .= "<h2>Totals for $schoolyear </h2>";
 
 /* familid's in 
        raffle_income_join
@@ -75,7 +75,7 @@ function viewHack(&$cp)
 
 
 
-	print showRawQuery("Total ALL income from ALL sources", 
+	$res .= showRawQuery("Total ALL income from ALL sources", 
 					   "select chart_of_accounts.description as Description, 
 	   sum(payment_amount)  as Total 
 		from income 
@@ -87,7 +87,7 @@ function viewHack(&$cp)
 		);
 
 
-	print showRawQuery("Total ALL income by reconciliation status", 
+	$res .= showRawQuery("Total ALL income by reconciliation status", 
 				 "select chart_of_accounts.description, 
 	   sum(if(income.cleared_date>0,0,income.payment_amount)) 
 			as not_cleared_yet ,
@@ -104,7 +104,7 @@ function viewHack(&$cp)
 
 
 
-	print showRawQuery("Income By Date",
+	$res .= showRawQuery("Income By Date",
 		 "select concat(monthname(check_date), ' ', year(check_date)) 
 				as Month, 
 				sum(payment_amount) as Total 
@@ -114,12 +114,12 @@ function viewHack(&$cp)
 				order by check_date" , 1);
 
 
-	print "<h2>Solicitation</h2>";
+	$res .= "<h2>Solicitation</h2>";
 
 
 	// fix an dptu itn
 
-	print showRawQuery("Solicitation Cash Income by Type",
+	$res .= showRawQuery("Solicitation Cash Income by Type",
 " 
 select coa.description as Description,
         sum(inc.total) as Before_Event, 
@@ -156,8 +156,8 @@ order by Before_Event desc, At_Event desc
 
 
 
-	print "<h2>Invitations</h2>";
-	print showRawQuery("Invitation Income by Type", 
+	$res .= "<h2>Invitations</h2>";
+	$res .= showRawQuery("Invitation Income by Type", 
 "
 select coa.description as Description,
         sum(coalesce(tic.total,0) + coalesce(inc.total,0)) as Total
@@ -190,14 +190,12 @@ order by Total desc
 					   , 1);
 
 
-	print showRawQuery("Invitation  Counts", 
+	$res .= showRawQuery("Invitation  Counts", 
 				 sprintf('select relation, 
 			sum(if(invitations.family_id>0,0,1)) as Alumni_List ,
 			sum(if(invitations.family_id>0,1,0)) as Family_Supplied ,
 			count(distinct(lead_id)) as Total 
 		from invitations 
-		left join kids on kids.family_id = invitations.family_id
-				left join enrollment on enrollment.kid_id = kids.kid_id 
 		where 
 			  invitations.school_year = "%s" 
    		group by relation 
@@ -205,7 +203,7 @@ order by Total desc
 		   $schoolyear));
 
 
-	print showRawQuery("Reservations from Invitations", 
+	$res .= showRawQuery("Reservations from Invitations", 
 				 "select  invitations.relation,
 			sum(if(invitations.family_id>0,0,ticket_quantity)) as Alumni_List ,
 			sum(if(invitations.family_id>0,ticket_quantity,0)) as Family_Supplied ,
@@ -222,7 +220,7 @@ order by Total desc
 		);
 
 
-	print showRawQuery("Total Event Reservations (Paddles)", 
+	$res .= showRawQuery("Total Event Reservations (Paddles)", 
 		   "select if(tickets.income_id > 0, 'Paid', 
 				if(tickets.family_id > 0, 'Members', 'Freebies')) 
 						as Payment_Type,
