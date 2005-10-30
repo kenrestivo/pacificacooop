@@ -329,13 +329,15 @@ function viewHack(&$cp)
 	       	from families 
        			left join invitations 
                         on families.family_id = invitations.family_id
+                            and invitations.school_year = '%s'
 			left join kids on kids.family_id = families.family_id
 			left join enrollment on enrollment.kid_id = kids.kid_id
 		where enrollment.school_year = '%s' 
 			and enrollment.dropout_date is NULL
 		group by enrollment.am_pm_session, families.name
 		order by enrollment.am_pm_session, $sortby $sortdir\n",
-					 $cp->currentSchoolYear));
+                $cp->currentSchoolYear,
+                $cp->currentSchoolYear));
 
 
 	$res .= '<tr bgcolor="#aabbff" align="center">';

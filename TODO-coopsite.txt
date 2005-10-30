@@ -4206,4 +4206,4 @@ slam details into the nag report
 	make sure family extradetails include everything
 	enrollment, oddly, isn't?
 why doesn't enrollment show up in family details?				
-	because it was horrifically broken. it shows up now. yay.
+	because it was horrifically broken. it shows up now. yay.counts wrong on invites in nagreport. go fix.
