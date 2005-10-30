@@ -49,7 +49,7 @@ class Kids extends CoopDBDO
 
             // NOTE i do this the easy way: i don't constrain to families
             // just to enrollment, because it's the shortest path
-            $enrollment =  $this->factory('enrollment');
+            $enrollment =  new CoopObject(&$co->page, 'enrollment', &$co);
 
 
             $this->orderBy('last_name, first_name');
@@ -57,7 +57,7 @@ class Kids extends CoopDBDO
             // HACK! this is presuming VIEW, but in popup it could be EDIT
 
 
-            $this->joinAdd($enrollment, 'left');
+            $co->protectedJoin($enrollment, 'left');
 
             // IMPORTANT! otherwise it matches old year
             $this->selectAdd("max(enrollment.school_year) 

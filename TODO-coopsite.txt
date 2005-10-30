@@ -12,6 +12,11 @@ MY agenda! dammit, mine! for a change....
 
 why doesn't enrollment show up in family details?
 
+?? PHP
+back is broken in details! really, this is seriously fucked up.
+	i'll need to deal with report, not just table. 
+		that will require genericreport architecture, no doubt.
+
 ??? PHP/QA/bureaucracy
 	paypal back to life
 

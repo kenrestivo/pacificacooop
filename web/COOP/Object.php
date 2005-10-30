@@ -812,7 +812,7 @@ function triggerNotices($audit_id)
     // joinobj is a  ccopobject object! 
     // you'll need this to make linkconstraints coexist with extradetails
     // XXX it checks interal DBDO variables like _join. DANGEROUS!
-    function protectedJoin(&$joinco)
+    function protectedJoin(&$joinco, $jointype = 'left')
         {
             if(strstr($this->obj->_join, $joinco->table)){
                 $this->page->printDebug(
@@ -822,13 +822,17 @@ function triggerNotices($audit_id)
                     2);
                 return;
             }
-            $this->page->printDebug(
-                sprintf('protectedJoin(%s)  joining for %s',
-                        $this->table, 
-                        $joinco->table),
+            $this->page->confessArray(
+                $this->obj->_join, 
+                "CoopObject:protectedJoin({$this->table}) joins, before joining {$joinco->table}", 
                 1);
 
-            $this->obj->joinAdd($joinco->obj);
+
+            $this->obj->joinAdd($joinco->obj, $jointype);
+            $this->page->confessArray(
+                $this->obj->_join, 
+                "CoopObject:protectedJoin({$this->table}) joins, AFTER joining {$joinco->table}", 
+                1);
         }
 
     function &getData($query, $limit, $beginsWith)

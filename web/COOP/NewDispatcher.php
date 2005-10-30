@@ -262,16 +262,8 @@ class CoopNewDispatcher
                                                 $id));
                     $real =& new CoopView(&$atd->page, $dest, &$co2);
                     $real->obj->orderBy('school_year desc');
-                    $this->page->confessArray(
-                        $real->obj->_join, 
-                        "CoopNewDispatcher::details({$real->table}) joins, before", 
-                        5);
-                    $real->obj->joinadd($co2->obj);
-                    $this->page->confessArray(
-                        $real->obj->_join, 
-                        "CoopNewDispatcher::details({$real->table}) joins, after", 
-                        4);
-
+                    $real->protectedJoin($co2);
+ 
                     /// XXX this is sketchy. could cause GRIEF
                     /// i need to add the $co2's PK to the REAL object
                     /// because the actionbuttons will need it!

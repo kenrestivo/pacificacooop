@@ -59,10 +59,10 @@ class Enrollment extends CoopDBDO
 	function fb_linkConstraints(&$co)
 		{
 
-            $kids =  $this->factory('kids');
+            $kids = new CoopObject(&$co->page, 'kids', &$co);
 
 
-            $this->joinAdd($kids, 'left');
+            $co->protectedJoin($kids, 'left');
 
                 // TODO! support chooser
             $this->whereAdd(
@@ -70,7 +70,7 @@ class Enrollment extends CoopDBDO
             
             $this->whereAdd(sprintf('%s.school_year like "%s"',
                                     $co->table,
-                                    $chosen));
+                                    $co->getChosenSchoolYear()));
 
             $this->orderBy('am_pm_session, last_name, first_name');
 

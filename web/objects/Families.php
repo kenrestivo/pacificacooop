@@ -43,7 +43,8 @@ class Families extends CoopDBDO
 
     var $fb_extraDetails = array('parents:enhancement_hours',
                                  'families_income_join:income',
-                                 'auction_items_families_join:auction_donation_items');
+                                 'auction_items_families_join:auction_donation_items',
+                                 'kids:enrollment');
 
 
 

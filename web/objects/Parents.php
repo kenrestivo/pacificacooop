@@ -53,7 +53,7 @@ class Parents extends CoopDBDO
             $families =&  new CoopObject(&$co->page, 'families', &$co);
             $families->linkConstraints();
             
-            $this->joinAdd($families->obj);
+            $co->protectedJoin($families);
         
             $co->constrainSchoolYear();
     
