@@ -10,6 +10,18 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
+??? PHP
+show the whole leads detail for invitations
+	basically overrides
+
+
+1 hour PHP
+alertorstatus needs to be made generic, used everywhere!
+	enhancement, invitations, attendance (ooh!), elsewhere
+	be sure to check due dates too!
+	need: result, longstatus, shortstatus/count (for reports)
+
+
 
 1 hour PHP/SQL
 write a little script to goose all emails
@@ -29,8 +41,11 @@ back is broken in details! really, this is seriously fucked up.
 
 
 
+??? DATA ENTRY
+move all the instructions over to the new thing
 
-show the whole leads detail for invitations
+
+
 
 
 ??? PHP
@@ -52,13 +67,6 @@ STUCK - behind things that are either prerequisites or MORE IMPORTANT
 10 mins PHP
 show the whole lead info in invitations. override linkdisplayfields, basically
 	shoule i really do this?
-
-
-1 hour PHP
-alertorstatus needs to be made generic, used everywhere!
-	enhancement, invitations, attendance (ooh!), elsewhere
-	be sure to check due dates too!
-	need: result, longstatus, shortstatus/count (for reports)
 
  
 
@@ -4214,3 +4222,7 @@ there is one XXX i need to check: a javascript function that may not exist?
 carriereport is totally, completely fucking broken
 	but qa didn't catch it! it shows html just fine
 	ah, migrated it and fixed it
+
+
+10 mins PHP
+alphebetise the damned invitations!

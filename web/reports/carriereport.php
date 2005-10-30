@@ -58,11 +58,18 @@ function schoolYearChooser(&$cp, $table)
 
 function viewHack(&$cp)
 {
+    $res = '';
+
+    $res .='This is the famous "Carrie Report". 	
+	    It shows the summary of all income and general 
+		performance statistics for the entire program.';
 
 
     list($schoolyear, $chooser) = schoolYearChooser(&$cp, 'income');
 
-    $res = $chooser; // hack
+
+
+    $res .= $chooser; // hack
 
 	
 	$res .= "<h2>Totals for $schoolyear </h2>";
