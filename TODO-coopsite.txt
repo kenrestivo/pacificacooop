@@ -10,12 +10,13 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-why doesn't enrollment show up in family details?
 
 ?? PHP
 back is broken in details! really, this is seriously fucked up.
 	i'll need to deal with report, not just table. 
 		that will require genericreport architecture, no doubt.
+		moving all the stack handling to cooppage, or dispatcher, not generic!
+
 
 ??? PHP/QA/bureaucracy
 	paypal back to life
@@ -4204,3 +4205,5 @@ ok, push it live!
 slam details into the nag report
 	make sure family extradetails include everything
 	enrollment, oddly, isn't?
+why doesn't enrollment show up in family details?				
+	because it was horrifically broken. it shows up now. yay.

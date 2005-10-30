@@ -519,9 +519,10 @@ group by user_id,table_name,field_name";
                 // so that  linkfields properly show all years
                 if($chosen){
                     $this->obj->whereAdd(
-                        sprintf('(%sschool_year like "%s" or %sschool_year is null or school_year < "1900-01-01")', 
+                        sprintf('(%sschool_year like "%s" or %sschool_year is null or %sschool_year < "1900-01-01")', 
                                 empty($last) ? '' :  $last . '.' ,
                                 $chosen,
+                                empty($last) ? '' :  $last . '.' ,
                                 empty($last) ? '' :  $last . '.' ));
                     $this->obj->orderBy('school_year desc');
                 }
