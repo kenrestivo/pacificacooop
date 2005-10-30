@@ -95,12 +95,12 @@ class Table_permissions extends CoopDBDO
         }
 
 
-    function fb_display_summary(&$co)
-        {
+//     function fb_display_summary(&$co)
+//         {
             /// TODO: the simple summary of what i can do to thistable
             /// and.... who can do it if i cannot!
             
-        }
+//        }
 
     function FOOfb_display_details(&$co)
         {

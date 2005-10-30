@@ -1,8 +1,72 @@
 report notes
 $Id$
 
-16 hours PHP
+40 hours PHP
 re-architect reports
+
+create a subclass of dispatcher, or a new dispatcher 
+
+
+8 hours PHP
+ 	add in the nag report!!!
+		re-do using html table
+	is there some way to use alerts instead of logic inside of nagreport??
+		nice, to get a summary of all alerts for a family!
+		yank that silly conditional at the top of the nagreport!
+	show nags only by due dates passed!
+		or, will my above alertstatus do it?
+	get details working
+		use generic with extradetails?
+	add a 'send reminder' button, to send alerts
+
+
+margolisreport
+
+report arch
+
+create a coopreport class, stick getreportperms into it
+	make it a paralell of coopobject, probably not inheriting from it
+	genericise some of the reports
+
+	others?
+		what do i do about reports!?
+		table can have a view, but also some number of reports.
+		HEY! how about one report for each realm!
+		pick a generic report file, somewhere store all the reports!
+			there must be *some* way of registering them.
+			fuck it, stick a struct in a file and be done with it
+			that's for *storing* the new ones.
+
+
+??? PHP
+parent ed attendance report that makes sense
+	using adddefaultfamilyperms, as a model
+
+
+
+???  PHP
+	shirley's summary
+	first, all enrolled families (like in sandyreport?)
+	all enrollment totals (days)
+		by family and kid
+	make both reports group view only? 
+
+
+
+birthdays report
+	for this and next month, am/pm
+	where to put it? students?
+
+baby report: how many babies per workday and epod day
+
+
+??? PHP
+	look at the sandyreport IT IS BORKEN
+	the fucking linkconstraints... they're getting called when i don't want!
+		how to override them?
+
+kudos system
+	put the sandy report into that realm
 
 
 test the enhancement summary!
@@ -36,6 +100,11 @@ report ideas
       		fall/spring, schoolyear, showall, in report
       	report varliable?
       		if blank, use 'view',otherwise a custom 
+
+
+
+fix enhancement summary report to allow multiyear
+	the date is broken in enhancement.php, 'bad date
 
 
 list of families, and how many names have been entered so far

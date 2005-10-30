@@ -249,7 +249,8 @@ class CoopNewDispatcher
                 $res .= $aud->simpleTable();
             }
 
-
+            // now, extradetails is a bit of a hack. it is used for join links
+            // there has to be a better way of doing it, generically
             if(is_array($atd->obj->fb_extraDetails)){
                 foreach($atd->obj->fb_extraDetails as $path){
                     // XXX this only handles one-degree-of-separation!

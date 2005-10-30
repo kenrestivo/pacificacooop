@@ -389,7 +389,7 @@ class coopView extends CoopObject
                 $headers =   $this->makeHeader();
             }
             $tmp = $this->toArray($headers['keys']);
-            // fucking array_combine, dude
+            // array_combine() is only in PHP5. bastards.
             foreach($headers['keys'] as $key){
                 $audformatted[$key] = array_shift($tmp);
             }

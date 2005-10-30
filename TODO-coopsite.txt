@@ -2,6 +2,7 @@ coop web database
 
 MY agenda! dammit, mine! for a change....
 	fix money: make it INVOICES and income (invoicing.txt) SQL
+	fix report arch (reportnotes.txt)
 	sortable/searchable reports (searchfeature.txt)
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 	normalise and clean up permissions (permsfixing.txt) SQL
@@ -9,12 +10,10 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
+why doesn't enrollment show up in family details?
 
-springfest priorities
- 	add in the nag report!!!
-		umm, whyzit not showing up?
-			bah, works for system user. wtf?
-	paypal!!!!!!!!!!
+??? PHP/QA/bureaucracy
+	paypal back to life
 
 
 10 mins PHP
@@ -27,18 +26,6 @@ select all the audits after 10/5/2005 with no email
 run it off of a cronjob
 
 
-??? PHP/JS
-attempt to implement subform.. as an ajax
-	write a simple test that poots out a subform, possibly stripped of its FORM
-	i.e., um, subform!
-	what to do at save time?
-		i suppose i need a hidden, with the names of all the subforms i've created
-		populate it via js
-	my validate needs to be recursive
-		umm. what about javascript validation? does it break now?
-
-??? CSS
-make menu printable, add to print css
 
 show the whole leads detail for invitations
 
@@ -58,6 +45,14 @@ READING (when too burnt out to do actual work)
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
+
+1 hour PHP
+alertorstatus needs to be made generic, used everywhere!
+	enhancement, invitations, attendance (ooh!), elsewhere
+	be sure to check due dates too!
+	need: result, longstatus, shortstatus/count (for reports)
+
+ 
 
 ??? PHP/JS
 goose emails individually
@@ -105,9 +100,6 @@ selfurl needs help
 
 check for javascript in some more places.
 
-margolisreport
-
-report arch
 
 to read:
 	pear traps/catch
@@ -138,22 +130,11 @@ BUG
 
 
 
-??? PHP
-parent ed attendance report that makes sense
-	using adddefaultfamilyperms, as a model
-
 2 hours PHP
 link to new record from popups... PUT IT BACK!
 	it doesn't have to work perfectly. just do it!
 	shitcan the push/pop stuff for now.
 
-
-???  PHP
-	shirley's summary
-	first, all enrolled families (like in sandyreport?)
-	all enrollment totals (days)
-		by family and kid
-	make both reports group view only? 
 
 
 ??? PHP/SQL
@@ -197,11 +178,6 @@ BUGS
 		if the student switches, the parent's workday should too
 	
 
-
-2 hours
-	bring the solicitatoin and general springfest stuff back from the dead
-		lisa wants a report by territory
-	USE THE NEW LEADS STUFF!
 
 ???
 	recursive linkdisplay
@@ -378,6 +354,25 @@ move teh family fees to the database! they're hard coded, taht is stupid
 BELOW THE LINE
 
 
+??? PHP/JS
+attempt to implement subform.. as an ajax
+	write a simple test that poots out a subform, possibly stripped of its FORM
+	i.e., um, subform!
+		make add new blah do a js foo(subtable, id)
+			js fetches the subform, passes the ID along with it
+			callback dumps it into innerhtml, 
+				and sets a hidden array of subtable names
+		the 'server' side does only some of what's in newdispatcher::add_edit()
+			and strips out the form html
+	what to do at save time?
+		i suppose i need a hidden, 
+			with the names of all the subforms i've created
+		populate it via js
+	my validate needs to be recursive
+		build the subforms-- be certain to recurse!
+		umm. what about javascript validation? does it break now?
+
+
 2 hours PHP/JS
 add the things i need in there.
 	hmm. how to handle duplicates?
@@ -400,8 +395,9 @@ instructions
 
 ?? PHP/JS
 ooh, maybe a cool ajax thing
-	a link on all items in reports, which are editable
+	a link on all items in views, which are editable
 	turns the link into an INPUT BOX!
+		essentially, a spreadsheet
 		or a popup or whatever is appropriate (use PHP side to determine)
 	upon losing focus, save the changes
 
@@ -495,15 +491,9 @@ add an email type fb_emailFields, and do email checking on them
 
 customise fckeditor text thing, to make it show/backout changes from the Past
 
-birthdays report
-	for this and next month, am/pm
-	where to put it? students?
-
 link to family details, on blog
 
 move job assignments to membership? or just remind susan et all to subscribe to it
-
-baby report: how many babies per workday and epod day
 
 delegate perms editing?
 	wouldn't be hard to put a linkconstraint in for userprivs
@@ -527,15 +517,8 @@ show what they did in login history
 perms: set free_tuition_[start|end]_month to superuser-only?
 	when i get a chance to make the job-assignments editing shit work
 
-??? PHP
-	look at the sandyreport IT IS BORKEN
-	the fucking linkconstraints... they're getting called when i don't want!
-		how to override them?
 
 
-
-kudos system
-	put the sandy report into that realm
 
 
 30 mins PHP
@@ -547,9 +530,6 @@ fix recordbuttons in coopview
 accounting system!!! it's too late, i have to do this
 	i am *not* going to create an accounting system from scratch
 
-
-fix enhancement summary report to allow multiyear
-	the date is broken in enhancement.php, 'bad date'
 
 
 finish up the schoolyearchooser churn and bugfixen
@@ -582,9 +562,6 @@ show perms for a particular table. i.e., if the user doesn't have privs for it
 	show the realm and table permissions for it, and who *does* have perms
 	people will want to know that.
 
-create a coopreport class, stick getreportperms into it
-	make it a paralell of coopobject, probably not inheriting from it
-	genericise some of the reports
 
 i think i can yank menulevel (and maybe year level?) from the table permissions table
 	have another look through and inventory the fields actually used
@@ -734,14 +711,6 @@ login history is showing too many people.
 	just constrain for *this* user: me
 		link userid not familyid. i need a pathtofamilyid here, see above.
 
-	others?
-		what do i do about reports!?
-		table can have a view, but also some number of reports.
-		HEY! how about one report for each realm!
-		pick a generic report file, somewhere store all the reports!
-			there must be *some* way of registering them.
-			fuck it, stick a struct in a file and be done with it
-			that's for *storing* the new ones.
 
 
 ok, NEW FAMILY ADD WIZARD!
@@ -2876,6 +2845,10 @@ i do however WANT to be able to copy the insurance info in!
 ----------------
 NOWHERE
 
+??? CSS
+make menu printable, add to print css
+	http://www.help2go.com/article54.html
+
     [] => Array
         (
             [user] => 200
@@ -4211,3 +4184,18 @@ stick them in the top of each dispatcher
 	start out with just the invitations-- needed most desperately
 ok, push it live!
 	can i insert html via js? YES!!
+		umm, whyzit not showing up?
+			bah, works for system user. wtf?
+			bug in menu calculation? i don't know.
+
+
+
+2 hours
+	bring the solicitatoin and general springfest stuff back from the dead
+		lisa wants a report by territory
+	USE THE NEW LEADS STUFF!
+
+??? PHP
+slam details into the nag report
+	make sure family extradetails include everything
+	enrollment, oddly, isn't?

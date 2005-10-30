@@ -320,26 +320,23 @@ function viewHack(&$cp)
 	$sortby = $gv['sortby'] ? $gv['sortby'] : 'families.name';
 	$sortdir = $gv['sortdir'] ? $gv['sortdir'] : 'asc';
 
+	$top = new CoopView(&$cp, 'families', $nothing);
 
-	$query = sprintf("select families.name, families.family_id, families.phone, 
+	$top->obj->query(
+        sprintf("select families.name, families.family_id, families.phone, 
 				count(distinct(invitations.invitation_id)) as cntlead, 
 						enrollment.am_pm_session
 	       	from families 
-       			left join invitations on families.family_id = invitations.family_id
+       			left join invitations 
+                        on families.family_id = invitations.family_id
 			left join kids on kids.family_id = families.family_id
 			left join enrollment on enrollment.kid_id = kids.kid_id
 		where enrollment.school_year = '%s' 
 			and enrollment.dropout_date is NULL
 		group by enrollment.am_pm_session, families.name
 		order by enrollment.am_pm_session, $sortby $sortdir\n",
-					 findSchoolYear());
+					 $cp->currentSchoolYear));
 
-	$list = mysql_query($query);
-	
-	$err = mysql_error();
-	if($err){
-		user_error("[$query] errored with $err", E_USER_ERROR);
-	}
 
 	$res .= '<tr bgcolor="#aabbff" align="center">';
 	$res .= sortColumns('Family Name', 'families.name', 'asc', $showall);
@@ -359,8 +356,9 @@ function viewHack(&$cp)
 	$res .= "</tr>\n";
 	
 	$rowcolor = 0;
-	while($row = mysql_fetch_array($list))
+	while($top->obj->fetch())
 	{
+        $row = $top->obj->toArray();
 		$tennamespaid = checkPayments($row['family_id'], '10names');
 		$quiltpaid = checkPayments($row['family_id'], 'quilt');
 		$auction = checkAuction($row['family_id']);
@@ -468,7 +466,7 @@ function viewHack(&$cp)
 		$res .= "</td>"; 
 		// ACTIONS
 		$res .= "<td align='center'>";
-        $res .= ''; // XXX bring details back
+        $res .= $top->recordButtons();
 		$res .= "</td><td align='center'>";
 		//GENERAL INDULGENCES
 		$res .= $generalindulgence;
@@ -504,102 +502,6 @@ function viewHack(&$cp)
 	 
 }
 
-
-//TODO replace with the generic details, using some custom extradetails
-function details(&$cp)
-{
-
-
-	$top = new CoopView(&$cp, 'families', &$nothing);
-	//$res .= "CHECKING $table<br>";
-    $id = $this->page->vars['last']['id'];
-    $atd->obj->get($id);
-	$res .= $top->horizTable();
-
-	foreach(array('solicit_company.php',  'indulgences.php') as $page)
-	{
-		$cb =$cp->indexed_all[$page];
-		$view = new CoopView(&$cp, $cb['maintable'], &$top);
-		$view->obj->$mi = $cid;
-//		confessObj($view, 'clasvars');
-		if(in_array('school_year', array_keys(get_object_vars($view->obj)))){
-			$view->obj->school_year = $sy;
-		}
-		$view->createLegacy($cb);
-		$res .= $view->simpleTable();
-	}
-
-	$view = new CoopView(&$cp, 'parents', &$top);
-	$view->obj->$mi = $cid;
-	$res .= $view->simpleTable();
-	
-	$view = new CoopView(&$cp, 'kids', &$top);
-	//$res .= "CHECKING $table<br>";
-	$enrol = new CoopObject(&$cp , 'enrollment', &$top);
-	$enrol->obj->school_year = $sy;
-	$view->obj->joinAdd($enrol->obj);
-	$view->obj->$mi = $cid;
-	$res .= $view->simpleTable();
-
-
-	// should probably go nuts here and show total springfest here:
-
-	//money
-	$join = new CoopObject(&$cp, 'families_income_join', &$top);
-	//$res .= "CHECKING $table<br>";
-	$join->obj->$mi = $cid;	
-	$view = new CoopView(&$cp , 'income', &$top);
-	$view->obj->school_year = $sy;
-	$view->obj->joinAdd($join->obj);
-	$view->obj->fb_fieldsToRender = array('check_date', 'check_number', 
-								  'payer', 'account_number', 
-								  'payment_amount', 'cleared_date', 'note');
-	$view->createLegacy($cp->indexed_all['money.php']);
-	$res .= $view->simpleTable();
-
-
-	//auctions
-	$join = new CoopObject(&$cp, 'auction_items_families_join', &$top);
-	//$res .= "CHECKING $table<br>";
-	$join->obj->$mi = $cid;	
-	$view = new CoopView(&$cp , 'auction_donation_items', &$top);
-	$view->obj->school_year = $sy;
-	$view->obj->joinAdd($join->obj);
-	$view->obj->fb_fieldsToRender = array('quantity', 'item_description', 
-										  'date_received');
-	$view->createLegacy($cp->indexed_all['auction.php']);
-	$res .= $view->simpleTable();
-
-
-	//solicit auctions
-	$join = new CoopObject(&$cp, 'companies_auction_join', &$top);
-	//$res .= "CHECKING $table<br>";
-	$join->obj->$mi = $cid;	
-	$view = new CoopView(&$cp , 'auction_donation_items', &$top);
-	$view->obj->school_year = $sy;
-	$view->obj->joinAdd($join->obj);
-	$view->obj->fb_fieldsToRender = array('quantity', 'item_description', 
-										  'date_received');
-	$view->createLegacy($cp->indexed_all['solicit_auction.php']);
-	$res .= $view->simpleTable();
-
-	//solicit ads
-	$view = new CoopView(&$cp , 'ads', &$top);
-	$view->obj->$mi = $cid;	
-	$view->obj->school_year = $sy;
-	$view->obj->fb_fieldsToRender = array('artwork_received', 'company_id', 
-										  'school_year', 'ad_size_id', 
-										  'artwork_provided');
-	$view->createLegacy($cp->indexed_all['solicit_ads.php']);
-	$res .= $view->simpleTable();
-
-	
-	//TODO: show the status in the detail report?
-	//i.e. the line of the nag summmay?
-
-    return $res;
-
-}
 
 
 ////////////////////////MAIN
