@@ -264,6 +264,10 @@ group by subscriptions.user_id,table_name
      sleep(20);
  }
 
+
+ print "<p>{$sub->obj->N} subscriptions found... </p>";
+
+
 // TODO: if it is devsite, only fetch a few. really, limit is what i want
 // unless i need the N to check that my query was ok
  while($sub->obj->fetch()){
@@ -334,9 +338,10 @@ function gooseUnSent(&$cp)
     $auds->obj->whereAdd('updated > "2005-10-27"');
     $auds->obj->whereAdd('email_sent is null');
     $found = $auds->obj->find();
-    $msg = "$found unsent messages found! Goosing...";
-    print "<p>$msg</p>";
+    $msg = "$found un-notified changes found...";
     user_error($msg, E_USER_NOTICE);
+    print "<p>$msg</p>";
+
     while($auds->obj->fetch()){
         notifyAll(&$cp, $auds->obj->audit_trail_id);
     }

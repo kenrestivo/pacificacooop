@@ -130,9 +130,13 @@ class Invitations extends CoopDBDO
     function fb_display_summary(&$co)
         {
             list($ok, $res) = $this->_alert_or_status(&$co);
+
+            // NOTE: i can't include the summary here because schoolyearchooser
+
             if($ok){
                 return $res;
             }
+
         }
 
 
@@ -154,7 +158,7 @@ class Invitations extends CoopDBDO
             $inc = new CoopObject(&$co->page, 'income', $nothing);
             $inc->obj->school_year = $co->page->currentSchoolYear;
             $inc->obj->account_number = COOP_NAMES_FORFEIT_FEE; 
-            $cv->obj->joinAdd($inc->obj);
+            $cv->protectedJoin($inc);
             $found = $cv->obj->find(true);
             
             // TODO: check amount is correct. duh.

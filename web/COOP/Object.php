@@ -538,6 +538,9 @@ group by user_id,table_name,field_name";
                $this->page->userStruct['family_id'])
             {
                 $this->page->printDebug("FORCING familyid for search, with wheraedd", 2);
+
+                //TODO: i'm going to have to specify the table here,
+                //using joinpath, as i do in constrainschoolyear
                 $this->obj->whereAdd(
                     sprintf('family_id = %d',
                             $this->page->userStruct['family_id']));
@@ -831,7 +834,8 @@ function triggerNotices($audit_id)
     // XXX it checks interal DBDO variables like _join. DANGEROUS!
     function protectedJoin(&$joinco, $jointype = 'left')
         {
-            if(strstr($this->obj->_join, $joinco->table)){
+
+            if(strstr($this->obj->_join, $joinco->table)) {
                 $this->page->printDebug(
                     sprintf('protectedJoin(%s) already contains join for %s, skipping',
                             $this->table, 
@@ -852,6 +856,7 @@ function triggerNotices($audit_id)
                 1);
         }
 
+    // this is used by various linkdisplay-type summaries, i.e. JSON and popups
     function &getData($query, $limit, $beginsWith)
         {
             if(strlen($query)< 2){

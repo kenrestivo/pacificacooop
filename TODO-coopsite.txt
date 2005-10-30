@@ -10,27 +10,26 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-??? PHP
-show the whole leads detail for invitations
-	basically overrides
-
 
 1 hour PHP
 alertorstatus needs to be made generic, used everywhere!
 	enhancement, invitations, attendance (ooh!), elsewhere
-	be sure to check due dates too!
+		be sure to check due dates too! or does it?
 	need: result, longstatus, shortstatus/count (for reports)
+	for starters, show invitation summary in invitations, only if perms
+		but handle schoolyearchooser. can't do it: chooser doesn't happen
+			until after the simpletable() is generated. hmm.
 
 
 
-1 hour PHP/SQL
-write a little script to goose all emails
-select all the audits after 10/5/2005 with no email
-run it off of a cronjob
+??? PHP
+bring back the auction item stuff!
+	ack. i'm fucked. family vs solicit join still!
+	until i redo the entire database. HOW TO GET AROUND IT!??
 
 
 ?? PHP
-back is broken in details! really, this is seriously fucked up.
+"go back" is broken in details! really, this is seriously fucked up.
 	i'll need to deal with report, not just table. 
 		that will require genericreport architecture, no doubt.
 		moving all the stack handling to cooppage, or dispatcher, not generic!
@@ -41,17 +40,17 @@ back is broken in details! really, this is seriously fucked up.
 
 
 
+
+BUGS
+	leads is now fucked, but only in view and only with viewall perms!
+		joining invites, which joins back to leads. son of bitch.
+		is this the family thing?
+		it is very strange
+
+
 ??? DATA ENTRY
 move all the instructions over to the new thing
 
-
-
-
-
-??? PHP
-try the auction item stuff?
-	ack. i'm fucked. family vs solicit join still!
-	until i redo the entire database. HOW TO GET AROUND IT!??
 
 
 -----------
@@ -4226,3 +4225,13 @@ carriereport is totally, completely fucking broken
 
 10 mins PHP
 alphebetise the damned invitations!
+
+
+20 mins PHP
+show the whole leads detail for invitations
+	basically overrides
+1 hour PHP/SQL
+write a little script to goose all emails
+select all the audits after 10/5/2005 with no email
+run it off of a cronjob
+
