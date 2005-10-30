@@ -67,14 +67,15 @@ class Parent_ed_attendance extends CoopDBDO
 
 	function fb_linkConstraints(&$co)
 		{
-            //print "WTF";
-            $fam = $this->factory('families');
-            $par = $this->factory('parents');
-            $par->joinAdd($fam);
-            $this->joinAdd($par);
 
-            $ev = $this->factory('calendar_events');
-            $this->joinAdd($ev);
+
+            $par = new CoopObject(&$co->page, 'parents', &$co);
+            $par->linkConstraints();
+            $co->protectedJoin($par);
+           
+
+            $ev = new CoopObject(&$co->page, 'calendar_events', &$co);
+            $co->protectedJoin($ev);
 
             if($co->isPermittedField(NULL) < ACCESS_VIEW && 
                 $co->page->userStruct['family_id'])
@@ -87,8 +88,6 @@ class Parent_ed_attendance extends CoopDBDO
             
             $this->orderBy('families.name, event_date');
 
-            //XXX until i have year perms.
-            $this->school_year = $co->page->currentSchoolYear;
             
             
             ///$co->debugWrap(2);

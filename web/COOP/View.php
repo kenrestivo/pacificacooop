@@ -47,14 +47,14 @@ class coopView extends CoopObject
 		{
 			parent::CoopObject(&$page, $table, &$parentCO, $level);
 
-            $this->joinTo('family_id');
-            $this->joinTo('school_year');
-            $page->confessArray(&$this->obj->fb_joinPaths,
-                                      'coopView() joinpaths found', 3);
-            // reset debuglevel in obj, which may bave been set by save!
+           // reset debuglevel in obj, which may bave been set by save!
             $this->debugWrap(5);
 
-            $this->doJoins();
+ //            $this->joinTo('family_id');
+//             $this->joinTo('school_year');
+ //            $page->confessArray(&$this->obj->fb_joinPaths,
+//                                       'coopView() joinpaths found', 3);
+             // XXX doesn't work yet $this->doJoins();
             
 		}
 

@@ -471,6 +471,9 @@ group by user_id,table_name,field_name";
                 $this->constrainFamily();
             }
               
+            // XXX instead, i need to  check  fb_joinpaths!!!
+            // there may not be a DIRECT path to schoolyear,
+            //but i need to constrain anyway!
             if($this->inObject('school_year')){
                 $this->constrainSchoolYear();
             }
@@ -493,11 +496,22 @@ group by user_id,table_name,field_name";
 
     function constrainSchoolYear($force = false)
         {
-             //this code ought to be taken out and shot.
-             // XXX for starters, use ispermittedfied, not perms[null]
+            
+            if(!empty($this->obj->fb_joinPaths['school_year'])){
+                $paths = explode(':', $this->obj->fb_joinPaths['school_year']);
+                $last = array_pop($paths);
+                $this->page->printDebug("CoopObject::constrainSchoolYear({$this->table}) final path is $last", 2);
+            }
+
+            
+            //this code ought to be taken out and shot.
+            // XXX for starters, use ispermittedfied, not perms[null]
             if($this->perms[null]['year'] < ACCESS_VIEW || $force) {
+                $this->page->printDebug("CoopObject::constrainSchoolYear({$this->table})", 2);
+                //TODO: search up the link heirarchy to find where school year!
                 $this->obj->whereAdd(
-                    sprintf('school_year = "%s"',
+                    sprintf('%sschool_year = "%s"',
+                            empty($last) ? '' :  $last . '.' ,
                             $this->page->currentSchoolYear));
             } else {
                 $chosen = $this->getChosenSchoolYear();
@@ -505,8 +519,10 @@ group by user_id,table_name,field_name";
                 // so that  linkfields properly show all years
                 if($chosen){
                     $this->obj->whereAdd(
-                        sprintf('(school_year like "%s" or school_year is null or school_year < "1900-01-01")', 
-                                $chosen));
+                        sprintf('(%sschool_year like "%s" or %sschool_year is null or school_year < "1900-01-01")', 
+                                empty($last) ? '' :  $last . '.' ,
+                                $chosen,
+                                empty($last) ? '' :  $last . '.' ));
                     $this->obj->orderBy('school_year desc');
                 }
             }
@@ -664,7 +680,7 @@ group by user_id,table_name,field_name";
     
     function recurseJoin($stack)
         {
-            
+            /// TODO: do something!!
         }
 
 

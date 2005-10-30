@@ -57,9 +57,9 @@ class Workers extends CoopDBDO
 	function fb_linkConstraints(&$co)
 		{
 
-            $par = $this->factory('parents');
+            $par = new CoopObject(&$co->page, 'parents', &$co);
 
-            $this->joinAdd($par);
+            $co->protectedJoin($par);
             $this->selectAdd('family_id');
 
             /// AGAIN, nasty hack

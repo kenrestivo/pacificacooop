@@ -42,8 +42,8 @@ class Job_assignments extends CoopDBDO
 
     function fb_linkConstraints(&$co)
 		{
-            $descr = $this->factory('job_descriptions');
-            $this->joinAdd($descr);
+            $descr = new CoopObject(&$co->page, 'job_descriptions', &$co);
+            $co->protectedJoin($descr);
             $this->orderBy('summary');
             $co->constrainSchoolYear();
             

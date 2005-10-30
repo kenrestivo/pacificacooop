@@ -47,7 +47,7 @@ class Brings_baby extends CoopDBDO
             $workers = new CoopObject(&$co->page, 'workers', &$co);
             $workers->linkConstraints();
 
-            $this->joinAdd($workers->obj);
+            $co->protectedJoin($workers);
 
             $this->orderBy('parents.last_name, parents.first_name');
 
