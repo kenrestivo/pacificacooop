@@ -314,6 +314,8 @@ function checkAds($family_id)
 function viewHack(&$cp)
 {
 
+
+
 	$res .= '<table bgcolor="#ffffff" border="0">';
 
 	// let people sort as they wish
@@ -321,6 +323,10 @@ function viewHack(&$cp)
 	$sortdir = $gv['sortdir'] ? $gv['sortdir'] : 'asc';
 
 	$top = new CoopView(&$cp, 'families', $nothing);
+
+
+    $showall = $top->isPermittedField(null, true, true) > ACCESS_VIEW;
+
 
 	$top->obj->query(
         sprintf("select families.name, families.family_id, families.phone, 
@@ -476,7 +482,7 @@ function viewHack(&$cp)
 	}
 
 	if($showall){
-		tdArray(array (
+		$res .= tdArray(array (
 				"TOTAL",
 				$total['leads'],
 				sprintf("$%01.2f", $total['quilt']),
@@ -492,7 +498,9 @@ function viewHack(&$cp)
 				"",
 				""
 			),
-			"align='center'"
+                "align='center'",
+                '',
+                true
 		);
 	}
 

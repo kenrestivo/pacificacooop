@@ -31,12 +31,16 @@ require_once("HTML/Table.php");
 # saves ken's wrists from carpool tunnel syndrome. 
 # i hate html
 ##############
-function tdArray($arr, $align='align="left"', $font = "") {
-	printf('<tr valign="top" %s>',$align);
+function tdArray($arr, $align='align="left"', $font = "", $ret = false) {
+	$res = sprintf('<tr valign="top" %s>',$align);
     while ( list( $key, $val ) = each($arr)) {
-		printf("\t<td>%s</td>\n", $val);
+		$res .= sprintf("\t<td>%s</td>\n", $val);
     }
-	print "</tr>\n";
+	$res .= "</tr>\n";
+    if($ret){
+        return $res;
+    }
+    print $res;
 }###END TDARRAY
 
 ###############
