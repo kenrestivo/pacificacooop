@@ -188,36 +188,25 @@ class EmailChanges
             $this->audit_co->obj->update($old);
         }
 
-    function finish()
-        {
-            return; // XXX cruft. i'm using popups instead
-            //return $this->page->selfURL(array('value' => 'Back to main menu'));
-        }
-    
-} // END SENDEMAIL CLASS
+     
+} ///////////  END SENDEMAIL CLASS
 
-
-/////////MAIN
-
-ignore_user_abort(); // IMPORTANT!
-
-$cp = new coopPage( $debug);
-
+function notifyAll(&$cp, $id)
+{
 /// THIS IS ONLY A HACK TO GET THE TABLENAME!
-$em =& new EmailChanges (&$cp);
-$em->get($_REQUEST['audit_id']);
+    $em =& new EmailChanges (&$cp);
+    $em->get($id);
 
 /// put on the condom!
-if(!$em->sanityCheck()){
-    print $em->finish();
-    exit(1);
-}
+    if(!$em->sanityCheck()){
+        exit(1);
+    }
 
-print "<p>--- Starting email notification... ---</p>";
+    print "<p>--- Starting email notification for $id... ---</p>";
 
-$sub =& new CoopObject(&$cp, 'subscriptions', &$nothing);
-$sub->obj->query(
-    sprintf('
+    $sub =& new CoopObject(&$cp, 'subscriptions', &$nothing);
+    $sub->obj->query(
+        sprintf('
 select subscriptions.*, upriv.user_id, upriv.family_id,
 table_permissions.table_name, table_permissions.field_name,
 max(if((upriv.max_user <= table_permissions.user_level or
@@ -265,76 +254,107 @@ where  table_name = "%s"
     and subscription_id is not null
 group by subscriptions.user_id,table_name
 ', 
-            // assuming they'll never be able to choose, to go retroactive
-$sub->page->currentSchoolYear,
-$em->audit_co->obj->table_name));
+                // assuming they'll never be able to choose, to go retroactive
+            $sub->page->currentSchoolYear,
+            $em->audit_co->obj->table_name));
 
 
 // XXX hack to deal with my slow spamassassin
-if(devSite()){
-    sleep(20);
-}
+ if(devSite()){
+     sleep(20);
+ }
 
 // TODO: if it is devsite, only fetch a few. really, limit is what i want
 // unless i need the N to check that my query was ok
-while($sub->obj->fetch()){
-    //confessObj($sub, 'subs');
-    $fam =& new CoopObject(&$cp, 'families', &$sub);
-    $fam->obj->get($sub->obj->family_id); // or just add email into query?
+ while($sub->obj->fetch()){
+     //confessObj($sub, 'subs');
+     $fam =& new CoopObject(&$cp, 'families', &$sub);
+     $fam->obj->get($sub->obj->family_id); // or just add email into query?
 
-    if(!$fam->obj->email){
-        $em->page->printDebug("skipping {$fam->obj->name}: no email address!", 
-                              2);
-        continue;
+     if(!$fam->obj->email){
+         $em->page->printDebug("skipping {$fam->obj->name}: no email address!", 
+                               2);
+         continue;
+     }
+    
+     //might as well instantiate in loop. lightweight, and i need to get() anyway
+     $em =& new EmailChanges (&$cp);
+
+     // FORCE EACH USER! log them in forcibly, then re-get.
+     // i don't like this at all.
+     $em->page->forceUser($sub->obj->user_id);
+     $em->get($id);
+
+     // check if type is change/add, compare to subscription
+     if(!(($em->type == 'change' && $sub->obj->changes) ||
+          ($em->type == 'add' && $sub->obj->new_entries)))
+     {
+         $em->page->printDebug("skipping {$fam->obj->name}: not subscribed for {$em->type} on {$em->record_co->table}", 
+                               2);
+         continue;
+     }
+
+     // if they don't have view perms for this record, outtahere
+     if($em->record_co->isPermittedField() < ACCESS_VIEW){
+         $em->page->printDebug("user {$sub->obj->user_id} {$fam->obj->name} doesn't have perms to view this record at all, skipping", 4);
+         continue;
+     }
+
+     // finally, if i should, let's do it.
+     $em->makeEmail();
+
+     ///for testing
+     $crap = "\n----- MAILED TO  {$fam->obj->email} ({$fam->obj->name})---\n";
+
+     if(devSite()){
+         global $coop_sendto;
+         $to =  $coop_sendto['email_address'];
+         $em->body .= $crap;
+     } else {
+         $to = $fam->obj->email;
+         //PEAR::raiseError('force dev only', 888);
+     }
+
+     $em->mailIt($to);
+
+    
+     print '<pre>' . $crap . $em->body . '</pre>';
+
+ }
+
+ $em->saveStatus();
+ print "<p>--- DONE with $id---</p>";
+
+} // END NOTIFYALL
+
+
+function gooseUnSent(&$cp)
+{
+    $auds =& new CoopObject(&$cp, 'audit_trail', &$nothing);
+    $auds->obj->whereAdd('updated > "2005-10-27"');
+    $auds->obj->whereAdd('email_sent is null');
+    $found = $auds->obj->find();
+    $msg = "$found unsent messages found! Goosing...";
+    print "<p>$msg</p>";
+    user_error($msg, E_USER_NOTICE);
+    while($auds->obj->fetch()){
+        notifyAll(&$cp, $auds->obj->audit_trail_id);
     }
     
-    //might as well instantiate in loop. lightweight, and i need to get() anyway
-    $em =& new EmailChanges (&$cp);
-
-    // FORCE EACH USER! log them in forcibly. i don't like this at all.
-    $em->page->forceUser($sub->obj->user_id);
-    $em->get($_REQUEST['audit_id']);
-
-    // check if type is change/add, compare to subscription
-    if(!(($em->type == 'change' && $sub->obj->changes) ||
-         ($em->type == 'add' && $sub->obj->new_entries)))
-    {
-        $em->page->printDebug("skipping {$fam->obj->name}: not subscribed for {$em->type} on {$em->record_co->table}", 
-                              2);
-        continue;
-    }
-
-    // if they don't have view perms for this record, outtahere
-    if($em->record_co->isPermittedField() < ACCESS_VIEW){
-        $em->page->printDebug("user {$sub->obj->user_id} {$fam->obj->name} doesn't have perms to view this record at all, skipping", 4);
-        continue;
-    }
-
-    // finally, if i should, let's do it.
-    $em->makeEmail();
-
-    ///for testing
-    $crap = "\n----- MAILED TO  {$fam->obj->email} ({$fam->obj->name})---\n";
-
-    if(devSite()){
-        global $coop_sendto;
-        $to =  $coop_sendto['email_address'];
-        $em->body .= $crap;
-   } else {
-        $to = $fam->obj->email;
-        //PEAR::raiseError('force dev only', 888);
-    }
-
-    $em->mailIt($to);
-
-    
-    print '<pre>' . $crap . $em->body . '</pre>';
-
 }
 
-$em->saveStatus();
-print "<p>--- DONE---</p>";
-print $em->finish();
+
+/////////MAIN
+
+ignore_user_abort(); // IMPORTANT!
+
+$cp = new coopPage( $debug);
+
+if(!empty($_REQUEST['audit_id'])){
+    notifyAll(&$cp, $_REQUEST['audit_id']);
+} else {
+    gooseUnSent(&$cp);
+}
 
 ////KEEP EVERTHANG BELOW
 
