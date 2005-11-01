@@ -2,7 +2,7 @@ coop web database
 
 MY agenda! dammit, mine! for a change....
 	fix money: make it INVOICES and income (invoicing.txt) SQL
-	fix report arch (reportnotes.txt)
+	create generic report arch (reportnotes.txt)
 	sortable/searchable reports (searchfeature.txt)
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 	normalise and clean up permissions (permsfixing.txt) SQL
@@ -14,7 +14,10 @@ BUGS
 	editing doesn't work on auction items. why? edit BUTTON does!
  		perms are all fucked up. it DOES NOT KNOW HOW TO JOIN TO GET TO PERMS!!!
 			i have to put pathtofamilyid in there, don't i?
-
+		looks like i need to constrainfamilyid in coopform somewhere.
+			coould get uuugly, if there are multiple paths to it!
+		need some way to decide based on previous or parent table!
+			maybe go via the parent table. think about subforms too!
 
 ??? PHP
 bring back the auction item stuff!
@@ -376,6 +379,10 @@ move teh family fees to the database! they're hard coded, taht is stupid
 
 ----------------
 BELOW THE LINE
+
+?? CSS annoyance. 
+in simpletable, if it's a short table, it needs to expand to the full size
+
 
 ??? PHP
 	add a crosslink? for auction

@@ -84,6 +84,9 @@ class Auction_donation_items extends CoopDBDO
         'item_description' => 100
         );
 
+    // XXX ACK! multiple paths.
+    // i need some way to decide, based on previous table!
+    var $fb_joinPaths = array('family_id' => 'auction_items_families_join');
 
 	function fb_linkConstraints(&$co)
 		{

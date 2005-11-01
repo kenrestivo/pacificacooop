@@ -45,6 +45,8 @@ class coopForm extends CoopObject
 	function &build($vars = false)
 		{
 			$this->page->confessArray($vars, "CoopForm::build({$this->table})", 3);
+            // XXX make this do something $this->constrainFamily();
+
 			$this->id = (int)$vars[$this->prependTable($this->pk)];
 			if($this->id > 0){
 				$this->obj->get($this->id);

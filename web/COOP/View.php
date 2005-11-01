@@ -443,7 +443,7 @@ class coopView extends CoopObject
 						 'class="tabletitles"', 'TH'); 
 
 			while($this->obj->fetch()){
-                $this->recoverSafe();
+                $this->recoverSafePK();
 
 				//confessObj($this, 'onelinetable');
 				$mainlink = $this->concatLinkFields();
