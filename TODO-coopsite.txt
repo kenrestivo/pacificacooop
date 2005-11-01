@@ -14,21 +14,8 @@ MY agenda! dammit, mine! for a change....
 bring back the auction item stuff!
 	perms: restrict  the received/located/thankyou
 	instructions for auction and familyauctionjoin
-
-
-why don't the crosslinks work?
-	this is most curious. only groups and jobs work. or does it? why or why not?
-	huh, doesn't workf or jobs anymore either. i broke it?
-		no nothing there, i commented it out
-	groups works. why not anything else?
-	hmm. it'll only do the first crosslink
-
-??PHP/QA
-make sure i didn't break anything! i.e. make sure searchselect still works!
-
-
-??? PHP/QA/bureaucracy
-	paypal back to life
+	qa: make sure i didn't break searchselect  or invites
+	push live!
 
 
 -----------
@@ -41,6 +28,11 @@ BURNT (when too burnt out to do actual work)
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
+
+
+??? PHP/QA/bureaucracy
+	paypal back to life
+
 
 ?? PHP/SQL
 i think i need to change my protected join from 'left' to 'outer'
@@ -78,6 +70,17 @@ alertorstatus needs to be made generic, used everywhere!
 
 
 
+
+??? PHP
+why don't the crosslinks work?
+	re do them. they make no fucking sense at all.
+	this is most curious. only groups and jobs work. or does it? why or why not?
+	huh, doesn't workf or jobs anymore either. i broke it?
+		no nothing there, i commented it out
+	groups works. why not anything else?
+	hmm. it'll only do the first crosslink
+
+
 ??? PHP/JS
 goose emails individually button
 also for sending them as reminders, in nag report!
@@ -87,6 +90,16 @@ same as what's in coopobject: go hit the URL, with audit_id!
 	nice: js to insert a spinning progress gif
 
 
+???PHP/JSON
+need to check perms on edits before allowing it
+	either do it as a batch, or include it, or something
+	but i need them perms. i.e. ispermitted for everything i get
+		maybe return a struct instead of a 2-dimensional object?
+			and pre-populate it for customselect
+		my json needs to have that. {'id' : id, 
+									'value' : {'display': val, 
+												'edit' : edit}}
+		or maybe it's ok to edit in cases of say auction, where i can add fam
   	
 
   man i GOT to go through and dick with dupeignores!
