@@ -341,10 +341,6 @@ class coopForm extends CoopObject
 			while($sub->obj->fetch()){
                 $sub->recoverSafePK();
 
-                //confessObj($sub->obj, 'subobj');
-                if(is_null($sub->obj->$link[1])){
-                    PEAR::raiseError('you are trying to build a pop-up with a null or empty key. your select is likely very wrong here.... try outer instead of left join', 666);
-                }
                 //$link[1], NOT pk! in custom link, it MIGHT NOT be the pk!
 				$options[(string)$sub->obj->$link[1]] = 
 					$sub->concatLinkFields();

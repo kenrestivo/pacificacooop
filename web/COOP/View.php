@@ -272,13 +272,9 @@ class coopView extends CoopObject
 	function toArray($headerkeys = null)
 		{
             
-            // pull back the hack
-            $this->obj->{$this->pk} = $this->obj->{'SAFE_' . $this->pk};
+            $this->recoverSafePK();
 
-            // a condom. vitally necessary
-            if(is_null($this->obj->{$this->pk})){
-                PEAR::raiseError('your record has an empty primary key. your linkconstraints are broken: use outer not left for joins', 666);
-            }
+
 
 			$table = $this->obj->table();
 			$row = $this->reorder($this->obj->toArray());

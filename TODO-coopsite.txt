@@ -10,17 +10,16 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
+BUGS
+	editing doesn't work on auction items. why? edit BUTTON does!
+ 		perms are all fucked up. it DOES NOT KNOW HOW TO JOIN TO GET TO PERMS!!!
+			i have to put pathtofamilyid in there, don't i?
+
 
 ??? PHP
 bring back the auction item stuff!
 	perms too: for the received/located/thankyou
 	instructions for auction and familyauctionjoin
-	add a crosslink?
-	i can't get away from forcign SOME way to backlink these things
-		i have to put backlinks in new/edit. this sucks.
-		or, force add off on menu? just view/edit?
-		do this for leads too!?
-		why not put in crosslinks for *all* backlinks?
 	everyone should be able to see all years, no?
 		chooser?
 	add a search for auction? or is a big popup ok?
@@ -377,6 +376,14 @@ move teh family fees to the database! they're hard coded, taht is stupid
 
 ----------------
 BELOW THE LINE
+
+??? PHP
+	add a crosslink? for auction
+	i can't get away from forcign SOME way to backlink these things
+		i have to put backlinks in new/edit. this sucks.
+		or, force add off on menu? just view/edit?
+		do this for leads too!?
+		why not put in crosslinks for *all* backlinks?
 
 
 ??PHP

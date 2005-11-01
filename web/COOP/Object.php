@@ -550,6 +550,14 @@ group by user_id,table_name,field_name";
 
     function constrainFamily($force = false)
         {
+
+            if(!empty($this->obj->fb_joinPaths['family_id'])){
+                $paths = explode(':', $this->obj->fb_joinPaths['family_id']);
+                $last = array_pop($paths);
+                $this->page->printDebug("CoopObject::constrainFamily({$this->table}) final path is $last", 2);
+            }
+
+
             if(($this->isPermittedField(null, false, true) < ACCESS_VIEW  || 
                 $force) &&
                $this->page->userStruct['family_id'])
@@ -952,11 +960,18 @@ function triggerNotices($audit_id)
     function recoverSafePK()
         {
             // pull back the hack, only if it was used!
-            if(!isset($this->obj->{'SAFE_' . $this->pk})){
-                return;
+            if(isset($this->obj->{'SAFE_' . $this->pk})){
+                $this->obj->{$this->pk} = $this->obj->{'SAFE_' . $this->pk};
             }
 
-            $this->obj->{$this->pk} = $this->obj->{'SAFE_' . $this->pk};
+
+            // a condom. vitally necessary
+            if(isset($this->obj->{$this->pk}) && 
+                     is_null($this->obj->{$this->pk}))
+            {
+                PEAR::raiseError("CoopObject:recoverSafePK({$this->table}): your record has an empty primary key {$this->pk}. your linkconstraints or query is broken: always need a primary key!", 666);
+            }
+
 
         }
 

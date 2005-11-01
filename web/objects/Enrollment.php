@@ -177,7 +177,7 @@ class Enrollment extends CoopDBDO
             // TODO: do not show dropped enrollment!
 
             $rastaquery = 
-                'select  enrollment_id, kids.last_name as kid_last, 
+                'select  enrollment.enrollment_id, kids.last_name as kid_last, 
 concat(moms.first_name, " ", 
 moms.last_name) as mom,
 concat(dads.first_name, " ", dads.last_name) as dad, 
@@ -299,7 +299,7 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             $this->fb_recordActions = array();
             $this->query(
                 sprintf(
-                    'select  am_pm_session, sum(monday) as monday, sum(tuesday) as tuesday, sum(wednesday) as wednesday, sum(thursday) as thursday, sum(friday) as friday,  sum(monday) + sum(tuesday) + sum(wednesday) + sum(thursday) + sum(friday) as child_days from enrollment where enrollment.school_year = "2005-2006" group by am_pm_session order by enrollment.am_pm_session',
+                    'select  enrollment.enrollment_id, am_pm_session, sum(monday) as monday, sum(tuesday) as tuesday, sum(wednesday) as wednesday, sum(thursday) as thursday, sum(friday) as friday,  sum(monday) + sum(tuesday) + sum(wednesday) + sum(thursday) + sum(friday) as child_days from enrollment where enrollment.school_year = "2005-2006" group by am_pm_session order by enrollment.am_pm_session',
                     $co->perms[null]['year'] < ACCESS_VIEW ?
                     $co->page->currentSchoolYear : $co->getChosenSchoolYear()
                     ));
