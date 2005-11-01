@@ -22,4 +22,31 @@ class Auction_items_families_join extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+	var $fb_linkDisplayFields = array('auction_donation_item_id', 
+									  'family_id');
+
+	var $fb_fieldLabels = array ('auction_donation_item_id' => 'Auction Item',
+                                 'family_id' => 'Co-Op Family');
+
+	var $fb_formHeaderText =  'Springfest Family Auction Donation Items';
+
+	var $fb_requiredFields = array('auction_donation_item_id', 
+                                   'family_id');
+
+
+    var $fb_shortHeader = 'Family Donations';
+
+    function fb_linkConstraints(&$co)
+		{
+            $auc =& new CoopObject(&$co->page, 'auction_donation_items', 
+                                   &$co);
+            $auc->constrainSchoolYear();
+            $auc->constrainSchoolYear();
+            $co->protectedJoin($auc);
+            
+		}
+
+
+
 }

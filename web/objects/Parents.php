@@ -57,9 +57,13 @@ class Parents extends CoopDBDO
         
             $co->constrainSchoolYear();
     
-            
+            /// XXX do i really need this
+            /// now that i specify table.schoolyear in link?
+            /// is "outer" join sufficient to work this?
             $this->selectAdd();
             $this->selectAdd("{$co->table}.*");
+
+            ///XXX this is redunannt. it is done elsewhere now.
             $this->groupBy("{$co->table}.{$co->pk}");
             
 

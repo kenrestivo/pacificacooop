@@ -176,6 +176,9 @@ class coopView extends CoopObject
             
             $this->linkConstraints();
 	
+            // XXX this might not be the right place for this
+            $this->obj->groupBy(sprintf('%s.%s', $this->table, $this->pk));
+
             $this->debugWrap(5);
 
 
@@ -270,6 +273,11 @@ class coopView extends CoopObject
 	/// and record buttons, ready for passing to html::table::addRow()
 	function toArray($headerkeys = null)
 		{
+
+            // a condom. vitally necessary
+            if(is_null($this->obj->{$this->pk})){
+                PEAR::raiseError('your record has an empty primary key. your linkconstraints are broken: use outer not left for joins', 666);
+            }
 
 			$table = $this->obj->table();
 			$row = $this->reorder($this->obj->toArray());

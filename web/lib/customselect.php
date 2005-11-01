@@ -62,7 +62,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                 $res .= $this->_getJs();
                 $res .= parent::toHTML(); // the actual {element}!
             
-                if($this->sub->isPermittedField() >= ACCESS_EDIT){
+                if($this->sub->isPermittedField(null, true, true) >= ACCESS_EDIT)
+                {
                     $res .= '&nbsp;' . $this->cf->page->selfURL(
                         array(
                             'value' =>sprintf(
@@ -76,7 +77,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                                               'push' => $this->getName())));
                 }            
 
-                if($this->sub->isPermittedField() >= ACCESS_ADD){
+                if($this->sub->isPermittedField(null, true, true) >= ACCESS_ADD)
+                {
                     //XXX do i really need to wrap it in a div? or just use ID?
                     $res .= sprintf(
                         '<div>&nbsp;%s</div>',

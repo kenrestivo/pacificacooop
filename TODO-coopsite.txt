@@ -11,34 +11,30 @@ MY agenda! dammit, mine! for a change....
 
 
 
-1 hour PHP
-alertorstatus needs to be made generic, used everywhere!
-	enhancement, invitations, attendance (ooh!), elsewhere
-		be sure to check due dates too! or does it?
-	need: result, longstatus, shortstatus/count (for reports)
-	for starters, show invitation summary in invitations, only if perms
-		but handle schoolyearchooser. can't do it: chooser doesn't happen
-			until after the simpletable() is generated. hmm.
-
-
-
 ??? PHP
 bring back the auction item stuff!
-	ack. i'm fucked. family vs solicit join still!
-	until i redo the entire database. HOW TO GET AROUND IT!??
+	perms too: for the received/located/thankyou
+	instructions for auction and familyauctionjoin
+	add a crosslink?
+	i can't get away from forcign SOME way to backlink these things
+		i have to put backlinks in new/edit. this sucks.
+		or, force add off on menu? just view/edit?
+		do this for leads too!?
+		why not put in crosslinks for *all* backlinks?
+	everyone should be able to see all years, no?
+		chooser?
+	add a search for auction? or is a big popup ok?
+	don't show the NUMBER(id) in popup for family aucction
+		in fact, don't show it anywhere, except packaging. maybe.
 
-
-?? PHP
-"go back" is broken in details! really, this is seriously fucked up.
-	i'll need to deal with report, not just table. 
-		that will require genericreport architecture, no doubt.
-		moving all the stack handling to cooppage, or dispatcher, not generic!
+??? PHP
+the whole backlink thing i can't get away from it!
+	look at all extradetails! they are fucking BACKLINKS!
+	use backlinks for extradetails. and shut the fuck up.
 
 
 ??? PHP/QA/bureaucracy
 	paypal back to life
-
-
 
 
 BUGS
@@ -46,7 +42,8 @@ BUGS
 		joining invites, which joins back to leads. son of bitch.
 		is this the family thing?
 		it is very strange
-
+		ah. i caused this problem by joining to leads in invites view
+			which i need to do in order to sort by last/first!
 
 ??? DATA ENTRY
 move all the instructions over to the new thing
@@ -62,15 +59,44 @@ READING (when too burnt out to do actual work)
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
+?? PHP/SQL
+i think i need to change my protected join from 'left' to 'outer'
+	otherwise all my primary keys get whacked!
 
-10 mins PHP
-show the whole lead info in invitations. override linkdisplayfields, basically
-	shoule i really do this?
-
- 
 
 ??? PHP/JS
-goose emails individually
+attempt to implement subform.. as an ajax
+	write a simple test that poots out a subform, possibly stripped of its FORM
+	i.e., um, subform!
+		make add new blah do a js foo(subtable, id)
+			js fetches the subform, passes the ID along with it
+			callback dumps it into innerhtml, 
+				and sets a hidden array of subtable names
+		the 'server' side does only some of what's in newdispatcher::add_edit()
+			and strips out the form html
+	what to do at save time?
+		i suppose i need a hidden, 
+			with the names of all the subforms i've created
+		populate it via js
+	my validate needs to be recursive
+		build the subforms-- be certain to recurse!
+		umm. what about javascript validation? does it break now?
+
+
+??? PHP/thinking
+alertorstatus needs to be made generic, used everywhere!
+	enhancement, invitations, attendance (ooh!), elsewhere
+		be sure to check due dates too! or does it?
+	need: result, longstatus, shortstatus/count (for reports)
+	for starters, show invitation summary in invitations, only if perms
+		but handle schoolyearchooser. can't do it: chooser doesn't happen
+			until after the simpletable() is generated. hmm.
+	experiment with parent ed?
+
+
+
+??? PHP/JS
+goose emails individually button
 also for sending them as reminders, in nag report!
 just use the simple XHTML crap from kenflex.js
 same as what's in coopobject: go hit the URL, with audit_id!
@@ -364,24 +390,16 @@ move teh family fees to the database! they're hard coded, taht is stupid
 ----------------
 BELOW THE LINE
 
+?? PHP
+show all the backlinks/forward links. maybe automate crosslinks?
 
-??? PHP/JS
-attempt to implement subform.. as an ajax
-	write a simple test that poots out a subform, possibly stripped of its FORM
-	i.e., um, subform!
-		make add new blah do a js foo(subtable, id)
-			js fetches the subform, passes the ID along with it
-			callback dumps it into innerhtml, 
-				and sets a hidden array of subtable names
-		the 'server' side does only some of what's in newdispatcher::add_edit()
-			and strips out the form html
-	what to do at save time?
-		i suppose i need a hidden, 
-			with the names of all the subforms i've created
-		populate it via js
-	my validate needs to be recursive
-		build the subforms-- be certain to recurse!
-		umm. what about javascript validation? does it break now?
+
+?? PHP
+"go back" is broken in details! really, this is seriously fucked up.
+	i'll need to deal with report, not just table. 
+		that will require genericreport architecture, no doubt.
+		moving all the stack handling to cooppage, or dispatcher, not generic!
+
 
 
 2 hours PHP/JS
@@ -2855,6 +2873,9 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	ack. i'm fucked. family vs solicit join still!
+	until i redo the entire database. HOW TO GET AROUND IT!??
+		just do it. and do it now
 
 ??? CSS
 make menu printable, add to print css
@@ -4235,3 +4256,21 @@ write a little script to goose all emails
 select all the audits after 10/5/2005 with no email
 run it off of a cronjob
 
+
+10 mins PHP
+show the whole lead info in invitations. override linkdisplayfields, basically
+	shoule i really do this?
+	linkconstraints for auction
+
+waaaaaaaaait a minute
+somehow, my whole fucking select is now broken. why? how?
+	defaulting.... problem...
+	ah. some of these items are not showing up in the select with any VALUE
+	i don't get that. but it's PHP. getoptions?
+		aha. i needed to OUTER join, not left join	
+totally fucking broken
+	my dbdo selects are fucked
+		they select *. no no no! only select thistable.*!
+		in case of join, yank everything except what i explicitly need
+	I AM SO FUCKED!!
+		outer join dude

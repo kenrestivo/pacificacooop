@@ -29,14 +29,11 @@ class Auction_donation_items extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $fb_linkDisplayFields = array('auction_donation_item_id', 
-									  'item_description');
+	var $fb_linkDisplayFields = array('item_description');
 	var $fb_selectAddEmpty = array ('package_id');
-	var $fb_fieldLabels = array ('item_description' => 'Item Description');
 	var $fb_enumFields = array ('item_type');
 	var $fb_textFields = array ('item_description'); 
-	var $fb_fieldsToRender = array('item_description', 'item_value',  
-								   'quantity', 'school_year', 'thank_you_id');
+
 	var $fb_fieldLabels = array(
 		"quantity" => "Quantity of items", 
 		"item_description" => "Description of item" ,
@@ -48,6 +45,7 @@ class Auction_donation_items extends CoopDBDO
 		"auction_donation_item_id" => "Unique ID" ,
 		"thank_you_id" => "Thank-You Sent" 
 		);
+
 	var $fb_formHeaderText =  'Springfest Auction Donation Items';
 	var $fb_crossLinks = array(array('table' => 'auction_packages_join', 
 									 'toTable' => 'packages',
@@ -76,16 +74,21 @@ class Auction_donation_items extends CoopDBDO
     var $fb_currencyFields = array(
         'item_value'
         );
-   var $fb_sizes = array(
-     'item_description' => 100
-   );
+
+    var $fb_sizes = array(
+        'item_description' => 100
+        );
 
 
-// 	function fb_linkConstraints()
-// 		{
-//             //XXX isn't this unnecessary now with year perms?
-// 			$this->whereAdd("date_received > '2000-01-01'");
-// 		}
+	function fb_linkConstraints(&$co)
+		{
+            $auc =& new CoopObject(&$co->page, 'auction_items_families_join', 
+                                       &$co);
+            $auc->constrainSchoolYear();
+            $auc->constrainFamily();
+            $co->protectedJoin($auc, 'outer');
+
+		}
 
 	// form that blasts over to the packages::new, to create a new one
 	// just generates a CREATE NEW button with all the shit inside

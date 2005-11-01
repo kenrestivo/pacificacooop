@@ -308,11 +308,16 @@ class coopForm extends CoopObject
 	function findLinkOptions($key)
 		{
 			$link = explode(':', $this->forwardLinks[$key]);
+            
+            $this->page->confessArray($link, 'findlinkoptions link');
+
 			$sub =& new CoopObject(&$this->page, $link[0], &$this);
 
 			///$top =& $this->findTop(); // will need this for overrides
             
             $sub->linkConstraints();
+
+            $sub->obj->groupBy(sprintf('%s.%s', $sub->table, $sub->pk));
 
             //$this->debugWrap(2);
 			$sub->obj->find();
@@ -335,6 +340,10 @@ class coopForm extends CoopObject
             // I can't use loaddbresult here. i need concatlinkfields
             //$sub->debugWrap(2);
 			while($sub->obj->fetch()){
+                //confessObj($sub->obj, 'subobj');
+                if(is_null($sub->obj->$link[1])){
+                    PEAR::raiseError('you are trying to build a pop-up with a null or empty key. your select is likely very wrong here.... try outer instead of left join', 666);
+                }
                 //$link[1], NOT pk! in custom link, it MIGHT NOT be the pk!
 				$options[(string)$sub->obj->$link[1]] = 
 					$sub->concatLinkFields();
