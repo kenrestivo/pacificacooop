@@ -45,11 +45,14 @@ class coopForm extends CoopObject
 	function &build($vars = false)
 		{
 			$this->page->confessArray($vars, "CoopForm::build({$this->table})", 3);
-            // XXX make this do something $this->constrainFamily();
+            $this->linkConstraints();
 
 			$this->id = (int)$vars[$this->prependTable($this->pk)];
 			if($this->id > 0){
-				$this->obj->get($this->id);
+                $this->obj->whereAdd(sprintf('%s.%s = %d',
+                                              $this->table, $this->pk,
+                                              $this->id));
+                $this->obj->find(true);
 			} else {
 				$this->page->printDebug(
                     "coopForm::build($this->table $this->id) called with no id, assuming NEW");
@@ -181,6 +184,13 @@ class coopForm extends CoopObject
 					}
 					continue;
 				}
+
+                // skip those that aren't in this table
+                // XXX is there a better/saner way to do it?
+                // i.e. in_array(get_class_methods) or something?
+                if(empty($this->obj->fb_fieldLabels[$key])){
+                    continue;
+                }
 
 				if(!empty($this->obj->fb_preDefElements) && 
 				   in_array($key, array_keys($this->obj->fb_preDefElements)))
