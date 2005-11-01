@@ -27,31 +27,19 @@ bring back the auction item stuff!
 	don't show the NUMBER(id) in popup for family aucction
 		in fact, don't show it anywhere, except packaging. maybe.
 
-??? PHP
-the whole backlink thing i can't get away from it!
-	look at all extradetails! they are fucking BACKLINKS!
-	use backlinks for extradetails. and shut the fuck up.
+
+??PHP/QA
+make sure i didn't break anything! i.e. make sure searchselect still works!
 
 
 ??? PHP/QA/bureaucracy
 	paypal back to life
 
 
-BUGS
-	leads is now fucked, but only in view and only with viewall perms!
-		joining invites, which joins back to leads. son of bitch.
-		is this the family thing?
-		it is very strange
-		ah. i caused this problem by joining to leads in invites view
-			which i need to do in order to sort by last/first!
-
-??? DATA ENTRY
-move all the instructions over to the new thing
-
-
-
 -----------
-READING (when too burnt out to do actual work)
+BURNT (when too burnt out to do actual work)
+
+	move all the instructions over to the new thing
 
 	read greenspun's sql book
 
@@ -390,8 +378,16 @@ move teh family fees to the database! they're hard coded, taht is stupid
 ----------------
 BELOW THE LINE
 
-?? PHP
-show all the backlinks/forward links. maybe automate crosslinks?
+
+??PHP
+should *not* have to join to a link just to order by it!
+	orderbylinkdisplay should be recursive. go order by what's there. no?
+
+??? PHP
+the whole backlink thing i can't get away from it!
+	look at all extradetails! they are fucking BACKLINKS!
+	use backlinks for extradetails. and shut the fuck up.
+	show all the backlinks/forward links. maybe automate crosslinks?
 
 
 ?? PHP
@@ -4273,4 +4269,15 @@ totally fucking broken
 		they select *. no no no! only select thistable.*!
 		in case of join, yank everything except what i explicitly need
 	I AM SO FUCKED!!
-		outer join dude
+		outer join dudehmm outer doesn't work. dammit. it breaks my familyid shit!
+	need to alias
+		ok, check it now
+
+BUGS
+	leads is now fucked, but only in view and only with viewall perms!
+		joining invites, which joins back to leads. son of bitch.
+		is this the family thing?
+		it is very strange
+		ah. i caused this problem by joining to leads in invites view
+			which i need to do in order to sort by last/first!
+			i fixed this, in the middle of the night.

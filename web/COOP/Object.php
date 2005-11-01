@@ -459,10 +459,19 @@ group by user_id,table_name,field_name";
 	// it also does the orderBy stuff. this function is insanely important
 	function linkConstraints()
 		{
+            //XXX this may not be the best place for it, but JUST DO IT
+            // NASTY hack around bug in DBDO
+            $this->obj->selectAdd(sprintf('%s.%s as SAFE_%s',
+                                          $this->table, $this->pk, $this->pk));
+
 
             if(is_callable(array($this->obj, 'fb_linkConstraints'))){
                 return $this->obj->fb_linkConstraints(&$this);
             } 
+
+
+            // XXX this might not be the right place for this
+            $this->obj->groupBy(sprintf('%s.%s', $this->table, $this->pk));
 
             
 // XXX  you goddamned better have a path to family, everywhere
@@ -478,20 +487,28 @@ group by user_id,table_name,field_name";
                 $this->constrainSchoolYear();
             }
              
-             
-             if(!empty($this->obj->fb_linkDisplayFields) && 
-                count($this->obj->fb_linkDisplayFields) > 0)
-             {
-                 $this->obj->orderBy(
-                     implode(',', 
-                             array_map(
-                                 create_function(
-                                     '$item',
-                                     "return(sprintf('%s.%s', '{$this->table}', \$item));"),
-                                 $this->obj->fb_linkDisplayFields)));
-             }
+            $this->orderByLinkDisplay(); 
+            
+            $this->obj->groupBy(sprintf('%s.%s', $this->table, $this->pk));
+
 
 		}
+
+    function orderByLinkDisplay()
+        {
+            if(!empty($this->obj->fb_linkDisplayFields) && 
+               count($this->obj->fb_linkDisplayFields) > 0)
+            {
+                $this->obj->orderBy(
+                    implode(',', 
+                            array_map(
+                                create_function(
+                                    '$item',
+                                    "return(sprintf('%s.%s', '{$this->table}', \$item));"),
+                                $this->obj->fb_linkDisplayFields)));
+            }
+            
+        }
 
 
     function constrainSchoolYear($force = false)
@@ -930,8 +947,19 @@ function triggerNotices($audit_id)
                 return ;
             }
             return '<p class="instructions">' . $inst->instruction . '</p>';
-            }
+        }
     
+    function recoverSafePK()
+        {
+            // pull back the hack, only if it was used!
+            if(!isset($this->obj->{'SAFE_' . $this->pk})){
+                return;
+            }
+
+            $this->obj->{$this->pk} = $this->obj->{'SAFE_' . $this->pk};
+
+        }
+
 } // END COOP OBJECT CLASS
 
 

@@ -50,7 +50,12 @@ class Auction_donation_items extends CoopDBDO
 	var $fb_crossLinks = array(array('table' => 'auction_packages_join', 
 									 'toTable' => 'packages',
 									 'toField' => 'package_id',
+									 'type' => 'select'),
+                               array('table' => 'auction_items_families_join', 
+									 'toTable' => 'families',
+									 'toField' => 'auction_item_id',
 									 'type' => 'select'));
+
 
 	var $fb_requiredFields = array('item_description', 'quantity', 
 								   'school_year',  'item_value', 
@@ -84,9 +89,10 @@ class Auction_donation_items extends CoopDBDO
 		{
             $auc =& new CoopObject(&$co->page, 'auction_items_families_join', 
                                        &$co);
-            $auc->constrainSchoolYear();
-            $auc->constrainFamily();
-            $co->protectedJoin($auc, 'outer');
+            $co->constrainSchoolYear();
+            $co->constrainFamily();
+            $co->protectedJoin($auc);
+            $co->orderByLinkDisplay();
 
 		}
 
@@ -154,9 +160,6 @@ class Auction_donation_items extends CoopDBDO
 		}// end newpackageform
 
 
-//     function fb_display_view(&$co)
-//         {
-//         }
 
 // set item_description lines = 3
 	

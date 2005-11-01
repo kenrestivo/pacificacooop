@@ -317,7 +317,6 @@ class coopForm extends CoopObject
             
             $sub->linkConstraints();
 
-            $sub->obj->groupBy(sprintf('%s.%s', $sub->table, $sub->pk));
 
             //$this->debugWrap(2);
 			$sub->obj->find();
@@ -340,6 +339,8 @@ class coopForm extends CoopObject
             // I can't use loaddbresult here. i need concatlinkfields
             //$sub->debugWrap(2);
 			while($sub->obj->fetch()){
+                $sub->recoverSafePK();
+
                 //confessObj($sub->obj, 'subobj');
                 if(is_null($sub->obj->$link[1])){
                     PEAR::raiseError('you are trying to build a pop-up with a null or empty key. your select is likely very wrong here.... try outer instead of left join', 666);

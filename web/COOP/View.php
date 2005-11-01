@@ -176,8 +176,6 @@ class coopView extends CoopObject
             
             $this->linkConstraints();
 	
-            // XXX this might not be the right place for this
-            $this->obj->groupBy(sprintf('%s.%s', $this->table, $this->pk));
 
             $this->debugWrap(5);
 
@@ -273,6 +271,9 @@ class coopView extends CoopObject
 	/// and record buttons, ready for passing to html::table::addRow()
 	function toArray($headerkeys = null)
 		{
+            
+            // pull back the hack
+            $this->obj->{$this->pk} = $this->obj->{'SAFE_' . $this->pk};
 
             // a condom. vitally necessary
             if(is_null($this->obj->{$this->pk})){
@@ -446,14 +447,17 @@ class coopView extends CoopObject
 						 'class="tabletitles"', 'TH'); 
 
 			while($this->obj->fetch()){
+                $this->recoverSafe();
+
 				//confessObj($this, 'onelinetable');
 				$mainlink = $this->concatLinkFields();
 
 				if($this->legacyCallbacks){
-					$meat = $this->page->selfURL(array('value' => $mainlink, 
-											 'inside' => $this->nastyInner(&$this->obj, 
-															   'details'),
-												 'base' => $this->legacyCallbacks['page']));
+					$meat = $this->page->selfURL(
+                        array('value' => $mainlink, 
+                              'inside' => $this->nastyInner(&$this->obj, 
+                                                            'details'),
+                              'base' => $this->legacyCallbacks['page']));
 				} else {
 					// handle the no-legacy-callbacks case
                     $meat = $this->page->selfURL(
