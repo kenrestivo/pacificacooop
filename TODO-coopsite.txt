@@ -10,25 +10,18 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-BUGS
-	editing doesn't work on auction items. why? edit BUTTON does!
- 		perms are all fucked up. it DOES NOT KNOW HOW TO JOIN TO GET TO PERMS!!!
-			i have to put pathtofamilyid in there, don't i?
-		looks like i need to constrainfamilyid in coopform somewhere.
-			coould get uuugly, if there are multiple paths to it!
-		need some way to decide based on previous or parent table!
-			maybe go via the parent table. think about subforms too!
-
 ??? PHP
 bring back the auction item stuff!
-	perms too: for the received/located/thankyou
+	perms: restrict  the received/located/thankyou
 	instructions for auction and familyauctionjoin
-	everyone should be able to see all years, no?
-		chooser?
-	add a search for auction? or is a big popup ok?
-	don't show the NUMBER(id) in popup for family aucction
-		in fact, don't show it anywhere, except packaging. maybe.
 
+
+why don't the crosslinks work?
+	this is most curious. only groups and jobs work. or does it? why or why not?
+	huh, doesn't workf or jobs anymore either. i broke it?
+		no nothing there, i commented it out
+	groups works. why not anything else?
+	hmm. it'll only do the first crosslink
 
 ??PHP/QA
 make sure i didn't break anything! i.e. make sure searchselect still works!
@@ -393,6 +386,8 @@ in simpletable, if it's a short table, it needs to expand to the full size
 		why not put in crosslinks for *all* backlinks?
 
 
+
+
 ??PHP
 should *not* have to join to a link just to order by it!
 	orderbylinkdisplay should be recursive. go order by what's there. no?
@@ -403,6 +398,10 @@ the whole backlink thing i can't get away from it!
 	use backlinks for extradetails. and shut the fuck up.
 	show all the backlinks/forward links. maybe automate crosslinks?
 
+??? PHP
+	everyone should be able to see all years, for auctions, no?
+		chooser?
+
 
 ?? PHP
 "go back" is broken in details! really, this is seriously fucked up.
@@ -410,6 +409,7 @@ the whole backlink thing i can't get away from it!
 		that will require genericreport architecture, no doubt.
 		moving all the stack handling to cooppage, or dispatcher, not generic!
 
+add a search for auction? or is a big popup ok?
 
 
 2 hours PHP/JS
@@ -4295,3 +4295,15 @@ BUGS
 		ah. i caused this problem by joining to leads in invites view
 			which i need to do in order to sort by last/first!
 			i fixed this, in the middle of the night.
+
+BUGS
+	editing doesn't work on auction items. why? edit BUTTON does!
+ 		perms are all fucked up. it DOES NOT KNOW HOW TO JOIN TO GET TO PERMS!!!
+			i have to put pathtofamilyid in there, don't i?
+		looks like i need to constrainfamilyid in coopform somewhere.
+			coould get uuugly, if there are multiple paths to it!
+		need some way to decide based on previous or parent table!
+			maybe go via the parent table. think about subforms too!
+		ugh. linkconstraints in coopform. i hate it but it works
+	don't show the NUMBER(id) in popup for family aucction
+		in fact, don't show it anywhere, except packaging. maybe.

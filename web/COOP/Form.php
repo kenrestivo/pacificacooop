@@ -716,7 +716,8 @@ class coopForm extends CoopObject
 	function addCrossLinks($vars)
 		{
 			
-			if(!is_array($this->obj->fb_crossLinks)){
+			if(empty($this->obj->fb_crossLinks)){
+                $this->page->printDebug("no crosslinks for {$this->table}", 4);
 				return;
 			}
 
@@ -729,7 +730,7 @@ class coopForm extends CoopObject
 
 
 				$this->page->printDebug(
-                    "processing crosslinks $mt:$nk $ft:$tf ",
+                    "adding crosslinks for {$this->table}: $mt:$nk $ft:$tf ",
                                         2);
 
                 // links will add or delete from the mid table!
@@ -758,6 +759,8 @@ class coopForm extends CoopObject
 										   $far->obj->fb_linkDisplayFields));
 				$far->obj->find();
 				while($far->obj->fetch()){
+                    // XXX will this get safepk'ed?
+                    // should i use getoptions instead?
 					$options[(string)$far->obj->$tf] = 
 							 sprintf('%.42s...', 
 									 $far->concatLinkFields());

@@ -59,10 +59,10 @@ class Job_descriptions extends CoopDBDO
                              'free_tuition_end_month' => 'None');
 
 	// save it until i square away schoolyear
-//  	var $fb_crossLinks = array(array('table' => 'job_assignments', 
-//  									 'toTable' => 'families',
-//  									 'toField' => 'family_id',
-//  									 'type' => 'select'));
+//   	var $fb_crossLinks = array(array('table' => 'job_assignments', 
+//   									 'toTable' => 'families',
+//   									 'toField' => 'family_id',
+//   									 'type' => 'select'));
 
     function postGenerateForm(&$form)
         {
