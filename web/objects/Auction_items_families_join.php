@@ -42,7 +42,6 @@ class Auction_items_families_join extends CoopDBDO
             $auc =& new CoopObject(&$co->page, 'auction_donation_items', 
                                    &$co);
             $auc->constrainSchoolYear();
-            $auc->constrainSchoolYear();
             $co->protectedJoin($auc);
             // TODO: somehow make orderbylinkdisplay() recursive
             $this->orderBy('item_description');
