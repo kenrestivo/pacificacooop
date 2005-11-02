@@ -134,8 +134,8 @@ class Enhancement_hours extends CoopDBDO
             
             if($needed > 0){
                 return sprintf(" You must perform %0.02f more hours before %s.",
-                       $needed,
-                       $en->cutoffDatesArray[$sem]
+                               $needed,
+                               sql_to_human_date($en->cutoffDatesArray[$sem])
                     );
             } else if ($needed == 0){
                 return ;
