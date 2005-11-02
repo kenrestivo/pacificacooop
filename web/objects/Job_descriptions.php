@@ -48,9 +48,9 @@ class Job_descriptions extends CoopDBDO
 	var $fb_requiredFields = array('long_description', 'summary');
     var $fb_longHeader = 'The virtual job description binder.';
 	var $fb_shortHeader = 'Descriptions';
-    // NOTE ! do NOT schoolyearify the jobdescriptions. show all years.
-    // XXX Ryeah, but, dumbass, you need to EDIT only this years'
+
     var $fb_joinPaths = array('family_id' => 'job_assignments');
+
 	var $fb_crossLinks = array(array('table' => 'job_assignments', 
 									 'toTable' => 'families',
 									 'toField' => 'family_id',
@@ -77,25 +77,18 @@ class Job_descriptions extends CoopDBDO
         }
 
 
-/////NOT YET! first fix the form linking, doesn't work in form.
-/////and perms for job_descr: don't want people editing the days tuition
-// 	function fb_linkConstraints(&$co)
-// 		{
+	function fb_linkConstraints(&$co)
+		{
     
-//             $ass =  $this->factory('job_assignments');
+            $ass = new CoopObject(&$co->page, 'job_assignments', &$co);
 
-//             $this->joinAdd($ass);
+            $co->protectedJoin($ass);
 
-//             $this->orderBy('summary');
-//             $this->groupBy("{$co->table}.{$co->pk}");
+            $co->constrainFamily();
+            $co->constrainSchoolYear();
+            $co->orderByLinkDisplay();
 
-//             $co->debugWrap(4);
-
-// 			ugly, but consisent. only shows families for this year
-
-
-
-//  		}
+ 		}
 
 
 }

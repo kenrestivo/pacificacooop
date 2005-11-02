@@ -12,8 +12,8 @@ MY agenda! dammit, mine! for a change....
 
 ??? PHP
 bring back the auction item stuff!
-	perms: restrict  the received/located/thankyou
 	instructions for auction and familyauctionjoin
+		didn't i grab these already?
 	qa: make sure i didn't break searchselect  or invites
 	push live!
 
@@ -29,14 +29,24 @@ BURNT (when too burnt out to do actual work)
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
+???PHP
+make frozen fields not show the fucking --CHOOSE ONE--
+	in fact it shouldn't even go get the options, it should just concatlinkfields()
+	maybe override for now
+
+??PHP/SQL
+the linkconstraints for perms are broken in cases of multiple families
+aha! scary fucking shit. in forms, it grabs only one of the families
+	this will Cause Trouble with multi-joins
+	it groups by! that may not be a good thing
+	hmm. but it works fine for coopview. why?
+		look at the fetches and go see what's up
+	maybe some kind of funky SQL thing
+
 
 ??? PHP/QA/bureaucracy
 	paypal back to life
-
-
-?? PHP/SQL
-i think i need to change my protected join from 'left' to 'outer'
-	otherwise all my primary keys get whacked!
+	try bank account number
 
 
 ??? PHP/JS
@@ -80,6 +90,10 @@ why don't the crosslinks work?
 	groups works. why not anything else?
 	hmm. it'll only do the first crosslink
 
+
+??? BUREAUCRACY
+paypal $500 limit fix
+	well beecooke ssn isn't it
 
 ??? PHP/JS
 goose emails individually button
@@ -2896,6 +2910,11 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+?? PHP/SQL
+i think i need to change my protected join from 'left' to 'outer'
+	otherwise all my primary keys get whacked!
+
 	ack. i'm fucked. family vs solicit join still!
 	until i redo the entire database. HOW TO GET AROUND IT!??
 		just do it. and do it now
