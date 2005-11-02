@@ -28,7 +28,7 @@ require_once "HTML/QuickForm/group.php";
 class paypalForm extends HTML_QuickForm
 {
 	var $title;
-	var $account = 'beecooke@yahoo.com';
+	var $account = 'billing@pacificacoop.org';
 	var $server = 'https://www.paypal.com/cgi-bin/webscr';
     var $notify_url ="http://www.pacificacoop.org/sf/ipn.php";
 

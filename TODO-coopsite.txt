@@ -10,12 +10,23 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
+
 ??? PHP
 bring back the auction item stuff!
-	instructions for auction and familyauctionjoin
-		didn't i grab these already?
+	also need the ALERT SHIT TOO!!
+	bring forward from invitations-land
+		ok, calculate the amount
+			look maybe at nag report?
+	move all this to the land of family auction
+
 	qa: make sure i didn't break searchselect  or invites
-	push live!
+
+
+BUGS
+	aaaugh! edit used to go away when choose one, now it's there
+		is my json shit broken?? not cool
+	it worked fine yesterday. whahappen?
+
 
 
 -----------
@@ -41,6 +52,7 @@ aha! scary fucking shit. in forms, it grabs only one of the families
 	it groups by! that may not be a good thing
 	hmm. but it works fine for coopview. why?
 		look at the fetches and go see what's up
+		huh. well it fetches both in edit. is it the luck of the draw? does dbdo do magick?
 	maybe some kind of funky SQL thing
 
 
@@ -2910,6 +2922,7 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	why also is package purchases showing up online? ah, i fuced up
 
 ?? PHP/SQL
 i think i need to change my protected join from 'left' to 'outer'
@@ -4339,3 +4352,6 @@ BUGS
 		ugh. linkconstraints in coopform. i hate it but it works
 	don't show the NUMBER(id) in popup for family aucction
 		in fact, don't show it anywhere, except packaging. maybe.
+	push live!
+	instructions for auction and familyauctionjoin
+		didn't i grab these already?

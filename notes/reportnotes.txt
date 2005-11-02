@@ -6,20 +6,6 @@ re-architect reports
 
 create a subclass of dispatcher, or a new dispatcher 
 
-
-8 hours PHP
- 	add in the nag report!!!
-		re-do using html table
-	is there some way to use alerts instead of logic inside of nagreport??
-		nice, to get a summary of all alerts for a family!
-		yank that silly conditional at the top of the nagreport!
-	show nags only by due dates passed!
-		or, will my above alertstatus do it?
-	get details working
-		use generic with extradetails?
-	add a 'send reminder' button, to send alerts
-
-
 margolisreport
 
 report arch
@@ -43,13 +29,28 @@ parent ed attendance report that makes sense
 	using adddefaultfamilyperms, as a model
 
 
-
 ???  PHP
 	shirley's summary
 	first, all enrolled families (like in sandyreport?)
 	all enrollment totals (days)
 		by family and kid
 	make both reports group view only? 
+
+
+
+8 hours PHP
+ 	add in the nag report!!!
+		re-do using html table
+	is there some way to use alerts instead of logic inside of nagreport??
+		nice, to get a summary of all alerts for a family!
+		yank that silly conditional at the top of the nagreport!
+	show nags only by due dates passed!
+		or, will my above alertstatus do it?
+	get details working
+		use generic with extradetails?
+	add a 'send reminder' button, to send alerts
+
+
 
 
 
