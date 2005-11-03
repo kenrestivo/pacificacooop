@@ -47,6 +47,7 @@ class Calendar_events extends CoopDBDO
 
     function fb_display_view(&$co)
         {
+            // TODO: put this in linkconstraints so that popups use it too
             $this->orderBy('event_date asc');
             return $co->simpleTable();
         }

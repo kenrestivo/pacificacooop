@@ -38,13 +38,6 @@ class Income extends CoopDBDO
 	var $fb_linkDisplayFields = array('payer', 
 									  'payment_amount', 
 									  'check_date');
-	var $fb_fieldsToRender= array("check_date", 
-								  "payer", 
-								  'school_year',
-								  "account_number", 
-								  "payment_amount", 
-								  "note",
-								  'thank_you_id');
     var $fb_shortHeader = 'Income';
 
 	var $fb_fieldLabels = array( 
@@ -61,6 +54,8 @@ class Income extends CoopDBDO
 		"thank_you_id" => "Thank-You Sent" 
 		);
 
+    // txn_id is a not-null field. set 0 as default
+    var $fb_defaults = array('txn_id' => 0);
 	var $fb_formHeaderText = "Cash Donations and Fees";
 
 	var $fb_requiredFields = array('check_number', 'check_date', 'payer', 
@@ -92,6 +87,8 @@ var $fb_dupeIgnore = array(
                 $par = $this->factory('companies_income_join');
                 $this->joinAdd($par);
             }
+
+
             //$co->constrainFamily();
             $co->constrainSchoolYear();
             

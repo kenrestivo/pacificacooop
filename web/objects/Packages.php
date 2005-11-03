@@ -38,10 +38,6 @@ class Packages extends CoopDBDO
 									   'package_description');
 	var $fb_enumFields = array ('item_type', 'package_type', 'display_publicly');
 
-	var $fb_fieldsToRender = array('package_type', 'package_number', 
-								   'package_title', 'package_description', 
-								   'item_type', 'package_value',
-								   'display_publicly');
     var $fb_shortHeader = 'Packages';
     var $fb_dupeIgnore = array(
         'package_type',

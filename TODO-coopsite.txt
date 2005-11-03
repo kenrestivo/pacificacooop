@@ -1,31 +1,27 @@
 coop web database
 
 MY agenda! dammit, mine! for a change....
-	fix money: make it INVOICES and income (invoicing.txt) SQL
 	create generic report arch (reportnotes.txt)
-	sortable/searchable reports (searchfeature.txt)
+	fix money: make it INVOICES and income (invoicing.txt) SQL
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
+	sortable/searchable reports (searchfeature.txt)
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 
 
+AUUGH! sendemail has nasty bug
+	line 275 get for familyid 110, claims no such family?
+	at very least, skip any null familyid's!
 
-??? PHP
-bring back the auction item stuff!
-	also need the ALERT SHIT TOO!!
-	bring forward from invitations-land
-		ok, calculate the amount
-			look maybe at nag report?
-	move all this to the land of family auction
-
-	qa: make sure i didn't break searchselect  or invites
-
+MINE! do report/alert arch
+	get the margolis report going
 
 BUGS
 	aaaugh! edit used to go away when choose one, now it's there
 		is my json shit broken?? not cool
 	it worked fine yesterday. whahappen?
+
 
 
 
@@ -39,6 +35,22 @@ BURNT (when too burnt out to do actual work)
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
+
+get income entered: the old way for now. just do it.
+
+check perms for job descr. make sure only admins can edit the free days
+
+???PHP
+bring Packaging back to life! so they can start entering baskets
+	perms, then crosslinks?
+	generously donated by should not be required
+	make sure everyone can see the packages
+
+???PHP
+bring income back to life: especially springfest family fees
+	then enter the goddamned things.
+	paths to schoolyear and family
+
 
 ???PHP
 make frozen fields not show the fucking --CHOOSE ONE--
@@ -60,6 +72,15 @@ aha! scary fucking shit. in forms, it grabs only one of the families
 	paypal back to life
 	try bank account number
 
+
+??? PHP
+why don't the crosslinks work?
+	re do them. they make no fucking sense at all.
+	this is most curious. only groups and jobs work. or does it? why or why not?
+	huh, doesn't workf or jobs anymore either. i broke it?
+		no nothing there, i commented it out
+	groups works. why not anything else?
+	hmm. it'll only do the first crosslink
 
 ??? PHP/JS
 attempt to implement subform.. as an ajax
@@ -92,15 +113,6 @@ alertorstatus needs to be made generic, used everywhere!
 
 
 
-
-??? PHP
-why don't the crosslinks work?
-	re do them. they make no fucking sense at all.
-	this is most curious. only groups and jobs work. or does it? why or why not?
-	huh, doesn't workf or jobs anymore either. i broke it?
-		no nothing there, i commented it out
-	groups works. why not anything else?
-	hmm. it'll only do the first crosslink
 
 
 ??? BUREAUCRACY
@@ -4355,3 +4367,12 @@ BUGS
 	push live!
 	instructions for auction and familyauctionjoin
 		didn't i grab these already?
+
+??? PHP
+bring back the auction item stuff!
+	also need the ALERT SHIT TOO!!
+	bring forward from invitations-land
+		ok, calculate the amount
+			look maybe at nag report?
+	move all this to the land of family auction
+	qa: make sure i didn't break searchselect  or invites

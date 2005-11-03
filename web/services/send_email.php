@@ -252,6 +252,7 @@ on upriv.realm_id = table_permissions.realm_id
 where  table_name = "%s" 
     and field_name is null 
     and subscription_id is not null
+   and family_id > 0
 group by subscriptions.user_id,table_name
 ', 
                 // assuming they'll never be able to choose, to go retroactive
@@ -273,6 +274,10 @@ group by subscriptions.user_id,table_name
  while($sub->obj->fetch()){
      //confessObj($sub, 'subs');
      $fam =& new CoopObject(&$cp, 'families', &$sub);
+     // condom
+     if($sub->obj->family_id < 1){
+         continue;
+     }
      $fam->obj->get($sub->obj->family_id); // or just add email into query?
 
      if(!$fam->obj->email){
