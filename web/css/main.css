@@ -1,46 +1,61 @@
 /* $Id$ */
-p,table,li,h1,h2,h3
-{
-  font-family: verdana, arial, "sans serif"; 
-}
 
-body{ 
+body {
 	margin: 0;
 	padding: 0;
- }
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 76%;/* font sizing in ems, baby. if you want to change anything, just change this.*/
+	/*funny thing happens at 75% and lower. opera goes to a nice small size, but moz and ie pc change almost not at all. seems 76% is as small as you can go and stay the same across browsers. poop.*/
+	color: #000;
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-position: top left;
+	}
 
-p,li,th,td
-{
-	font-size: 9px;
-	padding: 1px;
-	margin: 0; 
 
-}
-/*/*/a{}
-body,
-body td,
-body th,
-body p {
-  font-size: x-small;
-  voice-family: "\"}\"";
-voice-family: inherit;
-font-size: small;
-}
-html>body,
-html>body td,
-html>body th
-html>body p {
-  font-size: small;
-}
-/* */
+h1 {
+	font-size: 2.0em;
+	font-weight: bold;
+	margin-top: 0em;
+	margin-bottom: 0em;/*both set to zero and padding in header div is used intead to deal with compound ie pc problems that are beyound summary in a simple comment.*/
+	}
+h2 {
+	font-size: 1.7em;
+	margin: 1.2em 0em 1.2em 0em;
+	font-weight: bold;
+	}
+h3 {
+	font-size: 1.4em;
+	margin: 1.2em 0em 1.2em 0em;
+	font-weight: bold;
+	}
+h4 {
+	font-size: 1.2em;
+	margin: 1.2em 0em 1.2em 0em;
+	font-weight: bold;
+	}
+h5 {
+	font-size: 1.0em;
+	margin: 1.2em 0em 1.2em 0em;
+	font-weight: bold;
+	}
+h6 {
+	font-size: 0.8em;
+	margin: 1.2em 0em 1.2em 0em;
+	font-weight: bold;
+	}
+img {
+	border: 0;
+	}
+
+
+
+/* END of general stuff */
 
 .foobar {
   background: gray;
 }
 
-h3 { 
-	font-size: 110%;
- }
 
 #backbutton { 
 	background-color:  #ffcc99;
