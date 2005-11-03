@@ -2,6 +2,7 @@ coop web database
 
 MY agenda! dammit, mine! for a change....
 	create generic report arch (reportnotes.txt)
+	json the subforms
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 	sortable/searchable reports (searchfeature.txt)
@@ -10,12 +11,9 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-AUUGH! sendemail has nasty bug
-	line 275 get for familyid 110, claims no such family?
-	at very least, skip any null familyid's!
-
 MINE! do report/alert arch
 	get the margolis report going
+
 
 BUGS
 	aaaugh! edit used to go away when choose one, now it's there
@@ -4376,3 +4374,8 @@ bring back the auction item stuff!
 			look maybe at nag report?
 	move all this to the land of family auction
 	qa: make sure i didn't break searchselect  or invites
+
+AUUGH! sendemail has nasty bug
+	line 275 get for familyid 110, claims no such family?
+	at very least, skip any null familyid's!
+		ah. familyid is null on dropped families
