@@ -10,12 +10,20 @@ MY agenda! dammit, mine! for a change....
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 
+css 
+	make the icon transparent
+	and some spacing between lines
+	and not so damn much between paragraphs, esp in buttons
+		look at old css. i think i had a  p style
+
+all system, not all {this realm} showing up in links to audit
 
 MINE! do report/alert arch
 	get the margolis report going
 
 
 BUGS
+	job descriptions doubling up. annoying.
 	aaaugh! edit used to go away when choose one, now it's there
 		is my json shit broken?? not cool
 	it worked fine yesterday. whahappen?

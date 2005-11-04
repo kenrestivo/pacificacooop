@@ -43,8 +43,12 @@ user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
  $metalinks = '
 <meta http-equiv="content-type" 
  				content="text/html; charset=iso-8859-1">
-				<link rel="stylesheet" href="main.css" title="main" 
-					  	>';
+				<link rel="stylesheet" href="main.css" title="main">
+<!--[if gte IE 5.5000]>
+<script type="text/javascript" src="lib/pngfix.js"></script>
+<![endif]-->
+';
+
 $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">';
 

@@ -80,9 +80,11 @@ foreach($menu->alertme as $table){
     if(is_callable(array($alert->obj, 'fb_display_alert'))){
         $alertbody =  $alert->obj->fb_display_alert(&$alert);
         if($alertbody){
-            print rawMenuRow($alert->obj->fb_formHeaderText,
-                             $alertbody,
-                             $alert->actionButtons());
+            print rawMenuRow(
+                $alert->obj->fb_formHeaderText,
+                sprintf('<img src="../images/Achtung-small.png">&nbsp;%s',
+                        $alertbody),
+                $alert->actionButtons());
         }
     }
 }
