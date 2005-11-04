@@ -191,11 +191,15 @@ class Auction_items_families_join extends CoopDBDO
             }
 
             // XXX total value, not quantity
-            $res .= sprintf("You have committed to donate %d item%s worth $%0.02f thus far. 
-				You must commit to donating additional items worth $%0.02f before %s.",
-                            $auc->obj->auc_count, 
-                            $auc->obj->auc_count == 1 ? "" : "s",
-                            $auc->obj->total_value,
+            if($auc->obj->auc_count > 0){
+                $res .= sprintf(
+                    'You have committed to donate %d item%s worth $%0.02f thus far.', 
+                    $auc->obj->auc_count,       
+                    $auc->obj->auc_count == 1 ? "" : "s",
+                    $auc->obj->total_value); 
+            }
+            $res .= sprintf(' You must commit to donating%s item(s) worth $%0.02f or more before %s.',
+                            $auc->obj->auc_count ? ' additional' : '',
                             COOP_AUCTION_VALUE_REQUIRED - $auc->obj->total_value,
                             timestamp_db_php($ev->event_date)
                 );
