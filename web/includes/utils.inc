@@ -400,9 +400,9 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 
 	$listq = mysql_query($q);
 	
-	$toptab = new HTML_Table(' bgcolor="#aa99ff" cellpadding="0" cellspacing="0"');
+	$toptab = new HTML_Table('class="tablecontainer"');
 
-	$tab = new HTML_Table(' bgcolor="#ffffff"');	
+	$tab = new HTML_Table();	
 
 	$i = 0;
 	$err = mysql_error();
@@ -416,7 +416,7 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 				$headers[] = $key;
 				$grand[] = 0;
 			}
-			$tab->addRow($headers, ' bgcolor="#aabbff"', "TH");
+			$tab->addRow($headers, ' class="tableheaders"', "TH");
 			reset($row);
 			$i++;
 		}
@@ -431,7 +431,7 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 			}
 			$grand[$i++] += $val;
 		}
-		$tab->addRow($tdrow, 'align=right');
+		$tab->addRow($tdrow, 'align="right"');
 	
 	}
 	$s = count($headers);
@@ -455,10 +455,10 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 		$tab->addRow($grandfixed,'bgcolor="#aa99ff" align=right' );
 	}
 
-	$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
-								   'bgcolor="#ccccff"');
+	$tab->altRowAttributes(1, 'class="altrow1"', 
+								   'class="altrow2"');
 
-	$tab->setColAttributes(0, 'align="left"');
+	$tab->updateColAttributes(0, 'align="left"');
 
 	$toptab->addRow(array($title), 'align="center"', "TH");
 	$toptab->addRow(array($tab->toHTML()));
