@@ -10,10 +10,31 @@ MY agenda! dammit, mine! for a change....
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 
+
+BUGS
+	the dejarnatt entries. wtf happened?
+	aha! all the do-not-contacts are ok. 
+		but the ones without are completely fucked
+		something updated something with a find. 
+			CHECK EVERYWHERE UPDATE IS CALLED!
+	first of all, try to DUPLICATE it!
+		ok, first of all, do not contacts should not show up, should they?
+		no matter what id i get, when i edit it, it comes upburton
+   aha
+   	i must make sure the updates insist on a primary key DONE
+   	also take out any whereadds! nothing should be in there except key and data DONE
+   	i must make the new one limit 1 DONE
+   	i have to wrap my do not contact whereadd in a () in leads
+	at build time, after finding, make DAMNED sure the pk is what you say it is
+		is there any way to find out? yes, DONE
+   
+
 ??? PHP
 bring income entry back to life.
 	i don't give a damn if it's wrong, stupid, or broken. JUST DO IT.
-
+	dispatch linktables based on perms
+		i.e. if they have solicit, link to solicit, etc
+		can i press the existing perms shit into service for that?
 
 -----------
 BURNT (when too burnt out to do actual work)
@@ -234,9 +255,6 @@ move leads to some other realm.. i dunno where
 
 
 BUGS
-	horiztable in enrollment details is b0rken. but only there. why? 
-		compare to, say, generic. see what's different?
-	enhancement summary DETAILS is broken.... it does *not* show enhancement details	
 	i will need to move the ampmsession from workers back to enrollment	
 		SESSION SHOULD FOLLOW ENROLLMENT! it doesn't belong in there.
 		it's idiotic that someone can switch to mornign but keep pm workday!
@@ -356,8 +374,6 @@ let them edit the fucking thankyou template
 check steenkin nearlyfreespeech.net, renew domainnames
 	expires in october; fix before that
 
-fix css shit in display
-	the coopview inside coopview is weeeird
 
 also, get blogs going too!
 	maybe email subscription? 
@@ -417,6 +433,12 @@ move teh family fees to the database! they're hard coded, taht is stupid
 
 ----------------
 BELOW THE LINE
+
+put in admin perms for master names (people) for system admin too
+
+10 minutes PHP
+add the contact information for enrollment, in the enrollment summary
+	copy/paste from roster
 
 css 
 	and some spacing between lines
@@ -862,9 +884,6 @@ i now remember why i'm doing count!
 	so that i don't show view menuitem 
 		if there is nothing in there that i can see
 
-blog stuff
-	create a css for "small": on local and livesite
-		after i get the summary integrated into some kind of menu
 
 hey! how about in my search for all the realms/tables, i do a count?
 	any tables that appear in >1 realm, put it somewhere else!
@@ -4385,3 +4404,12 @@ AUUGH! sendemail has nasty bug
 	at very least, skip any null familyid's!
 		ah. familyid is null on dropped families
 	make the icon transparent ah, it is on FF. add hack for IE
+fix css shit in display
+	the coopview inside coopview is weeeird
+blog stuff
+	create a css for "small": on local and livesite
+		after i get the summary integrated into some kind of menu
+	horiztable in enrollment details is b0rken. but only there. why? 
+		compare to, say, generic. see what's different?
+		done	enhancement summary DETAILS is broken.... it does *not* show enhancement details	
+	it does now: extradetails

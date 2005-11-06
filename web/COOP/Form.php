@@ -49,10 +49,15 @@ class coopForm extends CoopObject
 
 			$this->id = (int)$vars[$this->prependTable($this->pk)];
 			if($this->id > 0){
+                $this->obj->whereAdd(); // important! clear any where's before this
                 $this->obj->whereAdd(sprintf('%s.%s = %d',
                                               $this->table, $this->pk,
                                               $this->id));
                 $this->obj->find(true);
+                // just being extra paranoid
+                if($this->obj->{$this->pk} != $this->id){
+                    raiseError('CoopForm::build() id is not what was found!', 666);
+                }
 			} else {
 				$this->page->printDebug(
                     "coopForm::build($this->table $this->id) called with no id, assuming NEW");
@@ -468,18 +473,28 @@ class coopForm extends CoopObject
 	
 	function update(&$old)
 		{
-			if(!$old->find(true)){
+
+            // first, *lots* of sanity czechs
+
+            if($old->{$this->pk} < 1 || $this->obj->{$this->pk} < 1){
+				PEAR::raiseError('no PK for the old or new item. cannot update it', 666);
+            }
+
+            if(!$old->find(true)){
 				PEAR::raiseError("save couldn't get its pk. did something else change the record in between editing and saving?", 888);
 			}
-
-			if($this->page->debug > 1){
-				$this->debugWrap(2);
-			}
+            
+            // clear any where's in there (only pk!), and put the damned condom on
+            $this->obj->whereAdd();
+            $this->obj->limit(1);
+           			
+            $this->debugWrap(2);
+			
 			if($this->page->debug > 2){
 				confessObj($old, 'CoopForm::update() OLD data');
 				confessObj($this->obj, 'CoopForm::update() NEW data');
 			}
-
+            
 			$this->obj->update($old);
 			$this->id = $this->obj->{$this->pk};
 

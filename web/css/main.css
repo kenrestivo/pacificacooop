@@ -221,6 +221,7 @@ p.letter{
   text-align: center;
 }
 
+/* AFIACT, this is only used in horiztable */
 .tabletitles { 
   background-color: #cccccc;
  }
