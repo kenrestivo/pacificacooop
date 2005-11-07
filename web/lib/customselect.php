@@ -16,9 +16,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
     var $vals; // cache selected values. NEED BECAUSE PHP CAN'T getvalues()[0]!
     var $showEditText = 0; // the edit link show the text USE 1/0 NOT TRUE/FALSE
 
-    function _prepare()
+    function prepare()
         {
-
             $this->cf =& $this->_parentForm->CoopForm; // save typing
 			list($table, $this->field) = explode('-', $this->getName());
 
@@ -49,7 +48,6 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
     function toHtml()
         {
-            $this->_prepare();
 
             if ($this->_flagFrozen) {
                 return $this->getFrozenHTML();
@@ -110,8 +108,12 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
             // specific to this select
             // rebuild the table/field because i can't use - in globals!
+            // XXX this typeof is a hack to get around bug in httpunit
+            // the right way would be to make this an onload or something
             $js .= sprintf(
-                'eval(\'editperms_%s_%s = \' + document.getElementsByName(\'editperms-%s\')[0].value);', 
+                'if(typeof document.getElementsByName == \'function\') {
+                  eval(\'editperms_%s_%s = \' + document.getElementsByName(\'editperms-%s\')[0].value);
+                 }', 
                 $this->cf->table, $this->field,
                 $this->getName());
 

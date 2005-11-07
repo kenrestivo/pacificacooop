@@ -489,10 +489,15 @@ group by user_id,table_name,field_name";
              
             $this->orderByLinkDisplay(); 
             
-            $this->obj->groupBy(sprintf('%s.%s', $this->table, $this->pk));
-
+            $this->grouper();
 
 		}
+
+    function grouper()
+        {
+            $this->obj->groupBy(sprintf('%s.%s', $this->table, $this->pk));
+
+        }
 
     function orderByLinkDisplay()
         {

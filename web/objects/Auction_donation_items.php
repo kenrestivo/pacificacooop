@@ -98,7 +98,7 @@ class Auction_donation_items extends CoopDBDO
             $co->constrainFamily();
             $co->protectedJoin($auc);
             $co->orderByLinkDisplay();
-
+            $co->grouper();
 		}
 
 	// form that blasts over to the packages::new, to create a new one

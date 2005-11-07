@@ -7,12 +7,12 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
 {
 
     // XXX HACK! instead, i shoudl be doing some kind of multi-inclusion guard
-    function _prepareSearchSelect()
+    function prepare()
         {
             // needed before callign parent's prepare!
             $this->showEditText = 1;
 
-            parent::_prepare();
+            parent::prepare();
 
             $this->setSize(10);
 
@@ -20,24 +20,10 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
             $target_id =  $target . '-'. $targfield;
 
 
-
-            //TODO: if there is a value present, and it's NOT in options,
-            //then go fetch the option and add it here
-            if(array_sum($this->vals)){
-                $this->sub->obj->{$targfield} = $this->vals[0];
-                $this->sub->obj->find();
-                $options = $this->cf->getLinkOptions($this->sub, 
-                                                     $this->link, 
-                                                     false);
-                $this->cf->page->confessArray(
-                    $options, "CoopForm::Link options($table $targfield)", 4);
-                $this->loadArray($options);
-            }
         }
 
     function toHtml()
     {
-        $this->_prepareSearchSelect();
 
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();

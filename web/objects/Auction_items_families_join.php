@@ -45,7 +45,7 @@ class Auction_items_families_join extends CoopDBDO
             $co->protectedJoin($auc);
             // TODO: somehow make orderbylinkdisplay() recursive
             $this->orderBy('item_description');
-            
+            $co->grouper();
 		}
 
 

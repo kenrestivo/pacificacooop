@@ -12,12 +12,47 @@ MY agenda! dammit, mine! for a change....
 
 
 
+?? JS
+do my shit onload, not at a random point in parsing
+
+
+BUG
+	can i set to relative/friend? wtf?
+
+
+??? QA
+test what i just did-- make sure edits, adds, etc all work, with custom/search
+	BOTH select types. check!
+
+
+??? PHP
+\why don't the crosslinks work?
+	re do them. they make no fucking sense at all.
+	this is most curious. only groups and jobs work. or does it? why or why not?
+	huh, doesn't workf or jobs anymore either. i broke it?
+		no nothing there, i commented it out
+	groups works. why not anything else?
+	hmm. it'll only do the first crosslink
+
+
+??PHP/SQL
+the linkconstraints for perms are broken in cases of multiple families
+aha! scary fucking shit. in forms, it grabs only one of the families
+	this will Cause Trouble with multi-joins
+	it groups by! that may not be a good thing
+	hmm. but it works fine for coopview. why?
+		look at the fetches and go see what's up
+		huh. well it fetches both in edit. is it the luck of the draw? does dbdo do magick?
+	maybe some kind of funky SQL thing
+
+
 ??? PHP
 bring income entry back to life.
 	i don't give a damn if it's wrong, stupid, or broken. JUST DO IT.
 	dispatch linktables based on perms
 		i.e. if they have solicit, link to solicit, etc
 		can i press the existing perms shit into service for that?
+
 
 -----------
 BURNT (when too burnt out to do actual work)
@@ -29,6 +64,11 @@ BURNT (when too burnt out to do actual work)
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
+
+??? PHP/JS
+will definitely need to save the state of a form before pushing
+	even if i blow off my push/pop for NEW, i'll still need it for EDIT!
+
 
 get income entered: the old way for now. just do it.
 
@@ -51,15 +91,6 @@ make frozen fields not show the fucking --CHOOSE ONE--
 	in fact it shouldn't even go get the options, it should just concatlinkfields()
 	maybe override for now
 
-??PHP/SQL
-the linkconstraints for perms are broken in cases of multiple families
-aha! scary fucking shit. in forms, it grabs only one of the families
-	this will Cause Trouble with multi-joins
-	it groups by! that may not be a good thing
-	hmm. but it works fine for coopview. why?
-		look at the fetches and go see what's up
-		huh. well it fetches both in edit. is it the luck of the draw? does dbdo do magick?
-	maybe some kind of funky SQL thing
 
 
 ??? PHP/QA/bureaucracy
@@ -67,14 +98,7 @@ aha! scary fucking shit. in forms, it grabs only one of the families
 	try bank account number
 
 
-??? PHP
-\why don't the crosslinks work?
-	re do them. they make no fucking sense at all.
-	this is most curious. only groups and jobs work. or does it? why or why not?
-	huh, doesn't workf or jobs anymore either. i broke it?
-		no nothing there, i commented it out
-	groups works. why not anything else?
-	hmm. it'll only do the first crosslink
+
 
 ??? PHP/JS
 attempt to implement subform.. as an ajax
@@ -4424,3 +4448,4 @@ need to check perms on edits before allowing it
 	AUUGH! customselect doesn't have any concept of combobox!
 		so i can't use its js for checking perms!
 	yes it is possible. and it works. but it's scaaaaaaaaaary!	
+	edits are borken: array?

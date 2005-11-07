@@ -46,7 +46,7 @@ class Job_assignments extends CoopDBDO
             $co->protectedJoin($descr);
             $this->orderBy('summary');
             $co->constrainSchoolYear();
-            
+            $co->grouper();
         }
 
 }

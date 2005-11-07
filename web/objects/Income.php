@@ -91,6 +91,8 @@ var $fb_dupeIgnore = array(
 
             //$co->constrainFamily();
             $co->constrainSchoolYear();
+            $co->orderByLinkDisplay();
+            $co->grouper();
             
         }
 

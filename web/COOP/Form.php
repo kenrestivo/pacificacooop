@@ -205,46 +205,47 @@ class coopForm extends CoopObject
 					$this->form->addElement(&$el);
 					$el->setName($fullkey); 
 				} else if($this->isLinkField($key)) {
-                    // WHAT A FUCKING MESS! pull this out into a function
+                    // TODO: pull this out into a function. it's too long.
 
-                    $type = 'select';
-                    // XXX this is fucked. shouldn't i do this with perms?
-                    if(empty($this->obj->fb_addNewLinkFields) ||
-                       in_array($key, $this->obj->fb_addNewLinkFields))
-                    { 
-                        $type = 'customselect';
-                        //always create this, both custom and search need it
+                    $tmp = $this->findLinkOptions($key);
 
-                        // TODO: blow off this hidden field, and just
-                        // do the javascript here directly to put the
-                        // editperms array into a javascript global var
-                        $editperms =& $this->form->addElement(
-                        'hidden',
-                        'editperms-' . $fullkey);
-                        //XXX hack until i test for N found
-                        // TODO: check $tmp[0]->obj->N,
-                        //  call searchselect xif > lots
-                        if(!empty($this->obj->fb_searchSelects) &&
-                            in_array($key, $this->obj->fb_searchSelects))
-                        {
-                            $type = 'searchselect';
-                        }
-                        $this->page->printDebug("$key is a $type", 4);
-                    }
+                    $type = $tmp[0]->obj->N > COOP_MAX_SELECT_COUNT ?
+                    'searchselect' : 'customselect';
+                    
+            
                     $el =& $this->form->addElement(
                         $type, 
                         $fullkey, false);
-                    /// XXX also have to put in the editperms for THIS ONE!
-                    // regardless of searchselect or not. comprendez-vous?
-                    if($type != 'searchselect'){
-                        $tmp = $this->findLinkOptions($key);
-                        $multi = $tmp[0]->getLinkOptions();
-                        $el->loadArray($multi['data']);
-                        $json = new Services_JSON();// XXX call statically?
-                        $editperms->setValue($json->encode($multi['editperms']));
+
+                    $el->setValue($val); // duplicate of bleow, but need it here
+
+                    if($type == 'searchselect'){
+                        $tmp[0]->obj->whereAdd($tmp[0]->pk . '='.  $val);
+                        $tmp[0]->obj->find();
+                        $tmp[0]->grouper();
                     }
+
+
+                    $multi = $tmp[0]->getLinkOptions($type == 'customselect');
+
+                    // TODO: blow off this hidden field, and just
+                    // do the javascript here directly to put the
+                    // editperms array into a javascript global var
+                    $editperms =& $this->form->addElement(
+                        'hidden',
+                        'editperms-' . $fullkey,
+                        '{}');
+
+
+                    // XXX put this in prepare()?
+
+                    $el->loadArray($multi['data']);
+                    $json = new Services_JSON();// XXX call statically?
+                    $editperms->setValue($json->encode($multi['editperms']));
+                    
                     //XXX parentform isn't available at add, only at toHTML
                     $el->_parentForm =& $this->form;
+                    $el->prepare();
 						
 				} else if(!empty($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))

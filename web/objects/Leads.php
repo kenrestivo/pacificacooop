@@ -187,8 +187,9 @@ class Leads extends CoopDBDO
 		{
             // XXX ONLY if perms permit!
 			$this->whereAdd('(do_not_contact is null or do_not_contact< "2000-01-01")');
-            /// XXX change this to ->orderbylinkdisplay() instead
-            $this->orderBy('last_name, first_name, company');
+
+            $co->orderByLinkDisplay();
+            $co->grouper();
 		}	
 
     function fb_display_view(&$co)

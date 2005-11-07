@@ -52,8 +52,6 @@ class Kids extends CoopDBDO
             $enrollment =  new CoopObject(&$co->page, 'enrollment', &$co);
 
 
-            $this->orderBy('last_name, first_name');
-
             // HACK! this is presuming VIEW, but in popup it could be EDIT
 
 
@@ -62,7 +60,6 @@ class Kids extends CoopDBDO
             // IMPORTANT! otherwise it matches old year
             $this->selectAdd("max(enrollment.school_year) 
                                                 as school_year");
-            $this->groupBy("{$co->table}.{$co->pk}");
 
             $co->constrainSchoolYear();
 
@@ -70,8 +67,10 @@ class Kids extends CoopDBDO
 
             $this->selectAdd();
             $this->selectAdd("{$co->table}.*");
-            $this->groupBy("{$co->table}.{$co->pk}");
 
+
+            $co->orderByLinkDisplay();
+            $co->grouper();
 
 
             //$co->debugWrap(2);

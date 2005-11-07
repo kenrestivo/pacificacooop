@@ -71,6 +71,8 @@ class Enhancement_hours extends CoopDBDO
 
             $co->constrainFamily();
             $co->constrainSchoolYear();
+            $co->orderByLinkDisplay();
+            $co->grouper();
         }
 
 

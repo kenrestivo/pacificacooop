@@ -59,6 +59,7 @@ class Subscriptions extends CoopDBDO
             $fam = $this->factory('users');
             $this->joinAdd($fam);
             //$this->selectAdd('family_id');
+            /// XXX isn't this constrainfamily????
             if($co->isPermittedField(NULL) < ACCESS_VIEW ){
                 //XXX constrainfamily won't work, because i use userid here
                 $this->whereAdd(

@@ -73,6 +73,8 @@ class Enrollment extends CoopDBDO
                                     $co->getChosenSchoolYear()));
 
             $this->orderBy('am_pm_session, last_name, first_name');
+            //XXX grouper??
+
 
             //TODO: selectadd familyid!
             $this->selectAdd();
@@ -80,7 +82,6 @@ class Enrollment extends CoopDBDO
             //$co->debugWrap(2);
 
 			// ugly, but consisent. only shows families for this year
-
 
 
  		}

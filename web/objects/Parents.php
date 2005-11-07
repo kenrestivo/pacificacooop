@@ -63,8 +63,10 @@ class Parents extends CoopDBDO
             $this->selectAdd();
             $this->selectAdd("{$co->table}.*");
 
+
+            $co->orderByLinkDisplay();
             ///XXX this is redunannt. it is done elsewhere now.
-            $this->groupBy("{$co->table}.{$co->pk}");
+            $co->grouper();
             
 
             //confessObj($co, 'sure it is an objec');

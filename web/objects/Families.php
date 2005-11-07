@@ -71,8 +71,8 @@ class Families extends CoopDBDO
             // FORCE the familyid! so i don't grab the crap from elswhere
             $this->selectAdd('families.family_id as family_id');
     
-            $this->orderBy('families.name');
-            $this->groupBy('families.name');
+            $co->orderByLinkDisplay();
+            $co->grouper();
             
             // XXX broken! in previous years, i need to see dropouts
             if($co->perms[NULL]['year'] < ACCESS_VIEW){
