@@ -10,10 +10,6 @@ MY agenda! dammit, mine! for a change....
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 
-BUG
-	aaaikgh. everything dead. no entry on invitations. gah.
-
-family names for cooke
 
 post the policy/bylaws from lisa!
 	at least the bylaws
@@ -4459,3 +4455,11 @@ BUG
 		yes, it lets you set it, but it shows up wrong in the report.
 	burdick, couldn't set to relative. also didn't show up for a few
 
+BUG
+	family names for cooke
+
+
+BUG
+	totally wrong: it's selecting all on searchselect. just stupid.
+	aaaikgh. everything dead. no entry on invitations. gah.
+	easy. return nothing if no n, in getlinkoptions

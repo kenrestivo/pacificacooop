@@ -225,8 +225,7 @@ class coopForm extends CoopObject
                         $tmp[0]->obj->find();
                         $tmp[0]->grouper();
                     }
-
-
+                    
                     $multi = $tmp[0]->getLinkOptions($type == 'customselect');
 
                     // TODO: blow off this hidden field, and just
