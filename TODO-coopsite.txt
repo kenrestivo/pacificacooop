@@ -10,10 +10,14 @@ MY agenda! dammit, mine! for a change....
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 
-
-
 BUG
-	can i set to relative/friend? wtf?
+	aaaikgh. everything dead. no entry on invitations. gah.
+
+family names for cooke
+
+post the policy/bylaws from lisa!
+	at least the bylaws
+
 
 
 ??? QA
@@ -23,7 +27,7 @@ test what i just did-- make sure edits, adds, etc all work, with custom/search
 
 
 ??? PHP
-\why don't the crosslinks work?
+why don't the crosslinks work?
 	re do them. they make no fucking sense at all.
 	this is most curious. only groups and jobs work. or does it? why or why not?
 	huh, doesn't workf or jobs anymore either. i broke it?
@@ -151,14 +155,14 @@ same as what's in coopobject: go hit the URL, with audit_id!
 
 
 
+??? PHP
+the whole backlink thing i can't get away from it!
+	look at all extradetails! they are fucking BACKLINKS!
+	use backlinks for extradetails. and shut the fuck up.
+	show all the backlinks/forward links. maybe automate crosslinks?
+
 BUGS
-	job descriptions doubling up. annoying.
-	aaaugh! edit used to go away when choose one, now it's there
-		is my json shit broken?? not cool
-	it worked fine yesterday. whahappen?
 	have to have some way to allfamilies!
-	font on frontpage looks like shit in IE
-		post it to #web
 	refreshing on a push, continues to push. don't do that.
 		can't NOT push, because sometimes you want to push again...
 	check crosslinks (i.e. groups? jobdescriptions?)
@@ -197,27 +201,12 @@ add shirley to the audit trail mailing list!
 details view of audit trail is busted-- didn't i fix this already?
 
 
-the debug stuff is still broken
-	it's not printing out ALL of it, in certain situations. flush?
-		find out how/where to duplicate it!
-
-BUG
-	adapt and test confirmdelete and delete with new cpvarslast thing!
-		test thoroughly. this is KINDA SCARY!
-	watch out for linkconstraints without any orderby!
-		look through all objects for linkconstraints without orderby!
-
-
-
-2 hours PHP
-link to new record from popups... PUT IT BACK!
-	it doesn't have to work perfectly. just do it!
-	shitcan the push/pop stuff for now.
 
 
 
 ??? PHP/SQL
 raiseError in case of my linkconstraint warnings.
+	WHAT linkconstraint warnings???!
 	then do a total QA script run on it. fix any mistakes.
 
 
@@ -234,12 +223,6 @@ nifty stuff FOR ME for a change (below the line)
 list-id in email
 
 does concatlinkfields deal with perms?? don't want to leak data here...
-
-
-move leads to some other realm.. i dunno where
-	make invitations go where leads was, under springfest
-	YANK contacts! it's too big (it's so *big*!)
-
 
 
 10 mins PHP
@@ -270,11 +253,7 @@ scary linkconstraint stuff
 	fix the sponsorships. i gutted it, look up the old version, and fix.
 
 
-
-fix families fb_extraDetails... it won't show enhancement hours
-
 CRUFT
-
 
 ???
 hmm. how to give springfest chairs perms to post to HOME page?
@@ -300,13 +279,9 @@ fix the logs thing. i really could use that. PHP/UNIX
 
 proper permissions on job descr: users can change own description, and summary, but NOT THE NUMBER OF DAYS TUITION!, board, or new/returning.
 
-actually SHOW the invitations now!!
-	i can do that.
 
-
+??PHP
 job alert, or, show which families do *not* have job assignmetns yet
-
-
 
 
 ??? rasta PHP
@@ -321,6 +296,7 @@ fix all the details views!!
 		in target obj's. 
 	joinconstraints should always beat a path to familyid and schoolyear
 		and anything else, shoudl be custom done elsewhere
+	didn't i get all these? any left?
 
 
 
@@ -331,15 +307,6 @@ menu helptext
  STUCK: the htmlmenu has no place for me to put this stuff
 
 
-
-???
-use WHEREADD for familyid (and possibly schoolyear) in linkconstraints!
-	so that you're not INJECTING DATA into it!
-	this is huge
-	do this everywhere!
-	i can also WIPE WHEREADD's whereadd(), whereadd(stuff)
-		to block any familyid constraints added by default linkconstraints
-		useful for reprts
 
 ???
 	sponsorships, also not right. umm. wha's wrong?
@@ -363,19 +330,8 @@ let them edit the fucking thankyou template
 
 
 
-
-check steenkin nearlyfreespeech.net, renew domainnames
-	expires in october; fix before that
-
-
-also, get blogs going too!
-	maybe email subscription? 
-	or, a button: email to current membership?
-
 check that all numeric fields get a validation type of 'numeric'
 	
-	OK. I CANNOT inject a familyid. if the table i'm viewing is families..
-		it'll insert some random family?
 
 
 checklist for job functions-- catherine's new job
@@ -460,12 +416,6 @@ in simpletable, if it's a short table, it needs to expand to the full size
 ??PHP
 should *not* have to join to a link just to order by it!
 	orderbylinkdisplay should be recursive. go order by what's there. no?
-
-??? PHP
-the whole backlink thing i can't get away from it!
-	look at all extradetails! they are fucking BACKLINKS!
-	use backlinks for extradetails. and shut the fuck up.
-	show all the backlinks/forward links. maybe automate crosslinks?
 
 ??? PHP
 	everyone should be able to see all years, for auctions, no?
@@ -2949,6 +2899,14 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	shitcan the push/pop stuff for now.
+the debug stuff is still broken
+	it's not printing out ALL of it, in certain situations. flush?
+		find out how/where to duplicate it!
+
+	OK. I CANNOT inject a familyid. if the table i'm viewing is families..
+		it'll insert some random family?
+
 	why also is package purchases showing up online? ah, i fuced up
 
 ?? PHP/SQL
@@ -4450,3 +4408,54 @@ need to check perms on edits before allowing it
 ?? JS
 do my shit onload, not at a random point in parsing
 	ok, hope it doesn't cause trouble
+
+???
+use WHEREADD for familyid (and possibly schoolyear) in linkconstraints!
+	so that you're not INJECTING DATA into it!
+	this is huge
+	do this everywhere!
+	i can also WIPE WHEREADD's whereadd(), whereadd(stuff)
+		to block any familyid constraints added by default linkconstraints
+		useful for reprts
+
+check steenkin nearlyfreespeech.net, renew domainnames
+	expires in october; fix before that
+
+also, get blogs going too!
+	maybe email subscription? 
+	or, a button: email to current membership?
+
+
+
+
+	aaaugh! edit used to go away when choose one, now it's there
+		is my json shit broken?? not cool
+	font on frontpage looks like shit in IE
+		post it to #web
+	watch out for linkconstraints without any orderby!
+		look through all objects for linkconstraints without orderby!
+2 hours PHP
+link to new record from popups... PUT IT BACK!
+	it doesn't have to work perfectly. just do it!
+
+
+BUG
+	adapt and test confirmdelete and delete with new cpvarslast thing!
+		test thoroughly. this is KINDA SCARY!
+	seems ok
+
+move leads to some other realm.. i dunno where
+	make invitations go where leads was, under springfest
+	YANK contacts! it's too big (it's so *big*!)
+fix families fb_extraDetails... it won't show enhancement hours
+	it does now!
+
+actually SHOW the invitations now!!
+	i can do that.
+alter table leads drop column relation;
+
+BUG
+	can i set to relative/friend? wtf?
+		yes, it lets you set it, but it shows up wrong in the report.
+	burdick, couldn't set to relative. also didn't show up for a few
+

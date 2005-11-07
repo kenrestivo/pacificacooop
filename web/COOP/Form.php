@@ -53,7 +53,7 @@ class coopForm extends CoopObject
                 $this->obj->whereAdd(); // important! clear any where's before this
                 $this->obj->whereAdd(sprintf('%s.%s = %d',
                                               $this->table, $this->pk,
-                                              $this->id));
+											 $this->id));
                 $this->obj->find(true);
                 // just being extra paranoid
                 if($this->obj->{$this->pk} != $this->id){
@@ -218,8 +218,9 @@ class coopForm extends CoopObject
                         $fullkey, false);
 
                     $el->setValue($val); // duplicate of bleow, but need it here
-
-                    if($type == 'searchselect'){
+					
+					// obviously, only if there's a value there.
+                    if($type == 'searchselect' && $val){
                         $tmp[0]->obj->whereAdd($tmp[0]->pk . '='.  $val);
                         $tmp[0]->obj->find();
                         $tmp[0]->grouper();

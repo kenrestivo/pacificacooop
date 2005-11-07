@@ -5,3 +5,4 @@
 
 -- add families/income, and perms for restivo (others too?) to edit
 
+alter table leads drop column relation;
