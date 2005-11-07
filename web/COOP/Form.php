@@ -221,12 +221,13 @@ class coopForm extends CoopObject
 					
 					// obviously, only if there's a value there.
                     if($type == 'searchselect' && $val){
-                        $tmp[0]->obj->whereAdd($tmp[0]->pk . '='.  $val);
+                        $tmp[0]->obj->whereAdd(sprintf('%s.%s = %d', 
+                                                       $tmp[0]->table, 
+                                                       $tmp[0]->pk,
+                                                       $val));
                         $tmp[0]->obj->find();
                         $tmp[0]->grouper();
                     }
-                    
-                    $multi = $tmp[0]->getLinkOptions($type == 'customselect');
 
                     // TODO: blow off this hidden field, and just
                     // do the javascript here directly to put the
@@ -236,12 +237,15 @@ class coopForm extends CoopObject
                         'editperms-' . $fullkey,
                         '{}');
 
+                    if($val || $type != 'searchselect'){
+                        $multi = $tmp[0]->getLinkOptions($type == 'customselect');
+                        // XXX put this in prepare()?
+                        
+                        $el->loadArray($multi['data']);
+                        $json = new Services_JSON();// XXX call statically?
+                        $editperms->setValue($json->encode($multi['editperms']));
+                    }
 
-                    // XXX put this in prepare()?
-
-                    $el->loadArray($multi['data']);
-                    $json = new Services_JSON();// XXX call statically?
-                    $editperms->setValue($json->encode($multi['editperms']));
                     
                     //XXX parentform isn't available at add, only at toHTML
                     $el->_parentForm =& $this->form;

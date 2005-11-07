@@ -11,10 +11,6 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-post the policy/bylaws from lisa!
-	at least the bylaws
-
-
 
 ??? QA
 test what i just did-- make sure edits, adds, etc all work, with custom/search
@@ -4463,3 +4459,10 @@ BUG
 	totally wrong: it's selecting all on searchselect. just stupid.
 	aaaikgh. everything dead. no entry on invitations. gah.
 	easy. return nothing if no n, in getlinkoptions
+
+BUGS
+	no that searchselect code is still totally fucked up
+	only search IFF there is a value AND it IS a searchselect
+		and only populate it too IFF it has a value OR it has a value and is not a searchselect
+ post the policy/bylaws from lisa!
+	at least the bylaws
