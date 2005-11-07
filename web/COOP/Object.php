@@ -882,7 +882,7 @@ function triggerNotices($audit_id)
         }
 
     // this is used by various linkdisplay-type summaries, i.e. JSON and popups
-    function &getData($query, $limit, $beginsWith)
+    function &findAnywhereInLinkfields($query, $limit, $beginsWith)
         {
             if(strlen($query)< 2){
                 return array();
@@ -900,14 +900,41 @@ function triggerNotices($audit_id)
             
             //$this->debugWrap(2);
 			$this->obj->find();
+        }
+
+
+
+	function getLinkOptions($chooseone = true)
+		{
+
+            //XXX check to make sure find has been called, error out if not
+
+            // NOTE!!! you must first do the finding outside of here!
+
+			// i ALWAYS want a choose one. always. screw FB.
+			if($chooseone){
+                $options[] = "-- CHOOSE ONE --";
+            }
+
+
 			while($this->obj->fetch()){
+                $this->recoverSafePK();
 				$options[(string)$this->obj->{$this->pk}] =
- $this->concatLinkFields();
+    $this->concatLinkFields();
+                $perms[$this->obj->{$this->pk}] = 
+    $this->isPermittedField() >= ACCESS_EDIT;
 			}
             
-            $this->page->confessArray($options, 'getData options', 4);
-            return $options;
+			$this->page->confessArray(
+                $options, 
+                "CoopObject::getLinkOptions({$this->table})", 6);
+            return array('data' => $options,
+                         'editperms' => $perms);
         }
+
+
+
+
     
     
     //used in coopform customselectboxes mostly

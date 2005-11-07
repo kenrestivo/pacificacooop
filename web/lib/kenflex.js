@@ -36,15 +36,22 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
         {
             this.selectBox.cleanBox();
             
-            for (match in this.matches)
+            for (match in this.matches.data)
             {
-                this.selectBox.options.add(new Option(this.matches[match], 
+                this.selectBox.options.add(new Option(this.matches.data[match], 
                                                       match));
             }
             
             this.selectBox.focus();
+
         }
     
+    this.populateEditperms = 
+        function ()
+        {
+            eval(this.editpermsname + ' =  this.matches.editperms');
+            
+        }
     
 // temporarily store the data in the object, then call populateBox to insert it
     this.fetchDataCallback = 
@@ -79,7 +86,8 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
             this.status.innerHTML = 'Done';
             
             this.populateBox();
-            
+
+            this.populateEditperms();
         }
 
   
@@ -132,12 +140,14 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
             
         }
     
-    
+/// CONSTRUCTOR    
     
 // to handle more than one
     this.searchBox = document.getElementsByName(searchBoxName)[0];
     this.selectBox = document.getElementsByName(selectBoxName)[0];
     this.status = document.getElementById('status-' + selectBoxName);
+    this.editpermsname = 'editperms_' + selectBoxName.replace(/-/g, '_');
+
     this.linkTableName = linkTableName;
     
     

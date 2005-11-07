@@ -3,6 +3,8 @@
 // $Id$
 
 require_once('HTML/QuickForm/select.php');
+
+
 class HTML_QuickForm_customselect extends HTML_QuickForm_select
 {
 
@@ -34,7 +36,6 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             
             //  need these for edit link
             $this->vals = $this->getValue();
-
 
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
@@ -75,6 +76,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                                               'action' => 'edit',
                                               $target_id => $this->vals[0],
                                               'push' => $this->getName())));
+                    // TODO: add a hidden field with the JSON perms array
                 }            
 
                 if($this->sub->isPermittedField(null, true, true) >= ACCESS_ADD)
@@ -104,6 +106,17 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
         {
             // Generate the javascript code needed to handle this element
             $js = '';
+
+
+            // specific to this select
+            // rebuild the table/field because i can't use - in globals!
+            $js .= sprintf(
+                'eval(\'editperms_%s_%s = \' + document.getElementsByName(\'editperms-%s\')[0].value);', 
+                $this->cf->table, $this->field,
+                $this->getName());
+
+
+            // non-specific
             if (!defined('HTML_QUICKFORM_CUSTOMSELECT_EXISTS')) {
                 // We only want to include the javascript code once per form
                 define('HTML_QUICKFORM_CUSTOMSELECT_EXISTS', true);
@@ -116,7 +129,10 @@ function processCustomSelect(selectbox, target_id, showtext)
    if(!edlink){
         return;
    }
-   if(selectbox.value > 0){ 
+   // XXX this is a global, and, that sucks
+   editperms = eval(\'editperms_\' + selectbox.name.replace(/-/g, \'_\'));
+
+   if(selectbox.value > 0 && editperms[selectbox.value]){ 
         edlink.className = "";
         // NOTE the THREE GODDAMNED BACKSLASHES HERE IN THE SOURCE CODE!!
         // to keep PHP from mangling it
@@ -134,10 +150,10 @@ function processCustomSelect(selectbox, target_id, showtext)
 /* end javascript for HTML_QuickForm_customselect */
                ';
 				
-                // wrap wrap wrap wrap it up. i'll take it. up the ying-yang.
-                   $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
-				   $js . "//]]>\n</script>";
             }
+            
+            $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
+                $js . "//]]>\n</script>";
  $js .= '<noscript><h1>WARNING! This page WILL NOT work without Javascript. You must enable Javascript in your browser first. Sorry about that.</h1></noscript>';
  return $js;
         }

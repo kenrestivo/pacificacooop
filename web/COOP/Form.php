@@ -31,6 +31,7 @@ require_once('lib/customselect.php');
 require_once('lib/searchselect.php');
 require_once('lib/customdatebox.php');
 require_once('lib/customrequired.php');
+require_once('Services/JSON.php');
 
 //////////////////////////////////////////
 /////////////////////// COOP FORM CLASS
@@ -204,13 +205,25 @@ class coopForm extends CoopObject
 					$this->form->addElement(&$el);
 					$el->setName($fullkey); 
 				} else if($this->isLinkField($key)) {
+                    // WHAT A FUCKING MESS! pull this out into a function
+
                     $type = 'select';
-                    // default all linkfields are customeselect, unless i hack
+                    // XXX this is fucked. shouldn't i do this with perms?
                     if(empty($this->obj->fb_addNewLinkFields) ||
                        in_array($key, $this->obj->fb_addNewLinkFields))
                     { 
                         $type = 'customselect';
+                        //always create this, both custom and search need it
+
+                        // TODO: blow off this hidden field, and just
+                        // do the javascript here directly to put the
+                        // editperms array into a javascript global var
+                        $editperms =& $this->form->addElement(
+                        'hidden',
+                        'editperms-' . $fullkey);
                         //XXX hack until i test for N found
+                        // TODO: check $tmp[0]->obj->N,
+                        //  call searchselect xif > lots
                         if(!empty($this->obj->fb_searchSelects) &&
                             in_array($key, $this->obj->fb_searchSelects))
                         {
@@ -221,13 +234,14 @@ class coopForm extends CoopObject
                     $el =& $this->form->addElement(
                         $type, 
                         $fullkey, false);
+                    /// XXX also have to put in the editperms for THIS ONE!
+                    // regardless of searchselect or not. comprendez-vous?
                     if($type != 'searchselect'){
                         $tmp = $this->findLinkOptions($key);
-                        // TODO: check $tmp[0]->obj->N,
-                        //  call searchselect if > lots
-                        $el->loadArray(call_user_func_array(
-                                           array($this, 'getLinkOptions'),
-                                           $tmp));
+                        $multi = $tmp[0]->getLinkOptions();
+                        $el->loadArray($multi['data']);
+                        $json = new Services_JSON();// XXX call statically?
+                        $editperms->setValue($json->encode($multi['editperms']));
                     }
                     //XXX parentform isn't available at add, only at toHTML
                     $el->_parentForm =& $this->form;
@@ -339,33 +353,6 @@ class coopForm extends CoopObject
 			$sub->obj->find();
 
 			return array(&$sub, $link);
-		}
-
-	function getLinkOptions(&$sub, $link, $chooseone = true)
-		{
-
-            //XXX check to make sure find has been called, error out if not
-
-            // NOTE!!! you must first do the finding outside of here!
-
-			// i ALWAYS want a choose one. always. screw FB.
-			if($chooseone){
-                $options[] = "-- CHOOSE ONE --";
-            }
-
-            // I can't use loaddbresult here. i need concatlinkfields
-            //$sub->debugWrap(2);
-			while($sub->obj->fetch()){
-                $sub->recoverSafePK();
-
-                //$link[1], NOT pk! in custom link, it MIGHT NOT be the pk!
-				$options[(string)$sub->obj->$link[1]] = 
-					$sub->concatLinkFields();
-			}
-
-			$this->page->confessArray($options, 
-                                      "CoopForm::getLinkOptions($key)", 6);
-			return $options;
 		}
 
 

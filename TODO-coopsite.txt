@@ -11,23 +11,6 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-BUGS
-	the dejarnatt entries. wtf happened?
-	aha! all the do-not-contacts are ok. 
-		but the ones without are completely fucked
-		something updated something with a find. 
-			CHECK EVERYWHERE UPDATE IS CALLED!
-	first of all, try to DUPLICATE it!
-		ok, first of all, do not contacts should not show up, should they?
-		no matter what id i get, when i edit it, it comes upburton
-   aha
-   	i must make sure the updates insist on a primary key DONE
-   	also take out any whereadds! nothing should be in there except key and data DONE
-   	i must make the new one limit 1 DONE
-   	i have to wrap my do not contact whereadd in a () in leads
-	at build time, after finding, make DAMNED sure the pk is what you say it is
-		is there any way to find out? yes, DONE
-   
 
 ??? PHP
 bring income entry back to life.
@@ -85,7 +68,7 @@ aha! scary fucking shit. in forms, it grabs only one of the families
 
 
 ??? PHP
-why don't the crosslinks work?
+\why don't the crosslinks work?
 	re do them. they make no fucking sense at all.
 	this is most curious. only groups and jobs work. or does it? why or why not?
 	huh, doesn't workf or jobs anymore either. i broke it?
@@ -138,17 +121,6 @@ same as what's in coopobject: go hit the URL, with audit_id!
 	the function to call takes the id as arg?
 	nice: js to insert a spinning progress gif
 
-
-???PHP/JSON
-need to check perms on edits before allowing it
-	either do it as a batch, or include it, or something
-	but i need them perms. i.e. ispermitted for everything i get
-		maybe return a struct instead of a 2-dimensional object?
-			and pre-populate it for customselect
-		my json needs to have that. {'id' : id, 
-									'value' : {'display': val, 
-												'edit' : edit}}
-		or maybe it's ok to edit in cases of say auction, where i can add fam
   	
 
   man i GOT to go through and dick with dupeignores!
@@ -4412,4 +4384,43 @@ blog stuff
 	horiztable in enrollment details is b0rken. but only there. why? 
 		compare to, say, generic. see what's different?
 		done	enhancement summary DETAILS is broken.... it does *not* show enhancement details	
-	it does now: extradetails
+	it does now: extradetailsBUGS
+	the dejarnatt entries. wtf happened?
+	aha! all the do-not-contacts are ok. 
+		but the ones without are completely fucked
+		something updated something with a find. 
+			CHECK EVERYWHERE UPDATE IS CALLED!
+	first of all, try to DUPLICATE it!
+		ok, first of all, do not contacts should not show up, should they?
+		no matter what id i get, when i edit it, it comes upburton
+   aha
+   	i must make sure the updates insist on a primary key DONE
+   	also take out any whereadds! nothing should be in there except key and data DONE
+   	i must make the new one limit 1 DONE
+   	i have to wrap my do not contact whereadd in a () in leads
+	at build time, after finding, make DAMNED sure the pk is what you say it is
+		is there any way to find out? yes, DONE
+
+???PHP/JSON
+need to check perms on edits before allowing it
+	either do it as a batch, or include it, or something
+	but i need them perms. i.e. ispermitted for everything i get
+		maybe return a struct instead of a 2-dimensional object?
+			and pre-populate it for customselect
+		my json needs to have that. {'id' : id, 
+									'value' : {'display': val, 
+												'edit' : edit}}
+		or maybe it's ok to edit in cases of say auction, where i can add fam
+	better: a perms hidden json: table_field_perms
+		populate it at foo time
+		and in my results set, two arrays, which get placed
+	or, when they select something, go get it via json
+		a function to go get something.
+	THIS IS NOT FUCKING POSSIBLE!! the code for generating the options is FUCKED
+		it's not generalised between customselect and searchselect
+		ah. getdata and getlinkoptions are duplications
+			getdata is wrong. it's more like findanywhereinlink
+	ok i think this is better now. throw in the stuff and let's see
+	AUUGH! customselect doesn't have any concept of combobox!
+		so i can't use its js for checking perms!
+	yes it is possible. and it works. but it's scaaaaaaaaaary!	

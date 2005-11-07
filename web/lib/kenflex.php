@@ -51,7 +51,7 @@ class DataFetcher{
                 $longfield = $vars['f'];
                 list($table, $fieldname) = explode('-', $longfield);
                 $co =& new CoopObject(&$this->page, $table, &$nothing);
-                if(!is_callable(array($co, 'getData'))){
+                if(!is_callable(array($co, 'findAnywhereInLinkfields'))){
                     $this->scram();
                 }
             } else {
@@ -71,9 +71,9 @@ class DataFetcher{
                 $beginsWith = ($vars["b"] == "0" ? false : true);
             
             
-            return $this->json->encode($co->getData($query, 
-                                                    $limit, 
-                                                    $beginsWith));
+            $co->findAnywhereInLinkfields($query, $limit, $beginsWith);
+            return $this->json->encode($co->getLinkOptions(false));
+
         }
 } // END DATAFETCHER
 
