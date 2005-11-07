@@ -12,10 +12,6 @@ MY agenda! dammit, mine! for a change....
 
 
 
-?? JS
-do my shit onload, not at a random point in parsing
-
-
 BUG
 	can i set to relative/friend? wtf?
 
@@ -23,6 +19,7 @@ BUG
 ??? QA
 test what i just did-- make sure edits, adds, etc all work, with custom/search
 	BOTH select types. check!
+	also doublecheck on windoze
 
 
 ??? PHP
@@ -4449,3 +4446,7 @@ need to check perms on edits before allowing it
 		so i can't use its js for checking perms!
 	yes it is possible. and it works. but it's scaaaaaaaaaary!	
 	edits are borken: array?
+
+?? JS
+do my shit onload, not at a random point in parsing
+	ok, hope it doesn't cause trouble

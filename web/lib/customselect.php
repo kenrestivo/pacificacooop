@@ -111,7 +111,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             // XXX this typeof is a hack to get around bug in httpunit
             // the right way would be to make this an onload or something
             $js .= sprintf(
-                'if(typeof document.getElementsByName == \'function\') {
+                'window.onload = function (){ 
                   eval(\'editperms_%s_%s = \' + document.getElementsByName(\'editperms-%s\')[0].value);
                  }', 
                 $this->cf->table, $this->field,
