@@ -82,14 +82,18 @@ var $fb_dupeIgnore = array(
     function fb_linkConstraints(&$co)
         {
 
-            ///XXX HIDEOUS HACK!! should *not* be companies always
-            if(!strstr($this->_join, 'companies_income_join')){
-                $par = $this->factory('companies_income_join');
-                $this->joinAdd($par);
-            }
+            ///XXX HIDEOUS HACK!! 
+
+            $companies =& new CoopObject(&$co->page, 
+                                         'companies_income_join', &$co);
+            $co->protectedJoin(&$companies);
 
 
-            //$co->constrainFamily();
+            $fam =& new CoopObject(&$co->page, 
+                                         'families_income_join', &$co);
+            $co->protectedJoin(&$fam);
+
+            $co->constrainFamily();
             $co->constrainSchoolYear();
             $co->orderByLinkDisplay();
             $co->grouper();

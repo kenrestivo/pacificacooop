@@ -93,4 +93,11 @@ class Kids extends CoopDBDO
         }
     
 
+    function preGenerateForm(&$form)
+        {
+            // XXX doesn't work.
+            //$form->CoopForm->overrides['families']['fb_allYears'] = 1; 
+
+        }
+
 }

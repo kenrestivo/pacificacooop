@@ -2,7 +2,7 @@ coop web database
 
 MY agenda! dammit, mine! for a change....
 	create generic report arch (reportnotes.txt)
-	json the subforms
+	json the subforms, should be easy!
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 	sortable/searchable reports (searchfeature.txt)
@@ -10,6 +10,46 @@ MY agenda! dammit, mine! for a change....
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 
+
+
+??? PHP
+bring income entry back to life.
+i don't give a damn if it's wrong, stupid, or broken. JUST DO IT.
+	show the account too: do like my margolis thing
+	check that perms are ok
+	auto-select the category? i.e. always families if from here?
+	enter this shit and be done with it
+
+
+BUGS
+	fix family chooser: must override! all years if permitted!
+		maybe var $fb_allYears = array('field' => 1)?
+			rigth now it only works for view, and is binary.
+
+
+???PHP
+family income alarm
+	copy from old code, and from auction/invitation too
+
+
+-----------
+BURNT (when too burnt out to do actual work)
+
+	move all the instructions over to the new thing
+
+	read greenspun's sql book
+
+
+----------------
+STUCK - behind things that are either prerequisites or MORE IMPORTANT
+
+
+BUGS
+	go back and fix families: 
+		only show those currently enrolled unless they have perms
+	add constrainfamily? constrainschoolyear?
+		ah! i see. users can see all previous years 
+			BUT I DON'T WANT THEM IN POPUPS!
 
 
 ??? QA
@@ -35,28 +75,10 @@ aha! scary fucking shit. in forms, it grabs only one of the families
 	it groups by! that may not be a good thing
 	hmm. but it works fine for coopview. why?
 		look at the fetches and go see what's up
-		huh. well it fetches both in edit. is it the luck of the draw? does dbdo do magick?
+		huh. well it fetches both in edit. is it the luck of the draw? 
+			does dbdo do magick?
 	maybe some kind of funky SQL thing
 
-
-??? PHP
-bring income entry back to life.
-	i don't give a damn if it's wrong, stupid, or broken. JUST DO IT.
-	dispatch linktables based on perms
-		i.e. if they have solicit, link to solicit, etc
-		can i press the existing perms shit into service for that?
-
-
------------
-BURNT (when too burnt out to do actual work)
-
-	move all the instructions over to the new thing
-
-	read greenspun's sql book
-
-
-----------------
-STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
 ??? PHP/JS
 will definitely need to save the state of a form before pushing
@@ -372,8 +394,18 @@ WATCH OUT! the popup link constraints needs to check the parent's allyears!!
 move teh family fees to the database! they're hard coded, taht is stupid
 
 
+??? PHP 
+income clusterfuck
+	dispatch linktables based on perms
+		i.e. if they have solicit, link to solicit, etc
+		can i press the existing perms shit into service for that?
+
+
+
 ----------------
 BELOW THE LINE
+
+
 
 put in admin perms for master names (people) for system admin too
 
@@ -2891,6 +2923,15 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	BUG	ok, nothing shows up after going sub!
+		why the fuck does it work with invitations and audit, but not income?
+		what-all is different?? should be the same code: setdefaults
+			ah, there are two popups
+		perms dude! i'm not permitted to see it, so it's not in the popup at all!
+			hence, it's not selected either. dur.
+			maybe i should add that thing in
+		ah, familiy join to get familid dumbass
+
 	shitcan the push/pop stuff for now.
 the debug stuff is still broken
 	it's not printing out ALL of it, in certain situations. flush?

@@ -24,4 +24,26 @@ class Families_income_join extends CoopDBDO
     ###END_AUTOCODE
 	var $fb_fieldLabels = array ('income_id' => "Check", 
 								 'family_id' => "Co-op Family");
+
+	var $fb_formHeaderText =  'Family Fees';
+
+	var $fb_requiredFields = array('income_id', 'family_id');
+
+	var $fb_linkDisplayFields = array('income_id', 'family_id');
+
+    var $fb_shortHeader = 'Family Fees';
+
+    var $fb_joinPaths = array('school_year' => 'income');
+
+	function fb_linkConstraints(&$co)
+		{
+            $auc =& new CoopObject(&$co->page, 'income', &$co);
+            $co->constrainSchoolYear();
+            $co->constrainFamily();
+            $co->protectedJoin($auc);
+            $co->orderByLinkDisplay();
+            $co->grouper();
+		}
+
+
 }

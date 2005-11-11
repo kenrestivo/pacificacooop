@@ -408,8 +408,10 @@ group by user_id,table_name,field_name";
 
 
             $this->page->printDebug(
-                sprintf('ispermitted(%s : %s) RETURNING for OBJ famid [%s] , my famid [%d], force user [%s] force year [%s] perms [%s]', 
-                        $this->table, $key, empty($this->obj->family_id) ? 
+                sprintf('ispermitted(%s : %s) RETURNING for pk %d, OBJ famid [%s] , my famid [%d], force user [%s] force year [%s] perms [%s]', 
+                        $this->table, $key, 
+                        $this->obj->{$this->pk},
+                        empty($this->obj->family_id) ? 
                         'NO FAMILY ID IN OBJECT' : $this->obj->family_id, 
                         $this->page->userStruct['family_id'], 
                         $forceuser, $forceyear, $res),

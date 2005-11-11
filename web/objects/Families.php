@@ -61,7 +61,10 @@ class Families extends CoopDBDO
             $enrollment =  $this->factory('enrollment');
 
             // HACK! this is presuming VIEW, but in popup it could be EDIT
-            
+
+
+            // TODO: make all these protectedjoin!
+
             $kids =  $this->factory('kids');
             $kids->joinAdd($enrollment, 'left');
             
@@ -71,15 +74,15 @@ class Families extends CoopDBDO
             // FORCE the familyid! so i don't grab the crap from elswhere
             $this->selectAdd('families.family_id as family_id');
     
+            // XXX can't do this yet, how to force allyears
+            //in cases like roster!
+            $co->constrainSchoolYear();
+
+            //$co->constrainFamily(): // no point in this?
             $co->orderByLinkDisplay();
             $co->grouper();
             
-            // XXX broken! in previous years, i need to see dropouts
-            if($co->perms[NULL]['year'] < ACCESS_VIEW){
-                $enrollment->whereAdd(
-                    '(school_year is not null and (dropout_date is null or dropout_date < "2000-01-01"))');
-            }
-            
+
             //$co->debugWrap(4);
 
  		}

@@ -3,6 +3,9 @@
 
 -- add table permisssions: user instructions and auction stuff to System realm
 
--- add families/income, and perms for restivo (others too?) to edit
+-- user perms: fees income change from solicitation to fees
 
-alter table leads drop column relation;
+-- restivo family gets admin perms  (springfest gets them removed?)
+
+-- finally, look at audit trail for system, to check i got all of these
+
