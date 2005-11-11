@@ -207,19 +207,17 @@ group by user_id,table_name,field_name";
 				return false;
 			}
 
-			//ok, we have run the fucking gauntlet here.
-			//confessObj($obj, 
-//					   "checkLinkField() from $this->table: obj with links for $key of $val");
+
+            //XXX ok. this is stupid. i'm instantiating the sub and getting
+            // what i should be doing is using the DBDO's getLink()
+            // but i *can't* do that because i need methods like concatlinkfield
+            // the right way to do this would be to add my linkfield methods
+            // to the CoopDBDO subclass of DBDO. it is just plain wrong now.
             list($subtable, $subkey) = explode(':', $this->forwardLinks[$key]);
 			$sub =& new CoopObject(&$this->page, $subtable, &$this);
             $sub->obj->get($subkey, $this->obj->$key);
             
 
-	//confessObj($subobj, "checkLInkFild() subobj $subobj->__table for $key of $val");
-
-
-			// remember, subobj does NOT have a concatlinkfields method
-			// so i am keepign the method here and passing the subobj
 			return $sub->concatLinkFields();
 		}
 
@@ -244,7 +242,7 @@ group by user_id,table_name,field_name";
 					// might be more readable
                     // TODO: make sure i don't show the - if nothing there
                     // ALSO TODO: do the formatting i.e. coopview toArray!!
-					$val .= sprintf("%s%s", $val ? ' - ' : "", 
+					$val .= sprintf("%s%s", $val ? ' ' . chr(183) . ' ' : "", 
 									$this->checkLinkField($linkfield, 
                                                           $this->obj->$linkfield));
 				}

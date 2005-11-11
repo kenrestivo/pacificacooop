@@ -229,7 +229,7 @@ parent ed and subscriptions margolis UI (parented.txt)
 	search feature will be crucial to this!!
 
 
-nifty stuff FOR ME for a change (below the line)
+nifty stuff FOR ME for a change (belosw the line)
 	just PLAY!
 
 
@@ -405,6 +405,13 @@ income clusterfuck
 ----------------
 BELOW THE LINE
 
+??? PHP
+	concatlinkfields don't seem to work on imported fields
+		i.e. on fields from a jointable. fuck a duck.
+			maybe go digging up the heirarchy? looking for it?
+			so islinkfield can check parents up the line
+		but what if it is up the line? 
+			checklinkfield needs to return the parent's concatlinkfield
 
 
 put in admin perms for master names (people) for system admin too

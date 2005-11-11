@@ -39,7 +39,7 @@ family_id and school_year are *special* fields
 			using quickform setdefaults, so any setting overrides it
 		automatically searched for in genericview, IFF perms require it!
 	family_id
-
+a field *must* be in fb_fieldLabels or it won't get rendered. do it.
 
 
 to create a new table: est time per table: 1-2 hours

@@ -37,7 +37,8 @@ class Income extends CoopDBDO
 								'check_date');
 	var $fb_linkDisplayFields = array('payer', 
 									  'payment_amount', 
-									  'check_date');
+									  'check_date',
+                                      'account_number');
     var $fb_shortHeader = 'Income';
 
 	var $fb_fieldLabels = array( 
