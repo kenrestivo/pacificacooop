@@ -160,7 +160,7 @@ Tax ID # 94-1527749
 	
 			$text .= '<div id="mainletter"><p class="letter">';
 			$text .= str_replace($from, $to, 
-								 nl2br(htmlspecialchars($this->template)));
+								 nl2br(htmlentities($this->template)));
 			$text .= '</p></div>';
 
 			//hack for the "tagline" at the bottom. 

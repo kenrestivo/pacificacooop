@@ -2,7 +2,7 @@ coop web database
 
 MY agenda! dammit, mine! for a change....
 	create generic report arch (reportnotes.txt)
-	json the subforms, should be easy!
+	json the subforms0, should be easy!
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 	sortable/searchable reports (searchfeature.txt)
@@ -11,17 +11,20 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-
 ??? PHP
 bring income entry back to life.
 i don't give a damn if it's wrong, stupid, or broken. JUST DO IT.
-	show the account too: do like my margolis thing
-	check that perms are ok
-	auto-select the category? i.e. always families if from here?
+	check that perms are ok: that it doesn't show stuff it's not supposed to
+		gah. some people need to see all SPRINGFEST income, not all income
+			maybe a special callback/override in ispermitted?
+			like, solicitation, 'frinstance
+	you know what? fuck solicitation.
 	enter this shit and be done with it
 
 
 BUGS
+	fix perms for family fees, income, babies, enhancement, 
+		instructions, logins, groups
 	fix family chooser: must override! all years if permitted!
 		maybe var $fb_allYears = array('field' => 1)?
 			rigth now it only works for view, and is binary.
@@ -404,6 +407,11 @@ income clusterfuck
 
 ----------------
 BELOW THE LINE
+
+ah. the form title uses that titleheaderthing.
+	make it use the same one as coopview
+
+
 
 ??? PHP
 	concatlinkfields don't seem to work on imported fields
@@ -2930,6 +2938,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	auto-select the category? i.e. always families if from here?
+
 	BUG	ok, nothing shows up after going sub!
 		why the fuck does it work with invitations and audit, but not income?
 		what-all is different?? should be the same code: setdefaults
@@ -4514,3 +4524,4 @@ BUGS
 		and only populate it too IFF it has a value OR it has a value and is not a searchselect
  post the policy/bylaws from lisa!
 	at least the bylaws
+	show the account too: do like my margolis thing

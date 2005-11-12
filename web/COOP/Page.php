@@ -362,7 +362,7 @@ class coopPage
             
             $this->confessArray($args, 
                                 sprintf('CoopPage::selfURL() returning [%s]',
-                                        htmlspecialchars($res)), 
+                                        htmlentities($res)), 
                                 5);
             return $res; 
 		}

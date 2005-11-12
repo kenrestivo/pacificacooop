@@ -70,9 +70,9 @@ class coopForm extends CoopObject
 												  false, false, true);
 			}
 			$this->form->addElement('header', $formname, 
-							  $this->obj->fb_formHeaderText ?
-							  $this->obj->fb_formHeaderText : 
-							  ucwords($this->table));
+                                    $this->obj->fb_formHeaderText ?
+                                    $this->obj->fb_formHeaderText : 
+                                    ucwords($this->table));
 
 			// will need to guess field types
 			$this->_tableDef = $this->obj->table();

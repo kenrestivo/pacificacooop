@@ -340,7 +340,7 @@ class coopView extends CoopObject
                     //TODO: a little checkbox PNG would be nice
                     $res[] =  $val? 'X' :'';
                 } else {
-                    $res[] = nl2br(htmlspecialchars(
+                    $res[] = nl2br(htmlentities(
                                        $this->checkLinkField($key, $val)));
                 }
 				
