@@ -6,7 +6,7 @@ require_once 'DB/DataObject.php';
 
 class Families_income_join extends CoopDBDO 
 {
-    ###START_AUTOCODE
+###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'families_income_join';            // table name
@@ -21,7 +21,7 @@ class Families_income_join extends CoopDBDO
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Families_income_join',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-    ###END_AUTOCODE
+###END_AUTOCODE
 	var $fb_fieldLabels = array ('income_id' => "Check", 
 								 'family_id' => "Co-op Family");
 
@@ -46,8 +46,6 @@ class Families_income_join extends CoopDBDO
 		}
 
 
-
-		}
 
 
     function fb_display_alert(&$co)
@@ -127,7 +125,7 @@ class Families_income_join extends CoopDBDO
 
 
 
-			// check for indulgences
+            // check for indulgences
             $cv = new CoopObject(&$co->page, 'nag_indulgences', $nothing);
             $cv->obj->family_id = $fid;
             $cv->obj->school_year = $co->page->currentSchoolYear;
@@ -147,8 +145,6 @@ class Families_income_join extends CoopDBDO
             }
 	
 
-
-
             // this code ought to be taken out and shot
             $cv = new CoopObject(&$co->page, 'families_income_join', $nothing);
             $cv->obj->family_id = $fid;
@@ -164,7 +160,7 @@ class Families_income_join extends CoopDBDO
                 return array(true, 
                              sprintf("Congratulations! 
 						You have paid your food/raffle fee of $%0.2f.", 
-                                    $cv->obj->_income_id->payment_amount));
+                                     $cv->obj->_income_id->payment_amount));
             }
 
 
@@ -188,3 +184,5 @@ class Families_income_join extends CoopDBDO
 
 
 }
+
+?>
