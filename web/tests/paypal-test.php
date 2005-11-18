@@ -77,8 +77,10 @@ switch($_REQUEST['action'])
 	 print $pp->postTransaction($_REQUEST['uid']);
  case 'list':
  default:
-	 print $cp->selfURL('test 16', 'action=test&uid=16');
-	 print $cp->selfURL('test 17', 'action=test&uid=17');
+	 print $cp->selfURL(array('value' =>'test 16', 
+                              'inside'=> 'action=test&uid=16'));
+	 print $cp->selfURL(array('value' => 'test 17', 
+                              'inside' => 'action=test&uid=17'));
 	 break;
 }
 

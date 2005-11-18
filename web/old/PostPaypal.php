@@ -33,7 +33,7 @@ class PostPaypal
 	var $account_number;
 	var $company_id;
     var $income_id;
-	var $uid;
+	var $uid; // NOTE! this is not USER ID! this is paypal's "uid"-- unique id
 	var $paypal_obj;
 	var $key_mapping = array( 'fid' => 'family_id',
 							  'coa' => 'account_number',
@@ -70,9 +70,10 @@ class PostPaypal
 
 	// actually saves a paypal transaction as an income item
 	//this is the main engine
+	//  AGAIN NOTE! uid is *not* USER ID, it is UNIQUE ID, a paypal thing
 	function postTransaction($uid)
 		{
-			$this->uid = $uid;
+			$this->uid = $uid; 
 			$this->paypal_obj =& $this->factoryWrapper('accounting_paypal');
 			$this->paypal_obj->get($this->uid);
             

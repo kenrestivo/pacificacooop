@@ -13,27 +13,25 @@ MY agenda! dammit, mine! for a change....
 
 ??? PHP
 bring income entry back to life.
-i don't give a damn if it's wrong, stupid, or broken. JUST DO IT.
+	the alarm stuff for family income
+		copy from old code, and from auction/invitation too
+	i don't give a damn if it's wrong, stupid, or broken. JUST DO IT.
 	check that perms are ok: that it doesn't show stuff it's not supposed to
-		gah. some people need to see all SPRINGFEST income, not all income
-			maybe a special callback/override in ispermitted?
-			like, solicitation, 'frinstance
-	you know what? fuck solicitation.
+		make sure people have perms to see their own income
+			ahggg. null/zero again
 	enter this shit and be done with it
+	finally the fucking paypal
 
 
 BUGS
 	fix perms for family fees, income, babies, enhancement, 
 		instructions, logins, groups
+		hmm. maybe a custom override to enum?
+			insert and update, and enum. any -1 is a NULL!
+			fuck, i gotta use it everywhere: reports, table, userprivs
 	fix family chooser: must override! all years if permitted!
-		maybe var $fb_allYears = array('field' => 1)?
+		maybe var fb_allYears = array('field' => 1)?
 			rigth now it only works for view, and is binary.
-
-
-???PHP
-family income alarm
-	copy from old code, and from auction/invitation too
-
 
 -----------
 BURNT (when too burnt out to do actual work)
@@ -54,6 +52,7 @@ BUGS
 		ah! i see. users can see all previous years 
 			BUT I DON'T WANT THEM IN POPUPS!
 
+redo the nag report?
 
 ??? QA
 test what i just did-- make sure edits, adds, etc all work, with custom/search
@@ -2938,6 +2937,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+		gah. some people need to see all SPRINGFEST income, not all income
+			maybe a special callback/override in ispermitted?
+			like, solicitation, 'frinstance
+	you know what? fuck solicitation.
+
+
 	auto-select the category? i.e. always families if from here?
 
 	BUG	ok, nothing shows up after going sub!

@@ -66,7 +66,7 @@ class Auction_items_families_join extends CoopDBDO
             //PAYPAL BUTTON HERE
             $form =& new paypalForm('Springfest Invitations Forfeit Fee', 
                                     'auctionforfeit',   'MembersPage', false);
-            $form->addElement('hidden', 'amount', '50.00');
+            $form->addElement('hidden', 'amount', COOP_AUCTION_VALUE_REQUIRED);
             $form->addElement('hidden', 'custom', 
                               sprintf("fid%d:coa%d",
                                       $id, COOP_AUCTION_FORFEIT_FEE)); 
@@ -82,7 +82,10 @@ class Auction_items_families_join extends CoopDBDO
 		
             //TODO: use css
             $tab = new HTML_Table();
-            $tab->addCol(array('<p>Or you may click here to pay a $50 fee instead of donating an auction item:</p>'));
+            $tab->addCol(
+                array(
+                    sprintf('<p>Or you may click here to pay a $%0.2f fee instead of donating an auction item:</p>', 
+                            COOP_AUCTION_FORFEIT_FEE)));
             $tab->addCol(array($form->toHTML()));
             
             $res .= $tab->toHTML();

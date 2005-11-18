@@ -40,6 +40,7 @@ class paypalForm extends HTML_QuickForm
             $parth = pathinfo($_SERVER['SCRIPT_FILENAME']);
             $dir = $parth['dirname'] ;
             if(preg_match('/-dev/', $dir) > 0 ) {
+                // the fake dev acoount
                 $this->account = "pacificanurseryschool@yahoo.com"  ;
 				$this->server = 
 					'https://www.sandbox.paypal.com/cgi-bin/webscr';

@@ -102,11 +102,5 @@ class Table_permissions extends CoopDBDO
             
 //        }
 
-    function FOOfb_display_details(&$co)
-        {
-            /// TODO: the showperms from coopview
-            
-        }
-    
 
 }
