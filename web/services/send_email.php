@@ -88,8 +88,9 @@ class EmailChanges
     function mailIt($to)
         {
             $user =& $this->audit_co->obj->getLink('audit_user_id');
-            $fam =& $user->getLink('family_id');
-
+            if($user->family_id){ // SOME USERS DON'T HAVE FAMILIES!
+                $fam =& $user->getLink('family_id');
+            }
 
             $headers['From'] = sprintf('%s <%s>',
                                        $user->name ? $user->name :
