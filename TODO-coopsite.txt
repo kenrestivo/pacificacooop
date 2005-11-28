@@ -2,7 +2,7 @@ coop web database
 
 MY agenda! dammit, mine! for a change....
 	create generic report arch (reportnotes.txt)
-	json the subforms0, should be easy!
+	json the subformsq, should be easy!
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 	sortable/searchable reports (searchfeature.txt)
@@ -13,13 +13,15 @@ MY agenda! dammit, mine! for a change....
 
 ??? PHP
 bring income entry back to life.
-	the alarm stuff for family income
-		copy from old code, and from auction/invitation too
-	i don't give a damn if it's wrong, stupid, or broken. JUST DO IT.
+	make sure people have perms to see their own income
+		manual dicking with SQL NULL's
 	check that perms are ok: that it doesn't show stuff it's not supposed to
-		make sure people have perms to see their own income
-			ahggg. null/zero again
 	enter this shit and be done with it
+	and springfesters want to see their income too
+	STUCK: ambiguous familyid if you have multiple joins to it
+		gah. union, i suppose
+
+???PHP/QA/bureaucracy
 	finally the fucking paypal
 
 
@@ -410,6 +412,13 @@ BELOW THE LINE
 ah. the form title uses that titleheaderthing.
 	make it use the same one as coopview
 
+???PHP
+		ahggg. null/zero again
+			maybe make a hackypoo on that? override insert/update methods?
+			and display too, to show null
+				'' == null, 0 = 0
+		hmm. -1 should show up, but it doesn't. why?
+		yank choose one. default shoudl be invalid
 
 
 ??? PHP
@@ -4530,3 +4539,7 @@ BUGS
  post the policy/bylaws from lisa!
 	at least the bylaws
 	show the account too: do like my margolis thing
+	the alarm stuff for family income
+		copy from old code, and from auction/invitation too
+	i don't give a damn if it's wrong, stupid, or broken. JUST DO IT.
+ah shit. email bug. familyid = 0?

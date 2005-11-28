@@ -1,3 +1,9 @@
+-- fix it
+drop table access_levels;
+
+-- use the new definition for accesslevels (definition.sql)
+-- seed the new accesslevels (seed.sql)
+
 
 --- do it
 

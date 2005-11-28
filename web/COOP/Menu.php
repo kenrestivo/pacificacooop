@@ -194,7 +194,7 @@ class CoopMenu extends HTML_Menu
 select 
 report_permissions.report_name, report_permissions.page,
 max(if((upriv.max_group > report_permissions.menu_level or
-report_permissions.menu_level is null), 
+report_permissions.menu_level is null or report_permissions.menu_level < 0), 
 upriv.max_group, NULL)) as cooked_menu
 from report_permissions 
 left join 

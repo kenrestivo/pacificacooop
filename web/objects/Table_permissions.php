@@ -46,7 +46,10 @@ class Table_permissions extends CoopDBDO
                                      'field_name' => 'useLabel');
 
     var $fb_linkDisplayFields =  array('realm_id', 'table_name', 'field_name');
-
+    var $fb_defaults = array('user_level' => -1,
+                             'group_level' => -1,
+                             'menu_level' => -1,
+                             'year_level' => -1);
 
     function preGenerateForm(&$form)
         {

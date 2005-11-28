@@ -9,8 +9,10 @@ fields i added to the dataobject, which are *not* in FormBuilder
 in DO:
 fb_display_[view|details|summary|alarm]
 fb_URLFIelds array(fieldn...)
-fb_joinPaths  array(table -> path:tghrough:links). 
-    used for disambiguating constrainschoolyear() if there are multiple
+fb_joinPaths  array(table -> path:tghrough:links or array(path:through, more:through)). 
+    used for disambiguating constrainschoolyear() and constrainfamily(),
+        if there are multiple
+    the path can be either one or more, if there are >1, it is coalesced
 fb_usePage    "" (old page)
 fb_longHeader "" (old summary, if applicable)
 fb_shortHeader "" (old shortdesc)

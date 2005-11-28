@@ -52,16 +52,15 @@ class coopObject
     var $permsQuery = "select 
 table_permissions.table_name, table_permissions.field_name,
 max(if((upriv.max_user <= table_permissions.user_level or
-table_permissions.user_level is null), 
+table_permissions.user_level is null or table_permissions.user_level < 0), 
 upriv.max_user, table_permissions.user_level)) as cooked_user,
 max(if((upriv.max_group >=  table_permissions.group_level or
-table_permissions.group_level is null), 
+table_permissions.group_level is null or table_permissions.group_level < 0), 
 upriv.max_group, NULL )) as cooked_group,
-max(if((upriv.max_user > table_permissions.menu_level or
-table_permissions.menu_level is null),
+ max(if((upriv.max_user > table_permissions.menu_level or
+table_permissions.menu_level is null or table_permissions.menu_level < 0), 
 upriv.max_user, NULL)) as cooked_menu,
-max(if((upriv.max_year > table_permissions.user_level 
-or table_permissions.year_level is null),
+max(if((upriv.max_year > table_permissions.user_level or table_permissions.year_level is null or table_permissions.year_level < 0),
 upriv.max_year, table_permissions.year_level)) as cooked_year
 from table_permissions 
 left join 
@@ -556,10 +555,23 @@ group by user_id,table_name,field_name";
     function constrainFamily($force = false)
         {
 
+            // handle array case: more than one link to familyid
             if(!empty($this->obj->fb_joinPaths['family_id'])){
-                $paths = explode(':', $this->obj->fb_joinPaths['family_id']);
-                $last = array_pop($paths);
-                $this->page->printDebug("CoopObject::constrainFamily({$this->table}) final path is $last", 2);
+                if(is_array($this->obj->fb_joinPaths['family_id'])){
+                    foreach($this->obj->fb_joinPaths['family_id'] as $path){
+                        $paths = explode(':', $path);
+                        $last[] = array_pop($paths);
+                    }
+                    $this->page->printDebug(
+                        sprintf('CoopObject::constrainFamily(%s) final paths are %s',
+                                $this->table,
+                                implode(', ', $last)), 2);
+                } else {
+                    $paths = explode(':', 
+                                     $this->obj->fb_joinPaths['family_id']);
+                    $last = array_pop($paths);
+                    $this->page->printDebug("CoopObject::constrainFamily({$this->table}) final path is $last", 2);
+                }
             }
 
 
@@ -569,11 +581,23 @@ group by user_id,table_name,field_name";
             {
                 $this->page->printDebug("FORCING familyid for search, with wheraedd", 2);
 
-                //TODO: i'm going to have to specify the table here,
-                //using joinpath, as i do in constrainschoolyear
-                $this->obj->whereAdd(
-                    sprintf('family_id = %d',
-                            $this->page->userStruct['family_id']));
+                if(is_array($last)){
+                    $this->obj->whereAdd(
+                        sprintf(
+                            'coalesce(%s) = %d',
+                            implode(',', 
+                                    array_map(
+                                        create_function(
+                                            '$i',
+                                            'return($i . ".family_id");'),
+                                    $last)),
+                        $this->page->userStruct['family_id']));
+                } else {
+                    $this->obj->whereAdd(
+                        sprintf('%sfamily_id = %d',
+                                $last ? $last . '.' : '',
+                                $this->page->userStruct['family_id']));
+                }
             }
             
         }

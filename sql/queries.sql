@@ -1150,15 +1150,15 @@ order by packages.package_number
 select 
 table_permissions.table_name, table_permissions.field_name,
 max(if((upriv.max_user <= table_permissions.user_level or
-table_permissions.user_level is null), 
+table_permissions.user_level is null or table_permissions.user_level < 0), 
 upriv.max_user, table_permissions.user_level)) as cooked_user,
 max(if((upriv.max_group >=  table_permissions.group_level or
-table_permissions.group_level is null), 
+table_permissions.group_level is null or table_permissions.group_level < 0), 
 upriv.max_group, NULL )) as cooked_group,
  max(if((upriv.max_user > table_permissions.menu_level or
-table_permissions.menu_level is null), 
+table_permissions.menu_level is null or table_permissions.menu_level < 0), 
 upriv.max_user, NULL)) as cooked_menu,
-max(if((upriv.max_year > table_permissions.user_level or table_permissions.year_level is null),
+max(if((upriv.max_year > table_permissions.user_level or table_permissions.year_level is null or table_permissions.year_level < 0),
 upriv.max_year, table_permissions.year_level)) as cooked_year
 from table_permissions 
 left join 

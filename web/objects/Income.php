@@ -76,6 +76,10 @@ var $fb_dupeIgnore = array(
      'check_number' => 10
    );
 
+    var $fb_joinPaths = array('family_id' => array('companies_income_join',
+                                                   'families_income_join'));
+
+
 // set check_number size = 10
 
 // set account_number check_jointo = families
