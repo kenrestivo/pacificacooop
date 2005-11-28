@@ -11,21 +11,20 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
+push live, then enter shiiite!
+
 ??? PHP
 bring income entry back to life.
-	make sure people have perms to see their own income
-		manual dicking with SQL NULL's
-	check that perms are ok: that it doesn't show stuff it's not supposed to
 	enter this shit and be done with it
 	and springfesters want to see their income too
-	STUCK: ambiguous familyid if you have multiple joins to it
-		gah. union, i suppose
 
 ???PHP/QA/bureaucracy
 	finally the fucking paypal
 
 
 BUGS
+	AM/PM is fucked up in date stuff. check my regression test. auugh
+		any AM is showing up as PM
 	fix perms for family fees, income, babies, enhancement, 
 		instructions, logins, groups
 		hmm. maybe a custom override to enum?
@@ -4543,3 +4542,9 @@ BUGS
 		copy from old code, and from auction/invitation too
 	i don't give a damn if it's wrong, stupid, or broken. JUST DO IT.
 ah shit. email bug. familyid = 0?
+ 	make sure people have perms to see their own income
+		manual dicking with SQL NULL's
+	check that perms are ok: that it doesn't show stuff it's not supposed to
+	STUCK: ambiguous familyid if you have multiple joins to it
+		gah. union, i suppose
+		easy, coalesce
