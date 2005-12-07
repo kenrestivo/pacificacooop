@@ -156,6 +156,39 @@ class UtilsTest extends PHPUnit_TestCase {
                             human_to_sql_timestamp('1/1/2005 1:00pm'));
     }
 
+
+    function test_HUMANdatetimelcSHORTNOAM() {
+        $this->assertEquals('2005-01-01 08:00', 
+                            human_to_sql_timestamp('01/01/2005 8:00'));
+    }
+
+
+    function test_HUMANdatetimelcNOAM() {
+        $this->assertEquals('2005-01-01 08:00', 
+                            human_to_sql_timestamp('01/01/2005 08:00'));
+    }
+
+    function test_HUMANdatetimelcSHORTspaceAM() {
+        $this->assertEquals('2005-01-01 08:00', 
+                            human_to_sql_timestamp('01/01/2005 8:00 am'));
+    }
+
+
+    function test_HUMANdatetimelcSHORTAM() {
+        $this->assertEquals('2005-01-01 08:00', 
+                            human_to_sql_timestamp('01/01/2005 8:00am'));
+    }
+
+    function test_HUMANdatetimelcAM() {
+        $this->assertEquals('2005-01-01 08:00', 
+                            human_to_sql_timestamp('01/01/2005 08:00am'));
+    }
+
+    function test_HUMANdatetimelcspaceAM() {
+        $this->assertEquals('2005-01-01 08:00', 
+                            human_to_sql_timestamp('01/01/2005 08:00 am'));
+    }
+
     /// ALSO ADD VARIATIONS THAT TEST FOR ALREADY OK!
     // i.e. passing an sqldate to humantosqldate, and vice versa
 
