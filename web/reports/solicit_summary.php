@@ -104,7 +104,7 @@ left join
      left join income 
               on cinj.income_id = 
                 income.income_id
-        where school_year = '$schoolyear'
+        where school_year like '$schoolyear'
         group by cinj.company_id) 
     as inc
         on inc.account_number = coa.account_number
@@ -117,7 +117,7 @@ left join
      left join income 
               on ap.income_id = 
                 income.income_id
-        where income.school_year = '$schoolyear'
+        where income.school_year like '$schoolyear'
         group by atd.company_id) 
     as pur
         on pur.account_number = coa.account_number
@@ -143,7 +143,7 @@ left join
      left join auction_donation_items  as adi
               on caj.auction_donation_item_id = 
                 adi.auction_donation_item_id
-        where school_year = '$schoolyear'
+        where school_year like '$schoolyear'
         group by caj.family_id) 
     as auct
         on auct.family_id = families.family_id
@@ -153,7 +153,7 @@ left join
      left join in_kind_donations as ikd
               on cikj.in_kind_donation_id = 
                 ikd.in_kind_donation_id
-        where school_year = '$schoolyear'
+        where school_year like '$schoolyear'
         group by cikj.family_id) 
     as iks
         on iks.family_id = families.family_id
@@ -163,7 +163,7 @@ left join
      left join income 
               on cinj.income_id = 
                 income.income_id
-        where school_year = '$schoolyear'
+        where school_year like '$schoolyear'
         group by cinj.family_id) 
     as inc
         on inc.family_id = families.family_id
@@ -202,7 +202,7 @@ left join
      left join auction_donation_items  as adi
               on caj.auction_donation_item_id = 
                 adi.auction_donation_item_id
-        where school_year = '$schoolyear'
+        where school_year like '$schoolyear'
         group by caj.company_id) 
     as auct
         on auct.company_id = companies.company_id
@@ -212,7 +212,7 @@ left join
      left join in_kind_donations as ikd
               on cikj.in_kind_donation_id = 
                 ikd.in_kind_donation_id
-        where school_year = '$schoolyear'
+        where school_year like '$schoolyear'
         group by cikj.company_id) 
     as iks
         on iks.company_id = companies.company_id
@@ -222,7 +222,7 @@ left join
      left join income 
               on cinj.income_id = 
                 income.income_id
-        where school_year = '$schoolyear'
+        where school_year like '$schoolyear'
         group by cinj.company_id) 
     as inc
         on inc.company_id = companies.company_id
@@ -235,7 +235,7 @@ left join
      left join income 
               on ap.income_id = 
                 income.income_id
-        where income.school_year = '$schoolyear'
+        where income.school_year like '$schoolyear'
         group by atd.company_id) 
     as pur
         on pur.company_id = companies.company_id
@@ -273,7 +273,7 @@ left join
      left join auction_donation_items  as adi
               on caj.auction_donation_item_id = 
                 adi.auction_donation_item_id
-        where school_year = '$schoolyear'
+        where school_year like '$schoolyear'
         group by caj.company_id) 
     as auct
         on auct.company_id = companies.company_id
@@ -283,7 +283,7 @@ left join
      left join in_kind_donations as ikd
               on cikj.in_kind_donation_id = 
                 ikd.in_kind_donation_id
-        where school_year = '$schoolyear'
+        where school_year like '$schoolyear'
         group by cikj.company_id) 
     as iks
         on iks.company_id = companies.company_id
@@ -293,7 +293,7 @@ left join
      left join income 
               on cinj.income_id = 
                 income.income_id
-        where school_year = '$schoolyear'
+        where school_year like '$schoolyear'
         group by cinj.company_id) 
     as inc
         on inc.company_id = companies.company_id
@@ -306,7 +306,7 @@ left join
      left join income 
               on ap.income_id = 
                 income.income_id
-        where income.school_year = '$schoolyear'
+        where income.school_year like '$schoolyear'
         group by atd.company_id) 
     as pur
         on pur.company_id = companies.company_id
