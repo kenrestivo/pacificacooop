@@ -287,7 +287,7 @@ insert into sources set
             source_id = 9,
             description = "Solicitation";
 
---- ad sizes
+--- 2004 ad sizes
 insert into ad_sizes set
     ad_size_description = "Back Page or Inside Front/Back Cover",
     ad_price = 250,
@@ -315,6 +315,66 @@ insert into ad_sizes set
     ad_size_description = "Business Card",
     ad_price = 30,
     school_year = '2004-2005';
+
+
+--- 2003 ad sizes
+insert into ad_sizes set
+    ad_size_description = "Back Page or Inside Front/Back Cover",
+    ad_price = 250,
+    school_year = '2003-2004';
+
+insert into ad_sizes set
+    ad_size_description = "Full Page",
+    ad_price = 150,
+    school_year = '2003-2004';
+
+
+insert into ad_sizes set
+    ad_size_description = "1/2 Page",
+    ad_price =  85,
+    school_year = '2003-2004';
+
+
+insert into ad_sizes set
+    ad_size_description = "1/4 Page",
+    ad_price = 50,
+    school_year = '2003-2004';
+
+
+insert into ad_sizes set
+    ad_size_description = "Business Card",
+    ad_price = 30,
+    school_year = '2003-2004';
+
+
+--- 2005 ad sizes
+insert into ad_sizes set
+    ad_size_description = "Back Page or Inside Front/Back Cover",
+    ad_price = 250,
+    school_year = '2005-2006';
+
+insert into ad_sizes set
+    ad_size_description = "Full Page",
+    ad_price = 150,
+    school_year = '2005-2006';
+
+
+insert into ad_sizes set
+    ad_size_description = "1/2 Page",
+    ad_price =  85,
+    school_year = '2005-2006';
+
+
+insert into ad_sizes set
+    ad_size_description = "1/4 Page",
+    ad_price = 50,
+    school_year = '2005-2006';
+
+
+insert into ad_sizes set
+    ad_size_description = "Business Card",
+    ad_price = 30,
+    school_year = '2005-2006';
 
 
 

@@ -11,13 +11,14 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-
 4-8 hours PHP 
 fix the solicitation income stuff
 	in the linkconstraints, would need to weave in perm-checking somehow
 		link deep into the account number, which has realm, IIRC
 	this could be ugly. would need to override the getperms method?
-
+	quickly: create a solicit income realm. i HATE THIS! and add solicit income join to it?
+	or, fuck it, for now they can see the sponsorship levels.
+		no, that's a temporary hack. will *not* get them thru the year
 
 ??PHP/JS
 a little json test
@@ -4586,3 +4587,8 @@ debbie's stuff: nag privs
 fix the entries
 	various errors reported
 	and bethany's check
+remove the ad size view perm, and own artwork too
+	and ad ad sizes too... but only high springfest perms
+put in the ad sizes needed!!
+	copy/paste
+ad ad sizes, springfest, and edit

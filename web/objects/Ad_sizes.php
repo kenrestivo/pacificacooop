@@ -24,4 +24,23 @@ class Ad_sizes extends CoopDBDO
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_linkDisplayFields = array ('ad_size_description', 'ad_price');
+
+	var $fb_formHeaderText = 'Springfest Ad Sizes';
+	var $fb_fieldLabels = array(
+		"ad_size_id" => "Ad size",
+        'ad_size_description' => 'Description',
+        'ad_price' => 'Price',
+        'school_year' => 'School Year'
+		);
+    var $fb_shortHeader = 'Ad Sizes';
+
+    var $fb_requiredFields = array(
+        'ad_size_description',
+        'price',
+        'school_year'
+        );
+
+
+
+
 }
