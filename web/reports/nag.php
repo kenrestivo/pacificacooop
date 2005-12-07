@@ -474,7 +474,7 @@ function viewHack(&$cp)
 		$res .= "</td>"; 
 		// ACTIONS
 		$res .= "<td align='center'>";
-        $res .= $top->recordButtons();
+        $res .= $top->recordButtons(&$nothing);
 		$res .= "</td><td align='center'>";
 		//GENERAL INDULGENCES
 		$res .= $generalindulgence;

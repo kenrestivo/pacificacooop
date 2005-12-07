@@ -297,7 +297,7 @@ human_to_sql_timestamp($dt)
 				   E_USER_NOTICE);
 		return $dt;
 	}
-    // IS LEGAL HUMAN?
+    // IS LEGAL HUMAN? (and is numan human?)
 	if($dt && preg_match(
            "/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s*?((\d{1,2}):(\d{2})(:\d{1,2})*)*\s*(\w{2})*$/", 
 						 $dt, $cleaned) < 1 )
@@ -311,7 +311,8 @@ human_to_sql_timestamp($dt)
 						 $cleaned[3], $cleaned[1], $cleaned[2]);
     if($cleaned[5]){
         $cleandate .= sprintf(' %02d:%02d',
-                              $cleaned[8]? $cleaned[5]+12: $cleaned[5], 
+                              strtolower($cleaned[8]) == 'pm'? 
+                              $cleaned[5]+12: $cleaned[5], 
                               $cleaned[6]);
     }
 	user_error("human_to_sql_time(): changed [$dt] to [$cleandate]",

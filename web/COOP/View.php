@@ -493,6 +493,7 @@ class coopView extends CoopObject
 		{
             $res = '';
 
+
             // handle the simple case first: i have old callbacks
 			if($this->legacyCallbacks){
 				return recordButtons($row, $this->legacyCallbacks, 
