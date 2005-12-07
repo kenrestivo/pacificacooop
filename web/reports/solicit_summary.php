@@ -84,6 +84,12 @@ function viewHack(&$atd)
 
     $res .= $chooser;
 
+    // XXX nastiest fuckign hack on earth!
+    // force it to not show the goddamned popup by picking something
+    // that isn't elsewhere below, making it isTop()
+    $faketop =& new CoopView(&$atd->page, 'income', &$nothing);
+    $faketop->chosenSchoolYear = $schoolyear; // hack!
+
     $res .=  "<h2>Solicitation totals for $schoolyear </h2>";
 
 	$res .= showRawQuery("Solicitation Cash Income by Type",
@@ -170,7 +176,8 @@ order by cash_donations desc,
 
 
     
-    $view =& new CoopView(&$atd->page, 'territories', &$nothing);
+    $view =& new CoopView(&$atd->page, 'territories', &$faketop);
+    $view->chosenSchoolYear = $schoolyear; // hack!
 	$view->obj->fb_formHeaderText = 'Solicitation Summary by Territory';
     $view->obj->fb_fieldsToRender = array(); // bah, i must have crap in there
     $view->obj->fb_fieldLabels= array(
@@ -241,7 +248,8 @@ order by cash_donations desc, auction_purchases desc,
 
 
 
-    $view =& new CoopView(&$atd->page, 'companies', &$nothing);
+    $view =& new CoopView(&$atd->page, 'companies', &$faketop);
+    $view->chosenSchoolYear = $schoolyear; // hack!
 	$view->obj->fb_formHeaderText = 'Solicitation Summary by Company';
     $view->obj->fb_fieldsToRender = array(); // bah, i must have crap in there
     $view->obj->fb_fieldLabels= array(
