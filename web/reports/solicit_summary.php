@@ -90,7 +90,8 @@ function viewHack(&$atd)
     $faketop =& new CoopView(&$atd->page, 'income', &$nothing);
     $faketop->chosenSchoolYear = $schoolyear; // hack!
 
-    $res .=  "<h2>Solicitation totals for $schoolyear </h2>";
+    $res .=  sprintf('<h2>Solicitation totals for %s </h2>',
+                     $schoolyear == '%' ? 'All Years Combined' : $schoolyear);
 
 	$res .= showRawQuery("Solicitation Cash Income by Type",
 " 
