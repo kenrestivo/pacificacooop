@@ -299,7 +299,7 @@ class coopPage
             $host = isset($args['host']) ? $args['host'] :false;
             $title = isset($args['title']) ? $args['title'] :false;
             $elementid = isset($args['elementid']) ? $args['elementid'] :false;
-
+            $tags = isset($args['tags']) ? $args['tags'] :false;
 
 
             $res = '';
@@ -331,7 +331,12 @@ class coopPage
 
             if($value){
                 $par && $res .= '<p>';
-                $res .= '<a href="';
+                if($tags){
+                    foreach($tags as $tag=>$tagval){
+                        $tagstr .= sprintf('%s="%s" ', $tag, $tagval);
+                    }
+                }
+                $res .= "<a $tagstr href=\"";
             }
             
             

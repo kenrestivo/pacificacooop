@@ -515,6 +515,7 @@ class coopView extends CoopObject
                 if($permitted >= $needlevel) {
                     $res .= $this->page->selfURL(
 						array('value' => $this->actionnames[$action], 
+                              'tags'=> array('style' => 'actionlink'),
 						'inside' => array( 
 							'action' => $action,
 							'table' => $this->table,
