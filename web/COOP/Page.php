@@ -332,6 +332,7 @@ class coopPage
             if($value){
                 $par && $res .= '<p>';
                 if($tags){
+                    $tagstr = "";
                     foreach($tags as $tag=>$tagval){
                         $tagstr .= sprintf('%s="%s" ', $tag, $tagval);
                     }

@@ -11,6 +11,12 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
+
+??PHP/JS
+a little json test
+	push it live			
+
+
 4-8 hours PHP 
 fix the solicitation income stuff
 	in the linkconstraints, would need to weave in perm-checking somehow
@@ -19,14 +25,6 @@ fix the solicitation income stuff
 	quickly: create a solicit income realm. i HATE THIS! and add solicit income join to it?
 	or, fuck it, for now they can see the sponsorship levels.
 		no, that's a temporary hack. will *not* get them thru the year
-
-??PHP/JS
-a little json test
-	that "goose" button i mentioned.
-	doesn't even really need to be json. just get jsondoc is sufficient.
-	but the right thing to do would be to make the send_email.php a json-rpc
-		and call it every time
-	FUCKING JUST DO IT! it's simple
 
 ??PHP
 phptal? template engine for reports like the nag report?
@@ -4592,3 +4590,18 @@ remove the ad size view perm, and own artwork too
 put in the ad sizes needed!!
 	copy/paste
 ad ad sizes, springfest, and edit
+	that "goose" button i mentioned.
+	doesn't even really need to be json. just get jsondoc is sufficient.
+	but the right thing to do would be to make the send_email.php a json-rpc
+		and call it every time
+	FUCKING JUST DO IT! it's simple
+	in the long run, this send_email might need to be an RPC
+		return the status: number of mails sent, error if already sent
+	send js function
+		store the old innerhtml somewhere?
+		change this (what is this?) to read "sending..." immediately
+		dosimplehxmhttprequest
+		in deferred
+			callback: change it to "sent" 
+			errback: change it to "ERROR" and put link back in
+	ok, something is fucked up. it's reloading the page, and I HATE THAT					simple stupid include problem

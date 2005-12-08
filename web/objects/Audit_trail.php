@@ -38,14 +38,15 @@ class Audit_trail extends CoopDBDO
 		'audit_user_id' => 'Edited By',
 		'updated' => 'Edited On',
         'details' => 'What changed',
-        'email_sent' => 'Email notification sent?'
+        'email_sent' => 'Email notification'
 		);
 	var $fb_fieldsToRender = array ('audit_user_id', 'updated', 
                                     'email_sent', 'details');
     var $fb_recordActions = array();
     var $fb_viewActions = array();
     var $fb_displayCallbacks = array('details' => 'formatChanges',
-                                     'table_name' => 'useLabel');
+                                     'table_name' => 'useLabel',
+                                     'email_sent' => 'sendNow');
                                      
 
     function BORKENfb_display_details(&$co)
@@ -237,7 +238,7 @@ class Audit_trail extends CoopDBDO
 
                 // finally, SHOW the damned thing
 
-                if($this->fb_noHTML){        // for the emails
+                if(!empty($this->fb_noHTML)){        // for the emails
                     $res .= sprintf(" '%s' changed to '%s'\n", 
                                     $oldformatted, $newformatted);
                 } else {
@@ -248,7 +249,7 @@ class Audit_trail extends CoopDBDO
                     //$co->page->confessArray($rend->getParams(), 'inline params', 4);
                     $res .= nl2br($rend->render($diff));
                 }
-                $res .= $this->fb_noHTML ? "\n" :'<br />';
+                $res .= empty($this->fb_noHTML) ? '<br />': "\n" ;
             }
             return $res;
         }
@@ -283,11 +284,30 @@ class Audit_trail extends CoopDBDO
     function sendNow(&$co, $val, $key)
         {
             if($val){
-                return 'Email sent';
+                return 'Done';
             } 
             
-            //TODO: a JSON thing here.
-        }
+            $res = "";
+            if (!defined('MOCHIKIT_EXISTS')) {
+                // inclusion guard
+                define('MOCHIKIT_EXISTS', true);
+                
+                $res .= '<script src="lib/MochiKit/MochiKit.js"></script>'; 
+            }
+
+          if (!defined('SENDEMAIL_EXISTS')) {
+                // inclusion guard
+                define('SENDEMAIL_EXISTS', true);
+                
+                $res .= '<script src="lib/send_email.js"></script>'; 
+            }
+
+          $res .= sprintf(
+              '<a href="" onclick="return sendEmailNotice(this,%d)">Send</a>', 
+              $this->{$co->pk});
+          
+          return $res;
+      }
 
 
 }
