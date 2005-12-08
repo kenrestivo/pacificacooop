@@ -170,16 +170,21 @@ c.status.innerHTML= '<input type="text" id="testing" name="foobarbaz">';
 
 //// attempt at json
 
-d=doSimpleXMLHttpRequest('http://www/coop-dev/send_email.php', 
-    {'audit_id': 5436})
-
 a=A({'href':'','onclick': 'writeln("foo");return false'}, 'foo test');
 $('statusbar').appendChild(a)
 
 a.setAttribute('onclick', 'return sendEmailNotice(this,5436)')
 
 sendEmailNotice = function(self,audit_id){
-    writeln('testing');
+    ih=self.innerHTML;
     self.innerHTML='Sending...';
+    d=doSimpleXMLHttpRequest('http://www/coop-dev/send_email.php',
+        {'audit_id': audit_id});
+    d.addCallback(function(data){ 
+        a.removeAttributeNode(a.getAttributeNode('href'));
+        self.innerHTML='Sent'}); 
+    d.addErrback(function(err) { self.innerHTML= ih}); 
     return false;
 }
+
+sendEmailNotice(a, 5431);
