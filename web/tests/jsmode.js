@@ -170,14 +170,13 @@ c.status.innerHTML= '<input type="text" id="testing" name="foobarbaz">';
 
 //// attempt at json
 
-a=A({'href':'','onclick': 'writeln("foo");return false'}, 'foo test');
+a=A({'href':'','onclick': 'return sendEmailNotice(this,5436)'}, 'foo test');
 $('statusbar').appendChild(a)
 
-a.setAttribute('onclick', 'return sendEmailNotice(this,5436)')
 
 sendEmailNotice = function(self,audit_id){
     ih=self.innerHTML;
-    self.innerHTML='Sending...';
+    self.innerHTML='Sending <img src="/images/spinner.gif">';
     d=doSimpleXMLHttpRequest('http://www/coop-dev/send_email.php',
         {'audit_id': audit_id});
     d.addCallback(function(data){ 
