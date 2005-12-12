@@ -12,25 +12,35 @@ MY agenda! dammit, mine! for a change....
 
 
 
-??PHP/JS
-a little json test
-	push it live			
+???PHP JSON-RPC
+	javascript Error class. what is it? how can i coerce errors into it?
+		look at jsonrpc.py maybe?
+		ah: message, fileName, lineNumber, stack, name
+		hmm. how do i get jsonrpc.js to use the error object returned?
+
+	
+		jsonrpcObj.__proto__ = (new Error).__proto__ seems to do 
+ 		jsonrpcObj.__proto__ = Error.prototype
 
 
-4-8 hours PHP 
-fix the solicitation income stuff
-	in the linkconstraints, would need to weave in perm-checking somehow
-		link deep into the account number, which has realm, IIRC
-	this could be ugly. would need to override the getperms method?
-	quickly: create a solicit income realm. i HATE THIS! and add solicit income join to it?
-	or, fuck it, for now they can see the sponsorship levels.
-		no, that's a temporary hack. will *not* get them thru the year
 
-??PHP
+	do the jsonclass: hint, for all objects!
+		aha! it's a path to the class, useful for python
+	what about this stdclass thing? i'm not big on that.
+
+
+2-4 hours PHP
 phptal? template engine for reports like the nag report?
-	STUCK: have to load all those fucking libraries! not. fun.
+	then load all those fucking libraries! on nfsn. not. fun.
+		heh. that was easy! at least on bc it was...
+	build docs for it
+	now try it out, maybe for the reports
+	settings
+		cache dir? nocache? repository?
+		xhtml/xml mode?
+	setall!
 
-duplicates in attendance! margolis
+
 
 
 ???PHP
@@ -41,13 +51,32 @@ bring Packaging back to life! so they can start entering baskets
 
 
 
+??PHP/JS
+	try json'ing the subforms now
+		simply return the html, swap out what's there
+
+
+8-24 hours SQL/PHP 
+fix the solicitation income stuff
+	in the linkconstraints, would need to weave in perm-checking somehow
+		link deep into the account number, which has realm, IIRC
+	this could be ugly. would need to override the getperms method?
+	quickly: create a solicit income realm. i HATE THIS! and add solicit income join to it?
+	or, fuck it, for now they can see the sponsorship levels.
+		no, that's a temporary hack. will *not* get them thru the year
+
+
+
+duplicates in attendance! margolis
+	maybe do that margoilsreport in python? or use phptal?
+
+
+
 ???PHP/QA/bureaucracy
 	finally the fucking paypal
 
 
 BUGS
-	AM/PM is fucked up in date stuff. check my regression test. auugh
-		any AM is showing up as PM
 	fix perms for family fees, income, babies, enhancement, 
 		instructions, logins, groups
 		hmm. maybe a custom override to enum?
@@ -2970,6 +2999,29 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	well, it's in the xml package, and it's undocumented and fucked up. 
+		maybe try it anyway? might be easier
+	now what?
+		write my own??!
+		maybe try superclassing either PEAR or built-in xml-rpc?
+	try html-ajax
+		server:
+			handlerequest -- change GETc
+			_loadOptions
+		ajax: getVar
+			handlerequest: shitcan the 'get' c crap
+				also the ret, needs to be json-rpc'ified
+			register callback
+		this whole reply-type is fucked up. it's always json reply
+	better still: xmlrpc
+
+	start with the spec. and go from there!
+
+	you know, i can test with python too
+
+maybe try html ajax? why not use the pear-approved way then?
+	uugh. i hate htmlajax
+
 		gah. some people need to see all SPRINGFEST income, not all income
 			maybe a special callback/override in ispermitted?
 			like, solicitation, 'frinstance
@@ -4605,3 +4657,11 @@ ad ad sizes, springfest, and edit
 			callback: change it to "sent" 
 			errback: change it to "ERROR" and put link back in
 	ok, something is fucked up. it's reloading the page, and I HATE THAT					simple stupid include problem
+
+??PHP/JS
+a little json test
+	push it live			
+	AM/PM is fucked up in date stuff. check my regression test. auugh
+		any AM is showing up as PM
+		duh. simple change in code, 1-line
+	hmm. method is blank. why? ah. because it's not an array dumbass, but stdclass
