@@ -27,6 +27,7 @@ $result[] = new Person("buz", "05-321-378-654");
 $template->set("title", "the title value");
 $template->set("result", $result);
 
+$template->set('realpath', $template->realPath());
 // execute template
 $res = $template->execute();
 // result may be an error
