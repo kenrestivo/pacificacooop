@@ -233,6 +233,7 @@ class CoopNewDispatcher
             $res .= $atd->showLinkDetails();
 
             // standard audit trail, for all details
+            //TODO: eventually move this to coopview?
             $aud =& new CoopView(&$this->page, 'audit_trail', &$atd);
             $aud->obj->table_name = $atd->table;
             $aud->obj->index_id = $id;

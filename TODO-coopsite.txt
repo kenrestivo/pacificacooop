@@ -30,7 +30,7 @@ fix the solicitation income stuff
 			probably a simple, but very ugly, hack
 	what she wants is a simple report, actually
 	simple quick hack: just a simpletable, no links, include in details
-		how to extend details?
+		extend details and add it. the Thing from the summary
 
 
 2-4 hours PHP
