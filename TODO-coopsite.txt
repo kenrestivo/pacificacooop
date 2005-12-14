@@ -11,27 +11,11 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-8-24 hours SQL/PHP 
-fix the solicitation income stuff
-	in the linkconstraints, would need to weave in perm-checking somehow
-		link deep into the account number, which has realm, IIRC
-	this could be ugly. would need to override the getperms method?
-	quickly: create a solicit income realm. i HATE THIS! and add solicit income join to it?
-	or, fuck it, for now they can see the sponsorship levels.
-		no, that's a temporary hack. will *not* get them thru the year
-	maybe subclass ispermittedfield and hack around this for now?
-		it's very, very broken.
-	it wouldn't be that difficult to link all the way through to a realm!
-		i.e. an if statement. if there's a path to a realm, use it.
-		leave a %s in the ispermitted and the search
-	WAIT! it doesn't need to be done in ispermittedfield!
-		add it to the search criteria. that should be easy, linkconstraints!
-		then i'd need to override ispermitted, somehow
-			probably a simple, but very ugly, hack
+??PHP/SQL 
+	territory report
 	what she wants is a simple report, actually
-	simple quick hack: just a simpletable, no links, include in details
-		extend details and add it. the Thing from the summary
-
+	figure out how to force a schoolyear chooser in there, dammit.
+		path to schoolyear?
 
 2-4 hours PHP
 phptal? template engine for reports like the nag report?
@@ -353,6 +337,23 @@ fix all the details views!!
 		and anything else, shoudl be custom done elsewhere
 	didn't i get all these? any left?
 
+8-24 hours SQL/PHP 
+fix the solicitation income stuff
+	in the linkconstraints, would need to weave in perm-checking somehow
+		link deep into the account number, which has realm, IIRC
+	this could be ugly. would need to override the getperms method?
+	quickly: create a solicit income realm. i HATE THIS! and add solicit income join to it?
+	or, fuck it, for now they can see the sponsorship levels.
+		no, that's a temporary hack. will *not* get them thru the year
+	maybe subclass ispermittedfield and hack around this for now?
+		it's very, very broken.
+	it wouldn't be that difficult to link all the way through to a realm!
+		i.e. an if statement. if there's a path to a realm, use it.
+		leave a %s in the ispermitted and the search
+	WAIT! it doesn't need to be done in ispermittedfield!
+		add it to the search criteria. that should be easy, linkconstraints!
+		then i'd need to override ispermitted, somehow
+			probably a simple, but very ugly, hack
 
 
 strange stuff like files not showing up at all, but others (blog_entry) does?
@@ -4669,3 +4670,5 @@ a little json test
 		duh. simple change in code, 1-line
 	hmm. method is blank. why? ah. because it's not an array dumbass, but stdclass
 	build docs for it
+	simple quick hack: just a simpletable, no links, include in details
+		extend details and add it. the Thing from the summary

@@ -622,11 +622,13 @@ function schoolYearChooser()
 
     if($this->perms[NULL]['year'] < ACCESS_VIEW)
     {
+        $this->page->printDebug("schoolYearChooser({$this->table}) no year access, no chooser, sorry", 3);
         return;
     }
 
 
     if(!$this->isTop()){
+        $this->page->printDebug("schoolYearChooser({$this->table}) is not top, so no schoolyearchooser, sorry", 3);
         return;
     }
 

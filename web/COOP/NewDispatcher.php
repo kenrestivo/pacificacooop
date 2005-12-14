@@ -214,7 +214,7 @@ class CoopNewDispatcher
 
             $atd->fullText = true;    // force details to show all
             // MUST DO THIS! FIRST! please find a better way, this sucks
-            $atd->obj->{$atd->pk} = $this->page->vars['last']['id'];
+            $id = $atd->obj->{$atd->pk} = $this->page->vars['last']['id'];
 
             // object-specific override if needed
             if(is_callable(array($atd->obj, 'fb_display_details'))){
@@ -225,7 +225,6 @@ class CoopNewDispatcher
             $res .= $atd->getInstructions('details');
      
 
-            $id = $this->page->vars['last']['id'];
             $atd->obj->get($id);
             $res .= $atd->horizTable(false);
      

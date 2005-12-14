@@ -27,13 +27,15 @@ class Territories extends CoopDBDO
 		'description' => 'Territory Name');
     var $fb_formHeaderText =  'Springfest Solicitation Territories';
     var $fb_shortHeader = 'Territories';
-
+    var $fb_allYears = 1;
 
     // TODO: a summary, showing number of companies in each terrotiry
 
     function fb_display_details(&$co)
         {
             $res = "";
+            $res .= $co->horizTable(true);
+
             $view =& new CoopView(&$co->page, 'companies', &$co);
             $view->obj->fb_formHeaderText = 'Solicitation Summary by Company';
             $view->obj->fb_fieldsToRender = array(); // bah, i must have crap in there
@@ -44,7 +46,7 @@ class Territories extends CoopDBDO
                 'auction_donations' => 'Auction Donations',
                 'in_kind_donations' => 'In-Kind Donations');
 
-            $schoolyear = '%';//$co->getChosenSchoolYear();
+            $schoolyear = $co->getChosenSchoolYear(true);
             $view->obj->query(
                 sprintf(" 
 select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
