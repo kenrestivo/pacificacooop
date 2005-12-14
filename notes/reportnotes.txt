@@ -4,11 +4,32 @@ $Id$
 40 hours PHP
 re-architect reports
 
+
+
+8 hours PHP
+ 	add in the nag report!!!
+		re-do using PHPTAL!
+	is there some way to use alerts instead of logic inside of nagreport??
+		nice, to get a summary of all alerts for a family!
+		yank that silly conditional at the top of the nagreport!
+	show nags only by due dates passed!
+		or, will my above alertstatus do it?
+	get details working
+		use generic with extradetails?
+	add a 'send reminder' button, to send alerts
+
+
 create a subclass of dispatcher, or a new dispatcher 
 
-margolisreport
+margolisreport: see parentedattentance.txt
 
 report arch
+
+
+birthdays report
+	for this and next month, am/pm
+	where to put it? students?
+
 
 create a coopreport class, stick getreportperms into it
 	make it a paralell of coopobject, probably not inheriting from it
@@ -38,26 +59,6 @@ parent ed attendance report that makes sense
 
 
 
-8 hours PHP
- 	add in the nag report!!!
-		re-do using html table
-	is there some way to use alerts instead of logic inside of nagreport??
-		nice, to get a summary of all alerts for a family!
-		yank that silly conditional at the top of the nagreport!
-	show nags only by due dates passed!
-		or, will my above alertstatus do it?
-	get details working
-		use generic with extradetails?
-	add a 'send reminder' button, to send alerts
-
-
-
-
-
-birthdays report
-	for this and next month, am/pm
-	where to put it? students?
-
 baby report: how many babies per workday and epod day
 
 
@@ -65,7 +66,8 @@ baby report: how many babies per workday and epod day
 	look at the sandyreport IT IS BORKEN
 	the fucking linkconstraints... they're getting called when i don't want!
 		how to override them?
-
+	redo possibly with phptal
+	
 kudos system
 	put the sandy report into that realm
 

@@ -1,5 +1,10 @@
 notes on subform navigation, flipping between screens
 
+
+big question: if i json it, how do i deal with input validation?
+	unless i do the html-ajax approach, and submit the subform
+	i think i'm really in html-ajax land here.
+
 stack stuff
 	i can get a constipated stack. how to cleanse?
 	should hitting the index page wipe out the stack?
@@ -37,6 +42,17 @@ well first of all, THE VIEW/DETAILS SHOUDL PUSH!
 				make it a save button then
 
 
+
+???PHP JSON-RPC
+	do the jsonclass: hint, for all objects!
+		aha! it's a path to the class, useful for python
+		jsonrpcObj.__proto__ = (new Error).__proto__ seems to do 
+ 		jsonrpcObj.__proto__ = Error.prototype
+			look at how jsolait does it too. and/or htmlajax
+	what about this stdclass thing? i'm not big on that.
+		also what with the rpclib and syslib stuff?
+	try json'ing the subforms now
+		simply return the html, swap out what's there
 
 
 

@@ -11,7 +11,9 @@ from phpserialize.PHPUnserialize import PHPUnserialize
 
 
 ## go get it
-import model
+sys.path.insert(0, '/mnt/kens/ki/proj/coop/web/objects')
+sys.path.insert(0, '/mnt/kens/ki/proj/coop/web')
+from  model import *
 
 as=SessionInfo.get(434)
 

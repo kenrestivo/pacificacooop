@@ -1,4 +1,4 @@
-coop web database
+coout vop web database
 
 MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
@@ -11,51 +11,6 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-
-???PHP JSON-RPC
-	javascript Error class. what is it? how can i coerce errors into it?
-		look at jsonrpc.py maybe?
-		ah: message, fileName, lineNumber, stack, name
-		hmm. how do i get jsonrpc.js to use the error object returned?
-
-	
-		jsonrpcObj.__proto__ = (new Error).__proto__ seems to do 
- 		jsonrpcObj.__proto__ = Error.prototype
-
-
-
-	do the jsonclass: hint, for all objects!
-		aha! it's a path to the class, useful for python
-	what about this stdclass thing? i'm not big on that.
-
-
-2-4 hours PHP
-phptal? template engine for reports like the nag report?
-	then load all those fucking libraries! on nfsn. not. fun.
-		heh. that was easy! at least on bc it was...
-	build docs for it
-	now try it out, maybe for the reports
-	settings
-		cache dir? nocache? repository?
-		xhtml/xml mode?
-	setall!
-
-
-
-
-???PHP
-bring Packaging back to life! so they can start entering baskets
-	perms, then crosslinks?
-	generously donated by should not be required
-	make sure everyone can see the packages
-
-
-
-??PHP/JS
-	try json'ing the subforms now
-		simply return the html, swap out what's there
-
-
 8-24 hours SQL/PHP 
 fix the solicitation income stuff
 	in the linkconstraints, would need to weave in perm-checking somehow
@@ -64,6 +19,39 @@ fix the solicitation income stuff
 	quickly: create a solicit income realm. i HATE THIS! and add solicit income join to it?
 	or, fuck it, for now they can see the sponsorship levels.
 		no, that's a temporary hack. will *not* get them thru the year
+	maybe subclass ispermittedfield and hack around this for now?
+		it's very, very broken.
+	it wouldn't be that difficult to link all the way through to a realm!
+		i.e. an if statement. if there's a path to a realm, use it.
+		leave a %s in the ispermitted and the search
+	WAIT! it doesn't need to be done in ispermittedfield!
+		add it to the search criteria. that should be easy, linkconstraints!
+		then i'd need to override ispermitted, somehow
+			probably a simple, but very ugly, hack
+	what she wants is a simple report, actually
+	simple quick hack: just a simpletable, no links, include in details
+		how to extend details?
+
+
+2-4 hours PHP
+phptal? template engine for reports like the nag report?
+	then load all those fucking libraries! on nfsn. not. fun.
+		heh. that was easy! at least on bc it was...
+	now try it out, maybe for the reports
+	settings
+		cache dir? nocache? repository?
+		xhtml/xml mode?
+	setall!
+	for a territory report maybe?
+	gah! how to template a FRAGMENT, i.e. for details report?
+
+
+
+???PHP
+bring Packaging back to life! so they can start entering baskets
+	perms, then crosslinks?
+	generously donated by should not be required
+	make sure everyone can see the packages
 
 
 
@@ -2999,6 +2987,21 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+alternating colours for tables are not working anymore. wtf?
+	the code looks ok. wtf? it's fine dumbass
+
+	javascript Error class. what is it? how can i coerce errors into it?
+		look at jsonrpc.py maybe?
+		ah: message, fileName, lineNumber, stack, name
+		hmm. how do i get jsonrpc.js to use the error object returned?
+			python does not like the js error class. make it happy instead.
+			or, should i even provide detailed errors and tracebacks?
+		pear errors with stack are coming back null. why?
+			maybe blow off this whole thing. just pass simple errors.
+				good for security, i suppose.
+	for security reasons. blow this off. report errors locally.
+
 	well, it's in the xml package, and it's undocumented and fucked up. 
 		maybe try it anyway? might be easier
 	now what?
@@ -4665,3 +4668,4 @@ a little json test
 		any AM is showing up as PM
 		duh. simple change in code, 1-line
 	hmm. method is blank. why? ah. because it's not an array dumbass, but stdclass
+	build docs for it

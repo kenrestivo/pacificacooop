@@ -669,7 +669,62 @@ function schoolYearChooser()
 }
 
 
+    function showLinkDetails()
+        {
+            if($this->obj->{$this->pk} < 1){
+                PEAR::raiseError("CoopView::showLinkDetails({$this->table}): no index, can't show details", 
+                                 666);
+            }
 
+            $res = "";
+            // try to intelligently find all forward/backlinks
+            // or intermediately, adapt findfamily, and pass a list of tables
+            // let the code go fish out the path to 'em
+
+            foreach($this->allLinks() as $table => $ids){
+                list($nearid, $farid) = $ids;
+                $this->page->printDebug("$this->table  link for $nearid {$this->obj->$nearid}  $table", 4);
+                $aud =& new CoopView(&$this->page, $table, &$this);
+                $tabs = $aud->obj->table();
+                $farwhole = $farid;
+                if(!empty($tabs[$farid])){
+                    $farwhole = "{$aud->table}.$farid";
+                }
+                $aud->obj->whereAdd(sprintf('%s = %d', 
+                                            $farwhole, $this->obj->{$nearid}));
+                //confessObj($aud, 'aud');
+                $aud->debugWrap(5);
+                $res .= $aud->simpleTable();
+            }
+
+            // now, extradetails is a bit of a hack. it is used for join links
+            // there has to be a better way of doing it, generically
+            if(is_array($this->obj->fb_extraDetails)){
+                foreach($this->obj->fb_extraDetails as $path){
+                    // XXX this only handles one-degree-of-separation!
+                    list($join, $dest) = explode(':', $path);
+                    $co2 =& new CoopObject(&$this->page, $join, &$this);
+                    $co2->obj->whereAdd(sprintf('%s.%s = %d', 
+                                                $co2->table,
+                                                $this->pk, 
+                                                $id));
+                    $real =& new CoopView(&$this->page, $dest, &$co2);
+                    $real->obj->orderBy('school_year desc');
+                    $real->protectedJoin($co2);
+ 
+                    /// XXX this is sketchy. could cause GRIEF
+                    /// i need to add the $co2's PK to the REAL object
+                    /// because the actionbuttons will need it!
+//                     $real->obj->selectAdd(sprintf('%s.%s', 
+//                                              $co2->table, 
+//                                              $co2->pk));
+
+                    $res .= $real->simpleTable();
+                }
+            }
+
+            return $res;
+        }
 
 
 
