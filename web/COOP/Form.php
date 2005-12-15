@@ -55,7 +55,7 @@ class coopForm extends CoopObject
                                               $this->table, $this->pk,
 											 $this->id));
                 $this->obj->find(true);
-                $this->recoverSafePk();
+                $this->recoverSafePk(); // Essential!
 
                 // just being extra paranoid
                 if($this->obj->{$this->pk} != $this->id){
