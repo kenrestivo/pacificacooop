@@ -55,13 +55,20 @@ class coopForm extends CoopObject
                                               $this->table, $this->pk,
 											 $this->id));
                 $this->obj->find(true);
+                $this->recoverSafePk();
+
                 // just being extra paranoid
                 if($this->obj->{$this->pk} != $this->id){
-                    raiseError('CoopForm::build() id is not what was found!', 666);
+                    PEAR::raiseError(
+                        sprintf(
+                            'CoopForm::build() cached (requested edit) id %d is not %d which was found in find!',
+                                             $this->id,
+                                             $this->obj->{$this->pk}),
+                                     666);
                 }
 			} else {
 				$this->page->printDebug(
-                    "coopForm::build($this->table $this->id) called with no id, assuming NEW");
+                    "coopForm::build({$this->table} {$this->id}) called with no id, assuming NEW");
                 
 			}
 			$formname = sprintf('edit_%s', $this->table);
