@@ -101,6 +101,18 @@ class Auction_donation_items extends CoopDBDO
             $co->grouper();
 		}
 
+
+    function postGenerateForm(&$form)
+        {
+//              $form->addRule($form->CoopForm->prependTable('item_description'), 
+//                             'Do not enter "cash donation" here. Simply write your check and hand it to the Springfest Coordinators, and you will be removed from this list.', 'regex', '/.*?(?!cash).*?/i', 'client');
+             $form->addRule($form->CoopForm->prependTable('item_description'), 
+                            'Need more description, please make it sound attractive to potential buyers. At least 40 characters long.', 
+                            'minlength', 40, 'client');
+
+
+        }
+
 	// form that blasts over to the packages::new, to create a new one
 	// just generates a CREATE NEW button with all the shit inside
 	function newPackageForm(&$co)
