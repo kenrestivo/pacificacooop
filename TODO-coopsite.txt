@@ -12,13 +12,17 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-
 ???PHP
 bring Packaging back to life! so they can start entering baskets
 	aha! added permschecking in september, and did it apparently WRONG
 		mid table MAY NOT have any perms, in which case use far table
 			i.e. if it is a _join. haaack!
 	make sure everyone can see the packages
+	add the list of baskets (live packages)
+		a scrolling div, i think, would be best
+	add additional validation rules: 
+		no cash
+		make sure description is long enough
 
 
 ??? JSON/PHP
@@ -4675,3 +4679,8 @@ a little json test
 	heh. that was easy! at least on bc it was...
 	i need a new table for board members
 		links to parents and officers, basically
+
+BUG: the confirmdelete is utterly fucked up
+	ah. dbdo is stupid. there's a join so it's leaving the id blank. idiots.
+		how did i solve this before???
+	ah, safe
