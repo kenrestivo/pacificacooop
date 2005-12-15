@@ -728,6 +728,7 @@ class coopForm extends CoopObject
 				return;
 			}
 
+            
 			foreach($this->obj->fb_crossLinks as $la){
 				$tf = $la['toField'];
 				$longtf = $this->prependTable($tf);
@@ -741,11 +742,17 @@ class coopForm extends CoopObject
                                         2);
 
                 // links will add or delete from the mid table!
-				$mid = new CoopObject(&$this->page, $mt, $this);
-                if($mid->isPermittedField(null, !$this->id, 
-                                          !$this->id) < ACCESS_DELETE)
-                {
-                    return;
+                // but if it's a _join, it doesn't have perms, so don't bother
+    			if(!preg_match('/_join$/', $mt, $matches)){
+	
+                    $mid = new CoopObject(&$this->page, $mt, $this);
+                    if($mid->isPermittedField(null, !$this->id, 
+                                              !$this->id) < ACCESS_DELETE)
+                    {
+                        $this->page->printDebug("addCrosslinks({$this->table}) sorry, can't delete from {$mid->table}, so blowing off this whole project", 3);
+                        
+                        return;
+                    }
                 }
 
 				//duplication of selectoptions
@@ -755,15 +762,14 @@ class coopForm extends CoopObject
                 // i obviously need to view the remotes
                 if($far->isPermittedField(null, !$this->id, 
                                           !$this->id) < ACCESS_VIEW){
+                    $this->page->printDebug("addCrosslinks({$this->table}) sorry, can't view {$far->table}, so blowing off this whole project", 3);
                     return;
                 }
 
 
 				// IIRC this has a different name in FB. use theirs!
-                $this->linkConstraints();
+                $far->linkConstraints();
 
-				$far->obj->orderBy(implode(', ', 
-										   $far->obj->fb_linkDisplayFields));
 				$far->obj->find();
 				while($far->obj->fetch()){
                     // XXX will this get safepk'ed?

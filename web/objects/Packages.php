@@ -77,7 +77,7 @@ var $fb_currencyFields = array(
    'bid_increment'
 );
 
-	var $fb_requiredFields = array('package_description', 'donated_by_text', 
+	var $fb_requiredFields = array('package_description', 
 								   'starting_bid', 'bid_increment', 
 								   'school_year',
 								   'package_type', 
@@ -93,30 +93,7 @@ var $fb_currencyFields = array(
      'package_description' => 100
    );
 
-	function constrainedPackagePopup($schoolyear = false)
-		{
-			$schoolyear = $schoolyear ? $schoolyear : findSchoolYear();
-
-			$this->whereAdd(sprintf('%s.school_year = "%s"',
-									$this->__table, $schoolyear));
-			$this->orderBy('package_number, package_title, package_description');
-			$this->find();
-			$options[] = '-- CHOOSE ONE --';
-			while($this->fetch()){
-				$options[$this->package_id] = 
-					sprintf("%.42s...", 
-							implode(' - ', 
-									array(
-										$this->package_number, 
-										$this->package_title, 
-										$this->package_description)));
-			}
-			$el =& HTML_QuickForm::createElement('select', 'package_id', 
-												 $this->fb_fieldLabels['package_id'], 
-												 &$options);
-
-			return $el;
-		}
+    var $fb_extraDetails = array('auction_packages_join:auction_donation_items');
 
 
 // set package_description lines = 3

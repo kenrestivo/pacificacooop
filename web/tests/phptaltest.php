@@ -1,4 +1,6 @@
 <?php
+
+require_once('dbhost.inc');                                                         
 require_once "HTML/Template/PHPTAL.php";
 
 // create a new template object

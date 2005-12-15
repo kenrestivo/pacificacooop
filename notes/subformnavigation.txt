@@ -2,8 +2,7 @@ notes on subform navigation, flipping between screens
 
 
 big question: if i json it, how do i deal with input validation?
-	unless i do the html-ajax approach, and submit the subform
-	i think i'm really in html-ajax land here.
+	i have to go back to what i had. with some hidden var, showing which
 
 stack stuff
 	i can get a constipated stack. how to cleanse?

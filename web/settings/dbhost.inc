@@ -35,6 +35,10 @@ $dbpwd = "92xPi9";
 $dbhost =  "bc";
 //$coop_sendto =  "ken@restivo.org";
 
+// this is the local PEAR installer, NOT MY CVS TWEEKED VERSIONS!
+// these are run via a local PEAR instance, using their installer
+define(COOP_LOCAL_PEAR_PATH, '/mnt/kens/ki/is/php/local_pear');
+
 //ONLY ON BC!!! don't push this live or you'll be in a world of shit.
 if($debug < 0) {
     print 'YOU ARE USING APD!';

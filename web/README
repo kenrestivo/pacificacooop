@@ -66,6 +66,18 @@ if you ever, *ever* rename a table:
     update table_permissions set table_name = 'new_name' where table_name = 'old_name';
     update audit_trail set table_name = 'new_name' where table_name = 'old_name';
 
+you MUST USE a local copy of PEAR. install it in some directory, i.e. your shell directory, and put that path into the dbhost.inc
+
+lynx -source http://go-pear.org/ | php
+set the paths correctly
+
+
+then you must install PHPTAL packages for PHP4
+first go get: Algo_map-0.1.1.tgz  HTML_Template_PHPTAL-0.7.0.tgz GetText-0.6.4.tgz   Types-0.3.2.tgz
+then pear -c ~/.pearrc install <list of above package tarballs>
+    i don't know what they are for php5
+
+
 
 ---------------
 
