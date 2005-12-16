@@ -20,6 +20,7 @@
 $paypal_debug = 0;
 
 //move to object/foo.php?
+//XXX these value and quantity required need to move to year settings!
 define('COOP_NAMES_FORFEIT_FEE', 1);
 define('COOP_NAMES_DUE_EVENT', 3);
 define('COOP_NAMES_QUANTITY_REQUIRED', 5);
@@ -34,9 +35,13 @@ define('COOP_FOOD_VALUE_REQUIRED', 50);
 define('COOP_FOOD_FEE_DISCOUNT_EVENT', 27);
 define('COOP_FOOD_DISCOUNT_VALUE_REQUIRED', 45);
 
-//XXX these value and quantity required need to move to year settings!
+
 
 
 define('COOP_MAX_SELECT_COUNT', 150);
+
+define('COOP_DEFAULT_BID_INCREMENT_DIVISOR', 10);
+define('COOP_DEFAULT_STARTING_BID_DIVISOR', 2);
+
 
 ?>

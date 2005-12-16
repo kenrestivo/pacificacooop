@@ -45,19 +45,6 @@ class Blog_entry extends CoopDBDO
 	var $fb_defaults = array('show_on_members_page' => 'Yes',
                              'show_on_public_page' => 'No');
 
-    function postGenerateForm(&$form)
-        {
-            confessObj($form, 'form');
-            //confessArray(get_class_methods($form->CoopForm), 
-            //get_class($form->CoopForm));
-            $el =& $form->getElement(
-                $form->CoopForm->prependTable('body'));
-            if($el){
-                return;
-            }
-            $el->setRows(25);
-            $el->setCols(80);
-        }
 
 
 //     function linkConstraints(&$co)
