@@ -2,12 +2,11 @@ README the pacifica co-op nursery school database web interface
 $Id$
 
 
-this uses PEAR, particualrly HTML::QuickForm and DB::DataObjects
-i tried to make it backwards-compatible to DB_DataObjects_FormBuilder
+this uses PEAR, particualrly HTML::QuickForm and DB::DataObject
+i tried to make it backwards-compatible to DB_DataObjects_FormBuilder ("FB")
 fields i added to the dataobject, which are *not* in FormBuilder
 
-in DO:
-fb_display_[view|details|summary|alarm]
+vars in DataObject (in objects directory):
 fb_URLFIelds array(fieldn...)
 fb_joinPaths  array(table -> path:tghrough:links or array(path:through, more:through)). 
     used for disambiguating constrainschoolyear() and constrainfamily(),
@@ -29,6 +28,18 @@ fb_allYears = 0/1 // show all years by default in schoolyearchooser
 fb_noHTML = 0/1  // use text, not html
 fb_addNewLinkFields = OBSOLETE. i use perms now to determine
 fb_searchSelects = array() fields for searchselect. XXX HACK-- will use N instead
+callbacks in DataObject (in objects directory):
+fb_linkConstraints() = called by linkconstraints. 
+        overrides the defaults in COopObject
+fb_display_[view|details|alert"summary]() = called by the dispatcher. 
+        overrides the default view, details, alert, or summary
+afterForm() = this is called by dispatcher, after the form is rendered
+         use it to display any other things that do not go in the form itself
+postGenerateForm() compatibility with FB. called after the $form->build()
+preGenerateForm() compatibility with FB. called before the $form->build()
+afterInsert() = called, um, after insert. things that need to know the ID/key
+
+
 
 in coopview
 fullText (do not truncate longtextfields)
