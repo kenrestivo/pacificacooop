@@ -35,6 +35,10 @@ fb_display_[view|details|alert"summary]() = called by the dispatcher.
         overrides the default view, details, alert, or summary
 afterForm() = this is called by dispatcher, after the form is rendered
          use it to display any other things that do not go in the form itself
+beforeForm() = this is called by dispatcher, BEFORE the form is rendered
+         use it to display any other things that do not go in the form itself
+        what sucks about this is using this stuff for positioning, instead
+        of CSS or templating, but this is what I got for now
 postGenerateForm() compatibility with FB. called after the $form->build()
 preGenerateForm() compatibility with FB. called before the $form->build()
 afterInsert() = called, um, after insert. things that need to know the ID/key

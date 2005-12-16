@@ -12,11 +12,8 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
-
 ???PHP
 bring Packaging back to life! 
-	a scrolling div, i think, would be best, to show in add screen
-		tricky, have to deal with css addscript stuff
 	add additional validation rules: 
 		no cash
 	the make package form needs to push/pop
@@ -24,7 +21,15 @@ bring Packaging back to life!
 		is it pushing?
 
 
-regression-test all my javascript
+??? JSON/PHP
+	cool jsonism which at hover time goes and gets details on a record
+		and shoves it into title
+	tricky bit is adding onmouseover to each optionelement
+	updateNodeAttributes(this, {'title' : proxy.getDetails('tablename',this.value})
+	a little jsonrpc class
+		returns the view-formatted details in an array: {label:value}
+	the delay is a question though.
+
 
 
 ??PHP/shell
@@ -38,15 +43,6 @@ remove crufty files
 		trash states.inc, shared.inc
 		yank the createlegacy shit from View	
 
-
-??? JSON/PHP
-	cool jsonism which at hover time goes and gets details on a record
-		and shoves it into title
-	tricky bit is adding onmouseover to each optionelement
-	updateNodeAttributes(this, {'title' : proxy.getDetails('tablename',this.value})
-	a little jsonrpc class
-		returns the view-formatted details in an array: {label:value}
-	the delay is a question though.
 
 
 2-4 hours PHP
@@ -4726,3 +4722,12 @@ so they can start entering baskets	remove the legacy actionbuttons/recordbuttons
 		and perms!!
 			do i have a narsty hack in the pop that refuses to pop if add?
 				whack or special-case that dude. already done
+	a scrolling div, i think, would be best, to show in add screen
+		tricky, have to deal with css addscript stuff
+regression-test all my javascript	perms? what?
+	i think the perms calculation may be fucked. or i have a no s/b ignore?
+			ignore
+
+??PHP 
+bring the solicitation auction back to life. is this easy or hard?
+	easy, i just did it!
