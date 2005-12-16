@@ -1,4 +1,4 @@
-coout vop web database
+coop web database
 
 MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
@@ -11,16 +11,16 @@ MY agenda! dammit, mine! for a change....
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 
-write some js to generate an interpreter for debug, and shove it into a page
-	generate the whole form via mochi dom
-
 
 ???PHP
-bring Packaging back to life! so they can start entering baskets
-	finish adding the list of baskets (live packages)
+bring Packaging back to life! 
 	a scrolling div, i think, would be best, to show in add screen
 	add additional validation rules: 
 		no cash
+	the make package form needs to push/pop
+		and perms!!
+		oh THAT should be fun!!
+
 
 
 ??? JSON/PHP
@@ -31,6 +31,7 @@ bring Packaging back to life! so they can start entering baskets
 	a little jsonrpc class
 		returns the view-formatted details in an array: {label:value}
 	the delay is a question though.
+
 
 2-4 hours PHP
 phptal? template engine for reports like the nag report? parent ed? enhancement?
@@ -2975,6 +2976,13 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+write some js to generate an interpreter for debug, and shove it into a page
+	generate the whole form via mochi dom
+	no, just w=window.open('http://www/coop-dev'); w.document.doStuff()!
+
+	finish adding the list of baskets (live packages)
+
 	perms for JOIN table, then crosslinks?
 		NO
 
@@ -4691,3 +4699,7 @@ BUG: the confirmdelete is utterly fucked up
 	add perms
 	javascript onchange to guess starting bid and bid increment!
 		where to add that? postform?
+	round it up
+	new package form. where to put it!
+		can't stick it inside a form, can't nest the bastards. afterform
+so they can start entering baskets

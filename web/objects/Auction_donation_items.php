@@ -113,6 +113,19 @@ class Auction_donation_items extends CoopDBDO
 
         }
 
+    function afterForm(&$co)
+        {
+            $co->page->printDebug('after form', 3);
+            if($co->id > 0){
+                $pkgfake =& new CoopObject(&$co->page, 'packages', &$co);
+                if($pkgfake->isPermittedField(null, null, true) >= ACCESS_ADD){
+                    $npf =& $this->newPackageForm(&$co);
+                    return $npf->toHTML();
+                }
+            }
+        }
+
+
 	// form that blasts over to the packages::new, to create a new one
 	// just generates a CREATE NEW button with all the shit inside
 	function newPackageForm(&$co)

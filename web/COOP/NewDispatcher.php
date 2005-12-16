@@ -196,6 +196,12 @@ class CoopNewDispatcher
                     $this->page->vars['last']['action']);
 
                 $res .= $atdf->form->toHTML();
+
+                if(is_callable(array($atdf->obj, 'afterForm'))){
+                    $this->page->printDebug('newdispatcher calling after form', 3);
+                    $res .= $atdf->obj->afterForm(&$atdf);
+                }
+
                 return $res;
             }
         }
