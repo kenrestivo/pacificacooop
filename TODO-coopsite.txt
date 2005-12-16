@@ -12,25 +12,29 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
-??PHP/shell
-remove crufty files
-	cvs remove the whole list of crufty files: foundold-clean.txt
-	save tickets and thankyou's and paddles, dammit.
-		deal with that clusterfuck over the holiday
-	when tickets and paddles are finally gone, then you can:
-		trash states.inc, shared.inc
-		yank the createlegacy shit from View	
-
 
 ???PHP
 bring Packaging back to life! 
 	a scrolling div, i think, would be best, to show in add screen
+		tricky, have to deal with css addscript stuff
 	add additional validation rules: 
 		no cash
 	the make package form needs to push/pop
 		oh THAT should be fun!!
 		is it pushing?
 
+
+
+??PHP/shell
+remove crufty files
+	cvs remove the whole list of crufty files: foundold-clean.txt
+		first awk/split it out
+		then run another qa, just to be sure!
+	save tickets and thankyou's and paddles, dammit.
+		deal with that clusterfuck over the holiday
+	when tickets and paddles are finally gone, then you can:
+		trash states.inc, shared.inc
+		yank the createlegacy shit from View	
 
 
 ??? JSON/PHP
@@ -47,7 +51,8 @@ bring Packaging back to life!
 phptal? template engine for reports like the nag report? parent ed? enhancement?
 	then load all those fucking libraries! on nfsn. not. fun.
 		well, it might be easy!
-	 pear -s -c ~/.pearrc -d doc_dir=~/local_pear/docs  -d ext_dir=~/local_pear/ext  -d php_dir=~/local_pear/lib -d data_dir=~/local_pear/data  -d test_dir=~/local_pear/tests  -d cache_dir=~/local_pear/cache -d bin_dir=~/local_pear/bin
+		then again, maybe not!
+		STUCK: the include paths: use LOGS, wtf is going on?
 	now try it out, maybe for the reports
 	settings
 		cache dir? nocache? repository?
@@ -64,7 +69,7 @@ duplicates in attendance! margolis
 
 ??PHP/SQL
 bring tickets, paddles, etc back to life!
-
+se
 ???PHP/QA/bureaucracy
 	finally the fucking paypal
 
@@ -2988,7 +2993,7 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-
+	 pear -s -c ~/.pearrc -d doc_dir=~/local_pear/docs  -d ext_dir=~/local_pear/ext  -d php_dir=~/local_pear/lib -d data_dir=~/local_pear/data  -d test_dir=~/local_pear/tests  -d cache_dir=~/local_pear/cache -d bin_dir=~/local_pear/bin
 write some js to generate an interpreter for debug, and shove it into a page
 	generate the whole form via mochi dom
 	no, just w=window.open('http://www/coop-dev'); w.document.doStuff()!

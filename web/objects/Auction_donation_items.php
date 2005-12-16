@@ -194,7 +194,15 @@ class Auction_donation_items extends CoopDBDO
 
     function beforeForm(&$co)
         {
+
+            $inner = 'foo bar baz';
+
+            $res = "";
             //the scrolling div with packages!
+            
+
+            $res .= '<div id="possible_packages_scroll"><div id="possible_packages">'. $inner . '</div></div>';
+            return $res;
         }
 
 

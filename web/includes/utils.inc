@@ -561,16 +561,13 @@ function devSite()
 // EEEEEEEVIL! but,needed.
 function javaPopup()
 {
-	return '<SCRIPT LANGUAGE="JavaScript">
-<!-- Begin
+	return wrapJS('
 function popUp(URL) {
 day = new Date();
 id = day.getTime();
 eval("page" + id + " = window.open(URL, \'" + id + "\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=1,resizable=0,width=480,height=640,left = 272,top = 64\');");
 window.location.reload( false );
-}
-// End -->
-</script>';
+}');
 
 }
 
@@ -582,7 +579,7 @@ dateJava()
 	if (!defined('HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS')) {
 		define('HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS', true);
 		// wrapped in comments to make old browsems ignore it
-               $js .= '
+               return wrapJS( '
 function todaysDate(datefield) {
 		var mydate=new Date()
 		var theyear=mydate.getYear()
@@ -602,13 +599,30 @@ function todaysDate(datefield) {
 
 		datefield.value=displayfirst+"/"+displaysecond+"/"+displaythird
 }
-               ';
-               $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
-				   $js . "//]]>\n</script>";
+               ');
+
            }
-           return $js;
+           return '';
 
 } // END DATEJAVA
+
+
+// vital util. if you supply an inclusion guard, it'll only be
+// inluded once
+function wrapJS($js, $inclusion = false)
+{
+    $res = "";
+    if($inclusion){
+        if (defined($inclusion)) {
+            return;
+        } else {
+            define($inclusion, true);
+        }
+    }
+    return "\n<script type=\"text/javascript\">\n//<![CDATA[\n" .
+        $js . "//]]>\n</script>\n";
+}
+
  
 function unObject($val)
 {

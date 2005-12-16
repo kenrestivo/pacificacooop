@@ -54,21 +54,19 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
        function getSearchSelectJs()
        {
            $jspath = 'lib';
-           // guard ONLY for the inclusion. the rest must always be done
            $res = '';
-           if (!defined('HTML_QUICKFORM_SEARCHSELECT_EXISTS')) {
-			   // We only want to include the javascript code once per form
-               define('HTML_QUICKFORM_SEARCHSELECT_EXISTS', true);
+           $res .= $this->cf->page->jsRequireOnce(
+               sprintf('%s/kenflex.js' , 
+                       $jspath),
+               'HTML_QUICKFORM_SEARCHSELECT_EXISTS');
+           
 
-               $res .= sprintf('<script src="%s/kenflex.js"></script>' , 
-                                $jspath);
-           }
+           
+           list($target, $targfield) = $this->link;
+           $target_id =  $target . '-'. $targfield;
 
-
-            list($target, $targfield) = $this->link;
-            $target_id =  $target . '-'. $targfield;
-
-               $js .= sprintf('
+           // i don't wrap this in an inclusin guard, may have > 1
+           $js .= sprintf('
 /* begin javascript for THIS PARTICULAR HTML_QuickForm_searchselect */
 comboboxsettings.serverPage="%s/kenflex.php";
 %s
@@ -83,9 +81,7 @@ combobox_%s = new Combobox(\'search-%s\', \'%s\', \'%s\');
                           $target);
 				
 			   // wrap wrap wrap wrap it up. i'll take it. up the ying-yang.
-               $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
-				   $js . "//]]>\n</script>";
-           return $res . $js;
+           return $res . wrapJS($js);
        }
 
 

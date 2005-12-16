@@ -288,23 +288,17 @@ class Audit_trail extends CoopDBDO
             } 
             
             $res = "";
-            if (!defined('MOCHIKIT_EXISTS')) {
-                // inclusion guard
-                define('MOCHIKIT_EXISTS', true);
-                
-                $res .= '<script src="lib/MochiKit/MochiKit.js"></script>'; 
-            }
 
-          if (!defined('SENDEMAIL_EXISTS')) {
-                // inclusion guard
-                define('SENDEMAIL_EXISTS', true);
-                
-                $res .= '<script src="lib/send_email.js"></script>'; 
-            }
+            $res .= $co->page->jsRequireOnce('lib/MochiKit/MochiKit.js',
+                                     'MOCHIKIT_EXISTS');
 
-          $res .= sprintf(
-              '<a href="" onclick="return sendEmailNotice(this,%d)">Send</a>', 
-              $this->{$co->pk});
+            
+            $res .= $co->page->jsRequireOnce('lib/send_email.js', 
+                                   'SENDEMAIL_EXISTS');
+
+            $res .= sprintf(
+                '<a href="" onclick="return sendEmailNotice(this,%d)">Send</a>', 
+                $this->{$co->pk});
           
           return $res;
       }

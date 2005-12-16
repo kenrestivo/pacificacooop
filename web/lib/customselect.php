@@ -119,11 +119,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
 
             // non-specific
-            if (!defined('HTML_QUICKFORM_CUSTOMSELECT_EXISTS')) {
-                // We only want to include the javascript code once per form
-                define('HTML_QUICKFORM_CUSTOMSELECT_EXISTS', true);
-                
-                $js .= '
+            $js .= '
 /* begin javascript for HTML_QuickForm_customselect */
 function processCustomSelect(selectbox, target_id, showtext)
 {
@@ -152,18 +148,15 @@ function processCustomSelect(selectbox, target_id, showtext)
 /* end javascript for HTML_QuickForm_customselect */
                ';
 				
-            }
             
-            $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
-                $js . "//]]>\n</script>";
- $js .= '<noscript><h1>WARNING! This page WILL NOT work without Javascript. You must enable Javascript in your browser first. Sorry about that.</h1></noscript>';
- return $js;
+            
+            return wrapJS($js, 'HTML_QUICKFORM_CUSTOMSELECT_EXISTS') . '<noscript><h1>WARNING! This page WILL NOT work without Javascript. You must enable Javascript in your browser first. Sorry about that.</h1></noscript>';
         }
 
 
 
 	   
-    }
+    } // END CLASS CUSTOMSELECT
 
 // took this code from advmultiselect
 if (class_exists('HTML_QuickForm')) {

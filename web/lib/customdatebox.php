@@ -29,11 +29,8 @@
        {
            // Generate the javascript code needed to handle this element
            $js = '';
-           if (!defined('HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS')) {
-			   // We only want to include the javascript code once per form
-               define('HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS', true);
 
-               $js .= sprintf('
+           $js .= wrapJS(sprintf('
 function %stodaysDate(datefield) {
 		var mydate=new Date()
 		var theyear=mydate.getYear()
@@ -53,10 +50,9 @@ function %stodaysDate(datefield) {
 
 		datefield.value=displayfirst+"/"+displaysecond+"/"+displaythird
 }
-               ', $this->_jsPrefix);
-               $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
-				   $js . "//]]>\n</script>";
-           }
+               ', $this->_jsPrefix),
+                         'HTML_QUICKFORM_CUSTOMDATEBOX_EXISTS');
+
 			   $js .= "<noscript><h1>NOTICE! Some features on this page require Javascript. You will need to enable Javascript in your browser to use them.</h1></noscript>";
 			   return $js;
        }

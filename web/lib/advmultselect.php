@@ -92,11 +92,7 @@
        {
            // Generate the javascript code needed to handle this element
            $js = '';
-           if (!defined('HTML_QUICKFORM_ADVMULTSELECT_EXISTS')) {
-			   // We only want to include the javascript code once per form
-               define('HTML_QUICKFORM_ADVMULTSELECT_EXISTS', true);
-
-               $js .= "
+           $js .= wrapJS("
                    /* begin javascript for HTML_QuickForm_advmultselect */
                    function {$this->_jsPrefix}moveSelections(menuUnselected, menuSelected, menuHidden, action) {
                        if(action == 'add') {
@@ -139,11 +135,11 @@
                        }
                    }
                    /* end javascript for HTML_QuickForm_advmultselect */
-               ";
-               $js = "<script type=\"text/javascript\">\n//<![CDATA[\n" .
-				   $js . "//]]>\n</script>";
+               ",
+                             'HTML_QUICKFORM_ADVMULTSELECT_EXISTS');
+
 			   $js .= "<noscript><h1>WARNING! This page WILL NOT work without Javascript. You must enable Javascript in your browser first. Sorry about that.</h1></noscript>";
-           }
+               
            return $js;
        }
    }

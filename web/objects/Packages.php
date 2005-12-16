@@ -113,8 +113,7 @@ var $fb_currencyFields = array(
 
             $form->addElement('static', 
                               'setPackageDefaults_script', '',
-                              "<script type=\"text/javascript\">\n//<![CDATA[\n" .
-                              $js . "\n//]]>\n</script>");
+                              wrapJS($js));
             
             
 

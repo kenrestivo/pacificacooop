@@ -688,6 +688,16 @@ class coopPage
                            $spring - $numyears);
         }
 
+    // utility func. i'm always loading stuff with inclusion guards
+    function jsRequireOnce($url, $define)
+        {
+            if (!defined($define)) {
+                define($define, true);
+                return sprintf('<script src="%s" type="text/javascript"></script>', $url); 
+            }
+            return '';
+        }
+
 
 } // END COOP PAGE CLASS
 
