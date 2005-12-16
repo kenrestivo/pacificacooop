@@ -24,6 +24,8 @@ bring Packaging back to life!
 		is it pushing?
 
 
+regression-test all my javascript
+
 
 ??PHP/shell
 remove crufty files
