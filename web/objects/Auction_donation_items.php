@@ -180,6 +180,8 @@ class Auction_donation_items extends CoopDBDO
 				$form->addElement('hidden', $key, $val);
 			}
 
+            $form->addElement('hidden', 'push', $co->table);
+
 			// legacy
 			if($sid = thruAuthCore($co->page->auth)){
 				$form->addElement('hidden', 'coop', $sid); 
@@ -190,6 +192,10 @@ class Auction_donation_items extends CoopDBDO
 			return $form;
 		}// end newpackageform
 
+    function beforeForm(&$co)
+        {
+            //the scrolling div with packages!
+        }
 
 
 // set item_description lines = 3

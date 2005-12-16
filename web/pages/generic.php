@@ -34,6 +34,8 @@ if(!empty($_REQUEST['table'])){
                        'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
                        $cp->vars['last']['realm']);
 }
+// push is set by recordbuttons, actionbuttons, and some forms:
+// anyone who wants to save its place and then return to it
 if(isset($_REQUEST['push'])){
     $cp->printDebug('PUSHING onto the stack!', 1);
     $cp->vars['stack'][] = $cp->vars['last'];

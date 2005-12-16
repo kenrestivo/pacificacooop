@@ -21,12 +21,12 @@
 //$debug = -1;
 
 require_once("first.inc");
-require_once("shared.inc");
 require_once("auth.inc");
 
 require_once("CoopPage.php");
 require_once("CoopMenu.php");
-require_once("shared_OOP.php");
+require_once("CoopView.php");
+
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT); //  before page exists.
 

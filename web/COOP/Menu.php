@@ -25,8 +25,8 @@ require_once 'HTML/Menu.php';
 require_once 'HTML/Menu/DirectTreeRenderer.php';
 require_once 'HTML/Menu/DirectRenderer.php';
 require_once 'HTML/Table.php';
+require_once 'CoopObject.php';
 
-require_once('shared.inc');
 
 class CoopMenu extends HTML_Menu
 {

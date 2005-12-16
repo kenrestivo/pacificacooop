@@ -1,7 +1,6 @@
 coop web database
 
 MY agenda! dammit, mine! for a change....
-	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 	create generic report arch (reportnotes.txt)
 	import the 20-year roster (20yearroster.txt)
 	json the subforms (subform.txt)
@@ -10,6 +9,17 @@ MY agenda! dammit, mine! for a change....
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
+	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
+
+
+??PHP/shell
+remove crufty files
+	cvs remove the whole list of crufty files: foundold-clean.txt
+	save tickets and thankyou's and paddles, dammit.
+		deal with that clusterfuck over the holiday
+	when tickets and paddles are finally gone, then you can:
+		trash states.inc, shared.inc
+		yank the createlegacy shit from View	
 
 
 ???PHP
@@ -18,8 +28,8 @@ bring Packaging back to life!
 	add additional validation rules: 
 		no cash
 	the make package form needs to push/pop
-		and perms!!
 		oh THAT should be fun!!
+		is it pushing?
 
 
 
@@ -52,6 +62,8 @@ duplicates in attendance! margolis
 	maybe do that margoilsreport in python? or use phptal?
 
 
+??PHP/SQL
+bring tickets, paddles, etc back to life!
 
 ???PHP/QA/bureaucracy
 	finally the fucking paypal
@@ -452,9 +464,9 @@ income clusterfuck
 		can i press the existing perms shit into service for that?
 
 
-
 ----------------
 BELOW THE LINE
+
 
 maybe use json instead of serialize, for all persistent storage
 	so that i'm not wedded to PHP forever! i can use python instead
@@ -4702,4 +4714,8 @@ BUG: the confirmdelete is utterly fucked up
 	round it up
 	new package form. where to put it!
 		can't stick it inside a form, can't nest the bastards. afterform
-so they can start entering baskets
+so they can start entering baskets	remove the legacy actionbuttons/recordbuttons from view
+	for i in `cat patches/listofsharedincfuncs-clean.txt`; do rgrep $i web/* ; done
+		and perms!!
+			do i have a narsty hack in the pop that refuses to pop if add?
+				whack or special-case that dude. already done

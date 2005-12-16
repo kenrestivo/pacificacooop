@@ -617,7 +617,54 @@ function unObject($val)
     }
     return $val;
 }
- 
+
+/// XXX cruft! do this with htmltable insted! 
+/// NOTE CANNOT use this with showmenurow, because summary writes to screen
+function rawMenuRow($title, $body, $actions)
+{
+	$res = '<tr bgcolor="#aa99ff">';
+	$res .= '<td><b>';
+    $res .= $title;
+    $res .= '</b></td>';
+	$res .= "<td align=center>";
+    $res .= $actions;
+	$res .= "</td></tr>";
+	$res .= '<tr bgcolor="#ffffff"><td colspan=2>';
+	$res .= '<div>'. $body . '</div>';
+	$res .= "<br></td>\n</tr>\n";
+    return $res;
+}
+
+
+/****************
+	NAGONLYBUTTON
+    XXX more cruft!!!!
+	shows the nag-only link, and toggles it
+***************/
+function
+nagOnlyButton($showall, $things, $moreinside = false)
+{
+    print "<p>";
+	//TODO: use button-checked PNG's instead of text. 
+	if($showall){
+		print "ALL $things are shown here.&nbsp;";
+		$text = "(Click here to show only $things that need nagging)\n";
+	} else {
+		print "Only these $things need nagging.&nbsp;";
+		$text = "(Click here to show ALL $things)\n";
+	}
+	$inside =	htmlentities(sprintf("%s?%s%s",
+		 $_SERVER['PHP_SELF'], 
+		SID ? SID . "&" : "", 
+		$showall ? "" : 'showall=checked&'));
+
+	printf('<a href="%s%s">%s</a>',
+		   $inside, 
+		   $moreinside ?  htmlentities($moreinside)  : '',
+		   $text);
+	print "</p>";
+} /* END NAGONLYBUTTON */
+
 
 //EOF!!!  DON'T DELETE PAST HERE, I NEED THAT STUFF
 ?>

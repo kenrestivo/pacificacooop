@@ -195,6 +195,11 @@ class CoopNewDispatcher
                 $res .= $atdf->getInstructions(
                     $this->page->vars['last']['action']);
 
+                if(is_callable(array($atdf->obj, 'beforeForm'))){
+                    $this->page->printDebug('newdispatcher calling before form', 3);
+                    $res .= $atdf->obj->beforeForm(&$atdf);
+                }
+
                 $res .= $atdf->form->toHTML();
 
                 if(is_callable(array($atdf->obj, 'afterForm'))){
