@@ -68,7 +68,8 @@ class Packages extends CoopDBDO
 
 
 var $fb_defaults = array(
-  'package_type' => 'Silent'
+    'package_type' => 'Silent',
+    'display_publicly' => 'No'
 );
 
 var $fb_currencyFields = array(
@@ -94,6 +95,33 @@ var $fb_currencyFields = array(
    );
 
     var $fb_extraDetails = array('auction_packages_join:auction_donation_items');
+
+    function postGenerateForm(&$form)
+        {
+
+            $js = sprintf(
+                'setPackageDefaults = function(self){
+                        var form = document.getElementById("%s");
+                        form["%s"].value = self.value / %d;
+                        form["%s"].value = self.value / %d;
+                }',
+                $form->_attributes['name'],
+                $form->CoopForm->prependTable('starting_bid'),
+                COOP_DEFAULT_STARTING_BID_DIVISOR,
+                $form->CoopForm->prependTable('bid_increment'),
+                COOP_DEFAULT_BID_INCREMENT_DIVISOR);
+
+            $form->addElement('static', 
+                              'setPackageDefaults_script', '',
+                              "<script type=\"text/javascript\">\n//<![CDATA[\n" .
+                              $js . "\n//]]>\n</script>");
+            
+            
+
+            $form->updateElementAttr(
+                array($form->CoopForm->prependTable('package_value')), 
+                array('onchange' => 'setPackageDefaults(this)'));
+        }
 
 
 // set package_description lines = 3
