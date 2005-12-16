@@ -102,8 +102,8 @@ var $fb_currencyFields = array(
             $js = sprintf(
                 'setPackageDefaults = function(self){
                         var form = document.getElementById("%s");
-                        form["%s"].value = self.value / %d;
-                        form["%s"].value = self.value / %d;
+                        form["%s"].value = Math.ceil(self.value / %d);
+                        form["%s"].value = Math.ceil(self.value / %d);
                 }',
                 $form->_attributes['name'],
                 $form->CoopForm->prependTable('starting_bid'),
