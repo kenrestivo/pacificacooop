@@ -180,7 +180,7 @@ class Auction_donation_items extends CoopDBDO
 				$form->addElement('hidden', $key, $val);
 			}
 
-            $form->addElement('hidden', 'push', $co->table);
+            $form->addElement('hidden', 'push', $co->prependTable($co->pk));
 
 			// legacy
 			if($sid = thruAuthCore($co->page->auth)){

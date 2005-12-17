@@ -12,33 +12,35 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
-make perms group for solicit, and give them all auction
-
-
-??PHP/SQL
-groups details are BROKEN: usergroupjoin not working. i hate sql.
-	it's deep in the heart of schoolyearconstrain, and familyconstrain
-		probably need a custom shit
-	but, fuck it.
-
-
-???PHP
-bring Packaging back to life! 
-	add additional validation rules: 
-		no cash
-	the make package form needs to push/pop
-		oh THAT should be fun!!
-		is it pushing?
 
 
 ??? JSON/PHP
-	cool jsonism which at hover time goes and gets details on a record
-		and shoves it into title
-	tricky bit is adding onmouseover to each optionelement
-	updateNodeAttributes(this, {'title' : proxy.getDetails('tablename',this.value})
 	a little jsonrpc class
 		returns the view-formatted details in an array: {label:value}
-	the delay is a question though.
+	html css popup
+		play with positioning this thing.
+		at mouse? 
+		off to side of selectbox?
+			have to get coordinates of it then
+	where does this showDetails code go?
+		i think it just goes IN the page somewhere
+	getting this shit
+		how do i know what table? similar problem to customselect
+	add the onmouseover=showDetails(this)
+		advmultselect: in custom loadArray()? in js iterator? 
+		searchselect: also need it for the default set by coopform, as above
+	
+
+???PHP
+bring Packaging back to life! 
+	the make package form needs to push/pop
+		oh THAT should be fun!!
+		is it pushing?
+		hmm, the subform thing uses table-field
+			maybe keep the convention, but it's useless. generic just sees SET
+	add additional validation rules: 
+		no cash
+
 
 
 
@@ -479,6 +481,12 @@ income clusterfuck
 
 ----------------
 BELOW THE LINE
+
+??PHP/SQL
+groups details are BROKEN: usergroupjoin not working. i hate sql.
+	it's deep in the heart of schoolyearconstrain, and familyconstrain
+		probably need a custom shit
+	but, fuck it.
 
 
 ??PHP
@@ -3002,6 +3010,17 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+			.dialog	tricky bit is adding onmouseover to each optionelement
+		where to stick that? getlinkoptions?
+		can i put it into the outer select? or must each option have it?
+		or js it later? onload?
+
+		could make it proxy.gettitle()? and return the js!
+			i.e. return code to add the title to self!
+			sloppy for this, but potentially powerful
+			no point. i need code to build the jsonrpc anyway
+
+	the delay is a question though. no, it is not a question. works fine.
 
 maybe use json instead of serialize, for all persistent storage
 	so that i'm not wedded to PHP forever! i can use python instead
@@ -4750,4 +4769,12 @@ bring the solicitation auction back to life. is this easy or hard?
 	easy, i just did it!
 PUSH the companies auction live. make debbie enter some stuff ;-)
 	groups is broken
-		naw, it's fine
+		naw, it's finemake perms group for solicit, and give them all auction
+	cool jsonism which at hover time goes and gets details on a record
+		and shoves it into title
+	ok, BIG problem: title doesn't allow html, nor cr's
+		so, what now? css popupbox?
+		meebo has it. plagarise, plagarise!
+
+	add it in the js which populates the fuckers!
+				populateBox!

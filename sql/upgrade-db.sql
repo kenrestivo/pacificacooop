@@ -2,10 +2,6 @@
 
 -- add table permisssions: auction stuff to System realm
 
--- give everyone view perms for solicit? or maybe just solicit
+-- add access levels to system realm
 
--- a proper group for solicitation
 
--- remove table perms for group membership, dammit.
-
--- add access levels to system user

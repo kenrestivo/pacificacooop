@@ -191,3 +191,46 @@ sendEmailNotice(a, 5431);
 
 w=window.open('http://www/coop-dev')
 
+
+/////
+
+addScript('http://www/coop-dev/lib/JsonRpc.js');
+p = new JsonRpcProxy('http://www/coop-dev/tests/jsonrpctest.php',
+                     ['echotest','args2Array', 'args2String', 
+					  'throwError', 'throwPEARError']);
+
+undefer(p.echotest('foo bar baz')); 
+
+
+/////////
+s=w.document.forms[0]['companies_auction_join-company_id']
+
+
+getTitle = function(self){
+    if(!self.coop_title_added){
+        self.title  = self.innerHTML; //proxy.getDetails('tablename', this.value);
+        self.coop_title_added = 1;
+    }
+}
+
+s.options[0].addEventListener('mouseover', function(){ getTitle(this) }, true)
+
+
+
+/////TODO
+showDetails = function(self) {
+    //delay a second
+    // go get the stuff vis jsonproxy
+    //    grab the tablename?
+    // cache it so i don't always felch?
+    // unhide the dialog 
+}
+
+hideDetails = function(self){
+    //set dialog visibility to hidden
+}
+
+s.options[0].addEventListener('mouseover', function(){ showDetails(this) }, true)
+s.options[0].addEventListener('mouseout', function(){ hideDetails(this) }, true)
+
+

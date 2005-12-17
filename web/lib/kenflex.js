@@ -38,8 +38,10 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
             
             for (match in this.matches.data)
             {
-                this.selectBox.options.add(new Option(this.matches.data[match], 
-                                                      match));
+                o=new Option(this.matches.data[match], match);
+/*                 o.addEventListener('mouseover', function(){showDetails(this)},  */
+/*                                    true); */
+                this.selectBox.options.add(o);
             }
             
             this.selectBox.focus();
