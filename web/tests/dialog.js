@@ -5,7 +5,7 @@ var showDetails= function(ev){
     self=ev.target;
     d=document.getElementById('dialog');
     d.className = 'dialog';
-    d.style.top = ev.clientY + 'px';
+    d.style.top = (ev.clientY - 20) + 'px';
     d.style.left = ev.clientX + 'px';
     d.innerHTML = self.innerHTML;
     return false;
