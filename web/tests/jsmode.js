@@ -234,3 +234,8 @@ s.options[0].addEventListener('mouseover', function(){ showDetails(this) }, true
 s.options[0].addEventListener('mouseout', function(){ hideDetails(this) }, true)
 
 
+
+showEvent = function(ev){
+    ev = ev || window.event; // IE sucks.
+    writeln('x:'+ev.screenX+' y:'+ev.screenY+' cx:'+ev.clientX+' cy:'+ev.clientY)}
+
