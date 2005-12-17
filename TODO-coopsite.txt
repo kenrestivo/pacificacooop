@@ -12,6 +12,16 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
+make perms group for solicit, and give them all auction
+
+
+??PHP/SQL
+groups details are BROKEN: usergroupjoin not working. i hate sql.
+	it's deep in the heart of schoolyearconstrain, and familyconstrain
+		probably need a custom shit
+	but, fuck it.
+
+
 ???PHP
 bring Packaging back to life! 
 	add additional validation rules: 
@@ -471,9 +481,10 @@ income clusterfuck
 BELOW THE LINE
 
 
-maybe use json instead of serialize, for all persistent storage
-	so that i'm not wedded to PHP forever! i can use python instead
-	i.e. shared session keys
+??PHP
+in perms display, change IGNORE to nothing, and NONE to none
+	how? in db: acess levels?
+		no, it's not in there
 
 ah. the form title uses that titleheaderthing.
 	make it use the same one as coopview
@@ -2991,6 +3002,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+maybe use json instead of serialize, for all persistent storage
+	so that i'm not wedded to PHP forever! i can use python instead
+	i.e. shared session keys
+	no, won't work because the SESSION special global is handled by PHP
+
 	 pear -s -c ~/.pearrc -d doc_dir=~/local_pear/docs  -d ext_dir=~/local_pear/ext  -d php_dir=~/local_pear/lib -d data_dir=~/local_pear/data  -d test_dir=~/local_pear/tests  -d cache_dir=~/local_pear/cache -d bin_dir=~/local_pear/bin
 write some js to generate an interpreter for debug, and shove it into a page
 	generate the whole form via mochi dom
@@ -4731,3 +4748,6 @@ regression-test all my javascript	perms? what?
 ??PHP 
 bring the solicitation auction back to life. is this easy or hard?
 	easy, i just did it!
+PUSH the companies auction live. make debbie enter some stuff ;-)
+	groups is broken
+		naw, it's fine

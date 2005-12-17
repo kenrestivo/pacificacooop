@@ -25,6 +25,9 @@ class Access_levels extends CoopDBDO
     ###END_AUTOCODE
 
 	var $fb_linkDisplayFields = array('description');
+	var $fb_fieldLabels = array('short_name' => 'Short Name',
+                                'description'=> 'Description',
+                                'const_name'=>'Constant (used in code)');
 
 	var $fb_formHeaderText = 'Access Levels';
 	var $fb_shortHeader = 'Levels';

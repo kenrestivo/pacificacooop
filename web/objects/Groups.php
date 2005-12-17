@@ -30,6 +30,8 @@ class Groups extends CoopDBDO
 									 'toTable' => 'users',
 									 'toField' => 'user_id',
 									 'type' => 'select'));
+    // var $fb_extraDetails = array('users_groups_join:users');
+
 
 
 }
