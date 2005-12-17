@@ -12,10 +12,11 @@
     BACKGROUND-COLOR:  lightyellow;
     BORDER:            black 1px solid;
     PADDING:           0.5em;
-	visibility: hidden;
+	visibility: visible;
 	opacity: .9;
 	filter:alpha(opacity=90);
   }
 
 
 
+.hidden { display:none }

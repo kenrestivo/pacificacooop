@@ -164,6 +164,9 @@ function done()
       <a href="http://validator.w3.org/check/referer"><img
           src="http://www.w3.org/Icons/valid-xhtml10" name="validator"
           alt="Valid XHTML 1.0!" height="31" width="88" border="0" /></a>
+<!--[if IE]>
+<a href="http://www.getfirefox.com"><img border="0" alt="Get Firefox!" title="Get Firefox!" src="http://sfx-images.mozilla.org/affiliates/Buttons/110x32/get.gif"/></a>
+<![endif]-->
     ';
     ///note teh tag closing. it's an html validator bug waiting to happen ;-)
 	printf("If anything on this site appears to be not working properly, 

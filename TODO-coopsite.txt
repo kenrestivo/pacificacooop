@@ -31,14 +31,15 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 	a little jsonrpc class
 		returns the view-formatted details in an array: {label:value}
 	html css popup
-		play with positioning this thing.
-		at mouse? 
-		off to side of selectbox?
-			have to get coordinates of it then
+		play with positioning this thing. at location of this works, nonstd
+		at mouse?  get event details?
 	where does this showDetails code go?
 		i think it just goes IN the page somewhere
 	getting this shit
 		how do i know what table? similar problem to customselect
+	is there some way to have multiple classes in jsonrpc?
+		well, supposedly the python version supports that. proxy.foo.bar.baz()
+			try this, and try to guesstimate it with php
 	add the onmouseover=showDetails(this)
 		advmultselect: in custom loadArray()? in js iterator? 
 		searchselect: also need it for the default set by coopform, as above
@@ -3010,6 +3011,9 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+		off to side of selectbox?
+			have to get coordinates of it then
+
 			.dialog	tricky bit is adding onmouseover to each optionelement
 		where to stick that? getlinkoptions?
 		can i put it into the outer select? or must each option have it?
