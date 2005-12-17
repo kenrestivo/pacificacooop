@@ -13,6 +13,19 @@ MY agenda! dammit, mine! for a change....
 
 
 
+2-4 hours PHP
+phptal? template engine for reports like the nag report? parent ed? enhancement?
+	then load all those fucking libraries! on nfsn. not. fun.
+		well, it might be easy!
+		then again, maybe not!
+		STUCK: the include paths: use LOGS, wtf is going on?
+	now try it out, maybe for the reports
+	settings
+		cache dir? nocache? repository?
+		xhtml/xml mode?
+	setall! and setref (setall shoudl suffice, use refs if needed)
+	for an expanded territory report maybe?
+
 
 ??? JSON/PHP
 	a little jsonrpc class
@@ -56,19 +69,6 @@ remove crufty files
 		yank the createlegacy shit from View	
 
 
-
-2-4 hours PHP
-phptal? template engine for reports like the nag report? parent ed? enhancement?
-	then load all those fucking libraries! on nfsn. not. fun.
-		well, it might be easy!
-		then again, maybe not!
-		STUCK: the include paths: use LOGS, wtf is going on?
-	now try it out, maybe for the reports
-	settings
-		cache dir? nocache? repository?
-		xhtml/xml mode?
-	setall! and setref (setall shoudl suffice, use refs if needed)
-	for an expanded territory report maybe?
 
 
 

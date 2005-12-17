@@ -1,0 +1,21 @@
+
+  .dialog {
+	display: block;
+   	font-family: Tahoma, Arial, Sans Serif;
+	position: absolute;
+   	top: 85px;
+	left: 50px;
+	margin: 0px;
+	width: 20em;
+	height: 20em;
+    COLOR:             black;
+    BACKGROUND-COLOR:  lightyellow;
+    BORDER:            black 1px solid;
+    PADDING:           0.5em;
+	visibility: hidden;
+	opacity: .9;
+	filter:alpha(opacity=90);
+  }
+
+
+
