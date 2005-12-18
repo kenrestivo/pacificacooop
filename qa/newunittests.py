@@ -97,7 +97,7 @@ class CoopTest:
             
     def getAllLinks(self):
         """htmlunit has no such function as getalllinks. so, here it is"""
-        return [i for i in self.mainpage.getAllHtmlChildElements() if i.getTagName() == 'a' and i.getHrefAttribute().count('@') < 1]
+        return [i for i in self.mainpage.getAllHtmlChildElements() if i.getTagName() == 'a' and i.getHrefAttribute().count('@') < 1 and i.getHrefAttribute().count('index.php') < 1]
 
 
     def specialAudit(self):
@@ -122,7 +122,7 @@ def ManyVisitHack(url):
 
 def main():
     ManyVisitHack('http://www/coop-dev')
-
+    print 'All tests succeeded! Yay!'
 
     
 ## do this. it's good.
