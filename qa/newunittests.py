@@ -1,6 +1,12 @@
-
-
 #$Id$
+
+
+##to load in jython:
+## import sys
+## sys.path.append('/mnt/kens/ki/proj/coop/qa')
+## import newunittests
+## newunittests.main()
+
 
 htmlunitdir = '/usr/local/share/htmlunit'
 
@@ -15,7 +21,6 @@ import com.gargoylesoftware.htmlunit
 htmlunit = com.gargoylesoftware.htmlunit
 
 from java.net import URL
-import unittest
 
 
 ## some utility funcs
@@ -30,7 +35,7 @@ def usableSelect(sel, val):
 #TODO: don't click on links to same page, go find out what this page is
 
 
-class Test_Coop(unittest.TestCase):
+class CoopTest:
     """test the website. page is the current page. mainpage is homepage."""
     wc = None
     page= None 
@@ -41,8 +46,9 @@ class Test_Coop(unittest.TestCase):
         self.wc = htmlunit.WebClient(htmlunit.BrowserVersion.MOZILLA_1_0, )
         self.wc.setRedirectEnabled(1)
 
-    def testCaseToolIsStupid(self):
-        """i hate this peice of shit"""
+    def run(self):
+        """let's go"""
+        self.setUp()
         self.getLoginPage()
         self.logIn()
         self.visitSubPages()
@@ -52,7 +58,7 @@ class Test_Coop(unittest.TestCase):
         """get to the first URL. make sure we have at least that"""
         self.page= self.wc.getPage(URL(self.url))
         self.pageLoaded()
-        self.assertEquals(1, len(self.page.getForms()))
+        assert(1 == len(self.page.getForms()))
         self.logIn()
 
 
@@ -68,15 +74,16 @@ class Test_Coop(unittest.TestCase):
 
 
     def visitSubPages(self):
-        """iterate through all the links on themainpage, and go for it"""
+        """iterate through all the links on themainpage, and swap page"""
         for i in self.getAllLinks():
-            i.click()
+            self.page = i.click()
             self.pageLoaded()
 
 
 
     def pageLoaded(self):
-            self.assertEqual(1, self.page.getWebResponse().getContentAsString().count('</html>'))
+        print 'Checking load of %s ...' % (self.page.getWebResponse().getUrl(), )
+        assert(1 == self.page.getWebResponse().getContentAsString().count('</html>'))
 
             
     def getAllLinks(self):
@@ -96,7 +103,7 @@ class Test_Coop(unittest.TestCase):
 ##mainpage.getWebResponse().getUrl()
 ###### MAIN ######
 def main():
-    return unittest.TextTestRunner(verbosity=2).run(unittest.makeSuite(Test_Coop))
+    CoopTest().run()
 
     
 ## do this. it's good.
