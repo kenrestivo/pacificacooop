@@ -41,14 +41,22 @@ class Test_Coop(unittest.TestCase):
         self.wc = htmlunit.WebClient(htmlunit.BrowserVersion.MOZILLA_1_0, )
         self.wc.setRedirectEnabled(1)
 
-    def testGetLoginPage(self):
+    def testCaseToolIsStupid(self):
+        """i hate this peice of shit"""
+        self.getLoginPage()
+        self.logIn()
+        self.visitSubPages()
+
+
+    def getLoginPage(self):    
         """get to the first URL. make sure we have at least that"""
         self.page= self.wc.getPage(URL(self.url))
         self.pageLoaded()
         self.assertEquals(1, len(self.page.getForms()))
-        
+        self.logIn()
 
-    def testLogIn(self):
+
+    def logIn(self):
         """check that i might already be logged in, and log in if not"""
         try:
             f=self.page.getForms()[0]
@@ -59,7 +67,7 @@ class Test_Coop(unittest.TestCase):
             self.mainpage=self.page
 
 
-    def testSubPages(self):
+    def visitSubPages(self):
         """iterate through all the links on themainpage, and go for it"""
         for i in self.getAllLinks():
             i.click()
