@@ -116,7 +116,7 @@ def ManyVisitHack(url):
     usersToTest= ['Bartlett Family', 'Restivo Family', 'Cooke Family',
                   'Teacher Sandy', 'Shirley']
     for u in usersToTest:
-        print 'For %s, trying user %s ...' % (url, u)
+        print 'Starting user %s (%s)...' % (u, url)
         CoopTest(url, u).run()
     
 
