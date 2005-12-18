@@ -18,8 +18,7 @@ from java.net import URL
 
 
 wc = htmlunit.WebClient(htmlunit.BrowserVersion.MOZILLA_1_0, )
-url = URL('http://htmlunit.sourceforge.net')
-page= wc.getPage(url)
+page= wc.getPage(URL('http://htmlunit.sourceforge.net'))
 page.getTitleText()
 
 #assertEquals("htmlunit - Welcome to HtmlUnit", page.getTitleText() )
