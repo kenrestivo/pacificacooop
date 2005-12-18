@@ -120,6 +120,7 @@ var $fb_defaults = array(
     var $fb_shortHeader = 'Contacts';
     
 
+    ///XXX the auction purchases are utterly fucked up
     var $fb_extraDetails = array(
         'companies_income_join:income',
         'companies_auction_join:auction_donation_items',
