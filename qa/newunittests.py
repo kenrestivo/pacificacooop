@@ -52,7 +52,7 @@ class CoopTest:
         self.visitSubPages()
 
 
-    def getToMainPage():
+    def getToMainPage(self):
         self.setUp()
         self.getLoginPage()
         self.logIn()
