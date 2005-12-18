@@ -40,18 +40,25 @@ wc = htmlunit.WebClient(htmlunit.BrowserVersion.MOZILLA_1_0, )
 page= wc.getPage(URL('http://www/coop-dev'))
 
 page.getTitleText()
-#assertEquals("htmlunit - Welcome to HtmlUnit", page.getTitleText() )
-
+#assertEquals("Data Entry", page.getTitleText() )
+##assertEquals(1, page.getWebResponse().getContentAsString().count('</html>'))
 
 ##login form
-f=page.getForms()[0]
-f.getInputByName('auth[pwd]').setValueAttribute('tester')
-usableSelect(f.getSelectByName('auth[uid]'), 'Cooke Family')
-mainpage=f.getInputByName('login').click()
+## CHECK FIRST!! i might already be logged in
+try:
+    f=page.getForms()[0]
+    f.getInputByName('auth[pwd]').setValueAttribute('tester')
+    usableSelect(f.getSelectByName('auth[uid]'), 'Cooke Family')
+    mainpage=f.getInputByName('login').click()
+except KeyError:
+    mainpage=page
 
 
+mainpage.getWebResponse().getUrl()
 
 ## my special audit thing
-[a for a in getAllLinks(mainpage)
- if a.getHrefAttribute().count('audit')][0].click()
+aud=[a for a in getAllLinks(mainpage) if a.getHrefAttribute().count('audit')][0]
+audpage=aud.click()
+
+
 
