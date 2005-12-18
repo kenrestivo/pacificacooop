@@ -24,7 +24,7 @@ htmlunit = com.gargoylesoftware.htmlunit
 from java.net import URL
 
 from random import random
-from math import ceil
+from math import floor
 
 ## some utility funcs
 
@@ -116,9 +116,10 @@ class CoopTest:
 
     def pickRandomLink(self, kind):
         links=[i for i in self.getAllLinks() if i.asText() == kind]
-        print 'Trying %s link...' % (kind,)
+        index = int(floor(len(links) * random()))
         if len(links) > 0:
-            self.page = links[int(ceil(len(links) * random()))].click()
+            print 'Trying %d of %d %s links...' % (index, len(links), kind)
+            self.page = links[index].click()
             self.pageLoaded()
 
 
