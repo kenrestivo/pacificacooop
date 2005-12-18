@@ -49,7 +49,8 @@ class Territories extends CoopDBDO
             $schoolyear = $co->getChosenSchoolYear(true);
             $view->obj->query(
                 sprintf(" 
-select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
+select concat_ws('\n', company_name, concat_ws(' ', first_name, last_name),
+companies.address1, companies.address2, companies.city, companies.phone, companies.email_address) 
     as company, companies.company_id,
         sum(inc.payment_amount) as cash_donations,
         sum(pur.payment_amount) as auction_purchases,
