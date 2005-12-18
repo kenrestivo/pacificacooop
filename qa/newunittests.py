@@ -30,7 +30,7 @@ def usableSelect(sel, val):
             return
     #throw Exception(val + ' is not present in selectbox!')
 
-
+#TODO: don't click on links to same page, go find out what this page is
 def getAllLinks(page):
     return [i for i in page.getAllHtmlChildElements() if i.getTagName() == 'a']
 
@@ -38,11 +38,11 @@ def getAllLinks(page):
 ##login form
 f=page.getForms()[0]
 f.getInputByName('auth[pwd]').setValueAttribute('tester')
+usableSelect(f.getSelectByName('auth[uid]'), 'Cooke Family')
 mainpage=f.getInputByName('login').click()
 
 
 
-getHrefAttribute()
-
-[a for a in getAllLinks(mainpage) if a.getHrefAttribute().count('audit')]
+## my special audit thing
+[a for a in getAllLinks(mainpage) if a.getHrefAttribute().count('audit')][0].click()
 
