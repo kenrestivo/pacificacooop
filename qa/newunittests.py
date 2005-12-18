@@ -86,7 +86,7 @@ class CoopTest:
 
 
     def pageLoaded(self):
-        print 'Checking load of %s ...' % (self.page.getWebResponse().getUrl(), )
+        print 'Checking load of [%s] ...' % (self.page.getWebResponse().getUrl(), )
         assert(1 == self.page.getWebResponse().getContentAsString().count('</html>'))
 
             
