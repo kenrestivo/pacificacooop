@@ -12,6 +12,9 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
+ouch. mochikit is choking httpunit.
+	what THE FUCK happened???!!! all of a sudden, it doesn't work. 
+		it worked yesterday!
 
 2-4 hours PHP
 phptal? template engine for reports like the nag report? parent ed? enhancement?

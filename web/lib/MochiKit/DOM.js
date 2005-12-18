@@ -725,11 +725,11 @@ MochiKit.DOM.escapeHTML = function (s) {
         gt, quot, amp)
 
     ***/
-    return s.replace(/&/g, "&amp;"
-        ).replace(/"/g, "&quot;"
-        ).replace(/</g, "&lt;"
-        ).replace(/>/g, "&gt;");
-};
+    return s.replace(/&/g, '&amp;'
+        ).replace(/"/g, '&quot;'
+        ).replace(/</g, '&lt;'
+        ).replace(/>/g, '&gt;');
+}; // quote " to make emacs happy
 
 MochiKit.DOM.toHTML = function (dom) {
     /***
@@ -857,9 +857,12 @@ MochiKit.DOM.__new__ = function (win) {
 
     this.domConverters = new m.AdapterRegistry(); 
     
-    var __tmpElement = this._document.createElement("span");
+    var __tmpElement = this._document.createElement('span');
     var attributeArray;
-    if (__tmpElement.attributes.length > 0) {
+    // KR ugly hack to make Rhino happy
+     if (__tmpElement && __tmpElement.attributes && 
+         __tmpElement.attributes.length > 0) 
+    {
         // for braindead browsers (IE) that insert extra junk
         var filter = m.filter;
         attributeArray = function (node) {
