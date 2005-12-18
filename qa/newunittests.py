@@ -17,11 +17,8 @@ htmlunit = com.gargoylesoftware.htmlunit
 from java.net import URL
 
 
-wc = htmlunit.WebClient(htmlunit.BrowserVersion.MOZILLA_1_0, )
-page= wc.getPage(URL('http://www/coop-dev'))
 
-page.getTitleText()
-#assertEquals("htmlunit - Welcome to HtmlUnit", page.getTitleText() )
+## some utility funcs
 
 def usableSelect(sel, val):
     for i in sel.getOptions():
@@ -35,6 +32,17 @@ def getAllLinks(page):
     return [i for i in page.getAllHtmlChildElements() if i.getTagName() == 'a']
 
 
+
+
+###### MAIN ######
+
+wc = htmlunit.WebClient(htmlunit.BrowserVersion.MOZILLA_1_0, )
+page= wc.getPage(URL('http://www/coop-dev'))
+
+page.getTitleText()
+#assertEquals("htmlunit - Welcome to HtmlUnit", page.getTitleText() )
+
+
 ##login form
 f=page.getForms()[0]
 f.getInputByName('auth[pwd]').setValueAttribute('tester')
@@ -44,5 +52,6 @@ mainpage=f.getInputByName('login').click()
 
 
 ## my special audit thing
-[a for a in getAllLinks(mainpage) if a.getHrefAttribute().count('audit')][0].click()
+[a for a in getAllLinks(mainpage)
+ if a.getHrefAttribute().count('audit')][0].click()
 
