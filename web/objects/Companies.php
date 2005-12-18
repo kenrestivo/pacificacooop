@@ -125,7 +125,7 @@ var $fb_defaults = array(
         'companies_income_join:income',
         'companies_auction_join:auction_donation_items',
         'companies_in_kind_join:in_kind_donations',
-        'leads:springfest_attendees:auction_purchases');
+        'springfest_attendees:auction_purchases');
     
     function fb_display_view(&$co)
         {
