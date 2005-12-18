@@ -463,7 +463,7 @@ Tax ID # 94-1527749
 
 			// format auction
 			while($real->obj->fetch()){
-				$this->items_array[] = $real->obj->item_description;
+				$this->items_array[] = $real->obj->short_description;
 										
 				$soliciting_families[]= $real->obj->family_id;
 				if($save){
@@ -803,7 +803,7 @@ Tax ID # 94-1527749
 			$save =  $real->obj; // need to cache it b4 we search
 			$found = $real->obj->find();
 			while($real->obj->fetch()){
-				$this->items_array[] = $real->obj->item_description;
+				$this->items_array[] = $real->obj->short_description;
 										
 				$sf =& new CoopObject(&$this->cp , 
 									  'companies_auction_join', &$real);

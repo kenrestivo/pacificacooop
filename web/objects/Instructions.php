@@ -12,7 +12,7 @@ class Instructions extends CoopDBDO
     var $__table = 'instructions';                    // table name
     var $instruction_id;                  // int(32)  not_null primary_key unique_key auto_increment
     var $table_name;                      // string(255)  
-    var $action;                          // string(6)  enum
+    var $action;                          // string(7)  enum
     var $instruction;                     // blob(16777215)  blob
 
     /* ZE2 compatibility trick*/

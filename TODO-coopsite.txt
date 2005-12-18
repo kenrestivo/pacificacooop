@@ -19,6 +19,9 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 		well, it might be easy!
 		then again, maybe not!
 		STUCK: the include paths: use LOGS, wtf is going on?
+			include dbhost.inc BEFORE first.inc, or at the top of it
+
+
 	now try it out, maybe for the reports
 	settings
 		cache dir? nocache? repository?
@@ -30,9 +33,6 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 ??? JSON/PHP
 	a little jsonrpc class
 		returns the view-formatted details in an array: {label:value}
-	html css popup
-		play with positioning this thing. at location of this works, nonstd
-		at mouse?  get event details?
 	where does this showDetails code go?
 		i think it just goes IN the page somewhere
 	getting this shit
@@ -4782,3 +4782,6 @@ PUSH the companies auction live. make debbie enter some stuff ;-)
 
 	add it in the js which populates the fuckers!
 				populateBox!
+	html css popup
+		play with positioning this thing. at location of this works, nonstd
+		at mouse?  get event details?

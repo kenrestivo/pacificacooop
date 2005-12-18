@@ -344,7 +344,7 @@ setupDB($urlonly = false)
 	$dbfile ="dbhost.inc" ;
 
 	if(is_file($dbfile)){
-		include($dbfile);
+		require_once($dbfile);
 		global $dbhost;
 		global $coop_sendto;
 		global $dbuser;

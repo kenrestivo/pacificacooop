@@ -160,7 +160,9 @@ class coopForm extends CoopObject
 
 			$frozen = array();
 			//confessObj($this, 'coopForm::build($id) found');
-			foreach($this->obj->toArray() as $key => $dbval){
+			$data = $this->obj->toArray();
+			foreach($this->obj->fb_fieldLabels as $key => $label){
+                $dbval = $data[$key];
 				// deal with tablenamign these thigns
 				$fullkey = $this->prependTable($key);
                 $this->page->printDebug(
@@ -198,12 +200,6 @@ class coopForm extends CoopObject
 					continue;
 				}
 
-                // skip those that aren't in this table
-                // XXX is there a better/saner way to do it?
-                // i.e. in_array(get_class_methods) or something?
-                if(empty($this->obj->fb_fieldLabels[$key])){
-                    continue;
-                }
 
 				if(!empty($this->obj->fb_preDefElements) && 
 				   in_array($key, array_keys($this->obj->fb_preDefElements)))
@@ -310,16 +306,17 @@ class coopForm extends CoopObject
 				} else {
                     // ok, it's just text
 					$el =& $this->form->addElement('text', $fullkey);
-                    if(is_array($this->obj->fb_sizes) &&
-                       !empty($this->obj->fb_sizes[$key]))
+                    if(!empty($this->obj->fb_sizes[$key]))
                     {
-                        $el->setSize($this->obj->fb_sizes[$key]);
+                        $this->form->updateElementAttr(
+                            $fullkey, 
+                            array('size' =>$this->obj->fb_sizes[$key]));
                     }
+                    $this->page->confessArray($this->_tableDef, 'tabb');
 				}
 				//print $key . "->" .$this->obj->fb_fieldLabels[$key] . "<br>";
 				// TODO: uppercase this thing, replace _ with spaces
-				$el->setLabel($this->obj->fb_fieldLabels[$key] ? 
-							  $this->obj->fb_fieldLabels[$key] : $key);
+				$el->setLabel($label);
 				
 				
 				// finally, pas through default or editable vals

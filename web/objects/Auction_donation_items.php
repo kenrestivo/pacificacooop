@@ -20,6 +20,7 @@ class Auction_donation_items extends CoopDBDO
     var $school_year;                     // string(50)  
     var $committed;                       // string(3)  enum
     var $thank_you_id;                    // int(32)  
+    var $short_description;               // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -29,14 +30,15 @@ class Auction_donation_items extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $fb_linkDisplayFields = array('item_description');
+	var $fb_linkDisplayFields = array('short_description', 'item_description');
 	var $fb_selectAddEmpty = array ('package_id');
 	var $fb_enumFields = array ('item_type');
 	var $fb_textFields = array ('item_description'); 
 
 	var $fb_fieldLabels = array(
 		"quantity" => "Quantity of items", 
-		"item_description" => "Description of item" ,
+		"short_description" => "Short description of item" ,
+		"item_description" => "Long, Detailed Description of item" ,
 		'item_value' => 'Estimated TOTAL Value ($)' ,
 		"item_type" => "Physical Product or Gift Certificate",
 		"date_received" => "Date Item received" ,
@@ -59,7 +61,8 @@ class Auction_donation_items extends CoopDBDO
 // 									 'type' => 'select'));
 
 
-	var $fb_requiredFields = array('item_description', 'quantity', 
+	var $fb_requiredFields = array('short_description',
+                                   'item_description', 'quantity', 
 								   'school_year',  'item_value', 
 								   'item_type', 'school_year');
 
@@ -83,6 +86,7 @@ class Auction_donation_items extends CoopDBDO
         );
 
     var $fb_sizes = array(
+        'short_description' => 50,
         'item_description' => 100
         );
 

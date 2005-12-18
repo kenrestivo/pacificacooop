@@ -1,10 +1,11 @@
 <?php
 
+chdir('../');
 require_once('dbhost.inc');                                                         
 require_once "HTML/Template/PHPTAL.php";
 
 // create a new template object
-$template = new PHPTAL("template-phptal-test.html");
+$template = new PHPTAL("tests/template-phptal-test.html");
 
 // the Person class
 class Person

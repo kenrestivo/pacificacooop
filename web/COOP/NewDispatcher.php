@@ -116,11 +116,19 @@ class CoopNewDispatcher
             // XXX THIS CLOBBERS WHATEVER WAS THERE!
             // also, shouldn't i use exportValues(), to get only thos in the QF?
             $this->page->vars['last']['submitvars'] = $atdf->form->getSubmitValues();
+            
+            // this is crucial for, well, everything.
+            $prev =& $this->page->getPreviousStack();
+
 
             //try to make it more userfriendly by specifying commit action
             if($atdf->form->elementExists('savebutton')){
                 $sbtn =& $atdf->form->getElement('savebutton');
-                if($this->page->vars['last']['action'] == 'add'){
+                if($prev && 
+                   ($prev['action'] == 'add' || $prev['action'] == 'edit'))
+                {
+                    $sbtn->setValue('Continue>>');
+                } else if($this->page->vars['last']['action'] == 'add'){
                     $sbtn->setValue('Add');
                 } else {
                     $sbtn->setValue('Save Changes');
@@ -134,13 +142,12 @@ class CoopNewDispatcher
                     $atdf->form->process(array(&$atdf, 'process'));
 
                 // put my saved ID back on the stack for later popping!
-                if($previous =& $this->page->getPreviousStack()){
-                    $previous['submitvars'][$previous['table'].'-'.$atdf->pk] = 
+                if($prev){
+                    $prev['submitvars'][$prev['table'].'-'.$atdf->pk] = 
                         $atdf->id;
                 }
                 // force back to view if previous state was 'edit'
                 // or previous table is DIFFERENT (XXX NASTY hack!)
-                $prev =& $this->page->getPreviousStack();
                 if($this->page->vars['last']['action'] != 'add' ||
                    (!empty($prev['table']) && 
                     $this->page->vars['last']['table'] != $prev['table']))

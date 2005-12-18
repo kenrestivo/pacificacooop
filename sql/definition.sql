@@ -29,6 +29,7 @@ USE coop;
 CREATE TABLE auction_donation_items (
   auction_donation_item_id int(32) NOT NULL unique auto_increment,
   item_description longtext,
+  short_description varchar(255),
   quantity int(5) default NULL,
   item_value decimal(9,2) default NULL,
   date_received date default NULL,

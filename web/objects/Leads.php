@@ -23,7 +23,6 @@ class Leads extends CoopDBDO
     var $zip;                             // string(255)  
     var $country;                         // string(255)  
     var $phone;                           // string(255)  
-    var $relation;                        // string(8)  enum
     var $do_not_contact;                  // date(10)  binary
     var $source_id;                       // int(32)  
     var $fax;                             // string(255)  
