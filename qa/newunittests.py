@@ -1,11 +1,12 @@
 #$Id$
 
 
-##to load in jython:
-## import sys
-## sys.path.append('/mnt/kens/ki/proj/coop/qa')
-## import newunittests
-## newunittests.main()
+"""to load in jython:
+import sys
+sys.path.append('/mnt/kens/ki/proj/coop/qa')
+import newunittests
+newunittests.main()
+"""
 
 
 htmlunitdir = '/usr/local/share/htmlunit'
@@ -22,6 +23,8 @@ htmlunit = com.gargoylesoftware.htmlunit
 
 from java.net import URL
 
+from random import random
+from math import ceil
 
 ## some utility funcs
 
@@ -87,11 +90,11 @@ class CoopTest:
         for i in self.getAllLinks():
             self.page = i.click()
             self.pageLoaded()
-
+            self.tryOperationsOnPage()
 
 
     def pageLoaded(self):
-        print 'Checking load of [%s] ...' % (self.page.getWebResponse().getUrl(), )
+        print 'Checking load of [%s] ...' % (self.getURL(), )
         assert(1 == self.page.getWebResponse().getContentAsString().count('</html>'))
 
             
@@ -106,7 +109,25 @@ class CoopTest:
         audpage=aud.click()
 
 
+    def tryOperationsOnPage(self):
+        operations= ['Edit', 'Enter New', 'Delete', 'Details']
+        for i in operations:
+            self.pickRandomLink(i)
 
+    def pickRandomLink(self, kind):
+        links=[i for i in self.getAllLinks() if i.asText() == kind]
+        print 'Trying %s link...' % (kind,)
+        if len(links) > 0:
+            self.page = links[int(ceil(len(links) * random()))].click()
+            self.pageLoaded()
+
+
+    def getURL(self):
+        """gets the url of the current page's web response
+        whatever the hell that means"""
+        return self.page.getWebResponse().getUrl()
+
+        
 ##mainpage.getWebResponse().getUrl()
 ###### MAIN ######
 
