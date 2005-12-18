@@ -100,7 +100,7 @@ class CoopTest:
             
     def getAllLinks(self):
         """htmlunit has no such function as getalllinks. so, here it is"""
-        return [i for i in self.mainpage.getAllHtmlChildElements() if i.getTagName() == 'a' and i.getHrefAttribute().count('@') < 1 and i.getHrefAttribute().count('index.php') < 1]
+        return [i for i in self.page.getAllHtmlChildElements() if i.getTagName() == 'a' and i.getHrefAttribute().count('@') < 1 and i.getHrefAttribute().count('index.php') < 1]
 
 
     def specialAudit(self):
@@ -110,6 +110,7 @@ class CoopTest:
 
 
     def tryOperationsOnPage(self):
+        print 'Diving down into links on [%s]...' % (self.getURL(),)
         operations= ['Edit', 'Enter New', 'Delete', 'Details']
         for i in operations:
             self.pickRandomLink(i)
@@ -118,7 +119,9 @@ class CoopTest:
         links=[i for i in self.getAllLinks() if i.asText() == kind]
         index = int(floor(len(links) * random()))
         if len(links) > 0:
-            print 'Trying %d of %d %s links...' % (index, len(links), kind)
+            print 'From %s trying %d of %d %s links...' % (self.getURL(),
+                                                           index, len(links),
+                                                           kind)
             self.page = links[index].click()
             self.pageLoaded()
 
