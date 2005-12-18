@@ -30,10 +30,19 @@ def usableSelect(sel, val):
             return
     #throw Exception(val + ' is not present in selectbox!')
 
+
+def getAllLinks(page):
+    return [i for i in page.getAllHtmlChildElements() if i.getTagName() == 'a']
+
+
 ##login form
 f=page.getForms()[0]
 f.getInputByName('auth[pwd]').setValueAttribute('tester')
 mainpage=f.getInputByName('login').click()
 
 
-[i for i in mainpage.getAllHtmlChildElements() ]
+
+getHrefAttribute()
+
+[a for a in getAllLinks(mainpage) if a.getHrefAttribute().count('audit')]
+
