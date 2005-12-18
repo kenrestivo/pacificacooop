@@ -48,10 +48,14 @@ class CoopTest:
 
     def run(self):
         """let's go"""
+        self.getToMainPage()
+        self.visitSubPages()
+
+
+    def getToMainPage():
         self.setUp()
         self.getLoginPage()
         self.logIn()
-        self.visitSubPages()
 
 
     def getLoginPage(self):    
@@ -88,7 +92,7 @@ class CoopTest:
             
     def getAllLinks(self):
         """htmlunit has no such function as getalllinks. so, here it is"""
-        return [i for i in self.mainpage.getAllHtmlChildElements() if i.getTagName() == 'a']
+        return [i for i in self.mainpage.getAllHtmlChildElements() if i.getTagName() == 'a' and i.getHrefAttribute().count('@') < 1]
 
 
     def specialAudit(self):
