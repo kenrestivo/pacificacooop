@@ -707,7 +707,7 @@ function schoolYearChooser()
                     $co2->obj->whereAdd(sprintf('%s.%s = %d', 
                                                 $co2->table,
                                                 $this->pk, 
-                                                $id));
+                                                $this->obj->{$this->pk}));
                     $real =& new CoopView(&$this->page, $dest, &$co2);
                     $real->obj->orderBy('school_year desc');
                     $real->protectedJoin($co2);
