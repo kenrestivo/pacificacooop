@@ -40,7 +40,12 @@ class CoopTest:
     wc = None
     page= None 
     mainpage= None
-    url= 'http://www/coop-dev'
+    url= ""
+    username= ""
+
+    def __init__(self, url, username):
+        self.url = url
+        self.username = username
     
     def setUp(self):
         self.wc = htmlunit.WebClient(htmlunit.BrowserVersion.MOZILLA_1_0, )
@@ -71,7 +76,7 @@ class CoopTest:
         try:
             f=self.page.getForms()[0]
             f.getInputByName('auth[pwd]').setValueAttribute('tester')
-            usableSelect(f.getSelectByName('auth[uid]'), 'Cooke Family')
+            usableSelect(f.getSelectByName('auth[uid]'), self.username)
             self.mainpage=f.getInputByName('login').click()
         except KeyError:
             self.mainpage=self.page
@@ -102,12 +107,22 @@ class CoopTest:
 
 
 
-
-
 ##mainpage.getWebResponse().getUrl()
 ###### MAIN ######
+
+
+def ManyVisitHack(url):
+    """runs multiple families in one url"""
+    usersToTest= ['Bartlett Family', 'Restivo Family', 'Cooke Family',
+                  'Teacher Sandy', 'Shirley']
+    for u in usersToTest:
+        print 'For %s, trying user %s ...' % (url, u)
+        CoopTest(url, u).run()
+    
+
 def main():
-    CoopTest().run()
+    ManyVisitHack('http://www/coop-dev')
+
 
     
 ## do this. it's good.
