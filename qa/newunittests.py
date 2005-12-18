@@ -23,15 +23,17 @@ page= wc.getPage(URL('http://www/coop-dev'))
 page.getTitleText()
 #assertEquals("htmlunit - Welcome to HtmlUnit", page.getTitleText() )
 
+def usableSelect(sel, val):
+    for i in sel.getOptions():
+        if i.asText() == val:
+            i.setSelected(1)
+            return
+    #throw Exception(val + ' is not present in selectbox!')
 
 ##login form
 f=page.getForms()[0]
-f.getSelectByName('auth[uid]')
-for i in s.getOptions():
-    if i.asText() == 'Cooke Family':
-            i.setSelected(1)
 f.getInputByName('auth[pwd]').setValueAttribute('tester')
 mainpage=f.getInputByName('login').click()
 
 
-
+[i for i in mainpage.getAllHtmlChildElements() ]
