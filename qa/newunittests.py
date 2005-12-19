@@ -45,7 +45,8 @@ class CoopTest:
     mainlinks=[]
     url= ""
     username= ""
-
+    loggedin = 0
+    
     def __init__(self, url, username):
         self.url = url
         self.username = username
@@ -64,7 +65,8 @@ class CoopTest:
         self.setUp()
         self.getLoginPage()
         self.logIn()
-
+        self.mainlinks=self.getAllLinks()
+        
 
     def getLoginPage(self):    
         """get to the first URL. make sure we have at least that"""
@@ -82,12 +84,12 @@ class CoopTest:
             usableSelect(f.getSelectByName('auth[uid]'), self.username)
             self.page=f.getInputByName('login').click()
         except KeyError:
-            pass
-        self.mainlinks=self.getAllLinks()
+            print 'Already logged in?'
 
 
     def visitSubPages(self):
         """iterate through all the links on themainpage, and swap page"""
+        assert(len(self.mainlinks) > 0)
         for i in self.mainlinks:
             self.page = i.click()
             self.pageLoaded()
