@@ -38,11 +38,11 @@ class Flyer_deliveries extends CoopDBDO
         );
     
 	var $fb_fieldLabels = array (
-		'company_id' => 'Company Name'
+		'company_id' => 'Company Name',
 		'flyer_type' => 'Flyer Type',
 		'delivered_date' => 'Delivered On',
 		'family_id' => 'Delivering Family',
-		'school_year' => 'School Year',
+		'school_year' => 'School Year'
 		);
 
 
