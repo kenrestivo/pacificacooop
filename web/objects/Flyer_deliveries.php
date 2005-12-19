@@ -27,14 +27,24 @@ class Flyer_deliveries extends CoopDBDO
     ###END_AUTOCODE
 
 
-var $fb_formHeaderText = 'Springfest Flyer Deliveries';
-var $fb_shortHeader = 'Deliveries';
+    var $fb_formHeaderText = 'Springfest Flyer Deliveries';
+    var $fb_shortHeader = 'Deliveries';
+    
+    var $fb_requiredFields = array(
+        'company_id',
+        'delivered_date',
+        'family_id',
+        'school_year'
+        );
+    
+	var $fb_fieldLabels = array (
+		'company_id' => 'Company Name'
+		'flyer_type' => 'Flyer Type',
+		'delivered_date' => 'Delivered On',
+		'family_id' => 'Delivering Family',
+		'school_year' => 'School Year',
+		);
 
-var $fb_requiredFields = array(
-   'company_id',
-   'delivered_date',
-   'family_id',
-   'school_year'
-);
+
 
 }

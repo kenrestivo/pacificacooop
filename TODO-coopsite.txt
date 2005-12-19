@@ -24,8 +24,6 @@ qa into the jython age
 
 
 ??? JSON/PHP
-	mouselocation problem
-		how do you do a deep copy of an object in javascript? clone doesn't
 	a little jsonrpc class
 		returns the view-formatted details in an array: {label:value}
 	where does this showDetails code go?
@@ -4803,3 +4801,6 @@ PUSH the companies auction live. make debbie enter some stuff ;-)
 	html css popup
 		play with positioning this thing. at location of this works, nonstd
 		at mouse?  get event details?
+	mouselocation problem
+		how do you do a deep copy of an object in javascript? clone doesn't
+			you don't. you just copy what you need

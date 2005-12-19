@@ -51,7 +51,7 @@ class Families extends CoopDBDO
     function postGenerateForm(&$form)
         {
             $form->addRule($form->CoopForm->prependTable('email'), 
-                           'Email address must be valid', 'emailorblank', true);
+                           'Email address must be valid', 'email', true);
         }
 
 
