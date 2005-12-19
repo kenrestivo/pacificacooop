@@ -42,7 +42,7 @@ class CoopTest:
     """test the website. page is the current page. mainpage is homepage."""
     wc = None
     page= None 
-    mainpage= None
+    mainlinks=[]
     url= ""
     username= ""
 
@@ -80,17 +80,18 @@ class CoopTest:
             f=self.page.getForms()[0]
             f.getInputByName('auth[pwd]').setValueAttribute('tester')
             usableSelect(f.getSelectByName('auth[uid]'), self.username)
-            self.mainpage=f.getInputByName('login').click()
+            self.page=f.getInputByName('login').click()
         except KeyError:
-            self.mainpage=self.page
+            pass
+        self.mainlinks=self.getAllLinks()
 
 
     def visitSubPages(self):
         """iterate through all the links on themainpage, and swap page"""
-        for i in self.getAllLinks():
+        for i in self.mainlinks:
             self.page = i.click()
             self.pageLoaded()
-            self.tryOperationsOnPage()
+            #self.tryOperationsOnPage()
 
 
     def pageLoaded(self):
