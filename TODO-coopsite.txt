@@ -13,16 +13,6 @@ MY agenda! dammit, mine! for a change....
 
 
 
-???Python/JAVA
-qa into the jython age
-	do sub-page checking
-		recursion, basically	
-			well then really recurse! this hack isn'tt working			
-	get the qa script to run w3c vaildation
-		should be VERY easy with python
-	run again, rlfe is NOT needed for jython, it has its own readline
-		though DO set the scrollback for screen
-
 
 ??? JSON/PHP
 	a little jsonrpc class
@@ -67,6 +57,11 @@ bring Packaging back to life!
 		no cash
 
 
+???Python/JAVA
+qa into the jython age
+	get the qa script to run w3c vaildation
+		STUCK: posting mime files. how did i do that? i've done it before!
+			where is that stuff? what project?
 
 
 ??PHP/shell
@@ -187,24 +182,6 @@ make frozen fields not show the fucking --CHOOSE ONE--
 
 
 
-
-??? PHP/JS
-attempt to implement subform.. as an ajax
-	write a simple test that poots out a subform, possibly stripped of its FORM
-	i.e., um, subform!
-		make add new blah do a js foo(subtable, id)
-			js fetches the subform, passes the ID along with it
-			callback dumps it into innerhtml, 
-				and sets a hidden array of subtable names
-		the 'server' side does only some of what's in newdispatcher::add_edit()
-			and strips out the form html
-	what to do at save time?
-		i suppose i need a hidden, 
-			with the names of all the subforms i've created
-		populate it via js
-	my validate needs to be recursive
-		build the subforms-- be certain to recurse!
-		umm. what about javascript validation? does it break now?
 
 
 ??? PHP/thinking
@@ -4806,3 +4783,18 @@ PUSH the companies auction live. make debbie enter some stuff ;-)
 		how do you do a deep copy of an object in javascript? clone doesn't
 			you don't. you just copy what you needborken
 	some flyer thing
+	do sub-page checking
+		recursion, basically	
+			well then really recurse! this hack isn'tt working			
+				yes it is, and i don't know why!onclick="hideDetails(event)" 	run again, rlfe is NOT needed for jython, it has its own readline
+		though DO set the scrollback for screen
+
+thank you notes pukes
+	uses the old entry0 crap
+	heh, ugly hack that forces shit into request[entry0]
+		should be VERY easy with python... if i can figue out how
+		yeah, in python, but in jython, it's all WEIRD
+			urllib dies with no errno
+			urllib2 dies with no attribute HTTP
+			my java code kind of works, if i can figure out how to iterate
+				easy, just a while

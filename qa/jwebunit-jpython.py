@@ -1,4 +1,8 @@
 
+""" NOTE! this is depreciated. i'm not using httpunit anymore.
+i'm using htmlunit, which is in newunittest.py
+"""
+
 from pprint import pprint
 
 def pd(thing):

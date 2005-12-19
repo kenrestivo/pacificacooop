@@ -10,7 +10,7 @@ var showDetails= function(self, x, y){
     d=document.getElementById('dialog');
     d.style.top = (y - 20) + 'px';
     d.style.left = x + 'px';
-    d.innerHTML = ' event at x: ' + x +  'y:' +y;
+    d.innerHTML = ' event at x: ' + x +  ' y:' +y + self.innerHTML;
     d.className = 'dialog';
     return false;
 }

@@ -37,14 +37,12 @@ class In_kind_donations extends CoopDBDO
 		"in_kind_donation_id" => "Unique ID" ,
 		"thank_you_id" => "Thank-You Sent" 
 		);
-	var $fb_fieldsToRender = array('item_description', 'item_value',  'quantity', 'school_year', 'thank_you_id');
 	var $fb_linkDisplayFields = array('item_description');
 
 
 var $fb_shortHeader = 'In-kind Donations';
 
 var $fb_requiredFields = array(
-   'company_id',
    'quantity',
    'item_description',
    'item_value',

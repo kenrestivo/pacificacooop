@@ -32,5 +32,11 @@ class Raffle_locations extends CoopDBDO
         'location_name'
         );
     
+    var $fb_fieldLabels = array(
+        'location_name' => 'Location Name',
+        'start_date' => 'Date Flyer Placed',
+        'end_date' => 'Date Flyer Removed',
+        'description' => 'Location Description',
+        );
     
 }

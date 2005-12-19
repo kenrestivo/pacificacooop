@@ -36,7 +36,7 @@ class Ad_sizes extends CoopDBDO
 
     var $fb_requiredFields = array(
         'ad_size_description',
-        'price',
+        'ad_price',
         'school_year'
         );
 

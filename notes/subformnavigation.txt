@@ -1,8 +1,29 @@
 notes on subform navigation, flipping between screens
 
 
+
+??? PHP/JS
+attempt to implement subform.. as an ajax
+	write a simple test that poots out a subform, possibly stripped of its FORM
+	i.e., um, subform!
+		make add new blah do a js foo(subtable, id)
+			js fetches the subform, passes the ID along with it
+			callback dumps it into innerhtml, 
+				and sets a hidden array of subtable names
+		the 'server' side does only some of what's in newdispatcher::add_edit()
+			and strips out the form html
+	what to do at save time?
+		i suppose i need a hidden, 
+			with the names of all the subforms i've created
+		populate it via js
+	my validate needs to be recursive
+		build the subforms-- be certain to recurse!
+		umm. what about javascript validation? does it break now?
+
+
 big question: if i json it, how do i deal with input validation?
 	i have to go back to what i had. with some hidden var, showing which
+
 
 stack stuff
 	i can get a constipated stack. how to cleanse?
