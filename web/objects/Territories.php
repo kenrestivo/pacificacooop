@@ -29,6 +29,14 @@ class Territories extends CoopDBDO
     var $fb_shortHeader = 'Territories';
     var $fb_allYears = 1;
 
+
+// can only do these crosslinks when there is an intermediate table. sad. :-(
+// 	var $fb_crossLinks = array(array('table' => 'companies', 
+// 									 'toTable' => 'companies',
+// 									 'toField' => 'company_id',
+// 									 'type' => 'select'));
+
+
     // TODO: a summary, showing number of companies in each terrotiry
 
     function fb_display_details(&$co)

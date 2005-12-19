@@ -12,28 +12,20 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
-ouch. mochikit is choking httpunit.
-	what THE FUCK happened???!!! all of a sudden, it doesn't work. 
-		it worked yesterday!
-
-2-4 hours PHP
-phptal? template engine for reports like the nag report? parent ed? enhancement?
-	then load all those fucking libraries! on nfsn. not. fun.
-		well, it might be easy!
-		then again, maybe not!
-		STUCK: the include paths: use LOGS, wtf is going on?
-			include dbhost.inc BEFORE first.inc, or at the top of it
-
-
-	now try it out, maybe for the reports
-	settings
-		cache dir? nocache? repository?
-		xhtml/xml mode?
-	setall! and setref (setall shoudl suffice, use refs if needed)
-	for an expanded territory report maybe?
+???Python/JAVA
+qa into the jython age
+	do sub-page checking
+		recursion, basically	
+			well then really recurse! this hack isn'tt working			
+	get the qa script to run w3c vaildation
+		should be VERY easy with python
+	run again, rlfe is NOT needed for jython, it has its own readline
+		though DO set the scrollback for screen
 
 
 ??? JSON/PHP
+	mouselocation problem
+		how do you do a deep copy of an object in javascript? clone doesn't
 	a little jsonrpc class
 		returns the view-formatted details in an array: {label:value}
 	where does this showDetails code go?
@@ -46,6 +38,23 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 	add the onmouseover=showDetails(this)
 		advmultselect: in custom loadArray()? in js iterator? 
 		searchselect: also need it for the default set by coopform, as above
+
+
+
+
+2-4 hours PHP
+phptal? template engine for reports like the nag report? parent ed? enhancement?
+	then load all those fucking libraries! on nfsn. not. fun.
+		well, it might be easy!
+		then again, maybe not!
+		STUCK: the include paths: use LOGS, wtf is going on?
+			include dbhost.inc BEFORE first.inc, or at the top of it
+	now try it out, maybe for the reports
+	settings
+		cache dir? nocache? repository?
+		xhtml/xml mode?
+	setall! and setref (setall shoudl suffice, use refs if needed)
+	for an expanded territory report maybe?
 	
 
 ???PHP
@@ -3014,6 +3023,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+ouch. mochikit is choking httpunit.
+	what THE FUCK happened???!!! all of a sudden, it doesn't work. 
+		it worked yesterday!
+	no it didn't. it's not worked since i added mochikit
+
 		off to side of selectbox?
 			have to get coordinates of it then
 

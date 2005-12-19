@@ -1,21 +1,44 @@
 // $Id$
 
-var showDetails= function(ev){
-    ev = ev || window.event; // IE sucks.
-    self=ev.target;
+
+
+infoPopup = {
+    'def': null
+}
+
+var showDetails= function(self, x, y){
     d=document.getElementById('dialog');
+    d.style.top = (y - 20) + 'px';
+    d.style.left = x + 'px';
+    d.innerHTML = ' event at x: ' + x +  'y:' +y;
     d.className = 'dialog';
-    d.style.top = (ev.clientY - 20) + 'px';
-    d.style.left = ev.clientX + 'px';
-    d.innerHTML = self.innerHTML;
     return false;
 }
 
-var hideDetails = function(self){
+var delayDetails = function(ev){
+    ev = ev || window.event; // IE sucks.
+    if(infoPopup.def){
+        infoPopup.def.cancel();
+    }
+    infoPopup.def = callLater(0.5, showDetails, clone(ev.target), 
+                              ev.clientX, ev.clientY);
+}
+
+var  hideDetails = function(self){
+    if(infoPopup.def){
+        infoPopup.def.cancel();
+    }
     document.getElementById('dialog').className = 'hidden';
+}
+
+
+printEvent = function (ev){
+    return 'EV x:'+ev.screenX+' y:'+ev.screenY+' cx:'+ev.clientX+' cy:'+ev.clientY;
+
 }
 
 
 showEvent = function(ev){
     ev = ev || window.event; // IE sucks.
-    alert('x:'+ev.screenX+' y:'+ev.screenY+' cx:'+ev.clientX+' cy:'+ev.clientY)}
+    alert(printEvent(ev));
+}
