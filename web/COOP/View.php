@@ -671,9 +671,16 @@ function schoolYearChooser()
 
     function showLinkDetails()
         {
-            if($this->obj->{$this->pk} < 1){
-                PEAR::raiseError("CoopView::showLinkDetails({$this->table}): no index, can't show details", 
-                                 666);
+            // bah. pk might not be an int. it's a string in session_info!
+            // php coerces a string to 0 for integer comparisons. bah.
+            if(empty($this->obj->{$this->pk}) || 
+               (is_numeric($this->obj->{$this->pk}) && 
+                $this->obj->{$this->pk} == 0))
+            {
+                PEAR::raiseError(
+                    sprintf('CoopView::showLinkDetails(%s): having heartburn over index [%s], cant show details', 
+                            $this->table, $this->obj->{$this->pk}), 
+                    666);
             }
 
             $res = "";

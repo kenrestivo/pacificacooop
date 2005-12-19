@@ -12,6 +12,7 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
+
 ???Python/JAVA
 qa into the jython age
 	do sub-page checking
@@ -4803,4 +4804,5 @@ PUSH the companies auction live. make debbie enter some stuff ;-)
 		at mouse?  get event details?
 	mouselocation problem
 		how do you do a deep copy of an object in javascript? clone doesn't
-			you don't. you just copy what you need
+			you don't. you just copy what you needborken
+	some flyer thing
