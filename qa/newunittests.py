@@ -91,7 +91,7 @@ class CoopTest:
         for i in self.mainlinks:
             self.page = i.click()
             self.pageLoaded()
-            #self.tryOperationsOnPage()
+            self.tryOperationsOnPage()
 
 
     def pageLoaded(self):
