@@ -672,7 +672,7 @@ function schoolYearChooser()
     function showLinkDetails()
         {
             // bah. pk might not be an int. it's a string in session_info!
-            // php coerces a string to 0 for integer comparisons. bah.
+            // php coerces a string to 0 for integer comparisons. bah.n
             if(empty($this->obj->{$this->pk}) || 
                (is_numeric($this->obj->{$this->pk}) && 
                 $this->obj->{$this->pk} == 0))
@@ -869,6 +869,21 @@ order by report_name'));
 
             return $res;
         }
+
+// TODO: format this prettier-like, with floats, etc
+function getAlert()
+        {
+            $res = '';
+            if(is_callable(array($this->obj, 'fb_display_alert'))){
+                $alertbody =  $this->obj->fb_display_alert(&$this);
+                if($alertbody){
+                    $res .= sprintf('<img src="../images/Achtung-small.png" alt="Achtung!">&nbsp;%s', 
+                                   $alertbody);
+                }
+            }
+            return $res;
+        }
+    
 
 } // END COOP VIEW CLASS
 

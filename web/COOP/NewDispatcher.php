@@ -62,10 +62,9 @@ class CoopNewDispatcher
                 $atd2->page->printDebug('calling callback for summary', 2);
                 $res .= '<p>' . $atd2->obj->fb_display_summary(&$atd2) . '</p>';
             }
-            if(is_callable(array($atd2->obj, 'fb_display_alert'))){
+            if($alert = $atd2->getAlert()){
                 $atd2->page->printDebug('calling callback for alert', 2);
-                //TODO: put this in RED or something. maybe a ! icon?
-                $res .= '<p>' . $atd2->obj->fb_display_alert(&$atd2) . '</p>';
+                $res .= "<p>$alert</p>";
             }
             $res .= '</div><!-- end status alert div -->';
             
@@ -188,7 +187,6 @@ class CoopNewDispatcher
                     if($atdf->form->elementExists(
                            $atdf->prependTable($localfield)))
                     {
-                        // TODO: maybe save it too! so it doesn't get lost
                         $fr =& $atdf->form->getElement(
                             $atdf->prependTable($localfield));
                         $fr->freeze();

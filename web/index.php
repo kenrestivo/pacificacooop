@@ -78,15 +78,12 @@ print "\n\n<table border=0>\n";
 //TODO: put this in as a generic function, in an object, using HTML_TABLE!
 foreach($menu->alertme as $table){
     $alert =& new CoopView(&$cp, $table, &$nothing);
-    if(is_callable(array($alert->obj, 'fb_display_alert'))){
-        $alertbody =  $alert->obj->fb_display_alert(&$alert);
-        if($alertbody){
-            print rawMenuRow(
-                $alert->obj->fb_formHeaderText,
-                sprintf('<img src="../images/Achtung-small.png" alt="Achtung!">&nbsp;%s',
-                        $alertbody),
-                $alert->actionButtons());
-        }
+    $alertbody = $alert->getAlert();
+    if($alertbody){
+        print rawMenuRow(
+            $alert->obj->fb_formHeaderText,
+            $alertbody,
+            $alert->actionButtons());
     }
 }
 

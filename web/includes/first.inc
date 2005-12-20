@@ -52,17 +52,12 @@ user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
 <![endif]-->
 ';
 
-//$doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
 $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
               "http://www.w3.org/TR/html4/loose.dtd">';
-//$doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">';
-// $doctype = '
-// <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-// "http://www.w3.org/TR/html4/loose.dtd"> ';
-// $doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-//        "http://www.w3.org/TR/html4/strict.dtd">';
+
 // $doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-//        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+//         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+
 // end of main code
 
 

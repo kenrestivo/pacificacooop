@@ -12,17 +12,6 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
-
-
-???PHP
-bring Packaging back to life! 
-		aha. the generiously donated by needs to be fixed now
-			for cases of solicitation, it seems
-	add additional validation rules: 
-		no cash
-
-
-
 ???Python/JAVA
 qa into the jython age
 	get the qa script to run w3c vaildation
@@ -31,6 +20,16 @@ qa into the jython age
 	hmm. blow this web thing off and use the java validator instead!
 		won't do html
 			where is domparser? get latest versioN?
+	maybe just go to xhtml? can't hurt. try it.
+
+
+???PHP
+menu takes too goddamned long to display
+	cache it
+		build, save in session, with date
+		flag on change to ANY system realm
+		menu grabs from session
+			if it was calculated before last system realm change, recalc	
 
 
 ??? JSON/PHP
@@ -84,6 +83,12 @@ remove crufty files
 
 
 
+???PHP
+save whatever was last?
+	it knew what was there, it saved it so i could go getit.
+	then, why doesn't it stay there?
+		i.e. when i push?
+
 
 BUG
 	linkconstraints are bogus on details. i often only want them on popup
@@ -100,13 +105,12 @@ bring tickets, paddles, etc back to life!
 	finally the fucking paypal
 
 
+
 ???PHP
-menu takes too goddamned long to display
-	cache it
-		build, save in session, with date
-		flag on change to ANY system realm
-		menu grabs from session
-			if it was calculated before last system realm change, recalc	
+bring Packaging back to life! 
+	add additional auction validation rules: 
+		no cash
+
 
 BUGS
 	fix -1 perms for family fees, income, babies, enhancement, 
@@ -4867,3 +4871,6 @@ BUGS
 			maybe keep the convention, but it's useless. generic just sees SET
 		bizarre. after packages:postgenerateform, all debug output stops. why?
 			hee! it was calling the OLD packages.php!
+		aha. the generiously donated by needs to be fixed now
+			for cases of solicitation, it seems
+				hmm. seems ok to me
