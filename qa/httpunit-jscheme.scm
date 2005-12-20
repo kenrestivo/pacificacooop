@@ -121,7 +121,8 @@
   (let* ((html (dump-page wtc))
 		 (result (post-url "http://fred/w3c-markup-validator/check"
 			  (list (list "uploaded_file" html) '("ss" "1")))))
-	;; TODO: check it for <h2 id="result" class="valid">
+	;; TODO: check it for <h2 id="result" class="valid"> 
+    ;; though id is NOT present on invalid
 	;; cheap substring? why not.
 	;; or figure out how to inject html into a response and then parse it
 	;; and save it if it's not present

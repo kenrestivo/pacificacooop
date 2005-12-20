@@ -299,11 +299,10 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
             $this->fb_formHeaderText = 'Enrollment Session Summary';
             $this->fb_recordActions = array();
             $this->query(
-                sprintf(
-                    'select  enrollment.enrollment_id, am_pm_session, sum(monday) as monday, sum(tuesday) as tuesday, sum(wednesday) as wednesday, sum(thursday) as thursday, sum(friday) as friday,  sum(monday) + sum(tuesday) + sum(wednesday) + sum(thursday) + sum(friday) as child_days from enrollment where enrollment.school_year = "2005-2006" group by am_pm_session order by enrollment.am_pm_session',
-                    $co->perms[null]['year'] < ACCESS_VIEW ?
-                    $co->page->currentSchoolYear : $co->getChosenSchoolYear()
-                    ));
+                sprintf('select  enrollment.enrollment_id, am_pm_session, sum(monday) as monday, sum(tuesday) as tuesday, sum(wednesday) as wednesday, sum(thursday) as thursday, sum(friday) as friday,  sum(monday) + sum(tuesday) + sum(wednesday) + sum(thursday) + sum(friday) as child_days from enrollment where enrollment.school_year = "2005-2006" and (enrollment.dropout_date < "1900-01-01" or enrollment.dropout_date > "%s" or enrollment.dropout_date is null) group by am_pm_session order by enrollment.am_pm_session',
+                        $co->perms[null]['year'] < ACCESS_VIEW ?
+                        $co->page->currentSchoolYear : $co->getChosenSchoolYear(),
+                        date('Y-m-d')));
             $res .= $co->simpleTable(false);
 
             return $res;

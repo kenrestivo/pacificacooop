@@ -237,6 +237,7 @@ left join
             left join enrollment on kids.kid_id = enrollment.kid_id 
         where enrollment.school_year = "%s"
         and (enrollment.dropout_date < "1900-01-01"
+            or enrollment.dropout_date > "%s"
             or enrollment.dropout_date is null)
         group by families.family_id
         order by families.name) as enrolled
@@ -258,6 +259,7 @@ group by subscriptions.user_id,table_name
 ', 
                 // assuming they'll never be able to choose, to go retroactive
             $sub->page->currentSchoolYear,
+            date('Y-m-d'),
             $em->audit_co->obj->table_name));
 
 

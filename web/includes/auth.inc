@@ -449,11 +449,13 @@ function loginPopup($uid)
 	$sy = findSchoolYear();
 	#DO THE QUERY
 	// TODO: group by user_id
+    $today = date('Y-m-d');
 	$listq = mysql_query(" select * from users 
 						left join kids on users.family_id = kids.family_id 
 						left join enrollment on kids.kid_id = enrollment.kid_id
 						where (enrollment.school_year = '$sy'
 							and (enrollment.dropout_date < '2000-01-01'
+                            or enrollment.dropout_date > '$today'
 							or enrollment.dropout_date is null)
 							or  (users.family_id is null 
                                         or users.family_id < 1))

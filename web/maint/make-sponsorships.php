@@ -1,6 +1,14 @@
 <?php
 
 //$Id$
+/*
+        this should NOT be necessary anymore! 
+        i now have a pseudo-listener-type pattern going on
+        where whenever anyone adds anything pertaining to sponsorships,
+        it'll recalculate them
+
+*/
+
 
 chdir("../");                   // XXX only for "test" dir hack!
 require_once('CoopPage.php');

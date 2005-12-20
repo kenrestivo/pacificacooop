@@ -580,7 +580,11 @@ group by user_id,table_name,field_name";
                $this->page->userStruct['family_id'])
             {
                 $this->page->printDebug("FORCING familyid for search, with wheraedd", 2);
-
+                
+                // kids, this is what happens when you study lisp
+                // and learn functional programming, then attempt to use
+                // these constructs in a shitty langauge like PHP.
+                // don't try this at home.
                 if(is_array($last)){
                     $this->obj->whereAdd(
                         sprintf(

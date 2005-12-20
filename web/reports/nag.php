@@ -339,11 +339,16 @@ function viewHack(&$cp)
 			left join kids on kids.family_id = families.family_id
 			left join enrollment on enrollment.kid_id = kids.kid_id
 		where enrollment.school_year = '%s' 
-			and enrollment.dropout_date is NULL
-		group by enrollment.am_pm_session, families.name
-		order by enrollment.am_pm_session, $sortby $sortdir\n",
+    and (enrollment.dropout_date < '1900-01-01' 
+    or enrollment.dropout_date > '%s' 
+    or enrollment.dropout_date is null)
+    		group by enrollment.am_pm_session, families.name
+		order by enrollment.am_pm_session, %s %s\n",
                 $cp->currentSchoolYear,
-                $cp->currentSchoolYear));
+                $cp->currentSchoolYear,
+                date('Y-m-d'),
+                $sortby, $sortdir
+                ));
 
 
 	$res .= '<tr bgcolor="#aabbff" align="center">';

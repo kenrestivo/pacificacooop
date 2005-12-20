@@ -7,7 +7,6 @@
 chdir("../");                   // XXX only for "test" dir hack!
 require_once('CoopPage.php');
 require_once('CoopObject.php');
-require_once("everything.inc");
 
 
 $cp = new coopPage( $debug);
@@ -17,12 +16,12 @@ print date('m/d/Y');
 
 
 $page = new CoopPage(4);
-$co =& new CoopObject(&$page, 
-                            'table_permissions', &$nothing);
+$co =& new CoopObject(&$page, 'table_permissions', &$nothing);
 
 
 $co->obj->query(
     'select distinct table_name from table_permissions');
+
 while($co->obj->fetch()){
     $tables[] = $co->obj->table_name;
 }

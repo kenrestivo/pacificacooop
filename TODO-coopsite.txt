@@ -13,6 +13,32 @@ MY agenda! dammit, mine! for a change....
 
 
 
+BUGS
+	aha. when you inject the id before returning, use the THEY use
+		i.e. the far id in the link
+
+
+
+???Python/JAVA
+qa into the jython age
+	get the qa script to run w3c vaildation
+	hmm. blow this web thing off and use the java validator instead?
+		at least i'll get errors out of it.
+		ok, i have error handler, and errors, but it's not getting called!
+			silent failures
+
+
+
+???PHP
+bring Packaging back to life! 
+	the make package form needs to push/pop
+		oh THAT should be fun!!
+		is it pushing?
+		hmm, the subform thing uses table-field
+			maybe keep the convention, but it's useless. generic just sees SET
+	add additional validation rules: 
+		no cash
+
 
 ??? JSON/PHP
 	a little jsonrpc class
@@ -46,22 +72,6 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 	for an expanded territory report maybe?
 	
 
-???PHP
-bring Packaging back to life! 
-	the make package form needs to push/pop
-		oh THAT should be fun!!
-		is it pushing?
-		hmm, the subform thing uses table-field
-			maybe keep the convention, but it's useless. generic just sees SET
-	add additional validation rules: 
-		no cash
-
-
-???Python/JAVA
-qa into the jython age
-	get the qa script to run w3c vaildation
-		STUCK: posting mime files. how did i do that? i've done it before!
-			where is that stuff? what project?
 
 
 ??PHP/shell
@@ -470,6 +480,11 @@ income clusterfuck
 
 ----------------
 BELOW THE LINE
+
+??PHP/Python?
+a little utility/button to move auction items to in-kind's
+	for packaging people to do.
+
 
 ??PHP/SQL
 groups details are BROKEN: usergroupjoin not working. i hate sql.
@@ -3000,6 +3015,10 @@ i do however WANT to be able to copy the insurance info in!
 ----------------
 NOWHERE
 
+		STUCK: posting mime files. how did i do that? i've done it before!
+			where is that stuff? what project?
+				ah, moot. checker doesn't require all that mime shit
+
 ouch. mochikit is choking httpunit.
 	what THE FUCK happened???!!! all of a sudden, it doesn't work. 
 		it worked yesterday!
@@ -4798,3 +4817,11 @@ thank you notes pukes
 			urllib2 dies with no attribute HTTP
 			my java code kind of works, if i can figure out how to iterate
 				easy, just a while
+
+???QA
+go through and inspect all fieldlabel order
+	make sure the field order makes sense
+		figure out how to parse the w3c reply: xhtml, look for passed!
+		nekohtml supposedly does this
+		yeah, xerxes does it actually
+	also the count (one! one finger!) needs to be updated when drops happen	

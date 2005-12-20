@@ -28,6 +28,8 @@ class Raffle_locations extends CoopDBDO
 
     var $fb_shortHeader = 'Locations';
     
+    var $fb_formHeaderText = 'Springfest Raffle Sales Locations';
+
     var $fb_requiredFields = array(
         'location_name'
         );

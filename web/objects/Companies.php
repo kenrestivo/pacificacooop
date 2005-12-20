@@ -64,9 +64,9 @@ class Companies extends CoopDBDO
 );
 	var $fb_fieldsToRender = array (
 		'company_name' ,
+		'salutation',
 		'last_name' ,
 		'first_name',
-		'salutation',
 		'title' ,
 		"address1", 
 		"address2" ,
