@@ -47,11 +47,15 @@ def usableSelect(sel, val):
 
 class simpleErrorHandler(org.xml.sax.ErrorHandler):
     """ just prints the data as provided by xerces. nothin fancy"""
+    wc = None
+    def __init__(self, ct):
+        self.ct = ct
     def error(self, ex):
         self._printError('error', ex)
     def warning(self, ex):
         self._printError('warning', ex)
     def fatalError(self, ex):
+        print self.ct.page.getWebResponse().getContentAsString()        
         self._printError('FATAL', ex)
     def _printError(self,type, ex):
         print '%s on %s:%s col %d line %d: %s' % (type, ex.getSystemId(), ex.getPublicId(), ex.getColumnNumber(), ex.getLineNumber(), ex.getMessage())
@@ -80,7 +84,7 @@ class CoopTest:
         self.wc.setRedirectEnabled(1)
         self.parser=org.apache.xerces.parsers.DOMParser()
         self.parser.setFeature("http://xml.org/sax/features/validation", 1)
-        self.parser.setErrorHandler(simpleErrorHandler())
+        self.parser.setErrorHandler(simpleErrorHandler(self))
 
 
     def run(self):
