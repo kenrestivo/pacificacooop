@@ -30,9 +30,9 @@ class Kids extends CoopDBDO
 	var $fb_fieldLabels = array ('last_name' => 'Last Name');
 	var $fb_linkOrderFields = array ('last_name', 'first_name');
 	var $fb_fieldLabels = array(
+		'first_name' => "First Name",
 		'last_name' => "Last Name",
 		'family_id' => "Co-Op Family",
-		'first_name' => "First Name",
 		'date_of_birth' => 'Birthday',
 		'allergies' => 'Allergies',
         'doctor_id' => 'Doctor'
@@ -43,6 +43,7 @@ class Kids extends CoopDBDO
 	var $fb_requiredFields  = array('last_name', 'first_name', 'family_id');
 
     var $fb_joinPaths = array('school_year' => 'enrollment');
+
 
 	function fb_linkConstraints(&$co)
 		{

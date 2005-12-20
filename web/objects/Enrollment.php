@@ -61,12 +61,12 @@ class Enrollment extends CoopDBDO
 
             $kids = new CoopObject(&$co->page, 'kids', &$co);
 
-
             $co->protectedJoin($kids, 'left');
 
-                // TODO! support chooser
+            // XXX: DO NOT constrain this on details. only on popup. what to do?
             $this->whereAdd(
-                '(dropout_date is null or dropout_date < "2000-01-01")');
+                sprintf('(dropout_date is null or dropout_date < "2000-01-01" or dropout_date > "%s")', 
+                        date('Y-m-d')));
             
             $this->whereAdd(sprintf('%s.school_year like "%s"',
                                     $co->table,

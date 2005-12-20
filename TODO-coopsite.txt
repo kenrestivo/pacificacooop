@@ -12,11 +12,9 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
-
-BUGS
-	aha. when you inject the id before returning, use the THEY use
-		i.e. the far id in the link
-
+BUG
+	linkconstraints are bogus on details. i often only want them on popup
+		then only when permitted. i.e. enrollment dropout date in kids detail
 
 
 ???Python/JAVA
@@ -478,8 +476,17 @@ income clusterfuck
 		can i press the existing perms shit into service for that?
 
 
+??SQL
+my enrollment date links and summaries are all fucked up
+	they check for dropout ANYTIME, but should just check on this schoolyear
+	i.e. s/b ..... join enrollment on enrollment.kid_id = foo.kid_id AND enrollment.school_year = "%s" ..... where ... and (enrollment.dropoutdate < 1900 or enrollment.dropout_date > "%s" or enrollment.dropout_date is null....)
+	devise a unit test for this. and use it.
+		drop someone in a previous year, see if they stay put
+
+
 ----------------
 BELOW THE LINE
+
 
 ??PHP/Python?
 a little utility/button to move auction items to in-kind's
@@ -4825,3 +4832,7 @@ go through and inspect all fieldlabel order
 		nekohtml supposedly does this
 		yeah, xerxes does it actually
 	also the count (one! one finger!) needs to be updated when drops happen	
+BUGS
+	aha. when you inject the id before returning, use the THEY use
+		i.e. the far id in the link
+		np, use backlinks
