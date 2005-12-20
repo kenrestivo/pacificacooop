@@ -183,8 +183,9 @@ class CoopMenu extends HTML_Menu
                 $this->page->confessArray($res, 'res', 4);
                   $this->setMenu($res);
             }
-
-            return array($res, $i);
+            
+            //remember, it is recursive!
+            return array(&$res, $i);
         }
 
     // maybe create a report class, which is a subclass of coopview
@@ -224,6 +225,8 @@ group by report_permissions.realm_id',
             }
             return $menu;
         }
+
+
 
 
 
