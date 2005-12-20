@@ -174,19 +174,21 @@ class CoopNewDispatcher
                                 $atdf->obj->fb_formHeaderText);
                 }
 
-				//if previous state was ADD, and it popped,
-				// something was inserted here
-				// (how can i tell?) then freeze whatever was inserted
+
+				//if previous state was was add,
+				// and something popped to get me here,
+				// something was inserted before i got here
+				// so freeze just that field that was inserted
                 if($this->page->vars['prev']['action'] == 'add' &&
                    !empty($this->page->vars['prev']['pop']))
                 {
-                    // i'm assuming it's always gonna be a backlink!
+                    // i'm assuming it's always gonna be a forwardlink!
                     $localfield = 
                         $atdf->getLinkField($this->page->vars['prev']['table']);
                     if($atdf->form->elementExists(
                            $atdf->prependTable($localfield)))
                     {
-                        
+                        // TODO: maybe save it too! so it doesn't get lost
                         $fr =& $atdf->form->getElement(
                             $atdf->prependTable($localfield));
                         $fr->freeze();
@@ -205,6 +207,10 @@ class CoopNewDispatcher
                 $res .= $atdf->getInstructions(
                     $this->page->vars['last']['action']);
 
+                
+                /// finally, show the before/after hacks
+                /// (XXX these suck. use templates or CSS instead!)
+                /// and, actually display the damned form! yippie!
                 if(is_callable(array($atdf->obj, 'beforeForm'))){
                     $this->page->printDebug('newdispatcher calling before form', 3);
                     $res .= $atdf->obj->beforeForm(&$atdf);

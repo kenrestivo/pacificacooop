@@ -12,30 +12,25 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
-BUG
-	linkconstraints are bogus on details. i often only want them on popup
-		then only when permitted. i.e. enrollment dropout date in kids detail
+
+
+???PHP
+bring Packaging back to life! 
+		aha. the generiously donated by needs to be fixed now
+			for cases of solicitation, it seems
+	add additional validation rules: 
+		no cash
+
 
 
 ???Python/JAVA
 qa into the jython age
 	get the qa script to run w3c vaildation
-	hmm. blow this web thing off and use the java validator instead?
-		at least i'll get errors out of it.
-		ok, i have error handler, and errors, but it's not getting called!
-			silent failures
-
-
-
-???PHP
-bring Packaging back to life! 
-	the make package form needs to push/pop
-		oh THAT should be fun!!
-		is it pushing?
-		hmm, the subform thing uses table-field
-			maybe keep the convention, but it's useless. generic just sees SET
-	add additional validation rules: 
-		no cash
+	w3c busted
+		need MIME!, see convo.txt
+	hmm. blow this web thing off and use the java validator instead!
+		won't do html
+			where is domparser? get latest versioN?
 
 
 ??? JSON/PHP
@@ -70,6 +65,10 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 	for an expanded territory report maybe?
 	
 
+??PHP/TAL/JSON
+3 nifty new NAG REPORTS in phptal! yay! with json email nag buttons!
+	for springfest, enhancement, and parent ed
+	move calcs into object
 
 
 ??PHP/shell
@@ -86,18 +85,28 @@ remove crufty files
 
 
 
-
-
-duplicates in attendance! margolis
-	maybe do that margoilsreport in python? or use phptal?
+BUG
+	linkconstraints are bogus on details. i often only want them on popup
+		then only when permitted. i.e. enrollment dropout date in kids detail
+	duplicates in attendance! margolis
+		maybe do that margoilsreport in python? or use phptal?
 
 
 ??PHP/SQL
 bring tickets, paddles, etc back to life!
-se
+
+
 ???PHP/QA/bureaucracy
 	finally the fucking paypal
 
+
+???PHP
+menu takes too goddamned long to display
+	cache it
+		build, save in session, with date
+		flag on change to ANY system realm
+		menu grabs from session
+			if it was calculated before last system realm change, recalc	
 
 BUGS
 	fix -1 perms for family fees, income, babies, enhancement, 
@@ -230,8 +239,11 @@ same as what's in coopobject: go hit the URL, with audit_id!
 ??? PHP
 the whole backlink thing i can't get away from it!
 	look at all extradetails! they are fucking BACKLINKS!
+		compare them, is the EXACTLY what they are?
 	use backlinks for extradetails. and shut the fuck up.
 	show all the backlinks/forward links. maybe automate crosslinks?
+
+
 
 BUGS
 	have to have some way to allfamilies!
@@ -486,6 +498,12 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+
+???PHP
+stack makes no fucking sense. these names suck
+	what is 'last'? what is 'prev', what is getprevous stack (stack[-1])?
+	
 
 
 ??PHP/Python?
@@ -4836,3 +4854,16 @@ BUGS
 	aha. when you inject the id before returning, use the THEY use
 		i.e. the far id in the link
 		np, use backlinks
+		at least i'll get errors out of it.
+		ok, i have error handler, and errors, but it's not getting called!
+			silent failures.
+				AH! use org.apache.xerces not nekohtml
+		now figure out how to get a text stream out of wc, wr, or page
+		heh. getcontentasstream!
+ 	the make package form needs to push/pop
+		oh THAT should be fun!!
+		is it pushing?
+		hmm, the subform thing uses table-field
+			maybe keep the convention, but it's useless. generic just sees SET
+		bizarre. after packages:postgenerateform, all debug output stops. why?
+			hee! it was calling the OLD packages.php!

@@ -30,7 +30,8 @@ require_once("CoopView.php");
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT); //  before page exists.
 
-printf('%s <HTML lang="en">
+printf('%s
+<HTML lang="en">
 		<HEAD> %s
 			<TITLE>Data Entry</TITLE>
 		</HEAD>
@@ -82,7 +83,7 @@ foreach($menu->alertme as $table){
         if($alertbody){
             print rawMenuRow(
                 $alert->obj->fb_formHeaderText,
-                sprintf('<img src="../images/Achtung-small.png">&nbsp;%s',
+                sprintf('<img src="../images/Achtung-small.png" alt="Achtung!">&nbsp;%s',
                         $alertbody),
                 $alert->actionButtons());
         }

@@ -992,6 +992,8 @@ function triggerNotices($audit_id)
         }
 
 
+    // only for FORWARD links.
+    // in backlinks, just do $this->backlinks['tablename']
     function getLinkField($table)
         {
             foreach ($this->forwardLinks as $nearfield => $far){

@@ -226,8 +226,11 @@ group by report_permissions.realm_id',
             return $menu;
         }
 
+// get it from the session cache, if present AND current
+function getMenu()
+        {
 
-
+        }
 
 
 } // END COOPMENU CLASSr

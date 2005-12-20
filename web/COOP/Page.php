@@ -104,7 +104,8 @@ class coopPage
 		{
 			global $metalinks; // from first.inc. bah.
 			global $doctype; // from first.inc. bah.
-			printf('%s <HTML lang="en">
+			printf('%s
+<HTML lang="en">
 		<HEAD> %s
 			<TITLE>%s</TITLE>
 		</HEAD>
@@ -559,6 +560,7 @@ class coopPage
 
     // gets the last stack item, IN PLACE t
     // this is so you can insert things into  it to be popped off later
+    // XXX is this is the one BEFORE 'last', before 'prev'?
     function &getPreviousStack()
         {
             if(empty($this->vars['stack'][count($this->vars['stack']) - 1])){

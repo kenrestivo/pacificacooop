@@ -16,15 +16,22 @@ for i in os.listdir(htmlunitdir):
     sys.path.append('/'.join([htmlunitdir, i]))
 
 
+#python imports
+from random import random
+from math import floor
+
+
+#java imports
 import com.gargoylesoftware.htmlunit 
+import org.apache.xerces
+import org.xml
+from java.net import URL
 
 #from doesn't seem to work in py 2.1
 htmlunit = com.gargoylesoftware.htmlunit
 
-from java.net import URL
 
-from random import random
-from math import floor
+
 
 ## some utility funcs
 
@@ -38,10 +45,26 @@ def usableSelect(sel, val):
 #TODO: don't click on links to same page, go find out what this page is
 
 
+class simpleErrorHandler(org.xml.sax.ErrorHandler):
+    """ just prints the data as provided by xerces. nothin fancy"""
+    def error(self, ex):
+        self._printError('error', ex)
+    def warning(self, ex):
+        self._printError('warning', ex)
+    def fatalError(self, ex):
+        self._printError('FATAL', ex)
+    def _printError(self,type, ex):
+        print '%s on %s:%s col %d line %d: %s' % (type, ex.getSystemId(), ex.getPublicId(), ex.getColumnNumber(), ex.getLineNumber(), ex.getMessage())
+
+
+
+
+
 class CoopTest:
     """test the website. page is the current page. mainpage is homepage."""
     wc = None
     page= None 
+    parser = None
     mainlinks=[]
     url= ""
     username= ""
@@ -52,8 +75,13 @@ class CoopTest:
         self.username = username
     
     def setUp(self):
+        """this is redundant to __init__, but i'm too scared to change it"""
         self.wc = htmlunit.WebClient(htmlunit.BrowserVersion.MOZILLA_1_0, )
         self.wc.setRedirectEnabled(1)
+        self.parser=org.apache.xerces.parsers.DOMParser()
+        self.parser.setFeature("http://xml.org/sax/features/validation", 1)
+        self.parser.setErrorHandler(simpleErrorHandler())
+
 
     def run(self):
         """let's go"""
@@ -99,6 +127,7 @@ class CoopTest:
     def pageLoaded(self):
         print 'Checking load of [%s] ...' % (self.getURL(), )
         assert(1 == self.page.getWebResponse().getContentAsString().count('</html>'))
+        self.validate()
 
             
     def getAllLinks(self):
@@ -133,6 +162,13 @@ class CoopTest:
         """gets the url of the current page's web response
         whatever the hell that means"""
         return self.page.getWebResponse().getUrl()
+
+
+    def validate(self):
+        """very simple, straightforward dom parsing. reject bad html"""
+        self.parser.parse(org.xml.sax.InputSource(self.page.getWebResponse().getContentAsStream()))
+        d=self.parser.getDocument()
+        return d
 
         
 ##mainpage.getWebResponse().getUrl()

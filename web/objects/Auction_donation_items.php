@@ -132,10 +132,12 @@ class Auction_donation_items extends CoopDBDO
 
 	// form that blasts over to the packages::new, to create a new one
 	// just generates a CREATE NEW button with all the shit inside
+	// XXXX THIS IS a NASTY HACK that assumes dicking around with
+	// the internals of newcoopdispatcher variables. uglay!
 	function newPackageForm(&$co)
 		{
 			$form =& new HTML_QuickForm('newpackageform', 'post', 
-										'packages.php');
+                                        'generic.php');
 
 
 			$form->addElement('header', 'newpackageheader', 
@@ -178,7 +180,8 @@ class Auction_donation_items extends CoopDBDO
 						$prefix . 'school_year' => $this->school_year,
 						$prefix . 'auction_donation_item_id[]' => 
 						$this->auction_donation_item_id,
-						'action' => 'add' // need this for legacy form
+						'action' => 'add', // need this for newdispatcher
+						'table' => 'packages' // need this for newdispatcher
 						) as $key => $val)
 			{
 				$form->addElement('hidden', $key, $val);
