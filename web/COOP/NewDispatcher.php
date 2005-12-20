@@ -143,7 +143,10 @@ class CoopNewDispatcher
 
                 // put my saved ID back on the stack for later popping!
                 if($prev){
-                    $prev['submitvars'][$prev['table'].'-'.$atdf->pk] = 
+                    //use whatever is in the LINKED table
+                    $backid = $atdf->backlinks[$prev['table']];
+                    $backid = $backid ? $backid : $atdf->pk;
+                    $prev['submitvars'][$prev['table'].'-'.$backid] = 
                         $atdf->id;
                 }
                 // force back to view if previous state was 'edit'
