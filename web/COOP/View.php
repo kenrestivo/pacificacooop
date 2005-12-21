@@ -425,7 +425,7 @@ class coopView extends CoopObject
 			$toptab = new HTML_Table(
 				'class="tablecontainer"');
 			$toptab->addRow(array($title, $this->actionButtons()), 
-							'class="mysteryclass"', "TH");
+							'class="tableheader"', "TH");
 			$toptab->addRow(array($contents), 'colspan="2"');
 			
 			return $toptab->toHTML();

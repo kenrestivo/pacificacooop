@@ -15,17 +15,11 @@ MY agenda! dammit, mine! for a change....
 
 ??XHTML
 move to xthtml
-	time bombs ticking in coopview toarray!
-		GOT to htmlentities all that shit!		
-		try it. it's all htmlentitie'ed
-			textfields not escaping! field trip coord
-				look at data in sql? maybe it's ugly there
-					still, that's not ok. should show up here. charset?
-	in thank you's i'm htmlentitying too early!
-		have to do it AFTER sprintf..., so i don't trim off amp!
-	bgcolor. damn. ah ! think i got it
+	textfields not escaping! field trip coord
+		look at data in sql? maybe it's ugly there
+			still, that's not ok. should show up here. charset?
 
-http://www/coop-dev/generic.php?action=details&table=users&push=users&users-user_id=23	 -- The content of element type "table" is incomplete, it must match "(caption?,(col*|colgroup*),thead?,tfoot?,(tbody+|tr+))"
+weird open table: http://www/coop-dev/generic.php?action=details&table=users&push=users&users-user_id=23	 -- The content of element type "table" is incomplete, it must match "(caption?,(col*|colgroup*),thead?,tfoot?,(tbody+|tr+))"
 
 	handle all the other errors, attributename/border, img, etc
 		quick/ugly hack is to throw exception on all errors!
@@ -4946,3 +4940,9 @@ BUGS
 				in regular popup or just json?
 		cool! it was in the json data. conditionalise and all is well
 	css the multiselect table
+	in thank you's i'm htmlentitying too early!
+		have to do it AFTER sprintf..., so i don't trim off amp!
+	bgcolor. damn. ah ! think i got it
+	time bombs ticking in coopview toarray!
+		GOT to htmlentities all that shit!		
+		try it. it's all htmlentitie'ed
