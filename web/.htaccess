@@ -4,7 +4,8 @@ php_value  max_execution_time 240
 php_value  memory_limit 80M
 php_value  display_errors Off
 
-AddCharset iso-8859-1 .php .inc .html
+AddDefaultCharset utf-8
+AddCharset utf-8 .php .inc .html
 
 <Files ~ "\.inc$">
   Order allow,deny

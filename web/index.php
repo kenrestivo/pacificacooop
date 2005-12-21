@@ -31,12 +31,16 @@ require_once("CoopView.php");
 PEAR::setErrorHandling(PEAR_ERROR_PRINT); //  before page exists.
 
 printf('%s
-<HTML lang="en">
-		<HEAD> %s
-			<TITLE>Data Entry</TITLE>
-		</HEAD>
 
-		<BODY>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+		<head> %s
+			<title>Data Entry</title>
+		</head>
+
+		<body>
+<!--[if gte IE 5.5000]>
+<script type="text/javascript" src="lib/pngfix.js"></script>
+<![endif]-->
 
 		<div id="header">
 				<h2>Pacifica Co-Op Nursery School Data Entry</h2>',
@@ -62,7 +66,7 @@ $menu->createNew();
 $u = $cp->userStruct; // cached by createlegacy
 
 print $cp->topNavigation();
-print "\n<hr></div> <!-- end header div -->\n";
+print "\n<hr /></div> <!-- end header div -->\n";
 //confessObj($menu, 'menu');
 
 

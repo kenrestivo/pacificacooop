@@ -58,7 +58,7 @@ class simpleErrorHandler(org.xml.sax.ErrorHandler):
         print self.ct.page.getWebResponse().getContentAsString()        
         self._printError('FATAL', ex)
     def _printError(self,type, ex):
-        print '%s on %s:%s col %d line %d: %s' % (type, ex.getSystemId(), ex.getPublicId(), ex.getColumnNumber(), ex.getLineNumber(), ex.getMessage())
+        print '%s on %s:%s line %d col %d: %s' % (type, ex.getSystemId(), ex.getPublicId(), ex.getLineNumber(), ex.getColumnNumber(), ex.getMessage())
 
 
 

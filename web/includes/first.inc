@@ -44,19 +44,17 @@ user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
 
  // global with meta tags and stylesheets
  $metalinks = '
-<meta http-equiv="content-type" 
- 				content="text/html; charset=iso-8859-1">
-				<link rel="stylesheet" href="main.css" title="main">
-<!--[if gte IE 5.5000]>
-<script type="text/javascript" src="lib/pngfix.js"></script>
-<![endif]-->
+<meta http-equiv="Content-Type" 
+ 				content="text/html;charset=utf-8" />
+				<link rel="stylesheet" href="main.css" title="main" />
 ';
 
-$doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-              "http://www.w3.org/TR/html4/loose.dtd">';
+// $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+//               "http://www.w3.org/TR/html4/loose.dtd">';
 
-// $doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-//         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+$doctype ='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+
 
 // end of main code
 

@@ -105,12 +105,15 @@ class coopPage
 			global $metalinks; // from first.inc. bah.
 			global $doctype; // from first.inc. bah.
 			printf('%s
-<HTML lang="en">
-		<HEAD> %s
-			<TITLE>%s</TITLE>
-		</HEAD>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+		<head> %s
+			<title>%s</title>
+		</head>
 
-		<BODY>
+		<body>
+<!--[if gte IE 5.5000]>
+<script type="text/javascript" src="lib/pngfix.js"></script>
+<![endif]-->
 
 		<div id="header">
 				<h2>%s</h2>',

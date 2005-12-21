@@ -85,7 +85,7 @@ if(empty($atd)){
 $cp->buffer(sprintf("<h3>%s</h3>",$atd->obj->fb_formHeaderText));
 
 
-$cp->buffer("\n<hr></div><!-- end header div -->\n"); //ok, we're logged in. show the rest of the page
+$cp->buffer("\n<hr /></div><!-- end header div -->\n"); //ok, we're logged in. show the rest of the page
 $cp->buffer('<div id="centerCol">');
 
 $disp =& new CoopNewDispatcher(&$cp);

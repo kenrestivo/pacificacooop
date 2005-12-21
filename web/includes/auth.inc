@@ -488,9 +488,9 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	// say hi.
 	print "<p>$statusline</p>";
 
-	printf("<div><FORM METHOD=POST ACTION='%s'>", 
+	printf('<div><form method="POST" action="%s">', 
 					$_SERVER['PHP_SELF']);
-	print "\n<table border=1>\n";
+	print '<table border="1">';
 	//user popup (or display) stuff
 	print "\n<tr>\n";
 	if($user == 'show'){
@@ -513,7 +513,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 			print "\t<td>Enter password 
 				(or type in a new password if you don't have one yet): </td>\n";
 		}
-		print "\t<td><INPUT TYPE=password NAME='auth[pwd]'></td>\n";
+		print '<td><input type="password" name="auth[pwd]" /></td>';
 	}
 	print "</tr>\n";
 
@@ -522,7 +522,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	if($type == 'confirm' || $type == 'both'){
 		print "\n<tr>\n";
 		print "\t<td>Please re-type your password to confirm it: </td>\n";
-		print "\t<td><INPUT TYPE=password NAME='auth[confirm]'></td>\n";
+		print '<input type="password" name="auth[confirm]" />';
 		print "</tr>\n";
 	}
 
@@ -538,10 +538,10 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 		thruAuth($auth);
 	}
 
-	printf("<INPUT TYPE=submit NAME='login' VALUE='%s'>",
+	printf('<input type="submit" name="login" value="%s" />',
 		$type == 'confirm' || $type == 'both' ? 'Save New Password' : 'Log In');
-	printf("<INPUT TYPE=submit NAME='logout' VALUE='Cancel'>");
-    print "</FORM></div>";
+	printf('<input type="submit" name="logout" value="Cancel" />');
+    print "</form></div>";
 }/* END LOGINFORM */
 
 
@@ -1116,7 +1116,7 @@ thruAuth($auth)
 {
 	$sid = thruAuthCore($auth);
 	if($sid){
-		printf("<INPUT TYPE=hidden NAME='%s' VALUE='%s'>\n",
+		printf('<input type="hidden" name="%s" value="%s" />',
 					   'coop',  $sid);
 	}
 }/* END THRUAUTH  */

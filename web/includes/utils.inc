@@ -159,7 +159,7 @@ function done()
 	global $coop_sendto;
 
 	print "</div><!-- rightcol div end -->";	
-	print '<div id="footer"><hr>';
+	print '<div id="footer"><hr />';
     print '<p>
       <a href="http://validator.w3.org/check/referer"><img
           src="http://www.w3.org/Icons/valid-xhtml10" name="validator"
@@ -197,7 +197,7 @@ warnDev()
 	if(preg_match("/dev/", $_SERVER['PHP_SELF'])){
 		print '<div id="warning"><p><strong>NOTE! THIS IS THE DEV SITE! 
 				THIS IS NOT LIVE DATA, THIS IS ONLY FOR TESTING.</strong>
-				<br>If you want the live site, use the "members" link, 
+				<br />If you want the live site, use the "members" link, 
 				NOT "members-dev". Thanks.</p></div>';
 	}
 	
