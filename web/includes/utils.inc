@@ -456,7 +456,8 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 			}
 		}
 		//confessArray($grand, "grand($s)");
-		$tab->addRow($grandfixed,'bgcolor="#aa99ff" align=right' );
+		$tab->addRow($grandfixed,
+                     'class="tablecontainer" style="text-align: right"' );
 	}
 
 	$tab->altRowAttributes(1, 'class="altrow1"', 
@@ -639,7 +640,7 @@ function unObject($val)
 /// NOTE CANNOT use this with showmenurow, because summary writes to screen
 function rawMenuRow($title, $body, $actions)
 {
-	$res = '<tr bgcolor="#aa99ff">';
+	$res = '<tr style="tablecontainer">';
 	$res .= '<td><b>';
     $res .= $title;
     $res .= '</b></td>';
@@ -647,7 +648,7 @@ function rawMenuRow($title, $body, $actions)
     $res .= $actions;
 	$res .= "</td></tr>";
 
-	$res .= '<tr bgcolor="#ffffff"><td colspan=2>';
+	$res .= '<tr><td colspan=2>';
 	$res .= '<div>'. $body . '</div>';
 	$res .= "<br></td>\n</tr>\n";
     return $res;

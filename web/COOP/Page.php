@@ -167,6 +167,9 @@ class coopPage
 		$this->confessArray($_SESSION, 
                             "test SESSION (prior to request being processed)");
 		$this->confessArray($_SERVER, "test SERVER", 4);
+		$this->confessArray(apache_request_headers(), "apache request", 4);
+		$this->confessArray(apache_response_headers(), 
+                            "apache response headers-- BEFORE output", 4);
 				
 	}
 
@@ -521,6 +524,8 @@ class coopPage
                                 4);
             $this->confessArray($_SESSION, 
                                 'CoopPage::done() saving SESSION  at END of page');
+            $this->confessArray(apache_response_headers(), 
+                                "FINAL apache response headers-- AFTER output", 4);
         }
 
     function done()
@@ -710,6 +715,7 @@ class coopPage
             //NOTE! colspan=2 might annoy xhtml
             $tab->addRow(array($body),'style="colspan:2" colspan="2"');
         }
+
 
 
 } // END COOP PAGE CLASS

@@ -882,7 +882,20 @@ function getAlert()
             }
             return $res;
         }
-    
+  
+
+    // this does nothing, because it appears to be impossible to do what i want
+    function titleJSHack()
+        {
+            $title = sprintf('%s - %s', 
+                             $this->fb_formHeaderText,
+                             $this->actionnames[$this->page->vars['last']['action']]);
+            
+            return wrapJS('', 
+                          'COOP_TITLE_HACK');
+        }
+
+  
 
 } // END COOP VIEW CLASS
 

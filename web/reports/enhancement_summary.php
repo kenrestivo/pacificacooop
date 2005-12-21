@@ -117,7 +117,7 @@ function viewHack(&$atd)
 
 
 
-	$tab = new HTML_Table(' bgcolor="#ffffff"');	
+	$tab = new HTML_Table();	
 
     //hack just to get semester
     // TODO: let them choose it?
@@ -154,7 +154,7 @@ function viewHack(&$atd)
                    'Session',
                      'Phone Number',
                      'Actions'),
-                 ' align="left" bgcolor="#aabbff"', "TH");
+                 ' style="tableheader"', "TH");
 	while($row = mysql_fetch_array($listq)){
         //confessArray($row,'row');
         $en =& new Enhancement(&$atd->page, $row['family_id']);
@@ -176,9 +176,8 @@ function viewHack(&$atd)
         }
     }
 
-	$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
-								   'bgcolor="#ccccff"');
-
+    $tab->altRowAttributes(1, 'class="altrow1"', 
+								   'class="altrow2"');
 
 	$res .= "<h2>Totals for $sem $year </h2>";
 

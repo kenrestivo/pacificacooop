@@ -137,10 +137,11 @@ function auctionItems(&$cp, $sy)
 				$tdrow[] = $val;
 			}
 		}
-		$tab->addRow($tdrow, 'bgcolor="#aabbff" align="left"');
+		$tab->addRow($tdrow, 'style="tableheader"');
 	}
-	$tab->altRowAttributes(1, 'bgcolor="#dddddd"', 
-						   'bgcolor="#ccccff"');
+    $tab->altRowAttributes(1, 'class="altrow1"', 
+                           'class="altrow2"');
+
 
 	return $res . $tab->toHTML();
 } // end auctions

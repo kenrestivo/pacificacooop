@@ -46,7 +46,7 @@ user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
  $metalinks = '
 <meta http-equiv="Content-Type" 
  				content="text/html;charset=utf-8" />
-				<link rel="stylesheet" href="main.css" title="main" />
+<link rel="stylesheet" href="main.css" title="main" />
 ';
 
 // $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"

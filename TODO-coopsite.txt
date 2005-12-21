@@ -1,4 +1,4 @@
-coop web database
+cooPagep web database
 
 MY agenda! dammit, mine! for a change....
 	create generic report arch (reportnotes.txt)
@@ -12,11 +12,6 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
-??PHP/JS
-make the document title make sense.
-	at navbar time, js it in
-
-
 
 ??XHTML
 move to xthtml
@@ -26,11 +21,20 @@ move to xthtml
 			textfields not escaping! field trip coord
 				look at data in sql? maybe it's ugly there
 					still, that's not ok. should show up here. charset?
+	in thank you's i'm htmlentitying too early!
+		have to do it AFTER sprintf..., so i don't trim off amp!
+	bgcolor. damn. ah ! think i got it
+
+http://www/coop-dev/generic.php?action=details&table=users&push=users&users-user_id=23	 -- The content of element type "table" is incomplete, it must match "(caption?,(col*|colgroup*),thead?,tfoot?,(tbody+|tr+))"
+
 	handle all the other errors, attributename/border, img, etc
 		quick/ugly hack is to throw exception on all errors!
 	in first.inc or somewhere, spit out a content-type header of app/xhtml
-		IFF the ua supports it
-			how to sniff?
+		 $hdr= get_apache_request()
+		 if(strstr('application/xhtml+xml', $hdr['Accept'])){
+		 	header('Content-Type: application/xhtml+xml', true);
+		 }
+		store content type in page->foo, make it agree with the meta tag!		
 
 
 
@@ -41,6 +45,9 @@ qa into the jython age
 			increment it on a new lowlevel
 			then each level needs to keep a copy
 				when done, restore the classvar
+	do SAVES on edits?
+		deal with the redirects
+	eventually adds too, but will need content-understanding
 	store results in db
 		testruns: date
 		page: url, title	
@@ -3080,7 +3087,15 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	w3c busted
+	
+
+
+??PHP/JS
+make the document title make sense.
+	at navbar time, js it in
+	bah, can't change title
+
+w3c busted
 		need MIME!, see convo.txt
 	hmm. blow this web thing off and use the java validator instead!
 		won't do html

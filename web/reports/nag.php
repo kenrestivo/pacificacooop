@@ -351,7 +351,7 @@ function viewHack(&$cp)
                 ));
 
 
-	$res .= '<tr bgcolor="#aabbff" align="center">';
+	$res .= '<tr style="tableheader">';
 	$res .= sortColumns('Family Name', 'families.name', 'asc', $showall);
 	$res .= sortColumns('Leads Submitted', 'cntlead', 'desc', $showall);
 	$res .= "\t<td ><em><u>Food/Raffle Fee Paid</u></em></td>\n";
@@ -410,11 +410,11 @@ function viewHack(&$cp)
 		}
 	
 		//FAMILYNAME
-		$res .= sprintf('<tr bgcolor="%s"><td>', 
-			   $rowcolor++ % 2 ? '#dddddd' : '#ccccff');
+		$res .= sprintf('<tr style="%s"><td>', 
+			   $rowcolor++ % 2 ? 'altrow1' : 'altrow2');
 		$res .= $row['name'];
 		//LEADS
-		$res .= "</td><td align='center'>";
+		$res .= "</td><td >";
 		//XXX bug lurking. if a cntlead AND a dollar amount, it'll look ugly.
 		$res .= $row['cntlead'] ? $row['cntlead'] : "";
 		if ($tennamespaid['payment_amount'] > 0){
