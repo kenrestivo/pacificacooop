@@ -17,7 +17,7 @@
 		   //  only show this if the field is empty!
 		   if(!$this->getValue()){
 			   $res .= sprintf(
-			   "&nbsp;<input type=\"button\" onClick=\"{$this->_jsPrefix}todaysDate(this.form.elements['%s'])\" value=\"Today\" />", 
+			   "&nbsp;<input type=\"button\" onclick=\"{$this->_jsPrefix}todaysDate(this.form.elements['%s'])\" value=\"Today\" />", 
 			   $this->getName());
 		   }
 		   

@@ -18,11 +18,14 @@ make the document title make sense.
 
 
 
-
 ??XHTML
 move to xthtml
 	time bombs ticking in coopview toarray!
 		GOT to htmlentities all that shit!		
+		try it. it's all htmlentitie'ed
+			textfields not escaping! field trip coord
+				look at data in sql? maybe it's ugly there
+					still, that's not ok. should show up here. charset?
 	handle all the other errors, attributename/border, img, etc
 		quick/ugly hack is to throw exception on all errors!
 	in first.inc or somewhere, spit out a content-type header of app/xhtml
@@ -43,6 +46,9 @@ qa into the jython age
 		page: url, title	
 	get mysqldb and/or sqlobject on jython	
 
+
+???PHP
+sf purchases is utterly fucked up
 
 
 ???PHP
@@ -4924,3 +4930,4 @@ BUGS
 			ok trace it through. WHERE is it getting fucked up?
 				in regular popup or just json?
 		cool! it was in the json data. conditionalise and all is well
+	css the multiselect table

@@ -84,7 +84,7 @@ class HTML_QuickForm_customSubForm extends HTML_QuickForm_static {
 
         return sprintf('<div class="%s" id="%s">
 				<a href="javascript:void();" id="%s-%s-toggle"
-	   onClick="toggleSubform(\'%s\',\'%s\')">&lt;&lt; Choose Existing %s</a>%s</div>', 
+	   onclick="toggleSubform(\'%s\',\'%s\')">&lt;&lt; Choose Existing %s</a>%s</div>', 
 					   $hidden, 
 					   $this->getName(),
 					   $field,

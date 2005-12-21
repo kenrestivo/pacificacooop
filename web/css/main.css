@@ -242,6 +242,15 @@ p.letter{
 .inline { display:inline }
 
 
+table.multiselect { 
+  border: solid 1px ;    
+  padding:1;      
+  text-align:center ;
+ }
+
+td.multiselect { 
+  text-align: center 
+}
 
 
 @media print { 	

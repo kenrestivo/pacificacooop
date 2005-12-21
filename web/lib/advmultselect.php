@@ -27,13 +27,13 @@
                }
                // The 'unselected' multi-select which appears on the right
                $strHtmlUnselected = '<select name="__' . $this->getName()
-				   . "[]\" size=10 multiple>\n"; // PUT CONFIGURABLE SIZE HERE?
+				   . "[]\" size=\"10\" multiple=\"multiple\">\n"; // PUT CONFIGURABLE SIZE HERE?
                // The 'selected' multi-select which appears on the left
                $strHtmlSelected = '<select name="_' . $this->getName() .
-				   "[]\" size=10 multiple>\n"; // PUT CONFIGURABLE SIZE HERE?
+				   "[]\" size=\"10\" multiple=\"multiple\">\n"; // PUT CONFIGURABLE SIZE HERE?
                // The hiddent multi-select
                $strHtmlHidden = '<select name="' . $this->getName() .
-				   "[]\" multiple style=\"overflow: hidden; visibility: hidden; display: none; width: 0px; height: 0px;\">\n";
+				   "[]\" multiple=\"multiple\" style=\"overflow: hidden; visibility: hidden; display: none; width: 0px; height: 0px;\">\n";
 
                foreach ($this->_options as $option) {
                    if (is_array($this->_values) &&
@@ -65,22 +65,21 @@
                $strHtml .= $this->_getJs();
                // I'm using a table in order to lay this out properly on the page.
                // Any ideas on a better way to do this?
-               $strHtml .= $tabs . "<table border=1 cellpadding=1
-   cellspacing=0 align=center ><tr><td align=center>\n";
+               $strHtml .= $tabs . '<table class="multiselect"><tr><td>';
                $strHtml .= $tabs . $strHtmlSelected;
-               $strHtml .= $tabs . "</td><td align=center>\n";
+               $strHtml .= $tabs . "</td><td>\n";
                $strHtml .= $tabs . "<input type=\"button\"
-   onClick=\"{$this->_jsPrefix}moveSelections(this.form.elements['__" .
+   onclick=\"{$this->_jsPrefix}moveSelections(this.form.elements['__" .
 				   $this->getName() . "[]'], this.form.elements['_" . $this->getName() .
 				   "[]'], this.form.elements['" . $this->getName() . "[]'], 'add')\"
-   value=\"". htmlentities("<<Add") . "\"><br>\n";
+   value=\"". htmlentities("<<Add") . "\" /><br />\n";
                $strHtml .= $tabs . "<input type=\"button\"
-   onClick=\"{$this->_jsPrefix}moveSelections(this.form.elements['__" .
+   onclick=\"{$this->_jsPrefix}moveSelections(this.form.elements['__" .
 				   $this->getName() . "[]'], this.form.elements['_" . $this->getName() .
 				   "[]'], this.form.elements['" . $this->getName() . "[]'], 'remove')\"
-   value=\"" . htmlentities("Remove>>") . "\">\n";
+   value=\"" . htmlentities("Remove>>") . "\" />\n";
                $strHtml .= $tabs . $strHtmlHidden;
-               $strHtml .= $tabs . "</td><td align=center>\n";
+               $strHtml .= $tabs . "</td><td>\n";
                $strHtml .= $tabs . $strHtmlUnselected;
                $strHtml .= $tabs . "</td></tr></table>\n";
 			   

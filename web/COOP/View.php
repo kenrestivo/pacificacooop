@@ -326,7 +326,8 @@ class coopView extends CoopObject
                           in_array($key, $this->obj->fb_URLFields)) 
                 {
                     $res[] = sprintf('<a href="%s">%s</a>',
-                                     $this->page->fixURL($val), $val);
+                                     $this->page->fixURL(htmlentities($val)), 
+                                     htmlentities($val));
                 } else if(!empty($this->obj->fb_currencyFields) &&
                           in_array($key, $this->obj->fb_currencyFields)) 
                 {
@@ -335,8 +336,8 @@ class coopView extends CoopObject
                 } else if(!empty($this->obj->fb_textFields) &&
                           in_array($key, $this->obj->fb_textFields)) 
                 {
-                    $res[] = $this->fullText ? $val : 
-                        sprintf("%.40s...",$val); // truncate, unless not
+                    $res[] = htmlentities($this->fullText ? $val : 
+                        sprintf("%.40s...",$val)); // truncate, unless not
                 } else if ($table[$key] &  DB_DATAOBJECT_BOOL){
                     //TODO: a little checkbox PNG would be nice
                     $res[] =  $val? 'X' :'';
@@ -347,9 +348,6 @@ class coopView extends CoopObject
 				
 			}
 
-			//XXX hack! do this AFTER query, but not here.
-			// BEFORE the query, backlink whatever will need to get real familyid
-			
 			$res[] = $this->recordButtons($row);
 			
 			// the Simple Version. useful for debuggin'

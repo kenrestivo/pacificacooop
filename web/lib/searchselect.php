@@ -35,7 +35,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
                 onchange="combobox_%s.fetchData()"/>
 
                 <input  type="button" 
-                      onClick="combobox_%s.fetchData()"
+                      onclick="combobox_%s.fetchData()"
                         value="Search"/> &nbsp;
                 <p class="inline" id="status-%s"></p><br />',
                 $this->getName(),
