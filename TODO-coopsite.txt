@@ -1,6 +1,7 @@
 cooPagep web database
 
 MY agenda! dammit, mine! for a change....
+	xhtml validation
 	create generic report arch (reportnotes.txt)
 	import the 20-year roster (20yearroster.txt)
 	json the subforms (subform.txt)
@@ -12,6 +13,16 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
+ [http://www/coop-dev/generic.php?action=edit&table=packages&push=packages&packages-package_id=393] ...
+http://www/coop-dev/generic.php?action=edit&table=packages&push=pa
+ckages&packages-package_id=393
+FATAL on None:None line 223 col 30: Attribute name "selected" associated with an element type "option" must be followed by the ' = ' character.
+	advmultiselect is fucked
+		the moveselections script appears twice
+		the moveselections script appears twice
+	selected is appearing in the HIDDEN, which mean qf is setting it :-(
+		is it ok on on-adv selects?
+			it's ok on yearselect. what about some non-year select somewhere else?			package type!
 
 ??XHTML
 move to xthtml
@@ -23,12 +34,12 @@ weird open table: http://www/coop-dev/generic.php?action=details&table=users&pus
 
 	handle all the other errors, attributename/border, img, etc
 		quick/ugly hack is to throw exception on all errors!
-	in first.inc or somewhere, spit out a content-type header of app/xhtml
+	in pagetop or somewhere, spit out a content-type header of app/xhtml
 		 $hdr= get_apache_request()
 		 if(strstr('application/xhtml+xml', $hdr['Accept'])){
 		 	header('Content-Type: application/xhtml+xml', true);
 		 }
-		store content type in page->foo, make it agree with the meta tag!		
+		store content-type in page->foo, make it agree with the meta tag!		
 
 
 

@@ -138,6 +138,7 @@ class Auction_donation_items extends CoopDBDO
 		{
 			$form =& new HTML_QuickForm('newpackageform', 'post', 
                                         'generic.php');
+            $form->removeAttribute('name');
 
 
 			$form->addElement('header', 'newpackageheader', 

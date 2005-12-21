@@ -77,6 +77,7 @@ class coopForm extends CoopObject
 												  false, 
                                                   array('id' => $formname), 
                                                   true);
+                $this->form->removeAttribute('name'); // make XTHML happy
 			}
 			$this->form->addElement('header', $formname, 
                                     $this->obj->fb_formHeaderText ?

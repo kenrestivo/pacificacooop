@@ -631,7 +631,10 @@ function schoolYearChooser()
 
  
     $syform =& new HTML_QuickForm($this->table . '-search', false, false, 
-                                  false, false, true);
+                                  array('id' =>'yearselect_'.$this->table), 
+                                  false, true);
+    $syform->removeAttribute('name');
+    $syform->removeAttribute('target');
     $el =& $syform->addElement('select', 'school_year', 'School Year', 
                                //TODO check ispermittedfield for allyears!
                                $this->getSchoolYears(null, true),
