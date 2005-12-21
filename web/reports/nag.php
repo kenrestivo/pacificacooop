@@ -69,7 +69,7 @@ function checkPayments($family_id, $type)
 	{
 		$total['payment_amount'] += $row['payment_amount'];
 		$total['notes'] .= sprintf("%s%s",
-				$i ? "<br>" : "",
+				$i ? "<br />" : "",
 				$row['note']
 				);
 		$row['note'] && $i++;
@@ -225,7 +225,7 @@ sortColumns($text, $sortby, $sortdir, $showall)
 
 /********************
 	CHECKINDULGENCES
-	returns a <br> formatted string with indulgences for this family.
+	returns a <br /> formatted string with indulgences for this family.
 *****************/
 function
 checkIndulgences($family_id, $uglytype)
@@ -263,7 +263,7 @@ checkIndulgences($family_id, $uglytype)
 	while($row = mysql_fetch_array($list))
 	{
 		$total .= sprintf("Excused %s%s%s%s",
-							$i ? "<br>" : "",
+							$i ? "<br />" : "",
 						  $row['granted_date'],
 						  $row['note'] ? ": " : "",
 							$row['note']
@@ -316,7 +316,7 @@ function viewHack(&$cp)
 
 
 
-	$res .= '<table bgcolor="#ffffff" border="0">';
+	$res .= '<table >';
 
 	// let people sort as they wish
 	$sortby = $gv['sortby'] ? $gv['sortby'] : 'families.name';
@@ -421,11 +421,11 @@ function viewHack(&$cp)
 			$res .= sprintf("$%01.2f", $tennamespaid['payment_amount']);
 		}
 		if($tennamespaid['notes'])
-			$res .= sprintf("<br>%s",$tennamespaid['notes']);
+			$res .= sprintf("<br />%s",$tennamespaid['notes']);
 		if($tennamespaid['indulgences']){
 			$res .= sprintf("%s%s", 
 				$tennamespaid['payment_amount'] > 0  || $row['cntlead'] > 0
-				   ? "<br>" : "",
+				   ? "<br />" : "",
 				$tennamespaid['indulgences']);
 		}
 		//QUILT FEE
@@ -433,14 +433,14 @@ function viewHack(&$cp)
 		if ($quiltpaid['payment_amount'] > 0){
 			$res .= sprintf("$%01.2f", $quiltpaid['payment_amount']);
 			if($quiltpaid['notes'])
-				$res .= sprintf("<br>%s",$quiltpaid['notes']);
+				$res .= sprintf("<br />%s",$quiltpaid['notes']);
 		} 
 		/* if there's NOTHIGN in the field
 				the br's are superfluous and should be gone!
 		 */
 		if($quiltpaid['indulgences']){
 			$res .= sprintf("%s%s", 
-			   $quiltpaid['payment_amount'] > 0 ? "<br>" : "",
+			   $quiltpaid['payment_amount'] > 0 ? "<br />" : "",
 				$quiltpaid['indulgences']);
 		}
 		//AUCTION (family auction)
@@ -450,7 +450,7 @@ function viewHack(&$cp)
 		}
 		if($auction['indulgences']){
 			$res .= sprintf("%s%s", 
-				   $auction['total'] > 0 ? "<br>" : "",
+				   $auction['total'] > 0 ? "<br />" : "",
 				$auction['indulgences']);
 		}
 		//FAMILY AUCTION DELIVERY
@@ -458,19 +458,19 @@ function viewHack(&$cp)
 		if ($delivery['undelivered'] > 0)
 			$res .= sprintf("%d missing", $delivery['undelivered']);
 		if($delivery['indulgences'])
-			$res .= sprintf("<br>%s",$delivery['indulgences']);	
+			$res .= sprintf("<br />%s",$delivery['indulgences']);	
 		//SOLICITATION AUCTION DELIVERY
 		$res .= "</td><td align='center'>";
 		if ($solicitdelivery['undelivered'] > 0)
 			$res .= sprintf("%d missing", $solicitdelivery['undelivered']);
 		if($solicitdelivery['indulgences'])
-			$res .= sprintf("<br>%s",$solicitdelivery['indulgences']);
+			$res .= sprintf("<br />%s",$solicitdelivery['indulgences']);
 		//PROGRAM AD DELIVERY
 		$res .= "</td><td align='center'>";
 		if ($ad_delivery['undelivered'] > 0)
 			$res .= sprintf("%d missing", $ad_delivery['undelivered']);
 		if($ad_delivery['indulgences'])
-			$res .= sprintf("<br>%s",$ad_delivery['indulgences']);
+			$res .= sprintf("<br />%s",$ad_delivery['indulgences']);
 		//SESSION, PHONE
 		$res .= "</td><td align='center'>";
 		$res .= $row['am_pm_session'];
@@ -492,10 +492,10 @@ function viewHack(&$cp)
 				$total['leads'],
 				sprintf("$%01.2f", $total['quilt']),
 				sprintf("$%01.2f", $total['auction']),
-				sprintf("%d missing<br>(%d received)", $total['undelivered'], 
+				sprintf("%d missing<br />(%d received)", $total['undelivered'], 
 					$total['delivered']),
 				"",
-				sprintf("%d missing<br>(%d received)", 
+				sprintf("%d missing<br />(%d received)", 
 						$total['ad_undelivered'], 
 						$total['ad_delivered']),
 				"",

@@ -120,7 +120,7 @@ class Families extends CoopDBDO
             $co2 =& new CoopView($co->page, $co->table, $none);
             $co2->obj->whereAdd('am_pm_session = "PM"');
             $co2->find(true); // MY find
-            $res .= '<br>PM Families: ' .$co2->obj->N ;
+            $res .= '<br />PM Families: ' .$co2->obj->N ;
             return $res;
         }
 

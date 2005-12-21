@@ -78,7 +78,7 @@ print '</div><!-- end leftcol div -->';
 
 print '<div id="rightCol">';
 
-print "\n\n<table border=0>\n";
+print "\n\n<table >\n";
 //TODO: put this in as a generic function, in an object, using HTML_TABLE!
 foreach($menu->alertme as $table){
     $alert =& new CoopView(&$cp, $table, &$nothing);

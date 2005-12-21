@@ -37,7 +37,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
                 <input  type="button" 
                       onClick="combobox_%s.fetchData()"
                         value="Search"/> &nbsp;
-                <p class="inline" id="status-%s"></p><br>',
+                <p class="inline" id="status-%s"></p><br />',
                 $this->getName(),
                 strtr($this->getName(), '-', '_'),
                 strtr($this->getName(), '-', '_'),

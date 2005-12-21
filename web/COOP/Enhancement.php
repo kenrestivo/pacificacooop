@@ -233,7 +233,7 @@ class Enhancement
             if(!$semester){
                 $semester = $this->guessSemester();
             }
-            ///print "sem= $semester<br>";
+            ///print "sem= $semester<br />";
             //confessObj($this);
             
             $this->getStartDropDate();
@@ -241,7 +241,7 @@ class Enhancement
 									'Enhancement::realhousedone: stardrop '. $this->familyID, 5);
             
             $this->getHoursOwed($this->startdrop['start']);
-            //print "owed $owed<br>";
+            //print "owed $owed<br />";
             $this->cp->confessArray($this->owed, 'Enhancement::realhoursdone owed '. $this->familyID, 5);
             
             $this->getHoursCompleted($this->familyID);

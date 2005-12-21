@@ -142,11 +142,11 @@ Tax ID # 94-1527749
 			//un-arrayify the ones that are arrays
 			// and format them html-like
 			//confessArray($this->address_array, 'addr');
-			$subst['ADDRESS'] = implode('<br>', $this->address_array);
+			$subst['ADDRESS'] = implode('<br />', $this->address_array);
 			$subst['ITEMS'] = implode(count($this->items_array) > 2 ?
 											', ' : " and ", 
 									  $this->items_array);
-			$subst['FROM'] = sprintf('<br><br><br>%s', $this->from);
+			$subst['FROM'] = sprintf('<br /><br /><br />%s', $this->from);
 			$subst['ORDINAL'] = sprintf('<sup>%s</sup>', $this->ordinal);
 
 

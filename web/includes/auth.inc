@@ -957,7 +957,7 @@ nullPassState($auth, $states)
 		loginForm($newauth, 'both', 'hide', 
 			sprintf("<h3>Welcome %s!</h3>
 				<p>This must be your first time using the new 
-				password-protected version of the site. <br>
+				password-protected version of the site. <br />
 				Please choose a new password that you will 
 				use for this site from now on, and type it in here.</p>", 
 				$uinfo['username']));
@@ -983,9 +983,9 @@ nullPassState($auth, $states)
 	// wow! we made it! a good password! let's save it, shall we?
 	$token = savePass($auth['uid'], $auth['pwd']);
 	if($token){
-		print "Your new password has been saved! <br>
+		print "Your new password has been saved! <br />
 				You'll need to use your password from now on 
-				whenever you access this site. <br>
+				whenever you access this site. <br />
 				Please be sure to remember it.\n";
 		$newauth =  changeState($auth, $states, 'loggedin', 1);
 		$newauth['token'] = $token;
@@ -1247,15 +1247,15 @@ function
 checkSessionId($auth)
 {
 	if(!session_id()){
-		print "<br>This web site, just like our kids, needs cookies in order to function.
-				<br>ME WANT COOKIE!!!!!
-				<br>Please either:
+		print "<br />This web site, just like our kids, needs cookies in order to function.
+				<br />ME WANT COOKIE!!!!!
+				<br />Please either:
 				<li>Turn on cookies in your browser
 				<li>Enable cookies for this site (check its 'security settings')
 				<li>Upgrade your browser if 
 						you have an old one that doesn't support cookies
 				<li>Try reloading this page, or typing in the URL manually
-				<br>If it still doesn't work, call us. 
+				<br />If it still doesn't work, call us. 
 						Something may be wrong that we need to fix.
 				";
 		done();

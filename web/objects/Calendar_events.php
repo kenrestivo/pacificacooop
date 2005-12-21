@@ -83,7 +83,7 @@ class Calendar_events extends CoopDBDO
 
             $this->find();
             while($this->fetch()){
-                $res .= sprintf("<p>%s%s:&nbsp;<b>%s</b></p><p>%s</p><br>", 
+                $res .= sprintf("<p>%s%s:&nbsp;<b>%s</b></p><p>%s</p><br />", 
                                 $this->human_date, 
                                 $this->human_time ? ' '. $this->human_time : '',
                                 $this->description, 

@@ -140,7 +140,7 @@ class Leads extends CoopDBDO
 									   $this->city,
 									   $this->state,
 									   $this->zip);		
-			$address = implode('<br>', $address_array);
+			$address = implode('<br />', $address_array);
 
 			return $address;
 		}

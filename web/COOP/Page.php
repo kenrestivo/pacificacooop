@@ -53,7 +53,7 @@ function dump($data, $close = false)
 	static $fp;
 	if(!$fp){
 		$fp = fopen($fname, 'w');
-		fwrite($fp, sprintf("<p>%s %s<br> via %s .</p>",
+		fwrite($fp, sprintf("<p>%s %s<br /> via %s .</p>",
 							$_SERVER['REQUEST_URI'], 
 							$_SERVER['REQUEST_METHOD'], 
 							$_SERVER['HTTP_REFERER']));

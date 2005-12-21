@@ -89,7 +89,7 @@ class Tickets extends CoopDBDO
 			$man = $data['manual'];
 			$auto = $data['automatic'];
 			
-			//print "ticket $this->ticket_id man $man auto $auto<br>";
+			//print "ticket $this->ticket_id man $man auto $auto<br />";
 			// add tickets
 			$toadd = $this->ticket_quantity - ($man + $auto);
 			while($toadd-- > 0){

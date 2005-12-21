@@ -124,10 +124,10 @@ attend the Pacifica Co-op Nursery School&#39;s annual
  Springfest at the Pacifica Community Center (540 Crespi Drive, Pacifica). This
 wonderful evening will include silent and live auctions, wine tasting, hearty
 appetizers, live music, and dancing. Proceeds benefit the Pacifica Co-op Nursery
- School.</p><br>
-<p>The event is <em><b>fabulous</b></em> and definitely worth finding a babysitter!</p><br>
+ School.</p><br />
+<p>The event is <em><b>fabulous</b></em> and definitely worth finding a babysitter!</p><br />
 <p>Tickets are available in advance for $25 or at the door for $30. Must be 21 or over to attend. For tickets and information,
-please call <strong>(650) 557-9257 or <a href=\"#tickets\">click here to order online with your credit card</a>.</strong> </p><br>";
+please call <strong>(650) 557-9257 or <a href=\"#tickets\">click here to order online with your credit card</a>.</strong> </p><br />";
 
 print "<p>We are looking for generous individuals and businesses who want to support the work of the coop. There are many benefits to becoming a sponsor:</p>";
 

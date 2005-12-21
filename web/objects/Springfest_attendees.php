@@ -81,7 +81,7 @@ class Springfest_attendees extends CoopDBDO
                 die($data->getMessage());
             }
 
-			//print "id $id<br>";
+			//print "id $id<br />";
 			$this->paddle_number = $id;
 			parent::insert();
 		}

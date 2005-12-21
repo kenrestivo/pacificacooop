@@ -314,7 +314,7 @@ class coopForm extends CoopObject
                     }
                     $this->page->confessArray($this->_tableDef, 'tabb');
 				}
-				//print $key . "->" .$this->obj->fb_fieldLabels[$key] . "<br>";
+				//print $key . "->" .$this->obj->fb_fieldLabels[$key] . "<br />";
 				// TODO: uppercase this thing, replace _ with spaces
 				$el->setLabel($label);
 				
@@ -442,7 +442,7 @@ class coopForm extends CoopObject
 				//TODO: escape currency chars, as per shared.inc
 								
 				$this->page->printDebug(
-					sprintf("CoopForm::scrubForSave(%s) %d chars<br>", 
+					sprintf("CoopForm::scrubForSave(%s) %d chars<br />", 
 						   $fullkey, strlen($val)),3);
 
 				if($val == ''){ 

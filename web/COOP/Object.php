@@ -175,7 +175,7 @@ group by user_id,table_name,field_name";
 
 			// and only if, um, the links.ini agrees that they are there
 			if(!$this->forwardLinks){
-				//print "no links for $this->table $key $val<br>";
+				//print "no links for $this->table $key $val<br />";
 				return false;
 			}
 			$this->page->confessArray($this->forwardLinks, 

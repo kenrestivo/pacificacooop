@@ -148,7 +148,7 @@ function viewHack(&$atd)
                      'Family Name',
                      sprintf('Hours Completed %s',
                              $sem == 'spring' ? 
-                             "<br>(or carried over from fall)" : ""),
+                             "<br />(or carried over from fall)" : ""),
                      "Hours Required",
                      "Remaining Hours Owed",
                    'Session',

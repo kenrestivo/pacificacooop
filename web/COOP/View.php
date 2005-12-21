@@ -368,7 +368,7 @@ class coopView extends CoopObject
                 array_keys($this->obj->fb_fieldLabels) : array();
 
 			foreach($this->reorder($this->obj->toArray()) as $key => $trash){
-				//print "checking $key<br>";
+				//print "checking $key<br />";
                 //force EVERYTHING for header. some might be theirs
                 //also, it doesn't know year, so i have to force
 				if($this->isPermittedField($key,true,true) &&
@@ -511,7 +511,7 @@ class coopView extends CoopObject
                 $this->obj->fb_recordActions : $this->recordActions;
 
             foreach($ra as $action => $needlevel){
-                //print "asking: $pair[1] $level,  i have: $permitted<br>";
+                //print "asking: $pair[1] $level,  i have: $permitted<br />";
                 if($permitted >= $needlevel) {
                     $res .= $this->page->selfURL(
 						array('value' => $this->actionnames[$action], 
@@ -559,7 +559,7 @@ class coopView extends CoopObject
                 $this->obj->fb_viewActions : $this->viewActions;
 
             foreach($va as $action => $needlevel){
-                //print "asking: $pair[1] $level,  i have: $permitted<br>";
+                //print "asking: $pair[1] $level,  i have: $permitted<br />";
                 if($permitted < $needlevel) {
                     continue;
                 }

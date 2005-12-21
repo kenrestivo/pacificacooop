@@ -11,6 +11,10 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
+??XHTML
+move to xthtml
+	the popups, in customselect, not escaping &'s. why?
+
 
 ???Python/JAVA
 qa into the jython age

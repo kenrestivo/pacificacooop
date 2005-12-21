@@ -99,7 +99,7 @@ class Enrollment extends CoopDBDO
             $cp =& $top->page;
 
             
-            //print "CHECKING $table<br>";
+            //print "CHECKING $table<br />";
             $top->obj->$mi = $cid;
             $top->obj->find(true);
             $res .= $top->horizTable();
