@@ -156,7 +156,7 @@ Tax ID # 94-1527749
 			}
 			$to = array_values($subst);
 
-			$text .= '<div id="toplogo"><img src="/round-small-logo.gif" border="0" alt="Logo"></div>';
+			$text .= '<div id="toplogo"><img src="/round-small-logo.gif"  alt="Logo" /></div>';
 	
 			$text .= '<div id="mainletter"><p class="letter">';
 			$text .= str_replace($from, $to, 

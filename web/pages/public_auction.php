@@ -179,7 +179,7 @@ $_SESSION['foo'] = 'foo';		// keep auth.inc happy
 
 print $cp->header("Springfest $sfyear", 
 				  "Join us for Springfest $sfyear!"); 
-print "\n<hr></div> <!-- end header div -->\n";
+print "\n<hr /></div> <!-- end header div -->\n";
 
 print '<div id="leftCol">';
 print sponsors(&$cp, $sy);

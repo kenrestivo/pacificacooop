@@ -55,8 +55,8 @@ class simpleErrorHandler(org.xml.sax.ErrorHandler):
     def warning(self, ex):
         self._printError('warning', ex)
     def fatalError(self, ex):
-        print self.ct.page.getWebResponse().getContentAsString()        
         self._printError('FATAL', ex)
+        self.ct.dumpHTML()
     def _printError(self,type, ex):
         print '%s on %s:%s line %d col %d: %s' % (type, ex.getSystemId(), ex.getPublicId(), ex.getLineNumber(), ex.getColumnNumber(), ex.getMessage())
 
@@ -166,6 +166,10 @@ class CoopTest:
         """gets the url of the current page's web response
         whatever the hell that means"""
         return self.page.getWebResponse().getUrl()
+
+
+    def dumpHTML(self):
+        print self.page.getWebResponse().getContentAsString()        
 
 
     def validate(self):

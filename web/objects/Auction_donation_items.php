@@ -225,7 +225,7 @@ class Auction_donation_items extends CoopDBDO
                                    $pkgs->obj->package_description));
             }
 
-            $res .= '<h4>Try to donate items which will fit into one of the "baskets" listed here:</h2>';
+            $res .= '<h4>Try to donate items which will fit into one of the "baskets" listed here:</h4>';
             $res .= '<div id="possible_packages_scroll"><div id="possible_packages">'. $tab->toHTML() . '</div></div>';
             return $res;
         }

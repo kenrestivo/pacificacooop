@@ -11,29 +11,56 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
+
+??PHP/JS
+make the document title make sense.
+	at navbar time, js it in
+
+
+
+
 ??XHTML
 move to xthtml
-	the popups, in customselect, not escaping &'s. why?
+	time bombs ticking in coopview toarray!
+		GOT to htmlentities all that shit!		
+	handle all the other errors, attributename/border, img, etc
+		quick/ugly hack is to throw exception on all errors!
+	in first.inc or somewhere, spit out a content-type header of app/xhtml
+		IFF the ua supports it
+			how to sniff?
+
 
 
 ???Python/JAVA
 qa into the jython age
-	get the qa script to run w3c vaildation
-	w3c busted
-		need MIME!, see convo.txt
-	hmm. blow this web thing off and use the java validator instead!
-		won't do html
-			where is domparser? get latest versioN?
-	maybe just go to xhtml? can't hurt. try it.
+	show redirection level
+		store it in a ct classvar
+			increment it on a new lowlevel
+			then each level needs to keep a copy
+				when done, restore the classvar
+	store results in db
+		testruns: date
+		page: url, title	
+	get mysqldb and/or sqlobject on jython	
+
 
 
 ???PHP
 menu takes too goddamned long to display
 	cache it
 		build, save in session, with date
+			wrapper around createmenu
+				grabs from session
+					if saved date < last system realm change, recalc	
 		flag on change to ANY system realm
-		menu grabs from session
-			if it was calculated before last system realm change, recalc	
+			how? where?
+
+
+???PHP
+alumni invite!
+	add all of last years' alumni!
+		basically, all the alumni invited last year, unless they're already in
+	de-dupe?
 
 
 ??? JSON/PHP
@@ -3047,6 +3074,11 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	w3c busted
+		need MIME!, see convo.txt
+	hmm. blow this web thing off and use the java validator instead!
+		won't do html
+			where is domparser? get latest versioN?
 
 		STUCK: posting mime files. how did i do that? i've done it before!
 			where is that stuff? what project?
@@ -4878,3 +4910,17 @@ BUGS
 		aha. the generiously donated by needs to be fixed now
 			for cases of solicitation, it seems
 				hmm. seems ok to me
+	get the qa script to run w3c vaildation
+	maybe just go to xhtml? can't hurt. try it.
+		so far that works
+	css (and maybe htmltable) the rawmenurow
+	companies fucked up somehow. entity?
+		need to escape it in onelinetable too
+	the popups, in customselect, not escaping &'s. why?
+		check that i didn't break anything.
+		it needs to. desperately. where is that done?
+			can i do it without fucking up my js inserts?
+		i did. middot escaping twice
+			ok trace it through. WHERE is it getting fucked up?
+				in regular popup or just json?
+		cool! it was in the json data. conditionalise and all is well

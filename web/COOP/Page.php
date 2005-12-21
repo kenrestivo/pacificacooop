@@ -351,7 +351,7 @@ class coopPage
             if($value){
                 $res .= '" ';
                 if($popup){
-					 $res .= sprintf('onClick="popUp(\'%s\')"',
+					 $res .= sprintf('onclick="popUp(\'%s\')"',
 									 $this->formatURLVars($base, $inside));
                 }
                 
@@ -531,7 +531,7 @@ class coopPage
             dump('all done' , true);
         }
 
-
+    // produces a text description of the stack
     function stackPath()
         {
             $res = array();
@@ -701,6 +701,14 @@ class coopPage
                 return sprintf('<script src="%s" type="text/javascript"></script>', $url); 
             }
             return '';
+        }
+
+    //for index page, mostly. uses htmltable
+    function newMenuRow(&$tab, $title, $body, $actions)
+        {
+            $tab->addRow(array($title, $actions), 'class="tableheaders"');
+            //NOTE! colspan=2 might annoy xhtml
+            $tab->addRow(array($body),'style="colspan:2" colspan="2"');
         }
 
 

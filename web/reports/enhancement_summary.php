@@ -41,7 +41,7 @@ $menu =& new CoopMenu(&$cp);
 print $menu->topNavigation();
 
 
-print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
+print "\n<hr /></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div id="centerCol">';
 
 /// XXX DUPLICATE OF THE SOLICIT SUMMARY ONE!!

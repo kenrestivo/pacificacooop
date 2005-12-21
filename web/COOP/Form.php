@@ -74,7 +74,9 @@ class coopForm extends CoopObject
 			$formname = sprintf('edit_%s', $this->table);
 			if(!$this->form){	// deal with QFC
 				$this->form =& new HTML_QuickForm($formname, false, false, 
-												  false, false, true);
+												  false, 
+                                                  array('id' => $formname), 
+                                                  true);
 			}
 			$this->form->addElement('header', $formname, 
                                     $this->obj->fb_formHeaderText ?
@@ -210,9 +212,9 @@ class coopForm extends CoopObject
 				} else if($this->isLinkField($key)) {
                     // TODO: pull this out into a function. it's too long.
 
-                    $tmp = $this->findLinkOptions($key);
+                    list($sub, $link)  = $this->findLinkOptions($key);
 
-                    $type = $tmp[0]->obj->N > COOP_MAX_SELECT_COUNT ?
+                    $type = $sub->obj->N > COOP_MAX_SELECT_COUNT ?
                     'searchselect' : 'customselect';
                     
             
@@ -224,12 +226,12 @@ class coopForm extends CoopObject
 					
 					// obviously, only if there's a value there.
                     if($type == 'searchselect' && $val){
-                        $tmp[0]->obj->whereAdd(sprintf('%s.%s = %d', 
-                                                       $tmp[0]->table, 
-                                                       $tmp[0]->pk,
+                        $sub->obj->whereAdd(sprintf('%s.%s = %d', 
+                                                       $sub->table, 
+                                                       $sub->pk,
                                                        $val));
-                        $tmp[0]->obj->find();
-                        $tmp[0]->grouper();
+                        $sub->obj->find();
+                        $sub->grouper();
                     }
 
                     // TODO: blow off this hidden field, and just
@@ -241,12 +243,13 @@ class coopForm extends CoopObject
                         '{}');
 
                     if($val || $type != 'searchselect'){
-                        $multi = $tmp[0]->getLinkOptions($type == 'customselect');
+                        $opts = $sub->getLinkOptions($type == 'customselect', 
+                                                     true);
                         // XXX put this in prepare()?
                         
-                        $el->loadArray($multi['data']);
+                        $el->loadArray($opts['data']);
                         $json = new Services_JSON();// XXX call statically?
-                        $editperms->setValue($json->encode($multi['editperms']));
+                        $editperms->setValue($json->encode($opts['editperms']));
                     }
 
                     
@@ -345,6 +348,7 @@ class coopForm extends CoopObject
 			$this->form->freeze($frozen);
 		}
 
+    // return subform, and the link tuple (table, fieldname)
 	function findLinkOptions($key)
 		{
 			$link = explode(':', $this->forwardLinks[$key]);
@@ -780,7 +784,7 @@ class coopForm extends CoopObject
                     // should i use getoptions instead?
 					$options[(string)$far->obj->$tf] = 
 							 sprintf('%.42s...', 
-									 $far->concatLinkFields());
+									 htmlentities($far->concatLinkFields()));
 				}
 				
 	
@@ -803,7 +807,7 @@ class coopForm extends CoopObject
 						$far->obj->find(true);
 						$options[$key] = 
 							 sprintf('%.42s...', 
-									 $far->concatLinkFields());
+									 htmlentities($far->concatLinkFields()));
 					}
 				}
 				

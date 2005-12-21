@@ -530,7 +530,7 @@ print $cp->topNavigation();
 $atd = new CoopView(&$cp, 'nags', $none);
 
 
-print "\n<hr></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
+print "\n<hr /></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div id="centerCol">';
 
 

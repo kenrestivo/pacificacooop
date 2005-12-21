@@ -488,7 +488,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	// say hi.
 	print "<p>$statusline</p>";
 
-	printf('<div><form method="POST" action="%s">', 
+	printf('<div><form method="post" action="%s">', 
 					$_SERVER['PHP_SELF']);
 	print '<table border="1">';
 	//user popup (or display) stuff
@@ -538,9 +538,9 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 		thruAuth($auth);
 	}
 
-	printf('<input type="submit" name="login" value="%s" />',
+	printf('<p><input type="submit" name="login" value="%s" />',
 		$type == 'confirm' || $type == 'both' ? 'Save New Password' : 'Log In');
-	printf('<input type="submit" name="logout" value="Cancel" />');
+	print '<input type="submit" name="logout" value="Cancel" /></p>';
     print "</form></div>";
 }/* END LOGINFORM */
 

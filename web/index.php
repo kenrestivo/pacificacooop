@@ -78,32 +78,37 @@ print '</div><!-- end leftcol div -->';
 
 print '<div id="rightCol">';
 
-print "\n\n<table >\n";
+$tab =& new HTML_Table();
+
 //TODO: put this in as a generic function, in an object, using HTML_TABLE!
 foreach($menu->alertme as $table){
     $alert =& new CoopView(&$cp, $table, &$nothing);
     $alertbody = $alert->getAlert();
     if($alertbody){
-        print rawMenuRow(
-            $alert->obj->fb_formHeaderText,
-            $alertbody,
-            $alert->actionButtons());
+        $cp->newMenuRow(&$tab,
+                   $alert->obj->fb_formHeaderText,
+                   $alertbody,
+                   $alert->actionButtons());
     }
 }
 
 // TODO: let the user configure what to show?
 $blog =& new CoopView(&$cp, 'blog_entry', &$nothing);
-print rawMenuRow($blog->obj->fb_formHeaderText,
+print $cp->newMenuRow(&$tab, 
+                 $blog->obj->fb_formHeaderText,
                  $blog->obj->fb_display_summary(&$blog),
                  $blog->actionButtons());
 
+
 $cal =& new CoopView(&$cp, 'calendar_events', &$nothing);
-print rawMenuRow($cal->obj->fb_formHeaderText,
+print $cp->newMenuRow(&$tab, 
+                 $cal->obj->fb_formHeaderText,
                  $cal->obj->fb_display_summary(&$cal),
                  $cal->actionButtons());
 
-print "\n</table>\n\n";
 
+
+print $tab->toHTML();
 
 ///XXX every visit to home page wipes out the whole stack
 ///i suspect this is a bad idea, but it beats confusing people

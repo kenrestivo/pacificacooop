@@ -156,26 +156,26 @@ print	"<h3>Angel Contribution of $1,000.00 or more:</h3>
 <li>Two tickets for Springfest 2005";
 
 print sponsor();
-print "<hr>";
+print "<hr />";
 
 
 
 print "<h3>Advertise in the Springfest program</h3>";
 print  ads();
-print "<hr>";
+print "<hr />";
 
 
 
 print "<h3>Donate cash of any amount</h3>";
 print donation();
-print "<hr>";
+print "<hr />";
 
 
 print '<a name="tickets">';
 print "<h3>Purchase tickets to Springfest</h3>";
 print "<p>Event tickets are $25 each</p>";
 print tickets();
-print "<hr>";
+print "<hr />";
 
 
 

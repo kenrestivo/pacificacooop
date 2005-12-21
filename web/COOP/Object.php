@@ -936,8 +936,8 @@ function triggerNotices($audit_id)
         }
 
 
-
-	function getLinkOptions($chooseone = true)
+    /// returns the data and the perms
+	function getLinkOptions($chooseone = true, $escape = false)
 		{
             if($this->obj->N < 1){
                 return array('data' => array(),
@@ -957,6 +957,7 @@ function triggerNotices($audit_id)
 			while($this->obj->fetch()){
                 $this->recoverSafePK();
 				$options[(string)$this->obj->{$this->pk}] =
+    $escape ? htmlentities($this->concatLinkFields()) : 
     $this->concatLinkFields();
                 $perms[$this->obj->{$this->pk}] = 
     $this->isPermittedField() >= ACCESS_EDIT;

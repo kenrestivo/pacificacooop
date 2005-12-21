@@ -273,6 +273,7 @@ class coopView extends CoopObject
 
 	/// generates an array of values, with permitted fields,
 	/// and record buttons, ready for passing to html::table::addRow()
+    /// TODO: i really need to htmlentites all this stuff.
 	function toArray($headerkeys = null)
 		{
             
@@ -450,7 +451,7 @@ class coopView extends CoopObject
                 $this->recoverSafePK();
 
 				//confessObj($this, 'onelinetable');
-				$mainlink = $this->concatLinkFields();
+				$mainlink = htmlentities($this->concatLinkFields());
 
 				if($this->legacyCallbacks){
 					$meat = $this->page->selfURL(
@@ -877,7 +878,7 @@ function getAlert()
             if(is_callable(array($this->obj, 'fb_display_alert'))){
                 $alertbody =  $this->obj->fb_display_alert(&$this);
                 if($alertbody){
-                    $res .= sprintf('<img src="../images/Achtung-small.png" alt="Achtung!">&nbsp;%s', 
+                    $res .= sprintf('<img src="../images/Achtung-small.png" alt="Achtung!" />&nbsp;%s', 
                                    $alertbody);
                 }
             }

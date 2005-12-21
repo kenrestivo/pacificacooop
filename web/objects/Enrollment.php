@@ -153,7 +153,7 @@ class Enrollment extends CoopDBDO
             // XXX not very object-oriented, but, fuck it, it works
             $res .= $this->_prepareView(&$co, 'AM');  
 
-            $res .= '<hr><p class="pagebreak"></p>';
+            $res .= '<hr /><p class="pagebreak"></p>';
             
             // i need separate copies for am/pm
             $co2 = new CoopView(&$co->page, $co->table, &$nothing);
