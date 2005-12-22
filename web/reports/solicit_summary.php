@@ -52,6 +52,7 @@ function schoolYearChooser(&$atd, $table)
  
     $syform =& new HTML_QuickForm('schoolyearchooser', false, false, 
                                   false, false, true);
+    $syform->removeAttribute('name');
     $el =& $syform->addElement('select', 'gschoolyear', 'Choose School Year', 
                                //TODO check ispermittedfield for allyears!
                                $at->getSchoolYears(null, true),

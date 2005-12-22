@@ -75,6 +75,7 @@ class Session_info extends CoopDBDO
             /// THE CHOOSER FORM
             $syform =& new HTML_QuickForm('sessioninfo', false, false, 
                                           false, false, true);
+            $syform->removeAttribute('name');
             $el =& $syform->addElement('text', 'limit', 'Records to show', 
                                        '20',
                                        array('onchange' =>

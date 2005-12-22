@@ -107,6 +107,7 @@ class Parent_ed_attendance extends CoopDBDO
             /// THE CHOOSER FORM
             $syform =& new HTML_QuickForm($cp->table . 'chooser', false, false, 
                                           false, false, true);
+            $syform->removeAttribute('name');
 
 
             ///meetings

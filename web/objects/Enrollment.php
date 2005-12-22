@@ -156,7 +156,7 @@ class Enrollment extends CoopDBDO
             $res .= '<hr /><p class="pagebreak"></p>';
             
             // i need separate copies for am/pm
-            $co2 = new CoopView(&$co->page, $co->table, &$nothing);
+            $co2 = new CoopView(&$co->page, $co->table, &$co);
             $res .= $co2->obj->_prepareView(&$co2, 'PM');
 
             $res .= '<p class="small">Legend: W=Worker, c=Child Attends, E=EPOD, B=Brings Baby</p>';
@@ -171,7 +171,12 @@ class Enrollment extends CoopDBDO
     function _prepareView(&$co, $session)
         {
 
-            $co->schoolYearChooser();
+
+            if($session != 'AM'){
+                //$co->searchForm =& new HTML_QuickForm();
+            }
+
+
             $chosen = $co->perms[null]['year'] < ACCESS_VIEW ?
                 $co->page->currentSchoolYear : $co->getChosenSchoolYear();
 

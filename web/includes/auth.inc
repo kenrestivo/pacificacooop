@@ -522,7 +522,7 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 	if($type == 'confirm' || $type == 'both'){
 		print "\n<tr>\n";
 		print "\t<td>Please re-type your password to confirm it: </td>\n";
-		print '<input type="password" name="auth[confirm]" />';
+		print '<td><input type="password" name="auth[confirm]" /></td>';
 		print "</tr>\n";
 	}
 
@@ -534,11 +534,12 @@ loginForm($auth, $type = 'password', $user = 'show', $statusline)
 		(GODDAMNED PHP SESSION MAGIC!) and i end up passing cookie auths as vars.
 		VERY stupid, very unnecessary, very bug-causing.
 	*/
+    print '<p>';
 	if($auth){ 
 		thruAuth($auth);
 	}
 
-	printf('<p><input type="submit" name="login" value="%s" />',
+	printf('<input type="submit" name="login" value="%s" />',
 		$type == 'confirm' || $type == 'both' ? 'Save New Password' : 'Log In');
 	print '<input type="submit" name="logout" value="Cancel" /></p>';
     print "</form></div>";

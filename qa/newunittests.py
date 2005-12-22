@@ -60,7 +60,10 @@ class simpleErrorHandler(org.xml.sax.ErrorHandler):
         self._printError('FATAL', ex)
         self.ct.dumpHTML()
     def _printError(self,type, ex):
-        print '%s on %s:%s line %d col %d: %s' % (type, ex.getSystemId(), ex.getPublicId(), ex.getLineNumber(), ex.getColumnNumber(), ex.getMessage())
+        er= '%s on %s:%s line %d col %d: %s' % (type, ex.getSystemId(), ex.getPublicId(), ex.getLineNumber(), ex.getColumnNumber(), ex.getMessage())
+        print er
+        self.ct.logfp.write('%s [%s] %s\n' % (self.ct.username, self.ct.getURL(), er))
+        self.ct.logfp.flush()
 
 
 
@@ -76,11 +79,13 @@ class CoopTest:
     username= ""
     loggedin = 0
     validate = 0
+    logfp = ""
     
-    def __init__(self, url, username, validate=0):
+    def __init__(self, url, username, validate=0, logfp=""):
         self.url = url
         self.username = username
         self.validate = validate
+        self.logfp = logfp
     
     def setUp(self):
         """this is redundant to __init__, but i'm too scared to change it"""
@@ -190,14 +195,17 @@ class CoopTest:
 ###### MAIN ######
 
 
-def ManyVisitHack(url, validate=0):
+def ManyVisitHack(url, validate=0, logfile="tests.log"):
     """runs multiple families in one url"""
     usersToTest= ['Bartlett Family', 'Restivo Family', 'Cooke Family',
                   'Teacher Sandy', 'Shirley']
+    fp=open(logfile, 'a')
+    fp.write('================\n')
     for u in usersToTest:
         print 'Starting user %s (%s)...' % (u, url)
-        CoopTest(url, u, validate).run()
+        CoopTest(url, u, validate, fp).run()
     print 'All tests succeeded! Yay!'
+    fp.close()
     
 
 def main():

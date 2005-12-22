@@ -424,7 +424,8 @@ class coopView extends CoopObject
 
 			$toptab = new HTML_Table(
 				'class="tablecontainer"');
-			$toptab->addRow(array($title, $this->actionButtons()), 
+			$toptab->addRow(array(htmlentities($title), 
+                                  $this->actionButtons()), 
 							'class="tableheader"', "TH");
 			$toptab->addRow(array($contents), 'colspan="2"');
 			
@@ -629,10 +630,14 @@ function schoolYearChooser()
         return;
     }
 
+    if(!empty($this->searchForm)){
+        //there's already one there
+        return;
+    }
+
  
-    $syform =& new HTML_QuickForm($this->table . '-search', false, false, 
-                                  array('id' =>'yearselect_'.$this->table), 
-                                  false, true);
+    $syform =& new HTML_QuickForm($this->table . '-schoolyearchooser',
+                                  false, false, false, false, true);
     $syform->removeAttribute('name');
     $syform->removeAttribute('target');
     $el =& $syform->addElement('select', 'school_year', 'School Year', 

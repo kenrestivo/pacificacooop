@@ -13,41 +13,22 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
+
+
 ??XHTML
-move to xthtml
-	textfields not escaping! field trip coord
-		look at data in sql? maybe it's ugly there
-			still, that's not ok. should show up here. charset?
+serve up xthtml for FF
 
-weird open table: http://www/coop-dev/generic.php?action=details&table=users&push=users&users-user_id=23	 -- The content of element type "table" is incomplete, it must match "(caption?,(col*|colgroup*),thead?,tfoot?,(tbody+|tr+))"
-
-	go thru and remove any more name attributes from quickforms
-
-	handle all the other errors, attributename/border, img, etc
-		quick/ugly hack is to throw exception on all errors!
 	in pagetop or somewhere, spit out a content-type header of app/xhtml
 		 $hdr= get_apache_request()
 		 if(strstr('application/xhtml+xml', $hdr['Accept'])){
 		 	header('Content-Type: application/xhtml+xml', true);
 		 }
 		store content-type in page->foo, make it agree with the meta tag!		
+		or, maybe announce strict 4.01 instead?
+			can i do that? do i need any transforms?
 
+	test it, and push it live!!
 
-
-???Python/JAVA
-qa into the jython age
-	show redirection level
-		store it in a ct classvar
-			increment it on a new lowlevel
-			then each level needs to keep a copy
-				when done, restore the classvar
-	do SAVES on edits?
-		deal with the redirects
-	eventually adds too, but will need content-understanding
-	store results in db
-		testruns: date
-		page: url, title	
-	get mysqldb and/or sqlobject on jython	
 
 
 ???PHP
@@ -71,20 +52,6 @@ alumni invite!
 		basically, all the alumni invited last year, unless they're already in
 	de-dupe?
 
-
-??? JSON/PHP
-	a little jsonrpc class
-		returns the view-formatted details in an array: {label:value}
-	where does this showDetails code go?
-		i think it just goes IN the page somewhere
-	getting this shit
-		how do i know what table? similar problem to customselect
-	is there some way to have multiple classes in jsonrpc?
-		well, supposedly the python version supports that. proxy.foo.bar.baz()
-			try this, and try to guesstimate it with php
-	add the onmouseover=showDetails(this)
-		advmultselect: in custom loadArray()? in js iterator? 
-		searchselect: also need it for the default set by coopform, as above
 
 
 
@@ -173,6 +140,19 @@ BURNT (when too burnt out to do actual work)
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
+
+??XHTML/PHP
+markup errors that need a-fixin'
+	stuttering schoolyearchooser in rasta, for betsy
+		STUCK: hmm. what to do?
+
+
+	textfields not escaping! field trip coord
+		look at data in sql? maybe it's ugly there
+			still, that's not ok. should show up here. charset?
+
+	weird open table: http://www/coop-dev/generic.php?action=details&table=users&push=users&users-user_id=23	 -- The content of element type "table" is incomplete, it must match "(caption?,(col*|colgroup*),thead?,tfoot?,(tbody+|tr+))"
+	
 
 new design
 	lisa: 
@@ -551,6 +531,27 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+
+??QA/python/java
+new QA system, validation
+	grab w3c checky files for any pages with errors
+
+
+
+??? JSON/PHP
+	a little jsonrpc class
+		returns the view-formatted details in an array: {label:value}
+	where does this showDetails code go?
+		i think it just goes IN the page somewhere
+	getting this shit
+		how do i know what table? similar problem to customselect
+	is there some way to have multiple classes in jsonrpc?
+		well, supposedly the python version supports that. proxy.foo.bar.baz()
+			try this, and try to guesstimate it with php
+	add the onmouseover=showDetails(this)
+		advmultselect: in custom loadArray()? in js iterator? 
+		searchselect: also need it for the default set by coopform, as above
 
 
 ???PHP
@@ -3093,6 +3094,34 @@ i do however WANT to be able to copy the insurance info in!
 ----------------
 NOWHERE
 	
+	now retrofit it to use the NEW w3c validation
+	still need xerces to look for the h2 validated tag
+		so try that.
+	or do i just march forward into the uncharted waters of xhtml?
+	FUCK THIS. simple text log file.
+
+??EMACS
+nifty debugger in elisp
+	in jython output, look for errors
+		move point to the line and column of the error
+		or somehow open the dumpedhtml into a new buffer!
+
+
+???Python/JAVA
+qa into the jython age
+	show redirection level
+		store it in a ct classvar
+			increment it on a new lowlevel
+			then each level needs to keep a copy
+				when done, restore the classvar
+	do SAVES on edits?
+		deal with the redirects
+	eventually adds too, but will need content-understanding
+	store results in db
+		testruns: date
+		page: url, title	
+	get mysqldb and/or sqlobject on jython	
+	by the time i build the GUI out, i'll be an old man. 
 
 
 ??PHP/JS
@@ -4975,4 +5004,15 @@ FATAL on None:None line 223 col 30: Attribute name "selected" associated with an
 			read docs
 		aha. he's a freak: he's manually constructiong the boxes in tohtml. DUMB ASS DUMB
 		but i don't feel like dicking with it, so instead i just made selected into selected="selected", and xhtml is happy now
-			
+				handle all the other errors, attributename/border, img, etc
+		quick/ugly hack is to throw exception on all errors!
+
+	ah. nested p's in status/alert div
+
+	go thru and remove any more name attributes from quickforms
+		lots of 'em!
+	try jakarta httpclient, which does mime multipart already!! 
+			it works!!!
+	make the thing send a content header
+	make it send file from a bytestream InputStream or something
+		which is what i'm gonna get

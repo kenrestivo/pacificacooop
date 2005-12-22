@@ -91,6 +91,7 @@ class Audit_trail extends CoopDBDO
             /// THE CHOOSER FORM
             $syform =& new HTML_QuickForm('auditreport', false, false, 
                                           false, false, true);
+            $syform->removeAttribute('name');
             $el =& $syform->addElement('text', 'limit', 'Records to show', 
                                        '20',
                                        array('onchange' =>
