@@ -73,10 +73,12 @@ class CoopTest:
     url= ""
     username= ""
     loggedin = 0
+    validate = 0
     
-    def __init__(self, url, username):
+    def __init__(self, url, username, validate=0):
         self.url = url
         self.username = username
+        self.validate = validate
     
     def setUp(self):
         """this is redundant to __init__, but i'm too scared to change it"""
@@ -131,7 +133,8 @@ class CoopTest:
     def pageLoaded(self):
         print 'Checking load of [%s] ...' % (self.getURL(), )
         assert(1 == self.page.getWebResponse().getContentAsString().count('</html>'))
-        self.validate()
+        if self.validate:
+            self.validateMarkup()
 
             
     def getAllLinks(self):
@@ -172,7 +175,7 @@ class CoopTest:
         print self.page.getWebResponse().getContentAsString()        
 
 
-    def validate(self):
+    def validateMarkup(self):
         """very simple, straightforward dom parsing. reject bad html"""
         self.parser.parse(org.xml.sax.InputSource(self.page.getWebResponse().getContentAsStream()))
         d=self.parser.getDocument()
@@ -183,7 +186,7 @@ class CoopTest:
 ###### MAIN ######
 
 
-def ManyVisitHack(url):
+def ManyVisitHack(url, validate=0):
     """runs multiple families in one url"""
     usersToTest= ['Bartlett Family', 'Restivo Family', 'Cooke Family',
                   'Teacher Sandy', 'Shirley']
