@@ -52,6 +52,8 @@ class simpleErrorHandler(org.xml.sax.ErrorHandler):
         self.ct = ct
     def error(self, ex):
         self._printError('error', ex)
+        #self.ct.dumpHTML()
+        #raise Exception('validation error')
     def warning(self, ex):
         self._printError('warning', ex)
     def fatalError(self, ex):
@@ -195,13 +197,14 @@ def ManyVisitHack(url, validate=0):
     for u in usersToTest:
         print 'Starting user %s (%s)...' % (u, url)
         CoopTest(url, u, validate).run()
+    print 'All tests succeeded! Yay!'
     
 
 def main():
     ManyVisitHack('http://www/coop-live')
-    print 'All tests succeeded! Yay!'
 
     
 ## do this. it's good.
+## TODO: getopt parsing, to take url and validation as args
 if __name__ == '__main__':
     main()
