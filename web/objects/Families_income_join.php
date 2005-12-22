@@ -38,12 +38,11 @@ class Families_income_join extends CoopDBDO
 	function fb_linkConstraints(&$co)
 		{
             $auc =& new CoopObject(&$co->page, 'income', &$co);
-            $fam =& new CoopObject(&$co->page, 'families', &$co);
-            $co->constrainSchoolYear();
+                        $co->constrainSchoolYear();
             $co->constrainFamily();
             $co->protectedJoin($auc);
-            $co->obj->joinAdd($fam->obj); // overriding protected join!
-            $co->obj->orderBy('families.name');
+            //$fam =& new CoopObject(&$co->page, 'families', &$co);
+            //$co->obj->orderBy('families.name');
             $co->grouper();
 		}
 
