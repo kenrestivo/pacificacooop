@@ -212,6 +212,7 @@ class coopForm extends CoopObject
 					$el->setName($fullkey); 
 				} else if($this->isLinkField($key)) {
                     // TODO: pull this out into a function. it's too long.
+                    // actually, it'd be nice to move it to customselect element
 
                     list($sub, $link)  = $this->findLinkOptions($key);
 

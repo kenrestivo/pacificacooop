@@ -15,6 +15,10 @@
            //$this->setValues($values);
        }
        */
+
+// this code is REALLY REALLY UGLY and it messes with the internals of quickform
+// scary stuff
+
        function toHtml()
        {
            if ($this->_flagFrozen) {
@@ -44,7 +48,7 @@
 						   $option['text'] . "</option>\n"; // DO I WANT TO USE THE _getAttrString() METHOD?
                        // Add it to the 'hidden' multi-select and set it as 'selected'
                        $strHtmlHidden .= $tabs . "\t<option" .
-						   $this->_getAttrString($option['attr']) . ' selected>' .
+						   $this->_getAttrString($option['attr']) . ' selected="selected">' .
 						   $option['text'] . "</option>\n";
                    }
                    else {

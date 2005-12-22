@@ -13,17 +13,6 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
- [http://www/coop-dev/generic.php?action=edit&table=packages&push=packages&packages-package_id=393] ...
-http://www/coop-dev/generic.php?action=edit&table=packages&push=pa
-ckages&packages-package_id=393
-FATAL on None:None line 223 col 30: Attribute name "selected" associated with an element type "option" must be followed by the ' = ' character.
-	advmultiselect is fucked
-		the moveselections script appears twice
-		the moveselections script appears twice
-	selected is appearing in the HIDDEN, which mean qf is setting it :-(
-		is it ok on on-adv selects?
-			it's ok on yearselect. what about some non-year select somewhere else?			package type!
-
 ??XHTML
 move to xthtml
 	textfields not escaping! field trip coord
@@ -31,6 +20,8 @@ move to xthtml
 			still, that's not ok. should show up here. charset?
 
 weird open table: http://www/coop-dev/generic.php?action=details&table=users&push=users&users-user_id=23	 -- The content of element type "table" is incomplete, it must match "(caption?,(col*|colgroup*),thead?,tfoot?,(tbody+|tr+))"
+
+	go thru and remove any more name attributes from quickforms
 
 	handle all the other errors, attributename/border, img, etc
 		quick/ugly hack is to throw exception on all errors!
@@ -182,6 +173,7 @@ BURNT (when too burnt out to do actual work)
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
+
 new design
 	lisa: 
 		andreas07  http://www.oswd.org/design/preview/id/2426
@@ -193,6 +185,14 @@ BUGS
 	add constrainfamily? constrainschoolyear?
 		ah! i see. users can see all previous years 
 			BUT I DON'T WANT THEM IN POPUPS!
+
+
+??PHP
+order the family fees by family, duh
+	NO! cannot do it. if i do, everything fucking breaks
+		protectedjoin WILL NOT let me join to families.
+			because for people for whom constrain families works, it breaks
+
 
 redo the nag report?
 
@@ -4957,3 +4957,22 @@ BUGS
 	time bombs ticking in coopview toarray!
 		GOT to htmlentities all that shit!		
 		try it. it's all htmlentitie'ed
+
+ [http://www/coop-dev/generic.php?action=edit&table=packages&push=packages&packages-package_id=393] ...
+http://www/coop-dev/generic.php?action=edit&table=packages&push=pa
+ckages&packages-package_id=393
+FATAL on None:None line 223 col 30: Attribute name "selected" associated with an element type "option" must be followed by the ' = ' character.
+	advmultiselect is fucked
+		the moveselections script appears twice
+		the moveselections script appears twice
+	selected is appearing in the HIDDEN, which mean qf is setting it :-(
+		is it ok on non-adv selects?
+			it's ok on yearselect, and on package type! so, qf *can* do it right
+			must be me
+			it doesn't call setselected, it calls setvalue?
+				WHERE do i set the values??? SOMEONE is doing it!
+			this is the only multiple, i think
+			read docs
+		aha. he's a freak: he's manually constructiong the boxes in tohtml. DUMB ASS DUMB
+		but i don't feel like dicking with it, so instead i just made selected into selected="selected", and xhtml is happy now
+			
