@@ -229,6 +229,9 @@ p.letter{
 
 .tableheaders { 
   background-color: #aabbff;
+  font-weight: bold;
+  padding-left: 2px;
+  vertical-align: middle;
   text-align: left;
  }
 

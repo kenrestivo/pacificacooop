@@ -60,7 +60,7 @@ class simpleErrorHandler(org.xml.sax.ErrorHandler):
         self._printError('FATAL', ex)
         self.ct.dumpHTML()
     def _printError(self,type, ex):
-        er= '%s on %s:%s line %d col %d: %s' % (type, ex.getSystemId(), ex.getPublicId(), ex.getLineNumber(), ex.getColumnNumber(), ex.getMessage())
+        er= '%s on line %d col %d %s:%s: %s' % (type,  ex.getLineNumber(), ex.getColumnNumber(), ex.getSystemId(), ex.getPublicId(), ex.getMessage())
         print er
         self.ct.logfp.write('%s [%s] %s\n' % (self.ct.username, self.ct.getURL(), er))
         self.ct.logfp.flush()
@@ -205,6 +205,7 @@ def ManyVisitHack(url, validate=0, logfile="tests.log"):
         print 'Starting user %s (%s)...' % (u, url)
         CoopTest(url, u, validate, fp).run()
     print 'All tests succeeded! Yay!'
+    fp.write('done\n')
     fp.close()
     
 

@@ -218,7 +218,7 @@ sortColumns($text, $sortby, $sortdir, $showall)
 								$sortby, $sortdir, 
 								$showall ? "&showall=checked" : ""));
 	return sprintf(
-        '<td align="center"><em><u><a href="%s">%s</a></u></em></td>', 
+        '<td align="center"><a href="%s">%s</a></td>', 
         $url, $text);
 }/* END SORTCOLUMNS */
 
@@ -351,21 +351,21 @@ function viewHack(&$cp)
                 ));
 
 
-	$res .= '<tr style="tableheader">';
+	$res .= '<tr class="tableheaders">';
 	$res .= sortColumns('Family Name', 'families.name', 'asc', $showall);
 	$res .= sortColumns('Leads Submitted', 'cntlead', 'desc', $showall);
-	$res .= "\t<td ><em><u>Food/Raffle Fee Paid</u></em></td>\n";
-	$res .= "\t<td ><em><u>Auction Donated and Solicited</u></em></td>\n";
-	$res .= "\t<td ><em><u>Family Auction Inventory</u>
-			</em></td>\n";
-	$res .= "\t<td ><em><u>Solicitation Auction Inventory</u>
-			</em></td>\n";
-	$res .= "\t<td ><em><u>Program Ad Copy</u>
-			</em></td>\n";
-	$res .= "\t<td ><em><u>Session</u></em></td>\n";
-	$res .= "\t<td ><em><u>Phone</u></em></td>\n";
-	$res .= "\t<td ><em><u>Actions</u></em></td>\n";
-	$res .= "\t<td></td>\n"; // a place for the 'everything' indulgences
+	$res .= "\t<th >Food/Raffle Fee Paid</th>\n";
+	$res .= "\t<th >Auction Donated and Solicited</th>\n";
+	$res .= "\t<th >Family Auction Inventory
+			</th>\n";
+	$res .= "\t<th >Solicitation Auction Inventory
+			</th>\n";
+	$res .= "\t<th >Program Ad Copy
+			</th>\n";
+	$res .= "\t<th >Session</th>\n";
+	$res .= "\t<th >Phone</th>\n";
+	$res .= "\t<th >Actions</th>\n";
+	$res .= "\t<th></th>\n"; // a place for the 'everything' indulgences
 	$res .= "</tr>\n";
 	
 	$rowcolor = 0;
@@ -410,7 +410,7 @@ function viewHack(&$cp)
 		}
 	
 		//FAMILYNAME
-		$res .= sprintf('<tr style="%s"><td>', 
+		$res .= sprintf('<tr class="%s"><td>', 
 			   $rowcolor++ % 2 ? 'altrow1' : 'altrow2');
 		$res .= $row['name'];
 		//LEADS

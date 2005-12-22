@@ -36,6 +36,11 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             //  need these for edit link
             $this->vals = $this->getValue();
 
+            if(count($this->vals) < 2){
+                $this->addOption('To search, type in box above', '');
+            }
+            
+
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
                 array('onchange' => 
@@ -75,6 +80,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                                               $target_id => $this->vals[0],
                                               'push' => $this->getName())));
                     // TODO: add a hidden field with the JSON perms array
+                    // so it doesn't have to fetch it? or did i do this already?
                 }            
 
                 if($this->sub->isPermittedField(null, true, true) >= ACCESS_ADD)
@@ -150,7 +156,7 @@ function processCustomSelect(selectbox, target_id, showtext)
 				
             
             
-            return wrapJS($js, 'HTML_QUICKFORM_CUSTOMSELECT_EXISTS') . '<noscript><h1>WARNING! This page WILL NOT work without Javascript. You must enable Javascript in your browser first. Sorry about that.</h1></noscript>';
+            return wrapJS($js, 'HTML_QUICKFORM_CUSTOMSELECT_EXISTS') . "<noscript><h1>WARNING! This page WILL NOT work without Javascript. You must enable Javascript in your browser first. Sorry about that.</h1></noscript>\n\n";
         }
 
 

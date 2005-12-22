@@ -120,7 +120,7 @@ class coopView extends CoopObject
 								   'class="altrow2"');
 
 			
-			return $this->tableTitle($tab->toHTML());
+			return $this->tableTitle($rowcnt ? $tab->toHTML(): 'Nothing found.');
 
 		}
 
@@ -409,7 +409,7 @@ class coopView extends CoopObject
 			//TODO: use DIV's instead of tables for this.
             $par = $this->getParent();
 			$title = sprintf("%s %.50s (%d found)", 
-							 $this->title(),
+							 htmlentities($this->title()),
 							 is_a($par, 'CoopObject') ? 
 							 "for " . $par->getSummary() : "",
                              $this->obj->N);
@@ -424,7 +424,7 @@ class coopView extends CoopObject
 
 			$toptab = new HTML_Table(
 				'class="tablecontainer"');
-			$toptab->addRow(array(htmlentities($title), 
+			$toptab->addRow(array($title, 
                                   $this->actionButtons()), 
 							'class="tableheader"', "TH");
 			$toptab->addRow(array($contents), 'colspan="2"');

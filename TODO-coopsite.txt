@@ -1,4 +1,4 @@
-cooPagep web database
+coop web database
 
 MY agenda! dammit, mine! for a change....
 	xhtml validation
@@ -13,21 +13,36 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
+the farkin schoolyearchooser changes bgcolour. why?
+
+??QA/python
+store results in db
+	 runs: date, sitename,  username, baseurl
+		page: url, title (if any), w3cPrintout(blob)
+			errors: type, sysid, pubid, lineno, colno, message
+	sqlobject this thing. i'm stick to death of php
+		then manually jython mysqldb the entries
+			though this is a perfect case for my "if it's not there, add it"
+				hack around it
+
 
 
 ??XHTML
-serve up xthtml for FF
+serve up xthtml for FF, see how it goes
 
 	in pagetop or somewhere, spit out a content-type header of app/xhtml
-		 $hdr= get_apache_request()
+			 $hdr= get_apache_request()
 		 if(strstr('application/xhtml+xml', $hdr['Accept'])){
 		 	header('Content-Type: application/xhtml+xml', true);
+			//store content-type in page->foo, make it agree with the meta tag!
 		 }
-		store content-type in page->foo, make it agree with the meta tag!		
 		or, maybe announce strict 4.01 instead?
-			can i do that? do i need any transforms?
+			can i do that? do i need any transforms? will it work?
+
+	all pages use pagetop now?. so it should be safe.
 
 	test it, and push it live!!
+
 
 
 
@@ -97,6 +112,7 @@ save whatever was last?
 		i.e. when i push?
 
 
+
 BUG
 	linkconstraints are bogus on details. i often only want them on popup
 		then only when permitted. i.e. enrollment dropout date in kids detail
@@ -128,6 +144,7 @@ BUGS
 	fix family chooser: must override! all years if permitted!
 		maybe var fb_allYears = array('field' => 1)?
 			rigth now it only works for view, and is binary.
+
 
 -----------
 BURNT (when too burnt out to do actual work)
@@ -3117,10 +3134,6 @@ qa into the jython age
 	do SAVES on edits?
 		deal with the redirects
 	eventually adds too, but will need content-understanding
-	store results in db
-		testruns: date
-		page: url, title	
-	get mysqldb and/or sqlobject on jython	
 	by the time i build the GUI out, i'll be an old man. 
 
 
@@ -5016,3 +5029,10 @@ FATAL on None:None line 223 col 30: Attribute name "selected" associated with an
 	make the thing send a content header
 	make it send file from a bytestream InputStream or something
 		which is what i'm gonna get
+	get mysqldb and/or sqlobject on jython	
+fix the styling for the headers in the new fake menurow
+	how did it break?
+
+table underneath tabletitles is empty, don't put it in there.
+the nag report. a potpurri of html errols
+	nice
