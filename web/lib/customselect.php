@@ -36,10 +36,6 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             //  need these for edit link
             $this->vals = $this->getValue();
 
-            if(count($this->vals) < 2){
-                $this->addOption('To search, type in box above', '');
-            }
-            
 
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 

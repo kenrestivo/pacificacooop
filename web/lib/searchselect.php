@@ -19,6 +19,9 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
             list($target, $targfield) = $this->link;
             $target_id =  $target . '-'. $targfield;
 
+            if(count($this->vals) < 2){
+                $this->addOption('To search, type in box above', '');
+            }
 
         }
 

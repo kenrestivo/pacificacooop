@@ -16,6 +16,17 @@
        }
        */
 
+
+//     function prepare()
+//         {
+//             // needed before callign parent's prepare!
+//             parent::prepare();
+//             if(count($this->vals) < 2){
+//                 $this->addOption('Add/Remove', '');
+//             }
+//         }
+
+
 // this code is REALLY REALLY UGLY and it messes with the internals of quickform
 // scary stuff
 
@@ -24,6 +35,8 @@
            if ($this->_flagFrozen) {
                return $this->getFrozenHtml();
            } else {
+
+
                $tabs    = $this->_getTabs();
                $strHtml = '';
                if ($this->getComment() != '') {

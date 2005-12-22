@@ -15,6 +15,9 @@ MY agenda! dammit, mine! for a change....
 
 the farkin schoolyearchooser changes bgcolour. why?
 
+the bogus val in advmulti too
+	make sure it doesn't break saving!!
+
 ??QA/python
 store results in db
 	 runs: date, sitename,  username, baseurl
