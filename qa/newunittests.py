@@ -133,8 +133,9 @@ class CoopTest:
     def pageLoaded(self):
         print 'Checking load of [%s] ...' % (self.getURL(), )
         assert(1 == self.page.getWebResponse().getContentAsString().count('</html>'))
-        if self.validate:
+        if self.validate > 0:
             self.validateMarkup()
+
 
             
     def getAllLinks(self):
@@ -177,6 +178,7 @@ class CoopTest:
 
     def validateMarkup(self):
         """very simple, straightforward dom parsing. reject bad html"""
+        print 'Validating markup...'
         self.parser.parse(org.xml.sax.InputSource(self.page.getWebResponse().getContentAsStream()))
         d=self.parser.getDocument()
         return d
@@ -192,11 +194,11 @@ def ManyVisitHack(url, validate=0):
                   'Teacher Sandy', 'Shirley']
     for u in usersToTest:
         print 'Starting user %s (%s)...' % (u, url)
-        CoopTest(url, u).run()
+        CoopTest(url, u, validate).run()
     
 
 def main():
-    ManyVisitHack('http://www/coop-dev')
+    ManyVisitHack('http://www/coop-live')
     print 'All tests succeeded! Yay!'
 
     
