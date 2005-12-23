@@ -1,4 +1,3 @@
-
 <?php
 
 
@@ -94,7 +93,6 @@ class paypalForm extends HTML_QuickForm
 
 // keep below
 ?>
-<!-- PAYPAL -->
 
 
 

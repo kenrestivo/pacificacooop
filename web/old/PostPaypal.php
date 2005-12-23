@@ -227,5 +227,3 @@ class PostPaypal
 # end of inner php code
 
 ?>
-
-<!-- END POSTPAYPAL CLASS -->

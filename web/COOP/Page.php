@@ -105,7 +105,7 @@ class coopPage
 			global $metalinks; // from first.inc. bah.
 			global $doctype; // from first.inc. bah.
 			printf('%s
-<html xmlns="http://www.w3.org/1999/xhtml" >
+<html  %s>
 		<head> %s
 			<title>%s</title>
 		</head>
@@ -117,7 +117,10 @@ class coopPage
 
 		<div id="header">
 				<h2>%s</h2>',
-				   $doctype, $metalinks, $this->title, $this->heading);
+				   $doctype, 
+                   strstr('xml', $doctype) ? 
+                   'xmlns="http://www.w3.org/1999/xhtml"' : 'lang="en"',
+                   $metalinks, $this->title, $this->heading);
 			
 			
 			$this->debugCrap();

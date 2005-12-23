@@ -13,22 +13,23 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
-??PHP/JS
-advmultiselect the add/remove thing, when adding, remove the placeholder
-	the nothing
-
 
 ??XHTML
 serve up xthtml for FF, see how it goes	
 	test it,
 		weird exploiter problem, figure it out
 		thank you refuses to parse
+			there's ONE blank line i have to deal with. fuckers.
 	and push it live!!
 
 
 the farkin schoolyearchooser changes bgcolour. why?
 
 
+
+??PHP/JS
+advmultiselect the add/remove thing, when adding, remove the placeholder
+	the nothing
 
 
 ??QA/python
