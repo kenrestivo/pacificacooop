@@ -13,13 +13,15 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
+???PHP/SQL
+	aack. the enrollemnt shit is all fucked up now.
+		when i moved the status to cooppage. why??!
+
+
 
 ??XHTML
-serve up xthtml for FF, see how it goes	
+serve up xhtml for FF, see how it goes	
 	test it,
-		weird exploiter problem, figure it out
-		separate out alert and status, or something. i.e. cooke enhancementhours
-		
 	and push it live!!
 
 
@@ -32,18 +34,19 @@ advmultiselect the add/remove thing, when adding, remove the placeholder
 	the nothing
 
 
-??QA/python
-store results in db
-	 runs: date, sitename,  username, baseurl
-		page: url, title (if any), w3cPrintout(blob), actualsource(blob)
-				NOTE: only save actual source if fatal error
-			errors: type, sysid, pubid, lineno, colno, message
-	sqlobject this thing. i've had enough of php
-		then manually jython mysqldb the entries
-			though this is a perfect case for my "if it's not there, add it"
-				hack around it
-	ya know, just make it a flat fucking file then. at least for now
 
+??QA/python
+try html 4.01 validation too
+	get w3c validator going
+	store results in db
+		 runs: date, sitename,  username, baseurl
+			page: url, title (if any), w3cPrintout(blob), actualsource(blob)
+					NOTE: only save actual source if fatal error
+				errors: type, sysid, pubid, lineno, colno, message
+		sqlobject this thing. i've had enough of php
+			then manually jython mysqldb the entries
+				though this is a perfect case for my "if it's not there, add it"
+					hack around it
 
 
 ???PHP
@@ -3115,7 +3118,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	
+			try konqueror again,  accept looser (xml)k
+				no, it doesn't advertise xml
 	now retrofit it to use the NEW w3c validation
 	still need xerces to look for the h2 validated tag
 		so try that.
@@ -5055,3 +5059,7 @@ the nag report. a potpurri of html errols
 		thank you refuses to parse
 			there's ONE blank line i have to deal with. fuckers.
 			got 'em
+		weird exploiter problem, figure it out
+			ah, double-inclusion of some js		separate out alert and status, or something. i.e. cooke enhancementhours
+		
+	ya know, just make it a flat fucking file then. at least for now
