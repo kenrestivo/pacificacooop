@@ -118,7 +118,7 @@ class coopPage
 		<div id="header">
 				<h2>%s</h2>',
 				   $doctype, 
-                   strstr('xml', $doctype) ? 
+                   strstr($doctype, 'xml') ? 
                    'xmlns="http://www.w3.org/1999/xhtml"' : 'lang="en"',
                    $metalinks, $this->title, $this->heading);
 			
@@ -170,7 +170,7 @@ class coopPage
 		$this->confessArray($_SESSION, 
                             "test SESSION (prior to request being processed)");
 		$this->confessArray($_SERVER, "test SERVER", 4);
-		$this->confessArray(apache_request_headers(), "apache request", 4);
+		$this->confessArray(apache_request_headers(), "apache request", 2);
 		$this->confessArray(apache_response_headers(), 
                             "apache response headers-- BEFORE output", 4);
 				
