@@ -92,6 +92,7 @@ $disp =& new CoopNewDispatcher(&$cp);
 $cp->buffer($disp->dispatch());
 
 
+header('Assure-Top-Line-PHP-Hack: true');
 print $cp->flushBuffer();
 
 $cp->done();

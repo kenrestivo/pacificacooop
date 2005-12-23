@@ -182,6 +182,10 @@ class CoopTest:
 
     def dumpHTML(self):
         print self.page.getWebResponse().getContentAsString()        
+        fp=open('death.html', 'w')
+        fp.write(self.page.getWebResponse().getContentAsString())
+        fp.close()
+        
 
 
     def validateMarkup(self):

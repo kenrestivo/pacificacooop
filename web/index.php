@@ -64,7 +64,7 @@ $menu->createNew();
 
 	
 $u = $cp->userStruct; // cached by createlegacy
-
+header('Assure-Top-Line-PHP-Hack: true');
 print $cp->topNavigation();
 print "\n<hr /></div> <!-- end header div -->\n";
 //confessObj($menu, 'menu');
