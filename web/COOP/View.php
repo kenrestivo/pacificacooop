@@ -884,13 +884,21 @@ function getAlert()
             if(is_callable(array($this->obj, 'fb_display_alert'))){
                 $alertbody =  $this->obj->fb_display_alert(&$this);
                 if($alertbody){
-                    $res .= sprintf('<img src="../images/Achtung-small.png" alt="Achtung!" />&nbsp;%s', 
+                    $res .= sprintf('<p><img src="/images/Achtung-small.png" alt="Achtung!" />&nbsp;%s</p>', 
                                    $alertbody);
                 }
             }
             return $res;
         }
   
+function getSummary()
+        {
+            if(is_callable(array($this->obj, 'fb_display_summary'))){
+                $this->page->printDebug('calling callback for summary', 2);
+                return  '<p>' . $this->obj->fb_display_summary(&$this) . '</p>';
+            }
+        }
+
 
     // this does nothing, because it appears to be impossible to do what i want
     function titleJSHack()
