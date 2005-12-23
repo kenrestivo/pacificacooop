@@ -16,7 +16,6 @@ MY agenda! dammit, mine! for a change....
 
 ??XHTML
 serve up xthtml for FF, see how it goes	
-	make the goofy xerces webclient show an accept header
 	test it,
 		weird exploiter problem, figure it out
 		thank you refuses to parse
@@ -5052,3 +5051,4 @@ the nag report. a potpurri of html errols
 			can i do that? do i need any transforms? will it work?
 
 	all pages use pagetop now?. so it should be safe.
+	make the goofy xerces webclient show an accept header

@@ -408,11 +408,11 @@ class coopView extends CoopObject
 		{
 			//TODO: use DIV's instead of tables for this.
             $par = $this->getParent();
-			$title = sprintf("%s %.50s (%d found)", 
-							 htmlentities($this->title()),
+			$title = htmlentities(sprintf("%s %.50s (%d found)", 
+							 $this->title(),
 							 is_a($par, 'CoopObject') ? 
-							 "for " . htmlentities($par->getSummary()) : "",
-                             $this->obj->N);
+							 "for " . $par->getSummary() : "",
+                             $this->obj->N));
 
 
             if($this->searchForm){
