@@ -17,14 +17,6 @@
        */
 
 
-//     function prepare()
-//         {
-//             // needed before callign parent's prepare!
-//             parent::prepare();
-//             if(count($this->vals) < 2){
-//                 $this->addOption('Add/Remove', '');
-//             }
-//         }
 
 
 // this code is REALLY REALLY UGLY and it messes with the internals of quickform
@@ -35,7 +27,6 @@
            if ($this->_flagFrozen) {
                return $this->getFrozenHtml();
            } else {
-
 
                $tabs    = $this->_getTabs();
                $strHtml = '';
@@ -51,6 +42,11 @@
                // The hiddent multi-select
                $strHtmlHidden = '<select name="' . $this->getName() .
 				   "[]\" multiple=\"multiple\" style=\"overflow: hidden; visibility: hidden; display: none; width: 0px; height: 0px;\">\n";
+
+             // TODO: WHEN i figure out how to remove the placeholder b4 saving
+//                if(count($this->getValue()) < 2){
+//                    $strHtmlSelected .= '<option value="">Add/Remove</option>';
+//                }
 
                foreach ($this->_options as $option) {
                    if (is_array($this->_values) &&
