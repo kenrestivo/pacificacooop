@@ -207,7 +207,8 @@ class Auction_donation_items extends CoopDBDO
 
             $res = "";
             //the scrolling div with packages!
-            $res .= $co->page->jsRequireOnce('lib/utils.js');
+            $res .= $co->page->jsRequireOnce('lib/utils.js', 
+                                             'COOP_UTILS_JS');
             $res .= wrapJS("addLink('css/packages.css')");
 
 
