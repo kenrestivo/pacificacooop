@@ -50,8 +50,7 @@ $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 $hdr= apache_request_headers();
 if(strstr( $hdr['Accept'], 'application/xhtml+xml')){
     $content_type = 'application/xhtml+xml';
-    $doctype ='<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+    $doctype ='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
 }
 
