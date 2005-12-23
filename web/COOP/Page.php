@@ -100,27 +100,53 @@ class coopPage
 
 
 	// NOTE! prints directly to screen, doesn't return output!
+	// it's also a VERY ugly function
 	function header()
 		{
-			global $metalinks; // from first.inc. bah.
-			global $doctype; // from first.inc. bah.
+            // default content is text/html. 
+            $content_type = 'text/html';
+            $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+               "http://www.w3.org/TR/html4/loose.dtd">';
+            // sniff the heaers. if agent supports it, send xhtml instead!
+            $hdr= apache_request_headers();
+            if(strstr( $hdr['Accept'], 'application/xhtml+xml')){
+                $content_type = 'application/xhtml+xml';
+                $doctype ='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+            }
+            // this commits our choice. browser now must follow us into it.
+            header('Content-Type: ' . $content_type, true);
 			printf('%s
 <html  %s>
-		<head> %s
-			<title>%s</title>
-		</head>
+',            
+                   $doctype,
+                   $content_type == 'application/xhtml+xml' ? 
+                   'xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"' : 
+                   'lang="en"');
+            
+            // again, this also must agree with the above.
+            print '<head>';
+            printf('
+<meta http-equiv="Content-Type" 
+ 				content="%s;charset=utf-8" %s>
+<link rel="stylesheet" href="main.css" title="main" />
+', 
+                   $content_type,
+                   $content_type == 'application/xhtml+xml' ? '/' :'');
 
-		<body>
+            // almost out of the woods now and into content-related stuff
+            printf('<title>%s</title> </head>', $this->title);
+
+            // because exploiter sucks
+            print '<body>
 <!--[if gte IE 5.5000]>
 <script type="text/javascript" src="lib/pngfix.js"></script>
 <![endif]-->
-
-		<div id="header">
+';
+            // definitely into the safety of our own content here
+            printf('<div id="header">
 				<h2>%s</h2>',
-				   $doctype, 
-                   strstr($doctype, 'xml') ? 
-                   'xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"' : 'lang="en"',
-                   $metalinks, $this->title, $this->heading);
+               $this->heading);
 			
 			
 			$this->debugCrap();
