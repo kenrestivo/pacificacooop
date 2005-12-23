@@ -119,7 +119,7 @@ class coopPage
 				<h2>%s</h2>',
 				   $doctype, 
                    strstr($doctype, 'xml') ? 
-                   'xmlns="http://www.w3.org/1999/xhtml"' : 'lang="en"',
+                   'xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"' : 'lang="en"',
                    $metalinks, $this->title, $this->heading);
 			
 			

@@ -30,44 +30,24 @@ require_once("CoopView.php");
 
 //PEAR::setErrorHandling(PEAR_ERROR_PRINT); //  before page exists.
 
+
+
+$cp =& new CoopPage($debug);
+
 if(headers_sent($file, $line)){
     PEAR::raiseError("headers sent at $file $line ", 666);
 }
-printf('%s
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-		<head> %s
-			<title>Data Entry</title>
-		</head>
-
-		<body>
-<!--[if gte IE 5.5000]>
-<script type="text/javascript" src="lib/pngfix.js"></script>
-<![endif]-->
-
-		<div id="header">
-				<h2>Pacifica Co-Op Nursery School Data Entry</h2>',
-	   $doctype, $metalinks);
-
-warnDev();
+print $cp->pageTop();
 
 
-
-$auth = logIn($_REQUEST);
-if($auth['state'] != 'loggedin'){
-	done();
-}
-
-//OK, i am logged in!
-$cp =& new CoopPage($debug);
-$cp->createLegacy($auth);
+print $cp->topNavigation();
+$cp->createLegacy($cp->auth);
 
 $menu =& new CoopMenu(&$cp);
 $menu->createNew();
 
-	
 $u = $cp->userStruct; // cached by createlegacy
-print $cp->topNavigation();
+
 print "\n<hr /></div> <!-- end header div -->\n";
 //confessObj($menu, 'menu');
 
