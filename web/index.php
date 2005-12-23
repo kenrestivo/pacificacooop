@@ -28,8 +28,11 @@ require_once("CoopMenu.php");
 require_once("CoopView.php");
 
 
-PEAR::setErrorHandling(PEAR_ERROR_PRINT); //  before page exists.
+//PEAR::setErrorHandling(PEAR_ERROR_PRINT); //  before page exists.
 
+if(headers_sent($file, $line)){
+    PEAR::raiseError("headers sent at $file $line ", 666);
+}
 printf('%s
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -64,7 +67,6 @@ $menu->createNew();
 
 	
 $u = $cp->userStruct; // cached by createlegacy
-header('Assure-Top-Line-PHP-Hack: true');
 print $cp->topNavigation();
 print "\n<hr /></div> <!-- end header div -->\n";
 //confessObj($menu, 'menu');

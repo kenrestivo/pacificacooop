@@ -18,8 +18,8 @@ MY agenda! dammit, mine! for a change....
 serve up xthtml for FF, see how it goes	
 	test it,
 		weird exploiter problem, figure it out
-		thank you refuses to parse
-			there's ONE blank line i have to deal with. fuckers.
+		separate out alert and status, or something. i.e. cooke enhancementhours
+		
 	and push it live!!
 
 
@@ -5052,3 +5052,6 @@ the nag report. a potpurri of html errols
 
 	all pages use pagetop now?. so it should be safe.
 	make the goofy xerces webclient show an accept header
+		thank you refuses to parse
+			there's ONE blank line i have to deal with. fuckers.
+			got 'em

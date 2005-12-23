@@ -92,7 +92,9 @@ $disp =& new CoopNewDispatcher(&$cp);
 $cp->buffer($disp->dispatch());
 
 
-header('Assure-Top-Line-PHP-Hack: true');
+if(headers_sent($file, $line)){
+    PEAR::raiseError("headers sent at $file $line ", 666);
+}
 print $cp->flushBuffer();
 
 $cp->done();
