@@ -411,7 +411,7 @@ class coopView extends CoopObject
 			$title = sprintf("%s %.50s (%d found)", 
 							 htmlentities($this->title()),
 							 is_a($par, 'CoopObject') ? 
-							 "for " . $par->getSummary() : "",
+							 "for " . htmlentities($par->getSummary()) : "",
                              $this->obj->N);
 
 

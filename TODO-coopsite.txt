@@ -36,7 +36,8 @@ advmultiselect the add/remove thing, when adding, remove the placeholder
 ??QA/python
 store results in db
 	 runs: date, sitename,  username, baseurl
-		page: url, title (if any), w3cPrintout(blob)
+		page: url, title (if any), w3cPrintout(blob), actualsource(blob)
+				NOTE: only save actual source if fatal error
 			errors: type, sysid, pubid, lineno, colno, message
 	sqlobject this thing. i've had enough of php
 		then manually jython mysqldb the entries
