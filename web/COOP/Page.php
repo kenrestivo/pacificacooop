@@ -704,6 +704,9 @@ class coopPage
     // utility func. i'm always loading stuff with inclusion guards
     function jsRequireOnce($url, $define)
         {
+            if($define){
+                PEAR::raiseError('jsRequireOnce means, um, require ONCE. give it a define argument!', 666);
+            }
             if (!defined($define)) {
                 define($define, true);
                 return sprintf('<script src="%s" type="text/javascript"></script>', $url); 
