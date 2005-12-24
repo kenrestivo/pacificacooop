@@ -19,25 +19,20 @@
 	("insurance_information" . "insurance_information_id")
 	("drivers_licenses" . "drivers_license_id"))
 
-(define sites-tables
-  '(("leads" . "lead_id")
-	("companies"  . "company_id")
-	("families" . "family_id"))
-
-(define org-tables
-  '(("leads" . "lead_id")
-	("companies" . "company_id")
-	("flyer_locations" . "flyer_location_id")
-	("raffle_locations" . "raffle_location_id"))
-
 (define people-fields
   '("first_name"
 	"last_name"
 	"title" 
 	"salutation" 
 	"email_address"))
+
 (define people-keys
   '("first_name" "last_name"))
+
+(define sites-tables
+  '(("leads" . "lead_id")
+	("companies"  . "company_id")
+	("families" . "family_id"))
 
 (define sites-fields
   '("address1"
@@ -51,6 +46,13 @@
 
 (define sites-keys
   '("address1" "city"))
+
+(define org-tables
+  '(("leads" . "lead_id")
+	("companies" . "company_id")
+	("flyer_locations" . "flyer_location_id")
+	("raffle_locations" . "raffle_location_id"))
+
 
 (define org-fields
   '("company_name"
@@ -105,7 +107,7 @@
 		(db-ref-last (choose-duplicates search-results)
 					 (car (car all-indexed-fields))) ; got it!
 		(begin (safe-sql dbh (sprintf #f "
-				insert into %s set % "
+				insert into %s set %s "
 									  new-table
 									  (make-set-line (cdr))
 									  

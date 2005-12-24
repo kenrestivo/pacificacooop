@@ -33,7 +33,7 @@ FARPORT=2299
 BKPW=test
 PW=test
 BKUSER=input
-NFSNHOST=c3.phx.nearlyfreespeech.net
+NFSNHOST=dev.phx.nearlyfreespeech.net
 
 all::
 	@echo "not so fast... get specific"

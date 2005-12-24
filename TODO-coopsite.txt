@@ -13,15 +13,10 @@ MY agenda! dammit, mine! for a change....
 	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
 
 
-???PHP/SQL
-	aack. the enrollemnt shit is all fucked up now.
-		when i moved the status to cooppage. why??!
-
-
-
 ??XHTML
 serve up xhtml for FF, see how it goes	
 	test it,
+		browsercam? someone with IE?
 	and push it live!!
 
 
@@ -77,10 +72,9 @@ alumni invite!
 
 
 
-
-
 2-4 hours PHP
 phptal? template engine for reports like the nag report? parent ed? enhancement?
+	bah! it's borken. and i don't know why?
 	then load all those fucking libraries! on nfsn. not. fun.
 		well, it might be easy!
 		then again, maybe not!
@@ -5063,3 +5057,12 @@ the nag report. a potpurri of html errols
 			ah, double-inclusion of some js		separate out alert and status, or something. i.e. cooke enhancementhours
 		
 	ya know, just make it a flat fucking file then. at least for now
+???PHP/SQL
+	aack. the enrollemnt shit is all fucked up now.
+		when i moved the status to coopview. why??!
+	it works, but the chooser is being ignored
+	details are brokern now
+		i see. if the parent is itself (as it is for some enrollment), it dies
+			can't query twice, adn getsummary requires a query
+	aha! i fucked up and named the function getsummary... overloading coopobject::getsummary
+		removed it
