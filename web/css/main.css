@@ -257,6 +257,27 @@ td.multiselect {
 }
 
 
+div.possible_packages_scroll {
+    display: block;
+    border: 1px solid #CCCCCC;
+    padding: 2px 4px;
+    margin-top: .3em;
+    height: 100px;
+    overflow: auto;
+}
+
+div.possible_packages {
+    display: inline;
+    font-size: .60em;
+    white-space: -moz-pre-wrap; /* Mozilla */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    white-space: pre-wrap; /* CSS 2.1 */
+    white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+    word-wrap: break-word; /* IE */
+    wrap-option: emergency; /* CSS 3 */
+}
+
+
 @media print { 	
   #header { display:none }	
   #footer { display:none }	

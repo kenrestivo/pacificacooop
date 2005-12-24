@@ -1,4 +1,4 @@
-coop web database
+vaicoop web database
 
 MY agenda! dammit, mine! for a change....
 	xhtml validation
@@ -48,6 +48,11 @@ try html 4.01 validation too
 the bogus val in advmulti too
 	make sure it doesn't break saving!!
 
+
+???PHP/HTML
+construct the <HEAD> *last*, after the whole body is done
+	buffer the entire page, no matter how fucking enormous
+		this also gets me a <title> that makes sense too
 
 ???PHP
 sf purchases is utterly fucked up

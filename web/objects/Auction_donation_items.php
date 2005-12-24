@@ -206,11 +206,6 @@ class Auction_donation_items extends CoopDBDO
             $inner = 'foo bar baz';
 
             $res = "";
-            //the scrolling div with packages!
-            $res .= $co->page->jsRequireOnce('lib/utils.js', 
-                                             'COOP_UTILS_JS');
-            $res .= wrapJS("addLink('css/packages.css')");
-
 
             $pkgs = new CoopView(&$co->page, 'packages', &$co);
             $pkgs->obj->whereAdd('package_type = "Live"');
@@ -228,7 +223,7 @@ class Auction_donation_items extends CoopDBDO
             }
 
             $res .= '<h4>Try to donate items which will fit into one of the "baskets" listed here:</h4>';
-            $res .= '<div id="possible_packages_scroll"><div id="possible_packages">'. $tab->toHTML() . '</div></div>';
+            $res .= '<div class="possible_packages_scroll"><div class="possible_packages">'. $tab->toHTML() . '</div></div>';
             return $res;
         }
 
