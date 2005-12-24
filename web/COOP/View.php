@@ -285,6 +285,7 @@ class coopView extends CoopObject
 			$row = $this->reorder($this->obj->toArray());
 			foreach($row as $key => $val){
 
+
 				// this is where the fun begins.
 
 				if(!empty($headerkeys) && !in_array($key, $headerkeys)){

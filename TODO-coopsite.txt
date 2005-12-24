@@ -1,8 +1,8 @@
 vaicoop web database
 
 MY agenda! dammit, mine! for a change....
+	wiki/wysiwyg editor
 	xhtml validation
-	xhtml fckeditor/xinha/tinymce for documents: handbook, policies, etc. 
 	create generic report arch (reportnotes.txt)
 	import the 20-year roster (20yearroster.txt)
 	json the subforms (subform.txt)
@@ -11,21 +11,6 @@ MY agenda! dammit, mine! for a change....
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
-
-
-
-??PHP/HTML
-textareas, utterly fucked
-	go through and fix all the broken ones
-		maybe do it on the fly, in php, at display time? at save time?
-	add custom QF FORM FILTER rule to checkfor illlegal chars in all inputs
-		how do i get the DB to do multibyte?
-	or multibyte stuff?
-	0x3f sucks, in edit
-	curlyquotes suck, in details. also nl2br appears borken
-	maybe wiki it?
-
-
 
 
 
@@ -2537,6 +2522,13 @@ understand what "fold" means
 
 
 
+	quick audit trail of all in realm, i.e. for rasta
+		all tables in realm, all changes??! or last 20
+	what is this? where do i put it?
+	it's a system report?
+	NO. there's a default summary, recent-changes
+	holy shit, it's already there, in audit!
+
 
 rasta CHANGES
 	abstract out the find-existing method (in the let) from the check-for
@@ -3133,6 +3125,19 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+??PHP/HTML
+textareas, utterly fucked
+	go through and fix all the broken ones
+		maybe do it on the fly, in php, at display time? at save time?
+	add custom QF FORM FILTER rule to checkfor illlegal chars in all inputs
+		how do i get the DB to do multibyte?
+	or multibyte stuff?
+	0x3f sucks, in edit
+	curlyquotes suck, in details. also nl2br appears borken
+	maybe wiki it?
+	fuck this. use tinymce and make life easy
+
                 if(!ctype_print($val)){
                     PEAR::raiseError("illegal chars in {$this->table} $key
 [$val]", 
@@ -3438,27 +3443,6 @@ go back and wipe out or otherwise cleanse the damned audits for textfields
 	it's too detailed
 
 
-wsywig html editors for job descriptions, handbook, etc
-	ogham
-	fckeditor?
-	whizzywig
-	rtwedit
-	tinymce (easy to integrate?)
-
-wiki/cms
-	silva? kupu? python... cool
-	cmssimple? NO, license
-	ncaster?
-	kupu by itself? looks damned good...
-		try that article!
-	back to fckeditor?
-
-	quick audit trail of all in realm, i.e. for rasta
-		all tables in realm, all changes??! or last 20
-	what is this? where do i put it?
-	it's a system report?
-	NO. there's a default summary, recent-changes
-	holy shit, it's already there, in audit!
 
 do tahe perm checking separately, after. otherwise i will flip the fuck out.
 	it's nonsensical but i have no choice. i'll go apeshit otherwise.
