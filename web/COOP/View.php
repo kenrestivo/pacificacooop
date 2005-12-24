@@ -336,8 +336,8 @@ class coopView extends CoopObject
                 } else if(!empty($this->obj->fb_textFields) &&
                           in_array($key, $this->obj->fb_textFields)) 
                 {
-                    $res[] = htmlentities($this->fullText ? $val : 
-                        sprintf("%.40s...",$val)); // truncate, unless not
+                    $res[] = nl2br(htmlentities($this->fullText ? $val : 
+                        sprintf("%.40s...",$val))); // truncate, unless not
                 } else if ($table[$key] &  DB_DATAOBJECT_BOOL){
                     //TODO: a little checkbox PNG would be nice
                     $res[] =  $val? 'X' :'';
