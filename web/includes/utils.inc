@@ -157,7 +157,6 @@ function areYouSure()
 function done()
 {
 	global $coop_sendto;
-    global $doctype;
 
 	print "</div><!-- rightcol div end -->";	
 	print '<div id="footer"><hr />';
@@ -627,7 +626,7 @@ function wrapJS($js, $inclusion = false)
         }
     }
     return "\n<script type=\"text/javascript\">\n//<![CDATA[\n" .
-        $js . "//]]>\n</script>\n";
+        $js . "\n//]]>\n</script>\n";
 }
 
  
