@@ -661,7 +661,9 @@ class coopForm extends CoopObject
 			if(!is_array($this->obj->fb_crossLinks)){
 				return;
 			}
-			//$this->debugWrap(0); 
+
+
+ 			//$this->debugWrap(0); 
 			// for everything in crosslinks, 
 			foreach($this->obj->fb_crossLinks as $la){
 				$tf = $la['toField'];
@@ -674,10 +676,14 @@ class coopForm extends CoopObject
 				}
 				
  				if(!isset($vars[$longtf])){
-					// XXX this scares me. if i forget to include these...
-					// then they get wiped out of the db? that seems wrong to me.
-					$vars[$longtf] = array();
-					//continue;  // XXX WTF? why was i continuing!!? debug?
+                    // THIS IS CRITICAL!
+                    // if for some reason addcrosslinks screws up,
+                    // or it's on a browser that doesn't do JS,
+                    // or i don't have perms,
+                    // processing this could  blow away all the links.
+                    // don't do it.
+                    // so here i escape out, to avoid that ignoble fate
+                    continue;  // 
  				}
 
 				//print "mt $mt tf $tf ft $ft nk $nk";

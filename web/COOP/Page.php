@@ -199,6 +199,13 @@ class coopPage
 		$this->confessArray(apache_request_headers(), "apache request", 2);
 		$this->confessArray(apache_response_headers(), 
                             "apache response headers-- BEFORE output", 4);
+        if($this->debug > 3){
+            $this->printDebug('internal encoding:' . mb_internal_encoding());
+            foreach(array('G', 'P', 'C') as $type){
+                $this->printDebug( "input encoding for $type: ". 
+                                   mb_http_input($type));
+            }
+        }
 				
 	}
 

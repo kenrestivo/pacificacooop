@@ -2,6 +2,7 @@ vaicoop web database
 
 MY agenda! dammit, mine! for a change....
 	xhtml validation
+	xhtml fckeditor/xinha/tinymce for documents: handbook, policies, etc. 
 	create generic report arch (reportnotes.txt)
 	import the 20-year roster (20yearroster.txt)
 	json the subforms (subform.txt)
@@ -10,7 +11,22 @@ MY agenda! dammit, mine! for a change....
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
-	wiki or fckeditor/xinha/tinymce for documents: handbook, policies, etc
+
+
+
+??PHP/HTML
+textareas, utterly fucked
+	go through and fix all the broken ones
+		maybe do it on the fly, in php, at display time? at save time?
+	add custom QF FORM FILTER rule to checkfor illlegal chars in all inputs
+		how do i get the DB to do multibyte?
+	or multibyte stuff?
+	0x3f sucks, in edit
+	curlyquotes suck, in details. also nl2br appears borken
+	maybe wiki it?
+
+
+
 
 
 ??XHTML
@@ -3117,6 +3133,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+                if(!ctype_print($val)){
+                    PEAR::raiseError("illegal chars in {$this->table} $key
+[$val]", 
+                                     666);
+                }
+
 			try konqueror again,  accept looser (xml)k
 				no, it doesn't advertise xml
 	now retrofit it to use the NEW w3c validation
@@ -5071,3 +5093,12 @@ the nag report. a potpurri of html errols
 			can't query twice, adn getsummary requires a query
 	aha! i fucked up and named the function getsummary... overloading coopobject::getsummary
 		removed it
+	SERIOUS FUCK UP!!! IT WIPES OUT JOB DESCRIPTIONS AT SAVE TIME!!!
+		aghhg. it's the fucking crosslinks. they are FUCKED.		
+			first of all, ONLY process the crosslinks if they are present!
+		aha. i needed to CONTINUE
+AAGH
+	the only job descriptions which show up, are ones ALREADY ASSIGNED!
+		do something funky with view... don't constrain
+	i think this is a -1
+	no, this is a case where you need to LIMIT perms on assignment
