@@ -411,7 +411,7 @@ class coopView extends CoopObject
 			$title = htmlentities(sprintf("%s %.50s (%d found)", 
 							 $this->title(),
 							 is_a($par, 'CoopObject') ? 
-							 "for " . $par->getSummary() : "",
+							 "for " . $par->concatLinkFields() : "",
                              $this->obj->N));
 
 
@@ -891,6 +891,7 @@ function getAlert()
             return $res;
         }
   
+
 function getSummary()
         {
             if(is_callable(array($this->obj, 'fb_display_summary'))){

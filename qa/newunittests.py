@@ -6,6 +6,8 @@ import sys
 sys.path.append('/mnt/kens/ki/proj/coop/qa')
 import newunittests
 newunittests.main()
+#or
+newunittests.ManyVisitHack('http://www/coop-dev/', 1, '/mnt/kens/ki/proj/coop/qa/reports/testrun.log')
 """
 
 

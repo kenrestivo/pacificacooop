@@ -261,15 +261,6 @@ group by user_id,table_name,field_name";
 
 		}
 
-	// nice recursive function. returns summary of parents, skipping joins
-	// note now this is *different* from getParent.. don't try to combine em
-	function getSummary()
-		{
-			
-			//confessObj($this, 'getSummary');
-			return $this->concatLinkFields(&$this->obj);
-				
-		}
 
     function lastInsertID()
         {

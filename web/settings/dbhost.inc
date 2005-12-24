@@ -32,7 +32,7 @@ global $debug;
 $debug = isset($debug) ? $debug : 4;
 $dbuser = "springfest";
 $dbpwd = "92xPi9";
-$dbhost =  "bc";
+$dbhost =  "localhost";
 //$coop_sendto =  "ken@restivo.org";
 
 // this is the local PEAR installer, NOT MY CVS TWEEKED VERSIONS!

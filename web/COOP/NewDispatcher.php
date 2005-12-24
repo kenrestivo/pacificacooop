@@ -52,18 +52,17 @@ class CoopNewDispatcher
             
             $res .= '<div><!-- status alert div -->';
             
+            // the status of the last action
+            // TODO: put this in a distinctive statusbar div, not in here
             $res .= '<p>' . $this->page->getStatus() . '</p>';
 
             $atd2 =& new CoopView(&$this->page, 
                                   $this->page->vars['last']['table'], $none);
             // alert  and/or summary does a find, so i need a separate obj for it
             
-            if(is_callable(array($atd2->obj, 'fb_display_summary'))){
-                $atd2->page->printDebug('calling callback for summary', 2);
-                $res .=  $atd2->obj->fb_display_summary(&$atd2);
-            }
+            $res .= $atd2->getSummary();
+
             if($alert = $atd2->getAlert()){
-                $atd2->page->printDebug('calling callback for alert', 2);
                 $res .= $alert;
             }
             $res .= '</div><!-- end status alert div -->';
@@ -88,7 +87,8 @@ class CoopNewDispatcher
 
 
     /// this is the ugliest code i've ever been embarrassed to have written
-    /// and yet, this convoluted mess is the core of the entire damned website. 
+    /// and yet, this convoluted mess is the core of the entire damned website.
+    /// big fear.
     function add_edit()
         {
             $res = '';
@@ -113,6 +113,7 @@ class CoopNewDispatcher
             $atdf->addRequiredFields();
 
             // XXX THIS CLOBBERS WHATEVER WAS THERE!
+            // don't i have an array merge function somewhere?
             // also, shouldn't i use exportValues(), to get only thos in the QF?
             $this->page->vars['last']['submitvars'] = $atdf->form->getSubmitValues();
             

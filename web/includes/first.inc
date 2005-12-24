@@ -43,28 +43,6 @@ user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
                    session_id(), $_SESSION['auth']['state']), E_USER_NOTICE);	
 
 
-$content_type = 'text/html';
-$doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-               "http://www.w3.org/TR/html4/loose.dtd">';
-
-$hdr= apache_request_headers();
-if(strstr( $hdr['Accept'], 'application/xhtml+xml')){
-    $content_type = 'application/xhtml+xml';
-    $doctype ='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-}
-
-header('Content-Type: ' . $content_type, true);
-
- // global with meta tags and stylesheets
- $metalinks = sprintf('
-<meta http-equiv="Content-Type" 
- 				content="%s;charset=utf-8" %s>
-<link rel="stylesheet" href="main.css" title="main" />
-', 
-                      $content_type,
-                      strstr($content_type, 'xml') ? '/' :'');
-
 
 
 // end of main code
