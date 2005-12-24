@@ -51,18 +51,14 @@ class Job_descriptions extends CoopDBDO
 
     var $fb_joinPaths = array('family_id' => 'job_assignments');
 
-	var $fb_crossLinks = array(array('table' => 'job_assignments', 
-									 'toTable' => 'families',
-									 'toField' => 'family_id',
-									 'type' => 'select'));
     var $fb_defaults = array('free_tuition_start_month' => 'None',
                              'free_tuition_end_month' => 'None');
 
-	// save it until i square away schoolyear
-//   	var $fb_crossLinks = array(array('table' => 'job_assignments', 
-//   									 'toTable' => 'families',
-//   									 'toField' => 'family_id',
-//   									 'type' => 'select'));
+	// will default to THIS schoolyear
+  	var $fb_crossLinks = array(array('table' => 'job_assignments', 
+  									 'toTable' => 'families',
+  									 'toField' => 'family_id',
+  									 'type' => 'select'));
 
     function postGenerateForm(&$form)
         {
@@ -71,7 +67,9 @@ class Job_descriptions extends CoopDBDO
 //             get_class($form->CoopForm));
             $el =& $form->getElement(
                 $form->CoopForm->prependTable('long_description'));
-            //confessObj($el, get_class($el));
+            if($form->CoopForm->page->debug > 3){
+                confessObj($el, get_class($el));
+            }
             $el->setRows(25);
             $el->setCols(80);
         }
