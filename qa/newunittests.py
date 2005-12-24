@@ -198,8 +198,6 @@ class CoopTest:
         return d
 
         
-##mainpage.getWebResponse().getUrl()
-###### MAIN ######
 
 
 def ManyVisitHack(url, validate=0, logfile="tests.log"):
@@ -214,7 +212,18 @@ def ManyVisitHack(url, validate=0, logfile="tests.log"):
     print 'All tests succeeded! Yay!'
     fp.write('done\n')
     fp.close()
-    
+
+
+def force_page(urlbase, urlmore, username, fp):
+    """utility for validating one particular long url""" 
+    ct=CoopTest(urlbase, username, 1, fp)
+    ct.getToMainPage()
+    ct.page=ct.wc.getPage(URL('/'.join((urlbase,urlmore))))
+    ct.pageLoaded()
+
+
+##mainpage.getWebResponse().getUrl()
+###### MAIN ######
 
 def main():
     ManyVisitHack('http://www/coop-live')
