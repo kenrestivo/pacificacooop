@@ -102,6 +102,7 @@ class CoopTest:
     logfp = None
     testresults = ""
     result_doc = None
+    errnum = 0
     
     def __init__(self, url, username, validator_url=None, logfp=""):
         self.url = url
@@ -204,7 +205,7 @@ class CoopTest:
 
     def dumpHTML(self):
         #print self.page.getWebResponse().getContentAsString()        
-        fp=open('death.html', 'w')
+        fp=open('%d-death.html' % (self.errnum), 'w')
         fp.write(self.page.getWebResponse().getContentAsString())
         fp.close()
         
@@ -218,11 +219,12 @@ class CoopTest:
         self.result_doc = self.parser.getDocument()
         if [i.getAttribute('class') for i in allTags(self.result_doc, 'h2')].count('valid') < 1:
             print 'VALIDATION ERROR'
+            self.errnum = self.errnum + 1
             self.dumpHTML()
-            fp=open('w3c_report.html', 'w')
+            self.logfp.write('%d %s [%s]\n' % (self.errnum, self.ct.username, self.ct.getURL()))
+            fp=open('%d-w3c_report.html' % (self.errnum), 'w')
             fp.write(self.testresults)
             fp.close()
-            raise Exception
 
 
 
