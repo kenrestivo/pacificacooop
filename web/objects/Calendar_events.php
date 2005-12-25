@@ -92,6 +92,7 @@ class Calendar_events extends CoopDBDO
                                 $co->recordButtons(&$this, false)
                     );
             }
+// XXX broken, don't know why. actionbuttons screwed up on members page IFF they have edit perms. weird... actionbuttons broken
             if(!$publiconly){
                 $res .= '<p>For more events, click "View" above.</p>';
             }

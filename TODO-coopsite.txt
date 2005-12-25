@@ -12,20 +12,42 @@ MY agenda! dammit, mine! for a change....
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 
+go get xerces docs, and any others i might need
+
+
+
+??PHP/TAL/JSON
+3 nifty new NAG REPORTS in phptal! yay! with json email nag buttons!
+	for springfest, enhancement, and parent ed
+	move calcs into object
+phptal? template engine for reports like the nag report? parent ed? enhancement?
+	bah! it's borken. and i don't know why?
+	then load all those fucking libraries! on nfsn. not. fun.
+		well, it might be easy!
+		then again, maybe not!
+		STUCK: the include paths: use LOGS, wtf is going on?
+			include dbhost.inc BEFORE first.inc, or at the top of it
+	now try it out, maybe for the reports
+	settings
+		cache dir? nocache? repository?
+		xhtml/xml mode?
+	setall! and setref (setall shoudl suffice, use refs if needed)
+	for an expanded territory report maybe?
+
 
 
 ???JS/PHP SOME EDITOR (wikinotes)
 tinymce
-  read docs, and integrate
-  	safari_warning!
-  	paste plugin
-  		paste_auto_cleanup_on_paste
-	look at sample code
-	the compressed version
-		doesn't work for some reason
 	the OLD data could be a clusterfuck. escaping shit out
 		go through and htmlentities all blob fields??!
-
+	  read docs, and integrate
+		simplify-- too much shit in there
+	  	safari_warning!
+ 	 	paste plugin
+  			paste_auto_cleanup_on_paste
+		look at sample code
+		the compressed version
+			doesn't work for some reason
 
 
 ??QA
@@ -76,27 +98,8 @@ alumni invite!
 
 
 
-2-4 hours PHP
-phptal? template engine for reports like the nag report? parent ed? enhancement?
-	bah! it's borken. and i don't know why?
-	then load all those fucking libraries! on nfsn. not. fun.
-		well, it might be easy!
-		then again, maybe not!
-		STUCK: the include paths: use LOGS, wtf is going on?
-			include dbhost.inc BEFORE first.inc, or at the top of it
-	now try it out, maybe for the reports
-	settings
-		cache dir? nocache? repository?
-		xhtml/xml mode?
-	setall! and setref (setall shoudl suffice, use refs if needed)
-	for an expanded territory report maybe?
 	
 
-
-??PHP/TAL/JSON
-3 nifty new NAG REPORTS in phptal! yay! with json email nag buttons!
-	for springfest, enhancement, and parent ed
-	move calcs into object
 
 
 ??PHP/shell
@@ -3135,6 +3138,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+	custom character is fuckedup
 
 all textareas will be whatever
 

@@ -14,6 +14,11 @@
                                                               'COOP_TINYMCE_INCLUDE');
            $res .= wrapJS('tinyMCE.init({
                         	mode : "textareas",
+							plugins: "paste",
+							paste_use_dialog: false,
+				paste_auto_cleanup_on_paste : true,
+				paste_convert_headers_to_strong : false,
+			paste_strip_class_attributes : "all",
                         convert_newlines_to_brs : true
                 });',
                          'HTML_QUICKFORM_MCETEXTAREA_EXISTS');
