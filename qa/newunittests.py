@@ -19,6 +19,8 @@ for i in os.listdir(htmlunitdir):
 
 
 #python imports
+sys.path.append('/home/kensbackup/python/lib')
+import multiparttest
 from random import random
 from math import floor
 
@@ -47,26 +49,27 @@ def usableSelect(sel, val):
 #TODO: don't click on links to same page, go find out what this page is
 
 
+
+
 class simpleErrorHandler(org.xml.sax.ErrorHandler):
-    """ just prints the data as provided by xerces. nothin fancy"""
-    wc = None
-    def __init__(self, ct):
-        self.ct = ct
-    def error(self, ex):
-        self._printError('error', ex)
+     """ just prints the data as provided by xerces. nothin fancy"""
+     wc = None
+     def __init__(self, ct):
+         self.ct = ct
+     def error(self, ex):
+         self._printError('error', ex)
         #self.ct.dumpHTML()
         #raise Exception('validation error')
-    def warning(self, ex):
-        self._printError('warning', ex)
-    def fatalError(self, ex):
-        self._printError('FATAL', ex)
-        self.ct.dumpHTML()
-    def _printError(self,type, ex):
-        er= '%s on line %d col %d %s:%s: %s' % (type,  ex.getLineNumber(), ex.getColumnNumber(), ex.getSystemId(), ex.getPublicId(), ex.getMessage())
-        print er
-        self.ct.logfp.write('%s [%s] %s\n' % (self.ct.username, self.ct.getURL(), er))
-        self.ct.logfp.flush()
-
+     def warning(self, ex):
+         self._printError('warning', ex)
+     def fatalError(self, ex):
+         self._printError('FATAL', ex)
+         self.ct.dumpHTML()
+     def _printError(self,type, ex):
+         er= '%s on line %d col %d %s:%s: %s' % (type,  ex.getLineNumber(), ex.getColumnNumber(), ex.getSystemId(), ex.getPublicId(), ex.getMessage())
+         print er
+         self.ct.logfp.write('%s [%s] %s\n' % (self.ct.username, self.ct.getURL(), er))
+         self.ct.logfp.flush()
 
 
 
@@ -78,24 +81,23 @@ class CoopTest:
     parser = None
     mainlinks=[]
     url= ""
+    validator_url = None
     username= ""
     loggedin = 0
-    validate = 0
     logfp = ""
+    testresults = ""
     
-    def __init__(self, url, username, validate=0, logfp=""):
+    def __init__(self, url, username, validate='http://localhost/w3c-markup-validator/check', logfp=""):
         self.url = url
         self.username = username
-        self.validate = validate
+        self.validator_url = validate
         self.logfp = logfp
     
     def setUp(self):
         """this is redundant to __init__, but i'm too scared to change it"""
         self.wc = htmlunit.WebClient(htmlunit.BrowserVersion.MOZILLA_1_0, )
-        self.wc.addRequestHeader('Accept', 'text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8')
         self.wc.setRedirectEnabled(1)
         self.parser=org.apache.xerces.parsers.DOMParser()
-        self.parser.setFeature("http://xml.org/sax/features/validation", 1)
         self.parser.setErrorHandler(simpleErrorHandler(self))
 
 
@@ -143,7 +145,7 @@ class CoopTest:
     def pageLoaded(self):
         print 'Checking load of [%s] ...' % (self.getURL(), )
         assert(1 == self.page.getWebResponse().getContentAsString().count('</html>'))
-        if self.validate > 0:
+        if self.validator_url:
             self.validateMarkup()
 
 
@@ -193,14 +195,15 @@ class CoopTest:
     def validateMarkup(self):
         """very simple, straightforward dom parsing. reject bad html"""
         print 'Validating markup...'
-        self.parser.parse(org.xml.sax.InputSource(self.page.getWebResponse().getContentAsStream()))
-        d=self.parser.getDocument()
-        return d
+        w3c_resp =  multiparttest.postMultipartFile(self.validator_url, self.page.getWebResponse().getContentAsString())
+        self.parser.parse(org.xml.sax.InputSource(w3c_resp))
+        self.testresults = self.parser.getDocument()
+
 
         
 
 
-def ManyVisitHack(url, validate=0, logfile="tests.log"):
+def ManyVisitHack(url, validate='http://localhost/w3c-markup-validator/check', logfile="tests.log"):
     """runs multiple families in one url"""
     usersToTest= ['Bartlett Family', 'Restivo Family', 'Cooke Family',
                   'Teacher Sandy', 'Shirley']
@@ -208,18 +211,20 @@ def ManyVisitHack(url, validate=0, logfile="tests.log"):
     fp.write('================\n')
     for u in usersToTest:
         print 'Starting user %s (%s)...' % (u, url)
-        CoopTest(url, u, validate, fp).run()
+        CoopTest(url, u, logfp=fp).run()
     print 'All tests succeeded! Yay!'
     fp.write('done\n')
     fp.close()
 
 
-def force_page(urlbase, urlmore, username, fp):
+def force_page(urlbase, urlmore, username, fp=None):
     """utility for validating one particular long url""" 
-    ct=CoopTest(urlbase, username, 1, fp)
+    ct=CoopTest(urlbase, username,  logfp='forcepagetest.log')
     ct.getToMainPage()
     ct.page=ct.wc.getPage(URL('/'.join((urlbase,urlmore))))
     ct.pageLoaded()
+    return ct
+
 
 
 ##mainpage.getWebResponse().getUrl()
