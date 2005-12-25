@@ -45,6 +45,14 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
         }
 
+// XXX broken. doesn't work, and i haven't time to figure out why
+//     function getFrozenHTML(){
+//         $res .= "";
+//         foreach($this->vals as $val){
+//             $res .= $this->cf->checkLinkField($this->field, $val);
+//         }
+//         return $res;
+//     }
 
 
     function toHtml()

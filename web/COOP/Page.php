@@ -104,16 +104,19 @@ class coopPage
 	function header()
 		{
             // default content is text/html. 
-            $content_type = 'text/html';
-            $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-               "http://www.w3.org/TR/html4/loose.dtd">';
-            // sniff the heaers. if agent supports it, send xhtml instead!
-            $hdr= apache_request_headers();
-            if(strstr( $hdr['Accept'], 'application/xhtml+xml')){
-                $content_type = 'application/xhtml+xml';
-                $doctype ='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-            }
+            $content_type = 'text/html;charset=utf-8';
+            $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';
+
+/// NO! do not do this. evil evil evil
+//             // sniff the heaers. if agent supports it, send xhtml instead!
+//             $hdr= apache_request_headers();
+//             if(strstr( $hdr['Accept'], 'application/xhtml+xml')){
+//                 $content_type = 'application/xhtml+xml';
+//                 $doctype ='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+//                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+//             }
+
+
             // this commits our choice. browser now must follow us into it.
             header('Content-Type: ' . $content_type, true);
 			printf('%s
@@ -129,14 +132,16 @@ class coopPage
             printf('
 <meta http-equiv="Content-Type" 
  				content="%s;charset=utf-8" %s>
-<link rel="stylesheet" href="main.css" title="main" />
+<link rel="stylesheet" href="main.css" title="main" %s>
 ', 
                    $content_type,
+                   $content_type == 'application/xhtml+xml' ? '/' :'',
                    $content_type == 'application/xhtml+xml' ? '/' :'');
 
             // almost out of the woods now and into content-related stuff
-            printf('<title>%s</title> </head>', $this->title);
+            printf('<title>%s</title>', $this->title);
 
+            print '</head>';
             // because exploiter sucks
             print '<body>
 <!--[if gte IE 5.5000]>

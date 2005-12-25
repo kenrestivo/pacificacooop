@@ -201,6 +201,7 @@ class CoopNewDispatcher
                 }
                 
 
+
                 // last thing before i show it: instructions
                 // WARNIGN! FRAGILE! assume action hasn't been mangled!
                 $res .= $atdf->getInstructions(

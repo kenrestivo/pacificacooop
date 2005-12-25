@@ -31,6 +31,7 @@ require_once('lib/customselect.php');
 require_once('lib/searchselect.php');
 require_once('lib/customdatebox.php');
 require_once('lib/customrequired.php');
+require_once('lib/mcetextarea.php');
 require_once('Services/JSON.php');
 
 //////////////////////////////////////////
@@ -263,10 +264,11 @@ class coopForm extends CoopObject
 				{
                     $cols = !empty($this->obj->fb_sizes[$key]) ?
                         $this->obj->fb_sizes[$key] : 40;
-					$el =& $this->form->addElement('textarea', 
+					$el =& $this->form->addElement('mcetextarea', 
                                                    $fullkey, false, 
                                                    array('rows' => 10,  //??
                                                          'cols' => $cols));
+                    $el->_parentForm =& $this->form;
 				} else if(!empty($this->obj->fb_enumFields) &&
 						  in_array($key, $this->obj->fb_enumFields))
 				{

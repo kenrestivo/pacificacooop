@@ -1,7 +1,7 @@
 vaicoop web database
 
 MY agenda! dammit, mine! for a change....
-	wiki/wysiwyg editor
+	wiki/wysiwyg editor (wikinotes.txt)
 	xhtml validation
 	create generic report arch (reportnotes.txt)
 	import the 20-year roster (20yearroster.txt)
@@ -13,16 +13,18 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
-
-??XHTML
-serve up xhtml for FF, see how it goes	
-	test it,
-		browsercam? someone with IE?
-	and push it live!!
+???JS/PHP SOME EDITOR (wikinotes)
+tinymce
+  read docs, and integrate
+  	safari_warning!
+  	paste plugin
+  		paste_auto_cleanup_on_paste
+	look at sample code
+  make the styled htmlareas work via coopview too
+	the compressed version
 
 
 the farkin schoolyearchooser changes bgcolour. why?
-
 
 
 ??PHP/JS
@@ -172,12 +174,11 @@ markup errors that need a-fixin'
 		STUCK: hmm. what to do?
 
 
-	textfields not escaping! field trip coord
-		look at data in sql? maybe it's ugly there
-			still, that's not ok. should show up here. charset?
-
 	weird open table: http://www/coop-dev/generic.php?action=details&table=users&push=users&users-user_id=23	 -- The content of element type "table" is incomplete, it must match "(caption?,(col*|colgroup*),thead?,tfoot?,(tbody+|tr+))"
 	
+
+		browsercam? someone with IE?
+
 
 new design
 	lisa: 
@@ -247,7 +248,7 @@ bring income back to life: especially springfest family fees
 ???PHP
 make frozen fields not show the fucking --CHOOSE ONE--
 	in fact it shouldn't even go get the options, it should just concatlinkfields()
-	maybe override for now
+	maybe override for now? in customselect, the frozenfields code
 
 
 
@@ -3126,8 +3127,42 @@ i do however WANT to be able to copy the insurance info in!
 ----------------
 NOWHERE
 
+all textareas will be whatever
+
+wsywig html editors for job descriptions, handbook, etc
+	xinha -- not stable yet
+	ogham?
+	fckeditor? no DOCUMENTATION!!! it's a fucking wiki!
+	whizzywig
+	rtwedit
+	tinymce (easy to integrate? but BROKEN with xhtml)
+
+wiki/cms
+	silva? kupu? python... cool
+	cmssimple? NO, license
+	ncaster?
+	kupu by itself? looks damned good...
+		try that article!
+	back to fckeditor?
+
+
+
+	
+??XHTML
+serve up xhtml for FF, see how it goes	
+	test it,
+	and push it live!!
+	NO. use 4.01 strict
+
+  	will NOT work inside my page. something is fucking with it
+		doesn't matter where i put it. i can put it in head. it's all fucked up
+		ah, simple test case fails: xhtml+xml
+		
 ??PHP/HTML
 textareas, utterly fucked
+	textfields not escaping! field trip coord
+		look at data in sql? maybe it's ugly there
+			still, that's not ok. should show up here. charset?
 	go through and fix all the broken ones
 		maybe do it on the fly, in php, at display time? at save time?
 	add custom QF FORM FILTER rule to checkfor illlegal chars in all inputs
