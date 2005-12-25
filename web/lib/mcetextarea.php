@@ -10,7 +10,7 @@
            $res  = "";
 
            // change to tiny_mce_gzip.php, but it doesn't work
-           $res .= $this->_parentForm->CoopForm->page->jsRequireOnce('lib/tiny_mce/tiny_mce.js', 
+           $res .= $this->_parentForm->CoopForm->page->jsRequireOnce('lib/tiny_mce/tiny_mce_gzip.php', 
                                                               'COOP_TINYMCE_INCLUDE');
            $res .= wrapJS(
 'tinyMCE.init({
