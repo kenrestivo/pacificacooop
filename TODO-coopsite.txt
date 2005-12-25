@@ -12,9 +12,6 @@ MY agenda! dammit, mine! for a change....
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 
-go get xerces docs, and any others i might need
-
-
 
 ??PHP/TAL/JSON
 3 nifty new NAG REPORTS in phptal! yay! with json email nag buttons!
@@ -37,17 +34,12 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 
 
 ???JS/PHP SOME EDITOR (wikinotes)
-tinymce
+  read docs, and integrate
+  	safari_warning!
+	the compressed version
+		doesn't work for some reason
 	the OLD data could be a clusterfuck. escaping shit out
 		go through and htmlentities all blob fields??!
-	  read docs, and integrate
-		simplify-- too much shit in there
-	  	safari_warning!
- 	 	paste plugin
-  			paste_auto_cleanup_on_paste
-		look at sample code
-		the compressed version
-			doesn't work for some reason
 
 
 ??QA
@@ -5145,4 +5137,9 @@ try html 4.01 validation too
 	get w3c validator going
 		first save it to a file and then die
   make the styled htmlareas work via coopview too
-copy the mce shit to bc, adn start running tests homey
+copy the mce shit to bc, adn start running tests homey  	paste plugin
+  		paste_auto_cleanup_on_paste
+	how to add buttons to the SIMPLE theme?
+		paste button, style chooser
+	look at sample code
+go get xerces docs, and any others i might need
