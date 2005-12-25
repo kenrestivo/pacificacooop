@@ -272,6 +272,7 @@ def force_page(urlbase, urlmore, username, fp=None):
     ct.getToMainPage()
     ct.page=ct.wc.getPage(URL('/'.join((urlbase,urlmore))))
     ct.pageLoaded()
+    print 'page loaded successfully!'
     return ct
 
 
