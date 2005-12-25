@@ -12,15 +12,17 @@
            // change to tiny_mce_gzip.php, but it doesn't work
            $res .= $this->_parentForm->CoopForm->page->jsRequireOnce('lib/tiny_mce/tiny_mce.js', 
                                                               'COOP_TINYMCE_INCLUDE');
-           $res .= wrapJS('tinyMCE.init({
-                        	mode : "textareas",
-							plugins: "paste",
-							paste_use_dialog: false,
-				paste_auto_cleanup_on_paste : true,
-				paste_convert_headers_to_strong : false,
-			paste_strip_class_attributes : "all",
-                        convert_newlines_to_brs : true
-                });',
+           $res .= wrapJS(
+'tinyMCE.init({
+  mode : "textareas",
+  theme: "advanced",
+  theme_advanced_disable: "image,anchor,newdocument,visualaid,link,unlink,code", 
+  theme_advanced_buttons3_add: "cut,copy,pasteword,pastetext,selectall",
+  plugins: "paste",
+  paste_use_dialog: false,
+  paste_auto_cleanup_on_paste: true,     
+  paste_strip_class_attributes : "all",
+ });',
                          'HTML_QUICKFORM_MCETEXTAREA_EXISTS');
            
            $res .= "<noscript><h1>NOTICE! Some features on this page require Javascript. You will need to enable Javascript in your browser to use them.</h1></noscript>";
