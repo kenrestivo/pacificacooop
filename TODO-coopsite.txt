@@ -1,10 +1,10 @@
-vaicoop web database
+coop web database
 
 MY agenda! dammit, mine! for a change....
 	wiki/wysiwyg editor (wikinotes.txt)
-	xhtml validation
 	create generic report arch (reportnotes.txt)
 	import the 20-year roster (20yearroster.txt)
+	html 4.01 validation
 	json the subforms (subform.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	sortable/searchable repodddrts (searchfeature.txt)
@@ -12,9 +12,6 @@ MY agenda! dammit, mine! for a change....
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 
-
-??QA
-copy the mce shit to bc, adn start running tests homey
 
 
 ???JS/PHP SOME EDITOR (wikinotes)
@@ -24,8 +21,16 @@ tinymce
   	paste plugin
   		paste_auto_cleanup_on_paste
 	look at sample code
-  make the styled htmlareas work via coopview too
 	the compressed version
+		doesn't work for some reason
+	the OLD data could be a clusterfuck. escaping shit out
+		go through and htmlentities all blob fields??!
+
+
+
+??QA
+walk through doing testing again	
+	status alert divs once more, with feeling-- view in FF
 
 
 the farkin schoolyearchooser changes bgcolour. why?
@@ -34,7 +39,6 @@ the farkin schoolyearchooser changes bgcolour. why?
 ??PHP/JS
 advmultiselect the add/remove thing, when adding, remove the placeholder
 	the nothing
-
 
 
 
@@ -48,8 +52,9 @@ construct the <HEAD> *last*, after the whole body is done
 	buffer the entire page, no matter how fucking enormous
 		this also gets me a <title> that makes sense too
 
+
 ???PHP
-sf purchases is utterly fucked up
+sf night-of event purchases is utterly fucked up
 
 
 ???PHP
@@ -87,6 +92,7 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 	for an expanded territory report maybe?
 	
 
+
 ??PHP/TAL/JSON
 3 nifty new NAG REPORTS in phptal! yay! with json email nag buttons!
 	for springfest, enhancement, and parent ed
@@ -111,6 +117,8 @@ save whatever was last?
 	it knew what was there, it saved it so i could go getit.
 	then, why doesn't it stay there?
 		i.e. when i push?
+		have to override though, because user can CHANGE them
+	aren't i blowing them away?
 
 
 
@@ -561,7 +569,9 @@ BELOW THE LINE
 			then manually jython mysqldb the entries
 				though this is a perfect case for my "if it's not there, add it"
 					hack around it
-
+		some page to show errors, pages with errors
+			and a link to a python or php script which displays the w3c
+				grabs it from the db, spews it out, not hard
 
 
 ??? JSON/PHP
@@ -5129,3 +5139,5 @@ new QA system, validation
 try html 4.01 validation too
 	get w3c validator going
 		first save it to a file and then die
+  make the styled htmlareas work via coopview too
+copy the mce shit to bc, adn start running tests homey

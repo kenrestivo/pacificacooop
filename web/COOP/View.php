@@ -338,7 +338,7 @@ class coopView extends CoopObject
                           in_array($key, $this->obj->fb_textFields)) 
                 {
                     //nl2br is to deal with old text imports
-                    $res[] = nl2br($this->fullText ? $val : 
+                    $res[] = nl2br($this->fullText ? '<div>' . $val . '</div>' : 
                         strip_tags(sprintf("%.40s...",$val))); // truncate, unless not
                 } else if ($table[$key] &  DB_DATAOBJECT_BOOL){
                     //TODO: a little checkbox PNG would be nice
@@ -898,7 +898,7 @@ function getSummary()
         {
             if(is_callable(array($this->obj, 'fb_display_summary'))){
                 $this->page->printDebug('calling callback for summary', 2);
-                return  '<p>' . $this->obj->fb_display_summary(&$this) . '</p>';
+                return  '<div>' . $this->obj->fb_display_summary(&$this) . '</div>';
             }
         }
 

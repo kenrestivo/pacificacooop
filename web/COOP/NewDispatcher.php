@@ -50,11 +50,11 @@ class CoopNewDispatcher
                                  $this->page->vars['last']['table'], $none);
             //$atd->debugWrap(2);
             
-            $res .= '<div><!-- status alert div -->';
+            $res .= '<div id="status_alert">';
             
             // the status of the last action
             // TODO: put this in a distinctive statusbar div, not in here
-            $res .= '<p>' . $this->page->getStatus() . '</p>';
+            $res .= '<div id="status"><p>' . $this->page->getStatus() . '</p></div>';
 
             $atd2 =& new CoopView(&$this->page, 
                                   $this->page->vars['last']['table'], $none);
@@ -65,7 +65,7 @@ class CoopNewDispatcher
             if($alert = $atd2->getAlert()){
                 $res .= $alert;
             }
-            $res .= '</div><!-- end status alert div -->';
+            $res .= '</div>';
             
 
             if(is_callable(array($atd->obj, 'fb_display_view'))){

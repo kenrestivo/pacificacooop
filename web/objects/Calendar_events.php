@@ -92,7 +92,9 @@ class Calendar_events extends CoopDBDO
                                 $co->recordButtons(&$this, false)
                     );
             }
-            $res .= '<p>For more events, click "View" above.</p>';
+            if(!$publiconly){
+                $res .= '<p>For more events, click "View" above.</p>';
+            }
             return $res;
 
         }
