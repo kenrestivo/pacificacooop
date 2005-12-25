@@ -48,6 +48,20 @@ def usableSelect(sel, val):
 
 #TODO: don't click on links to same page, go find out what this page is
 
+def allTags(d, type):
+    l=[]
+    nl=d.getElementsByTagName(type)
+    nl.getLength()
+    for i in range(0, nl.getLength()):
+        l.append(nl.item(i))
+    return l
+
+
+def tagInfo(d, tagname):
+    for i in allTags(d, tagname):
+        print '   id: %s' % (i.getAttribute('id'))
+        print '   class: %s' % (i.getAttribute('class'))
+        print '   text: "%s"'  % (i.getTextContent())
 
 
 
@@ -86,6 +100,7 @@ class CoopTest:
     loggedin = 0
     logfp = ""
     testresults = ""
+    result_doc = None
     
     def __init__(self, url, username, validate='http://localhost/w3c-markup-validator/check', logfp=""):
         self.url = url
@@ -195,12 +210,14 @@ class CoopTest:
     def validateMarkup(self):
         """very simple, straightforward dom parsing. reject bad html"""
         print 'Validating markup...'
-        w3c_resp =  multiparttest.postMultipartFile(self.validator_url, self.page.getWebResponse().getContentAsString())
-        self.parser.parse(org.xml.sax.InputSource(w3c_resp))
-        self.testresults = self.parser.getDocument()
-
-
+        gm =  multiparttest.postMultipartFile(self.validator_url, self.page.getWebResponse().getContentAsString())
+        self.testresults = gm.getResponseBodyAsString()
+        self.parser.parse(org.xml.sax.InputSource(gm.getResponseBodyAsStream()))
+        self.result_doc = self.parser.getDocument()
+        if [i.getAttribute('class') for i in allTags(self.result_doc, 'h2')].count('valid') < 1:
+            print 'VALIDATION ERROR'
         
+
 
 
 def ManyVisitHack(url, validate='http://localhost/w3c-markup-validator/check', logfile="tests.log"):
