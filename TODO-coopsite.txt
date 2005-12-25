@@ -13,6 +13,25 @@ MY agenda! dammit, mine! for a change....
 	insurance, dammit
 
 
+
+??QA/python
+	store results in db
+		 runs: date, sitename,  username, baseurl
+			page: url, title (if any), w3cPrintout(blob), actualsource(blob)
+					NOTE: only save actual source if fatal error
+				errors: type, sysid, pubid, lineno, colno, message
+		sqlobject this thing. i've had enough of php
+			then manually jython mysqldb the entries
+				though this is a perfect case for my "if it's not there, add it"
+					hack around it
+			the steenkin blobs. how do i save them? just DO it
+			c.lastrowid, remember
+
+		some page to show errors, pages with errors
+			and a link to a python or php script which displays the w3c
+				grabs it from the db, spews it out, not hard
+
+
 ??PHP/TAL/JSON
 3 nifty new NAG REPORTS in phptal! yay! with json email nag buttons!
 	for springfest, enhancement, and parent ed
@@ -37,7 +56,7 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
   read docs, and integrate
   	safari_warning!
 	the compressed version
-		doesn't work for some reason
+		doesn't work for some reason? does on bc, anyway.
 	the OLD data could be a clusterfuck. escaping shit out
 		go through and htmlentities all blob fields??!
 
@@ -45,6 +64,7 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 ??QA
 walk through doing testing again	
 	status alert divs once more, with feeling-- view in FF
+	write the damned database thing. keep it simple if you must
 
 
 the farkin schoolyearchooser changes bgcolour. why?
@@ -553,20 +573,6 @@ my enrollment date links and summaries are all fucked up
 BELOW THE LINE
 
 
-
-??QA/python
-	store results in db
-		 runs: date, sitename,  username, baseurl
-			page: url, title (if any), w3cPrintout(blob), actualsource(blob)
-					NOTE: only save actual source if fatal error
-				errors: type, sysid, pubid, lineno, colno, message
-		sqlobject this thing. i've had enough of php
-			then manually jython mysqldb the entries
-				though this is a perfect case for my "if it's not there, add it"
-					hack around it
-		some page to show errors, pages with errors
-			and a link to a python or php script which displays the w3c
-				grabs it from the db, spews it out, not hard
 
 
 ??? JSON/PHP
