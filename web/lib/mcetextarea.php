@@ -18,6 +18,7 @@
   theme: "advanced",
   theme_advanced_disable: "image,anchor,newdocument,visualaid,link,unlink,code", 
   theme_advanced_buttons3_add: "cut,copy,pasteword,pastetext,selectall",
+  convert_newlines_to_brs: true,
   plugins: "paste",
   paste_use_dialog: false,
   paste_auto_cleanup_on_paste: true,     
