@@ -216,7 +216,12 @@ class CoopTest:
         self.result_doc = self.parser.getDocument()
         if [i.getAttribute('class') for i in allTags(self.result_doc, 'h2')].count('valid') < 1:
             print 'VALIDATION ERROR'
-        
+            self.dumpHTML()
+            fp=open('w3c_report.html', 'w')
+            fp.write(self.testresults)
+            fp.close()
+            raise Exception
+
 
 
 
