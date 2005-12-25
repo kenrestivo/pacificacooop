@@ -9,10 +9,12 @@
        {
            $res  = "";
 
+           // change to tiny_mce_gzip.php, but it doesn't work
            $res .= $this->_parentForm->CoopForm->page->jsRequireOnce('lib/tiny_mce/tiny_mce.js', 
                                                               'COOP_TINYMCE_INCLUDE');
            $res .= wrapJS('tinyMCE.init({
-                        	mode : "textareas"
+                        	mode : "textareas",
+                        convert_newlines_to_brs : true
                 });',
                          'HTML_QUICKFORM_MCETEXTAREA_EXISTS');
            

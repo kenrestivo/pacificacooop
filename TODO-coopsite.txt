@@ -7,10 +7,14 @@ MY agenda! dammit, mine! for a change....
 	import the 20-year roster (20yearroster.txt)
 	json the subforms (subform.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
-	sortable/searchable reports (searchfeature.txt)
+	sortable/searchable repodddrts (searchfeature.txt)
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
+
+
+??QA
+copy the mce shit to bc, adn start running tests homey
 
 
 ???JS/PHP SOME EDITOR (wikinotes)
@@ -32,19 +36,6 @@ advmultiselect the add/remove thing, when adding, remove the placeholder
 	the nothing
 
 
-
-??QA/python
-try html 4.01 validation too
-	get w3c validator going
-	store results in db
-		 runs: date, sitename,  username, baseurl
-			page: url, title (if any), w3cPrintout(blob), actualsource(blob)
-					NOTE: only save actual source if fatal error
-				errors: type, sysid, pubid, lineno, colno, message
-		sqlobject this thing. i've had enough of php
-			then manually jython mysqldb the entries
-				though this is a perfect case for my "if it's not there, add it"
-					hack around it
 
 
 ???PHP
@@ -559,9 +550,17 @@ my enrollment date links and summaries are all fucked up
 BELOW THE LINE
 
 
-??QA/python/java
-new QA system, validation
-	grab w3c checky files for any pages with errors
+
+??QA/python
+	store results in db
+		 runs: date, sitename,  username, baseurl
+			page: url, title (if any), w3cPrintout(blob), actualsource(blob)
+					NOTE: only save actual source if fatal error
+				errors: type, sysid, pubid, lineno, colno, message
+		sqlobject this thing. i've had enough of php
+			then manually jython mysqldb the entries
+				though this is a perfect case for my "if it's not there, add it"
+					hack around it
 
 
 
@@ -5121,3 +5120,12 @@ AAGH
 		do something funky with view... don't constrain
 	i think this is a -1
 	no, this is a case where you need to LIMIT perms on assignment
+
+??QA/python/java
+new QA system, validation
+	grab w3c checky files for any pages with errors
+
+??QA/python
+try html 4.01 validation too
+	get w3c validator going
+		first save it to a file and then die

@@ -104,7 +104,7 @@ class coopPage
 	function header()
 		{
             // default content is text/html. 
-            $content_type = 'text/html;charset=utf-8';
+            $content_type = 'text/html';
             $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';
 
 /// NO! do not do this. evil evil evil
