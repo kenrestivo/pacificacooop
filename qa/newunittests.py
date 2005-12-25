@@ -7,7 +7,7 @@ sys.path.append('/mnt/kens/ki/proj/coop/qa')
 import newunittests
 newunittests.main()
 #or
-newunittests.ManyVisitHack('http://www/coop-dev/', 1, '/mnt/kens/ki/proj/coop/qa/reports/testrun.log')
+newunittests.ManyVisitHack('http://www/coop-dev/')
 """
 
 
@@ -19,8 +19,6 @@ for i in os.listdir(htmlunitdir):
 
 
 #python imports
-sys.path.append('/home/kensbackup/python/lib')
-import multiparttest
 from random import random
 from math import floor
 
@@ -30,6 +28,9 @@ import com.gargoylesoftware.htmlunit
 import org.apache.xerces
 import org.xml
 from java.net import URL
+import java.lang, java.io
+from org.apache.commons.httpclient import *
+from org.apache.commons.httpclient.methods.multipart import *
 
 #from doesn't seem to work in py 2.1
 htmlunit = com.gargoylesoftware.htmlunit
@@ -95,19 +96,21 @@ class CoopTest:
     parser = None
     mainlinks=[]
     url= ""
-    validator_url = None
+    validator_url = 'http://localhost/w3c-markup-validator/check'
     username= ""
     loggedin = 0
-    logfp = ""
+    logfp = None
     testresults = ""
     result_doc = None
     
-    def __init__(self, url, username, validate='http://localhost/w3c-markup-validator/check', logfp=""):
+    def __init__(self, url, username, validator_url=None, logfp=""):
         self.url = url
         self.username = username
-        self.validator_url = validate
         self.logfp = logfp
-    
+        if validator_url:
+            self.validator_url = validator_url
+
+
     def setUp(self):
         """this is redundant to __init__, but i'm too scared to change it"""
         self.wc = htmlunit.WebClient(htmlunit.BrowserVersion.MOZILLA_1_0, )
@@ -196,11 +199,11 @@ class CoopTest:
     def getURL(self):
         """gets the url of the current page's web response
         whatever the hell that means"""
-        return self.page.getWebResponse().getUrl()
+        return '%s' % (self.page.getWebResponse().getUrl())
 
 
     def dumpHTML(self):
-        print self.page.getWebResponse().getContentAsString()        
+        #print self.page.getWebResponse().getContentAsString()        
         fp=open('death.html', 'w')
         fp.write(self.page.getWebResponse().getContentAsString())
         fp.close()
@@ -210,8 +213,7 @@ class CoopTest:
     def validateMarkup(self):
         """very simple, straightforward dom parsing. reject bad html"""
         print 'Validating markup...'
-        gm =  multiparttest.postMultipartFile(self.validator_url, self.page.getWebResponse().getContentAsString())
-        self.testresults = gm.getResponseBodyAsString()
+        gm =  self.postMultipartFile()
         self.parser.parse(org.xml.sax.InputSource(gm.getResponseBodyAsStream()))
         self.result_doc = self.parser.getDocument()
         if [i.getAttribute('class') for i in allTags(self.result_doc, 'h2')].count('valid') < 1:
@@ -222,6 +224,31 @@ class CoopTest:
             fp.close()
             raise Exception
 
+
+
+    def postMultipartFile(self):
+        htc=HttpClient()
+        gm=methods.MultipartPostMethod(self.validator_url)
+        baps=ByteArrayPartSource(self.getURL(), self.page.getWebResponse().getContentAsString())
+        gm.addPart(FilePart('uploaded_file', baps, 'text/html', 'utf-8'))
+        gm.addParameter('ss', '1')
+        gm.addParameter('sp', '1')
+        retryhandler = DefaultMethodRetryHandler()
+        retryhandler.setRequestSentRetryEnabled(0)
+        retryhandler.setRetryCount(3)
+        gm.setMethodRetryHandler(retryhandler)
+        try:
+            statusCode = htc.executeMethod(gm)
+            if statusCode != HttpStatus.SC_OK:
+                print "Failed to connect: " + gm.getStatusLine()
+                raise Exception
+            self.testresults = gm.getResponseBodyAsString()
+            return  gm
+        except IOException(e):
+            print "Failed to upload file."
+            e.printStackTrace()
+            gm.releaseConnection();
+            
 
 
 
@@ -241,7 +268,7 @@ def ManyVisitHack(url, validate='http://localhost/w3c-markup-validator/check', l
 
 def force_page(urlbase, urlmore, username, fp=None):
     """utility for validating one particular long url""" 
-    ct=CoopTest(urlbase, username,  logfp='forcepagetest.log')
+    ct=CoopTest(urlbase, username,  logfp=open('forcepagetest.log', 'w'))
     ct.getToMainPage()
     ct.page=ct.wc.getPage(URL('/'.join((urlbase,urlmore))))
     ct.pageLoaded()
