@@ -221,7 +221,7 @@ class CoopTest:
             print 'VALIDATION ERROR'
             self.errnum = self.errnum + 1
             self.dumpHTML()
-            self.logfp.write('%d %s [%s]\n' % (self.errnum, self.ct.username, self.ct.getURL()))
+            self.logfp.write('%d %s [%s]\n' % (self.errnum, self.username, self.getURL()))
             fp=open('%d-w3c_report.html' % (self.errnum), 'w')
             fp.write(self.testresults)
             fp.close()
