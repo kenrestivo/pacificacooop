@@ -5,6 +5,36 @@ $Id$
 re-architect reports
 
 
+PHPTAL nag reports
+	which?
+		parent ed nag (best choice, start from scratch)
+			families, and all that they owe
+		sf nag report
+		enhancement nag
+		solicitation summary
+		springfest totals (carriereport)
+
+
+??PHP/TAL/JSON
+3 nifty new REPORTS in phptal! yay! with json email nag buttons!
+	for springfest, enhancement, and parent ed
+	move calcs into object
+phptal? template engine for reports like the nag report? parent ed? enhancement?
+	hmm, works on vaio, but not on bc. why?
+	then load all those fucking libraries! on nfsn. not. fun.
+		well, it might be easy!
+		then again, maybe not!
+		STUCK: the include paths: use LOGS, wtf is going on?
+			include dbhost.inc BEFORE first.inc, or at the top of it
+		know what? fuck it. put it in local_pear, if you can.
+	now try it out, maybe for the reports
+	settings
+		cache dir? nocache? repository?
+		xhtml/xml mode?
+	setall! and setref (setall shoudl suffice, use refs if needed)
+	for an expanded territory report maybe?
+
+
 
 8 hours PHP
  	add in the nag report!!!

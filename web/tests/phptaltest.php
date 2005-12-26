@@ -4,8 +4,6 @@ chdir('../');
 require_once('dbhost.inc');                                                         
 require_once "HTML/Template/PHPTAL.php";
 
-print "OK";
-exit(0);
 
 // create a new template object
 $template = new PHPTAL("tests/template-phptal-test.html");

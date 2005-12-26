@@ -17,5 +17,8 @@ class SessionInfo(SQLObject):
 
 
 
-     
+class JobDescriptions(SQLObject):
+       class sqlmeta:
+              fromDatabase = True
+              idName='job_description_id'
 

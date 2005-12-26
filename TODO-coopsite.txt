@@ -1,6 +1,6 @@
 coop web database
 
-MY agenda! dammit, mine! for a change....
+ MY agenda! dammit, mine! for a change....
 	wiki/wysiwyg editor (wikinotes.txt)
 	create generic report arch (reportnotes.txt)
 	import the 20-year roster (20yearroster.txt)
@@ -14,46 +14,12 @@ MY agenda! dammit, mine! for a change....
 
 
 
-??PHP/TAL/JSON
-3 nifty new NAG REPORTS in phptal! yay! with json email nag buttons!
-	for springfest, enhancement, and parent ed
-	move calcs into object
-phptal? template engine for reports like the nag report? parent ed? enhancement?
-	hmm, works on vaio, but not on bc. why?
-	then load all those fucking libraries! on nfsn. not. fun.
-		well, it might be easy!
-		then again, maybe not!
-		STUCK: the include paths: use LOGS, wtf is going on?
-			include dbhost.inc BEFORE first.inc, or at the top of it
-		know what? fuck it. put it in local_pear, if you can.
-	now try it out, maybe for the reports
-	settings
-		cache dir? nocache? repository?
-		xhtml/xml mode?
-	setall! and setref (setall shoudl suffice, use refs if needed)
-	for an expanded territory report maybe?
-
 
 
 ???JS/PHP SOME EDITOR (wikinotes)
   read docs, and integrate
+	remove align, it is illegal!
   	safari_warning!
-	the OLD data could be a clusterfuck. escaping shit out
-		go through and htmlentities all blob fields??!
-			auction_donation_items item_description
-			blog_entry longtext
-			enhancement_projects project_description
-			events notes
-			packages  package_description 
-			ads ad_copy
-			solicitation_calls call_note
-			in_kind_donations item_description
-			thank_you_templates template
-			job_descriptions long_description
-			instructions  instruction
-		DO NOT do audittrails
-	look at the paste plugin code
-
 
 
 ??QA
@@ -579,7 +545,11 @@ BELOW THE LINE
 					hack around it
 			the steenkin blobs. how do i save them? just DO it
 			c.lastrowid, remember
-
+		parse the errors out of the w3c validator output
+			ol id=errors is the list of errors
+				li href is linenum, column num follows, both inside em
+					message is a span class=msg!!
+					then a strong, wtf up with that?
 		some page to show errors, pages with errors
 			and a link to a python or php script which displays the w3c
 				grabs it from the db, spews it out, not hard
@@ -3147,6 +3117,50 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+fuck it. just keep everything iso????
+		NO!! won't validate
+	the OLD data could be a clusterfuck. escaping shit out
+		go through and htmlentities all blob fields??!
+			auction_donation_items item_description
+			blog_entry longtext
+			enhancement_projects project_description
+			events notes
+			packages  package_description 
+			ads ad_copy
+			solicitation_calls call_note
+			in_kind_donations item_description
+			thank_you_templates template
+			job_descriptions long_description
+			instructions  instruction
+		DO NOT do audittrails
+	look at the paste plugin code
+	ah! s.decode('cp1252') in python, should do it!
+			no
+		in native whatever; '\xe2', '\x80', '\x99',
+ 		in unicode:  u'\xe2', u'\u20ac', u'\u2122',
+	no, it's \x92, which is 146, which is that cp1252 apostrophe
+	ah! encode turns it into \u2019! a legal apostrape if 0x2019 (8217)
+		in utf8 should be 0xE2 0x80 0x99 or e28099
+
+aha! validate
+$field =~
+  m/^(
+     [\x09\x0A\x0D\x20-\x7E]            # ASCII
+   | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
+   |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
+   | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+   |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
+   |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
+   | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
+   |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
+  )*$/x;
+
+what's the equiv?
+	maybe a filter, do iconv("windows-1252", "utf-8", $field)
+	http://www.w3.org/International/questions/qa-forms-utf-8.html
+	naw, just set db connection
+
 	bah! it's borken. and i don't know why?
 		well it's fine on mine
 	custom character is fuckedup
@@ -5164,3 +5178,5 @@ go get xerces docs, and any others i might need
 	the compressed version
 		doesn't work for some reason? does on bc, anyway.
 			works now. dunno why
+utf-8
+	easy: set names in db connection! let db stay in latin, it's easier

@@ -1,0 +1,7 @@
+wiki-like wsywig editors
+
+
+
+make sure it works with exploiter
+
+xhtml fckeditor/xinha/tinyce mfor documents: handbook, policies, etc. 

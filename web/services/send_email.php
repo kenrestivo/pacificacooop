@@ -149,7 +149,7 @@ class EmailChanges
             // so test the obj version
             if($this->type == 'change'){
                 $this->body .= "The following changes were made:\n";
-                $this->body .= $audformatted['details'];
+                $this->body .= strip_tags($audformatted['details']);
             } else {
                 // it's an add!
                 $rec->fullText = 1; // XXX nasty hack!
