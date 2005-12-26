@@ -104,7 +104,7 @@ class coopPage
 	function header()
 		{
             // default content is text/html. 
-            $content_type = 'text/html';
+            $content_type = 'text/html;charset=utf-8';
             $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';
 
 /// NO! do not do this. evil evil evil
@@ -131,7 +131,7 @@ class coopPage
             print '<head>';
             printf('
 <meta http-equiv="Content-Type" 
- 				content="%s;charset=utf-8" %s>
+ 				content="%s" %s>
 <link rel="stylesheet" href="main.css" title="main" %s>
 ', 
                    $content_type,
