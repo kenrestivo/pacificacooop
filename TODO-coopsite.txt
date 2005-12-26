@@ -14,35 +14,18 @@ MY agenda! dammit, mine! for a change....
 
 
 
-??QA/python
-	store results in db
-		 runs: date, sitename,  username, baseurl
-			page: url, title (if any), w3cPrintout(blob), actualsource(blob)
-					NOTE: only save actual source if fatal error
-				errors: type, sysid, pubid, lineno, colno, message
-		sqlobject this thing. i've had enough of php
-			then manually jython mysqldb the entries
-				though this is a perfect case for my "if it's not there, add it"
-					hack around it
-			the steenkin blobs. how do i save them? just DO it
-			c.lastrowid, remember
-
-		some page to show errors, pages with errors
-			and a link to a python or php script which displays the w3c
-				grabs it from the db, spews it out, not hard
-
-
 ??PHP/TAL/JSON
 3 nifty new NAG REPORTS in phptal! yay! with json email nag buttons!
 	for springfest, enhancement, and parent ed
 	move calcs into object
 phptal? template engine for reports like the nag report? parent ed? enhancement?
-	bah! it's borken. and i don't know why?
+	hmm, works on vaio, but not on bc. why?
 	then load all those fucking libraries! on nfsn. not. fun.
 		well, it might be easy!
 		then again, maybe not!
 		STUCK: the include paths: use LOGS, wtf is going on?
 			include dbhost.inc BEFORE first.inc, or at the top of it
+		know what? fuck it. put it in local_pear, if you can.
 	now try it out, maybe for the reports
 	settings
 		cache dir? nocache? repository?
@@ -55,10 +38,22 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 ???JS/PHP SOME EDITOR (wikinotes)
   read docs, and integrate
   	safari_warning!
-	the compressed version
-		doesn't work for some reason? does on bc, anyway.
 	the OLD data could be a clusterfuck. escaping shit out
 		go through and htmlentities all blob fields??!
+			auction_donation_items item_description
+			blog_entry longtext
+			enhancement_projects project_description
+			events notes
+			packages  package_description 
+			ads ad_copy
+			solicitation_calls call_note
+			in_kind_donations item_description
+			thank_you_templates template
+			job_descriptions long_description
+			instructions  instruction
+		DO NOT do audittrails
+	look at the paste plugin code
+
 
 
 ??QA
@@ -572,6 +567,22 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+??QA/python
+	store results in db
+		 runs: date, sitename,  username, baseurl
+			page: url, title (if any), w3cPrintout(blob), actualsource(blob)
+					NOTE: only save actual source if fatal error
+				errors: type, sysid, pubid, lineno, colno, message
+		sqlobject this thing. i've had enough of php
+			then manually jython mysqldb the entries
+				though this is a perfect case for my "if it's not there, add it"
+					hack around it
+			the steenkin blobs. how do i save them? just DO it
+			c.lastrowid, remember
+
+		some page to show errors, pages with errors
+			and a link to a python or php script which displays the w3c
+				grabs it from the db, spews it out, not hard
 
 
 
@@ -3136,7 +3147,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-
+	bah! it's borken. and i don't know why?
+		well it's fine on mine
 	custom character is fuckedup
 
 all textareas will be whatever
@@ -5149,3 +5161,6 @@ copy the mce shit to bc, adn start running tests homey  	paste plugin
 		paste button, style chooser
 	look at sample code
 go get xerces docs, and any others i might need
+	the compressed version
+		doesn't work for some reason? does on bc, anyway.
+			works now. dunno why
