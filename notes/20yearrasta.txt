@@ -1,0 +1,32 @@
+the 20 year roster!!
+
+
+tweeks:
+	birthdays need to be y2k'ed (like my old rasta import)
+	year attended is fucked. it's yy-yy,yy-yy,yy-yy for each subsequent line
+	board positoin is odd but predictabe: TITLE(yy-yy),TITLE(yy-yy)
+		also first/1st, second/2nd inconsistency
+	assume pacifica unless otherwise noted, i think i have this code somewhere
+	ignore the "see" lines
+	this is not difficult.
+	then make a php or python gui for dupe-fixing
+
+import the bitchen 20-year alumni rasta!
+	bummer: lots of work
+	first i have to yearify the roster form
+		so as to yank edit's out of ALL previous-year enrollments!
+	then i have to clean up the spreadsheet
+		empty lines are whatever was previous
+			do it MANUALLY? there are uglinessen
+		fix the 2-digit dates: manually, most likely
+			naw. easy in php. explode, then guess > 50 < 50
+		make the former-board-member stuff logical: manually? too	
+	at import time, need to check for duplicate last-names/family names
+		search db first, avoid collisions but also let merges happen!
+			soundexes on parent names? auugh.
+	i will need to deal with joins here if mult kids!
+		basically, if parent lines above are same, use same familyid 
+	finally the address hacks from alumni-hack.php
+		but different: there are no zipcodes?
+	then once it's in, got to reconcile with the "alumni" leads list!
+
