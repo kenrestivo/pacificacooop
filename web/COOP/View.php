@@ -428,7 +428,7 @@ class coopView extends CoopObject
 				'class="tablecontainer"');
 			$toptab->addRow(array($title, 
                                   $this->actionButtons()), 
-							'class="tableheader"', "TH");
+							'class="tablecontainer"', "TH");
 			$toptab->addRow(array($contents), 'colspan="2"');
 			
 			return $toptab->toHTML();
@@ -531,7 +531,7 @@ class coopView extends CoopObject
                     $par || $res .= '&nbsp;';
                 }
 			}
-			return $res;
+            return '<div class="actions">' . $res . '</div>';
 		}
 
 
@@ -597,11 +597,7 @@ class coopView extends CoopObject
 //                     confessObj($this->obj, 'parent obj');
                 
 			}
-            return $res;
-            
-            //XXX why doesn't the below actually hide?
-            //return "<div class=\"actionbuttons\">$res</div>";
-
+            return '<div class="actions">' . $res . '</div>';
 		}
 
 

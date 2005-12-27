@@ -333,6 +333,7 @@ class coopPage
     //                  popup if you want it to be a javascript popup)
     //                  and par if you want paragraph separators (default) )
     //                  host = use SERVER[http host], for headerlocation
+    //                  tags = array of tag attributes (i.e. 'class' => 'foo')
 	// all of which are optional
 	// if you do not specify inside, NO AUTH VARS ARE PASSED THROUGH! XXX
 	// without any args, returns just coop session var for use in Header()

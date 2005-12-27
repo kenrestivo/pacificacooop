@@ -241,6 +241,11 @@ p.letter{
   margin-bottom: 1em;
  }
 
+.actions { 
+/*   padding: 0; */
+/*  margin:0;    */
+}
+
 .hidden { display:none }
 
 .inline { display:inline }
@@ -283,7 +288,7 @@ div.possible_packages {
   #footer { display:none }	
   #leftCol { display:none }
   #springfestpretty { display:none }
-  a.actionlink { display: none }	
+  .actions { display: none }	
   #rightCol { margin: 0 }
   td { 
     padding-bottom: 10pt; 
