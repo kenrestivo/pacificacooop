@@ -601,10 +601,19 @@ class coopPage
                                  $co->obj->fb_shortHeader ? 
                                  $co->obj->fb_shortHeader : 
                                  $co->table);
-
+                
             }
-            return count($res) ? implode(' &gt; ', $res) : '';
+            if(count($res)){
+                return sprintf('<p>Navigation: %s %s</p>',
+                               implode(' &gt; ', $res), 
+                               $this->selfURL(
+                                   array('value'=>'Go Back',
+                                         'par' => false,
+                                         'inside' => array(
+                                             'pop' => 'true'))));
+            }
             
+            return '';
         }
 
     // gets the last stack item, IN PLACE t

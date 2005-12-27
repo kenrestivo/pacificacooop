@@ -34,6 +34,7 @@ class CoopMenu extends HTML_Menu
 	var $page;
 	var $renderer;
     var $alertme = array(); // list of tables to check for alerts
+    var $vars;
 
     //constructior
     function CoopMenu(&$page)
@@ -46,6 +47,8 @@ class CoopMenu extends HTML_Menu
         {
             // DEPRECATED!
             $this->page->printDebug('WARNING! you are using the old topnav', 0);
+            user_error('you are using the old coopmenu topnav which is depreciated', 
+                       E_USER_WARNING);
             return $this->page->topNavigation();
         }
 
@@ -181,7 +184,9 @@ class CoopMenu extends HTML_Menu
             //it's recursive. only return at top
             if(!$id){
                 $this->page->confessArray($res, 'res', 4);
-                  $this->setMenu($res);
+                $this->vars['menu'] = $res;
+                $this->vars['stamp'] = date('U');
+                $this->setMenu($res);
             }
             
             //remember, it is recursive!
@@ -227,9 +232,31 @@ group by report_permissions.realm_id',
         }
 
 // get it from the session cache, if present AND current
+// this will wrap createmenu
 function getMenu()
         {
+            $this->vars =& $_SESSION['cmvars'];
 
+            // get the realm stamp
+            $aud =& new CoopObject(&$this->page, 'audit_trail', &$none);
+            $aud->obj->query('select unix_timestamp(max(updated)) as menu_changed from audit_trail where table_name in ("table_permissions", "users", "user_permissions", "groups", "users_groups_join", "realms", "report_permissions")');
+            $aud->obj->fetch();
+            $this->page->printDebug(
+                sprintf('lastchange %d savedstamp %d', 
+                        $aud->obj->menu_changed, 
+                        $this->vars['stamp']),
+                2);
+
+            if($aud->obj->menu_changed < $this->vars['stamp'] &&
+                !empty($this->vars['menu']))
+            {
+                $this->page->printDebug('using saved menu',2);
+                $this->setMenu($this->vars['menu']);
+                return;
+            }
+
+            $this->page->printDebug('recalculating menu', 2);
+            $this->createNew();
         }
 
 

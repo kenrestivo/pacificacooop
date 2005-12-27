@@ -7,3 +7,5 @@
 -- -1 for job ass/descr: except limit to VIEW on previous years assignment
 
 --  everyone should see all previosu years jobs, board members delete all prev
+
+-- aha oh ho. nag indulgences privs are fuxored

@@ -1,66 +1,86 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	wiki/wysiwyg editor (wikinotes.txt)
-	create generic report arch (reportnotes.txt)
 	import the 20-year roster (20yearroster.txt)
-	html 4.01 validation
+	reports in phptal (reportnotes.txt)
+	html 4.01 strict validation (htmlvalidation.txt)
 	json the subforms (subform.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
-	sortable/searchable repodddrts (searchfeature.txt)
+	sortable/searchable reports (searchfeature.txt)
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 
 
 
+???PHP/HTML 
+cleanups and speed improvements
 
+    menu takes too goddamned long to display
+    	cache it
+    		build, save in session, with date
+					in what format of date?
+					where in session? raw? in cpvars?
+						cmvars?
+    			wrapper around createmenu
+    				grabs from session
+    					if saved date < last system realm change,
+						OR if there is no date saved, then recalc	
+    		flag on change to ANY system realm
+    			how?
+					after every save of any perms
+						realms, tableperms, userperms, groups, usergroupjoin
+						users?
+						hah. anything in that realm. maybe abstract it?
+					how to determine
+						max(audit_trail.updated) of any table_name of the above
+				where to save it?
+				look at my counters table for id's
+					maybe a lastchange table
+					realms, lastchange?
+					or can i calculate it relatively cheaply on the fly?
+			what about deletes? no audit trail on deletes... interesting
+				also the stamp isn't working....
 
-???JS/PHP SOME EDITOR (wikinotes)
-  read docs, and integrate
-	remove align, it is illegal!
-  	safari_warning!
+	use one db setup, in either first or obj-config or session-init
+		it's too crazy
+			first.inc  exec/define
+			object-config  exec/define
+			session-init  exec/define
+			globals.inc  define
+			dbhost.inc define
+		odd: the object-config doesn't get called until coopobject includes
+			can i force it earlier?
+				well earlier, but not first
+		do a pprof on this thing, trace calls. WHAT gets called WHEN exactly?
 
+	construct the <HEAD> *last*, after the whole body is done
+		buffer the entire page, no matter how fucking enormous
+			this also gets me a <title> that makes sense too
+			wouldn't take much to TAL the whole app, actually
 
-??QA
-walk through doing testing again	
-	status alert divs once more, with feeling-- view in FF
-	write the damned database thing. keep it simple if you must
+    remove crufty files
+    	cvs remove the whole list of crufty files: foundold-clean.txt
+    		first awk/split it out
+    		then run another qa, just to be sure!
+    	save tickets and thankyou's and paddles, dammit.
+    		deal with that clusterfuck over the holiday
 
+	save the diff's, NOT the entire whooha
+		if that's possible in text/diff mode
+			maybe only the textfields
+		but how to format that for email??
 
-the farkin schoolyearchooser changes bgcolour. why?
-
-
-??PHP/JS
-advmultiselect the add/remove thing, when adding, remove the placeholder
-	the nothing
-
-
-
-???PHP
-the bogus val in advmulti too
-	make sure it doesn't break saving!!
-
-
-???PHP/HTML
-construct the <HEAD> *last*, after the whole body is done
-	buffer the entire page, no matter how fucking enormous
-		this also gets me a <title> that makes sense too
-
-
+make generic.php truly generic
+	move all that crap out of there. allow subclassing
+		then use that for my fix-whatever
+		maybe even for reports too!!!! so they are accessible
+	what scares me is handlestack. if no table, what do i do?
+        
+  
 ???PHP
 sf night-of event purchases is utterly fucked up
 
-
-???PHP
-menu takes too goddamned long to display
-	cache it
-		build, save in session, with date
-			wrapper around createmenu
-				grabs from session
-					if saved date < last system realm change, recalc	
-		flag on change to ANY system realm
-			how? where?
 
 
 ???PHP
@@ -68,33 +88,6 @@ alumni invite!
 	add all of last years' alumni!
 		basically, all the alumni invited last year, unless they're already in
 	de-dupe?
-
-
-
-	
-
-
-
-??PHP/shell
-remove crufty files
-	cvs remove the whole list of crufty files: foundold-clean.txt
-		first awk/split it out
-		then run another qa, just to be sure!
-	save tickets and thankyou's and paddles, dammit.
-		deal with that clusterfuck over the holiday
-	when tickets and paddles are finally gone, then you can:
-		trash states.inc, shared.inc
-		yank the createlegacy shit from View	
-
-
-
-???PHP
-save whatever was last?
-	it knew what was there, it saved it so i could go getit.
-	then, why doesn't it stay there?
-		i.e. when i push?
-		have to override though, because user can CHANGE them
-	aren't i blowing them away?
 
 
 
@@ -107,10 +100,6 @@ BUG
 
 ??PHP/SQL
 bring tickets, paddles, etc back to life!
-
-
-???PHP/QA/bureaucracy
-	finally the fucking paypal
 
 
 
@@ -143,22 +132,23 @@ BURNT (when too burnt out to do actual work)
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
 
+
+
+???PHP shell
+when tickets and paddles are finally gone, then you can:
+	trash states.inc, shared.inc
+	yank the createlegacy shit from View	
+
+
 ??XHTML/PHP
-markup errors that need a-fixin'
-	stuttering schoolyearchooser in rasta, for betsy
-		STUCK: hmm. what to do?
-
-
-	weird open table: http://www/coop-dev/generic.php?action=details&table=users&push=users&users-user_id=23	 -- The content of element type "table" is incomplete, it must match "(caption?,(col*|colgroup*),thead?,tfoot?,(tbody+|tr+))"
-	
-
-		browsercam? someone with IE?
+	browsercam? someone with IE?
 
 
 new design
 	lisa: 
 		andreas07  http://www.oswd.org/design/preview/id/2426
 		winterheaven: http://www.oswd.org/design/preview/id/2423
+
 
 BUGS
 	go back and fix families: 
@@ -182,15 +172,6 @@ test what i just did-- make sure edits, adds, etc all work, with custom/search
 	BOTH select types. check!
 	also doublecheck on windoze
 
-
-??? PHP
-why don't the crosslinks work?
-	re do them. they make no fucking sense at all.
-	this is most curious. only groups and jobs work. or does it? why or why not?
-	huh, doesn't workf or jobs anymore either. i broke it?
-		no nothing there, i commented it out
-	groups works. why not anything else?
-	hmm. it'll only do the first crosslink
 
 
 ??PHP/SQL
@@ -227,14 +208,6 @@ make frozen fields not show the fucking --CHOOSE ONE--
 
 
 
-??? PHP/QA/bureaucracy
-	paypal back to life
-	try bank account number
-
-
-
-
-
 ??? PHP/thinking
 alertorstatus needs to be made generic, used everywhere!
 	enhancement, invitations, attendance (ooh!), elsewhere
@@ -250,16 +223,13 @@ alertorstatus needs to be made generic, used everywhere!
 
 
 ??? BUREAUCRACY
-paypal $500 limit fix
+???PHP/QA/bureaucracy
+	finally the fucking paypal
+	paypal $500 limit fix
 	well beecooke ssn isn't it
+	paypal back to life
+	try bank account number
 
-??? PHP/JS
-goose emails individually button
-also for sending them as reminders, in nag report!
-just use the simple XHTML crap from kenflex.js
-same as what's in coopobject: go hit the URL, with audit_id!
-	the function to call takes the id as arg?
-	nice: js to insert a spinning progress gif
 
   	
 
@@ -312,14 +282,12 @@ fix global audit trail, it needs to show NEW records
 	yes, i do want to know what was originally saved. it's important.
 	SAVE the new record as-is, in saveaudittrail
 
+
 ??? SQL
 add shirley to the audit trail mailing list!
 	umm. need a teachers table, with email. then add them to the query  
 
 details view of audit trail is busted-- didn't i fix this already?
-
-
-
 
 
 ??? PHP/SQL
@@ -415,6 +383,7 @@ fix all the details views!!
 	joinconstraints should always beat a path to familyid and schoolyear
 		and anything else, shoudl be custom done elsewhere
 	didn't i get all these? any left?
+
 
 8-24 hours SQL/PHP 
 fix the solicitation income stuff
@@ -533,6 +502,12 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+???PHP/JS?
+invitations really needs to be an advmultiselect, a crosslink with field
+	except for the damned RELATIVE and FAMILY thing
+	so you don't DELETE invitations, you REMOVE them from the selectbox
+
+
 ??QA/python
 	store results in db
 		 runs: date, sitename,  username, baseurl
@@ -557,6 +532,7 @@ BELOW THE LINE
 
 
 ??? JSON/PHP
+pop-up details
 	a little jsonrpc class
 		returns the view-formatted details in an array: {label:value}
 	where does this showDetails code go?
@@ -597,14 +573,6 @@ in perms display, change IGNORE to nothing, and NONE to none
 ah. the form title uses that titleheaderthing.
 	make it use the same one as coopview
 
-???PHP
-		ahggg. null/zero again
-			maybe make a hackypoo on that? override insert/update methods?
-			and display too, to show null
-				'' == null, 0 = 0
-		hmm. -1 should show up, but it doesn't. why?
-		yank choose one. default shoudl be invalid
-
 
 ??? PHP
 	concatlinkfields don't seem to work on imported fields
@@ -616,10 +584,6 @@ ah. the form title uses that titleheaderthing.
 
 
 put in admin perms for master names (people) for system admin too
-
-10 minutes PHP
-add the contact information for enrollment, in the enrollment summary
-	copy/paste from roster
 
 css 
 	and some spacing between lines
@@ -641,7 +605,7 @@ in simpletable, if it's a short table, it needs to expand to the full size
 		or, force add off on menu? just view/edit?
 		do this for leads too!?
 		why not put in crosslinks for *all* backlinks?
-
+			because it could get UGLAY
 
 
 
@@ -1699,11 +1663,11 @@ maybe put up the graphics? or should i not mess with that?
 	keep the gui separate from the code.
 
 MUST FIX
-	update the carriereport
-		bad address stuff! again by relation, source, and type
-			STUCK: first must fix the way i handle these
-			have to do this  B4 lisa starts do-not-contacting!
-
+	do not contact (maint/fix-badaddress.php)
+		which ones are?
+			 really do not contact
+			 uninvite hacks
+			just duplicates		
 		HOW the hell will i deal with do_not_contact vs. duplicates?
 			manually look at all do_not_contacts after 8/2004 and before 2/2005
 			create a merge-duplicates field 
@@ -1716,6 +1680,8 @@ MUST FIX
 						forward and backlinks (one level)
 					change the lead_id to the NEW one
 			all remainign do-not-contacts will THEREFORE actually be dnc's!
+				well, or uninvites, actually.
+					how can i tell?
 			do this for solicit companies too ;-)
 		note delete/uninvite/do-not-contact behaviour will be strange
 			basically you can:
@@ -3117,6 +3083,26 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+	check weird cp1252 characters in INPUT, i.e. word paste
+		naw fuck it, don't need it.
+
+??? PHP
+why don't the crosslinks work?
+	re do them. they make no fucking sense at all.
+	this is most curious. only groups and jobs work. or does it? why or why not?
+	huh, doesn't workf or jobs anymore either. i broke it?
+		no nothing there, i commented it out
+	groups works. why not anything else?
+	hmm. it'll only do the first crosslink
+		it worked. 
+???PHP
+save whatever was last?
+	it knew what was there, it saved it so i could go getit.
+	then, why doesn't it stay there?
+		i.e. when i push?
+		have to override though, because user can CHANGE them
+	aren't i blowing them away?
 
 fuck it. just keep everything iso????
 		NO!! won't validate
@@ -5180,3 +5166,33 @@ go get xerces docs, and any others i might need
 			works now. dunno why
 utf-8
 	easy: set names in db connection! let db stay in latin, it's easier
+??? PHP/JS
+goose emails individually button
+also for sending them as reminders, in nag report!
+just use the simple XHTML crap from kenflex.js
+same as what's in coopobject: go hit the URL, with audit_id!
+	the function to call takes the id as arg?
+	nice: js to insert a spinning progress gif
+
+???PHP
+		ahggg. null/zero again
+			maybe make a hackypoo on that? override insert/update methods?
+			and display too, to show null
+				'' == null, 0 = 0
+		hmm. -1 should show up, but it doesn't. why?
+		yank choose one. default shoudl be invalid
+			invalid -1 works as ignore
+10 minutes PHP
+add the contact information for enrollment, in the enrollment summary
+	copy/paste from roster
+		bad address stuff! again by relation, source, and type
+			STUCK: first must fix the way i handle these
+			have to do this  B4 lisa starts do-not-contacting!
+		is/python/lib/csvsqlobject.py
+when returning from the road
+	add to cvs BEFORE syncing up!!!
+		attendance.php
+		templates
+		templates/attendance.html
+		notes/htmlvalidation.txt
+		at home, 20yearroster is NOT in cvs, put it there!!!

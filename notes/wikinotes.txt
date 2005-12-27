@@ -1,6 +1,12 @@
 wiki-like wsywig editors
 
 
+???JS/PHP SOME EDITOR (wikinotes)
+  read docs, and integrate
+	remove align, it is illegal!
+	try bold, etc. wtf? will it meet the exacting html 4.01 strict standards?
+  	safari_warning!
+
 
 make sure it works with exploiter
 

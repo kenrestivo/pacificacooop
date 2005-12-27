@@ -517,6 +517,7 @@ class coopForm extends CoopObject
                 if($this->obj->$key != $old->$key){
                     // NOTE: i save the whole thing. i do formatting at display
                     // even if it is a massive longtext. it's wasteful, but wtf
+                    // TODO: don't save all if text fields, save only diff
                     $this->changes[$key] = array(
                         'old' => unObject($old->$key),
                         'new' => unObject($this->obj->$key));

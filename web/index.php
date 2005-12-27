@@ -44,7 +44,7 @@ print $cp->topNavigation();
 $cp->createLegacy($cp->auth);
 
 $menu =& new CoopMenu(&$cp);
-$menu->createNew();
+$menu->getMenu();
 
 $u = $cp->userStruct; // cached by createlegacy
 

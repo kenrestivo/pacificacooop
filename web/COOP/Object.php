@@ -307,6 +307,8 @@ group by user_id,table_name,field_name";
 			}
 
             // serialise and save the details!
+            // NOTE i have to un/serialize here manually,
+            // unlike in dealing with $_SESSION where php does it for me
             if(count($this->changes)){
                 $aud->obj->details = serialize($this->changes);
             }

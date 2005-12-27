@@ -1,0 +1,13 @@
+
+??QA HTML VALIDATION
+minor nits still tb fixed
+	remove autocomplete or conditionalize at least for IE
+	advmultiselect the add/remove thing, when adding, remove the placeholder
+		the nothing
+	status alert divs once more, with feeling-- view in FF
+	fix duplicate field names in betsy report
+		stuttering schoolyearchooser in rasta, for betsy
+	the farkin schoolyearchooser changes bgcolour. why?
+	the bogus val in advmulti too
+		make sure it doesn't break saving!!
+	weird open table: http://www/coop-dev/generic.php?action=details&table=users&push=users&users-user_id=23	 -- The content of element type "table" is incomplete, it must match "(caption?,(col*|colgroup*),thead?,tfoot?,(tbody+|tr+))"

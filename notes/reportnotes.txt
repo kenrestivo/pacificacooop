@@ -4,11 +4,17 @@ $Id$
 40 hours PHP
 re-architect reports
 
+STUCK: will need to implement an iterable method!
+	otherwise, how the fuck will i be able to do this shit?
 
 PHPTAL nag reports
 	which?
 		parent ed nag (best choice, start from scratch)
 			families, and all that they owe
+				total hours
+			try playing with it as a templ first, then add funct
+		also maybe that parent ed entry too
+			meeting, families, hours... though that's really a form
 		sf nag report
 		enhancement nag
 		solicitation summary

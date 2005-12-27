@@ -653,8 +653,8 @@ function schoolYearChooser()
     // this alllyears only makes sense if schoolyearchooser is ONLY
     // called when user has view permissions on not-this-year
     $syform->setDefaults(array('school_year' => 
-                               $this->obj->fb_allYears ? '%' :
-                               $this->page->currentSchoolYear));
+                               empty($this->obj->fb_allYears) ?
+                               $this->page->currentSchoolYear : '%'));
 
 
     // XXX temporary hacks until i get my savevars shit working

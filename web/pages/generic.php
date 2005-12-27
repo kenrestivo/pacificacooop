@@ -20,75 +20,30 @@ $cp->buffer($cp->pageTop());
 $cp->buffer($cp->topNavigation());
 
 
+$disp =& new CoopNewDispatcher(&$cp);
 
-
-////////////////{{{STACK HANDLING. move to cooppage? or dispatcher?
-if(!empty($_REQUEST['table'])){
-    $atd =& new CoopView(&$cp, $_REQUEST['table'], $none);
-    $formatted = array('table'=>$_REQUEST['table'], 
-                       'action' =>$_REQUEST['action'] ? 
-                       $_REQUEST['action'] : 
-                       'view', 
-                       'pop' => @$_REQUEST['pop'], 
-                       'id' =>$_REQUEST[$atd->prependTable($atd->pk)],
-                       'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
-                       $cp->vars['last']['realm']);
-}
-// push is set by recordbuttons, actionbuttons, and some forms:
-// anyone who wants to save its place and then return to it
-if(isset($_REQUEST['push'])){
-    $cp->printDebug('PUSHING onto the stack!', 1);
-    $cp->vars['stack'][] = $cp->vars['last'];
-} 
-
-// ALWAYS use formatted as last.... if it exists, that is
-// it won't exist in cases where i'm coming back from a header location
-if(!empty($formatted)){
-    $cp->vars['last'] =  $formatted;
-}
-
-// critical to do this here. 
-$prev = $cp->popOff();
-
-
-//////////////}}} END STACK HANDLING
-
+$atd =& $disp->handleStack();
 
 
 // TODO: Move to cooppage. and call it everywhere
 //in case of bug
-if(!$cp->vars['last']['table']){
-    $cp->headerLocation(
-                $cp->selfURL(
-                    array('par' => false,
-                          'base' => 'index.php',
-                          'inside' => array('coop' => $_REQUEST['coop']),
-                          'host' => true)));
-}
 
 /// XXX i think this is the WRONG place for this
-if($sp= $cp->stackPath()){
-   $cp->buffer(sprintf('<p>Navigation: %s %s</p>',
-                       $sp, 
-                       $cp->selfURL(
-                           array('value'=>'Go Back',
-                                 'par' => false,
-                                 'inside' => array(
-                                     'pop' => 'true')))));
-}
+$cp->buffer($sp= $cp->stackPath());
 
 
 /////// FINALLY, the page
 if(empty($atd)){
     $atd =& new CoopView(&$cp, $cp->vars['last']['table'], $none);
 }
+
 $cp->buffer(sprintf("<h3>%s</h3>",$atd->obj->fb_formHeaderText));
 // NOT WORKING YET $cp->buffer($atd->titleJSHack());
 
 $cp->buffer("\n<hr /></div><!-- end header div -->\n"); //ok, we're logged in. show the rest of the page
 $cp->buffer('<div id="centerCol">');
 
-$disp =& new CoopNewDispatcher(&$cp);
+
 $cp->buffer($disp->dispatch());
 
 

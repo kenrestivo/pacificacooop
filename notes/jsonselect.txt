@@ -12,10 +12,10 @@ fix combobox to make it OOP, add keydown events
 
 
 ??JS/PHP
-don't let them hit return to initiate a search?
+let them hit return to initiate a search?
 	on key? look at flexac
 	when hitting return before running a search
-Error: [Exception... "Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsIXMLHttpRequest.status]"  nsresult: "0x80040111 (NS_ERROR_NOT_AVAILABLE)"  location: "JS frame :: http://www/coop-dev/lib/flexac/kenflex.js :: anonymous :: line 61"  data: no]
+	use my new interpreter to see what's going on there
 Source File: http://www/coop-dev/lib/flexac/kenflex.js
 Line: 61
 	STUCK: got to redesign combobox, make it OOP, in BELOW THE LINE!

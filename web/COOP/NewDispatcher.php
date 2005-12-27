@@ -39,6 +39,51 @@ class CoopNewDispatcher
 		}
 
 
+    // returns the atd for the view, if any
+    function &handleStack()
+        {
+            // XXX ok what about reports? no table for those puppies.
+            if(!empty($_REQUEST['table'])){
+                $atd =& new CoopView(&$this->page, $_REQUEST['table'], $none);
+                $formatted = array('table'=>$_REQUEST['table'], 
+                                   'action' =>$_REQUEST['action'] ? 
+                                   $_REQUEST['action'] : 
+                                   'view', 
+                                   'pop' => @$_REQUEST['pop'], 
+                                   'id' =>$_REQUEST[$atd->prependTable($atd->pk)],
+                                   'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
+                                   $this->page->vars['last']['realm']);
+            }
+            // push is set by recordbuttons, actionbuttons, and some forms:
+            // anyone who wants to save its place and then return to it
+            if(isset($_REQUEST['push'])){
+                $this->page->printDebug('PUSHING onto the stack!', 1);
+                $this->page->vars['stack'][] = $this->page->vars['last'];
+            } 
+
+            // ALWAYS use formatted as last.... if it exists, that is
+            // it won't exist in cases where i'm coming back from a header location
+            if(!empty($formatted)){
+                $this->page->vars['last'] =  $formatted;
+            }
+
+            // critical to do this here. 
+            $prev = $this->page->popOff();
+ 
+            // no. what to do in case of report? there'll be no table, i expect
+            if(!$this->page->vars['last']['table']){
+                $this->page->headerLocation(
+                    $this->page->selfURL(
+                        array('par' => false,
+                              'base' => 'index.php',
+                              // remember bug in selfurl: must have something inside
+                              'inside' => array('redirect' => 'yes'),
+                              'host' => true)));
+            }
+
+            return $atd; 
+        }
+
 
 
     function view()
@@ -288,7 +333,7 @@ class CoopNewDispatcher
         }
 
 
-function confirmDelete()
+function confirmdelete()
         {
             $res = '';
             //TODO: put on a permissions condom here
@@ -419,45 +464,36 @@ function confirmDelete()
         }
 
 
+function perms()
+        {
+            $atd =& new CoopView(&$this->page, 
+                                 $this->page->vars['last']['table'], $none);
+            return $atd->showPerms();
+        
+        }
+
 function dispatch()
 {
-
-    // cheap newDispatcher
     //confessArray($this->page->vars['last'],'req');
-    switch($this->page->vars['last']['action']){
 
-    case 'new':
-    case 'add':					//  for OLD menu system
-    case 'edit':
+    $funcname = $this->page->vars['last']['action'];
+
+    // new add edit are all add_edit
+    // dammit. 'new' is a keyword.
+    if(in_array($funcname, array('new', 'add', 'edit'))){
         return $this->add_edit();
-        break;
- 
-    case 'perms':
-        $atd =& new CoopView(&$this->page, 
-                             $this->page->vars['last']['table'], $none);
-        return $atd->showPerms();
-        break;
-
-    case 'details':
-        return $this->details();
-        break;
-
-    case 'confirmdelete':
-        return $this->confirmdelete();
-        break;
-
-    case 'delete':
-        return $this->delete();
-        break;
-
-    case 'view':
-    default:
-        return $this->view();
-        break;
     }
 
-} // end dispatch
 
+    // make this subclassable! dispatch to internal func
+    if(is_callable(array($this, $funcname)) && strpos($funcname, '_') != 1){
+        return call_user_func(array($this, $funcname));
+    }
+   
+    // the default
+    return $this->view();
+            
+} // end dispatch
 
 
 
