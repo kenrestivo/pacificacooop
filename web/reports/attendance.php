@@ -18,44 +18,69 @@
 
 //$Id$
 
+require_once('CoopPage.php');
+require_once('CoopNewDispatcher.php');
 require_once "HTML/Template/PHPTAL.php";
 
 
-// create a new template object
-$template = new PHPTAL("tests/template-phptal-test.html");
 
-// the Person class
-class Person
+///// move this to its own class and generalise it?
+class ReportDispatcher extends CoopNewDispatcher
 {
-    var $name;
-    var $phone;
-    function Person($name, $phone)
-    {
-        $this->name = $name;
-        $this->phone = $phone;
-    }
-};
 
-// let's create an array of objects for test purpose
-$result = array();
-$result[] = new Person("foo", "01-344-121-021");
-$result[] = new Person("bar", "05-999-165-541");
-$result[] = new Person("baz", "01-389-321-024");
-$result[] = new Person("buz", "05-321-378-654");
+    function view()
+        {
+            // create a new template object
+            $template = new PHPTAL("templates/attendance.html");
+            
+            $context = array('families' => array(
+                                 array('name' => 'foo', 
+                                       'family_id' => 222),
+                                 array('name' => 'bar',
+                                       'family_id' => 333)));
 
-// put some data into the template context
-$template->set("title", "the title value");
-$template->set("result", $result);
+            
+            /// TODO: need to implement an iterable method in coopobject!
 
-$template->set('realpath', $template->realPath());
-// execute template
-$res = $template->execute();
-// result may be an error
-if (PEAR::isError($res)) {
-    echo $res->toString(), "\n";
-} else {
-    echo $res;
+            $template->setAll($context);
+            
+            // execute template
+            return  $template->execute();
+        }
+
 }
+
+
+//////// MAIN
+
+
+$cp = new coopPage( $debug);
+$cp->buffer($cp->pageTop());
+
+
+$cp->buffer($cp->topNavigation());
+
+
+$disp =& new ReportDispatcher(&$cp);
+
+
+$cp->buffer(sprintf("<h3>%s</h3>",$atd->obj->fb_formHeaderText));
+// NOT WORKING YET $cp->buffer($atd->titleJSHack());
+
+$cp->buffer("\n<hr /></div><!-- end header div -->\n"); //ok, we're logged in. show the rest of the page
+$cp->buffer('<div id="centerCol">');
+
+
+$cp->buffer($disp->dispatch());
+
+
+if(headers_sent($file, $line)){
+    PEAR::raiseError("headers sent at $file $line ", 666);
+}
+print $cp->flushBuffer();
+
+$cp->done();
+
 
 
 ?>
