@@ -3,6 +3,8 @@
 //$Id$
 // nifty little util to grab the latest page and display it where's i can see it
 
+print '<a href="latest.php">back to latest logs</a><br />';
+
 print "test results so far:<br />";
 
 if ($handle = opendir('.')) {

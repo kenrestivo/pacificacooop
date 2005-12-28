@@ -14,6 +14,10 @@ if ($handle = opendir('.')) {
     }
     closedir($handle);
 
+    
+    print '<a href="testresults.php">back to test results</a><br />';
+
+
     printf('LATEST.php: %s is most recent. <a href="%s">%s</a> is previous. <a href="%s">%s</a> is third previous<br>',
            $saver, $prev, $prev, $secondprev, $secondprev);
     $fd = fopen($saver, 'r');
