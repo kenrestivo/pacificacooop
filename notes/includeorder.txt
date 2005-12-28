@@ -1,0 +1,115 @@
+include order fun
+
+	use one db setup, in either first or obj-config or session-init
+		it's too crazy
+			first.inc  exec/define
+			object-config  exec/define
+			session-init  exec/define
+			globals.inc  define
+			dbhost.inc define
+		odd: the object-config doesn't get called until coopobject includes
+			can i force it earlier?
+				well earlier, but not first
+
+
+problem is that auth.inc requires mysql
+
+
+current include order to object-config (index page as exampe)
+
+   [0] => /u4/kens/ki/proj/coop/web/index.php
+    [1] => /u4/kens/ki/proj/coop/web/first.inc (acconted for?)
+    [2] => /u4/kens/ki/proj/coop/web/globals.inc
+    [3] => /u4/kens/ki/proj/coop/web/session-init.php (accounted for?)
+    [4] => /u4/kens/ki/proj/coop/web/dbhost.inc
+    [5] => /u4/kens/ki/proj/coop/web/auth.inc
+    [6] => /u4/kens/ki/proj/coop/web/utils.inc
+    [7] => /usr/share/pear/HTML/Table.php
+    [8] => /usr/share/pear/PEAR.php
+    [9] => /usr/share/pear/HTML/Common.php
+    [10] => /usr/share/pear/HTML/Table/Storage.php
+   [11] => /u4/kens/ki/proj/coop/web/CoopPage.php
+    [12] => /usr/share/pear/Mail.php
+    [13] => /u4/kens/ki/proj/coop/web/CoopMenu.php
+    [14] => /usr/share/pear/HTML/Menu.php
+    [15] => /usr/share/pear/HTML/Menu/DirectTreeRenderer.php
+    [16] => /usr/share/pear/HTML/Menu/Renderer.php
+    [17] => /usr/share/pear/HTML/Menu/DirectRenderer.php
+    [18] => /u4/kens/ki/proj/coop/web/CoopObject.php
+    [19] => /u4/kens/ki/proj/coop/web/CoopDBDO.php
+    [20] => /usr/share/pear/DB/DataObject.php
+    [21] => /u4/kens/ki/proj/coop/web/object-config.php
+
+call tree:
+(first.inc)
+main
+setupdb (not shown in call tree! this is basically called first)
+  pathinfo
+  preg_match
+  mysql_connect
+  mysql_select_db
+  mysql_query
+  sprintf
+setuperrors
+	error_reporting
+sessionsetup
+  user_error
+  ini_set 
+  get_magic_quotes_gpc
+  get_magic_quotes_runtime
+  ini_set (3x)
+  session_set_save_handler
+  session_name
+  session_start
+
+(WHO is doing this and why?)
+opensess
+readsess
+  user_error
+  mysql_query
+  mysql_error
+  mysql_fetch_array (2x)
+session_id
+sprintf
+user_error
+session_id
+sprintf
+user_error
+
+
+
+
+  define (6x) -- ?? 14 in globals.inc
+  function_exists
+  zend_version
+  version_compare
+  define
+  substr
+  define (3x)
+  defined
+  ini_set (2x)
+define (10x)   --- these are in auth.inc!
+
+
+
+
+define (7x)
+
+
+ (2x)
+
+
+  define (16x) -- 14 in globals.inc>
+  phpversion
+  substr
+  phpversion
+  version_compare
+  function_exists
+  eval (2x)
+  defined
+
+parseinifile
+  parse_ini_file
+  pear->getstaticproperty (2x)
+
+
