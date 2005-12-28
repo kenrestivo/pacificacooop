@@ -99,7 +99,7 @@ class CoopNewDispatcher
             
             // the status of the last action
             // TODO: put this in a distinctive statusbar div, not in here
-            $res .= '<div id="status"><p>' . $this->page->getStatus() . '</p></div>';
+            $res .= '<div id="status">' . $this->page->getStatus() . '</div>';
 
             $atd2 =& new CoopView(&$this->page, 
                                   $this->page->vars['last']['table'], $none);
@@ -389,7 +389,8 @@ function confirmdelete()
             $atdf = new CoopForm(&$this->page, 
                                  $this->page->vars['last']['table'], $none); 
             $atdf->build($this->page->mergeRequest());
-            ;
+            
+            // TODO: override this in coopform, and saveaudit on deletes!
             $atdf->obj->delete();
 
             // to display success message

@@ -2,12 +2,26 @@
 ??QA HTML VALIDATION
 minor nits still tb fixed
 	remove autocomplete or conditionalize at least for IE
+		that script to check
+	art area utf issues still: ligatures for 1/2
+		maybe do that encoding/recoding thing?
+			look up the keycode
 	advmultiselect the add/remove thing, when adding, remove the placeholder
-		the nothing
-	status alert divs once more, with feeling-- view in FF
-	fix duplicate field names in betsy report
-		stuttering schoolyearchooser in rasta, for betsy
+		the nothing? i think it is fixed on bc
 	the farkin schoolyearchooser changes bgcolour. why?
 	the bogus val in advmulti too
 		make sure it doesn't break saving!!
 	weird open table: http://www/coop-dev/generic.php?action=details&table=users&push=users&users-user_id=23	 -- The content of element type "table" is incomplete, it must match "(caption?,(col*|colgroup*),thead?,tfoot?,(tbody+|tr+))"
+
+
+
+
+
+	fix duplicate field names in betsy report
+		stuttering schoolyearchooser in rasta, for betsy
+			manually hack id!
+			well, not that easy. it's in schoolyearchooser
+		well, try making it a child of above
+			that makes sense, but it still creates a second one
+				where does it decide to CREATE them?
+		this is evil. i'm goign to let this stay broken for now

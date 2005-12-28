@@ -849,6 +849,7 @@ group by user_id,table_name,field_name";
             return $this->page->currentSchoolYear;
         }
 
+
 function triggerNotices($audit_id)
         {
             //XXX fix this path!
@@ -864,6 +865,7 @@ function triggerNotices($audit_id)
                 $this->page->mailError('SUBSCRIPTION TRIGGER FAILED ON LIVE SITE!', 
                                        "ERRNO $errno, ERRSTR $errstr");
             } else {
+                //TODO: use json, make this proper rpc
                 fputs ($fp, "GET {$inner['dirname']}/send_email.php?audit_id={$audit_id} HTTP/1.0\r\nHost: {$host}\r\n\r\n");
                 fclose ($fp);
             }

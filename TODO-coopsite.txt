@@ -1,10 +1,10 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	import the 20-year roster (20yearroster.txt)
 	reports in phptal (reportnotes.txt)
 	html 4.01 strict validation (htmlvalidation.txt)
 	json the subforms (subform.txt)
+	import the 20-year roster (20yearroster.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	sortable/searchable reports (searchfeature.txt)
 	normalise and clean up permissions (permsfixing.txt) SQL
@@ -12,75 +12,16 @@ coop web database
 	insurance, dammit
 
 
+???PHP (htmlvali)
+push live my html 4.01 and misc tweeks
+	
 
-???PHP/HTML 
-cleanups and speed improvements
+???PHP
+clean up my inclusion order
 
-    menu takes too goddamned long to display
-    	cache it
-    		build, save in session, with date
-					in what format of date?
-					where in session? raw? in cpvars?
-						cmvars?
-    			wrapper around createmenu
-    				grabs from session
-    					if saved date < last system realm change,
-						OR if there is no date saved, then recalc	
-    		flag on change to ANY system realm
-    			how?
-					after every save of any perms
-						realms, tableperms, userperms, groups, usergroupjoin
-						users?
-						hah. anything in that realm. maybe abstract it?
-					how to determine
-						max(audit_trail.updated) of any table_name of the above
-				where to save it?
-				look at my counters table for id's
-					maybe a lastchange table
-					realms, lastchange?
-					or can i calculate it relatively cheaply on the fly?
-			what about deletes? no audit trail on deletes... interesting
-				also the stamp isn't working....
 
-	use one db setup, in either first or obj-config or session-init
-		it's too crazy
-			first.inc  exec/define
-			object-config  exec/define
-			session-init  exec/define
-			globals.inc  define
-			dbhost.inc define
-		odd: the object-config doesn't get called until coopobject includes
-			can i force it earlier?
-				well earlier, but not first
-		do a pprof on this thing, trace calls. WHAT gets called WHEN exactly?
-
-	construct the <HEAD> *last*, after the whole body is done
-		buffer the entire page, no matter how fucking enormous
-			this also gets me a <title> that makes sense too
-			wouldn't take much to TAL the whole app, actually
-
-    remove crufty files
-    	cvs remove the whole list of crufty files: foundold-clean.txt
-    		first awk/split it out
-    		then run another qa, just to be sure!
-    	save tickets and thankyou's and paddles, dammit.
-    		deal with that clusterfuck over the holiday
-
-	save the diff's, NOT the entire whooha
-		if that's possible in text/diff mode
-			maybe only the textfields
-		but how to format that for email??
-
-make generic.php truly generic
-	move all that crap out of there. allow subclassing
-		then use that for my fix-whatever
-		maybe even for reports too!!!! so they are accessible
-	what scares me is handlestack. if no table, what do i do?
-        
-  
 ???PHP
 sf night-of event purchases is utterly fucked up
-
 
 
 ???PHP
@@ -506,6 +447,35 @@ BELOW THE LINE
 invitations really needs to be an advmultiselect, a crosslink with field
 	except for the damned RELATIVE and FAMILY thing
 	so you don't DELETE invitations, you REMOVE them from the selectbox
+
+
+???PHP/HTML 
+cleanups and speed improvements
+
+
+	construct the <HEAD> *last*, after the whole body is done
+		buffer the entire page, no matter how fucking enormous
+			this also gets me a <title> that makes sense too
+			wouldn't take much to TAL the whole app, actually
+
+    remove crufty files
+    	cvs remove the whole list of crufty files: foundold-clean.txt
+    		first awk/split it out
+    		then run another qa, just to be sure!
+    	save tickets and thankyou's and paddles, dammit.
+    		deal with that clusterfuck over the holiday
+
+
+	what about deletes? no audit trail on deletes... interesting
+
+
+	save the diff's, NOT the entire whooha
+		if that's possible in text/diff mode
+			maybe only the textfields
+		but how to format that for email??
+
+	generic dispatcher
+		then use that for my fix-whateve
 
 
 ??QA/python
@@ -5196,3 +5166,34 @@ when returning from the road
 		templates/attendance.html
 		notes/htmlvalidation.txt
 		at home, 20yearroster is NOT in cvs, put it there!!!
+    menu takes too goddamned long to display
+    	cache it
+    		build, save in session, with date
+					in what format of date?
+					where in session? raw? in cpvars?
+						cmvars?
+    			wrapper around createmenu
+    				grabs from session
+    					if saved date < last system realm change,
+						OR if there is no date saved, then recalc	
+    		flag on change to ANY system realm
+    			how?
+					after every save of any perms
+						realms, tableperms, userperms, groups, usergroupjoin
+						users?
+						hah. anything in that realm. maybe abstract it?
+					how to determine
+						max(audit_trail.updated) of any table_name of the above
+				where to save it?
+				look at my counters table for id's
+					maybe a lastchange table
+					realms, lastchange?
+					or can i calculate it relatively cheaply on the fly?
+				also the stamp isn't working....
+					yes, yes it is.make generic.php truly generic
+	move all that crap out of there. allow subclassing
+	status alert divs once more, with feeling-- view in FF
+		unclosed P in blog
+			fuck it, use divs	blog posting <p> issues. jeez i wish i used phptal here
+			ah. can't have div inside p. and p's close automatically, so validator doesnt' yeell at ma
+		STUCK: do a pprof on this thing, trace calls. WHAT gets called WHEN exactly?		done

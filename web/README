@@ -85,7 +85,7 @@ if you ever, *ever* rename a table:
 you MUST USE a local copy of PEAR. install it in some directory, i.e. your shell directory, and put that path into the dbhost.inc
 
 lynx -source http://go-pear.org/ | php
-set the paths correctly
+set the paths correctly! expect libs in managed_pear/lib and data in managed_pear/data
 
 
 then you must install PHPTAL packages for PHP4

@@ -148,7 +148,7 @@ class Enrollment extends CoopDBDO
 
     function fb_display_view(&$co)
         {
-
+            
             
             // XXX not very object-oriented, but, fuck it, it works
             $res .= $this->_prepareView(&$co, 'AM');  

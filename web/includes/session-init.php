@@ -160,7 +160,7 @@ sessionSetup()
 	ini_set('session.gc_probability', 1);
 
 	// Inactivity timeout for user sessions
-	//TODO ini_set('session.gc_maxlifetime', $mins * 60);
+	//SET IN .htaccess not here: ini_set('session.gc_maxlifetime', $mins * 60);
 
 	/* Session handlers */	
 	session_set_save_handler("openSess",
@@ -223,7 +223,7 @@ readSess($sessid)
 
 
 	#DO THE QUERY
-	$q = "select vars from session_info where session_id = '$sessid'";
+	$q = "select vars from session_info where session_id = '$sessid' order by updated desc limit 1";
 	$listq = mysql_query($q);
 	$err = mysql_error();
 	if($err){

@@ -76,7 +76,7 @@ class Blog_entry extends CoopDBDO
 			limit 4", 
                                  $clause));
             while($this->fetch()){
-                $res .= sprintf("<p><b>%s</b>&nbsp;%s</p><p>%s</p><p class=\"small\">(Posted %s by %s)</p><br />", 
+                $res .= sprintf("<p><b>%s</b>&nbsp;%s</p>%s<p class=\"small\">(Posted %s by %s)</p><br />\n\n", 
                                 $this->short_title, $this->body, 
                                 $publiconly ? '' : 
                                 $co->recordButtons(&$this, false),

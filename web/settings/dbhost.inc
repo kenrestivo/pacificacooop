@@ -41,7 +41,7 @@ define(COOP_LOCAL_PEAR_PATH, '/mnt/kens/ki/is/php/local_pear');
 
 //ONLY ON BC!!! don't push this live or you'll be in a world of shit.
 if($debug < 0) {
-    print 'YOU ARE USING APD!';
+    user_error('YOU ARE USING APD!', E_USER_WARNING);
     apd_set_pprof_trace();
 }
 

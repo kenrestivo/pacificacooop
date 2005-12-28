@@ -6,6 +6,10 @@ re-architect reports
 
 STUCK: will need to implement an iterable method!
 	otherwise, how the fuck will i be able to do this shit?
+	ok, try it. add a method in coopobject which will return an iterator!
+			i.e. a generator. i'm writing generators in php. gah.
+		getNewIterator() and size()... factory basically
+
 
 PHPTAL nag reports
 	which?
@@ -19,6 +23,10 @@ PHPTAL nag reports
 		enhancement nag
 		solicitation summary
 		springfest totals (carriereport)
+
+report generic
+	maybe even for reports too!!!! so they are accessible
+	what scares me is handlestack. if no table, what do i do?
 
 
 ??PHP/TAL/JSON

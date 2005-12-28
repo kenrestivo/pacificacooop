@@ -516,18 +516,18 @@ class coopView extends CoopObject
                 //print "asking: $pair[1] $level,  i have: $permitted<br />";
                 if($permitted >= $needlevel) {
                     $res .= $this->page->selfURL(
-						array('value' => $this->actionnames[$action], 
-                              'tags'=> array('style' => 'actionlink'),
-						'inside' => array( 
-							'action' => $action,
-							'table' => $this->table,
-							'push' => $this->table,
-							$this->prependTable($this->pk) => 
-							$this->obj->{$this->pk}),
-                              'base' =>!empty($this->obj->fb_usePage) ? 
-                              $this->obj->fb_usePage :
-                              'generic.php', 
-                              'par' => $par)); 
+						array(
+                            'value' => $this->actionnames[$action],
+                            'inside' => array( 
+                                'action' => $action,
+                                'table' => $this->table,
+                                'push' => $this->table,
+                                $this->prependTable($this->pk) => 
+                                $this->obj->{$this->pk}),
+                            'base' =>!empty($this->obj->fb_usePage) ? 
+                            $this->obj->fb_usePage :
+                            'generic.php', 
+                            'par' => $par)); 
                     $par || $res .= '&nbsp;';
                 }
 			}

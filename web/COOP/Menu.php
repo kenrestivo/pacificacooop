@@ -187,6 +187,7 @@ class CoopMenu extends HTML_Menu
                 $this->vars['menu'] = $res;
                 $this->vars['stamp'] = date('U');
                 $this->setMenu($res);
+                /// don't need to return because recursion will stop here anyway
             }
             
             //remember, it is recursive!
@@ -231,9 +232,9 @@ group by report_permissions.realm_id',
             return $menu;
         }
 
-// get it from the session cache, if present AND current
-// this will wrap createmenu
-function getMenu()
+    // get it from the session cache, if present AND current
+    // this will wrap createmenu
+    function getMenu()
         {
             $this->vars =& $_SESSION['cmvars'];
 
@@ -242,7 +243,7 @@ function getMenu()
             $aud->obj->query('select unix_timestamp(max(updated)) as menu_changed from audit_trail where table_name in ("table_permissions", "users", "user_permissions", "groups", "users_groups_join", "realms", "report_permissions")');
             $aud->obj->fetch();
             $this->page->printDebug(
-                sprintf('lastchange %d savedstamp %d', 
+                sprintf('CoopMenu::getMenu(): lastchange %d savedstamp %d', 
                         $aud->obj->menu_changed, 
                         $this->vars['stamp']),
                 2);
@@ -250,12 +251,12 @@ function getMenu()
             if($aud->obj->menu_changed < $this->vars['stamp'] &&
                 !empty($this->vars['menu']))
             {
-                $this->page->printDebug('using saved menu',2);
+                $this->page->printDebug('CoopMenu::getMenu(): using saved',2);
                 $this->setMenu($this->vars['menu']);
                 return;
             }
 
-            $this->page->printDebug('recalculating menu', 2);
+            $this->page->printDebug('CoopMenu::getMenu(): recalculating', 2);
             $this->createNew();
         }
 
