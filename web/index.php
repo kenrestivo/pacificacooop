@@ -53,7 +53,10 @@ print "\n<hr /></div> <!-- end header div -->\n";
 
 
 /// every hit to main menu should clear out the stack
-$cp->vars['stack'] = array();
+///XXX every visit to home page wipes out the whole stack
+///i suspect this is a bad idea, but it beats confusing people
+$cp->initStack();
+
 
 
 //confessObj($menu, "menuonb");
@@ -94,10 +97,6 @@ print $cp->newMenuRow(&$tab,
 
 
 print $tab->toHTML();
-
-///XXX every visit to home page wipes out the whole stack
-///i suspect this is a bad idea, but it beats confusing people
-$cp->initStack();
 
 ///////////////////////
 
