@@ -216,7 +216,10 @@ class CoopTest:
         """very simple, straightforward dom parsing. reject bad html"""
         print 'Validating markup...'
         gm =  self.postMultipartFile()
-        self.parser.parse(org.xml.sax.InputSource(gm.getResponseBodyAsStream()))
+        try:
+            self.parser.parse(org.xml.sax.InputSource(gm.getResponseBodyAsStream()))
+        except java.net.SocketException:
+            self.parser.parse(org.xml.sax.InputSource(self.testresults))
         self.result_doc = self.parser.getDocument()
         if [i.getAttribute('class') for i in allTags(self.result_doc, 'h2')].count('valid') < 1:
             print 'VALIDATION ERROR'
