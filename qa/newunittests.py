@@ -22,7 +22,7 @@ for i in os.listdir(htmlunitdir):
 from random import random
 from math import floor
 import struct
-
+from shutil import copyfile
 
 #java imports
 import com.gargoylesoftware.htmlunit 
@@ -80,7 +80,7 @@ class simpleErrorHandler(org.xml.sax.ErrorHandler):
          self._printError('warning', ex)
      def fatalError(self, ex):
          self._printError('FATAL', ex)
-         self.ct.dumpHTML()
+         self.ct.saveDumpFile()
      def _printError(self,type, ex):
          er= '%s on line %d col %d %s:%s: %s' % (type,  ex.getLineNumber(), ex.getColumnNumber(), ex.getSystemId(), ex.getPublicId(), ex.getMessage())
          print er
@@ -165,6 +165,7 @@ class CoopTest:
 
     def pageLoaded(self):
         print 'Checking load of [%s] ...' % (self.getURL(), )
+        self.dumpHTML()
         assert(1 == self.page.getWebResponse().getContentAsString().count('</html>'))
         if self.validator_url:
             self.validateMarkup()
@@ -206,35 +207,47 @@ class CoopTest:
 
 
     def dumpHTML(self):
-        c=0
         #print self.page.getWebResponse().getContentAsString()        
-        fp=open('%d-death.html' % (self.errnum), 'w')
-        s=self.page.getWebResponse().getContentAsStream()
-        s.reset()
+        self.saveStream(open('tmp.html', 'w'), self.page.getWebResponse().getContentAsStream())
+
+
+
+    def saveStream(self, outs, ins):
+        c=0
+        try:
+            ins.reset()
+        except java.io.IOException:
+            print "INFO: cannot reset stream"
         while c != -1:
-            c=s.read()
-            fp.write(struct.pack("<B", c))
-        fp.close()
-        s.close()
+            c=ins.read()
+            if c < 0:
+                break
+            outs.write(struct.pack("<B", c))
+        try:
+            ins.reset()
+        except java.io.IOException:
+            print "INFO: cannot reset stream"
+        outs.close()
+        ins.close()
+        
+
+
+    def saveDumpFile(self):
+        copyfile('tmp.html', '%d-death.html' % (self.errnum))
 
 
     def validateMarkup(self):
         """very simple, straightforward dom parsing. reject bad html"""
         print 'Validating markup...'
         gm =  self.postMultipartFile()
-        try:
-            self.parser.parse(org.xml.sax.InputSource(gm.getResponseBodyAsStream()))
-        except java.net.SocketException:
-            self.parser.parse(org.xml.sax.InputSource(self.testresults))
+        self.parser.parse(org.xml.sax.InputSource(open('w3ctmp.html')))
         self.result_doc = self.parser.getDocument()
         if [i.getAttribute('class') for i in allTags(self.result_doc, 'h2')].count('valid') < 1:
             print 'VALIDATION ERROR'
             self.errnum = self.errnum + 1
-            self.dumpHTML()
+            self.saveDumpFile()
             self.logfp.write('%d %s [%s]\n' % (self.errnum, self.username, self.getURL()))
-            fp=open('%d-w3c_report.html' % (self.errnum), 'w')
-            fp.write(self.testresults)
-            fp.close()
+            copyfile('w3ctmp.html', '%d-w3c_report.html' %(self.errnum))
 
 
 
@@ -254,7 +267,8 @@ class CoopTest:
             if statusCode != HttpStatus.SC_OK:
                 print "Failed to connect: " + gm.getStatusLine()
                 raise Exception
-            self.testresults = gm.getResponseBodyAsString()
+            rs=gm.getResponseBodyAsStream()
+            self.saveStream(open('w3ctmp.html', 'w'), rs)
             return  gm
         except IOException(e):
             print "Failed to upload file."
