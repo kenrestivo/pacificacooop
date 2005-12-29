@@ -226,7 +226,7 @@ class CoopTest:
         try:
             ins.reset()
         except java.io.IOException:
-            print "INFO: cannot reset stream"
+            pass
         while c != -1:
             c=ins.read()
             if c < 0:
@@ -235,7 +235,7 @@ class CoopTest:
         try:
             ins.reset()
         except java.io.IOException:
-            print "INFO: cannot reset stream"
+            pass
         outs.close()
         ins.close()
         
