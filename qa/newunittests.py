@@ -106,6 +106,7 @@ class CoopTest:
         self.url = url
         self.username = username
         self.logfp = logfp
+        self.errnum=errnum
         if validator_url:
             self.validator_url = validator_url
 
