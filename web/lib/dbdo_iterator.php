@@ -11,10 +11,10 @@ class DBDO_Iterator
     //
     // This constructor takes an array as first argument
     //
-    function MyArrayIterator(&$array)
+    function DBDO_Iterator(&$obj)
         {
             // store array reference
-            $this->_src =& $array;
+            $this->_src =& $obj
             // reset iterator to first position
             $this->reset();
         }
@@ -25,17 +25,13 @@ class DBDO_Iterator
         {
             // unset value
             unset($this->_value);
+
             // reset index
             $this->_index = 0;
 
-            if (count($this->_src) == 0) {
-                // no data means end of iterator
-                $this->_end = true;
-            } else {
-                // otherwise, we reset _end flag
-                $this->_end = false;
-                // and we sotre the first item value
-                $this->_value =& $this->_src[0];
+            /// NOTE how can you reset a DBDO? impossible?
+            if($this->_index > 0){
+                return PEAR::raiseError("ResetError");
             }
         }
 
@@ -51,18 +47,21 @@ class DBDO_Iterator
             $this->_index++;
 
             // end reached
-            if ($this->_index >= count($this->_src)) {
+            if(!$this->_src->fetch()){
                 $this->_end = true;
                 return;
             }
 
             // unset reference to item value
             unset($this->_value);
+
             // make reference to current item
-            $this->_value =& $this->_src[$this->_index];
+            $this->_value =& $this->_src->toArray();
+
             // return value
             return $this->_value;
         }
+
 
     // returns true if end not reached
     //
@@ -94,6 +93,8 @@ class DBDO_Iterator
         {
             return $this->_index;
         }
+
+
 } // END ITERATOR CLASS
 
 
