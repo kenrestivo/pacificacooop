@@ -146,12 +146,7 @@ class CoopTest:
             f=self.page.getForms()[0]
             f.getInputByName('auth[pwd]').setValueAttribute('tester')
             usableSelect(f.getSelectByName('auth[uid]'), self.username)
-            while true:
-                try:
-                    self.page=f.getInputByName('login').click()
-                except org.apache.commons.httpclient.NoHttpResponseException:
-                    continue
-                break
+            self.page= self.retryClick(f.getInputByName('login').click)
         except KeyError:
             print 'Already logged in?'
 
@@ -160,12 +155,7 @@ class CoopTest:
         """iterate through all the links on themainpage, and swap page"""
         assert(len(self.mainlinks) > 0)
         for i in self.mainlinks:
-            while true:
-                try:
-                    self.page = i.click()
-                except org.apache.commons.httpclient.NoHttpResponseException:
-                    continue
-                break
+            self.page = self.retryClick(i.click)
             self.pageLoaded()
             self.tryOperationsOnPage()
 
@@ -196,6 +186,7 @@ class CoopTest:
         for i in operations:
             self.pickRandomLink(i)
 
+
     def pickRandomLink(self, kind):
         links=[i for i in self.getAllLinks() if i.asText() == kind]
         index = int(floor(len(links) * random()))
@@ -203,12 +194,7 @@ class CoopTest:
             print 'From %s trying %d of %d %s links...' % (self.getURL(),
                                                            index, len(links),
                                                            kind)
-            while true:
-                try:
-                    self.page = links[index].click()
-                except org.apache.commons.httpclient.NoHttpResponseException:
-                    continue
-                break
+            self.page = self.retryClick(links[index].click)
             self.pageLoaded()
 
 
@@ -222,6 +208,15 @@ class CoopTest:
         #print self.page.getWebResponse().getContentAsString()        
         self.saveStream('tmp.html', self.page.getWebResponse().getContentAsStream())
 
+
+    def retryClick(self, func):
+        while 1:
+            try:
+                res = func()
+            except org.apache.commons.httpclient.NoHttpResponseException:
+                continue
+            break
+        return res
 
 
     def saveStream(self, outfile, ins):
@@ -296,6 +291,7 @@ class CoopTest:
             e.printStackTrace()
             gm.releaseConnection();
             
+
 
 
 
