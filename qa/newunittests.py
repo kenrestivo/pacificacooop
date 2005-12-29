@@ -21,6 +21,7 @@ for i in os.listdir(htmlunitdir):
 #python imports
 from random import random
 from math import floor
+import struct
 
 
 #java imports
@@ -205,11 +206,16 @@ class CoopTest:
 
 
     def dumpHTML(self):
+        c=0
         #print self.page.getWebResponse().getContentAsString()        
         fp=open('%d-death.html' % (self.errnum), 'w')
-        fp.write(self.page.getWebResponse().getContentAsString())
+        s=self.page.getWebResponse().getContentAsStream()
+        s.reset()
+        while c != -1:
+            c=s.read()
+            fp.write(struct.pack("<B", c))
         fp.close()
-        
+        s.close()
 
 
     def validateMarkup(self):
