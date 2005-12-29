@@ -27,5 +27,4 @@ help::
 
 clean::
 	find . -name '*.html' -maxdepth 1 -exec rm -f {} \;	
-	rm -f tests.log
-	rm -f forcepagetest.log
+	rm -f tests.log forcepagetest.log tmp.html w3ctmp.html
