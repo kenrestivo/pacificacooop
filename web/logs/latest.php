@@ -6,7 +6,7 @@
 if ($handle = opendir('.')) {
     /* This is the correct way to loop over the directory. */
     while (false !== ($file = readdir($handle))) {
-        if(strstr($file, 'html')){
+        if(strstr($file, 'debug.html')){
             $secondprev = $prev;
             $prev = $saver;
             $saver = $file;
