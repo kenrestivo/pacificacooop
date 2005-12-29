@@ -205,11 +205,13 @@ class CoopTest:
 
     def dumpHTML(self):
         #print self.page.getWebResponse().getContentAsString()        
-        self.saveStream(open('tmp.html', 'w'), self.page.getWebResponse().getContentAsStream())
+        self.saveStream('tmp.html', self.page.getWebResponse().getContentAsStream())
 
 
 
-    def saveStream(self, outs, ins):
+    def saveStream(self, outfile, ins):
+        #java sucks, it has a binary mode
+        outs=open(outfile, 'wb')
         c=0
         try:
             ins.reset()
@@ -238,7 +240,7 @@ class CoopTest:
         print 'Validating markup...'
         gm =  self.postMultipartFile()
         try:
-            self.parser.parse(org.xml.sax.InputSource(open('w3ctmp.html')))
+            self.parser.parse(org.xml.sax.InputSource(open('w3ctmp.html', 'rb')))
         except org.xml.sax.SAXParseException:
             pass
         result_doc = self.parser.getDocument()
@@ -272,7 +274,7 @@ class CoopTest:
                 print "Failed to connect: " + gm.getStatusLine()
                 raise Exception
             rs=gm.getResponseBodyAsStream()
-            self.saveStream(open('w3ctmp.html', 'w'), rs)
+            self.saveStream('w3ctmp.html', rs)
             return  gm
         except IOException(e):
             print "Failed to upload file."
