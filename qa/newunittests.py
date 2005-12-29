@@ -146,7 +146,7 @@ class CoopTest:
             f=self.page.getForms()[0]
             f.getInputByName('auth[pwd]').setValueAttribute('tester')
             usableSelect(f.getSelectByName('auth[uid]'), self.username)
-            self.page= self.retryClick(f.getInputByName('login').click)
+            self.page= self.retryClick(f.getInputByName('login'))
         except KeyError:
             print 'Already logged in?'
 
@@ -155,7 +155,7 @@ class CoopTest:
         """iterate through all the links on themainpage, and swap page"""
         assert(len(self.mainlinks) > 0)
         for i in self.mainlinks:
-            self.page = self.retryClick(i.click)
+            self.page = self.retryClick(i)
             self.pageLoaded()
             self.tryOperationsOnPage()
 
@@ -194,7 +194,7 @@ class CoopTest:
             print 'From %s trying %d of %d %s links...' % (self.getURL(),
                                                            index, len(links),
                                                            kind)
-            self.page = self.retryClick(links[index].click)
+            self.page = self.retryClick(links[index])
             self.pageLoaded()
 
 
@@ -209,10 +209,10 @@ class CoopTest:
         self.saveStream('tmp.html', self.page.getWebResponse().getContentAsStream())
 
 
-    def retryClick(self, func):
+    def retryClick(self, obj):
         while 1:
             try:
-                res = func()
+                res = obj.click()
             except org.apache.commons.httpclient.NoHttpResponseException:
                 continue
             break
