@@ -7,7 +7,8 @@ sys.path.append('/mnt/kens/ki/proj/coop/qa')
 import newunittests
 newunittests.main()
 #or
-newunittests.ManyVisitHack('http://www/coop-dev/')
+run=newunittests.Runner()
+run.ManyVisitHack('http://www/coop-dev/')
 """
 
 
@@ -83,8 +84,7 @@ class simpleErrorHandler(org.xml.sax.ErrorHandler):
      def _printError(self,type, ex):
          er= '%s on line %d col %d %s:%s: %s' % (type,  ex.getLineNumber(), ex.getColumnNumber(), ex.getSystemId(), ex.getPublicId(), ex.getMessage())
          print er
-         self.ct.logfp.write('%s [%s] %s\n' % (self.ct.username, self.ct.getURL(), er))
-         self.ct.logfp.flush()
+         self.ct.logError(er)
 
 
 
@@ -102,7 +102,7 @@ class CoopTest:
     logfp = None
     errnum = 0
     
-    def __init__(self, url, username, validator_url=None, logfp=""):
+    def __init__(self, url, username, validator_url=None, logfp="", errnum=0):
         self.url = url
         self.username = username
         self.logfp = logfp
@@ -214,6 +214,7 @@ class CoopTest:
             try:
                 res = obj.click()
             except org.apache.commons.httpclient.NoHttpResponseException:
+                self.logError('no response! retrying')
                 continue
             break
         return res
@@ -238,7 +239,11 @@ class CoopTest:
             pass
         outs.close()
         ins.close()
-        
+
+
+    def logError(self, er):
+        ct.logfp.write('%s [%s] %s\n' % (ct.username, ct.getURL(), er))
+        ct.logfp.flush()
 
 
     def saveDumpFile(self):
@@ -293,38 +298,42 @@ class CoopTest:
             
 
 
+class Runner:
+    errnum  = 0
+    ct=None
 
-
-def ManyVisitHack(url, validate='http://localhost/w3c-markup-validator/check', logfile="tests.log"):
-    """runs multiple families in one url"""
-    usersToTest= ['Bartlett Family', 'Restivo Family', 'Cooke Family',
-                  'Teacher Sandy', 'Shirley']
-    fp=open(logfile, 'a')
-    fp.write('================\n')
-    for u in usersToTest:
-        print 'Starting user %s (%s)...' % (u, url)
-        CoopTest(url, u, logfp=fp).run()
-    print 'All tests succeeded! Yay!'
-    fp.write('done\n')
-    fp.close()
-
-
-def force_page(urlbase, urlmore, username, fp=None):
-    """utility for validating one particular long url""" 
-    ct=CoopTest(urlbase, username,  logfp=open('forcepagetest.log', 'w'))
-    ct.getToMainPage()
-    ct.page=ct.wc.getPage(URL('/'.join((urlbase,urlmore))))
-    ct.pageLoaded()
-    print 'page loaded successfully!'
-    return ct
-
+    def ManyVisitHack(self,url, validate='http://localhost/w3c-markup-validator/check', logfile="tests.log"):
+        """runs multiple families in one url"""
+        usersToTest= ['Bartlett Family', 'Restivo Family', 'Cooke Family',
+                      'Teacher Sandy', 'Shirley']
+        fp=open(logfile, 'a')
+        fp.write('================\n')
+        for u in usersToTest:
+            print 'Starting user %s (%s)...' % (u, url)
+            self.ct = CoopTest(url, u, logfp=fp,  errnum=self.errnum)
+            self.ct.run()
+            self.errnum = self.ct.errnum
+        print 'All tests succeeded! Yay!'
+        fp.write('done\n')
+        fp.close()
+    
+    
+    def force_page(self, urlbase, urlmore, username, fp=None):
+        """utility for validating one particular long url""" 
+        ct=CoopTest(urlbase, username,  logfp=open('forcepagetest.log', 'w'))
+        ct.getToMainPage()
+        ct.page=ct.wc.getPage(URL('/'.join((urlbase,urlmore))))
+        ct.pageLoaded()
+        print 'page loaded successfully!'
+        return ct
+    
 
 
 ##mainpage.getWebResponse().getUrl()
 ###### MAIN ######
 
 def main():
-    ManyVisitHack('http://www/coop-live')
+    Runner().ManyVisitHack('http://www/coop-live')
 
     
 ## do this. it's good.
