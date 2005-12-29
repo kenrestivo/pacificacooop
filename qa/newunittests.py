@@ -242,8 +242,9 @@ class CoopTest:
 
 
     def logError(self, er):
-        ct.logfp.write('%s [%s] %s\n' % (ct.username, ct.getURL(), er))
-        ct.logfp.flush()
+        self.errnum = self.errnum + 1
+        self.logfp.write('%d %s [%s] %s\n' % (self.errnum, self.username, self.getURL(), er))
+        self.logfp.flush()
 
 
     def saveDumpFile(self):
@@ -265,7 +266,7 @@ class CoopTest:
 
     def validationError(self):
         print 'VALIDATION ERROR'
-        self.errnum = self.errnum + 1
+        self.logError('validation error')
         self.saveDumpFile()
         self.logfp.write('%d %s [%s]\n' % (self.errnum, self.username, self.getURL()))
         copyfile('w3ctmp.html', '%d-w3c_report.html' %(self.errnum))
