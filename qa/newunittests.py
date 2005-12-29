@@ -100,8 +100,6 @@ class CoopTest:
     username= ""
     loggedin = 0
     logfp = None
-    testresults = ""
-    result_doc = None
     errnum = 0
     
     def __init__(self, url, username, validator_url=None, logfp=""):
@@ -243,8 +241,8 @@ class CoopTest:
             self.parser.parse(org.xml.sax.InputSource(open('w3ctmp.html')))
         except org.xml.sax.SAXParseException:
             pass
-        self.result_doc = self.parser.getDocument()
-        if [i.getAttribute('class') for i in allTags(self.result_doc, 'h2')].count('valid') < 1:
+        result_doc = self.parser.getDocument()
+        if [i.getAttribute('class') for i in allTags(result_doc, 'h2')].count('valid') < 1:
             self.validationError()
 
 
@@ -257,10 +255,11 @@ class CoopTest:
 
 
     def postMultipartFile(self):
+        wr=self.page.getWebResponse()
         htc=HttpClient()
         gm=methods.MultipartPostMethod(self.validator_url)
         baps=ByteArrayPartSource(self.getURL(), self.page.getWebResponse().getContentAsString())
-        gm.addPart(FilePart('uploaded_file', baps, 'text/html', 'utf-8'))
+        gm.addPart(FilePart('uploaded_file', baps, wr.getContentType(), wr.getContentCharSet()))
         gm.addParameter('ss', '1')
         gm.addParameter('sp', '1')
         retryhandler = DefaultMethodRetryHandler()
