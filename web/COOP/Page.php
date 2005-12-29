@@ -24,6 +24,7 @@ require_once("first.inc");
 require_once("auth.inc");
 require_once('Mail.php');
 require_once 'HTML/Table.php';
+require_once 'lib/sniff.php';
 
 
 function confessObj($obj, $text, $outofband = true)
@@ -79,6 +80,7 @@ class coopPage
     var $title = 'Data Entry';  // the titlebar of the browser windowi
     var $heading = 'Pacifica Co-Op Nursery School Data Entry'; // to display
     var $currentSchoolYear;   // cache so i'm not pounding findschoolyear
+    var $browserData;    /// cache of data found
     
 	function coopPage($debug = false)
 		{
@@ -770,6 +772,14 @@ class coopPage
             $tab->addRow(array($body),'style="colspan:2" colspan="2"');
         }
 
+
+    function getBrowserData()
+        {
+            if(empty($this->browserData)){
+                $this->browserData = SniffBrowser();
+            }
+            return $this->browserData;
+        }
 
 
 } // END COOP PAGE CLASS

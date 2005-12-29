@@ -395,6 +395,7 @@ setupDB($urlonly = false)
 
         mysql_select_db($dbname) or die ("can't use $dbname! ack!\n");
         
+        // MUST do this to get unicode crap
         mysql_query('set names utf8');
     }
     

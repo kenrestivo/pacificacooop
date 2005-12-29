@@ -1,5 +1,17 @@
 include order fun
 
+
+WARNING! shit like utils:devSite() looks at the dbhost/dbuser global!
+
+well first wrap auth.inc in a fucking object
+	the auth object needs to include uid, state, token,etc
+	store that in page
+	go through everywhere and change page->auth to be, whatever
+		thruauthcore to page->auth->thruAuthCore(),
+			which will get its vars out of itself
+	ugly thing is forceuser, which needs to change the uid
+
+
 	use one db setup, in either first or obj-config or session-init
 		it's too crazy
 			first.inc  exec/define

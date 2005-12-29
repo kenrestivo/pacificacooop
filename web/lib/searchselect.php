@@ -32,9 +32,10 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
             return $this->getFrozenHtml();
         } else {
             
+            $brows = $this->cf->page->getBrowserData();
 
             $res = sprintf(
-                '<input type="text" name="search-%s" autocomplete="off" 
+                '<input type="text" name="search-%s" %s
                 onchange="combobox_%s.fetchData()"/>
 
                 <input  type="button" 
@@ -42,6 +43,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
                         value="Search"/> &nbsp;
                 <p class="inline" id="status-%s"></p><br />',
                 $this->getName(),
+                $brows['type'] == 'Explorer' ? 'autocomplete="off"' : '',
                 strtr($this->getName(), '-', '_'),
                 strtr($this->getName(), '-', '_'),
                 $this->getName()

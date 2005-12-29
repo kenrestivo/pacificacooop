@@ -21,7 +21,12 @@ require_once('CoopForm.php');
 $cp = new coopPage( $debug);
 print $cp->pageTop();
 
-print $cp->selfURL('refresh (for testing)');
+print $cp->selfURL(array('value' =>'refresh (for testing)'));
+
+require_once('lib/sniff.php');
+
+confessArray(SniffBrowser());
+
 
 $fam =& new CoopObject(&$cp, 'leads', &$nothing);
 $fam->obj->query('select * from leads where lead_id = 333');

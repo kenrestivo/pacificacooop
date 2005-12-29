@@ -326,7 +326,6 @@ class Runner:
         ct.page=ct.wc.getPage(URL('/'.join((urlbase,urlmore))))
         ct.pageLoaded()
         print 'page loaded successfully!'
-        return ct
     
 
 

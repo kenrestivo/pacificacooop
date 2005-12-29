@@ -59,6 +59,7 @@ class Calendar_events extends CoopDBDO
             $ev =& $this->factory('events');
             $this->joinAdd($ev);
 
+            // oh, this is a SILLY way to determine this
             if(!$co->page->auth['token'] || $publiconly){
                 $clause = 'public'; 
                 $this->show_on_public_page = 'Yes';            

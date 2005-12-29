@@ -7,6 +7,11 @@ print '<a href="latest.php">back to latest logs</a><br />';
 
 print "test results so far:<br />";
 
+print '<pre>';
+readfile('tests.log');
+print '</pre>';
+
+
 if ($handle = opendir('.')) {
     /* This is the correct way to loop over the directory. */
     while (false !== ($file = readdir($handle))) {

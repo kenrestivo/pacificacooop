@@ -43,10 +43,6 @@
                $strHtmlHidden = '<select name="' . $this->getName() .
 				   "[]\" multiple=\"multiple\" style=\"overflow: hidden; visibility: hidden; display: none; width: 0px; height: 0px;\">\n";
 
-             // TODO: WHEN i figure out how to remove the placeholder b4 saving
-//                if(count($this->getValue()) < 2){
-//                    $strHtmlSelected .= '<option value="">Add/Remove</option>';
-//                }
 
                foreach ($this->_options as $option) {
                    if (is_array($this->_values) &&

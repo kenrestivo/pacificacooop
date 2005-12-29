@@ -43,6 +43,12 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                       "processCustomSelect(this, '{$target_id}', 
                                                 {$this->showEditText})"));
 
+             // TODO: WHEN i figure out how to remove the placeholder b4 saving
+//                if(count($this->vals) < 2){
+//                    $strHtmlSelected .= '<option value="">None</option>';
+//                }
+
+
         }
 
 // XXX broken. doesn't work, and i haven't time to figure out why

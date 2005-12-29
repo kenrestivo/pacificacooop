@@ -2,8 +2,8 @@ coop web database
 
  MY agenda! dammit, mine! for a change....
 	reports in phptal (reportnotes.txt)
-	html 4.01 strict validation (htmlvalidation.txt)
 	json the subforms (subform.txt)
+	html 4.01 strict validation (htmlvalidation.txt)
 	import the 20-year roster (20yearroster.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	sortable/searchable reports (searchfeature.txt)
@@ -14,10 +14,26 @@ coop web database
 
 ???PHP (htmlvali)
 push live my html 4.01 and misc tweeks
+	final test run
+
+
+
+BUGS
+	fix family chooser: must override! all years if permitted!
+		but but but....
+		maybe var fb_allYears = array('field' => 1)?
+			rigth now it only works for view, and is binary.
+		no, well have a look at it
 	
 
+???PHP/JS
+usability fix in search select: RETURN key!
+	make it do a search, NOT submit the form!
+
+
 ???PHP
-clean up my inclusion order
+clean up my inclusion order in proparation h for phptal
+	remember the set names!!!
 
 
 ???PHP
@@ -37,6 +53,11 @@ BUG
 		then only when permitted. i.e. enrollment dropout date in kids detail
 	duplicates in attendance! margolis
 		maybe do that margoilsreport in python? or use phptal?
+	fix -1 perms for family fees, income, babies, enhancement, 
+		instructions, logins, groups
+		hmm. maybe a custom override to enum?
+			insert and update, and enum. any -1 is a NULL!
+			fuck, i gotta use it everywhere: reports, table, userprivs
 
 
 ??PHP/SQL
@@ -49,16 +70,6 @@ bring Packaging back to life!
 	add additional auction validation rules: 
 		no cash
 
-
-BUGS
-	fix -1 perms for family fees, income, babies, enhancement, 
-		instructions, logins, groups
-		hmm. maybe a custom override to enum?
-			insert and update, and enum. any -1 is a NULL!
-			fuck, i gotta use it everywhere: reports, table, userprivs
-	fix family chooser: must override! all years if permitted!
-		maybe var fb_allYears = array('field' => 1)?
-			rigth now it only works for view, and is binary.
 
 
 -----------
@@ -3053,7 +3064,23 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+STUCK: unifucking code: newunittests.force_page('http://www/coop-dev', 'generic.php?action=edit&table=job_descriptions&push=job_descriptions&job_descriptions-job_description_id=2', 'Bartlett Family')
+	well it validates to the BROWSER
+		but no matter what i do, fucking asshole w3c won't accept it
+	it was a java problem
+	fucking java. 
+		dump the damned html page every time. don't getasstring
+		webresponse.getText()!
+			ah NO! they use the same NAME "webresponse" butit's not!
 
+		the htmlunit (gargoyle) one is great: it is markable and resettable
+		the httpclien (apache) one sucks donkey balls, it is NOT
+
+	ah. s=wr.getcontentasstream() will work
+		s.available() will tell me size of file(it's all in ram anyway)
+
+		set timeout shoudl help. i hope
+		well everything is broken now. emacs dying. shit blowing up.
 	check weird cp1252 characters in INPUT, i.e. word paste
 		naw fuck it, don't need it.
 
@@ -5197,3 +5224,18 @@ when returning from the road
 			fuck it, use divs	blog posting <p> issues. jeez i wish i used phptal here
 			ah. can't have div inside p. and p's close automatically, so validator doesnt' yeell at ma
 		STUCK: do a pprof on this thing, trace calls. WHAT gets called WHEN exactly?		done
+	AUUGH!!! my java test shit has just died!!!
+		ok, save shit to file, instead of in ram. should save memory
+
+??? PHP/JS
+make edit javascript check (using json) the perms for this particular record
+	i.e. if you have edit privs on some records, only show edit on those you do
+	so, for family, if it's your family, edit it! otherwise hide away
+	remove autocomplete or conditionalize at least for IE
+		that script to check
+
+	art area utf issues still: ligatures for 1/2
+		maybe do that encoding/recoding thing?
+			look up the keycode
+		make sure it's not fixed
+			fixed!
