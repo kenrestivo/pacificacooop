@@ -52,6 +52,9 @@ print "\n<hr /></div> <!-- end header div -->\n";
 //confessObj($menu, 'menu');
 
 
+/// every hit to main menu should clear out the stack
+$cp->vars['stack'] = array();
+
 
 //confessObj($menu, "menuonb");
 print '<div id="leftCol">';
