@@ -80,7 +80,6 @@ class simpleErrorHandler(org.xml.sax.ErrorHandler):
          self._printError('warning', ex)
      def fatalError(self, ex):
          self._printError('FATAL', ex)
-         self.ct.saveDumpFile()
      def _printError(self,type, ex):
          er= '%s on line %d col %d %s:%s: %s' % (type,  ex.getLineNumber(), ex.getColumnNumber(), ex.getSystemId(), ex.getPublicId(), ex.getMessage())
          print er
@@ -240,15 +239,21 @@ class CoopTest:
         """very simple, straightforward dom parsing. reject bad html"""
         print 'Validating markup...'
         gm =  self.postMultipartFile()
-        self.parser.parse(org.xml.sax.InputSource(open('w3ctmp.html')))
+        try:
+            self.parser.parse(org.xml.sax.InputSource(open('w3ctmp.html')))
+        except org.xml.sax.SAXParseException:
+            pass
         self.result_doc = self.parser.getDocument()
         if [i.getAttribute('class') for i in allTags(self.result_doc, 'h2')].count('valid') < 1:
-            print 'VALIDATION ERROR'
-            self.errnum = self.errnum + 1
-            self.saveDumpFile()
-            self.logfp.write('%d %s [%s]\n' % (self.errnum, self.username, self.getURL()))
-            copyfile('w3ctmp.html', '%d-w3c_report.html' %(self.errnum))
+            self.validationError()
 
+
+    def validationError(self):
+        print 'VALIDATION ERROR'
+        self.errnum = self.errnum + 1
+        self.saveDumpFile()
+        self.logfp.write('%d %s [%s]\n' % (self.errnum, self.username, self.getURL()))
+        copyfile('w3ctmp.html', '%d-w3c_report.html' %(self.errnum))
 
 
     def postMultipartFile(self):
