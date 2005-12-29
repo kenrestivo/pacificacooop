@@ -116,6 +116,7 @@ class CoopTest:
         """this is redundant to __init__, but i'm too scared to change it"""
         self.wc = htmlunit.WebClient(htmlunit.BrowserVersion.MOZILLA_1_0, )
         self.wc.setRedirectEnabled(1)
+        self.wc.setTimeout(60000)
         self.parser=org.apache.xerces.parsers.DOMParser()
         self.parser.setErrorHandler(simpleErrorHandler(self))
 
