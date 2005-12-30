@@ -250,12 +250,23 @@ var printKey = function(ev){
 
 
 addScript('http://www/lib/eventutils.js', w.document);
+
 var printKey  = function(ev){
-    evt = new Evt(ev);
-    // 13 and 39 to start with
-    writeln(evt._evt.keyCode + ' ' + evt._evt.type + ' ' + evt._evt.eventPhase);
-    evt.consume();
-    return false;
+    writeln(ev.keyCode + ' ' + ev.type + ' ' + ev.eventPhase);
+    switch(ev.keyCode) 
+    {
+    // trap these keys
+    case 13:
+    case 39: 
+        evt = new Evt(ev);
+        evt.consume();
+        writeln(evt.getSource().value)
+        return false;
+    default:
+        break;
+    }
+    
+    return true;
 }
 
 
