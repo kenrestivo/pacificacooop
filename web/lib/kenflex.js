@@ -30,8 +30,7 @@ comboboxsettings = {serverPage: 'lib/flexac/kenflex.php'};
 function Combobox (searchBoxName, selectBoxName, linkTableName)
 {
     
-    var trapKey  = function(ev){
-        writeln(ev.keyCode + ' ' + ev.type + ' ' + ev.eventPhase);
+    this.trapKey  = function(ev){
         switch(ev.keyCode) 
         {
             // trap these keys
@@ -44,8 +43,8 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
         default:
             break;
         }
-    return true;
-}
+        return true;
+    }
 
 
     // loop through matches, put them in the box
@@ -197,9 +196,9 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     this.status.combobox=self;
 
     // add my callbacks for key handling
-    EventUtils.addEventListener(this.searchBox, 'keyup', this.trapKey, true);
-    EventUtils.addEventListener(this.searchBox, 'keydown', this.trapKey, true);
-    EventUtils.addEventListener(this.searchBox, 'keypress', this.trapKey, true);
+    EventUtils.addEventListener(this.searchBox, 'keyup', function(ev){ return self.trapKey(ev)}, true);
+    EventUtils.addEventListener(this.searchBox, 'keydown', function(ev){ return self.trapKey(ev)}, true);
+    EventUtils.addEventListener(this.searchBox, 'keypress', function(ev){ return self.trapKey(ev)}, true);
 
 
 } // end Combobox constructor
