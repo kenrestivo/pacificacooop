@@ -36,7 +36,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
 
             $res = sprintf(
                 '<input type="text" name="search-%s" %s
-                onchange="combobox_%s.fetchData()"/>
+                onchange="combobox_%s.fetchData()" onkeydown="return false;" />
 
                 <input  type="button" 
                       onclick="combobox_%s.fetchData()"

@@ -11,29 +11,31 @@ coop web database
 	insurance, dammit
 
 
-BUGS BUGS BUGS
-	the emailing is all scqewy
-	audit trail link from details is stupid
-    AAAGH!!
-    	the stack is still totally fucked up??? doubel check
-
-
-
-
-BUGS
-	fix family chooser: must override! all years if permitted!
-		i should just fix chosenschoolyear as '%', which i'm doing, yay.
-			BUT! why is it NOT DOING WHAT I TELL IT!
-				and, it is also refusing to run in mysql... syntax error?
-			general query log, see what is up	
-	aha! it's ignoring this chosenschoolyear BECAUSE IT IS NOT THE TOP!
-		remember, it goes looking for the top
-
 
 ???PHP/JS
 usability fix in search select: RETURN key!
-	make it do a search, NOT submit the form!
+	integrate this, from jsmode.js
+	if they search for something else, KEEP what they already had selected!
+		go find out how. it doesn't really work. endlessloop!!?
+	
 
+
+???PHP/SQL
+linkconstraiints in unusual circumstances
+		and then only when really wanted!
+			in popup
+				for families
+				BUT NOT auctions!
+			in details
+				for everything IN families OR companies
+				but not in most other things-- stick with the schoolyear
+
+
+
+BUGS BUGS BUGS
+    AAAGH!!
+    	the stack is still totally fucked up??
+		at elast on the live site, it certainly is!
 
 
 ???PHP
@@ -49,8 +51,6 @@ alumni invite!
 
 
 BUG
-	linkconstraints are bogus on details. i often only want them on popup
-		then only when permitted. i.e. enrollment dropout date in kids detail
 	duplicates in attendance! margolis
 		maybe do that margoilsreport in python? or use phptal?
 	fix -1 perms for family fees, income, babies, enhancement, 
@@ -3074,6 +3074,15 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+    	fix family chooser: must override! all years if permitted!
+    		i should just fix chosenschoolyear as '%', which i'm doing, yay.
+    	linkconstraints are bogus on details. i often only want them on popup
+    		then only when permitted. i.e. enrollment dropout date in kids detai
+    			general query log, see what is up	
+	    	aha! it's ignoring this chosenschoolyear BECAUSE IT IS NOT THE TOP!
+				no, it works TOO well where it isn't supposed to, i.e. auction
+			remember, it goes looking for the top
+
 		maybe var fb_allYears = array('field' => 1)?
 			rigth now it only works for view, and is binary.
 		no, well have a look at it
@@ -5269,4 +5278,11 @@ BUGS BUGS BUGS
     	subclass text fields, i think i do this already! mce
     blogs need to show up pretty too    mustn't be empty javascript rule... do NOT do this on client side!!
 		or, make it work with tinymce. they collide at present
-			manually yahk from qf
+			manually yahk from qf	the emailing is all scqewy
+	audit trail link from details is stupid
+    			BUT! why is it NOT DOING WHAT I TELL IT!
+    				and, it is also refusing to run in mysql... syntax error?
+					because i have stupid shit in my joins. use protected
+	make it do a search, NOT submit the form!
+	STUCK: the event is not stopping. it's unstoppable!
+		solution: keypress

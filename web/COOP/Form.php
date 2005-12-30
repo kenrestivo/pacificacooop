@@ -360,7 +360,7 @@ class coopForm extends CoopObject
 
 			$sub =& new CoopObject(&$this->page, $link[0], &$this);
             
-            $sub->chosenSchoolYear='%'; // ALWAYS force '%' for popups
+            //$sub->chosenSchoolYear='%'; // ALWAYS force '%' for popups
 
 			///$top =& $this->findTop(); // will need this for overrides
             

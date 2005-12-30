@@ -6,6 +6,7 @@ infoPopup = {
     'def': null
 }
 
+// hey, does ev.originalTarget happen?
 var showDetails= function(self, x, y){
     d=document.getElementById('dialog');
     d.style.top = (y - 20) + 'px';

@@ -58,28 +58,19 @@ class Families extends CoopDBDO
  	function fb_linkConstraints(&$co)
 		{
 
-            $enrollment =  $this->factory('enrollment');
-
             // HACK! this is presuming VIEW, but in popup it could be EDIT
+            $enr =& new CoopObject(&$co->page, 'enrollment', &$co);
+            $kid =& new CoopObject(&$co->page, 'kids', &$co);
 
+            $kid->protectedJoin($enr);
+            $co->protectedJoin($kid);
 
-            // TODO: make all these protectedjoin!
-
-            $kids =  $this->factory('kids');
-            $kids->joinAdd($enrollment, 'left');
-            
-            $this->joinAdd($kids, 'left');
-            $this->selectAdd('max(school_year) as school_year');
-
-            // FORCE the familyid! so i don't grab the crap from elswhere
-            $this->selectAdd('families.family_id as family_id');
-    
-            // XXX can't do this yet, how to force allyears
-            //in popups, as in roster
             $co->constrainSchoolYear();
 
             //$co->constrainFamily(): // no point in this?
-            $co->orderByLinkDisplay();
+
+            $co->obj->orderBy();
+            $co->obj->orderBy('families.name');
             $co->grouper();
             
 

@@ -30,6 +30,24 @@ comboboxsettings = {serverPage: 'lib/flexac/kenflex.php'};
 function Combobox (searchBoxName, selectBoxName, linkTableName)
 {
     
+    var trapKey  = function(ev){
+        writeln(ev.keyCode + ' ' + ev.type + ' ' + ev.eventPhase);
+        switch(ev.keyCode) 
+        {
+            // trap these keys
+        case 13:
+        case 39: 
+            evt = new Evt(ev);
+            evt.consume();
+            this.fetchData();
+            return false;
+        default:
+            break;
+        }
+    return true;
+}
+
+
     // loop through matches, put them in the box
     this.populateBox =
         function ()
@@ -166,20 +184,23 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     this.selectBox.cleanBox = function ()
         {
             for ( i=this.length; this.length> 0; i--) {
+                // UNLESS it is selected!! XXX this causes an endless loop
+                //if(this.selectedIndex != i){
                 this.remove(i);
+                    //}
             }
             
         }
-    var self = this; // needed for callbacks!
+    var self = this; // needed for callbacks and reflection!
+    this.selectBox.combobox=self;
+    this.searchBox.combobox=self;
+    this.status.combobox=self;
 
-/*     if(this.selectBox.attachEvent){ */
-/*         this.selectBox.attachEvent('onchange',  */
-/*                                    function(){self.status.innerHTML = '' }); */
-/*     } else if(this.selectBox.addEventListener){ */
-/*         this.selectBox.addEventListener('onchange',  */
-/*                                    function(){self.status.innerHTML = '' },  */
-/*                                    false); */
-/*     } */
+    // add my callbacks for key handling
+    EventUtils.addEventListener(this.searchBox, 'keyup', this.trapKey, true);
+    EventUtils.addEventListener(this.searchBox, 'keydown', this.trapKey, true);
+    EventUtils.addEventListener(this.searchBox, 'keypress', this.trapKey, true);
+
 
 } // end Combobox constructor
 

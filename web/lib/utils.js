@@ -1,17 +1,11 @@
 //$Id$
 
-
-addLink = function(url, doc){
+addScript = function(url, doc){
     if(!doc){
         doc=document;
     }
-	var s=doc.createElement('link');
-	s.setAttribute('rel', 'stylesheet');
-	s.setAttribute('href', url);
-	doc.getElementsByTagName('head')[0].appendChild(s);
-    return s;
+	var s=doc.createElement('script');
+	s.setAttribute('type', 'text/javascript');
+	s.setAttribute('src', url);
+	doc.getElementsByTagName('body')[0].appendChild(s);
 }
-
-
-
-

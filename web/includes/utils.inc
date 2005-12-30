@@ -163,7 +163,7 @@ function done()
     print '<p>';
 
     print '<a href="http://validator.w3.org/check/referer"><img
-          src="images/html401.png" alt="Valid XHTML 1.0!"  /></a>';
+          src="../images/html401.png" alt="Valid XHTML 1.0!"  /></a>';
 
     print '<!--[if IE]>
 <a href="http://www.getfirefox.com"><img  alt="Get Firefox!" title="Get Firefox!" src="http://sfx-images.mozilla.org/affiliates/Buttons/110x32/get.gif"/></a>
