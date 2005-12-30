@@ -240,14 +240,28 @@ showEvent = function(ev){
     writeln('x:'+ev.screenX+' y:'+ev.screenY+' cx:'+ev.clientX+' cy:'+ev.clientY)}
 
 /////////
-var printKey  = function(ev){
-    // 13 and 39 to start with
-    writeln(ev.keyCode + ' ' + ev.type);
+var printKey = function(ev){
+    // mozilla-only version
+    writeln(ev.keyCode + ' ' + ev.type + ' ' + ev.eventPhase);
+    ev.stopPropagation();
+    ev.preventDefault();
     return false;
 }
 
+
+addScript('http://www/lib/eventutils.js', w.document);
+var printKey  = function(ev){
+    evt = new Evt(ev);
+    // 13 and 39 to start with
+    writeln(evt._evt.keyCode + ' ' + evt._evt.type + ' ' + evt._evt.eventPhase);
+    evt.consume();
+    return false;
+}
+
+
+
 c=w.combobox_companies_auction_join_company_id;
-c.searchBox.addEventListener('keyup', printKey, false);
-c.searchBox.addEventListener('keydown', printKey, false);
-// NICE originalTarget
-//keyCode and type
+EventUtils.addEventListener(c.searchBox, 'keyup', printKey, true);
+EventUtils.addEventListener(c.searchBox, 'keydown', printKey, true);
+EventUtils.addEventListener(c.searchBox, 'keypress', printKey, true);
+
