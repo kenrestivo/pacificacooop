@@ -22,6 +22,7 @@
 
 require_once('CoopPage.php');
 require_once('CoopView.php');
+require_once('lib/class.html2text.inc');
 
 
 class EmailChanges
@@ -148,8 +149,9 @@ class EmailChanges
             // NOTE! the formatted version may have 'no details found'
             // so test the obj version
             if($this->type == 'change'){
+                $h2t =& new html2text($audformatted['details']);
                 $this->body .= "The following changes were made:\n";
-                $this->body .= strip_tags($audformatted['details']);
+                $this->body .= $h2t->get_text();
             } else {
                 // it's an add!
                 $rec->fullText = 1; // XXX nasty hack!
@@ -159,14 +161,17 @@ class EmailChanges
                 foreach($headers['keys'] as $key){
                     $val = array_shift($recformatted);
                     $title = array_shift($headers['titles']);
+                    $h2t =& new html2text($val);
                     $this->body .= sprintf("   %s: %s\n\n", 
-                                           $title, $val);
+                                           $title, 
+                                           $h2t->get_text());
                 }
             }
 
             // REMEMBER! i can't use selfurl here: it adds SID
             $this->body .= sprintf('%sFor more details, visit here: http://%s/members/generic.php?action=details&table=%s&%s=%d',
                                    "\n\n",
+                                   $_SERVER['HTTP_HOST'],
                                    $this->audit_co->obj->table_name,
                                    $rec->prependTable($rec->pk),
                                    $this->audit_co->obj->index_id);
