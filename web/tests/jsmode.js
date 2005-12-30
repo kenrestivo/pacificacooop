@@ -240,13 +240,14 @@ showEvent = function(ev){
     writeln('x:'+ev.screenX+' y:'+ev.screenY+' cx:'+ev.clientX+' cy:'+ev.clientY)}
 
 /////////
-printKey  = function(ev){
+var printKey  = function(ev){
+    // 13 and 39 to start with
     writeln(ev.keyCode + ' ' + ev.type);
     return false;
 }
 
 c=w.combobox_companies_auction_join_company_id;
-c.searchBox.addEventListener('keyup', function(){writeln('keyup'); return false}, false);
-c.searchBox.addEventListener('keydown', function(ev){inspect(ev); return false}, false);
+c.searchBox.addEventListener('keyup', printKey, false);
+c.searchBox.addEventListener('keydown', printKey, false);
 // NICE originalTarget
 //keyCode and type
