@@ -239,3 +239,14 @@ showEvent = function(ev){
     ev = ev || window.event; // IE sucks.
     writeln('x:'+ev.screenX+' y:'+ev.screenY+' cx:'+ev.clientX+' cy:'+ev.clientY)}
 
+/////////
+printKey  = function(ev){
+    writeln(ev.keyCode + ' ' + ev.type);
+    return false;
+}
+
+c=w.combobox_companies_auction_join_company_id;
+c.searchBox.addEventListener('keyup', function(){writeln('keyup'); return false}, false);
+c.searchBox.addEventListener('keydown', function(ev){inspect(ev); return false}, false);
+// NICE originalTarget
+//keyCode and type
