@@ -598,14 +598,24 @@ class coopForm extends CoopObject
                 }
 
 				foreach($this->obj->fb_requiredFields as $fieldname){
-// 					user_error("CoopForm::addRequiredFields($fieldname)", 
-// 							   E_USER_NOTICE);
+                    /// NOTE! do NOT do client-side js validation on
+                    /// txtfields, beucase they are using tiny_mce
+                    /// tiny_mce doesn't put any text into the actual
+                    /// field until save time, *after* the validation has
+                    /// already told the user that the field is empty. doh.
+                    $side = 'client';
+                    if(is_array($this->obj->fb_textFields) && 
+                       in_array($fieldname, $this->obj->fb_textFields))
+                    {
+                        $side = NULL;
+                    }
 					$this->form->addRule(
                         $this->prependTable($fieldname), 
                         "{$this->obj->fb_fieldLabels[$fieldname]} mustn't be empty.", 
-                        'CustomRequired', NULL, 'client');
+                        'CustomRequired', NULL, $side);
                     // NOTE! must do regular required *AND* custom required
                     // customrequired doesn't "qualify" as a required
+                    // don't make both client-side though, or Trouble will ensue
 					$this->form->addRule(
                         $this->prependTable($fieldname), 
                         "{$this->obj->fb_fieldLabels[$fieldname]} mustn't be empty.", 

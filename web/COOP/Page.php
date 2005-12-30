@@ -212,6 +212,7 @@ class coopPage
                 $this->printDebug( "input encoding for $type: ". 
                                    mb_http_input($type));
             }
+            $this->confessArray(iconv_get_encoding('all'), 'iconv encoding');
         }
 				
 	}

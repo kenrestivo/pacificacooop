@@ -2,18 +2,30 @@
 
    // $Id$
 
-   require_once('HTML/QuickForm/textarea.php');
-   class HTML_QuickForm_mcetextarea extends HTML_QuickForm_textarea
-   {
-       function toHtml()
-       {
-           $res  = "";
+require_once('HTML/QuickForm/textarea.php');
+class HTML_QuickForm_mcetextarea extends HTML_QuickForm_textarea
+{
 
-           // change to tiny_mce_gzip.php, but it doesn't work
-           $res .= $this->_parentForm->CoopForm->page->jsRequireOnce('lib/tiny_mce/tiny_mce_gzip.php', 
-                                                              'COOP_TINYMCE_INCLUDE');
-           $res .= wrapJS(
-'tinyMCE.init({
+    function getFrozenHtml()
+    {
+        return '<div>' . $this->getValue() . '</div>';
+    }
+
+
+    function toHtml()
+        {
+               
+            if ($this->_flagFrozen) {
+                return $this->getFrozenHtml();
+            }
+               
+            $res  = "";
+               
+            // change to tiny_mce_gzip.php, but it doesn't work
+            $res .= $this->_parentForm->CoopForm->page->jsRequireOnce('lib/tiny_mce/tiny_mce_gzip.php', 
+                                                                      'COOP_TINYMCE_INCLUDE');
+            $res .= wrapJS(
+                'tinyMCE.init({
   mode : "textareas",
   theme: "advanced",
   theme_advanced_disable: "image,anchor,newdocument,visualaid,link,unlink,code", 
@@ -24,32 +36,32 @@
   paste_auto_cleanup_on_paste: true,     
   paste_strip_class_attributes : "all",
  });',
-                         'HTML_QUICKFORM_MCETEXTAREA_EXISTS');
+                'HTML_QUICKFORM_MCETEXTAREA_EXISTS');
            
-           $res .= "<noscript><h1>NOTICE! Some features on this page require Javascript. You will need to enable Javascript in your browser to use them.</h1></noscript>";
+            $res .= "<noscript><h1>NOTICE! Some features on this page require Javascript. You will need to enable Javascript in your browser to use them.</h1></noscript>";
 
 
-           $res .= parent::toHtml();
-		   return $res;
+            $res .= parent::toHtml();
+            return $res;
 		   
-	   } //end func toHtml
+        } //end func toHtml
 	   
 
 
 
 
 
-    }   // end custommce class
+}   // end custommce class
 
 
-   // took this code from advmultiselect
-   if (class_exists('HTML_QuickForm')) {
-       HTML_QuickForm::registerElementType('mcetextarea',
-										   'lib/mcetextarea.php', 
-										   'HTML_QuickForm_mcetextarea');
+// took this code from advmultiselect
+if (class_exists('HTML_QuickForm')) {
+    HTML_QuickForm::registerElementType('mcetextarea',
+                                        'lib/mcetextarea.php', 
+                                        'HTML_QuickForm_mcetextarea');
 
 
-   }
+}
 
 
    ?>

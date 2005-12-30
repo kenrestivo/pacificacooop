@@ -312,16 +312,17 @@ class CoopNewDispatcher
             $res .= $aud->simpleTable();
 
 
-            if($this->page->vars['last']['realm']){
-                $realm =& new CoopView(&$this->page, 'realms', &$atd);
-                $realm->obj->get($this->page->vars['last']['realm']);
-                $res .= $this->page->selfURL(
-                    array('value' => 
-                          "Click here for complete audit trail of all {$realm->obj->short_description}",
-                          'inside' => array('table' => 'audit_trail',
-                                            // XXX realm_id superflouos, using last!
-                                            'realm_id' => $this->page->vars['last']['realm'])));
-            }
+            /// XXX TOTALLY BROKEN!! and i haven't time or patience to fix it
+//             if($this->page->vars['last']['realm']){
+//                 $realm =& new CoopView(&$this->page, 'realms', &$atd);
+//                 $realm->obj->get($this->page->vars['last']['realm']);
+//                 $res .= $this->page->selfURL(
+//                     array('value' => 
+//                           "Click here for complete audit trail of all {$realm->obj->short_description}",
+//                           'inside' => array('table' => 'audit_trail',
+//                                             // XXX realm_id superflouos, using last!
+//                                             'realm_id' => $this->page->vars['last']['realm'])));
+//             }
 
             $res .= $this->page->selfURL(
                 array('value' => 'Click here for detailed view of Permissions',

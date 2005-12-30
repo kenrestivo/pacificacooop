@@ -12,9 +12,11 @@ coop web database
 
 
 BUGS BUGS BUGS
-	stack is utterly fucked up.
-		keeps INSISTING on going back to some random old stack. why?
-		it's somehow getting the old stack back
+	the emailing is all scqewy
+	audit trail link from details is stupid
+    AAAGH!!
+    	the stack is still totally fucked up??? doubel check
+
 
 
 
@@ -32,10 +34,6 @@ BUGS
 usability fix in search select: RETURN key!
 	make it do a search, NOT submit the form!
 
-
-???PHP
-clean up my inclusion order in proparation h for phptal
-	remember the set names!!!
 
 
 ???PHP
@@ -456,15 +454,25 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+?? PHP
+	format concatlinkfields
+		move that big loop in to the concatlinkfields in object
+
+
 ???PHP/JS?
 invitations really needs to be an advmultiselect, a crosslink with field
 	except for the damned RELATIVE and FAMILY thing
 	so you don't DELETE invitations, you REMOVE them from the selectbox
 
 
+
+???PHP
+clean up my inclusion order in proparation h for phptal
+	remember the set names!!!
+
+
 ???PHP/HTML 
 cleanups and speed improvements
-
 
 	construct the <HEAD> *last*, after the whole body is done
 		buffer the entire page, no matter how fucking enormous
@@ -5248,3 +5256,17 @@ make edit javascript check (using json) the perms for this particular record
 ???PHP (htmlvali)
 push live my html 4.01 and misc tweeks
 	final test run on LIVE site
+
+BUGS BUGS BUGS
+	stack is utterly fucked up.
+		keeps INSISTING on going back to some random old stack. why?
+		it's somehow getting the old stack back
+		well, i don't know what i did to fix it, but it works now.
+	handle formatted text in concatlinkfields
+		if it's a textarea, strip! (do not unescape!)
+    freeze method for textfields
+    	needs to show formatted html
+    	subclass text fields, i think i do this already! mce
+    blogs need to show up pretty too    mustn't be empty javascript rule... do NOT do this on client side!!
+		or, make it work with tinymce. they collide at present
+			manually yahk from qf

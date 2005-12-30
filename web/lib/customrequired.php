@@ -27,6 +27,13 @@ require_once('HTML/QuickForm/Rule/Required.php');
 */
 class CustomRequired extends HTML_QuickForm_Rule_Required
 {
+
+    // OK. WHY is this necessary? becuase PEAR sucks.
+    // pear quickform will only show a field as required if the
+    // DEFAULT built-in pear quickform 'required' rule has been added.
+    // but! that rule doesn't check for 0 values. mine does. well duh.
+    // so, in order to use mine, ou have to add BOTH the default rule AND mine
+
     /**
      * Checks if an element is empty
      *

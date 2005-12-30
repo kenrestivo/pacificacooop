@@ -164,17 +164,16 @@ class EmailChanges
                 }
             }
 
-            ///XXX broken until i fix the REQUEST crap in generic
             // REMEMBER! i can't use selfurl here: it adds SID
-//             $this->body .= sprintf('http://%s%s?table=%s&%s=%d',
-//                             $_SERVER['SERVER_NAME'],
-//                             '/generic.php',
-//                             $aud->obj->table_name,
-//                             $rec->prependTable($rec->pk),
-//                             $aud->obj->index_id);
+            $this->body .= sprintf('%sFor more details, visit here: http://%s/members/generic.php?action=details&table=%s&%s=%d',
+                                   "\n\n",
+                                   $this->audit_co->obj->table_name,
+                                   $rec->prependTable($rec->pk),
+                                   $this->audit_co->obj->index_id);
+
             
 
-            $this->body .= sprintf('%sYou have chosen to receive these updates via email. You may change or cancel this by visiting: http://%s/members/ under "Subscriptions:Settings"',
+            $this->body .= sprintf('%sYou have chosen to receive these updates via email. You may change or cancel this by visiting: http://%s/members/generic.php?table=subscriptions "',
                             "\n\n",
                                    $_SERVER['HTTP_HOST']
                                    );
