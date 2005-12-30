@@ -260,7 +260,8 @@ var printKey  = function(ev){
     case 39: 
         evt = new Evt(ev);
         evt.consume();
-        writeln(evt.getSource().value)
+        writeln(evt.getSource().value);
+        evt.getSource().combobox.fetchData();
         return false;
     default:
         break;
