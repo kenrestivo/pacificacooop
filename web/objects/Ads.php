@@ -47,12 +47,6 @@ class Ads extends CoopDBDO
 		);
     
 
-	var $fb_fieldsToRender = array(
-		"ad_size_id" ,
-		"artwork_provided" , "artwork_received" , "family_id" ,
-		"school_year", 'income_id' 
-		);
-
     var $fb_shortHeader = 'Ads';
 
     var $fb_requiredFields = array(

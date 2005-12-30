@@ -1751,4 +1751,16 @@ where audit_trail_id = (select max(audit_trail_id) from audit_trail) \G
 select distinct leads.lead_id from audit_trail left join leads on leads.lead_id = index_id left join invitations on index_id = invitations.lead_id where audit_user_id = 118 and table_name = 'leads' and invitation_id is null;
 
 
+
+--- WHY is this a syntax error???!
+SELECT *, families.family_id as SAFE_family_id , 
+max (school_year) as school_year , families.family_id as family_id 
+FROM families 
+LEFT JOIN kids ON kids.family_id=families.family_id 
+LEFT JOIN enrollment ON enrollment.kid_id=kids.kid_id 
+WHERE (enrollment.school_year like "%" or enrollment.school_year is null 
+or enrollment.school_year < "1900-01-01") 
+GROUP BY families.family_id 
+ORDER BY school_year desc , families.name 
+
 --- EOF

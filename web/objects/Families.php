@@ -75,7 +75,7 @@ class Families extends CoopDBDO
             $this->selectAdd('families.family_id as family_id');
     
             // XXX can't do this yet, how to force allyears
-            //in cases like roster!
+            //in popups, as in roster
             $co->constrainSchoolYear();
 
             //$co->constrainFamily(): // no point in this?

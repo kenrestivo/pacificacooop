@@ -559,6 +559,7 @@ class coopPage
             $_SESSION['cpVars'] =  array_merge($_SESSION['cpVars'], 
                                                $_REQUEST['cpVars']);
             $this->vars =& $_SESSION['cpVars'];
+            $this->confessArray($this->vars, 'merged session vars', 4);
         }
 
     function finalDebug()
