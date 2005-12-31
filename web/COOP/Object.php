@@ -953,11 +953,21 @@ function triggerNotices($audit_id)
 
 			while($this->obj->fetch()){
                 $this->recoverSafePK();
-				$options[(string)$this->obj->{$this->pk}] =
-    $escape ? 
-    htmlentities(sprintf('%.35s...',
-                         unHTML(strip_tags($this->concatLinkFields())))) : 
-    $this->concatLinkFields();
+				
+                // XXX this code ought to be taken out and shot
+                if($escape){
+                    $fmtval = unHTML(strip_tags($this->concatLinkFields()));
+                    if(strlen($fmtval) > 35){
+                        $fmtval = htmlentities(sprintf('%.35s...',$fmtval));
+                    } else {
+                        $fmtval = htmlentities($fmtval);
+                    }
+                } else {
+                    $fmtval = $this->concatLinkFields();
+                }
+                
+                $options[(string)$this->obj->{$this->pk}] = $fmtval;
+
                 $perms[$this->obj->{$this->pk}] = 
     $this->isPermittedField() >= ACCESS_EDIT;
 			}
@@ -1020,7 +1030,7 @@ function triggerNotices($audit_id)
             if($found < 1){
                 return ;
             }
-            return '<p class="instructions">' . $inst->instruction . '</p>';
+            return '<div class="instructions">' . $inst->instruction . '</div>';
         }
     
     function recoverSafePK()

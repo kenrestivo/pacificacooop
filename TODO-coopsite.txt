@@ -11,8 +11,9 @@ coop web database
 	insurance, dammit
 
 
-invalid html in tinymce!
-	blog_entry_id=35
+push tinymce fix live
+
+the instructions. certain people just are NOT PAYING ATTENTION
 
 
 ???PHP/SQL
@@ -453,6 +454,12 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+???CSS/HTML
+make the members main page prettier
+	make the centerdiv have a width, much like the giftfair
+	and put something over on the right, dunno what, something small
+
 
 ?? PHP
 	format concatlinkfields
@@ -5287,3 +5294,7 @@ BUGS BUGS BUGS
 	STUCK: the event is not stopping. it's unstoppable!
 		solution: keypress	integrate this, from jsmode.js
 usability fix in search select: RETURN key!
+invalid html in tinymce!
+	blog_entry_id=35
+
+	and fix that entry of mine!
