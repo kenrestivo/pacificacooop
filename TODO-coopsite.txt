@@ -3078,6 +3078,13 @@ i do however WANT to be able to copy the insurance info in!
 ----------------
 NOWHERE
 
+
+easy way out! just pass it the db_result handle
+	phptal has its own built in iterator for dbresults!
+	or, you can create an iterator. pain? or no pain? you decide.
+	NO. no way to set fetchmode
+
+
 bug: confirmdelete on linkfields-- utterly broken
 	i.e. family auciton/solicit auction
 	it's ok
@@ -5306,3 +5313,20 @@ year perms still totally fucked up!!
 		well, they do, when VIEWING in a POPUP, but not when EDITING!
 			they are ALL YEARS!
 		in the case of families, i hacked around it with aplumb: max schoolyear
+first get something working
+	db assoc? 
+		can't set the fetchmode.
+	my dbdo iterator, most likely
+		start with building the iterator manually
+			STUCK: how to debug?
+		then, make a generator(getiterator)
+		yay
+hmm. my iterator is not iterating
+	but it's not puking either.
+	bug in xml in the template! and it silently failed! auugh.
+STUCK: will need to implement an iterable method!
+	otherwise, how the fuck will i be able to do this shit?
+	ok, try it. add a method in coopobject which will return an iterator!
+			i.e. a generator. i'm writing generators in php. gah.
+		getNewIterator() and size()... factory basically
+		done
