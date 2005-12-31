@@ -22,10 +22,12 @@ class HTML_QuickForm_mcetextarea extends HTML_QuickForm_textarea
             $res  = "";
                
             // change to tiny_mce_gzip.php, but it doesn't work
-            $res .= $this->_parentForm->CoopForm->page->jsRequireOnce('lib/tiny_mce/tiny_mce_gzip.php', 
-                                                                      'COOP_TINYMCE_INCLUDE');
+            $res .= $this->_parentForm->CoopForm->page->jsRequireOnce(
+                'lib/tiny_mce/tiny_mce_gzip.php', 
+                'COOP_TINYMCE_INCLUDE');
 
-            $res .= $this->_parentForm->CoopForm->page->jsRequireOnce('lib/tinymceinit.js', 
+            $res .= $this->_parentForm->CoopForm->page->jsRequireOnce(
+                'lib/tinymceinit.js', 
                 'HTML_QUICKFORM_MCETEXTAREA_EXISTS');
            
             $res .= "<noscript><h1>NOTICE! Some features on this page require Javascript. You will need to enable Javascript in your browser to use them.</h1></noscript>";
