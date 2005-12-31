@@ -33,12 +33,6 @@ class ReportDispatcher extends CoopNewDispatcher
             // create a new template object
             $template = new PHPTAL("attendance.html", 
                                    'templates', 'cache');
-            
-            $context = array('families' => array(
-                                 array('name' => 'foo', 
-                                       'family_id' => 222),
-                                 array('name' => 'bar',
-                                       'family_id' => 333)));
 
             
             $fam =& new CoopView(&$this->page, 'families', &$nothing);
