@@ -277,3 +277,23 @@ EventUtils.addEventListener(c.searchBox, 'keyup', printKey, true);
 EventUtils.addEventListener(c.searchBox, 'keydown', printKey, true);
 EventUtils.addEventListener(c.searchBox, 'keypress', printKey, true);
 
+ 
+c.trapKey  = function(ev){
+    switch(ev.keyCode) 
+    {
+        // trap these keys
+        case 13:
+        case 39: 
+        evt = new Evt(ev);
+        evt.getSource().autocomplete = 0;
+            evt.consume();
+        this.fetchData();
+        return false;
+        break;
+        default:
+        break;
+        }
+    return true;
+}
+
+

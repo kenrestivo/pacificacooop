@@ -36,7 +36,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
 
             $res = sprintf(
                 '<input type="text" name="search-%s" %s
-                onchange="combobox_%s.fetchData()" onkeydown="return false;" />
+                onchange="combobox_%s.fetchData()" />
 
                 <input  type="button" 
                       onclick="combobox_%s.fetchData()"
@@ -60,7 +60,15 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
        {
            $jspath = 'lib';
            $res = '';
-           $res .= $this->cf->page->jsRequireOnce(
+  
+
+         $res .= $this->cf->page->jsRequireOnce(
+               sprintf('%s/eventutils.js' , 
+                       $jspath),
+               'INCLUDE_EVENTUTILS');
+  
+         
+         $res .= $this->cf->page->jsRequireOnce(
                sprintf('%s/kenflex.js' , 
                        $jspath),
                'HTML_QUICKFORM_SEARCHSELECT_EXISTS');

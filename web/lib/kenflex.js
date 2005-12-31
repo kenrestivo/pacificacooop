@@ -34,13 +34,14 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
         switch(ev.keyCode) 
         {
             // trap these keys
-        case 13:
-        case 39: 
+            case 13:
+            case 39: 
             evt = new Evt(ev);
             evt.consume();
             this.fetchData();
             return false;
-        default:
+            break;
+            default:
             break;
         }
         return true;
@@ -161,7 +162,7 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     
 /// CONSTRUCTOR    
     
-// to handle more than one
+    // to handle more than one
     this.searchBox = document.getElementsByName(searchBoxName)[0];
     this.selectBox = document.getElementsByName(selectBoxName)[0];
     this.status = document.getElementById('status-' + selectBoxName);
@@ -170,11 +171,11 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     this.linkTableName = linkTableName;
     
     
-// just to be sure
+    // just to be sure
     this.searchBox.autocomplete = 'off';
     
     
-//get the settings!
+    //get the settings!
     for(i in comboboxsettings){
         eval('this.' +i+ ' = comboboxsettings.' +i);
     }
@@ -196,9 +197,15 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     this.status.combobox=self;
 
     // add my callbacks for key handling
-    EventUtils.addEventListener(this.searchBox, 'keyup', function(ev){ return self.trapKey(ev)}, true);
-    EventUtils.addEventListener(this.searchBox, 'keydown', function(ev){ return self.trapKey(ev)}, true);
-    EventUtils.addEventListener(this.searchBox, 'keypress', function(ev){ return self.trapKey(ev)}, true);
+    EventUtils.addEventListener(this.searchBox, 'keyup', 
+                                function(ev){ return self.trapKey(ev) }, 
+                                true);
+    EventUtils.addEventListener(this.searchBox, 'keydown', 
+                                function(ev){ return self.trapKey(ev) }, 
+                                true);
+    EventUtils.addEventListener(this.searchBox, 'keypress', 
+                                function(ev){ return self.trapKey(ev) }, 
+                                true);
 
 
 } // end Combobox constructor

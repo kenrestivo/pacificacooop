@@ -12,14 +12,6 @@ coop web database
 
 
 
-???PHP/JS
-usability fix in search select: RETURN key!
-	integrate this, from jsmode.js
-	if they search for something else, KEEP what they already had selected!
-		go find out how. it doesn't really work. endlessloop!!?
-	
-
-
 ???PHP/SQL
 linkconstraiints in unusual circumstances
 		and then only when really wanted!
@@ -58,7 +50,12 @@ BUG
 		hmm. maybe a custom override to enum?
 			insert and update, and enum. any -1 is a NULL!
 			fuck, i gotta use it everywhere: reports, table, userprivs
-
+    if they search for something else, KEEP what they already had selected!
+    	go find out how. it doesn't really work. endlessloop!!?
+   	weird js error: Error: [Exception... "'Permission denied to get property XULElement.selectedIndex' when calling method: [nsIAutoCompletePopup::selectedIndex]"  nsresult: "0x8057001e (NS_ERROR_XPC_JS_THREW_STRING)"  location: "JS frame :: http://www/coop-dev/lib/kenflex.js :: anonymous :: line 64"  data: no]
+    Source File: http://www/coop-dev/lib/kenflex.js
+    Line: 64
+    
 
 ??PHP/SQL
 bring tickets, paddles, etc back to life!
@@ -5285,4 +5282,5 @@ BUGS BUGS BUGS
 					because i have stupid shit in my joins. use protected
 	make it do a search, NOT submit the form!
 	STUCK: the event is not stopping. it's unstoppable!
-		solution: keypress
+		solution: keypress	integrate this, from jsmode.js
+usability fix in search select: RETURN key!
