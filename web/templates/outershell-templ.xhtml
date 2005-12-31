@@ -4,12 +4,24 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <link rel="stylesheet" href="main.css" title="main" />
     
-    <title>Data Entry</title>
+    <title tal:content="page/title"></title>
   </head>
   <body>
     <!--[if gte IE 5.5000]> <script type="text/javascript" src="lib/pngfix.js"></script> <![endif]-->    
-    
-    
+
+    <div id="header">
+      <h2 tal:content="page/heading">Page Header</h2>
+      <div id="warning">Warning Here If Needed</div>
+
+      <div tal:content=""></div>
+
+
+      <div tal:comment="topnav func">Top Navigation</div>
+
+
+      <h3>Table Description</h3>
+      <hr />
+    </div>    
     
     
     
@@ -20,8 +32,8 @@
         
         <!--[if IE]><<a href="http://www.getfirefox.com"><img  alt="Get Firefox!" title="Get Firefox!" src="http://sfx-images.mozilla.org/affiliates/Buttons/110x32/get.gif"/></a><![endif]-->
         
-        If anything on this site appears to be not working properly, 
-      email <a href='mailto:ken@restivo.org'>ken@restivo.org</a> or call ken at 650-355-1317</div>
+        If anything on this site appears to be not working properly, email <a href='mailto:ken@restivo.org'>ken@restivo.org</a> or call ken at 650-355-1317</div>
     </div>
+
   </body>
 </html> 
