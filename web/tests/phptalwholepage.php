@@ -18,6 +18,8 @@
 
 //$Id$
 
+chdir('../'); // FOR TEST 
+
 require_once('CoopPage.php');
 require_once('CoopNewDispatcher.php');
 require_once "HTML/Template/PHPTAL.php";
@@ -28,10 +30,10 @@ $cp = new coopPage( $debug);
 $template = new PHPTAL("outershell-templ.xhtml");
 
 
-$template->setAll($context);
+$template->setAll($cp->context);
 
 // execute template
-return  $template->execute();
+print  $template->execute();
 
 
 ?>
