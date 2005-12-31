@@ -11,10 +11,6 @@ coop web database
 	insurance, dammit
 
 
-push tinymce fix live
-
-the instructions. certain people just are NOT PAYING ATTENTION
-
 
 ???PHP/SQL
 linkconstraiints in unusual circumstances
@@ -3081,6 +3077,10 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+bug: confirmdelete on linkfields-- utterly broken
+	i.e. family auciton/solicit auction
+	it's ok
     	fix family chooser: must override! all years if permitted!
     		i should just fix chosenschoolyear as '%', which i'm doing, yay.
     	linkconstraints are bogus on details. i often only want them on popup
@@ -5297,4 +5297,12 @@ usability fix in search select: RETURN key!
 invalid html in tinymce!
 	blog_entry_id=35
 
-	and fix that entry of mine!
+	and fix that entry of mine!push tinymce fix live
+
+the instructions. certain people just are NOT PAYING ATTENTION
+
+year perms still totally fucked up!!
+	what about things which HAVE NO SCHOOLYEAR!! i.e. families
+		well, they do, when VIEWING in a POPUP, but not when EDITING!
+			they are ALL YEARS!
+		in the case of families, i hacked around it with aplumb: max schoolyear

@@ -1,8 +1,30 @@
 report notes
 $Id$
 
+
+first get something working
+	db assoc? 
+		can't set the fetchmode.
+	my dbdo iterator, most likely
+		start with building the iterator manually
+			STUCK: how to debug?
+		then, make a generator(getiterator)
+	finally make an iterator for coopview
+		which uses view's toarray
+	
+
+easy way out! just pass it the db_result handle
+	phptal has its own built in iterator for dbresults!
+	or, you can create an iterator. pain? or no pain? you decide.
+
+
+hmm. my iterator is not iterating
+	but it's not puking either.
+
+
 40 hours PHP
 re-architect reports
+
 
 STUCK: will need to implement an iterable method!
 	otherwise, how the fuck will i be able to do this shit?

@@ -1,101 +1,109 @@
 <?php
 
-class DBDO_Iterator
+
+/**
+ * Iterator for DB_DataObject PEAR object.
+ *
+ * This class is an implementation of the Iterator Interface
+ * for DB_DataObject objects produced by the usage of PEAR::DB package.
+ * 
+ * @author based on Laurent Bedubourg <laurent.bedubourg@free.fr>
+   modified: Copyright (c) 2005 ken restivo <ken@restivo.org>
+ */
+
+require_once('Types/Iterator.php');
+
+class DB_DataObjectIterator extends Iterator
 {
     var $_src;
-    var $_end   = false;
     var $_index = -1;
-    var $_value = null;
+    var $_end   = false;
+    var $_value;
+    
+    /**
+     * Iterator constructor.
+     *
+     * @param DB_DataObject $result
+     *        The query result.
+     */
+    function DB_DataObjectIterator(&$dataobject)
+    {
+        $this->_src =& $dataobject;
+        $this->reset();
+    }
 
-    // constructor
-    //
-    // This constructor takes an array as first argument
-    //
-    function DBDO_Iterator(&$obj)
-        {
-            // store array reference
-            $this->_src =& $obj
-            // reset iterator to first position
-            $this->reset();
-        }
-
-    // reset iterator for next pass
-    //
     function reset()
-        {
-            // unset value
-            unset($this->_value);
-
-            // reset index
-            $this->_index = 0;
-
-            /// NOTE how can you reset a DBDO? impossible?
-            if($this->_index > 0){
-                return PEAR::raiseError("ResetError");
-            }
+    {
+        // DBDO is not resettable AFAICT
+        if($this->_index > 0){
+            return PEAR::raiseError("ResetError");
         }
-
-    // access next item
-    //
-    function &next()
-        {
-            // end already reached, do nothing
-            if ($this->_end) {
-                return;
-            }
-
-            $this->_index++;
-
-            // end reached
-            if(!$this->_src->fetch()){
-                $this->_end = true;
-                return;
-            }
-
-            // unset reference to item value
-            unset($this->_value);
-
-            // make reference to current item
-            $this->_value =& $this->_src->toArray();
-
-            // return value
-            return $this->_value;
+    }
+    
+    /**
+     * Return the number of rows in this result.
+     *
+     * @return int
+     */
+    function size()
+    {
+        if (!isset($this->_size)) {
+            $this->_size = $this->_src->N;
         }
+        return $this->_size;
+    }
 
-
-    // returns true if end not reached
-    //
+    /**
+     * Returns true if end of iterator has not been reached yet.
+     */
     function isValid()
-        {
-            return !$this->_end;
+    {
+        return !$this->_end;
+    }
+
+    /**
+     * Return the next row in this result.
+     *
+     * This method calls toArray() on the DB_DataObject, the return type depends
+     * of the DB_DataObject->toArray. Please specify it before executing the 
+     * template.
+     *
+     * @return mixed
+     */
+    function &next()
+    {
+        if ($this->_end || ++ $this->_index >= $this->size()) {
+            $this->_end = true;
+            return false;
         }
 
-
-    //
-    // getters
-    //
-
-    // retrieve current value by reference
-    //
-    // throws error if end reached
-    //
+        unset($this->_value);
+        $this->_src->fetch();
+        $this->_value = $this->_src;
+        return $this->_value;
+    }
+    
+    /**
+     * Return current row.
+     *
+     * @return mixed
+     */
     function &value()
-        {
-            if ($this->_end) {
-                return PEAR::raiseError("Iterator Out Of Bounds");
-            }
-            return $this->_value;
-        }
+    {
+        return $this->_value;
+    }
 
-    // retrieve current item index
-    //
+    /**
+     * Return current row index in resultset.
+     *
+     * @return int
+     */
     function index()
-        {
-            return $this->_index;
-        }
+    {
+        return $this->_index;
+    }
+}
 
-
-} // END ITERATOR CLASS
 
 
 

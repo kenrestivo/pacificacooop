@@ -21,7 +21,6 @@
 require_once('CoopPage.php');
 require_once('CoopNewDispatcher.php');
 require_once "HTML/Template/PHPTAL.php";
-require_once('lib/dbdo_iterator.php');
 
 
 
@@ -45,8 +44,7 @@ class ReportDispatcher extends CoopNewDispatcher
             $fam =& new CoopView(&$this->page, 'families', &$nothing);
             $fam->find(true);
             
-            $it =& new DB_DataObjectIterator(&$fam->obj);
-            $context = array('families' => $it);
+            $context = array('families' => &$fam);
 
             $template->setAll($context);
             

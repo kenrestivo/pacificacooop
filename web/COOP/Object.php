@@ -24,6 +24,7 @@ require_once('CoopPage.php');
 require_once('CoopDBDO.php');
 require_once("HTML/Table.php");
 require_once('object-config.php');
+require_once('lib/dbdo_iterator.php');
 
 //////////////////////////////////////////
 /////////////////////// COOP OBJECT CLASS
@@ -1050,6 +1051,13 @@ function triggerNotices($audit_id)
 
 
         }
+
+
+    function getNewIterator()
+    {
+        return new DB_DataObjectIterator(&$this->obj);
+    }
+
 
 } // END COOP OBJECT CLASS
 

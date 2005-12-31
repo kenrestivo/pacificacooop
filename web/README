@@ -93,6 +93,8 @@ first go get: Algo_map-0.1.1.tgz  HTML_Template_PHPTAL-0.7.0.tgz GetText-0.6.4.t
 then pear -c ~/.pearrc install <list of above package tarballs>
     i don't know what they are for php5
 
+you must also install tiny_mce. i had this in cvs but it was ridiculous.
+    so you have to find it, download it, and install it, in the 'lib' directory
 
 
 ---------------
