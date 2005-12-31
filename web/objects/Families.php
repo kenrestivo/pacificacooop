@@ -29,13 +29,13 @@ class Families extends CoopDBDO
 		'name' => 'Family Name',
 		'phone' => 'Phone Number',
 		'address1' => 'Address',
+
 		'email' => 'Email Address'
 		);
 	var $fb_requiredFields = array ('name', 'phone', 'address1');
 	//var $fb_crossLinks = array(array('table' => 'families_income_join',
 	//'fromField' => 'family_id', 'toField' => 'income_id'
 	var $fb_linkNewValue = 1;
-	var $fb_fieldsToRender = array ('name', 'phone', 'address1', 'email');
     var $fb_formHeaderText = "Co-Op Member Families";
     var $fb_shortHeader = "Families";
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
@@ -50,8 +50,10 @@ class Families extends CoopDBDO
 
     function postGenerateForm(&$form)
         {
-            $form->addRule($form->CoopForm->prependTable('email'), 
-                           'Email address must be valid', 'email', true);
+            if($form->elementExists($form->CoopForm->prependTable('email'))){
+                $form->addRule($form->CoopForm->prependTable('email'), 
+                               'Email address must be valid', 'email', true);
+            }
         }
 
 
@@ -68,6 +70,10 @@ class Families extends CoopDBDO
             $co->constrainSchoolYear();
 
             //$co->constrainFamily(): // no point in this?
+            
+            // NEED THIS HACK,
+            // otherwise perms calculates based on the LAST of the years
+            $co->obj->selectAdd('max(school_year) as school_year');
 
             $co->obj->orderBy();
             $co->obj->orderBy('families.name');
