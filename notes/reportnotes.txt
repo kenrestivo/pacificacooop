@@ -2,65 +2,43 @@ report notes
 $Id$
 
 
-STUCK: will need to implement an iterable method!
-	otherwise, how the fuck will i be able to do this shit?
-	ok, try it. add a method in coopobject which will return an iterator!
-			i.e. a generator. i'm writing generators in php. gah.
-		getNewIterator() and size()... factory basically
-
-
 PHPTAL nag reports
 	which?
 		sf nag report
 			might be easiest to start with this!!!!
-		parent ed nag (best choice, start from scratch)
+        	show nags only by due dates passed!
+        		or, will my above alertstatus do it?
+            use alerts instead of logic inside of nagreport??
+			nice, to get a summary of all alerts for a family!
+        		yank that silly conditional at the top of the nagreport!
+			move calcs into object
+	add a 'send reminder' button, to send alerts
+     	parent ed nag (best choice, start from scratch)
 			families, and all that they owe
 				total hours
-			try playing with it as a templ first, then add funct
 		also maybe that parent ed entry too
 			meeting, families, hours... though that's really a form
-		enhancement nag
-		solicitation summary
-		springfest totals (carriereport)
+	enhancement nag
+	solicitation summary
+	springfest totals (carriereport)
+	an expanded territory report maybe?
+	shirley's summary
+		first, all enrolled families (like in sandyreport?)
+		all enrollment totals (days)
+			by family and kid
+	make both reports group view only? 
 
 
-finally make an iterator for coopview
-		which uses view's toarray
+
+	get details working
+		the problem is the STACK. it needs to push
+			and it needs to know how to get back from there
 
 
-
-??PHP/TAL/JSON
-3 nifty new REPORTS in phptal! yay! with json email nag buttons!
-	for springfest, enhancement, and parent ed
-	move calcs into object
-phptal? template engine for reports like the nag report? parent ed? enhancement?
-	hmm, works on vaio, but not on bc. why?
-	then load all those fucking libraries! on nfsn. not. fun.
-		well, it might be easy!
-		then again, maybe not!
-		STUCK: the include paths: use LOGS, wtf is going on?
-			include dbhost.inc BEFORE first.inc, or at the top of it
-		know what? fuck it. put it in local_pear, if you can.
-	now try it out, maybe for the reports
 	settings
 		cache dir? nocache? repository?
 		xhtml/xml mode?
-	setall! and setref (setall shoudl suffice, use refs if needed)
-	for an expanded territory report maybe?
 
-
-
-8 hours PHP
- 	add in the nag report!!!
-		re-do using PHPTAL!
-	is there some way to use alerts instead of logic inside of nagreport??
-		nice, to get a summary of all alerts for a family!
-		yank that silly conditional at the top of the nagreport!
-	show nags only by due dates passed!
-		or, will my above alertstatus do it?
-	get details working
-		use generic with extradetails?
-	add a 'send reminder' button, to send alerts
 
 
 create a subclass of dispatcher, or a new dispatcher 
@@ -92,18 +70,13 @@ create a coopreport class, stick getreportperms into it
 			fuck it, stick a struct in a file and be done with it
 			that's for *storing* the new ones.
 
+finally make an iterator for coopview
+		which uses view's toarray
 
 ??? PHP
 parent ed attendance report that makes sense
 	using adddefaultfamilyperms, as a model
 
-
-???  PHP
-	shirley's summary
-	first, all enrolled families (like in sandyreport?)
-	all enrollment totals (days)
-		by family and kid
-	make both reports group view only? 
 
 
 

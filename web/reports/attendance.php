@@ -31,8 +31,7 @@ class ReportDispatcher extends CoopNewDispatcher
     function view()
         {
             // create a new template object
-            $template = new PHPTAL("attendance.html", 
-                                   'templates', 'cache/');
+            $template = new PHPTAL("attendance.xhtml");
 
             
             $fam =& new CoopView(&$this->page, 'families', &$nothing);

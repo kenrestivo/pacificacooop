@@ -81,6 +81,7 @@ class coopPage
     var $heading = 'Pacifica Co-Op Nursery School Data Entry'; // to display
     var $currentSchoolYear;   // cache so i'm not pounding findschoolyear
     var $browserData;    /// cache of data found
+    var $context = array(); // tal context
     
 	function coopPage($debug = false)
 		{
@@ -244,6 +245,20 @@ class coopPage
 
 
 		}
+
+    // the new version , simple, for phptal
+	function logIn()
+		{
+			ob_start();
+
+			$this->auth = logIn($_REQUEST);
+
+			$output = ob_get_clean();
+			$output && ob_end_flush();
+
+			return $output;
+		}
+
 
     function forceUser($uid)
         {

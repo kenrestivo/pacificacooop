@@ -43,5 +43,9 @@ define('COOP_MAX_SELECT_COUNT', 150);
 define('COOP_DEFAULT_BID_INCREMENT_DIVISOR', 10);
 define('COOP_DEFAULT_STARTING_BID_DIVISOR', 2);
 
+/// defaults for phptal. relative to the root dir
+define('PHPTAL_CACHE_DIR', 'cache/');
+define('PHPTAL_REPOSITORY', 'templates');
+
 
 ?>

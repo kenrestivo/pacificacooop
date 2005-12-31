@@ -11,12 +11,13 @@
 
     <div id="header">
       <h2 tal:content="page/heading">Page Header</h2>
+
       <div id="warning">Warning Here If Needed</div>
 
-      <div tal:content=""></div>
+      <div tal:content="page/logIn"></div>
 
 
-      <div tal:comment="topnav func">Top Navigation</div>
+      <div tal:content="structure page/topNavigation">Top Navigation</div>
 
 
       <h3>Table Description</h3>

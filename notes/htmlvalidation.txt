@@ -19,13 +19,9 @@ minor nits still tb fixed
 		well, try making it a child of above
 			that makes sense, but it still creates a second one
 				where does it decide to CREATE them?
+				just don't create it if it is already a child of same
 		STUCK: this is evil. i'm goign to let this stay broken for now
 
 
 	the farkin schoolyearchooser changes bgcolour. why?
 
-
-	art area utf issues still: ligatures for 1/2
-		maybe do that encoding/recoding thing?
-			look up the keycode
-		make sure it's not fixed

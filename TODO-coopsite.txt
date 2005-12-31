@@ -11,6 +11,10 @@ coop web database
 	insurance, dammit
 
 
+massive rewrite to use templates instead of my hacked-together nonsense
+	make a generic template for the WHOLE doc
+	filter to change the tags that shouldnt' be autoclosed to not autoclose
+
 
 ???PHP/SQL
 linkconstraiints in unusual circumstances
@@ -5330,3 +5334,15 @@ STUCK: will need to implement an iterable method!
 			i.e. a generator. i'm writing generators in php. gah.
 		getNewIterator() and size()... factory basically
 		done
+phptal? template engine for reports like the nag report? parent ed? enhancement?
+	hmm, works on vaio, but not on bc. why?
+	then load all those fucking libraries! on nfsn. not. fun.
+		well, it might be easy!
+		then again, maybe not!
+		STUCK: the include paths: use LOGS, wtf is going on?
+			include dbhost.inc BEFORE first.inc, or at the top of it
+		know what? fuck it. put it in local_pear, if you can.
+
+	now try it out, maybe for the reports
+	setall! and setref (setall shoudl suffice, use refs if needed)
+			try playing with it as a templ first, then add funct
