@@ -30,10 +30,13 @@ $cp = new coopPage( $debug);
 $template = new PHPTAL("outershell-templ.xhtml");
 
 
-$template->setAll($cp->context);
+$template->setAll(array('page' => &$cp));
 
 // execute template
 print  $template->execute();
 
+//$cp->printDebug($cp->title. $cp->heading);
+
+$cp->finalDebug();
 
 ?>
