@@ -46,6 +46,8 @@ class Blog_entry extends CoopDBDO
                              'show_on_public_page' => 'No');
 
 
+    var $fb_sizes = array('short_title' => 50, 
+                          'body' => 100);
 
 //     function linkConstraints(&$co)
 //         {

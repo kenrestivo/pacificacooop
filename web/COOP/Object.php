@@ -241,9 +241,11 @@ group by user_id,table_name,field_name";
 					// might be more readable
                     // TODO: make sure i don't show the - if nothing there
                     // ALSO TODO: do the formatting i.e. coopview toArray!!
-					$val .= sprintf("%s%s", $val ? ' ' . chr(183) . ' ' : "", 
-									$this->checkLinkField($linkfield, 
-                                                          $this->obj->$linkfield));
+					$val .= sprintf(
+                        "%s%s", 
+                        $val ? ' ' . chr(183) . ' ' : "", 
+                        $this->checkLinkField($linkfield, 
+                                              $this->obj->$linkfield));
 				}
 			}
 			return $val;
@@ -952,7 +954,9 @@ function triggerNotices($audit_id)
 			while($this->obj->fetch()){
                 $this->recoverSafePK();
 				$options[(string)$this->obj->{$this->pk}] =
-    $escape ? htmlentities($this->concatLinkFields()) : 
+    $escape ? 
+    htmlentities(sprintf('%.35s...',
+                         unHTML(strip_tags($this->concatLinkFields())))) : 
     $this->concatLinkFields();
                 $perms[$this->obj->{$this->pk}] = 
     $this->isPermittedField() >= ACCESS_EDIT;

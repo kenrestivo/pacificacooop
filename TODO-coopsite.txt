@@ -11,6 +11,9 @@ coop web database
 	insurance, dammit
 
 
+invalid html in tinymce!
+	blog_entry_id=35
+
 
 ???PHP/SQL
 linkconstraiints in unusual circumstances
