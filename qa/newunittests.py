@@ -216,7 +216,10 @@ class CoopTest:
             try:
                 res = obj.click()
             except org.apache.commons.httpclient.NoHttpResponseException:
-                self.logError('no response! retrying')
+                self.logError('no response from apache! retrying')
+                continue
+            except java.net.SocketTimeoutException:
+                self.logError('no response from javanet! retrying')
                 continue
             break
         return res
