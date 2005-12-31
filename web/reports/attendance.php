@@ -21,6 +21,7 @@
 require_once('CoopPage.php');
 require_once('CoopNewDispatcher.php');
 require_once "HTML/Template/PHPTAL.php";
+require_once('lib/dbdo_iterator.php');
 
 
 
@@ -31,7 +32,8 @@ class ReportDispatcher extends CoopNewDispatcher
     function view()
         {
             // create a new template object
-            $template = new PHPTAL("templates/attendance.html");
+            $template = new PHPTAL("attendance.html", 
+                                   'templates', 'cache');
             
             $context = array('families' => array(
                                  array('name' => 'foo', 
@@ -40,7 +42,11 @@ class ReportDispatcher extends CoopNewDispatcher
                                        'family_id' => 333)));
 
             
-            /// TODO: need to implement an iterable method in coopobject!
+            $fam =& new CoopView(&$this->page, 'families', &$nothing);
+            $fam->find(true);
+            
+            $it =& new DB_DataObjectIterator(&$fam->obj);
+            $context = array('families' => $it);
 
             $template->setAll($context);
             
