@@ -172,8 +172,9 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     
     
     // just to be sure
-    this.searchBox.autocomplete = 'off';
-    
+    this.searchBox.setAttribute('autocomplete', 'Off');
+    this.selectBox.setAttribute('autocomplete', 'Off');
+
     
     //get the settings!
     for(i in comboboxsettings){
