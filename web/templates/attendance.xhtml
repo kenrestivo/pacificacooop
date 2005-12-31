@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <table>
-  <tr><th tal:replace="families/obj/fb_fieldLabels/name">Name</th>
-  <th>Parent Ed Hours Owed</th></tr>
+  <tr class="tableheaders">
+    <th  tal:replace="families/obj/fb_fieldLabels/name">Name</th>
+    <th>Parent Ed Hours Owed</th>
+  </tr>
   <tr tal:repeat="family families">
     <td tal:content="family/name">Family</td>
     <td tal:content="family/family_id">Hours</td>
