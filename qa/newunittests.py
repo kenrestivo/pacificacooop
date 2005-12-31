@@ -14,7 +14,8 @@ run.ManyVisitHack('http://www/coop-dev/')
 
 htmlunitdir = '/usr/local/share/htmlunit'
 
-import os,sys
+import os.listdir, os.getcwd, os.system
+import sys.path
 for i in os.listdir(htmlunitdir):
     sys.path.append('/'.join([htmlunitdir, i]))
 
@@ -306,6 +307,8 @@ class Runner:
 
     def ManyVisitHack(self,url, validate='http://localhost/w3c-markup-validator/check', logfile="tests.log"):
         """runs multiple families in one url"""
+        print '=== starting new test in %s ===' % (os.getcwd())
+        os.system('make clean')
         usersToTest= ['Bartlett Family', 'Restivo Family', 'Cooke Family',
                       'Teacher Sandy', 'Shirley']
         fp=open(logfile, 'a')
