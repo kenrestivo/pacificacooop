@@ -28,7 +28,7 @@ require_once "lib/phptal_filters.php";
 $cp = new coopPage( $debug);
 
 
-$template = new PHPTAL("outershell-templ.xhtml");
+$template = new PHPTAL("wholepagetest.xhtml");
 
 
 $template->setAll ($cp->context);
