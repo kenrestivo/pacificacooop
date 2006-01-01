@@ -25,7 +25,7 @@ class XML_to_HTML extends PHPTAL_Filter
     {
          // make it valid html, not xml
         $patterns = array('/(<\?xml.*?>)/sm' => '',
-                          '/(<[meta|link].*?)\/>/sm' => '$1 >',
+                          '/(<.*?)\/>/sm' => '$1 >',
                           '/.*?<\!DOCTYPE/sm' => '<!DOCTYPE');
 
         return preg_replace(array_keys($patterns), 
