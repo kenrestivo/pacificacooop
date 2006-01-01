@@ -11,15 +11,14 @@
 
     <div id="header">
       <h2 tal:content="page/heading">Page Header</h2>
-
-      <div id="warning">Warning Here If Needed</div>
-
+      
+      <div tal:condition="page/devSite" id="warning"><strong>NOTE! THIS IS THE DEV SITE! 
+      THIS IS NOT LIVE DATA, THIS IS ONLY FOR TESTING.</strong>
+      <br />If you want the live site, use the "members" link, 
+      NOT "members-dev". Thanks.</div>
+      
       <div tal:content="page/logIn"></div>
-
-
       <div tal:content="structure page/topNavigation">Top Navigation</div>
-
-
       <h3>Table Description</h3>
       <hr />
     </div>    
