@@ -133,7 +133,7 @@ class EmailChanges
             $audformatted = $aud->toArrayWithKeys();
 
             $this->subject = sprintf("[%s] %s %s: %s", 
-                                     devSite() ? 'TESTING': 'Pacifica Co-Op',
+                                     $this->page->devSite() ? 'TESTING': 'Pacifica Co-Op',
                                      strtoupper($this->type),
                                      $rec->obj->fb_formHeaderText,
                                      $rec->concatLinkFields());
@@ -268,7 +268,7 @@ group by subscriptions.user_id,table_name
 
 
 // XXX hack to deal with my slow spamassassin
- if(devSite()){
+ if($cp->devSite()){
      sleep(20);
  }
 
@@ -322,7 +322,7 @@ group by subscriptions.user_id,table_name
      ///for testing
      $crap = "\n----- MAILED TO  {$fam->obj->email} ({$fam->obj->name})---\n";
 
-     if(devSite()){
+     if($cp->devSite()){
          global $coop_sendto;
          $to =  $coop_sendto['email_address'];
          $em->body .= $crap;

@@ -13,7 +13,8 @@ coop web database
 
 massive rewrite to use templates instead of my hacked-together nonsense
 	make a generic template for the WHOLE doc
-	filter to change the tags that shouldnt' be autoclosed to not autoclose
+	the tough part is figuring out how to SCRAM if no login
+		have to scram the template AND the actual page-generating code, both
 
 
 ???PHP/SQL
@@ -5346,3 +5347,4 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 	now try it out, maybe for the reports
 	setall! and setref (setall shoudl suffice, use refs if needed)
 			try playing with it as a templ first, then add funct
+	filter to change the tags that shouldnt' be autoclosed to not autoclose

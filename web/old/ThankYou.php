@@ -272,7 +272,7 @@ Tax ID # 94-1527749
 			}
 			
 			// CHECK DEV SITE AND DO NOT SEND IT IF I'M ON THE DEV SITE!
-			if(devSite()){
+			if($this->cp->devSite()){
 				printf("YOU ARE DEV. email is <pre>%s</pre>. goodbye now.",
 					   $this->toText());
 				return;

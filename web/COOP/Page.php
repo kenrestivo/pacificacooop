@@ -798,6 +798,14 @@ class coopPage
             return $this->browserData;
         }
 
+    // alias for OOP PHPTAL stuff
+    // devSite needs to be a non-object function for now still
+    function devSite()
+        {
+            return devSite();
+        }
+    
+
 
 } // END COOP PAGE CLASS
 
