@@ -23,6 +23,7 @@ chdir('../'); // FOR TEST
 require_once('CoopPage.php');
 require_once('CoopNewDispatcher.php');
 require_once "HTML/Template/PHPTAL.php";
+require_once "lib/phptal_filters.php";
 
 $cp = new coopPage( $debug);
 
@@ -33,6 +34,7 @@ $template = new PHPTAL("outershell-templ.xhtml");
 $template->setAll(array('page' => &$cp));
 
 // execute template
+$template->addOutputFilter(new XML_to_HTML());
 print  $template->execute();
 
 //$cp->printDebug($cp->title. $cp->heading);
