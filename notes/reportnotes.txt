@@ -1,6 +1,7 @@
 report notes
 $Id$
 
+make attendance test use wholephptal model now!
 
 PHPTAL nag reports
 	which?
@@ -30,6 +31,31 @@ PHPTAL nag reports
 
 
 
+coop_sendto
+	move to dbhost
+	need to be global ebcause it's referenced in session-init 
+	but i have to move it into cooppage somewhere-- setting
+
+
+phptal stuff
+	could do, in each template
+		usemacro top
+		usemacro head
+			do stuff
+		usemacro foot
+	or, 
+		use-macro page-shell
+			fill-slot centerstuff
+			nice! you can fill slots conditionally!
+
+
+use templates instead of my hacked-together nonsense
+	how to SCRAM if no login?
+		have to scram the template AND the actual page-generating code, both
+		a center div which scrams if no auth! duh. that's easy
+			a conditaional fill-slot???!
+				no login, no SLOT
+
 	get details working
 		the problem is the STACK. it needs to push
 			and it needs to know how to get back from there
@@ -42,6 +68,7 @@ PHPTAL nag reports
 
 
 create a subclass of dispatcher, or a new dispatcher 
+	this will be a very MVC, rails-ish thing, i expect
 
 margolisreport: see parentedattentance.txt
 

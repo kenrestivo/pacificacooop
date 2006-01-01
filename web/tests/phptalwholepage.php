@@ -31,7 +31,7 @@ $cp = new coopPage( $debug);
 $template = new PHPTAL("outershell-templ.xhtml");
 
 
-$template->setAll(array('page' => &$cp));
+$template->setAll ($cp->context);
 
 // execute template
 $template->addOutputFilter(new XML_to_HTML());

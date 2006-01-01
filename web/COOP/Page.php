@@ -91,6 +91,7 @@ class coopPage
 			dump("debug level $this->debug");
             $this->mergeSessionVars();
             $this->currentSchoolYear = findSchoolYear();
+            $this->context['page'] =& $this; /// store for easy access later
            
 		}
 
@@ -224,7 +225,7 @@ class coopPage
 			ob_start();
 			$this->header();
 		
-			$this->auth = logIn($_REQUEST);
+			$this->auth =& logIn($_REQUEST);
 
 			$this->confessArray($this->auth, 'auth -- post login');
 

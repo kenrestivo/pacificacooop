@@ -1126,7 +1126,7 @@ function
 thruAuthCore($auth)
 {
 	if(!is_array($auth)){
-		user_error("thruAuthCore($auth): is not an array. that would reset the session, and that would be bad. cowardly refusing to do so.", E_USER_ERROR);
+		PEAR::raiseError("thruAuthCore($auth): did NOT get passed an array. that would reset the session, and that would be bad. cowardly refusing to do so.", 666);
 	}
 
 	$_SESSION['auth'] = $auth;

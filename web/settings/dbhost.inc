@@ -33,7 +33,7 @@ $debug = isset($debug) ? $debug : 4;
 $dbuser = "springfest";
 $dbpwd = "92xPi9";
 $dbhost =  "localhost";
-//$coop_sendto =  "ken@restivo.org";
+
 
 // this is the local PEAR installer, NOT MY CVS TWEEKED VERSIONS!
 // these are run via a local PEAR instance, using their installer

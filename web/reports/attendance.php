@@ -21,6 +21,7 @@
 require_once('CoopPage.php');
 require_once('CoopNewDispatcher.php');
 require_once "HTML/Template/PHPTAL.php";
+require_once "lib/phptal_filters.php";
 
 
 
@@ -31,52 +32,40 @@ class ReportDispatcher extends CoopNewDispatcher
     function view()
         {
             // create a new template object
-            $template = new PHPTAL("attendance.xhtml");
-
+            if(!$this->page->auth['uid']){
+                PEAR::raiseError('not logged in, or bad reference', 666);
+            }
+            return "foo!";
             
             $fam =& new CoopView(&$this->page, 'families', &$nothing);
             $fam->find(true);
             
             $context = array('families' => &$fam);
 
-            $template->setAll($context);
-            
-            // execute template
-            return  $template->execute();
         }
 
 }
 
 
 //////// MAIN
+$cp =& new coopPage( $debug);
 
 
-$cp = new coopPage( $debug);
-$cp->buffer($cp->pageTop());
+$template = new PHPTAL("outershell-templ.xhtml");
 
 
-$cp->buffer($cp->topNavigation());
+// ok, the inside!
+$cp->context['dispatcher'] =& new ReportDispatcher(&$cp);
 
 
-$disp =& new ReportDispatcher(&$cp);
-
-
-$cp->buffer(sprintf("<h3>%s</h3>",$atd->obj->fb_formHeaderText));
-// NOT WORKING YET $cp->buffer($atd->titleJSHack());
-
-$cp->buffer("\n<hr /></div><!-- end header div -->\n"); //ok, we're logged in. show the rest of the page
-$cp->buffer('<div id="centerCol">');
-
-
-$cp->buffer($disp->dispatch());
-
+$template->setAll(&$cp->context);
+$template->addOutputFilter(new XML_to_HTML());
 
 if(headers_sent($file, $line)){
     PEAR::raiseError("headers sent at $file $line ", 666);
 }
-print $cp->flushBuffer();
-
-$cp->done();
+print  $template->execute();
+$cp->finalDebug();
 
 
 
