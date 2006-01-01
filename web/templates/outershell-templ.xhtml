@@ -18,8 +18,8 @@
       <br />If you want the live site, use the "members" link, 
       NOT "members-dev". Thanks.</div>
       
-      <div tal:content="page/logIn"></div>
-      <div tal:content="structure page/topNavigation">Top Navigation</div>
+      <div tal:content="structure page/logIn"></div>
+      <div tal:condition="page/auth/uid" tal:content="structure page/topNavigation">Top Navigation</div>
       <h3>Table Description</h3>
       <hr />
     </div>    
