@@ -296,6 +296,25 @@ c.trapKey  = function(ev){
     return true;
 }
 
+
+function hackkeys(o) { 
+    var l = new Array(); 
+    for (var p in o) { 
+        l.push(p) 
+            }
+    return l 
+}
+
+function hackvalues(o) { 
+     var l = new Array(); 
+     for (var p in o) { 
+         l.push(o[p]);
+     }
+     return l;
+}
+
+
+
 /////////
 addScript('http://www/coop-dev/lib/JsonRpc.js');
 p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
@@ -310,6 +329,7 @@ undefer(p.echotest());
 undefer(p.nothing());
 
 
+
 ///
 p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
                      ['getPage', 'dispatchTable']);
@@ -322,24 +342,10 @@ p.dispatchTable({action : 'add', table : 'ads'}).addCallback(function(data){ sub
 
 
 p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
-                     ['rpc_ping', 'rpc_get_methods']);
+                     ['rpc_ping', 'methodList']);
 
-p.rpc_get_methods().addCallback(function(data){p.addMethods(data)});
+p.methodList().addCallback(function(data){p.addMethods(values(data))});
 
 
 
-function keys(o) { 
-    var l = new Array(); 
-    for (var p in o) { 
-        l.push(p) 
-            }
-    return l 
-}
 
-function values(o) { 
-     var l = new Array(); 
-     for (var p in o) { 
-         l.push(o[p]);
-     }
-     return l ;
-}

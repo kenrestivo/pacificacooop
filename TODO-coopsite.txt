@@ -5348,3 +5348,4 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 	make a generic template for the WHOLE doc
 	handle errors properly: reset error handler
 	send to that dude
+	a getmethods method, introspect

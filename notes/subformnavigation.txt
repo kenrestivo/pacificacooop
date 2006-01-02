@@ -1,16 +1,9 @@
 notes on subform navigation, flipping between screens
 
 
-json housekeeping
-	finally tweek the error handling
-		make pear errors report their proper thing
-			not what's saved in user_error
-	multiple classes: how to do it?
-		with .'s?
-			look at the python stuff
-	a getmethods method, introspect
-
-	
+add to jsonrpc auto-adding of methods
+	converting indexed php fucked up array to a list, not fun
+	i need to write something like that
 
 
 ??? PHP/JS
@@ -43,6 +36,15 @@ big question: if i json it, how do i deal with input validation?
 
 
 make the jsonrpc.js introspect classes (get methods?) instead of specifying
+
+
+json housekeeping
+	finally tweek the error handling
+		make pear errors report their proper thing
+			not what's saved in user_error
+	multiple classes: how to do it?
+		with .'s?
+			look at the python stuff
 
 
 stack stuff

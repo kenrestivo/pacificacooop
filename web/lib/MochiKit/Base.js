@@ -199,6 +199,11 @@ MochiKit.Base.update(MochiKit.Base, {
         return rval;
     },
 
+               
+     values:  function(o){
+         return map(function(f){ return f[1] },items(o));
+     },
+
 
     _newNamedError: function (module, name, func) {
         func.prototype = new MochiKit.Base.NamedError(module.NAME + "." + name);
@@ -1240,6 +1245,7 @@ MochiKit.Base.EXPORT = [
     "setdefault",
     "keys",
     "items",
+    "values",
     "NamedError",
     "operator",
     "forward",

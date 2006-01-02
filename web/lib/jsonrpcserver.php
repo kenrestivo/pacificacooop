@@ -34,6 +34,8 @@ and from jsolait
   
   This file is part of the JavaScript o lait library(jsolait).
 
+the server only takes one "service" class to publish right now
+it also exposes built-in methods "rpc_ping" for testing and "rpc_get_methods" which  you can use for some rudimentary introspection
 
  */
 
@@ -54,7 +56,7 @@ class JSON_RPC_Server {
                           'error' => NULL); // skeletal response
     var $content = 'text/plain';
     var $instance;
-    var $builtIns = array('rpc_ping', 'rpc_get_methods');
+    var $builtIns = array('rpc_ping', 'methodlist'); // lowercase. php sucks.
 
     function JSON_RPC_Server()
         {
@@ -69,7 +71,7 @@ class JSON_RPC_Server {
         }
 
     // eventually take class as an argument
-    function rpc_get_methods()
+    function methodList()
         {
             return $this->_getMethodsToExport();
         }
