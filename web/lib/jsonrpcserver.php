@@ -1,7 +1,7 @@
 <?php
 // $Id$
 /*
-	Copyright (C) 2004-2005  ken restivo <ken@restivo.org>
+	Copyright (C) 2004-2006  ken restivo <ken@restivo.org>
 	 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -54,10 +54,24 @@ class JSON_RPC_Server {
                           'error' => NULL); // skeletal response
     var $content = 'text/plain';
     var $instance;
+    var $builtIns = array('rpc_ping', 'rpc_get_methods');
 
     function JSON_RPC_Server()
         {
             $this->json =& new Services_JSON();        
+        }
+
+
+    // built in utility
+    function rpc_ping($data)
+        {
+            return $data;
+        }
+
+    // eventually take class as an argument
+    function rpc_get_methods()
+        {
+            return $this->_getMethodsToExport();
         }
 
 
@@ -145,6 +159,11 @@ class JSON_RPC_Server {
                 PEAR::raiseError('Invalid JSON-RPC request', 666);
               }
 
+        }
+    
+
+    function _checkValidMethod()
+        {
             // make sure the method is in there too
             if(!in_array(strtolower($this->request->method), 
                          $this->exportedMethods)){
@@ -155,7 +174,6 @@ class JSON_RPC_Server {
                         implode(', ', $this->exportedMethods)), 666);
             }
         }
-    
 
  
     function handleRequest()
@@ -187,11 +205,18 @@ class JSON_RPC_Server {
             ///if you find it, instantiate whatever it's supposed to be
             ///tricky in PHP. easy in python. scary in javascript.
 
-
-            /// look at htmlajax, which i believe does it
-            $this->response['result'] = call_user_func_array(
-                array(&$this->instance, $this->request->method), 
-                $this->request->params);
+            if(in_array(strtolower($this->request->method), 
+                        $this->builtIns)){
+                $this->response['result'] = call_user_func_array(
+                    array(&$this, $this->request->method), 
+                    $this->request->params);
+            } else {
+                $this->_checkValidMethod();
+                /// look at htmlajax, which i believe does it
+                $this->response['result'] = call_user_func_array(
+                    array(&$this->instance, $this->request->method), 
+                    $this->request->params);
+            }
 
             restore_error_handler(); // remove error condom
 
