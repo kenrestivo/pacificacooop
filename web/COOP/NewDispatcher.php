@@ -485,7 +485,7 @@ function dispatch()
 
     //confessArray($this->page->vars['last'],'req');
 
-    $funcname = $this->page->vars['last']['action'];
+    $funcname =  $this->page->vars['last']['action'];
 
     $this->page->printDebug("CoopNewDispatcher::dispatch() going to $funcname");
 

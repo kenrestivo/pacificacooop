@@ -416,7 +416,12 @@ setupDB($urlonly = false)
 function
 getIpAddr()
 {
-    $ipaddr = $HTTP_SERVER_VARS['REMOTE_ADDR'];
+
+    $ipaddr = "Unknown";
+
+    if(!empty($HTTP_SERVER_VARS['REMOTE_ADDR'])){
+        $ipaddr = $HTTP_SERVER_VARS['REMOTE_ADDR'];
+    }
 
     if(empty($ipaddr)) {
         $ipaddr = getenv('REMOTE_ADDR');

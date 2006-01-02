@@ -7,6 +7,6 @@ sp=jsonrpc.ServiceProxy('http://www/coop-dev/dispatchproxy.php')
 
 sp2.echotest('foo')
 
-sp2.throwPEARError('foo')
+sp2.throwPEARError()
 
-sp2.getPage('foo')
+sp2.getPage()

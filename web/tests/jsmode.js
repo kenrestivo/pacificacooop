@@ -299,7 +299,13 @@ c.trapKey  = function(ev){
 /////////
 addScript('http://www/coop-dev/lib/JsonRpc.js');
 p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
-                     ['echotest']);
+                     ['echotest', 'getPage', 'throwError', 
+                      'throwPEARError', 'nothing']);
 
 undefer(p.echotest('foo bar baz')); 
+undefer(p.getPage());
+undefer(p.throwError());
+undefer(p.throwPEARError());
+undefer(p.echotest());
+undefer(p.nothing());
 

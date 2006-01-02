@@ -2,7 +2,15 @@ notes on subform navigation, flipping between screens
 
 
 json housekeeping
-	handle errors properly: reset error handler
+	finally tweek the error handling
+		make pear errors report their proper thing
+			not what's saved in user_error
+	multiple classes: how to do it?
+		with .'s?
+			look at the python stuff
+	a getmethods method, introspect
+
+	
 
 
 ??? PHP/JS

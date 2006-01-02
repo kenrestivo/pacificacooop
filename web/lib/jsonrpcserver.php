@@ -40,6 +40,7 @@ and from jsolait
 
 
 require_once('PEAR.php');
+require_once('PEAR/ErrorStack.php');
 require_once('Services/JSON.php');
 
 
@@ -94,6 +95,10 @@ class JSON_RPC_Server {
      */    
     function _sendResponse()
         {
+            if(headers_sent()){
+                return;
+            }
+
             //user_error('sending response', E_USER_NOTICE);
 
             $output = $this->json->encode($this->response);
@@ -120,7 +125,6 @@ class JSON_RPC_Server {
             
             $this->_sendHeaders($headers);
             
-            user_error($output, E_USER_NOTICE);
             print $output;
         }
 
@@ -140,9 +144,8 @@ class JSON_RPC_Server {
             if(!is_object($this->request) || empty($this->request->method))
             {
                 // error out
-                $this->response['error'] = 'Invalid JSON-RPC request';
-                return;
-            }
+                PEAR::raiseError('Invalid JSON-RPC request', 666);
+              }
 
             // make sure the method is in there too
             if(!in_array(strtolower($this->request->method), 
@@ -165,10 +168,11 @@ class JSON_RPC_Server {
 
 
             // put on the error condom
-			PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 
+            PEAR_ErrorStack::staticPushCallback(
 								   array(&$this, '_PEARErrorHandler'));
-            set_error_handler(array(&$this,'_errorHandler'));
+  
 
+          set_error_handler(array(&$this,'_errorHandler'));
 
             // ok, let's start a-parsing!
             $rawrequest = file_get_contents("php://input");
@@ -193,10 +197,10 @@ class JSON_RPC_Server {
 
             restore_error_handler(); // remove error condom
 
-            // if i get this far, i'm golden
+            // ONLY send response if it's not an error
+            // because error handler has already sent an error response
             if($this->response['error'] == NULL){
-                // ONLY send response if it's not an error
-                // because error handler has already sent an error response
+                // if i get this far, i'm golden
                 $this->_sendResponse();
             }
             
@@ -205,7 +209,6 @@ class JSON_RPC_Server {
     /** lifted from htmlajax */
     function _PEARerrorHandler(&$obj)
         {
-            restore_error_handler(); // otherwise it recurses!
 
             //SEGFAULTS! $this->response['error']['stack'] = $obj->backtrace;
             
@@ -213,22 +216,28 @@ class JSON_RPC_Server {
                                  $obj->message, 
                                  '', 
                                  '');
+
+            //TODO: restore the PEAR error, and re-raise
+            PEAR_ErrorStack::staticPopCallback();
         }
      
 
     /** lifted directly from htmlajax */
     function _errorHandler($errno, $errstr, $errfile, $errline) 
         {
-            if ($errno & error_reporting()) {
+            //TODO: do NOT stop for notices!!
+            if ($errno != E_NOTICE) {
             
                 $this->response['error'] = $errstr;
 
-
                 $this->_sendResponse();
             
-                // XXX if there is a cooppage, do the old pear error here!
-                // TODO: log it. how? restore error handler?
+                restore_error_handler(); // otherwise it recurses!
 
+                // log it. old error handler has already been restored
+                user_error(sprintf('%s originally on %s:%s',
+                                   $errstr, $errfile, $errline ), 
+                                   E_USER_ERROR);
             }
         }
 

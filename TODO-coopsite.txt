@@ -5346,3 +5346,5 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 			try playing with it as a templ first, then add funct
 	filter to change the tags that shouldnt' be autoclosed to not autoclose
 	make a generic template for the WHOLE doc
+	handle errors properly: reset error handler
+	send to that dude
