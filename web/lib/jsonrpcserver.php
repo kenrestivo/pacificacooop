@@ -94,6 +94,7 @@ class JSON_RPC_Server {
      */    
     function _sendResponse()
         {
+            //user_error('sending response', E_USER_NOTICE);
 
             $output = $this->json->encode($this->response);
             
@@ -136,8 +137,7 @@ class JSON_RPC_Server {
     function _checkRequest()
         {
             // mochitest uses id = 0. don't bother checking it.
-            if(empty($this->request->method) ||
-               empty($this->request->params))
+            if(!is_object($this->request) || empty($this->request->method))
             {
                 // error out
                 $this->response['error'] = 'Invalid JSON-RPC request';
@@ -147,12 +147,11 @@ class JSON_RPC_Server {
             // make sure the method is in there too
             if(!in_array(strtolower($this->request->method), 
                          $this->exportedMethods)){
-                $this->response['error'] = 
+                PEAR::raiseError(
                     sprintf(
                         '%s is not a valid method for this class. Valid are: [%s]',
                         $this->request->method,
-                        implode(', ', $this->exportedMethods));
-                $this->response['result'] = $this->json->encode($this->request);
+                        implode(', ', $this->exportedMethods)), 666);
             }
         }
     
@@ -160,34 +159,32 @@ class JSON_RPC_Server {
  
     function handleRequest()
         {
+
+            // does this belong here? needs to happen somewhere
+            $this->response['id'] = $this->request->id;
+
+
+            // put on the error condom
+			PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 
+								   array(&$this, '_PEARErrorHandler'));
+            set_error_handler(array(&$this,'_errorHandler'));
+
+
+            // ok, let's start a-parsing!
             $rawrequest = file_get_contents("php://input");
             //user_error($rawrequest, E_USER_NOTICE);
+
 
             $this->request = $this->json->decode($rawrequest);
             //XXX what to do if the json decode fails?
 
             $this->_checkRequest();
 
-            // does this belong here? needs to happen somewhere
-            $this->response['id'] = $this->request->id;
-
-
 
             ///TODO: surf through the entire response, looking for jsonclass
             ///if you find it, instantiate whatever it's supposed to be
             ///tricky in PHP. easy in python. scary in javascript.
 
-
-            if($this->response['error']){
-                // XXX:  call errorcallback instead
-                $this->_sendResponse();
-                return; // don't need to die, really
-            }
-
-            // put on the error condom
-			PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 
-								   array(&$this, '_PEARErrorHandler'));
-            set_error_handler(array(&$this,'_errorHandler'));
 
             /// look at htmlajax, which i believe does it
             $this->response['result'] = call_user_func_array(
@@ -197,7 +194,11 @@ class JSON_RPC_Server {
             restore_error_handler(); // remove error condom
 
             // if i get this far, i'm golden
-            $this->_sendResponse();
+            if($this->response['error'] == NULL){
+                // ONLY send response if it's not an error
+                // because error handler has already sent an error response
+                $this->_sendResponse();
+            }
             
         }
 
@@ -227,7 +228,6 @@ class JSON_RPC_Server {
             
                 // XXX if there is a cooppage, do the old pear error here!
                 // TODO: log it. how? restore error handler?
-                exit(1);
 
             }
         }

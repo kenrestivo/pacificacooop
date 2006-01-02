@@ -589,6 +589,7 @@ class coopPage
                                 'CoopPage::done() saving SESSION  at END of page');
             $this->confessArray(apache_response_headers(), 
                                 "FINAL apache response headers-- AFTER output", 4);
+
         }
 
     function done()

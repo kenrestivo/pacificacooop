@@ -1,6 +1,10 @@
 notes on subform navigation, flipping between screens
 
 
+json housekeeping
+	handle errors properly: reset error handler
+
+
 ??? PHP/JS
 attempt to implement subform.. as an ajax
 	write a simple test that poots out a subform, possibly stripped of its FORM
@@ -26,15 +30,17 @@ attempt to implement subform.. as an ajax
 		umm. what about javascript validation? does it break now?
 
 
-
 big question: if i json it, how do i deal with input validation?
 	i have to go back to what i had. with some hidden var, showing which
 
+
+make the jsonrpc.js introspect classes (get methods?) instead of specifying
 
 
 stack stuff
 	i can get a constipated stack. how to cleanse?
 	should hitting the index page wipe out the stack?
+	i think i fixed this already. test case?
 
 
 ?? PHP
