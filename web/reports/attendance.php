@@ -28,20 +28,15 @@ require_once "lib/phptal_filters.php";
 ///// move this to its own class and generalise it?
 class ReportDispatcher extends CoopNewDispatcher
 {
+    var $families;
 
     function view()
         {
-            // create a new template object
-            if(!$this->page->auth['uid']){
-                PEAR::raiseError('not logged in, or bad reference', 666);
-            }
-            return "foo!";
-            
-            $fam =& new CoopView(&$this->page, 'families', &$nothing);
-            $fam->find(true);
-            
-            $context = array('families' => &$fam);
+            $this->families =& new CoopView(&$this->page, 'families', &$nothing);
+            $this->families->find(true);
 
+            // works, but unnecessary yet.
+            //$this->page->context['families'] =& $this->families;
         }
 
 }
@@ -51,14 +46,24 @@ class ReportDispatcher extends CoopNewDispatcher
 $cp =& new coopPage( $debug);
 
 
-$template = new PHPTAL("outershell-templ.xhtml");
+$template = new PHPTAL("attendance.xhtml");
 
 
-// ok, the inside!
-$cp->context['dispatcher'] =& new ReportDispatcher(&$cp);
+// got to RUN certain things before anything makes sense
+$cp->logIn();
+$dispatcher =& new ReportDispatcher(&$cp);
+$dispatcher->dispatch();
 
 
-$template->setAll(&$cp->context);
+
+// let the template know all about it
+$template->setRef('page', $cp);
+$template->setRef('dispatcher', $dispatcher);
+
+
+confessObj($template->getContext(), 'context');
+
+
 $template->addOutputFilter(new XML_to_HTML());
 
 if(headers_sent($file, $line)){

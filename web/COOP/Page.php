@@ -79,9 +79,10 @@ class coopPage
 	var $vars;                  //alias of session vars. i hope.
     var $title = 'Data Entry';  // the titlebar of the browser windowi
     var $heading = 'Pacifica Co-Op Nursery School Data Entry'; // to display
+    var $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';    // since tal can't escape it
     var $currentSchoolYear;   // cache so i'm not pounding findschoolyear
     var $browserData;    /// cache of data found
-    var $context = array(); // tal context
+
     
 	function coopPage($debug = false)
 		{
@@ -91,7 +92,7 @@ class coopPage
 			dump("debug level $this->debug");
             $this->mergeSessionVars();
             $this->currentSchoolYear = findSchoolYear();
-            $this->context['page'] =& $this; /// store for easy access later
+
            
 		}
 
@@ -109,7 +110,7 @@ class coopPage
 		{
             // default content is text/html. 
             $content_type = 'text/html;charset=utf-8';
-            $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';
+
 
 /// NO! do not do this. evil evil evil
 //             // sniff the heaers. if agent supports it, send xhtml instead!
@@ -126,7 +127,7 @@ class coopPage
 			printf('%s
 <html  %s>
 ',            
-                   $doctype,
+                   $this->doctype,
                    $content_type == 'application/xhtml+xml' ? 
                    'xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"' : 
                    'lang="en"');
@@ -246,7 +247,7 @@ class coopPage
 
 
 		}
-
+  
     // the new version , simple, for phptal
 	function logIn()
 		{
@@ -679,6 +680,7 @@ class coopPage
     function initStack()
         {
             $this->printDebug('initialising stack', 2);
+            unset($this->vars['stack']);
             $this->vars['stack'] = array();
         }
 

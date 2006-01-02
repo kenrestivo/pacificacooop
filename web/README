@@ -96,10 +96,81 @@ then pear -c ~/.pearrc install <list of above package tarballs>
 you must also install tiny_mce. i had this in cvs but it was ridiculous.
     so you have to find it, download it, and install it, in the 'lib' directory
 
+------------
+old AUTH permissions system
+auth
+	why are users not families??? why create a shadow abstraction?!
+		well, because users are NOT families! 
+			there can be non-family users: i.e. teacher sandy/catherine/pat
+			i want to grant privs to the Roster person to add/change families
+				but NOT to administer user privileges!
+				that task will go to the webmiester/administrator/board
+	realms: areas of privilege
+		these are mostly arbitrary, but do center around various "views"
+		realms are neither tables nor views nor committees. 
+			they are orthoganal to all of them. yes, i know this is confusing.
+		auction: family auction-related stuff. roughly "auction committee"
+		calendar: the calendar of events
+		flyers: the flyer placement. roughly the "publicity committee"
+		insurance: insurance information. roughly the "insurance coordinator"
+		invitations: springfest invitations. roughly the "invitation committee"
+		money: income received. roughly springfest coordinator, and treasurer
+		packaging: stuff related to packaging up auctions. mostly pkg committee
+		raffle: stuff related to the raffle. mostly raffle and quilt committees
+		roster: the roster. mostly the roster coordinator
+		nag: the nag people.
+		solicitation: related to solicitation. mostly "solicitation committee"
+		user: user administration. mostly the membership, board, and web
+	user and group levels, each has an access level
+	ACCESS LEVELS  are:
+		'ACCESS_INVALID', -1);
+			bad user name. soemthing wicked happened
+		'ACCESS_NONE', 0);
+			no access.	
+		'ACCESS_SUMMARY', 100);
+			can view the totals (summaries) for this realm
+		'ACCESS_VIEW', 200);
+			can view the details of data for this realm	
+		'ACCESS_VIEWALL', 300);
+			depreciated. not used
+		'ACCESS_EDIT', 500);
+			can edit existing records in this realm
+		'ACCESS_ADD', 600);
+			can add new records for this realm
+		'ACCESS_DELETE', 700);
+			can delete records for the realm
+		'ACCESS_ADMIN', 800);
+			can change privileges for users relating to this realm
+	$auth struct
+		uid: the user_id. duh
+		pwd: the password supplied by the user. 
+		confirm: the confirm password supplied by the user
+		token: a hash of the md5 hash of the password, and the uid
+		state: what state of auth they are in
+	$p struct
+		TODO document me
+	$u struct: returned by getUser():
+		username
+		familyname
+		family_id
+	each field can have its own perms. field perms are a LIMIT
+		if the user/group has at LEAST the field's perm levels, 
+			it can do that action
+			basically it means: limit THIS action to only people with perms
+				i.e, edit perms on group = only  groupperms >= view can edit
+		so to calculate a perm for a field, fieldPerms() factors in:
+			the DESIRED action
+			the field's GROUP level
+			the field's USER level
+			whether the desired action is on the user's own family or another
+			the user's USERLEVEL privileges
+			the user's GROUPLEVEL privileges
+
 
 ---------------
 
 database things:
-	in general, i've been a relational database sql bigot. i am VERY much for segregation of data into separate tables, and ESPECIALLY where there's any duplication of data. any one-to-many's are done with direct joins, and many-to-many's are done with join ("glue") tables. often the join tables evolve into tables with useful data in their own right (example being the "attendance" table) and get their own names.
+	in general, i've been a relational database structure bigot. i am VERY much for segregation of data into separate tables, and ESPECIALLY where there's any duplication of data. any one-to-many's are done with direct joins, and many-to-many's are done with join ("glue") tables. often the join tables evolve into tables with useful data in their own right (example being the "attendance" table) and get their own names.
+
 
 

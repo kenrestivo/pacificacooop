@@ -1,7 +1,21 @@
 report notes
 $Id$
 
-make attendance test use wholephptal model now!
+
+ugly big huge reference problem
+	looks like the page that gets sent into the context is DIFFERENT
+		from the one that is in the dispatcher. this is deadly
+		make sure i understand exactly what is the behaviour
+			i.e. i can put things into dispatcher.
+				how do they get disconnected?
+		then go trace it through
+
+
+make attendance test use wholephptal model now!7
+	i think the secret is to change my brain. 
+	my view/add/confirmdelete/delete/etc code should NOT INCLUDE ANY HTML
+	 none whatsoever
+
 
 PHPTAL nag reports
 	which?

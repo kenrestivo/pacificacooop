@@ -476,9 +476,18 @@ function perms()
 
 function dispatch()
 {
+
+    if(empty($this->page->auth['uid'])){
+        //with templates, it's entirely possible to have a blank here
+        $this->page->printDebug('dispatcher called with no auth! scramming');
+        return;
+    }
+
     //confessArray($this->page->vars['last'],'req');
 
     $funcname = $this->page->vars['last']['action'];
+
+    $this->page->printDebug("CoopNewDispatcher::dispatch() going to $funcname");
 
     // new add edit are all add_edit
     // dammit. 'new' is a keyword.

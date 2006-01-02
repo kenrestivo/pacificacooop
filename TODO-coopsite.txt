@@ -1,8 +1,8 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	reports in phptal (reportnotes.txt)
 	json the subforms (subform.txt)
+	reports in phptal (reportnotes.txt)
 	import the 20-year roster (20yearroster.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	sortable/searchable reports (searchfeature.txt)
@@ -24,11 +24,6 @@ linkconstraiints in unusual circumstances
 				but not in most other things-- stick with the schoolyear
 
 
-
-BUGS BUGS BUGS
-    AAAGH!!
-    	the stack is still totally fucked up??
-		at elast on the live site, it certainly is!
 
 
 ???PHP
@@ -82,6 +77,12 @@ BURNT (when too burnt out to do actual work)
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
 
+
+BUGS BUGS BUGS
+    AAAGH!!
+    	the stack is still totally fucked up??
+		at elast on the live site, it certainly is!
+		my unset fix work?
 
 
 ???PHP shell

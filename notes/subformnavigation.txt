@@ -15,6 +15,7 @@ attempt to implement subform.. as an ajax
 				i'd have to extract that out into a coopform function... scary!
 					getting vars
 					validation
+				hmm. could i just call that by itself?? what comes out of it?
 			and strips out the form html
 	what to do at save time?
 		i suppose i need a hidden, 

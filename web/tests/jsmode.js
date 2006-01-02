@@ -289,11 +289,17 @@ c.trapKey  = function(ev){
             evt.consume();
         this.fetchData();
         return false;
-        break;
+        break; 
         default:
         break;
         }
     return true;
 }
 
+/////////
+addScript('http://www/coop-dev/lib/JsonRpc.js');
+p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
+                     ['echotest']);
+
+undefer(p.echotest('foo bar baz')); 
 

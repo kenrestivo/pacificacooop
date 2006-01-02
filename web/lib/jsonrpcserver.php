@@ -208,12 +208,10 @@ class JSON_RPC_Server {
 
             //SEGFAULTS! $this->response['error']['stack'] = $obj->backtrace;
             
-            // XXX if there is a cooppage, do the old pear error here!
             $this->_errorHandler($obj->code, 
                                  $obj->message, 
                                  '', 
                                  '');
-            
         }
      
 
@@ -227,6 +225,7 @@ class JSON_RPC_Server {
 
                 $this->_sendResponse();
             
+                // XXX if there is a cooppage, do the old pear error here!
                 // TODO: log it. how? restore error handler?
                 exit(1);
 

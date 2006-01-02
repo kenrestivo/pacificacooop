@@ -203,7 +203,7 @@ update(MochiKit.JsonRpc.JsonRpcProxy.prototype, {
     'call': function () {
         var arglist = MochiKit.Base.map(null,arguments)
         var methname = arglist.shift()
-        log(arglist);
+        log('sending:', arglist);
         var callobj = new MochiKit.JsonRpc.JsonRpcCall(methname,arglist);
         var callstr = json(callobj);
         var req = MochiKit.Async.getXMLHttpRequest();
