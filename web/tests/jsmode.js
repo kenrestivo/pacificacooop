@@ -316,6 +316,30 @@ p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
 undefer(p.getPage());
 
 
-
 subform = $('body').appendChild(DIV({id:'subform'},'stuff goes here'))
-p.dispatchTable({action : 'add', table : 'access_levels'}).addCallback(function(data){ subform.innerHTML = data});
+
+p.dispatchTable({action : 'add', table : 'ads'}).addCallback(function(data){ subform.innerHTML = data});
+
+
+p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
+                     ['rpc_ping', 'rpc_get_methods']);
+
+p.rpc_get_methods().addCallback(function(data){p.addMethods(data)});
+
+
+
+function keys(o) { 
+    var l = new Array(); 
+    for (var p in o) { 
+        l.push(p) 
+            }
+    return l 
+}
+
+function values(o) { 
+     var l = new Array(); 
+     for (var p in o) { 
+         l.push(o[p]);
+     }
+     return l ;
+}
