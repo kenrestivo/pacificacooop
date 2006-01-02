@@ -309,3 +309,13 @@ undefer(p.throwPEARError());
 undefer(p.echotest());
 undefer(p.nothing());
 
+
+///
+p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
+                     ['getPage', 'dispatchTable']);
+undefer(p.getPage());
+
+
+
+subform = $('body').appendChild(DIV({id:'subform'},'stuff goes here'))
+p.dispatchTable({action : 'add', table : 'access_levels'}).addCallback(function(data){ subform.innerHTML = data});
