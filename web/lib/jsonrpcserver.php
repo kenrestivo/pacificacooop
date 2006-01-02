@@ -91,8 +91,6 @@ class JSON_RPC_Server {
 
 
 
-    /* lifted from PEAR::HTML_AJAX 
-     */    
     function _sendResponse()
         {
             if(headers_sent()){
@@ -172,7 +170,7 @@ class JSON_RPC_Server {
 								   array(&$this, '_PEARErrorHandler'));
   
 
-          set_error_handler(array(&$this,'_errorHandler'));
+            set_error_handler(array(&$this,'_errorHandler'));
 
             // ok, let's start a-parsing!
             $rawrequest = file_get_contents("php://input");
@@ -206,26 +204,18 @@ class JSON_RPC_Server {
             
         }
 
-    /** lifted from htmlajax */
+
     function _PEARerrorHandler(&$obj)
         {
 
-            //SEGFAULTS! $this->response['error']['stack'] = $obj->backtrace;
-            
-            $this->_errorHandler($obj->code, 
-                                 $obj->message, 
-                                 '', 
-                                 '');
-
-            //TODO: restore the PEAR error, and re-raise
-            PEAR_ErrorStack::staticPopCallback();
+            $this->_errorHandler($obj->code, $obj->message, '', ''); 
         }
      
 
-    /** lifted directly from htmlajax */
+
     function _errorHandler($errno, $errstr, $errfile, $errline) 
         {
-            //TODO: do NOT stop for notices!!
+            // do NOT stop for notices!!
             if ($errno != E_NOTICE) {
             
                 $this->response['error'] = $errstr;
