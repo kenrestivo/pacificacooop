@@ -180,7 +180,9 @@ MochiKit.Logging.Logger.prototype = {
             if (pair[0] && !pair[0](msg)) {
                 continue;
             }
-            pair[1](msg);
+            if(typeof pair[1] == 'function'){
+                pair[1](msg);
+            }
         }
     },
 
