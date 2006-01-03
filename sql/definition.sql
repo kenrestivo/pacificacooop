@@ -978,5 +978,11 @@ instruction longtext
 );
 
 
+create table minutes(
+minutes_id int(32) primary key not null unique auto_increment,
+calendar_event_id int(32),
+body longtext
+);
+
 
 -- EOF

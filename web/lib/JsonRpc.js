@@ -194,8 +194,18 @@ MochiKit.JsonRpc.JsonRpcCall = function (method,params) {
 MochiKit.JsonRpc.JsonRpcProxy = function (url,methNames) {
     MochiKit.Base.bindMethods(this);
     this.url = url;
+    this.addMethods(['rpc_ping','methodList']);
     if (methNames) {
         MochiKit.Base.map(this._proxyMethod,methNames);
+    } else {
+        try{
+            this.call('methodList').addCallback(
+                function(data){
+                    this.addMethods(values(data))
+                });
+        } catch(e){
+            log('no methods found: ' + e);
+        }
     }
 }
 

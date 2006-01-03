@@ -2,17 +2,22 @@ notes on subform navigation, flipping between screens
 
 
 add to jsonrpc auto-adding of methods
-	converting indexed php fucked up array to a list, not fun
-	i need to write something like that
+	make the jsonrpc.js introspect classes (get methods?) instead of specifying
+	copy/paste from jsmode
+	not quite working yet
 
 
 ??? PHP/JS
 attempt to implement subform.. as an ajax
 	write a simple test that poots out a subform, possibly stripped of its FORM
+		AAGH! the included scripts! notworking
+			window? scope?
+		DOMinspect it, where are the scripts, if anywhere?
+
 	i.e., um, subform!
 		make add new blah do a js foo(subtable, id)
-			js fetches the subform, passes the ID along with it
-			deferred callback dumps it into innerhtml, 
+			js fetches the subform, passes the ID along with it?
+				deferred callback dumps it into innerhtml (easy), 
 				and appends/removes from a hidden array of subtable names
 					that'd need to be maintable-subtable do i can nest
 		the 'server' side that delivers the subform HTML 
@@ -21,6 +26,7 @@ attempt to implement subform.. as an ajax
 					getting vars
 					validation
 				hmm. could i just call that by itself?? what comes out of it?
+					a full form! might be ok
 			and strips out the form html
 	what to do at save time?
 		i suppose i need a hidden, 
@@ -35,7 +41,6 @@ big question: if i json it, how do i deal with input validation?
 	i have to go back to what i had. with some hidden var, showing which
 
 
-make the jsonrpc.js introspect classes (get methods?) instead of specifying
 
 
 json housekeeping

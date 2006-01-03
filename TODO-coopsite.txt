@@ -11,6 +11,10 @@ coop web database
 	insurance, dammit
 
 
+immediate
+	fix susan's bug in ads
+	add checks for leigh ann and bethany-- thought i did this already?
+	perms for checks to susan
 		
 
 ???PHP/SQL
@@ -5349,3 +5353,5 @@ phptal? template engine for reports like the nag report? parent ed? enhancement?
 	handle errors properly: reset error handler
 	send to that dude
 	a getmethods method, introspect
+	converting indexed php fucked up array to a list, not fun
+	i need to write something like that

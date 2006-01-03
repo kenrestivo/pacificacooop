@@ -9,3 +9,11 @@
 --  everyone should see all previosu years jobs, board members delete all prev
 
 -- aha oh ho. nag indulgences privs are fuxored
+
+
+
+create table minutes(
+minutes_id int(32) primary key not null unique auto_increment,
+calendar_event_id int(32),
+body longtext
+);

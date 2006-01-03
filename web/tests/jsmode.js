@@ -341,10 +341,8 @@ subform = $('body').appendChild(DIV({id:'subform'},'stuff goes here'))
 p.dispatchTable({action : 'add', table : 'ads'}).addCallback(function(data){ subform.innerHTML = data});
 
 
-p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
-                     ['rpc_ping', 'methodList']);
-
-p.methodList().addCallback(function(data){p.addMethods(values(data))});
+p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php')
+p.call('methodList').addCallback(function(data){p.addMethods(values(data))});
 
 
 
