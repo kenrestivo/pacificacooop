@@ -36,6 +36,7 @@ class Ads extends CoopDBDO
 	var $fb_formHeaderText = 'Springfest Ads';
 	var $fb_fieldLabels = array(
 		"company_id" => "Company Name",
+		"lead_id" => "Contact",
 		"ad_size_id" => "Ad size",
 		"artwork_provided" => "Customer will provide their own artwork?",
 		"artwork_received" => "Date Artwork Received" ,

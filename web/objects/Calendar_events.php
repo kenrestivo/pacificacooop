@@ -28,7 +28,7 @@ class Calendar_events extends CoopDBDO
     ###END_AUTOCODE
 	var $fb_enumFields = array ('status', 'show_on_public_page');
 
-	var $fb_linkDisplayFields = array('event_id', 'event_date');
+	var $fb_linkDisplayFields = array( 'event_date','event_id');
     var $fb_fieldLabels = array(
         'event_id' => 'Event',
         'event_date' => 'Date (and time) of Event (MM/DD/YYYY), with optional "HH:MM AM/PM"',

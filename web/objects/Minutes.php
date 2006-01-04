@@ -22,4 +22,35 @@ class Minutes extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+	var $fb_linkDisplayFields = array('calendar_event_id', 'body');
+
+    var $fb_textFields = array('body');
+
+	var $fb_fieldLabels = array(
+        'calendar_event_id' => 'Meeting',
+        'body' => 'Minutes'
+		);
+
+	var $fb_formHeaderText =  'Meeting Minutes';
+
+	var $fb_requiredFields = array('calendar_event_id', 'body');
+
+
+    var $fb_shortHeader = 'Minutes';
+
+    var $fb_joinPaths = array('school_year' => 'calendar_events');
+
+
+// 	function fb_linkConstraints(&$co)
+// 		{
+//             $cal =& new CoopObject(&$co->page, 'calendar_events', &$co);
+//             $co->protectedJoin($cal);
+//             $co->constrainSchoolYear();
+//             $co->orderByLinkDisplay();
+//             $co->grouper();
+// 		}
+
+
+
 }
