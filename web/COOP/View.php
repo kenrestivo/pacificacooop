@@ -88,6 +88,10 @@ class coopView extends CoopObject
 		{
             $rowcnt = 0;
             
+            //vital for tables with BLOBS in 'em
+            $this->dietBlobs($find);
+
+
 			// NOTE. this object's find, not the DBDO find
 			if(!$this->find($find)){
 				return;
@@ -198,6 +202,29 @@ class coopView extends CoopObject
             // even if nothign was found, force TRUE, so i get my enter new
             return $found || $perms >= ACCESS_ADD;
 		}
+
+
+    function dietBlobs($find)
+        {
+            // skip if i am manually querying,
+            // or if no way to determine textfields
+            if(!$find || empty($this->obj->fb_textFields)){
+                return; 
+            }
+
+            $this->obj->selectAdd();// clear!
+            foreach($this->obj->fb_fieldLabels as $key => $val){
+                if(in_array($key, $this->obj->fb_textFields))
+                {
+                    $this->obj->selectAdd(
+                        sprintf('left(%s, %d) as %s',
+                                $key, COOP_MAX_LONGTEXT_DISPLAY, $key));
+                } else {
+                    $this->obj->selectAdd($key);
+                }
+            }
+
+        }
 
 
 	function insertIntoRow(&$tab, $text)
@@ -910,7 +937,7 @@ function getSummary()
                           'COOP_TITLE_HACK');
         }
 
-  
+
 
 } // END COOP VIEW CLASS
 

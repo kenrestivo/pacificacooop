@@ -11,14 +11,12 @@ coop web database
 	insurance, dammit
 
 
-add meeting
-	pushlive
-	enter my shit!
 
-
-immediate BUG FIX
-	hmm. companies auction donation join issue?  id 236, confirmdelete
-
+???PHP/SQL
+aggh. coopview takes too long for laaaaaaaarge text fields
+	substr all text fields in simpletable
+	nice, but now i have to deal with illegal html chars
+		can i strip ANY html-like chars, i.e. &?
 		
 
 ???PHP/SQL
@@ -468,6 +466,12 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+
+???PHP
+calendar should not show summary if chosenschoolyear is not this one
+	should be easy, no?
+
+
 ???CSS/HTML
 make the members main page prettier
 	make the centerdiv have a width, much like the giftfair
@@ -540,6 +544,9 @@ cleanups and speed improvements
 			and a link to a python or php script which displays the w3c
 				grabs it from the db, spews it out, not hard
 
+
+immediate BUG FIX
+	hmm. companies auction donation join issue?  id 236, confirmdelete
 
 
 ??? JSON/PHP
@@ -5379,3 +5386,7 @@ Sea Breeze Motel (650) 359-3903' , 'No' , '2005-2006' ,  16 , NULL, '2006-01-02'
 delete from companies_auction_join where companies_auction_join_id=79;
 	object done?
 	test
+	pushlive
+
+add meeting
+	enter my shit!
