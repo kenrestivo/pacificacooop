@@ -4,12 +4,17 @@ tinyMCE.init({
     mode : "textareas",
         theme: "advanced",
         theme_advanced_disable: "image,anchor,newdocument,visualaid,code", 
-        theme_advanced_buttons3_add: "cut,copy,pasteword,pastetext,selectall",
+        theme_advanced_buttons3_add: "cut,copy,pasteword,pastetext,selectall,preview,fullscreen",
         convert_newlines_to_brs: true,
-        plugins: "paste",
+        plugins: "paste,fullscreen,preview",
         paste_use_dialog: false,
         paste_auto_cleanu4p_on_paste: true,     
         paste_strip_class_attributes : "all",
+        fullscreen_settings : {
+        theme_advanced_path_location : "top"
+            },
+        plugin_preview_width : "500",
+            plugin_preview_height : "600",
         verify_html: true,
         valid_elements : "" 
         +"a[accesskey|charset|class|coords|dir<ltr?rtl|href|hreflang|id|lang|name"
