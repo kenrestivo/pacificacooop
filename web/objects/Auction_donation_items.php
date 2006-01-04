@@ -30,7 +30,7 @@ class Auction_donation_items extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-	var $fb_linkDisplayFields = array('short_description', 'item_description');
+	var $fb_linkDisplayFields = array('short_description');
 	var $fb_selectAddEmpty = array ('package_id');
 	var $fb_enumFields = array ('item_type');
 	var $fb_textFields = array ('item_description'); 
