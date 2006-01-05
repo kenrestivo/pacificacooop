@@ -27,19 +27,29 @@ require_once("HTML/Table.php");
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
 
-function getentries(&$cp)
+function getBlogEntries(&$cp)
 {
     $co =& new CoopView(&$cp, 'blog_entry', &$none);
-    print $co->obj->fb_display_summary(&$co, true);
+    return $co->obj->fb_display_summary(&$co, true);
 
 }
+
+function getEvents(&$cp)
+{
+    $co =& new CoopView(&$cp, 'calendar_events', &$none);
+    return $co->obj->fb_display_summary(&$co, true);
+
+}
+
 
 ////////////
 ///MAIN
 $cp =& new CoopPage($debug);
-$_SESSION['foo'] = 'foo';		// keep auth.inc happy
+$_SESSION['homepage'] = 'homepage visit';		// keep auth.inc happy
 if($_REQUEST['summary']){
-    getentries(&$cp);
+    print getBlogEntries(&$cp);
+    print "<hr />";
+    print getEvents(&$cp);
 } else {
     print "nothing here yet";
 }

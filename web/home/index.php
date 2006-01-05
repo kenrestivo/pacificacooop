@@ -1,6 +1,6 @@
 <?php 
-chdir('members'); 
-require_once('first.inc');
+chdir('members');  //XXX hack
+require_once("members/public_blog.php"); 
 ?>
 <html>
 
@@ -35,7 +35,12 @@ require_once('first.inc');
 	<h2>
 		<b><font size"+2">Breaking News!</font></b>
 	</h2>
-		<?php $_REQUEST['summary'] = 'true';  include("members/public_blog.php");  ?>
+		<?php print getBlogEntries();   ?>
+	<hr size="5" width="600" color="red" align="left">
+	<h2>
+		<b><font size"+2">Upcoming Events!</font></b>
+	</h2>
+		<?php print getEvents();   ?>
 	<hr size="5" width="600" color="red" align="left">
 	<h2>
     		<b><font size="+2">About Us</font></b>

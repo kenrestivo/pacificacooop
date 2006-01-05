@@ -2,13 +2,17 @@
 
 
 """to load in jython:
+
 import sys
 sys.path.append('/mnt/kens/ki/proj/coop/qa')
 import newunittests
+
+#then run
 newunittests.main()
 #or
 run=newunittests.Runner()
 run.ManyVisitHack('http://www/coop-dev/')
+
 """
 
 

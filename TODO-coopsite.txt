@@ -11,6 +11,9 @@ coop web database
 	insurance, dammit
 
 
+???PHP/SQL
+vip stuff
+
 
 ???PHP/SQL
 aggh. coopview takes too long for laaaaaaaarge text fields
@@ -18,6 +21,11 @@ aggh. coopview takes too long for laaaaaaaarge text fields
 		coopview, coopform, globals, maint make script
 	test: SAVING! updateing!
 	run the update script to generate the alters, and populate the data
+
+
+
+???PHP/SQL
+add END dates to calendar events!!
 
 
 ???PHP/SQL
