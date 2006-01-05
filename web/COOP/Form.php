@@ -450,7 +450,10 @@ class coopForm extends CoopObject
 								
 				//TODO: escape currency chars, as per shared.inc
 					
-
+                // now we must save a short, unformatted summary
+                // for all longtext fields, named _cache_somefield
+                // these things can get crazy long and summmaries in
+                // coopview take too damned long without these
                 if(!empty($this->obj->fb_textFields) &&
                     in_array($key, $this->obj->fb_textFields))
                 {
