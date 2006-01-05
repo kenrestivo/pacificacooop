@@ -13,11 +13,9 @@ coop web database
 
 ???PHP/SQL
 aggh. coopview takes too long for laaaaaaaarge text fields
-	integrate: livesite
-		coopview, coopform, globals, maint make script
-	update dbobject and links if needed
-	test: SAVING! updateing!
 	run the update script to generate the alters, and populate the data
+	integrate: livesite EVERYTHING! lots of objects there.
+	push live. WATCH OUT! it has a dependency on phptal now
 
 
 ???PHP/SQL
@@ -482,6 +480,11 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+???PHP
+job description matrix report!
+	i.e. for this year, WHO has what job?
+		and which ones are still open? i.e. a picker
 
 
 ???PHP
@@ -5423,3 +5426,5 @@ add meeting
 			size? varchar255? just in case i want longer?
 	    	then, POPULATE it!
 				go through and do all the legacy stuff!
+	update dbobject and links if needed
+	test: SAVING! updateing!

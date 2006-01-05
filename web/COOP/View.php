@@ -204,6 +204,11 @@ class coopView extends CoopObject
 		}
 
 
+    /// this is critical. i am hacking around and NOT fetching blobs
+    /// to save time on large db queries. these can get crazy if i
+    /// grab the entire blob, just to show a few character summary of it
+    /// so instead, i'm doing a naughty here and NOT fetching the blob,
+    /// instead only getting the cache
     function dietBlobs($find)
         {
             // skip if i am manually querying,
@@ -217,7 +222,7 @@ class coopView extends CoopObject
                 if(in_array($key, $this->obj->fb_textFields))
                 {
                     $this->obj->selectAdd(
-                        sprintf('_cache_%s as %s', $key, $key));
+                        sprintf('_cache_%s', $key));
                 } else {
                     $this->obj->selectAdd($this->table . '.' . $key);
                 }
@@ -364,12 +369,13 @@ class coopView extends CoopObject
                           in_array($key, $this->obj->fb_textFields)) 
                 {
                     //NOTE nl2br is to deal with old text imports
+                    //TODO: don't use val, specifically go get _cache_$key here
                     $res[] = nl2br($this->fullText ? '<div>' . $val . '</div>' : 
                                    strip_tags(
                                        sprintf('%.' . 
                                                COOP_MAX_LONGTEXT_DISPLAY .
                                                's...',
-                                               $val))); 
+                                               $this->obj->{'_cache_' . $key}))); 
                 } else if ($table[$key] &  DB_DATAOBJECT_BOOL){
                     //TODO: a little checkbox PNG would be nice
                     $res[] =  $val? 'X' :'';
