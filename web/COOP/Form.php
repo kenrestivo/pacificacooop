@@ -454,7 +454,7 @@ class coopForm extends CoopObject
                 if(!empty($this->obj->fb_textFields) &&
                     in_array($key, $this->obj->fb_textFields))
                 {
-                    $this->obj->{$key . '_cache'} = 
+                    $this->obj->{'_cache_' .$key} = 
                         sprintf('%.200s',
                                 unHTML(strip_tags($val)));
                 }

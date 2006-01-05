@@ -2,17 +2,13 @@ coop web database
 
  MY agenda! dammit, mine! for a change....
 	json the subforms (subform.txt)
-	import the 20-year roster (20yearroster.txt)
 	reports in phptal (reportnotes.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	sortable/searchable reports (searchfeature.txt)
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
+	import the 20-year roster (20yearroster.txt)
 	insurance, dammit
-
-
-???PHP/SQL
-vip stuff
 
 
 ???PHP/SQL
@@ -23,9 +19,22 @@ aggh. coopview takes too long for laaaaaaaarge text fields
 	run the update script to generate the alters, and populate the data
 
 
+???PHP/SQL
+vip stuff -- import
+	how did i do vip's? tickets?
+
+
+??PHP
+audit trails are a botch. formatting!
+	go through and strip all tags/html from these fuckers
+	and do it for each save too
+		canonical fuckup is http://www/coop-dev/generic.php?table=audit_trail&realm=19
+
 
 ???PHP/SQL
 add END dates to calendar events!!
+	it's ridiculous the way i have it now
+	show start-end as needed in summaries
 
 
 ???PHP/SQL
@@ -37,8 +46,6 @@ linkconstraiints in unusual circumstances
 			in details
 				for everything IN families OR companies
 				but not in most other things-- stick with the schoolyear
-
-
 
 
 ???PHP
@@ -53,7 +60,7 @@ alumni invite!
 
 
 
-BUG
+BUGS
 	duplicates in attendance! margolis
 		maybe do that margoilsreport in python? or use phptal?
 	fix -1 perms for family fees, income, babies, enhancement, 

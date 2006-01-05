@@ -217,7 +217,7 @@ class coopView extends CoopObject
                 if(in_array($key, $this->obj->fb_textFields))
                 {
                     $this->obj->selectAdd(
-                        sprintf('%s_cache as %s', $key, $key));
+                        sprintf('_cache_%s as %s', $key, $key));
                 } else {
                     $this->obj->selectAdd($this->table . '.' . $key);
                 }

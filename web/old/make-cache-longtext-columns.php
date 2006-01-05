@@ -29,7 +29,7 @@ function makeColumns(&$cp)
             //confessArray($row, "row $table");
             if($lucy->obj->Type == 'longtext'){
                 $fieldname = $lucy->obj->Field;
-                printf('alter table %s add column %s_cache varchar(255);<br />',
+                printf('alter table %s add column _cache_%s varchar(255);<br />',
                        $table, $fieldname);
                 // OK populate it now
                     print "updating $table ...<br />";
@@ -39,7 +39,7 @@ function makeColumns(&$cp)
                         $hack =& new CoopObject(&$cp, $table, &$nothing);
                         $hack->obj->get($targ->obj->{$targ->pk});
                         $hack->obj->query(
-                            sprintf('update %s set %s_cache = "%.200s" where %s = %d limit 1', 
+                            sprintf('update %s set _cache_%s = "%.200s" where %s = %d limit 1', 
                                     $table, $fieldname, 
                                     mysql_real_escape_string(
                                         unHTML(

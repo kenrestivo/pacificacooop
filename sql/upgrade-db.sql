@@ -6,9 +6,10 @@
 
 
 -- aha oh ho. nag indulgences privs are fuxored
-
 -- HOW? go fix.
 
+
+-- springfest chairs (and erin, and petra) past tickets
 
 
 
