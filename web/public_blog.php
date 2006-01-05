@@ -50,8 +50,6 @@ if($_REQUEST['summary']){
     print getBlogEntries(&$cp);
     print "<hr />";
     print getEvents(&$cp);
-} else {
-    print "nothing here yet";
 }
 
 

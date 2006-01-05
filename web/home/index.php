@@ -1,6 +1,7 @@
 <?php 
 chdir('members');  //XXX hack
 require_once("members/public_blog.php"); 
+$cp=& new CoopPage();
 ?>
 <html>
 
@@ -35,12 +36,12 @@ require_once("members/public_blog.php");
 	<h2>
 		<b><font size"+2">Breaking News!</font></b>
 	</h2>
-		<?php print getBlogEntries();   ?>
+		<?php print getBlogEntries(&$cp);   ?>
 	<hr size="5" width="600" color="red" align="left">
 	<h2>
 		<b><font size"+2">Upcoming Events!</font></b>
 	</h2>
-		<?php print getEvents();   ?>
+		<?php print getEvents(&$cp);   ?>
 	<hr size="5" width="600" color="red" align="left">
 	<h2>
     		<b><font size="+2">About Us</font></b>
