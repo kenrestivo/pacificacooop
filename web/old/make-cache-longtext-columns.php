@@ -21,9 +21,19 @@ function makeColumns(&$cp)
         while($lucy->obj->fetch()){
             //confessArray($row, "row $table");
             if($lucy->obj->Type == 'longtext'){
+                $fieldname = $lucy->obj->Field;
                 printf('alter table %s add column %s_cache varchar(255);<br />',
-                       $table, $lucy->obj->Field);
+                       $table, $fieldname);
                 // OK populate it now
+                if($_REQUEST['populate']){
+                    $targ =& new CoopObject(&$cp, $table, &$nothing);
+                    $targ->obj->find();
+                    while($targ->obj->fetch()){
+                        $targ->obj->{$fieldname. '_cache'} = 
+                            sprintf('%.200s', 
+                                    unHTML(strip_tags($targ->obj->$fieldname)));
+                    }
+                }
             }
         }
     }
@@ -31,9 +41,14 @@ function makeColumns(&$cp)
 
 ////KEEP EVERTHANG BELOW
 $cp =& new CoopPage($debug);
+
+print $cp->selfURL(array('value' => 'Refresh'));
+
+
 makeColumns($cp);
 
-
+print $cp->selfURL(array('value' => 'Click here to populate data',
+                         'inside' => array('populate' => 'yes')));
 
 ?>
 
