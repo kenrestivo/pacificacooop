@@ -223,6 +223,7 @@ class coopView extends CoopObject
                 {
                     $this->obj->selectAdd(
                         sprintf('_cache_%s', $key));
+                    $this->obj->selectAdd("'ERROR! use _cache_$key field instead' as $key");
                 } else {
                     $this->obj->selectAdd($this->table . '.' . $key);
                 }
