@@ -217,8 +217,7 @@ class coopView extends CoopObject
                 if(in_array($key, $this->obj->fb_textFields))
                 {
                     $this->obj->selectAdd(
-                        sprintf('left(%s, %d) as %s',
-                                $key, COOP_MAX_LONGTEXT_DISPLAY, $key));
+                        sprintf('%s_cache as %s', $key, $key));
                 } else {
                     $this->obj->selectAdd($key);
                 }
@@ -364,9 +363,13 @@ class coopView extends CoopObject
                 } else if(!empty($this->obj->fb_textFields) &&
                           in_array($key, $this->obj->fb_textFields)) 
                 {
-                    //nl2br is to deal with old text imports
+                    //NOTE nl2br is to deal with old text imports
                     $res[] = nl2br($this->fullText ? '<div>' . $val . '</div>' : 
-                        strip_tags(sprintf("%.40s...",$val))); // truncate, unless not
+                                   strip_tags(
+                                       sprintf('%.' . 
+                                               COOP_MAX_LONGTEXT_DISPLAY .
+                                               's...',
+                                               $val))); 
                 } else if ($table[$key] &  DB_DATAOBJECT_BOOL){
                     //TODO: a little checkbox PNG would be nice
                     $res[] =  $val? 'X' :'';

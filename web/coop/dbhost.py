@@ -5,7 +5,7 @@ host='bc'
 db='qa'
 user='input'
 pw='test'
-port =3306
+port=3306
 
 connectionurl=     'mysql://%s:%s@%s:%d/%s' % (user, pw, host, port, db)
 

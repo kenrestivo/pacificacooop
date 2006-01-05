@@ -3,6 +3,8 @@
 #$Id$
 
 
+##XXX nice idea but going nowhere. i need to use php for this
+
 import os
 import csv
 from datetime import date

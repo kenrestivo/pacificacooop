@@ -449,7 +449,16 @@ class coopForm extends CoopObject
 				// i will be duplicating saveok here, basically
 								
 				//TODO: escape currency chars, as per shared.inc
-								
+					
+
+                if(!empty($this->obj->fb_textFields) &&
+                    in_array($key, $this->obj->fb_textFields))
+                {
+                    $this->obj->{$key . '_cache'} = 
+                        sprintf('%.200s',
+                                unHTML(strip_tags($val)));
+                }
+			
 				$this->page->printDebug(
 					sprintf("CoopForm::scrubForSave(%s) %d chars<br />", 
 						   $fullkey, strlen($val)),3);
