@@ -22,7 +22,7 @@ function makeColumns(&$cp)
             //confessArray($row, "row $table");
             if($lucy->obj->Type == 'longtext'){
                 printf('alter table %s add column %s_cache varchar(255);<br />',
-                       $table, $row['Field']);
+                       $table, $lucy->obj->Field);
                 // OK populate it now
             }
         }
