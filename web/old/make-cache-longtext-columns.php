@@ -5,6 +5,7 @@
 
 chdir("../");                   // XXX only for "test" dir hack!
 
+
 require_once("CoopObject.php");
 
 
@@ -12,11 +13,16 @@ require_once("CoopObject.php");
 function makeColumns(&$cp)
 {
  
+    $ignore = array('audit_trail');
+
     // get tables
     $tab =& new CoopObject(&$cp, 'table_permissions', &$nothing);
     $tab->obj->query("show tables");
     while($tab->obj->fetch()){
         $table  = $tab->obj->Tables_in_coop;
+        if(in_array($table, $ignore)){
+            continue;
+        }
         $lucy =& new CoopObject(&$cp, 'table_permissions', &$nothing);
         $lucy->obj->query("explain $table");
         while($lucy->obj->fetch()){
@@ -26,7 +32,6 @@ function makeColumns(&$cp)
                 printf('alter table %s add column %s_cache varchar(255);<br />',
                        $table, $fieldname);
                 // OK populate it now
-                if($_REQUEST['populate']){
                     print "updating $table ...<br />";
                     $targ =& new CoopObject(&$cp, $table, &$nothing);
                     $targ->obj->find();
@@ -34,7 +39,7 @@ function makeColumns(&$cp)
                         $hack =& new CoopObject(&$cp, $table, &$nothing);
                         $hack->obj->get($targ->obj->{$targ->pk});
                         $hack->obj->query(
-                            sprintf('update %s set %s_cache = "%.200s" where %s = %d', 
+                            sprintf('update %s set %s_cache = "%.200s" where %s = %d limit 1', 
                                     $table, $fieldname, 
                                     mysql_real_escape_string(
                                         unHTML(
@@ -44,10 +49,11 @@ function makeColumns(&$cp)
                                     $targ->obj->{$targ->pk}));
                     }
                 }
-            }
         }
     }
 }
+
+
 
 ////KEEP EVERTHANG BELOW
 $cp =& new CoopPage($debug);
