@@ -15,6 +15,7 @@ class Events extends CoopDBDO
     var $notes;                           // blob(16777215)  blob
     var $url;                             // string(255)  
     var $realm_id;                        // int(32)  
+    var $_cache_notes;                    // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

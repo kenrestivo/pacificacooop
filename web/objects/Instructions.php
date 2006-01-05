@@ -14,6 +14,7 @@ class Instructions extends CoopDBDO
     var $table_name;                      // string(255)  
     var $action;                          // string(7)  enum
     var $instruction;                     // blob(16777215)  blob
+    var $_cache_instruction;              // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

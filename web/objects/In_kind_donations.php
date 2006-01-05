@@ -17,6 +17,7 @@ class In_kind_donations extends CoopDBDO
     var $date_received;                   // date(10)  binary
     var $school_year;                     // string(50)  
     var $thank_you_id;                    // int(32)  
+    var $_cache_item_description;         // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

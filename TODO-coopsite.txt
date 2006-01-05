@@ -15,6 +15,7 @@ coop web database
 aggh. coopview takes too long for laaaaaaaarge text fields
 	integrate: livesite
 		coopview, coopform, globals, maint make script
+	update dbobject and links if needed
 	test: SAVING! updateing!
 	run the update script to generate the alters, and populate the data
 

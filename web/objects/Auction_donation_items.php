@@ -21,6 +21,7 @@ class Auction_donation_items extends CoopDBDO
     var $committed;                       // string(3)  enum
     var $thank_you_id;                    // int(32)  
     var $short_description;               // string(255)  
+    var $_cache_item_description;         // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -63,7 +64,8 @@ class Auction_donation_items extends CoopDBDO
 
 	var $fb_requiredFields = array('short_description',
                                    'item_description', 'quantity', 
-								   'school_year',  'item_value', 
+								   'school_year',  
+                                    // priceless! 'item_value', 
 								   'item_type', 'school_year');
 
 

@@ -14,6 +14,7 @@ class Enhancement_projects extends CoopDBDO
     var $project_name;                    // string(255)  
     var $project_description;             // blob(16777215)  blob
     var $project_complete;                // date(10)  binary
+    var $_cache_project_description;      // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

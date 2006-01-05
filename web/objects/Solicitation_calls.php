@@ -17,6 +17,7 @@ class Solicitation_calls extends CoopDBDO
     var $family_id;                       // int(32)  
     var $done;                            // date(10)  binary
     var $school_year;                     // string(50)  
+    var $_cache_call_note;                // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

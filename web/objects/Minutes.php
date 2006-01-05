@@ -13,6 +13,7 @@ class Minutes extends CoopDBDO
     var $minutes_id;                      // int(32)  not_null primary_key unique_key auto_increment
     var $calendar_event_id;               // int(32)  
     var $body;                            // blob(16777215)  blob
+    var $_cache_body;                     // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

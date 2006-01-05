@@ -16,6 +16,7 @@ class Blog_entry extends CoopDBDO
     var $body;                            // blob(16777215)  blob
     var $show_on_members_page;            // string(7)  enum
     var $show_on_public_page;             // string(7)  enum
+    var $_cache_body;                     // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

@@ -17,10 +17,11 @@ class Ads extends CoopDBDO
     var $school_year;                     // string(50)  
     var $ad_size_id;                      // int(32)  not_null
     var $income_id;                       // int(32)  
-    var $lead_id;                         // int(32)  not_null
+    var $lead_id;                         // int(32)  
     var $artwork_received;                // date(10)  binary
     var $family_id;                       // int(32)  
     var $company_id;                      // int(32)  
+    var $_cache_ad_copy;                  // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

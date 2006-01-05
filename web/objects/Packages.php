@@ -24,6 +24,7 @@ class Packages extends CoopDBDO
     var $school_year;                     // string(50)  
     var $wish_list;                       // string(3)  enum
     var $display_publicly;                // string(3)  enum
+    var $_cache_package_description;      // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}

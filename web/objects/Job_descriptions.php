@@ -18,6 +18,7 @@ class Job_descriptions extends CoopDBDO
     var $free_tuition_days;               // int(3)  
     var $free_tuition_start_month;        // string(9)  enum
     var $free_tuition_end_month;          // string(9)  enum
+    var $_cache_long_description;         // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
