@@ -8,10 +8,11 @@ chdir("../");                   // XXX only for "test" dir hack!
 require_once("CoopObject.php");
 
 
+//// ugly, one-off hack to initialise the _cache tables with plain-text summaries of all html-capable longtext fields
 function makeColumns(&$cp)
 {
  
-// get tables
+    // get tables
     $tab =& new CoopObject(&$cp, 'table_permissions', &$nothing);
     $tab->obj->query("show tables");
     while($tab->obj->fetch()){
@@ -26,12 +27,21 @@ function makeColumns(&$cp)
                        $table, $fieldname);
                 // OK populate it now
                 if($_REQUEST['populate']){
+                    print "updating $table ...<br />";
                     $targ =& new CoopObject(&$cp, $table, &$nothing);
                     $targ->obj->find();
                     while($targ->obj->fetch()){
-                        $targ->obj->{$fieldname. '_cache'} = 
-                            sprintf('%.200s', 
-                                    unHTML(strip_tags($targ->obj->$fieldname)));
+                        $hack =& new CoopObject(&$cp, $table, &$nothing);
+                        $hack->obj->get($targ->obj->{$targ->pk});
+                        $hack->obj->query(
+                            sprintf('update %s set %s_cache = "%.200s" where %s = %d', 
+                                    $table, $fieldname, 
+                                    mysql_real_escape_string(
+                                        unHTML(
+                                            strip_tags(
+                                                $hack->obj->$fieldname))),
+                                    $targ->pk,
+                                    $targ->obj->{$targ->pk}));
                     }
                 }
             }
