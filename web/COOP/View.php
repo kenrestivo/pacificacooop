@@ -219,7 +219,7 @@ class coopView extends CoopObject
                     $this->obj->selectAdd(
                         sprintf('%s_cache as %s', $key, $key));
                 } else {
-                    $this->obj->selectAdd($key);
+                    $this->obj->selectAdd($this->table . '.' . $key);
                 }
             }
 
