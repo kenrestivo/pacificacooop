@@ -8,7 +8,7 @@ tinyMCE.init({
         convert_newlines_to_brs: true,
         plugins: "paste,fullscreen,preview",
         paste_use_dialog: false,
-        paste_auto_cleanu4p_on_paste: true,     
+        paste_auto_cleanup_on_paste: true,     
         paste_strip_class_attributes : "all",
         fullscreen_settings : {
         theme_advanced_path_location : "top"
