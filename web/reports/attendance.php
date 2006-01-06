@@ -22,24 +22,10 @@ require_once('CoopPage.php');
 require_once('CoopNewDispatcher.php');
 require_once "HTML/Template/PHPTAL.php";
 require_once "lib/phptal_filters.php";
+require_once('lib/dbdo_iterator.php');  // XXX hack, around problems on nfsn
 
 
 
-///// move this to its own class and generalise it?
-class ReportDispatcher extends CoopNewDispatcher
-{
-    var $families;
-
-    function view()
-        {
-            $this->families =& new CoopView(&$this->page, 'families', &$nothing);
-            $this->families->find(true);
-
-            // works, but unnecessary yet.
-            //$this->page->context['families'] =& $this->families;
-        }
-
-}
 
 
 //////// MAIN
@@ -51,17 +37,19 @@ $template = new PHPTAL("attendance.xhtml");
 
 // got to RUN certain things before anything makes sense
 $cp->logIn();
-$dispatcher =& new ReportDispatcher(&$cp);
-$dispatcher->dispatch();
 
 
+$families =& new CoopView(&$cp, 'families', 
+                                &$nothing);
+$families->find(true);
+$cp->title = 'Parent Ed Attendance Summary Report';
 
 // let the template know all about it
 $template->setRef('page', $cp);
-$template->setRef('dispatcher', $dispatcher);
+$template->setRef('families', $families);
 
 
-confessObj($template->getContext(), 'context');
+//confessObj($template->getContext(), 'context');
 
 
 $template->addOutputFilter(new XML_to_HTML());

@@ -35,7 +35,7 @@ class CoopNewDispatcher
 
 	function CoopNewDispatcher(&$page)
 		{
-			$this->page = $page;
+			$this->page =& $page;
 		}
 
 

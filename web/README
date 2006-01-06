@@ -21,7 +21,7 @@ fb_fieldsToUnrender (always hide these! annoying, but needed.)
 fb_displayFormat  array (field => sprintffrormat)
 fb_displayCallbacks = array (field => cb) overrides CoopView::toArray()
      the result of you callbacks WILL NOT be html escaped. that's your job.
-fb_viewActions = array  (action => level)
+fb_viewActions = array  (action => level): by default,  CoopView::actionButtons()offers the user the default actions in viewActions. you can override this here, to add actions, override perms on the default actions, etc
 fb_recordActions = array  (action => level)
 fb_extraDetails = array('path:to:other:details', 'path:to:more:details')
     // basically, backlinked tables i want to display. kind of a hack.
@@ -58,6 +58,8 @@ family_id and school_year are *special* fields
 		automatically searched for in genericview, IFF perms require it!
 	family_id
 a field *must* be in fb_fieldLabels or it won't get rendered. do it.
+
+
 
 
 to create a new table: est time per table: 1-2 hours

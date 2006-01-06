@@ -573,7 +573,7 @@ class coopView extends CoopObject
 
 
 
-
+    // TODO: showview is a legacy. when i whack legacy, remove showview
 	function actionButtons($showview = 0)
 		{
             $res = '';
@@ -614,14 +614,17 @@ class coopView extends CoopObject
                     'action' => $action,
                     'table' => $this->table);
 
-                // XXX what exactly is this doing?? why not findTop?
+                // if i'm a sub-table under some other table
+                // as in the case of a details view
+                // then be sure to include the ID and table/fieldname of it!
                 $par = $this->getParent(); // NOT  parentCO, _join!
                 if(is_object($par) && is_a(&$par, 'CoopObject')){
                     //print "HEY!!! {$this->table} GOT ONE!!!";
                     $in[$this->prependTable($par->pk)] = 
                         $this->obj->{$par->pk};
                 }
-
+                
+                // always pushing from a view
                 $in['push'] = $this->table;
                                 
                 $res .= $this->page->selfURL(

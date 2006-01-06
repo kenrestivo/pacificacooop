@@ -330,7 +330,7 @@ undefer(p.nothing());
 
 
 
-///
+/// subform test!
 p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
                      ['getPage', 'dispatchTable']);
 undefer(p.getPage());

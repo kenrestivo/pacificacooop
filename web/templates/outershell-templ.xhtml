@@ -22,7 +22,7 @@
         <div tal:content="structure page/logIn"></div>
         <div tal:condition="page/auth/uid" 
              tal:content="structure page/topNavigation">Top Navigation</div>
-        <h3>Table Description</h3>
+        <h3 tal:content="page/title" tal:on-error="">Table Description</h3>
         <hr />
       </div>    
       

@@ -1,11 +1,6 @@
 notes on subform navigation, flipping between screens
 
 
-add to jsonrpc auto-adding of methods
-	make the jsonrpc.js introspect classes (get methods?) instead of specifying
-	copy/paste from jsmode
-	not quite working yet
-
 
 ??? PHP/JS
 attempt to implement subform.. as an ajax
@@ -13,8 +8,14 @@ attempt to implement subform.. as an ajax
 		AAGH! the included scripts! notworking
 			window? scope?
 		DOMinspect it, where are the scripts, if anywhere?
+	is it inline scripts or just links?
+		test
+	maybe test caching all js into a classvar
+		
 
-	i.e., um, subform!
+
+??JS/PHP
+	i.e., um, subform PLAN!
 		make add new blah do a js foo(subtable, id)
 			js fetches the subform, passes the ID along with it?
 				deferred callback dumps it into innerhtml (easy), 
@@ -35,6 +36,14 @@ attempt to implement subform.. as an ajax
 	my validate needs to be recursive
 		build the subforms-- be certain to recurse!
 		umm. what about javascript validation? does it break now?
+
+
+
+
+add to jsonrpc auto-adding of methods
+	make the jsonrpc.js introspect classes (get methods?) instead of specifying
+	copy/paste from jsmode
+	not quite working yet
 
 
 big question: if i json it, how do i deal with input validation?

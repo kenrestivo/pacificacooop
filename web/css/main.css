@@ -221,6 +221,10 @@ p.letter{
   background-color: #ccccff;
 }
 
+/* hack around phptal */
+.altrow0 {  
+  background-color: #ccccff;
+}
 
 /* AFIACT, this is only used in horiztable */
 .tabletitles { 

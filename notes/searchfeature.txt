@@ -24,6 +24,7 @@ how?
 			i'll have to deal with table() to check that
 		make sure it doesn't collide with linkconstraints
 			override them? check them?
+			AUUGH! this part is hard.
 	save/restore the state
 		i also have to deal with chosenschoolyear too
 			it and getChosenSchoolYear will be obsolete
