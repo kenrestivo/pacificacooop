@@ -26,27 +26,40 @@ require_once('lib/dbdo_iterator.php');  // XXX hack, around problems on nfsn
 
 
 
+class Report{
+    var $page;
+    var $families;
+    var $templateFile = 'attendance.xhtml';
+
+    function Report (&$cp){
+        $this->page =& $cp;
+    }
+
+    function build()
+        {
+            $this->families =& new CoopView(&$this->page, 'families', 
+                                      &$nothing);
+            $this->families->find(true);
+            $this->page->title = 'Parent Ed Attendance Summary Report';
+        }
+} // END REPORT CLASS
+
 
 
 //////// MAIN
 $cp =& new coopPage( $debug);
 
 
-$template = new PHPTAL("attendance.xhtml");
-
-
 // got to RUN certain things before anything makes sense
 $cp->logIn();
 
-
-$families =& new CoopView(&$cp, 'families', 
-                                &$nothing);
-$families->find(true);
-$cp->title = 'Parent Ed Attendance Summary Report';
+$report =& new Report(&$cp);
+$report->build();
 
 // let the template know all about it
+$template = new PHPTAL($report->templateFile);
 $template->setRef('page', $cp);
-$template->setRef('families', $families);
+$template->setRef('report', $report);
 
 
 //confessObj($template->getContext(), 'context');
