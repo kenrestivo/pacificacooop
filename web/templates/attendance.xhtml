@@ -4,7 +4,7 @@
     <h3 tal:content="page/auth/uid">foo bar</h3>
     <table>
       <tr class="tableheaders">
-        <th  tal:replace="families/obj/fb_fieldLabels/name">Name</th>
+        <th  tal:content="families/obj/fb_fieldLabels/name">Name</th>
         <th>Parent Ed Hours Owed</th>
       </tr>
       <tr tal:repeat="family families" 
