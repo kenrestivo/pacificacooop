@@ -44,8 +44,6 @@ class PHPUnserialize(object):
         Recurse on array.
 
         offset = raw offset from start of data
-
-
         """
 
         dtype = None
@@ -55,6 +53,7 @@ class PHPUnserialize(object):
         if match:
             dataoffset = match.end()
             dtype = match.group(1)
+
 
         #print "# dtype =", dtype
 
