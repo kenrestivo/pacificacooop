@@ -145,7 +145,8 @@ function viewHack(&$atd)
 	
 	$res .= $form->toHTML();
 
-	nagOnlyButton($showall, 'families', "semester=$sem");
+	$res .= nagOnlyButton($_REQUEST['showall'], 'families', 
+                          "semester=$sem", false, false);
 
     $tab->addRow(array(
                      'Family Name',
@@ -157,7 +158,7 @@ function viewHack(&$atd)
                    'Session',
                      'Phone Number',
                      'Actions'),
-                 ' style="tableheader"', "TH");
+                 ' class="tableheaders"', "TH");
 	while($row = mysql_fetch_array($listq)){
         //confessArray($row,'row');
         $en =& new Enhancement(&$atd->page, $row['family_id']);
@@ -166,7 +167,7 @@ function viewHack(&$atd)
 
         $needed =  $en->owed[$sem] - $total;
         // TODO: if nagonly, show only the needed > 0's
-        if($needed > 0 || $showall){
+        if($needed > 0 || $_REQUEST['showall']){
             $atd->obj->family_id = $row['family_id']; // XXX recordbuttons HACK!
             $tab->addRow(array(
                              $row['name'],
@@ -182,7 +183,7 @@ function viewHack(&$atd)
     $tab->altRowAttributes(1, 'class="altrow1"', 
 								   'class="altrow2"');
 
-	$res .= "<h2>Totals for $sem $year </h2>";
+	$res .= '<h2>Totals for '. strtoupper($sem).  " $year </h2>";
 
     $res .= $tab->toHTML();
 
