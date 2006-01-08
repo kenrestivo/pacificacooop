@@ -663,15 +663,15 @@ function rawMenuRow($title, $body, $actions)
 	shows the nag-only link, and toggles it
 ***************/
 function
-nagOnlyButton($showall, $things, $moreinside = false)
+nagOnlyButton($showall, $things, $moreinside = false, $print = true)
 {
-    print "<p>";
+    $res .= "<p>";
 	//TODO: use button-checked PNG's instead of text. 
 	if($showall){
-		print "ALL $things are shown here.&nbsp;";
+		$res .= "ALL $things are shown here.&nbsp;";
 		$text = "(Click here to show only $things that need nagging)\n";
 	} else {
-		print "Only these $things need nagging.&nbsp;";
+		$res .= "Only these $things need nagging.&nbsp;";
 		$text = "(Click here to show ALL $things)\n";
 	}
 	$inside =	htmlentities(sprintf("%s?%s%s",
@@ -679,11 +679,15 @@ nagOnlyButton($showall, $things, $moreinside = false)
 		SID ? SID . "&" : "", 
 		$showall ? "" : 'showall=checked&'));
 
-	printf('<a href="%s%s">%s</a>',
+	$res .= sprintf('<a href="%s%s">%s</a>',
 		   $inside, 
 		   $moreinside ?  htmlentities($moreinside)  : '',
 		   $text);
-	print "</p>";
+	$res .="</p>";
+    if($print){
+        print $res;
+    }
+    return $res;
 } /* END NAGONLYBUTTON */
 
 
