@@ -96,10 +96,10 @@ class Workers extends CoopDBDO
             $this->query(
                 sprintf(
                     'select  distinct
-workday, sum(if(workers.am_pm_session = "AM", 1,0 )) as AM, 
-sum(if(workers.am_pm_session = "PM", 1,0 )) as PM
+workday, sum(if(workers.am_pm_session = "AM" and enrolled.family_id is not null, 1,0 )) as AM, 
+sum(if(workers.am_pm_session = "PM" and enrolled.family_id is not null, 1,0 )) as PM
 from workers
-left join parents on parents. parent_id = workers.parent_id
+left join parents on parents.parent_id = workers.parent_id
 left join 
        (select distinct families.family_id
                     from families
@@ -135,10 +135,10 @@ order by  workday',
 
             $co2->obj->query(
                 sprintf('select epod, 
-sum(if(am_pm_session = "AM", 1,0 )) as AM, 
-sum(if(am_pm_session = "PM", 1,0 )) as PM
+sum(if(workers.am_pm_session = "AM" and enrolled.family_id is not null, 1,0 )) as AM, 
+sum(if(workers.am_pm_session = "PM" and enrolled.family_id is not null, 1,0 )) as PM
 from workers 
-left join parents on parents. parent_id = workers.parent_id
+left join parents on parents.parent_id = workers.parent_id
 left join 
        (select distinct families.family_id
                     from families
