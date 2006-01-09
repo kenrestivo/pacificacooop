@@ -35,20 +35,13 @@ function makeColumns(&$cp)
                         $hack->obj->get($targ->obj->{$targ->pk});
                         
                         // these are the regexps that are the heart of the thing
+                        // NOTE not attemtping to fix <ol><ol> or start/type
                         $new = preg_replace(array('/align="(\w+?)"/',
-                                                  '/<ol.*?><ol.*?>/',
-                                                  '/<\/ol.*?><\/ol.*?>/',
                                                   '/<meta.+?>/',
                                                   '/<title.+?>/',
                                                   '/<style>.*?<\/style>/',
-                                                  '/type=".+?"/',
-                                                  '/start=".+?"/',
                                                   ), 
                                             array('style="text-align: $1"', 
-                                                  '<ol>',
-                                                  '</ol>',
-                                                  '',
-                                                  '',
                                                   '',
                                                   '',
                                                   ''), 
