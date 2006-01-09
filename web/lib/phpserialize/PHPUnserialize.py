@@ -60,11 +60,13 @@ class PHPUnserialize(object):
         typeconvert = lambda x : x
         chars = datalength = 0
 
-        # handle php session_encode() style arrays with bare-string keys
+        # handle php session_encode() arrays with bare-string keys
         if dtype == None:
             sessionre = re.compile('(\w+)\|')
-            match = sessionre.match(data, offset)
-            while match:
+            while True:
+                match = sessionre.match(data, dataoffset)
+                if match == None:
+                    break
                 dataoffset = match.end()
                 key=match.group(1)
                 (vtype, vchars, value) = self._unserialize(data, dataoffset)
