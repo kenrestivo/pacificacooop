@@ -96,7 +96,7 @@ tinyMCE.init({
         +"|title],"
         +"noscript[class|dir<ltr?rtl|id|lang|style"
         +"|title],"
-        +"ol[class|compact<compact|dir<ltr?rtl|id|lang|start|style|title],"
+        +"ol[class|compact<compact|dir<ltr?rtl|id|lang|style|title],"
         +"optgroup[class|dir<ltr?rtl|disabled<disabled|id|label|lang|style|title],"
         +"option[class|dir<ltr?rtl|disabled<disabled|id|label|lang|selected<selected|style|title|value],"
         +"p[class|dir<ltr?rtl|id|lang|style|title],"
