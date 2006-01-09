@@ -53,6 +53,7 @@ backup-defs::
 	mysqldump \
 		--add-drop-table \
 		--all  \
+		--compress \
 		--database $(DB) \
 		--lock-tables \
 		--no-data \
@@ -63,6 +64,7 @@ backup-data:
 	mysqldump \
 		--add-locks \
 		--all  \
+		--compress \
 		--database $(DB) \
 		--extended-insert \
 		--lock-tables \
@@ -82,11 +84,11 @@ backup-live::
 	$(MAKE) backup DBUSER=$(BKUSER) DBHOST=127.0.0.1 DBPORT=$(FARPORT) PW=$(BKPW)
 
 ssh-tunnel-broken::
-	ssh -C -n -f -N -L6666:$(NFSNHOST):22 portaserver.restivo.org
+	ssh -n -f -N -L6666:$(NFSNHOST):22 portaserver.restivo.org
 	ssh -n -f -N -L$(FARPORT):$(REALDB):3306 -p 6666 ken@localnfsn
 
 ssh-tunnel::
-	ssh -C -n -f -N -L$(FARPORT):$(REALDB):3306  ken@$(NFSNHOST)
+	ssh -n -f -N -L$(FARPORT):$(REALDB):3306  ken@$(NFSNHOST)
 
 diagram:
 	autodia.pl -l DBI -i "mysql:$(DB):$(DBHOST)" -U$(BKUSER) -P$(BKPW) -o schema.dia
