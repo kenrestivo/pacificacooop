@@ -2,7 +2,7 @@
 
 ##TODO: check dev!
 host='bc'
-db='qa'
+db='coop'
 user='input'
 pw='test'
 port=3306
