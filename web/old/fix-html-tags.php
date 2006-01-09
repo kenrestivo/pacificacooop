@@ -36,13 +36,15 @@ function makeColumns(&$cp)
                         
                         // these are the regexps that are the heart of the thing
                         $new = preg_replace(array('/align="(\w+?)"/',
+                                                  '/<li><p (.+?)<\/p>/',
                                                   '/<meta.+?>/',
                                                   '/<title.+?>/',
                                                   '/<style>.*?<\/style>/',
                                                   '/type=".+?"/',
                                                   '/start=".+?"/'), 
                                             array('style="text-align: $1"',
-                                                  '', 
+                                                  '<span $1</span>', 
+                                                  '',
                                                   '',
                                                   '',
                                                   '',
