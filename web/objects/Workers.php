@@ -95,16 +95,32 @@ class Workers extends CoopDBDO
                 );
             $this->query(
                 sprintf(
-'select  
-workday, sum(if(am_pm_session = "AM", 1,0 )) as AM, 
-sum(if(am_pm_session = "PM", 1,0 )) as PM
-from workers 
-where school_year = "%s"
+                    'select  distinct
+workday, sum(if(workers.am_pm_session = "AM", 1,0 )) as AM, 
+sum(if(workers.am_pm_session = "PM", 1,0 )) as PM
+from workers
+left join parents on parents. parent_id = workers.parent_id
+left join 
+       (select distinct families.family_id
+                    from families
+                        left join kids on families.family_id = kids.family_id 
+                        left join enrollment on kids.kid_id = enrollment.kid_id 
+                    where enrollment.school_year = "%s"
+                    and ((enrollment.dropout_date < "1900-01-01"
+                       and enrollment.dropout_date > "%s")
+                        or enrollment.dropout_date is null)
+                    group by families.family_id
+                    order by families.name) as enrolled
+on enrolled.family_id = parents.family_id
+where workers.school_year = "%s"
 group by  workday
 order by  workday',
+
+                    $co->page->currentSchoolYear,
+                    date('Y-m-d'),
                     $co->page->currentSchoolYear));
             $res .= $co->simpleTable(false);
-
+            
 
             /// EPODS
             $co2 = new CoopView(&$co->page, $co->table, &$nothing);
@@ -122,11 +138,26 @@ order by  workday',
 sum(if(am_pm_session = "AM", 1,0 )) as AM, 
 sum(if(am_pm_session = "PM", 1,0 )) as PM
 from workers 
+left join parents on parents. parent_id = workers.parent_id
+left join 
+       (select distinct families.family_id
+                    from families
+                        left join kids on families.family_id = kids.family_id 
+                        left join enrollment on kids.kid_id = enrollment.kid_id 
+                    where enrollment.school_year = "%s"
+                    and ((enrollment.dropout_date < "1900-01-01"
+                       and enrollment.dropout_date > "%s")
+                        or enrollment.dropout_date is null)
+                    group by families.family_id
+                    order by families.name) as enrolled
+on enrolled.family_id = parents.family_id
 where school_year = "%s"
 group by  epod
 order by  epod',
-                         $co->page->currentSchoolYear));
-            
+                    $co->page->currentSchoolYear,
+                    date('Y-m-d'),
+                    $co->page->currentSchoolYear));
+             
             $res .= $co2->simpleTable(false);
             return $res;
 
