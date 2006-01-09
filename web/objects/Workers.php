@@ -62,12 +62,9 @@ class Workers extends CoopDBDO
             $co->protectedJoin($par);
             $this->selectAdd('family_id');
 
-            /// AGAIN, nasty hack
-//            if($co->perms[NULL]['year'] < ACCESS_VIEW){
-                // TODO! support chooser
-                $this->whereAdd(
-                    "school_year = '{$co->page->currentSchoolYear}'");
-                //          }
+            
+            $co->constrainSchoolYear();
+
 
             $this->orderBy('am_pm_session, workday, parents.last_name, parents.first_name');
             
@@ -83,6 +80,10 @@ class Workers extends CoopDBDO
     function  fb_display_summary(&$co)
         {
 
+            // XXX the summary is broken for non-current years
+            if($co->page->currentSchoolYear != $co->getChosenSchoolYear()){
+                return '';
+            }
 
             $res = '';
             $this->fb_formHeaderText = 'Workday Summary';
@@ -95,8 +96,8 @@ class Workers extends CoopDBDO
                 );
             $this->query(
                 sprintf(
-                    'select  distinct
-workday, sum(if(workers.am_pm_session = "AM" and enrolled.family_id is not null, 1,0 )) as AM, 
+                    'select  distinct workday, 
+sum(if(workers.am_pm_session = "AM" and enrolled.family_id is not null, 1,0 )) as AM, 
 sum(if(workers.am_pm_session = "PM" and enrolled.family_id is not null, 1,0 )) as PM
 from workers
 left join parents on parents.parent_id = workers.parent_id
@@ -116,9 +117,9 @@ where workers.school_year = "%s"
 group by  workday
 order by  workday',
 
-                    $co->page->currentSchoolYear,
+                    $co->getChosenSchoolYear(),
                     date('Y-m-d'),
-                    $co->page->currentSchoolYear));
+                    $co->getChosenSchoolYear()));
             $res .= $co->simpleTable(false);
             
 
@@ -134,7 +135,7 @@ order by  workday',
                 );
 
             $co2->obj->query(
-                sprintf('select epod, 
+                sprintf('select distinct epod, 
 sum(if(workers.am_pm_session = "AM" and enrolled.family_id is not null, 1,0 )) as AM, 
 sum(if(workers.am_pm_session = "PM" and enrolled.family_id is not null, 1,0 )) as PM
 from workers 
@@ -154,9 +155,9 @@ on enrolled.family_id = parents.family_id
 where school_year = "%s"
 group by  epod
 order by  epod',
-                    $co->page->currentSchoolYear,
+                    $co->getChosenSchoolYear(),
                     date('Y-m-d'),
-                    $co->page->currentSchoolYear));
+                    $co->getChosenSchoolYear()));
              
             $res .= $co2->simpleTable(false);
             return $res;
