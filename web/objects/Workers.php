@@ -106,8 +106,8 @@ left join
                         left join kids on families.family_id = kids.family_id 
                         left join enrollment on kids.kid_id = enrollment.kid_id 
                     where enrollment.school_year = "%s"
-                    and ((enrollment.dropout_date < "1900-01-01"
-                       and enrollment.dropout_date > "%s")
+                    and (enrollment.dropout_date < "1900-01-01"
+                       or enrollment.dropout_date > "%s"
                         or enrollment.dropout_date is null)
                     group by families.family_id
                     order by families.name) as enrolled
@@ -145,8 +145,8 @@ left join
                         left join kids on families.family_id = kids.family_id 
                         left join enrollment on kids.kid_id = enrollment.kid_id 
                     where enrollment.school_year = "%s"
-                    and ((enrollment.dropout_date < "1900-01-01"
-                       and enrollment.dropout_date > "%s")
+                    and (enrollment.dropout_date < "1900-01-01"
+                       or enrollment.dropout_date > "%s"
                         or enrollment.dropout_date is null)
                     group by families.family_id
                     order by families.name) as enrolled
