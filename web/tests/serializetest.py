@@ -21,3 +21,6 @@ as=model.SessionInfo.get('827ea3347b547e97b3e51710af714812')
 
 
 inpython=PHPUnserialize().session_decode(as.vars)
+
+print inpython['auth']
+print inpython['cpVars']['stack']
