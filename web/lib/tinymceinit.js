@@ -5,6 +5,7 @@ tinyMCE.init({
         theme: "advanced",
         theme_advanced_disable: "image,anchor,newdocument,visualaid,code", 
         theme_advanced_buttons3_add: "cut,copy,pasteword,pastetext,selectall,preview,fullscreen",
+        inline_styles: true,
         convert_newlines_to_brs: true,
         plugins: "paste,fullscreen,preview",
         paste_use_dialog: false,
