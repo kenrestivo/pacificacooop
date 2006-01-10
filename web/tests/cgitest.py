@@ -33,6 +33,7 @@ from posix import environ
 forminput = dict([(i.name, i.value)
                   for i in cgi.FieldStorage(keep_blank_values=True).list])
 
+debug = []
 output = []
 headers = []
 
@@ -40,22 +41,27 @@ import Cookie
 
 if environ.has_key('HTTP_COOKIE'):
     recv_cookies=Cookie.BaseCookie(environ['HTTP_COOKIE'])
-
+    recv_cookie_dict=dict([(i[0],i[1].value) for i in recv_cookies.items()])
+    debug.append('found cookies: %s' % (recv_cookie_dict))
 
 if not (environ.has_key('HTTP_COOKIE') and recv_cookies.has_key('foobar')):
     new_cookies=Cookie.BaseCookie()
     new_cookies['foobar'] = 'test'
     headers.append(repr(new_cookies))
-    output.append('new cookies: "%s<br />"' % (str(new_cookies)))
+    debug.append('new cookies: "%s<br />"' % (str(new_cookies)))
+
+
 
 headers.append('Content-Type: text/html; charset=utf-8\n')
 
 
 
-output.append("hey there<br />")
-
 for j in ['%s: %s<br />' % i for i in environ.items()]:
-    output.append(j)
+    debug.append(j)
+
+
+
+
 
 
 
@@ -63,5 +69,7 @@ for j in ['%s: %s<br />' % i for i in environ.items()]:
 for i in  headers:
     print i
 print
+for i in debug:
+    print i
 for i in output:
     print i
