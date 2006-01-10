@@ -1763,4 +1763,30 @@ or enrollment.school_year < "1900-01-01")
 GROUP BY families.family_id 
 ORDER BY school_year desc , families.name 
 
+
+-- ugly worker's query
+select  distinct
+workday, sum(if(workers.am_pm_session = "AM" and enrolled.family_id is not null, 1,0 )) as AM, 
+sum(if(workers.am_pm_session = "PM" and enrolled.family_id is not null, 1,0 )) as PM
+from workers
+left join parents on parents.parent_id = workers.parent_id
+left join 
+       (select distinct families.family_id
+                    from families
+                        left join kids on families.family_id = kids.family_id 
+                        left join enrollment on kids.kid_id = enrollment.kid_id 
+                    where enrollment.school_year = "2005-2006"
+                    and (enrollment.dropout_date < "1900-01-01"
+                       or enrollment.dropout_date > "2006-01-06"
+                        or enrollment.dropout_date is null)
+                    group by families.family_id
+                    order by families.name) as enrolled
+on enrolled.family_id = parents.family_id
+where workers.school_year = "2005-2006"
+group by  workday
+order by  workday
+
+
+
+
 --- EOF

@@ -8,13 +8,13 @@ sqlhub.processConnection = connectionForURI(dbhost.connectionurl)
 class SessionInfo(SQLObject):
        session_id=StringCol(length=32)
        ip_addr=StringCol(length=20)
-       entered=DateTimeCol()
-       updated=DateTimeCol()
+       entered=DateTimeCol(default=None)
+       updated=DateTimeCol(default=None)
        User=ForeignKey('Users')
        vars=BLOBCol()
        class sqlmeta:
               idName='session_id'
-              idtype = str
+              idType = str
 
 
 

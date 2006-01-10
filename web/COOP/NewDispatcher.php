@@ -268,6 +268,7 @@ class CoopNewDispatcher
                     $res .= $atdf->obj->afterForm(&$atdf);
                 }
 
+                //confessObj($atdf->form, 'the form structure');
                 return $res;
             }
         }

@@ -1,7 +1,6 @@
 <?php
 
 //$Id$
-// to move a few auction items over to in-kind items.
 
 chdir("../");                   // XXX only for "test" dir hack!
 
@@ -10,6 +9,7 @@ require_once("CoopObject.php");
 
 
 //// ugly, one-off hack to initialise the _cache tables with plain-text summaries of all html-capable longtext fields
+
 function makeColumns(&$cp)
 {
  

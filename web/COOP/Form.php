@@ -555,6 +555,7 @@ class coopForm extends CoopObject
 			return $this->id;
 		}
 
+
 	function getEnumOptions($key)
 		{
 			$db =& $this->obj->getDatabaseConnection();
@@ -562,16 +563,14 @@ class coopForm extends CoopObject
 										 $this->table),
 								 DB_FETCHMODE_ASSOC);
 			if (DB::isError($data)) {
-                die($data->getMessage());
+                PEAR::raiseError($data->getMessage(), 666);
             }
 			$this->page->confessArray($data, "coopForm::getEnumOptions($key)", 
 									  4);
 			preg_match('/enum\((.+?)\)/', $data['Type'], $matches);
 			$options = explode(',', ereg_replace("'", "", $matches[1]));
 			
-			// TODO set default to , um, default
-			
-			// selects must stutter: key => val. bah, give me LISP!
+            // selects must stutter: key => val. bah, give me LISP!
 			$doubleopt[''] =  '-- CHOOSE ONE --';
 			foreach($options as $opt){
 				$doubleopt[$opt]  = $opt;

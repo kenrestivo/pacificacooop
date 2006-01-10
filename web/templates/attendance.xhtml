@@ -6,10 +6,10 @@
         <th  tal:content="report/families/obj/fb_fieldLabels/name">Name</th>
         <th>Parent Ed Hours Owed</th>
       </tr>
-      <tr tal:repeat="family report/families" 
-          tal:attributes="class string:altrow${repeat/family/odd}" >
-        <td tal:content="family/name">Family</td>
-        <td tal:content="family/family_id">Hours</td>
+      <tr tal:repeat="family report/families" >
+        <td tal:content="family/name" colspan="2" >Family</td>
+          <div tal:omit-tag=""  tal:repeat="parents family/parents" > 
+          </div>
       </tr>
     </table>
   </div>

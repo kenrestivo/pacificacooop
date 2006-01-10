@@ -1,5 +1,6 @@
 notes on subform navigation, flipping between screens
 
+iframe? this is a botch
 
 
 ??? PHP/JS
@@ -11,7 +12,11 @@ attempt to implement subform.. as an ajax
 	is it inline scripts or just links?
 		test
 	maybe test caching all js into a classvar
-		
+		and then unfolding it later
+		this is going to suck pud.
+			cooppage has to change. 	
+		inclusion guards need to be sent to the page somehow
+			i.e. have to make sure not to re-load some js that's already there
 
 
 ??JS/PHP

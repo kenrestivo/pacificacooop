@@ -1,8 +1,9 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	json the subforms (subform.txt)
+	python translation: cookies
 	sortable/searchable reports (searchfeature.txt)
+	json the subforms (subform.txt)
 	reports in phptal (reportnotes.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
@@ -12,18 +13,21 @@ coop web database
 
 
 
-???PHP/SQL
-vip stuff -- import
-	how did i do vip's? tickets?
-		yes, they were direct tickets.
-	vip category? i like what julie did here
+neat: python sessions and cookies
+	generate session key if not present:
+	srand((double)microtime()*1000000 );
+	$rand=rand(1,9);
+    $session_id=$rand.substr(md5($REMOTE_ADDR), 0, 11+$rand);
+    $session_id.=substr(md5(rand(1,1000000)), rand(1,32-$rand), 21-$rand);
+    session_id($session_id);
+    session_start();
+    	
+
+STUCKAGE
+	json: dom loading scripts
+	reports: sub-objects iteration, i.e. sqlobject MultipleJoin
 
 
-??PHP
-audit trails are a botch. formatting!
-	go through and strip all tags/html from these fuckers
-	and do it for each save too
-		canonical fuckup is http://www/coop-dev/generic.php?table=audit_trail&realm=19
 
 
 ???PHP/SQL
@@ -32,11 +36,22 @@ add END dates to calendar events!!
 	show start-end as needed in summaries
 
 
-
 ???ENTRY
-	leigh ann's cash from 11/05 meeting
 	cut/paste massive 2nd vp job description in
 		and the gui version of the treasurer's description perhaps?
+
+
+
+
+??PHP
+audit trails are a botch. formatting!
+	go through and strip all tags/html from these fuckers
+	and do it for each save too
+		canonical fuckup is
+			http://www/coop-dev/generic.php?table=audit_trail&realm=19
+
+
+
 	
 
 ???PHP/SQL
@@ -48,6 +63,13 @@ linkconstraiints in unusual circumstances
 			in details
 				for everything IN families OR companies
 				but not in most other things-- stick with the schoolyear
+
+
+???PHP/SQL
+vip stuff -- import
+	how did i do vip's? tickets?
+		yes, they were direct tickets.
+	vip category? i like what julie did here
 
 
 ???PHP
@@ -268,6 +290,12 @@ fix global audit trail, it needs to show NEW records
 	yes, i do want to know what was originally saved. it's important.
 	SAVE the new record as-is, in saveaudittrail
 
+
+???PHP/SQL
+make territory editing limited to sf admins
+	here's a case for view 
+	naw, it doesn't work. they have view perms anyway
+	the permissions system is botched and needs to be re-done
 
 ??? SQL
 add shirley to the audit trail mailing list!
@@ -3128,7 +3156,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-
+	enhancement perms are all fucked up
+		look ok to me boss
 
 easy way out! just pass it the db_result handle
 	phptal has its own built in iterator for dbresults!
@@ -5442,3 +5471,10 @@ aggh. coopview takes too long for laaaaaaaarge text fields
 	integrate: livesite EVERYTHING! lots of objects there.
 	push live. WATCH OUT! it has a dependency on phptal now
 add a preview instruction to the livesite
+	damned ALIGN still sneeeaking in there. GET IT THE FUCK OUTTA THERE!!!
+		done: inline-styles
+	enhacement need nagging
+	fix start dates for previous years!
+update enrollment set start_date = "09-12-2003" where school_year = "2003-2004" and start_date is null;BUGS
+	also worker count
+	leigh ann's cash from 11/05 meeting

@@ -29,7 +29,7 @@ $atd =& $disp->handleStack();
 //in case of bug
 
 /// XXX i think this is the WRONG place for this
-$cp->buffer($sp= $cp->stackPath());
+$cp->buffer($cp->stackPath());
 
 
 /////// FINALLY, the page

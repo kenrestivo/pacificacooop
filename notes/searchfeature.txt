@@ -1,5 +1,8 @@
 a cool nifty SEARCH BOX in all generic views!!
 
+experiment with the enhancement summary perhaps
+	maybe a nag reminder button too
+
 task:
 	turn the schoolyearchooser into a generic search/sort interface
 		look at audit trail and/or parent ed for inspiration

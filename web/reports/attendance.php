@@ -42,6 +42,8 @@ class Report{
             $this->families->find(true);
             $this->page->title = 'Parent Ed Attendance Summary Report';
         }
+
+
 } // END REPORT CLASS
 
 

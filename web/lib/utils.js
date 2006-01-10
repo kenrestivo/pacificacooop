@@ -9,3 +9,10 @@ addScript = function(url, doc){
 	s.setAttribute('src', url);
 	doc.getElementsByTagName('body')[0].appendChild(s);
 }
+
+getEl = function(id, win){
+    if(!win){
+        win=window;
+    }
+    return win.document.getElementById(id);
+}
