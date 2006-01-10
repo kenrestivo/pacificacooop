@@ -62,6 +62,9 @@ class Session:
     def create_session(self):
         self.new_cookies=Cookie.BaseCookie()
         self.new_cookies[self.key_name] = self.generate_key()
+        self.db_obj = model.SessionInfo(
+            session_id=self.new_cookies[self.key_name].value,
+            ip_addr=self.remote_ip)
         self.page.headers.append(repr(self.new_cookies))
         self.page.debug.append('new cookies: "%s<br />"' % (
             str(self.new_cookies)))
