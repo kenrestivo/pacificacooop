@@ -61,14 +61,18 @@ class Session:
                 
            
     def create_session(self):
+        """XXX note the hack here. userid and vars need to be something
+        but that will require me to get my auth shit ported over too
+        """
         self.new_cookies=Cookie.BaseCookie()
         self.new_cookies[self.key_name] = self.generate_key()
         now = datetime.now()
-        #XXX note the hack here. userid and vars need to be something
-        #but that will require me to get my auth shit ported over too
-        self.db_obj = model.SessionInfo(
+        model.SessionInfo(
             session_id=self.new_cookies[self.key_name].value,
-            ip_addr=self.remote_ip, entered=now, updated=now, UserID=0, vars={})
+            ip_addr=self.remote_ip, entered=now, updated=now,
+            UserID=0, vars={})
+        #NOTE! you must now go GET it because it doesn't return right
+        self.db_obj=model.SessionInfo.get(self.new_cookies[self.key_name].value)
         self.page.headers.append(repr(self.new_cookies))
         self.page.debug.append('new cookies: "%s<br />"' % (
             str(self.new_cookies)))
