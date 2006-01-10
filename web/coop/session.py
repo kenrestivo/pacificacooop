@@ -13,6 +13,7 @@ from phpserialize.PHPUnserialize import PHPUnserialize
 from posix import environ
 import random
 import md5
+from datetime import datetime
 
 class NoSessionSaved(Exception):
     pass
@@ -62,9 +63,12 @@ class Session:
     def create_session(self):
         self.new_cookies=Cookie.BaseCookie()
         self.new_cookies[self.key_name] = self.generate_key()
+        now = datetime.now()
+        #XXX note the hack here. userid and vars need to be something
+        #but that will require me to get my auth shit ported over too
         self.db_obj = model.SessionInfo(
             session_id=self.new_cookies[self.key_name].value,
-            ip_addr=self.remote_ip)
+            ip_addr=self.remote_ip, entered=now, updated=now, UserID=0, vars={})
         self.page.headers.append(repr(self.new_cookies))
         self.page.debug.append('new cookies: "%s<br />"' % (
             str(self.new_cookies)))
