@@ -8,12 +8,15 @@ import sys
 #housebreaking wee-wee pads, needed bfore i import stuffi need
 try:
     mydir=os.path.dirname(__file__)
+    #ONLY FOR /test dir!
+    mydir = mydir + '/..'
     sys.path.append(mydir)
 except NameError:
     mydir=os.getcwd()
     pass
 
-sys.path.insert(0, '/'.join((mydir,'../')))
+sys.path.insert(0,'/'.join((mydir,'lib')))
+sys.path.insert(0,'/'.join((mydir,'objects')))
 os.chdir(mydir)
 
 
@@ -24,7 +27,20 @@ try:
 except AttributeError:
     pass
 
+import model
 
+from phpserialize.PHPSerialize import PHPSerialize
+from phpserialize.PHPUnserialize import PHPUnserialize
+
+phpun=PHPUnserialize()
+phpize=PHPSerialize()
+
+
+#####end of setup?
+
+debug = []
+output = []
+headers = []
 
 import cgi
 from posix import environ
@@ -33,22 +49,24 @@ from posix import environ
 forminput = dict([(i.name, i.value)
                   for i in cgi.FieldStorage(keep_blank_values=True).list])
 
-debug = []
-output = []
-headers = []
-
 import Cookie
 
 if environ.has_key('HTTP_COOKIE'):
     recv_cookies=Cookie.BaseCookie(environ['HTTP_COOKIE'])
     recv_cookie_dict=dict([(i[0],i[1].value) for i in recv_cookies.items()])
     debug.append('found cookies: %s' % (recv_cookie_dict))
+    session = phpun.session_decode(model.SessionInfo.get(recv_cookie_dict['coop']).vars)
+    #TODO: cache the db object too-- will need to save the session later
 
 if not (environ.has_key('HTTP_COOKIE') and recv_cookies.has_key('foobar')):
     new_cookies=Cookie.BaseCookie()
-    new_cookies['foobar'] = 'test'
+    newid = 'XXXtestnewsession'
+    new_cookies['coop'] = newid
+    #TODO: save the  new session!
     headers.append(repr(new_cookies))
     debug.append('new cookies: "%s<br />"' % (str(new_cookies)))
+
+
 
 
 
