@@ -11,4 +11,4 @@ regularstring = 'a:2:{s:3:"foo";a:2:{s:3:"bar";s:4:"baz|";s:4:"blah";a:1:{s:4:"n
 u = PHPUnserialize()
 
 print u.unserialize(regularstring)
-print u.unserialize(sessionstring)
+print u.session_decode(sessionstring)
