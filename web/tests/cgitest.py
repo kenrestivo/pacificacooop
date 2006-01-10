@@ -46,7 +46,7 @@ if not (environ.has_key('HTTP_COOKIE') and recv_cookies.has_key('foobar')):
     new_cookies=Cookie.BaseCookie()
     new_cookies['foobar'] = 'test'
     headers.append(repr(new_cookies))
-    output.append('cookies: "%s<br />"' % (new_cookies))
+    output.append('new cookies: "%s<br />"' % (str(new_cookies)))
 
 headers.append('Content-Type: text/html; charset=utf-8\n')
 
