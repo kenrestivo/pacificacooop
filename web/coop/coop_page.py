@@ -1,7 +1,8 @@
 import cgi
 
 class Page:
-    """ TODO: move this somewhere senisible"""
+    """a minimal (so far) reimplementation of the php CoopPage class
+    handles page display and header management"""
     debug = []
     output = []
     headers = []
