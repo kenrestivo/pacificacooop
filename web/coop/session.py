@@ -89,6 +89,7 @@ class Session:
         self.new_cookies=Cookie.BaseCookie()
         self.sid = self.generate_key()
         self.new_cookies[self.key_name] = self.sid
+        self.new_cookies[self.key_name]['path'] = '/'
         now = datetime.now()
         model.SessionInfo(
             session_id=self.sid,
