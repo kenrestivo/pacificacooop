@@ -59,7 +59,7 @@ class Session:
             self.recv_cookie_dict[self.key_name])
         self.session_data = self.phpun.session_decode(self.db_obj.vars)
         self.db_obj.ip_addr = self.remote_ip
-        self.page.output.append(self.session_data)
+        self.page.debug.append(self.session_data)
                 
            
     def create_session(self):
