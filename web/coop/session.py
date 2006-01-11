@@ -41,6 +41,10 @@ class NoSessionSaved(Exception):
 
 
 class Session:
+    """session-management operations.
+    sid is only set when a new key is created, or when the browser doesn't
+    send a cookie
+    """
     phpun=PHPUnserialize()
     phpize=PHPSerialize()
     recv_cookies= None
@@ -67,17 +71,21 @@ class Session:
             
 
     def get_session(self):
-        if not environ.has_key('HTTP_COOKIE'):
-            raise NoSessionSaved
-        self.recv_cookies=Cookie.SimpleCookie(environ['HTTP_COOKIE'])
-        if not self.recv_cookies.has_key(self.key_name):
+        if environ.has_key('HTTP_COOKIE'):
+            self.recv_cookies=Cookie.SimpleCookie(environ['HTTP_COOKIE'])
+            if not self.recv_cookies.has_key(self.key_name):
+                raise NoSessionSaved
+        elif self.page.forminput.has_key(self.key_name):
+            self.recv_cookies=Cookie.SimpleCookie('%s=%s' % (
+                self.key_name, self.page.forminput[self.key_name]))
+        else:
             raise NoSessionSaved
         self.recv_cookie_dict=dict(
             [(i[0],i[1].value) for i in self.recv_cookies.items()])
         self.page.debug.append('found cookies: %s' % (
             self.recv_cookie_dict))
-        self.sid = self.recv_cookie_dict[self.key_name]
-        self.db_obj = model.SessionInfo.get(self.sid)
+        self.db_obj = model.SessionInfo.get(
+            self.recv_cookie_dict[self.key_name])
         self.session_data = self.phpun.session_decode(self.db_obj.vars)
         self.db_obj.ip_addr = self.remote_ip
         self.page.debug.append(self.session_data)
