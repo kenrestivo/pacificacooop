@@ -13,6 +13,7 @@ from phpserialize.PHPUnserialize import PHPUnserialize
 from posix import environ
 import random
 import md5
+import re
 from datetime import datetime
 
 class NoSessionSaved(Exception):
@@ -62,8 +63,7 @@ class Session:
            
     def create_session(self):
         """XXX note the hack here. userid and vars need to be something
-        but that will require me to get my auth shit ported over too
-        """
+        but that will require me to get my auth shit ported over too"""
         self.new_cookies=Cookie.BaseCookie()
         self.new_cookies[self.key_name] = self.generate_key()
         now = datetime.now()
@@ -79,7 +79,8 @@ class Session:
     
 
     def generate_key(self):
-        """this algorithm is from ilovejackdaniels.com. i'm not kidding"""
+        """this algorithm is from ilovejackdaniels.com. i'm not kidding
+        i like that it's so terse. how readable it is, remains to be seen """
         random.seed()
         rnd=random.randint(1,9)
         return '%s%s%s' % (rnd,
