@@ -69,7 +69,7 @@ class Session:
     def get_session(self):
         if not environ.has_key('HTTP_COOKIE'):
             raise NoSessionSaved
-        self.recv_cookies=Cookie.BaseCookie(environ['HTTP_COOKIE'])
+        self.recv_cookies=Cookie.SimpleCookie(environ['HTTP_COOKIE'])
         if not self.recv_cookies.has_key(self.key_name):
             raise NoSessionSaved
         self.recv_cookie_dict=dict(
@@ -86,7 +86,7 @@ class Session:
     def create_session(self):
         """XXX note the hack here. userid and vars need to be something
         but that will require me to get my auth shit ported over too"""
-        self.new_cookies=Cookie.BaseCookie()
+        self.new_cookies=Cookie.SimpleCookie()
         self.sid = self.generate_key()
         self.new_cookies[self.key_name] = self.sid
         self.new_cookies[self.key_name]['path'] = '/'
