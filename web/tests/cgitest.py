@@ -27,55 +27,27 @@ try:
 except AttributeError:
     pass
 
-import model
-
-from phpserialize.PHPSerialize import PHPSerialize
-from phpserialize.PHPUnserialize import PHPUnserialize
-
-phpun=PHPUnserialize()
-phpize=PHPSerialize()
 
 
 #####end of setup?
 
-debug = []
-output = []
-headers = []
+
 
 import cgi
+import coop_page
+import session
+
+
+page=coop_page.Page()
+
+sess=session.Session(page)
+
+page.headers.append('Content-Type: text/html; charset=utf-8\n')
+
+
 from posix import environ
-
-## hack around bug in cgi input
-forminput = dict([(i.name, i.value)
-                  for i in cgi.FieldStorage(keep_blank_values=True).list])
-
-import Cookie
-
-if environ.has_key('HTTP_COOKIE'):
-    recv_cookies=Cookie.BaseCookie(environ['HTTP_COOKIE'])
-    recv_cookie_dict=dict([(i[0],i[1].value) for i in recv_cookies.items()])
-    debug.append('found cookies: %s' % (recv_cookie_dict))
-    session = phpun.session_decode(model.SessionInfo.get(recv_cookie_dict['coop']).vars)
-    #TODO: cache the db object too-- will need to save the session later
-
-if not (environ.has_key('HTTP_COOKIE') and recv_cookies.has_key('foobar')):
-    new_cookies=Cookie.BaseCookie()
-    newid = 'XXXtestnewsession'
-    new_cookies['coop'] = newid
-    #TODO: save the  new session!
-    headers.append(repr(new_cookies))
-    debug.append('new cookies: "%s<br />"' % (str(new_cookies)))
-
-
-
-
-
-headers.append('Content-Type: text/html; charset=utf-8\n')
-
-
-
 for j in ['%s: %s<br />' % i for i in environ.items()]:
-    debug.append(j)
+    page.debug.append(j)
 
 
 
@@ -84,10 +56,4 @@ for j in ['%s: %s<br />' % i for i in environ.items()]:
 
 
 ##### finally output stuff
-for i in  headers:
-    print i
-print
-for i in debug:
-    print i
-for i in output:
-    print i
+page.render(True)
