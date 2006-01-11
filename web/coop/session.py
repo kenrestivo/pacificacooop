@@ -49,6 +49,7 @@ class Session:
     page=None
     session_data = {}
     db_obj = None
+    sid = ''
     key_name = 'coop'
     remote_ip = '0.0.0.0'
 
@@ -75,8 +76,8 @@ class Session:
             [(i[0],i[1].value) for i in self.recv_cookies.items()])
         self.page.debug.append('found cookies: %s' % (
             self.recv_cookie_dict))
-        self.db_obj = model.SessionInfo.get(
-            self.recv_cookie_dict[self.key_name])
+        self.sid = self.recv_cookie_dict[self.key_name]
+        self.db_obj = model.SessionInfo.get(self.sid)
         self.session_data = self.phpun.session_decode(self.db_obj.vars)
         self.db_obj.ip_addr = self.remote_ip
         self.page.debug.append(self.session_data)
@@ -86,10 +87,11 @@ class Session:
         """XXX note the hack here. userid and vars need to be something
         but that will require me to get my auth shit ported over too"""
         self.new_cookies=Cookie.BaseCookie()
-        self.new_cookies[self.key_name] = self.generate_key()
+        self.sid = self.generate_key()
+        self.new_cookies[self.key_name] = self.sid
         now = datetime.now()
         model.SessionInfo(
-            session_id=self.new_cookies[self.key_name].value,
+            session_id=self.sid,
             ip_addr=self.remote_ip, entered=now, updated=now,
             UserID=0, vars={})
         #NOTE! you must now go GET it because it doesn't return right
