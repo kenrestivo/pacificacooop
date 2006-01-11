@@ -33,7 +33,7 @@ class Session:
     remote_ip = '0.0.0.0'
 
     def write_session(self):
-        pass
+        self.db_obj.vars = self.phpize.session_encode(self.session_data)
 
 
     def __init__(self, page):
@@ -57,8 +57,9 @@ class Session:
             self.recv_cookie_dict))
         self.db_obj = model.SessionInfo.get(
             self.recv_cookie_dict[self.key_name])
-        self.session_data = phpun.session_decode(self.db_obj.vars)
+        self.session_data = self.phpun.session_decode(self.db_obj.vars)
         self.db_obj.ip_addr = self.remote_ip
+        self.page.output.append(self.session_data)
                 
            
     def create_session(self):
@@ -97,3 +98,4 @@ class Session:
         if environ.has_key('REMOTE_ADDR'):
             return environ['REMOTE_ADDR']
         return 'Unknown'
+
