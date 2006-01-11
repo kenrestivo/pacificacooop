@@ -53,7 +53,5 @@ for j in ['%s: %s<br />' % i for i in environ.items()]:
 
 
 
-
-
 ##### finally output stuff
 page.render(True)
