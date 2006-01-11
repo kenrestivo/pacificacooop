@@ -16,7 +16,7 @@ coop web database
 neat: python sessions and cookies
 	and, set the path properly! how, in cookies? s/b '/'
 		in morsels, but, need to set it globally for the basecookie class
-	make it happy with no-cookie, i.e. w3m, sid
+	make it happy with no-cookie, i.e. w3m, sids
 
 
 STUCKAGE

@@ -42,7 +42,7 @@ page=coop_page.Page()
 
 sess=session.Session(page)
 
-page.headers.append('Content-Type: text/html; charset=utf-8\n')
+page.headers['Content-Type'] = 'text/html; charset=utf-8\n'
 
 
 from posix import environ

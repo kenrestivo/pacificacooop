@@ -97,7 +97,7 @@ class Session:
             UserID=0, vars={})
         #NOTE! you must now go GET it because it doesn't return right
         self.db_obj=model.SessionInfo.get(self.new_cookies[self.key_name].value)
-        self.page.headers.append(repr(self.new_cookies))
+        self.page.headers['Set-Cookie'] = self.new_cookies.output(header='')
         self.page.debug.append('new cookies: "%s<br />"' % (
             str(self.new_cookies)))
     

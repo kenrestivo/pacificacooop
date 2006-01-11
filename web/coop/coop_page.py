@@ -21,7 +21,7 @@ class Page:
     handles page display and header management"""
     debug = []
     output = []
-    headers = []
+    headers = {}
     forminput = dict()
 
     def __init__(self):
@@ -49,7 +49,7 @@ class Page:
         """outputs the page, headers first
         XXX this may or may not survive being simpletal'ed"""
         for i in  self.headers:
-            print i
+            print '%s: %s' % (i, self.headers[i].strip())
         print
         if debug:
             for i in self.debug:
