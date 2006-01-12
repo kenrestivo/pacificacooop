@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <html  lang="en">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+      <link rel="stylesheet" href="main.css" title="main" />
+      
+      <title tal:content="page/title"></title>
+    </head>
+    <body>
+      <!--[if gte IE 5.5000]> <script type="text/javascript" src="lib/pngfix.js"></script> <![endif]-->    
+
+      <div id="header">
+        <h2 tal:content="page/heading">Page Header</h2>
+        
+        <div id="warning" tal:condition="page/devSite" ><strong>NOTE! THIS IS THE DEV SITE! 
+        THIS IS NOT LIVE DATA, THIS IS ONLY FOR TESTING.</strong>
+        <br />If you want the live site, use the "members" link, 
+        NOT "members-dev". Thanks.</div>
+        
+        <div tal:content="structure page/logIn"></div>
+        <div tal:condition="page/auth/uid" 
+             tal:content="structure page/topNavigation">Top Navigation</div>
+        <h3 tal:content="page/title" tal:on-error="">Table Description</h3>
+        <hr />
+      </div>    
+      
+      
+
+      <div id="centerCol" tal:comment="this ID is used for css. keep it here." >
+        <div tal:condition="page/auth/uid" metal:define-slot="center_column">The Center Column Slot</div>
+      </div>
+      
+
+      <div id="footer">
+        <hr />
+        <div><a href="http://validator.w3.org/check/referer">
+          <img src="../images/html401.png" alt="Valid XHTML 1.0!"  /></a>
+          
+          <!--[if IE]><<a href="http://www.getfirefox.com"><img  alt="Get Firefox!" title="Get Firefox!" src="http://sfx-images.mozilla.org/affiliates/Buttons/110x32/get.gif"/></a><![endif]-->
+          
+        If anything on this site appears to be not working properly, email <a href='mailto:ken@restivo.org'>ken@restivo.org</a> or call ken at 650-355-1317</div>
+      </div>
+
+    </body>
+  </html> 

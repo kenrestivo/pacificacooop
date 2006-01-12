@@ -12,17 +12,14 @@ coop web database
 	python translation. for what? reports maybe?
 
 
-STUCKAGE
-	json: dom loading scripts
-	reports: sub-objects iteration, i.e. sqlobject MultipleJoin
-		or... my nifty python tal thing maybe??
 
-
-???PHP/SQL
-
-add END dates to calendar events!!
-	it's ridiculous the way i have it now
-	show start-end as needed in summaries
+NOW
+	some kind of alpha pager for coopview. 
+		where last_name like 'A%', basically
+			save the state in the session, somewhere
+			this is easy! in last! whoa.
+				but how to GET it, that's the hard part
+	and an excel export, which i think i've done
 
 
 ???ENTRY
@@ -63,6 +60,13 @@ vip stuff -- import
 
 ???PHP
 sf night-of event purchases is utterly fucked up
+
+
+???PHP/SQL
+add END dates to calendar events!!
+	it's ridiculous the way i have it now
+	show start-end as needed in summaries
+
 
 
 ???PHP
@@ -115,6 +119,12 @@ BURNT (when too burnt out to do actual work)
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
+
+
+	json: dom loading scripts
+
+	reports: sub-objects iteration, i.e. sqlobject MultipleJoin
+		or... my nifty python tal thing maybe??
 
 
 BUGS BUGS BUGS

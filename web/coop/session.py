@@ -51,14 +51,14 @@ class Session:
     recv_cookie_dict = {}
     new_cookies = None
     page=None
-    session_data = {}
+    data = {}
     db_obj = None
     sid = ''
     key_name = 'coop'
     remote_ip = '0.0.0.0'
 
     def write_session(self):
-        self.db_obj.vars = self.phpize.session_encode(self.session_data)
+        self.db_obj.vars = self.phpize.session_encode(self.data)
 
 
     def __init__(self, page):
@@ -86,9 +86,9 @@ class Session:
             self.recv_cookie_dict))
         self.db_obj = model.SessionInfo.get(
             self.recv_cookie_dict[self.key_name])
-        self.session_data = self.phpun.session_decode(self.db_obj.vars)
+        self.data = self.phpun.session_decode(self.db_obj.vars)
         self.db_obj.ip_addr = self.remote_ip
-        self.page.debug.append(self.session_data)
+        self.page.debug.append(self.data)
                 
            
     def create_session(self):

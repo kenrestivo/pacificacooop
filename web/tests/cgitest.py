@@ -35,14 +35,10 @@ except AttributeError:
 
 import cgi
 import coop_page
-import session
 
 
 page=coop_page.Page()
 page.headers['Content-Type'] = 'text/html; charset=utf-8'
-
-sess=session.Session(page)
-
 page.template_name  = 'debugtest'
 
 
@@ -55,5 +51,8 @@ for j in ['%s: %s<br />' % i for i in environ.items()]:
 
 
 ##### finally output stuff
-#page.render(True)
+#page.render_raw(True)
 page.render_template()
+
+
+#END

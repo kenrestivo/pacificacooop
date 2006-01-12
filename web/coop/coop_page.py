@@ -17,10 +17,14 @@
 import cgi
 from simpletal import simpleTAL, simpleTALES
 from sys import stdout
+import session
+import logging
 
 class Page:
     """a minimal (so far) reimplementation of the php CoopPage class
     handles page display and header management"""
+    session = None
+    cpVars = {}
     debug = []
     raw_output = []
     headers = {}
@@ -28,11 +32,16 @@ class Page:
     doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
     elements = {}
     template_name = ''
+    auth = {}
+    title = 'Data Entry'
+    heading = 'Pacifica Co-Op Nursery School'
 
     def __init__(self):
         """hack around bug in cgi input"""
         self.forminput = dict([(i.name, i.value)
                                for i in cgi.FieldStorage(keep_blank_values=True).list])
+        self.session=session.Session(self)
+
 
     def add_header(self, line):
         self.headers.append(line)
@@ -49,6 +58,12 @@ class Page:
     def add_line(self, line, type):
         """so that programs can decide at runtime"""
         getattr(self, type).append(line)
+
+
+    def logIn(self):
+        self.cpVars = self.session.data['cpVars']
+        self.auth = self.session.data['auth']
+
 
     def render_raw(self, debug = False):
         """outputs the page, headers first
@@ -68,8 +83,10 @@ class Page:
         for i in  self.headers:
             print '%s: %s' % (i, self.headers[i].strip())
         print
+        logging.getLogger('simpleTAL').setLevel(logging.WARN)
+        logging.getLogger('simpleTALES').setLevel(logging.WARN)
         context = simpleTALES.Context()
-        context.addGlobal('elements', self.elements)
+        context.addGlobal('page', self)
         templateFile = open ('templates/%s.xhtml' % (self.template_name), 'r')
         template = simpleTAL.compileXMLTemplate (templateFile)
         templateFile.close()
