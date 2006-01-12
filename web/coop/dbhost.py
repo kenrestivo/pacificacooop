@@ -15,6 +15,6 @@ port=3306
 connectionurl=     'mysql://%s:%s@%s:%d/%s' % (user, pw, host, port, db)
 
 # need this everywhere
-#Rsitepackages = '/mnt/kens/ki/proj/coop/web/site-packages'
+sitepackages = '/mnt/kens/ki/proj/coop/web/site-packages'
 
 

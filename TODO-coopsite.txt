@@ -1,7 +1,6 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	python translation: cookies
 	sortable/searchable reports (searchfeature.txt)
 	json the subforms (subform.txt)
 	reports in phptal (reportnotes.txt)
@@ -10,13 +9,7 @@ coop web database
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	import the 20-year roster (20yearroster.txt)
 	insurance, dammit
-
-
-
-neat: python sessions and cookies
-	and, set the path properly! how, in cookies? s/b '/'
-		in morsels, but, need to set it globally for the basecookie class
-	make it happy with no-cookie, i.e. w3m, sids
+	python translation. for what? reports maybe?
 
 
 STUCKAGE
@@ -5489,4 +5482,10 @@ update enrollment set start_date = "09-12-2003" where school_year = "2003-2004" 
     session_start();
     	
 	integrate it and see whatcha get
-		wow, it works
+		wow, it works	and, set the path properly! how, in cookies? s/b '/'
+		in morsels, but, need to set it globally for the basecookie class
+
+neat: python sessions and cookies
+	make it happy with no-cookie, i.e. w3m, sids
+		how to find out if no cookies?
+	done

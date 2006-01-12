@@ -15,14 +15,18 @@
 # 	 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import cgi
+from simpletal import simpleTAL, simpleTALES
 
 class Page:
     """a minimal (so far) reimplementation of the php CoopPage class
     handles page display and header management"""
     debug = []
-    output = []
+    raw_output = []
     headers = {}
     forminput = dict()
+    doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
+    elements = {}
+    template_name = ''
 
     def __init__(self):
         """hack around bug in cgi input"""
@@ -54,5 +58,17 @@ class Page:
         if debug:
             for i in self.debug:
                 print i
-        for i in self.output:
+        for i in self.raw_output:
             print i
+
+
+    def render_template(self):
+        context = simpleTALES.Context()
+        context.addGlobal('elements', self.elements)
+        templateFile = open (self.template_name, 'r')
+        template = simpleTAL.compileXMLTemplate (templateFile)
+        templateFile.close()
+        template.expand (context, sys.stdout, docType=self.doctype,
+                         suppressXMLDeclaration=True)
+
+         

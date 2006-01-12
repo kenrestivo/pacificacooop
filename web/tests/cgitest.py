@@ -39,15 +39,16 @@ import session
 
 
 page=coop_page.Page()
+page.headers['Content-Type'] = 'text/html; charset=utf-8'
 
 sess=session.Session(page)
 
-page.headers['Content-Type'] = 'text/html; charset=utf-8\n'
+
 
 
 from posix import environ
 for j in ['%s: %s<br />' % i for i in environ.items()]:
-    page.debug.append(j)
+    page.raw_output.append(j)
 
 
 
