@@ -42,8 +42,8 @@ class NoSessionSaved(Exception):
 
 class Session:
     """session-management operations.
-    sid is only set when a new key is created, or when the browser doesn't
-    send a cookie
+    sid is only set when a new key is created,
+    or when the browser doesn't send a cookie
     """
     phpun=PHPUnserialize()
     phpize=PHPSerialize()
