@@ -12,19 +12,27 @@ coop web database
 	python translation. for what? reports maybe?
 
 
+edit is broken in my custom-weird box. why??!
+
+
+??PHP
+back from the dead: add to the post-update callback, the sponsorships!
+	makesponsorships linkconstraint is fuxored-- ambiguous schoolyear?
+		where do i whereadd schoolyear WITOUT a column?
+	add afterinsert/update to all company-related things
+		bah, and to income in general... though that'll be interesting
 
 BUGS
-	income for solicitation needs to show the checks
-		the add new ain't happen'in. why?
-			ah, nothing in it
-		fix the check entries!!
+	that solicit summary, should show view for debbie. why doesn't it?
 
 	deb/bethany can't see totals anymore??! wtf?
 		menu perms, goddammit
 		i can see them just fine. what's different?
 
 
-	
+also make sure the random solicitation people can't edit money
+
+
 
 
 NOW
@@ -5558,3 +5566,7 @@ push my ghui fixes live
 
 	push the check stuff live
 		backup first, just to be paranoid
+		the add new ain't happen'in. why?
+			ah, nothing in it
+	income for solicitation needs to show the checks
+		fix the check entries!!

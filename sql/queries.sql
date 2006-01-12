@@ -1797,8 +1797,12 @@ group by  workday
 order by  workday
 
 
-
-
-
+-- any  do not contacts made their way in here?
+select *
+from invitations 
+left join leads using (lead_id)
+where invitations.school_year = '2005-2006' 
+and (leads.do_not_contact is not null or leads.do_not_contact > '2000-01-01') 
+and leads.do_not_contact < now();
 
 --- EOF

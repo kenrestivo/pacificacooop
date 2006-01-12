@@ -81,8 +81,9 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                     $res .= '&nbsp;' . $this->cf->page->selfURL(
                         array(
                             'value' =>sprintf(
-                                'Edit',
-                                $this->cf->obj->fb_fieldLabels[$this->field]),
+                                'Edit%s',
+                                $this->showEditText ? 
+                                ' ' . htmlentities($this->cf->concatLinkFields()) : ''),
                             'par' => false,
                             'elementid' => 'subedit-' . $this->getName(),
                             'inside' => array('table' => $target,

@@ -521,6 +521,12 @@ class coopForm extends CoopObject
 		
 			$this->saveAudit(false);
 		
+            //why? because saveaudit above needs lastinsertid. duh.
+            if(is_callable(array($this->obj,'afterUpdate'))){
+                $this->obj->afterUpdate(&$this);
+            }
+
+
 			return $this->id;
 		}
 

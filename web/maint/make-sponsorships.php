@@ -48,19 +48,16 @@ print $menu->topNavigation();
 
 print "<p>Springfest Sponsors Needed</p>";
 
-if(!checkAuthLevel($cp->auth, 0, 'solicit_money', ACCESS_EDIT, 
-				   $cp->userStruct)){
- 	print "You don't have permissions to do this. Sorry.";
- 	done();
-}
 
-print $cp->selfURL('View Sponsorships');
- print $cp->selfURL('Find Needed', array('action' => 'findneeded'));
- print $cp->selfURL('Add Needed', array('action' => 'addneeded'));
+print $cp->selfURL(array('value' =>'View Sponsorships'));
+ print $cp->selfURL(array('value' => 'Find Needed', 
+                    'inside' => array('action' => 'findneeded')));
+ print $cp->selfURL(array('value' => 'Add Needed', 
+                    'inside' => array('action' => 'addneeded')));
 
 
-//$sy = '2003-2004';
-$sy = findSchoolYear();
+
+$sy = $cp->currentSchoolYear;
 
 
 //TODO: merge this with sponsorships page?
@@ -77,8 +74,7 @@ $sy = findSchoolYear();
 function viewHack(&$cp, &$atd, $sy)
 {
 	 $co =& new CoopObject(&$cp, 'sponsorship_types', &$atd);
-	 $atd->obj->joinAdd($co->obj);
-	 $atd->obj->school_year = $sy;
+     $atd->protectedJoin($co);
 	 $atd->obj->orderBy('sponsorship_price desc');
 	 return $atd->simpleTable();
 			

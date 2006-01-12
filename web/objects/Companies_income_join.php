@@ -6,7 +6,7 @@ require_once 'DB/DataObject.php';
 
 class Companies_income_join extends CoopDBDO 
 {
-    ###START_AUTOCODE
+###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'companies_income_join';           // table name
@@ -22,7 +22,7 @@ class Companies_income_join extends CoopDBDO
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Companies_income_join',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-    ###END_AUTOCODE
+###END_AUTOCODE
 	var $fb_linkDisplayFields = array('company_id', 'income_id');
 
 	var $fb_fieldLabels = array ('income_id' => 'Payment Information',
@@ -48,7 +48,7 @@ class Companies_income_join extends CoopDBDO
             $co->grouper();
 		}
 
-        function preGenerateForm(&$form)
+    function preGenerateForm(&$form)
         {
             // the more "modern" way to do pregenerate form
             $el =& $form->createElement(
@@ -76,6 +76,7 @@ class Companies_income_join extends CoopDBDO
                 '{}');
             $json = new Services_JSON();// XXX call statically?
             $editperms->setValue($json->encode($opts['editperms']));
+            $el->setValue($this->income_id);
 
             $el->_parentForm =& $form;
             $el->prepare();
@@ -84,6 +85,22 @@ class Companies_income_join extends CoopDBDO
             
         }
 
-
+    function afterInsert(&$co)
+        {
+            return $this->_updateSponsors(&$co);
+        }
+    
+    function afterUpdate(&$co)
+        {
+            return $this->_updateSponsors(&$co);
+        }
+    
+    function _updateSponsors(&$co)
+        {
+            return; // XXX broken!
+            require_once('Sponsorship.php');
+            $sp = new Sponsorship(&$co->page, $this->school_year);
+            $sp->updateSponsorships($this->company_id, 'company_id');
+        }
 
 }
