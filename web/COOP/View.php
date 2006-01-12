@@ -656,62 +656,62 @@ class coopView extends CoopObject
  
 
 
-function schoolYearChooser()
-{
-
-    if($this->perms[NULL]['year'] < ACCESS_VIEW)
-    {
-        return;
-    }
-
-
-    if(!$this->isTop()){
-        return;
-    }
-
-    if(!empty($this->searchForm)){
-        //there's already one there
-        return;
-    }
-
- 
-    $syform =& new HTML_QuickForm($this->table . '-schoolyearchooser',
-                                  false, false, false, false, true);
-    $syform->removeAttribute('name');
-    $syform->removeAttribute('target');
-    $el =& $syform->addElement('select', 'school_year', 'School Year', 
-                               //TODO check ispermittedfield for allyears!
-                               $this->getSchoolYears(null, true),
-                               array('onchange' =>'this.form.submit()'));
-
-    if($sid = thruAuthCore($this->page->auth)){
-        $syform->addElement('hidden', 'coop', $sid); 
-    }
-
-    if(!empty($this->page->vars['last']['chosenSchoolYear'])){
-        $defaultsy = $this->page->vars['last']['chosenSchoolYear'];
-    } else if (empty($this->obj->fb_allYears)) {
-        // this alllyears only makes sense if schoolyearchooser is ONLY
-        // called when user has view permissions on not-this-year
-        $defaultsy = '%';
-    } else {
-        $defaultsy = $this->page->currentSchoolYear;
-    }
-
-    $syform->setDefaults(array('school_year' => $defaultsy));
-
-
-    $this->searchForm =& $syform;
-    
-
-    // TODO: move getchosenschoolyear back here again, and do this in it!
-    // and getelement(school_year) to get $el
-    $foo = $el->getValue();
-    $this->chosenSchoolYear = $foo[0];
-    $this->page->vars['last']['chosenSchoolYear'] = $this->chosenSchoolYear;
-
-    return;
-}
+    function schoolYearChooser()
+        {
+            
+            if($this->perms[NULL]['year'] < ACCESS_VIEW)
+            {
+                return;
+            }
+            
+            
+            if(!$this->isTop()){
+                return;
+            }
+            
+            if(!empty($this->searchForm)){
+                //there's already one there
+                return;
+            }
+            
+            
+            $syform =& new HTML_QuickForm($this->table . '-schoolyearchooser',
+                                          false, false, false, false, true);
+            $syform->removeAttribute('name');
+            $syform->removeAttribute('target');
+            $el =& $syform->addElement('select', 'school_year', 'School Year', 
+                                       //TODO check ispermittedfield for allyears!
+                                       $this->getSchoolYears(null, true),
+                                       array('onchange' =>'this.form.submit()'));
+            
+            if($sid = thruAuthCore($this->page->auth)){
+                $syform->addElement('hidden', 'coop', $sid); 
+            }
+            
+            if(!empty($this->page->vars['last']['chosenSchoolYear'])){
+                $defaultsy = $this->page->vars['last']['chosenSchoolYear'];
+            } else if (!empty($this->obj->fb_allYears)) {
+                // this alllyears only makes sense if schoolyearchooser is ONLY
+                // called when user has view permissions on not-this-year
+                $defaultsy = '%';
+            } else {
+                $defaultsy = $this->page->currentSchoolYear;
+            }
+            
+            $syform->setDefaults(array('school_year' => $defaultsy));
+            
+            
+            $this->searchForm =& $syform;
+            
+            
+            // TODO: move getchosenschoolyear back here, and do this in it!
+            // and getelement(school_year) to get $el
+            $foo = $el->getValue();
+            $this->chosenSchoolYear = $foo[0];
+            $this->page->vars['last']['chosenSchoolYear'] = $this->chosenSchoolYear;
+            
+            return;
+        }
 
 
     function showLinkDetails()
