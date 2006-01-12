@@ -15,7 +15,7 @@ coop web database
 STUCKAGE
 	json: dom loading scripts
 	reports: sub-objects iteration, i.e. sqlobject MultipleJoin
-
+		or... my nifty python tal thing maybe??
 
 
 ???PHP/SQL

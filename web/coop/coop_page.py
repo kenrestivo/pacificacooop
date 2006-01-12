@@ -16,6 +16,7 @@
 
 import cgi
 from simpletal import simpleTAL, simpleTALES
+from sys import stdout
 
 class Page:
     """a minimal (so far) reimplementation of the php CoopPage class
@@ -65,10 +66,10 @@ class Page:
     def render_template(self):
         context = simpleTALES.Context()
         context.addGlobal('elements', self.elements)
-        templateFile = open (self.template_name, 'r')
+        templateFile = open ('templates/%s.xhtml' % (self.template_name), 'r')
         template = simpleTAL.compileXMLTemplate (templateFile)
         templateFile.close()
-        template.expand (context, sys.stdout, docType=self.doctype,
+        template.expand (context, stdout, docType=self.doctype,
                          suppressXMLDeclaration=True)
 
          

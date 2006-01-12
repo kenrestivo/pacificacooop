@@ -43,7 +43,7 @@ page.headers['Content-Type'] = 'text/html; charset=utf-8'
 
 sess=session.Session(page)
 
-
+page.template_name  = 'debugtest'
 
 
 from posix import environ
@@ -55,4 +55,5 @@ for j in ['%s: %s<br />' % i for i in environ.items()]:
 
 
 ##### finally output stuff
-page.render(True)
+#page.render(True)
+page.render_template()
