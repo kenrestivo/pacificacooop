@@ -74,7 +74,29 @@ class Invitations extends CoopDBDO
                       'title', 'address1', 'address2', 'city', 'state', 'zip',
                       'country', 'phone');
             
-            return $co->simpleTable();
+
+            if($co->isPermittedField() >= ACCESS_VIEW){
+                $res .= '<div>Choose a letter to view:</div>';
+                foreach(range('A', 'Z') as $ltr){
+                    $res .= '&nbsp;' . $co->page->selfURL(
+                        array('value' => $ltr,
+                              'par' => '',
+                              'inside' => array('startletter' => $ltr)
+                            ));
+                }
+                // use latest of course, if available
+                if(!empty($_REQUEST['startletter'])){
+                    $co->page->vars['last']['startletter'] = 
+                        $_REQUEST['startletter'];
+                }
+                $sl = $co->page->vars['last']['startletter'] ? 
+                    $co->page->vars['last']['startletter'] : 'A';
+                $this->whereAdd("last_name like '$sl%'");
+                
+            }
+            $res .= $co->simpleTable();
+            return $res;
+
         }
 
 
