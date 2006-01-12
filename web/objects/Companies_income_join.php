@@ -31,7 +31,8 @@ class Companies_income_join extends CoopDBDO
 
 	var $fb_formHeaderText =  'Springfest Solicitation Cash Donations';
 
-	var $fb_requiredFields = array('auction_donation_item_id', 
+	var $fb_requiredFields = array('income_id',
+                                   'family_id',
                                    'company_id');
 
 
@@ -46,6 +47,26 @@ class Companies_income_join extends CoopDBDO
             // TODO: somehow make orderbylinkdisplay() recursive
             $co->grouper();
 		}
+
+        function preGenerateForm(&$form)
+        {
+
+            $el =& $form->addElement(
+                'customselect', 
+                $form->CoopForm->prependTable('income_id'), false);
+
+            $inc =& new CoopObject(&$form->CoopForm->page, 'income', 
+                                   &$form->CoopForm);
+            $opts = $inc->getLinkOptions(true, true);
+            
+            $el->_parentForm =& $form;
+            $el->prepare();
+
+            $this->fb_preDefElements[$form->CoopForm->prependTable('income_id')] = $el;
+			return $el;
+            
+        }
+
 
 
 }
