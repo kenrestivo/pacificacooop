@@ -972,7 +972,13 @@ function getAlert()
 
             // rendering code
             $res .= '<div>Choose a letter to view:</div>';
-            foreach(range('A', 'Z') as $ltr){
+            
+            $tmp =& $this->obj->factory($this->table);
+            $tmp->query(sprintf('select left(%s, 1) as startletter from %s where %s is not null group by left(%s, 1) order by left(%s, 1)', 
+                                $keyname, $this->table, 
+                                $keyname, $keyname, $keyname));
+            while ($tmp->fetch()){
+                $ltr = $tmp->startletter;
                 $letterlist[] = $sl == $ltr ? $sl : $this->page->selfURL(
                     array('value' => $ltr,
                           'par' => '',
