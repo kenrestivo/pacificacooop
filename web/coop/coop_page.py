@@ -50,7 +50,7 @@ class Page:
         """so that programs can decide at runtime"""
         getattr(self, type).append(line)
 
-    def render(self, debug = False):
+    def render_raw(self, debug = False):
         """outputs the page, headers first
         XXX this may or may not survive being simpletal'ed"""
         for i in  self.headers:
@@ -63,7 +63,11 @@ class Page:
             print i
 
 
+
     def render_template(self):
+        for i in  self.headers:
+            print '%s: %s' % (i, self.headers[i].strip())
+        print
         context = simpleTALES.Context()
         context.addGlobal('elements', self.elements)
         templateFile = open ('templates/%s.xhtml' % (self.template_name), 'r')

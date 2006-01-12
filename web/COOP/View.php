@@ -545,9 +545,10 @@ class coopView extends CoopObject
             $permitted = $this->isPermittedField();
 
 			//confessObj($this, 'this');
-			// the new style!
-            $ra = !empty($this->obj->fb_recordActions) ? 
+			// NOT EMPTY()! i want empty arrays to override!
+            $ra = is_array($this->obj->fb_recordActions) ? 
                 $this->obj->fb_recordActions : $this->recordActions;
+
 
             foreach($ra as $action => $needlevel){
                 //print "asking: $pair[1] $level,  i have: $permitted<br />";
