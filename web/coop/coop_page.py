@@ -61,8 +61,11 @@ class Page:
 
 
     def logIn(self):
-        self.cpVars = self.session.data['cpVars']
-        self.auth = self.session.data['auth']
+        try:
+            self.auth = self.session.data['auth']
+            self.cpVars = self.session.data['cpVars']
+        except KeyError:
+            return "TODO: port the log in code here!"
 
 
     def render_raw(self, debug = False):
