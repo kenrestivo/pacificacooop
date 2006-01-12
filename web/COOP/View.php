@@ -687,19 +687,18 @@ function schoolYearChooser()
     if($sid = thruAuthCore($this->page->auth)){
         $syform->addElement('hidden', 'coop', $sid); 
     }
-    // this alllyears only makes sense if schoolyearchooser is ONLY
-    // called when user has view permissions on not-this-year
-    $syform->setDefaults(array('school_year' => 
-                               empty($this->obj->fb_allYears) ?
-                               $this->page->currentSchoolYear : '%'));
 
+    if(!empty($this->page->vars['last']['chosenSchoolYear'])){
+        $defaultsy = $this->page->vars['last']['chosenSchoolYear'];
+    } else if (empty($this->obj->fb_allYears)) {
+        // this alllyears only makes sense if schoolyearchooser is ONLY
+        // called when user has view permissions on not-this-year
+        $defaultsy = '%';
+    } else {
+        $defaultsy = $this->page->currentSchoolYear;
+    }
 
-    // XXX temporary hacks until i get my savevars shit working
-    $syform->addElement('hidden', 'table', $this->table); 
-    $syform->addElement('hidden', 'action', $this->page->vars['last']['action']); 
-    $syform->addElement('hidden', $this->prependTable($this->pk), 
-                        $this->page->vars['last']['id']); 
-    $syform->addElement('hidden', 'realm', $this->page->vars['last']['realm']); 
+    $syform->setDefaults(array('school_year' => $defaultsy));
 
 
     $this->searchForm =& $syform;
@@ -709,7 +708,7 @@ function schoolYearChooser()
     // and getelement(school_year) to get $el
     $foo = $el->getValue();
     $this->chosenSchoolYear = $foo[0];
-
+    $this->page->vars['last']['chosenSchoolYear'] = $this->chosenSchoolYear;
 
     return;
 }
@@ -959,21 +958,20 @@ function getAlert()
                 $this->page->vars['last']['startletter'] = $_REQUEST['startletter'];
             }
             // defautl to A if not there
-            $sl = $this->page->vars['last']['startletter'] ? 
-    $this->page->vars['last']['startletter'] : 'A';
+            $sl = empty($this->page->vars['last']['startletter']) ? 'A': 
+    $this->page->vars['last']['startletter'];
 
             $res .= '<div>Choose a letter to view:</div>';
             foreach(range('A', 'Z') as $ltr){
-                $letterlist[] = $sl == $ltr ? $sl :
-    $this->page->selfURL(
-        array('value' => $ltr,
-              'par' => '',
-              'inside' => array('startletter' => $ltr)
-            ));
+                $letterlist[] = $sl == $ltr ? $sl : $this->page->selfURL(
+                    array('value' => $ltr,
+                          'par' => '',
+                          'inside' => array('startletter' => $ltr)
+                        ));
             }
             $res .= implode('&nbsp;', $letterlist);
-
-
+            
+            
             // ok, find it!
             $this->obj->whereAdd("last_name like '$sl%'");
 
