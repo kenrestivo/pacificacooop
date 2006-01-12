@@ -75,6 +75,7 @@ class Invitations extends CoopDBDO
                       'country', 'phone');
             
 
+            // only relevant for the big scary list
             if($co->isPermittedField() >= ACCESS_VIEW){
                 $res .= '<div>Choose a letter to view:</div>';
                 foreach(range('A', 'Z') as $ltr){
@@ -89,8 +90,10 @@ class Invitations extends CoopDBDO
                     $co->page->vars['last']['startletter'] = 
                         $_REQUEST['startletter'];
                 }
+                // defautl to A if not there
                 $sl = $co->page->vars['last']['startletter'] ? 
                     $co->page->vars['last']['startletter'] : 'A';
+                // ok, find it!
                 $this->whereAdd("last_name like '$sl%'");
                 
             }
