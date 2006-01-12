@@ -50,20 +50,37 @@ class Companies_income_join extends CoopDBDO
 
         function preGenerateForm(&$form)
         {
-
-            $el =& $form->addElement(
+            // the more "modern" way to do pregenerate form
+            $el =& $form->createElement(
                 'customselect', 
                 $form->CoopForm->prependTable('income_id'), false);
 
             $inc =& new CoopObject(&$form->CoopForm->page, 'income', 
                                    &$form->CoopForm);
-            $opts = $inc->getLinkOptions(true, true);
             
+            $inc->constrainSchoolYear();
+            $coa =& new CoopObject(&$form->CoopForm->page, 
+                                   'chart_of_accounts',
+                                   &$inc);
+            $inc->protectedJoin($coa);
+            $inc->obj->whereAdd('chart_of_accounts.join_to_table like "%compan%"');
+
+            $inc->obj->find();
+            $opts = $inc->getLinkOptions(true, true);
+            $el->loadArray($opts['data']);
+
+            // TODO: fix the  hidden too!
+            $editperms =& $form->addElement(
+                'hidden',
+                'editperms-' . $fullkey,
+                '{}');
+            $json = new Services_JSON();// XXX call statically?
+            $editperms->setValue($json->encode($opts['editperms']));
+
             $el->_parentForm =& $form;
             $el->prepare();
 
-            $this->fb_preDefElements[$form->CoopForm->prependTable('income_id')] = $el;
-			return $el;
+            $this->fb_preDefElements['income_id'] =& $el;
             
         }
 
