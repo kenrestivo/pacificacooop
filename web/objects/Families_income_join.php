@@ -37,6 +37,10 @@ class Families_income_join extends CoopDBDO
 
 	function fb_linkConstraints(&$co)
 		{
+
+            // TODO: constrain to just the chard of accounts
+            // where families is in the join? what a HACK!
+
             $auc =& new CoopObject(&$co->page, 'income', &$co);
                         $co->constrainSchoolYear();
             $co->constrainFamily();

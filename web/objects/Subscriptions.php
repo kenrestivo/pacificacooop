@@ -42,7 +42,8 @@ class Subscriptions extends CoopDBDO
 
     function preGenerateForm($form)
         {
-            // super butt ugly, with cheeze
+            // XXX super butt ugly, with cheeze
+            // i suspect this has been totally redone now with getlinkoptions
             $this->fb_defaults['user_id'] = $form->CoopForm->page->auth['uid'];
 
             //XXX this is HIDEOUS!! injecting family_id in there by force. EVIL!

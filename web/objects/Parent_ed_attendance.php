@@ -26,6 +26,9 @@ class Parent_ed_attendance extends CoopDBDO
 
     function preGenerateForm(&$form)
         {
+
+            // XXXX this uses teh OLD pregen. doesn't use getlinkoptions
+            // please rectify... or shitcan this whole thing anyway
             $calev = $this->factory('calendar_events');
             $calev->school_year = $form->CoopForm->page->currentSchoolYear;
 			$calev->whereAdd('event_id = 2'); // parent ed meeting

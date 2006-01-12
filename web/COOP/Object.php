@@ -836,6 +836,8 @@ group by user_id,table_name,field_name";
     // TODO: this belongs in coopview. really. go put it back!
     function getChosenSchoolYear($orcurrent = false)
         {
+            //XXX note! orcurrent isn't used anymore, since version 1.133!!
+            ///yank orcurent, or fix it!
             $this->page->printDebug("CoopObject::getChosenSchoolYear({$this->table})", 
                                     3);
             if($this->chosenSchoolYear){

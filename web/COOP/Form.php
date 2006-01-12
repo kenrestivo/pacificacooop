@@ -249,6 +249,7 @@ class coopForm extends CoopObject
                         $opts = $sub->getLinkOptions($type == 'customselect', 
                                                      true);
                         // XXX put this in prepare()?
+                        // it is for customselect, but NOT for searchselect
                         $el->loadArray($opts['data']);
                         $json = new Services_JSON();// XXX call statically?
                         $editperms->setValue($json->encode($opts['editperms']));

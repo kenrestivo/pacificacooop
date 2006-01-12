@@ -953,6 +953,11 @@ function getAlert()
 
     function alphaPager()
         {
+            ///XXX clean this up
+            /// last[startletter] =  request, last, 'A' (default)
+           
+            
+            //searching code
             // use latest of course, if available
             if(!empty($_REQUEST['startletter'])){
                 $this->page->vars['last']['startletter'] = $_REQUEST['startletter'];
@@ -961,6 +966,11 @@ function getAlert()
             $sl = empty($this->page->vars['last']['startletter']) ? 'A': 
     $this->page->vars['last']['startletter'];
 
+            // ok, find it!
+            $this->obj->whereAdd("last_name like '$sl%'");
+  
+
+            // rendering code
             $res .= '<div>Choose a letter to view:</div>';
             foreach(range('A', 'Z') as $ltr){
                 $letterlist[] = $sl == $ltr ? $sl : $this->page->selfURL(
@@ -971,9 +981,6 @@ function getAlert()
             }
             $res .= implode('&nbsp;', $letterlist);
             
-            
-            // ok, find it!
-            $this->obj->whereAdd("last_name like '$sl%'");
 
             return $res;
         }

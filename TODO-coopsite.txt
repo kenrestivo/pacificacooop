@@ -14,13 +14,16 @@ coop web database
 
 
 BUGS
+	income for solicitation needs to show the checks
+		the add new ain't happen'in. why?
+			ah, nothing in it
+		fix the check entries!!
+
 	deb/bethany can't see totals anymore??! wtf?
-	menu perms
+		menu perms, goddammit
+		i can see them just fine. what's different?
 
 
-??PHP
-move the alpha chooser into the simpletable header
-	use an fb_pagerType flag
 	
 
 
@@ -28,6 +31,23 @@ NOW
 	family chooser?
 	and an excel export, which i think i've done
 	import all the historical alumni: anyone invited last year
+
+
+
+??PHP
+move the alpha chooser into the simpletable header
+	use an fb_pagerType flag
+	NO. problem is that it's split!
+		table title html is called AFTER the query has run!
+			so i have to split it in 2 like wiht schoolyeachoooer
+			do the SEARCH in find, the CHOOSING in title
+	almost easy... do it all in find, and save the giblets
+		separate out the html display
+	make alpha chooser part of sychooser
+		use it automatically if # of entries > certain amount
+			that's tricky though. i'd have to search twice
+				and dbdo won't let me do that. drat.
+
 
 
 python port
@@ -528,17 +548,23 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+???PHP/SQL
+income is utterly botched. should constrain based on chardt of accounts join to table
+
 ???PHP
 job description matrix report!
 	i.e. for this year, WHO has what job?
 		and which ones are still open? i.e. a picker
 
 
-???PHP/SQL
-	make alpha chooser part of sychooser
-		use it automatically if # of entries > certain amount
-			that's tricky though. i'd have to search twice
-				and dbdo won't let me do that. drat.
+
+
+??PHP/python?/JS
+	territory
+			i should put a chooser in there or something
+			but it'd be one to many exclusive. odd
+		ya know, an ajaxy drag-and-drop would be cool here
+			build selectboxes for each
 
 ???PHP
 calendar should not show summary if chosenschoolyear is not this one
@@ -5527,3 +5553,8 @@ neat: python sessions and cookies
 		huge duplication, but i already have code for it
 push my ghui fixes live
 	run test first
+	world o shit. invited family! CAN BE BLANK.... if it's an alumni dammit
+		but, GOTTA ensure it gets added invisibly in non-root users!
+
+	push the check stuff live
+		backup first, just to be paranoid

@@ -72,7 +72,7 @@ class Companies_income_join extends CoopDBDO
             // TODO: fix the  hidden too!
             $editperms =& $form->addElement(
                 'hidden',
-                'editperms-' . $fullkey,
+                'editperms-' . $form->CoopForm->prependTable('income_id'),
                 '{}');
             $json = new Services_JSON();// XXX call statically?
             $editperms->setValue($json->encode($opts['editperms']));
