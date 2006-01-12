@@ -129,9 +129,19 @@ var $fb_defaults = array(
     
     function fb_display_view(&$co)
         {
-            $this->orderBy('company_name, last_name');
-                        
-            return $co->oneLineTable();
+            $res = $co->alphaPager('company_name');
+            $this->fb_fieldsToRender = array('company_name', 
+                                           'last_name', 
+                                           'first_name', 
+                                           'address1',
+                                             'city',
+                                             'phone',
+                                             'email',
+                                             'url',
+                                             'territory_id');
+            $res .= $co->simpleTable();
+            return $res;
+            
 
         }
 

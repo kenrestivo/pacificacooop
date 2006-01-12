@@ -13,6 +13,7 @@ coop web database
 
 
 edit is broken in my custom-weird box. why??!
+	looks like js
 
 
 ??PHP
@@ -29,10 +30,14 @@ BUGS
 		menu perms, goddammit
 		i can see them just fine. what's different?
 
+	what about alpha page thigns that begin with NOTHING
+		best to programattically sort them, actually, first
 
 also make sure the random solicitation people can't edit money
 
 
+ENTRY
+	fix UPS store
 
 
 NOW

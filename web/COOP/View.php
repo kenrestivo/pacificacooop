@@ -951,7 +951,7 @@ function getAlert()
         }
 
 
-    function alphaPager()
+    function alphaPager($keyname)
         {
             ///XXX clean this up
             /// last[startletter] =  request, last, 'A' (default)
@@ -967,7 +967,7 @@ function getAlert()
     $this->page->vars['last']['startletter'];
 
             // ok, find it!
-            $this->obj->whereAdd("last_name like '$sl%'");
+            $this->obj->whereAdd("{$keyname} like '$sl%'");
   
 
             // rendering code
