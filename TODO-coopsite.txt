@@ -14,12 +14,10 @@ coop web database
 
 
 NOW
-	some kind of alpha pager for coopview. 
-		where last_name like 'A%', basically
-			save the state in the session, somewhere
-			this is easy! in last! whoa.
-				but how to GET it, that's the hard part
 	and an excel export, which i think i've done
+	import all the historical alumni: anyone invited last year
+	import last year's alumni
+		huge duplication, but i already have code for it
 
 
 ???ENTRY
@@ -520,6 +518,12 @@ job description matrix report!
 	i.e. for this year, WHO has what job?
 		and which ones are still open? i.e. a picker
 
+
+???PHP/SQL
+	make alpha chooser part of sychooser
+		use it automatically if # of entries > certain amount
+			that's tricky though. i'd have to search twice
+				and dbdo won't let me do that. drat.
 
 ???PHP
 calendar should not show summary if chosenschoolyear is not this one
@@ -5499,3 +5503,8 @@ neat: python sessions and cookies
 	make it happy with no-cookie, i.e. w3m, sids
 		how to find out if no cookies?
 	done
+	some kind of alpha pager for coopview. 
+		where last_name like 'A%', basically
+			save the state in the session, somewhere
+			this is easy! in last! whoa.
+				but how to GET it, that's the hard part

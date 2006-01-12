@@ -193,11 +193,13 @@ class Leads extends CoopDBDO
 
     function fb_display_view(&$co)
         {
-
+            $res = "";
             $invites =& new CoopObject(&$co->page, 'invitations', &$co);
             $invites->linkConstraints();
             $co->protectedJoin($invites);
-            return $co->simpleTable();
+            $res .= $co->alphaPager();
+            $res .= $co->simpleTable();
+            return $res;
         }
 
 

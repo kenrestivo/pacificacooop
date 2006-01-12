@@ -77,30 +77,7 @@ class Invitations extends CoopDBDO
 
             // only relevant for the big scary list
             if($co->isPermittedField() >= ACCESS_VIEW){
-                // use latest of course, if available
-                if(!empty($_REQUEST['startletter'])){
-                    $co->page->vars['last']['startletter'] = 
-                        $_REQUEST['startletter'];
-                }
-                // defautl to A if not there
-                $sl = $co->page->vars['last']['startletter'] ? 
-                    $co->page->vars['last']['startletter'] : 'A';
-
-                $res .= '<div>Choose a letter to view:</div>';
-                foreach(range('A', 'Z') as $ltr){
-                    $letterlist[] = $sl == $ltr ? $sl :
-                        $co->page->selfURL(
-                            array('value' => $ltr,
-                                  'par' => '',
-                                  'inside' => array('startletter' => $ltr)
-                                ));
-                }
-                $res .= implode('&nbsp;', $letterlist);
-
-
-                // ok, find it!
-                $this->whereAdd("last_name like '$sl%'");
-                
+                $res .= $co->alphaPager();
             }
             $res .= $co->simpleTable();
             return $res;

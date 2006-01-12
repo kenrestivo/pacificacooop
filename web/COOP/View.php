@@ -931,7 +931,7 @@ function getAlert()
         }
   
 
-function getSummary()
+    function getSummary()
         {
             if(is_callable(array($this->obj, 'fb_display_summary'))){
                 $this->page->printDebug('calling callback for summary', 2);
@@ -949,6 +949,35 @@ function getSummary()
             
             return wrapJS('', 
                           'COOP_TITLE_HACK');
+        }
+
+
+    function alphaPager()
+        {
+            // use latest of course, if available
+            if(!empty($_REQUEST['startletter'])){
+                $this->page->vars['last']['startletter'] = $_REQUEST['startletter'];
+            }
+            // defautl to A if not there
+            $sl = $this->page->vars['last']['startletter'] ? 
+    $this->page->vars['last']['startletter'] : 'A';
+
+            $res .= '<div>Choose a letter to view:</div>';
+            foreach(range('A', 'Z') as $ltr){
+                $letterlist[] = $sl == $ltr ? $sl :
+    $this->page->selfURL(
+        array('value' => $ltr,
+              'par' => '',
+              'inside' => array('startletter' => $ltr)
+            ));
+            }
+            $res .= implode('&nbsp;', $letterlist);
+
+
+            // ok, find it!
+            $this->obj->whereAdd("last_name like '$sl%'");
+
+            return $res;
         }
 
 
