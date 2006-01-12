@@ -29,12 +29,12 @@ class Page:
     raw_output = []
     headers = {}
     forminput = dict()
-    doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
-    elements = {}
     template_name = ''
     auth = {}
-    title = 'Data Entry'
-    heading = 'Pacifica Co-Op Nursery School'
+    elements = dict(doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">',
+                    title = 'Data Entry',
+                    heading = 'Pacifica Co-Op Nursery School'
+                     )
 
     def __init__(self):
         """hack around bug in cgi input"""
@@ -90,7 +90,7 @@ class Page:
         templateFile = open ('templates/%s.xhtml' % (self.template_name), 'r')
         template = simpleTAL.compileXMLTemplate (templateFile)
         templateFile.close()
-        template.expand (context, stdout, docType=self.doctype,
+        template.expand (context, stdout, docType=self.elements['doctype'],
                          suppressXMLDeclaration=True)
 
          
