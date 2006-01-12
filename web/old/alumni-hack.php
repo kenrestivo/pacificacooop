@@ -49,7 +49,7 @@ while($top->obj->fetch()){
 	
 
 	if(!$found){
-		// families that weren't here last year
+		// families that weren't here this year
 		//now add their addresses to leads!
 		
 		$kid =& $top->obj->getlink('kid_id');
@@ -71,7 +71,7 @@ while($top->obj->fetch()){
             $firsts = array();
             $lasts = array();
             $par =& $family->factory('parents');
-            confessObj($par, 'yo yo');
+            //confessObj($par, 'yo yo');
             $par->family_id = $family->family_id;
             $par->orderBy('type asc');
             $par->find();

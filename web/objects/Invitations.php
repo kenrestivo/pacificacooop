@@ -130,10 +130,28 @@ class Invitations extends CoopDBDO
 
     function fb_display_summary(&$co)
         {
+
+
             list($ok, $res) = $this->_alert_or_status(&$co);
 
             // NOTE: i can't include the summary here because schoolyearchooser
-
+            // hack
+            if($co->isPermittedField() >= ACCESS_VIEW){
+                $co->schoolYearChooser();
+                $res .= $co->searchForm->toHTML();
+                $res .= showRawQuery("Invitation  Counts", 
+                                 sprintf('select relation, 
+			sum(if(invitations.family_id>0,0,1)) as Alumni_List ,
+			sum(if(invitations.family_id>0,1,0)) as Family_Supplied ,
+			count(distinct(lead_id)) as Total 
+		from invitations 
+		where 
+			  invitations.school_year = "%s" 
+   		group by relation 
+		order by total desc',
+                                         $co->getChosenSchoolYear()));
+                return $res;
+            }
             if($ok){
                 return $res;
             }

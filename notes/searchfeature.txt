@@ -1,5 +1,9 @@
 a cool nifty SEARCH BOX in all generic views!!
 
+
+saving these in last for now. is that OK?
+
+
 experiment with the enhancement summary perhaps
 	maybe a nag reminder button too
 

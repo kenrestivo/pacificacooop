@@ -1103,7 +1103,7 @@ insert into leads (first_name, last_name, salutation, title, company,
     address1, address2, city, state, zip, country, phone, company_id, 
 	do_not_contact, source_id) 
 select first_name, last_name, salutation, title, company_name, address1, 
-    address2, city, state, zip, country, phone, company_id , do_not_contact, 9
+    address2, city, state, zip, country, phone, company_id , do_not_contact, 
 from companies;
 
 
@@ -1710,6 +1710,7 @@ group by subscriptions.user_id,table_name
 
 
 ---- grab all of last years's invitations, and invite them this year!
+--- NOTE! will need to make this a script people can do!
 insert into invitations
 (school_year, lead_id, family_id, relation)
 -- all the most recent years' invitations
@@ -1741,6 +1742,15 @@ from invitations
 where previous.family_id > 0
 order by previous.family_id)
     
+
+
+---- carry forward last year's alumni.
+---- ALSO will neeed this, until i merge all the alumni into leads/parents
+insert into invitations 
+(school_year, lead_id, family_id, relation) 
+(select '2005-2006', lead_id, family_id, relation 
+from invitations 
+where  (family_id = 0 and school_year = '2004-2005'));
 
 
 --- last audit. used often
@@ -1785,6 +1795,8 @@ on enrolled.family_id = parents.family_id
 where workers.school_year = "2005-2006"
 group by  workday
 order by  workday
+
+
 
 
 

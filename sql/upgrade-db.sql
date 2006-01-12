@@ -11,4 +11,3 @@
 
 -- springfest chairs (and erin, and petra) past tickets
 
-update enrollment set start_date = "09-12-2003" where school_year = "2003-2004" and start_date is null;

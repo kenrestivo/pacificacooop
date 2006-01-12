@@ -13,11 +13,26 @@ coop web database
 
 
 
+BUGS
+	deb/bethany can't see totals anymore??! wtf?
+	menu perms
+
+
+??PHP
+move the alpha chooser into the simpletable header
+	use an fb_pagerType flag
+	
+
+
 NOW
+	family chooser?
 	and an excel export, which i think i've done
 	import all the historical alumni: anyone invited last year
-	import last year's alumni
-		huge duplication, but i already have code for it
+
+
+python port
+	get logging going, understand it
+	start logging stuff, to file, like php version
 
 
 ???ENTRY
@@ -5508,3 +5523,7 @@ neat: python sessions and cookies
 			save the state in the session, somewhere
 			this is easy! in last! whoa.
 				but how to GET it, that's the hard part
+	import last year's alumni, not here this year
+		huge duplication, but i already have code for it
+push my ghui fixes live
+	run test first
