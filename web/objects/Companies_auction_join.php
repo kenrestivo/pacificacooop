@@ -36,7 +36,7 @@ class Companies_auction_join extends CoopDBDO
                                    'company_id');
 
 
-    var $fb_shortHeader = 'Solicitation Donations';
+    var $fb_shortHeader = 'Solicitation Auction';
 
     function fb_linkConstraints(&$co)
 		{
