@@ -199,6 +199,9 @@ order by payment_amount desc
 			$sp->obj->school_year = $this->schoolYear;
 			$sp->obj->orderBy('sponsorship_price desc');
 			$sp->obj->find();
+            if($sp->obj->N < 1){
+                PEAR::raiseError("there are no sponsorship types for this year {$this->schoolYear}! go enter some!", 666);
+            }
 			while($sp->obj->fetch()){
 				$this->sponsorTypes[$sp->obj->sponsorship_type_id] = 
 					$sp->obj->sponsorship_price;

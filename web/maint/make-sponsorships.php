@@ -99,10 +99,12 @@ switch($_REQUEST['action']){
 		 while($co->obj->fetch()){
 			 if($type = $sp->calculateSponsorshipType($co->obj->{$co->pk}, 
 													  $co->pk)){
+                 $tp =& $co->factory('sponsorship_types');
+                 $tp->get($type);
 				 printf("(%s)%s %s %s => %d<br>", $tab, $co->obj->company_name, 
 						$co->obj->first_name, 
 						$co->obj->last_name, 
-						$type);
+						$tp->sponsorship_name);
 			 }
 		 }
 	 }
@@ -123,10 +125,12 @@ switch($_REQUEST['action']){
 		 while($co->obj->fetch()){
 			 if($type = $sp->updateSponsorships($co->obj->{$co->pk}, 
 													  $co->pk)){
+                 $tp =& $co->factory('sponsorship_types');
+                 $tp->get($type);
 				 printf("(%s)%s %s %s => %d<br>", $tab, $co->obj->company_name, 
 						$co->obj->first_name, 
 						$co->obj->last_name, 
-						$type);
+						$tp->sponsorship_name);
 			 }
 		 }
 	 }

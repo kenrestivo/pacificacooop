@@ -98,7 +98,6 @@ class Companies_income_join extends CoopDBDO
     
     function _updateSponsors(&$co)
         {
-            return; // XXX broken!
             require_once('Sponsorship.php');
             $sp = new Sponsorship(&$co->page, $this->school_year);
             $sp->updateSponsorships($this->company_id, 'company_id');

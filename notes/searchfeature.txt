@@ -1,7 +1,26 @@
 a cool nifty SEARCH BOX in all generic views!!
 
+family chooser and/or sorter please, for invites
 
+
+??PHP
+move the alpha chooser into the simpletable header
+	use an fb_pagerType flag
+	NO. problem is that it's split!
+		table title html is called AFTER the query has run!
+			so i have to split it in 2 like wiht schoolyeachoooer
+			do the SEARCH in find, the CHOOSING in title
+	almost easy... do it all in find, and save the giblets
+		separate out the html display
+	make alpha chooser part of sychooser
+		use it automatically if # of entries > certain amount
+			that's tricky though. i'd have to search twice
+				and dbdo won't let me do that. drat.
+
+
+???PROBLEM?
 saving these in last for now. is that OK?
+	i.e. what if multiple per page, i.e.  details
 
 
 experiment with the enhancement summary perhaps

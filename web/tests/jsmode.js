@@ -350,9 +350,12 @@ p.call('methodList').addCallback(function(data){p.addMethods(values(data))});
 
 ////////// just for testing
 processCustomSelect = function(selectbox, target_id, showtext) { 
-    log('hey'  + target_id)
+    log('selectbox: ' + selectbox.name + ' targetid ' + target_id);
     edlink = document.getElementById("subedit-" + selectbox.name); 
-    if (!edlink) { return; } 
+    if (!edlink) { 
+        log('ERROR hey no edlink subedit-' + selectbox.name);
+        return; 
+    } 
     editperms = eval("editperms_" + selectbox.name.replace(/-/g, "_")); 
     if (selectbox.value > 0 && editperms[selectbox.value]) { 
         edlink.className = ""; 
@@ -366,3 +369,6 @@ processCustomSelect = function(selectbox, target_id, showtext) {
         edlink.className = "hidden"; 
     } 
 }
+
+w.processCustomSelect(w.document.forms[0]['companies_income_join-company_id'], 
+                      'companies-company_id')

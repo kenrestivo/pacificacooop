@@ -86,8 +86,8 @@ class Page:
         for i in  self.headers:
             print '%s: %s' % (i, self.headers[i].strip())
         print
-        logging.getLogger('simpleTAL').setLevel(logging.WARN)
-        logging.getLogger('simpleTALES').setLevel(logging.WARN)
+        logging.getLogger('simpleTAL').setLevel(logging.INFO)
+        logging.getLogger('simpleTALES').setLevel(logging.INFO)
         context = simpleTALES.Context()
         context.addGlobal('page', self)
         templateFile = open ('templates/%s.xhtml' % (self.template_name), 'r')

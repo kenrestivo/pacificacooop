@@ -1,9 +1,9 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
+	reports in phptal (reportnotes.txt)
 	sortable/searchable reports (searchfeature.txt)
 	json the subforms (subform.txt)
-	reports in phptal (reportnotes.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
@@ -12,12 +12,7 @@ coop web database
 	python translation. for what? reports maybe?
 
 
-edit is broken in my custom-weird box. why??!
-	looks like js
-	also, if i select NOTHING, the box should go away. js problem i expect.
-
-
-
+ 
 ??PHP
 back from the dead: add to the post-update callback, the sponsorships!
 	makesponsorships linkconstraint is fuxored-- ambiguous schoolyear?
@@ -25,43 +20,33 @@ back from the dead: add to the post-update callback, the sponsorships!
 	add afterinsert/update to all company-related things
 		bah, and to income in general... though that'll be interesting
 
+
+
+NOW! for invitations
+	family chooser?
+	and an excel export, which i think i've done
+		in perl. try python now!
+	import all the historical alumni: anyone invited last year
+
+
 BUGS
 	that solicit summary, should show view for debbie. why doesn't it?
-
-	deb/bethany can't see totals anymore??! wtf?
-		menu perms, goddammit
-		i can see them just fine. what's different?
 
 	what about alpha page thigns that begin with NOTHING
 		best to programattically sort them, actually, first
 
-also make sure the random solicitation people can't edit money
+
+    edit is broken in my custom-weird box. why??!
+    	looks like js
+    	also, if i select NOTHING, the link should go away. js problem i expect.
+    		javascript sucks so bad, i can't handle it
+    
+	also make sure the random solicitation people can't edit money
 
 
 ENTRY
-	fix UPS store
+	fix UPS store: there are two of 'em, and that sucks
 
-
-NOW
-	family chooser?
-	and an excel export, which i think i've done
-	import all the historical alumni: anyone invited last year
-
-
-
-??PHP
-move the alpha chooser into the simpletable header
-	use an fb_pagerType flag
-	NO. problem is that it's split!
-		table title html is called AFTER the query has run!
-			so i have to split it in 2 like wiht schoolyeachoooer
-			do the SEARCH in find, the CHOOSING in title
-	almost easy... do it all in find, and save the giblets
-		separate out the html display
-	make alpha chooser part of sychooser
-		use it automatically if # of entries > certain amount
-			that's tricky though. i'd have to search twice
-				and dbdo won't let me do that. drat.
 
 
 
@@ -3216,6 +3201,11 @@ i do however WANT to be able to copy the insurance info in!
 ----------------
 NOWHERE
 
+	deb/bethany can't see totals anymore??! wtf?
+		menu perms, goddammit
+		i can see them just fine. what's different?
+			wait, it's OK now. wtf?
+
 	that entered default=none thing
 		user id, how is it done?
 			if uid is set in page auth  use it,
@@ -5577,3 +5567,4 @@ push my ghui fixes live
 			ah, nothing in it
 	income for solicitation needs to show the checks
 		fix the check entries!!
+-- chairs fees, why not
