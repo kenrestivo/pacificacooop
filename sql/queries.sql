@@ -1805,4 +1805,11 @@ where invitations.school_year = '2005-2006'
 and (leads.do_not_contact is not null or leads.do_not_contact > '2000-01-01') 
 and leads.do_not_contact < now();
 
+--- migrate last years sponsorships forward
+insert into sponsorship_types 
+(sponsorship_name, sponsorship_description, sponsorship_price, school_year) 
+select sponsorship_name, sponsorship_description, sponsorship_price, '2005-2006'
+from sponsorship_types 
+where school_year = '2004-2005';
+
 --- EOF
