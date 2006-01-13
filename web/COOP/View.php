@@ -951,8 +951,10 @@ function getAlert()
         }
 
 
-    function alphaPager($keyname)
+    function alphaPager($keyname, $tablename = false)
         {
+            $tablename = $tablename ? $tablename : $this->table;
+            
             ///XXX clean this up
             /// last[startletter] =  request, last, 'A' (default)
            
@@ -973,9 +975,11 @@ function getAlert()
             // rendering code
             $res .= '<div>Choose a letter to view:</div>';
             
+            // XXX NO! clone it instead... ugly, impractical, and stupid
+            // it might not have any. i can't think. i can't write in english.
             $tmp =& $this->obj->factory($this->table);
             $tmp->query(sprintf('select left(%s, 1) as startletter from %s where %s is not null group by left(%s, 1) order by left(%s, 1)', 
-                                $keyname, $this->table, 
+                                $keyname, $tablename, 
                                 $keyname, $keyname, $keyname));
             while ($tmp->fetch()){
                 $ltr = $tmp->startletter;

@@ -348,3 +348,21 @@ p.call('methodList').addCallback(function(data){p.addMethods(values(data))});
 
 
 
+////////// just for testing
+processCustomSelect = function(selectbox, target_id, showtext) { 
+    log('hey'  + target_id)
+    edlink = document.getElementById("subedit-" + selectbox.name); 
+    if (!edlink) { return; } 
+    editperms = eval("editperms_" + selectbox.name.replace(/-/g, "_")); 
+    if (selectbox.value > 0 && editperms[selectbox.value]) { 
+        edlink.className = ""; 
+        re = new RegExp("(" + target_id + "=)\\d*?(&)", "g"); 
+        edlink.href = edlink.href.replace(re, "$1" + selectbox.value + "$2"); 
+        if (showtext) { 
+            edlink.innerHTML = "Edit " + 
+                selectbox.options[selectbox.selectedIndex].text; 
+        } 
+    } else { 
+        edlink.className = "hidden"; 
+    } 
+}

@@ -68,6 +68,7 @@ class Companies_income_join extends CoopDBDO
             $inc->obj->find();
             $opts = $inc->getLinkOptions(true, true);
             $el->loadArray($opts['data']);
+            $el->setValue($this->income_id);
 
             // TODO: fix the  hidden too!
             $editperms =& $form->addElement(
@@ -76,7 +77,7 @@ class Companies_income_join extends CoopDBDO
                 '{}');
             $json = new Services_JSON();// XXX call statically?
             $editperms->setValue($json->encode($opts['editperms']));
-            $el->setValue($this->income_id);
+
 
             $el->_parentForm =& $form;
             $el->prepare();
