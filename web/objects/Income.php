@@ -105,17 +105,9 @@ var $fb_dupeIgnore = array(
             
         }
 
-    function afterInsert(&$co)
-        {
-            return $this->_updateSponsors(&$co);
-        }
-    
+    // i only care about revisiting the sponsorships after updating.
+    // when inserting, the jointable will catch it and call updatesponsorship()
     function afterUpdate(&$co)
-        {
-            return $this->_updateSponsors(&$co);
-        }
-    
-    function _updateSponsors(&$co)
         {
             require_once('Sponsorship.php');
             $sp = new Sponsorship(&$co->page, $this->school_year);

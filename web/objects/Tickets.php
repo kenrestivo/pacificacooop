@@ -56,7 +56,7 @@ class Tickets extends CoopDBDO
 
 	var $fb_enumFields = array('vip_flag');
 
-	function updatePaddles(&$page)
+	function updatePaddles(&$co)
 		{
 
 			if($this->ticket_id < 1){
@@ -93,7 +93,7 @@ class Tickets extends CoopDBDO
 			// add tickets
 			$toadd = $this->ticket_quantity - ($man + $auto);
 			while($toadd-- > 0){
-				$pado = new CoopObject(&$page, 'springfest_attendees', &$top);
+				$pado = new CoopObject(&$co->page, 'springfest_attendees', &$top);
 				$clone = $pado->obj;
 				$pado->obj->ticket_id = $this->ticket_id;
 				$pado->obj->entry_type  = 'Automatic';
@@ -101,7 +101,7 @@ class Tickets extends CoopDBDO
 
 				if($this->family_id > 0){
 					// check for parents, tag them otherwise
-					$par = new CoopObject(&$page, 'parents', &$top);
+					$par = new CoopObject(&$co->page, 'parents', &$top);
 					$par->obj->family_id = $this->family_id;
 					if($par->obj->find() < 1){
 						PEAR::raiseError("no parents for familyid $this->family_id ??", 447);
@@ -151,6 +151,31 @@ class Tickets extends CoopDBDO
 
 			return true;
 		}
+
+   function afterInsert(&$co)
+        {
+            $this->_updateSponsors(&$co);
+            $this->updatePaddles(&$co);
+        }
+    
+    function afterUpdate(&$co)
+        {
+            $this->_updateSponsors(&$co);
+            $this->updatePaddles(&$co);
+        }
+    
+    function _updateSponsors(&$co)
+        {
+            require_once('Sponsorship.php');
+            $sp = new Sponsorship(&$co->page, $this->school_year);
+            foreach(array('lead_id', 'company_id') as $idname){
+                if($this->{$idname} > 0){
+                    $sp->updateSponsorships($this->{$idname}, $idname);
+                }
+            }
+        }
+
+
 
 
 }
