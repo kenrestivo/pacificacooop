@@ -22,6 +22,7 @@ class Leads_income_join extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
 	var $fb_fieldLabels = array(
         'income_id' => "Payment Information",
 		'lead_id' => 'Invitee',
@@ -30,4 +31,24 @@ class Leads_income_join extends CoopDBDO
 	var $fb_formHeaderText = "Springfest Donations from Invitations";
 
 	var $fb_linkDisplayFields = array('lead_id', 'income_id');
+
+    function afterInsert(&$co)
+        {
+            return $this->_updateSponsors(&$co);
+        }
+    
+    function afterUpdate(&$co)
+        {
+            return $this->_updateSponsors(&$co);
+        }
+    
+    function _updateSponsors(&$co)
+        {
+            require_once('Sponsorship.php');
+            $sp = new Sponsorship(&$co->page, $this->school_year);
+            $sp->updateSponsorships($this->lead_id, 'lead_id');
+        }
+
+
+
 }

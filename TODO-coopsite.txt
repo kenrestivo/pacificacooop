@@ -17,9 +17,11 @@ coop web database
 back from the dead: add to the post-update callback, the sponsorships!
 	makesponsorships linkconstraint is fuxored-- ambiguous schoolyear?
 		where do i whereadd schoolyear WITOUT a column?
-	add afterinsert/update to all company-related things
+	add afterinsert/update to all company-related and lead-related things
 		bah, and to income in general... though that'll be interesting
-
+			i'd have to sift through all fwd/backlinks, and see what i get
+				any with income_id in them, that's what i want
+			or, manually do leads_income and tickets and companies_income
 
 
 NOW! for invitations

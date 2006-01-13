@@ -105,5 +105,43 @@ var $fb_dupeIgnore = array(
             
         }
 
+    function afterInsert(&$co)
+        {
+            return $this->_updateSponsors(&$co);
+        }
+    
+    function afterUpdate(&$co)
+        {
+            return $this->_updateSponsors(&$co);
+        }
+    
+    function _updateSponsors(&$co)
+        {
+            require_once('Sponsorship.php');
+            $sp = new Sponsorship(&$co->page, $this->school_year);
+            // find all joinfields that have lead_id or company_id
+            // this is some brutal, ugly, nasty, unmaintainable garbage.
+            foreach($co->backlinks as $table => $linkfield){
+                $tmp = new CoopObject(&$co->page, $table, &$co);
+                foreach(array('lead_id', 'company_id') as $idname){
+                    if($tmp->inObject($idname)){
+                        $tmp->obj->whereAdd(sprintf('%s.%s = %d',
+                                                    $tmp->table, 
+                                                    $co->pk, 
+                                                    $this->{$co->pk}));
+                        $tmp->obj->find(true);
+                        if($tmp->obj->{$idname} < 1){
+                            $co->page->printDebug("income::updateSponsors() nothing found for $idname of". $tmp->obj->{$idname}, 
+                                                  2);
+                            continue;
+                        }
+                        $sp->updateSponsorships($tmp->obj->{$idname}, $idname);
+                    }
+                }
+            }
+
+        }
+
+
 
 }
