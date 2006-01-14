@@ -77,9 +77,17 @@ class Invitations extends CoopDBDO
 ,if(length(address2)>0, address2, null)
 ,concat_ws(' ', concat(city, ', ', state), zip, if(country != 'USA', country, ''))
 ) as label_like");
-
-            $this->fb_fieldLabels['label_like'] = 'Address Label';
-
+            
+            
+            // NASTY!
+            $old=array_reverse(array_reverse($this->fb_fieldLabels)) ;
+            $this->fb_fieldLabels = array();
+            $this->fb_fieldLabels['label_like'] = 'Address Label Preview';
+            foreach($old as $k=>$v){
+                if($k != 'lead_id'){
+                    $this->fb_fieldLabels[$k] = $v;
+                }
+            }
 
             // only relevant for the big scary list
             if($co->isPermittedField() >= ACCESS_VIEW){
