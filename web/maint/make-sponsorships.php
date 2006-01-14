@@ -101,7 +101,7 @@ switch($_REQUEST['action']){
 													  $co->pk)){
                  $tp =& $co->obj->factory('sponsorship_types');
                  $tp->get($type);
-				 printf("(%s)%s %s %s => %d<br>", $tab, $co->obj->company_name, 
+				 printf("(%s)%s %s %s => %s<br>", $tab, $co->obj->company_name, 
 						$co->obj->first_name, 
 						$co->obj->last_name, 
 						$tp->sponsorship_name);
@@ -127,7 +127,7 @@ switch($_REQUEST['action']){
 													  $co->pk)){
                  $tp =& $co->obj->factory('sponsorship_types');
                  $tp->get($type);
-				 printf("(%s)%s %s %s => %d<br>", $tab, $co->obj->company_name, 
+				 printf("(%s)%s %s %s => %s<br>", $tab, $co->obj->company_name, 
 						$co->obj->first_name, 
 						$co->obj->last_name, 
 						$tp->sponsorship_name);
