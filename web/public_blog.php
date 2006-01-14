@@ -30,14 +30,14 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 function getBlogEntries(&$cp)
 {
     $co =& new CoopView(&$cp, 'blog_entry', &$none);
-    return $co->obj->fb_display_summary(&$co, true);
+    return $co->obj->homepage_summary(&$co, true);
 
 }
 
 function getEvents(&$cp)
 {
     $co =& new CoopView(&$cp, 'calendar_events', &$none);
-    return $co->obj->fb_display_summary(&$co, true);
+    return $co->obj->homepage_summary(&$co, true);
 
 }
 

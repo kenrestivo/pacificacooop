@@ -142,7 +142,7 @@ class Sponsorship
 			$co =& new CoopObject(&$this->cp, 'leads', &$nothing);
 			//$co->obj->debugLevel(2);
 			$query = sprintf("select leads.lead_id,
-        coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0) 
+        (coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0)) 
 				as payment_amount
 from leads
 left join 

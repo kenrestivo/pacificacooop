@@ -53,7 +53,7 @@ class Calendar_events extends CoopDBDO
         }
 
 
-    function fb_display_summary(&$co, $publiconly = false)
+    function homepage_summary(&$co, $publiconly = false)
         {
             
             $ev =& $this->factory('events');

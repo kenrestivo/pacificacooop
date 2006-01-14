@@ -1,7 +1,7 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	reports in phptal (reportnotes.txt)
+	reports in phptal, or maybe json/rest/xmlrpc (reportnotes.txt)
 	sortable/searchable reports (searchfeature.txt)
 	json the subforms (subform.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
@@ -9,27 +9,43 @@ coop web database
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	import the 20-year roster (20yearroster.txt)
 	insurance, dammit
-	python translation. for what? reports maybe?
+	python translation (pythonport.txt). 
 
+
+STACK IS STILL FUCKED UP!
+	as cooke, edit donations IS STUCK!
+		i'd gone from homepage to edit donations
+		then back to homepage
+		finally to VIEW calendar
+			and lookee here! back is still got edi tdonation!
+		AH! because i hit view from RIGHT, which apparently pushes?
+			pushing from homepage fucks shit up. big time.
 
  
-??PHP
-back from the dead: add to the post-update callback, the sponsorships!
-	makesponsorships linkconstraint is fuxored-- ambiguous schoolyear?
-		where do i whereadd schoolyear WITOUT a column?
-	add afterinsert/update to all company-related and lead-related things
-		bah, and to income in general... though that'll be interesting
-			i'd have to sift through all fwd/backlinks, and see what i get
-				any with income_id in them, that's what i want
-			or, manually do leads_income and tickets and companies_income
-
-
 NOW! for invitations
 	family chooser?
 	and an excel export, which i think i've done
 		in perl. try python now!
-	import all the historical alumni: anyone invited last year
+		ah, the labelprinted stuff! important!
+	i.e. show a report, then some way to tag them as labelprinted
+		pick/choose date label printed too, or none
+		it's a searchable report, basically!
+	and, the "export to excel" just re-does that query as an excel export!
+		this is where mvc is cool. controller is same, view is different
+			excel view, web view
 
+
+??? PHP
+sponsorships fix
+	either/or for ads: lead or company. make it so!
+
+??JS
+printable page, or print button in tinymce
+
+
+??PHP/JS
+a either-or chooser for JS. either leads or companies
+	hiding this is going to be challenging
 
 BUGS
 	that solicit summary, should show view for debbie. why doesn't it?
@@ -50,17 +66,9 @@ ENTRY
 	fix UPS store: there are two of 'em, and that sucks
 
 
-
-
-python port
-	get logging going, understand it
-	start logging stuff, to file, like php version
-
-
 ???ENTRY
 	cut/paste massive 2nd vp job description in
 		and the gui version of the treasurer's description perhaps?
-
 
 
 
@@ -70,8 +78,6 @@ audit trails are a botch. formatting!
 	and do it for each save too
 		canonical fuckup is
 			http://www/coop-dev/generic.php?table=audit_trail&realm=19
-
-
 
 	
 
@@ -194,10 +200,6 @@ BUGS
 	add constrainfamily? constrainschoolyear?
 		ah! i see. users can see all previous years 
 			BUT I DON'T WANT THEM IN POPUPS!
-
-??? PHP
-	either/or for ads: lead or company. make it so!
-		like in sponsorships
 
 
 ??PHP
@@ -3202,6 +3204,9 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	makesponsorships linkconstraint is fuxored-- ambiguous schoolyear?
+		where do i whereadd schoolyear WITOUT a column?
+			NOWHERE: i needed sponsorships records for this year and had none
 
 	deb/bethany can't see totals anymore??! wtf?
 		menu perms, goddammit
@@ -5569,4 +5574,12 @@ push my ghui fixes live
 			ah, nothing in it
 	income for solicitation needs to show the checks
 		fix the check entries!!
--- chairs fees, why not
+-- chairs fees, why notback from the dead: add to the post-update callback, the sponsorships!
+	add afterinsert/update to all company-related and lead-related things
+		bah, and to income in general... though that'll be interesting
+			i'd have to sift through all fwd/backlinks, and see what i get
+				any with income_id in them, that's what i want
+			or, manually do leads_income and tickets and companies_income
+			well i did it programmatically, being the freak that i ampush the sponsorship stuff live
+	then run make-sponsorship live too
+	import all the historical alumni: anyone invited last year

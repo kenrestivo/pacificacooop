@@ -84,14 +84,14 @@ foreach($menu->alertme as $table){
 $blog =& new CoopView(&$cp, 'blog_entry', &$nothing);
 print $cp->newMenuRow(&$tab, 
                  $blog->obj->fb_formHeaderText,
-                 $blog->obj->fb_display_summary(&$blog),
+                 $blog->obj->homepage_summary(&$blog),
                  $blog->actionButtons());
 
 
 $cal =& new CoopView(&$cp, 'calendar_events', &$nothing);
 print $cp->newMenuRow(&$tab, 
                  $cal->obj->fb_formHeaderText,
-                 $cal->obj->fb_display_summary(&$cal),
+                 $cal->obj->homepage_summary(&$cal),
                  $cal->actionButtons());
 
 

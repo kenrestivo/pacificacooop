@@ -34,6 +34,8 @@ fb_linkConstraints() = called by linkconstraints.
         overrides the defaults in COopObject
 fb_display_[view|details|alert"summary]() = called by the dispatcher. 
         overrides the default view, details, alert, or summary
+homepage_summary() = ONLY to be displayed on members and/or public homepage
+    distinct from fb_display_summary() which is shown at view, possibly add/edit
 afterForm() = this is called by dispatcher, after the form is rendered
          use it to display any other things that do not go in the form itself
 beforeForm() = this is called by dispatcher, BEFORE the form is rendered

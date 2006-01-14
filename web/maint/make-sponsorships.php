@@ -73,10 +73,8 @@ $sy = $cp->currentSchoolYear;
 
 function viewHack(&$cp, &$atd, $sy)
 {
-	 $co =& new CoopObject(&$cp, 'sponsorship_types', &$atd);
-     $atd->protectedJoin($co);
-	 $atd->obj->orderBy('sponsorship_price desc');
-	 return $atd->simpleTable();
+	 $co =& new CoopView(&$cp, 'sponsorships', &$atd);
+	 return $co->simpleTable();
 			
 }
 
@@ -88,6 +86,8 @@ switch($_REQUEST['action']){
 //// FIND NEEDED /////
  case 'findneeded':
 	 print "<p>This could take a while. Calculating sponsors needed.</p>";
+//      ob_end_flush();
+//      flush();
 	 $sp = new Sponsorship(&$cp, $sy);
 	 foreach(array('companies', 'leads') as $tab){
 		 //print $tab;
@@ -114,6 +114,8 @@ switch($_REQUEST['action']){
 //// ADD NEEDED /////////
  case 'addneeded':
 	 print "<p>This could take a very, very, very long time. Please be patient.</p>";
+//      ob_end_flush();
+//      flush();
 	 $sp = new Sponsorship(&$cp, $sy);
 	 foreach(array('companies', 'leads') as $tab){
 		 //print $tab;

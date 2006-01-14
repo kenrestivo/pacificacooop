@@ -56,7 +56,7 @@ class Blog_entry extends CoopDBDO
 //             $this->orderBy('updated desc');
 //         }
 
-    function fb_display_summary(&$co, $publiconly = false)
+    function homepage_summary(&$co, $publiconly = false)
         {
             if($co->page->auth['token'] && !$publiconly){
                 $clause = 'members'; 
