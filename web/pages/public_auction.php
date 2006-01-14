@@ -178,8 +178,11 @@ $cp =& new CoopPage();
 $_SESSION['foo'] = 'foo';		// keep auth.inc happy
 
 
-print $cp->header("Springfest $sfyear", 
-				  "Join us for Springfest $sfyear!"); 
+
+
+$cp->title = "Springfest $sfyear"; 
+$cp->heading =	"Join us for Springfest $sfyear!"; 
+print $cp->header();
 print "\n<hr /></div> <!-- end header div -->\n";
 
 print '<div id="leftCol">';
