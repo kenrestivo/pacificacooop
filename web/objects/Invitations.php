@@ -35,13 +35,6 @@ class Invitations extends CoopDBDO
     // basically ANY lead in this school year is a dupe
     var $fb_dupeIgnore = array('family_id', 'relation', 'label_printed');
 
-	var $fb_fieldsToRender = array (
-		'lead_id',
-		'school_year' ,
-		'family_id',
-		'relation',
-		'label_printed'
-		);
 
     var $fb_requiredFields = array('lead_id', 
                                    'relation', 'school_year');
@@ -69,11 +62,25 @@ class Invitations extends CoopDBDO
             
             $co->protectedJoin($leads, 'left');
             
-            $co->overrides['leads']['fb_linkDisplayFields'] = 
-                array('last_name', 'first_name', 'company', 
-                      'title', 'address1', 'address2', 'city', 'state', 'zip',
-                      'country', 'phone');
+//             $co->overrides['leads']['fb_linkDisplayFields'] = 
+//                 array('last_name', 'first_name', 'company', 
+//                       'title', 'address1', 'address2', 'city', 'state', 'zip',
+//                       'country', 'phone');
             
+
+            $co->obj->selectAdd(
+"concat_ws('\n'
+,concat_ws(' ' , salutation, first_name, last_name)
+,title
+,company
+,address1
+,address2
+,address2
+,concat_ws(' ', concat(city, ', ', state), zip, if(country != 'USA', country, ''))
+) as label_like");
+
+            $this->fb_fieldLabels['label_like'] = 'Address Label';
+
 
             // only relevant for the big scary list
             if($co->isPermittedField() >= ACCESS_VIEW){
