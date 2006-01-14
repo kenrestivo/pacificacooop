@@ -72,7 +72,7 @@ class Calendar_events extends CoopDBDO
                     '(keep_event_hidden_until_date is null 
                                 or  keep_event_hidden_until_date >= "%s")', 
                                     date('Y-m-d')));
-            $this->limit(4);
+            $this->limit(8); // we get busy! 4 is too few
 
             $this->selectAdd('date_format(event_date, "%a %b %D, %Y") as human_date');
             $this->selectAdd('if(hour(event_date) > 0, date_format(event_date, "%l:%i%p"), "") as human_time');
