@@ -71,11 +71,10 @@ class Invitations extends CoopDBDO
             $co->obj->selectAdd(
 "concat_ws('\n'
 ,concat_ws(' ' , salutation, first_name, last_name)
-,title
-,company
-,address1
-,address2
-,address2
+,if(length(title)>0, title, null)
+,if(length(company)>0, company, null)
+,if(length(address1)>0, address1, null)
+,if(length(address2)>0, address2, null)
 ,concat_ws(' ', concat(city, ', ', state), zip, if(country != 'USA', country, ''))
 ) as label_like");
 
