@@ -17,7 +17,7 @@ fb_longHeader "" (old summary, if applicable)
 fb_shortHeader "" (old shortdesc)
 fb_dupeIgnore array(fieldn...)
 fb_sizes  = array(field, size)
-fb_fieldsToUnrender (always hide these! annoying, but needed.)
+fb_fieldsToUnRender (always hide these! annoying, but needed.)
 fb_displayFormat  array (field => sprintffrormat)
 fb_displayCallbacks = array (field => cb) overrides CoopView::toArray()
      the result of you callbacks WILL NOT be html escaped. that's your job.

@@ -683,6 +683,10 @@ class coopPage
             $this->printDebug('initialising stack', 2);
             unset($this->vars['stack']);
             $this->vars['stack'] = array();
+            unset($this->vars['last']);
+            $this->vars['last'] = array();
+            unset($this->vars['prev']);
+            $this->vars['prev'] = array();
         }
 
     

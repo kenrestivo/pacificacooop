@@ -9,31 +9,54 @@ coop web database
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	import the 20-year roster (20yearroster.txt)
 	insurance, dammit
-	python translation (pythonport.txt). 
+	python translation (pythonport.txt)
+
+
 
 
 STACK IS STILL FUCKED UP!
 	as cooke, edit donations IS STUCK!
-		i'd gone from homepage to edit donations
+		i'd gone from homepage LEFT menu to edit donations
 		then back to homepage
-		finally to VIEW calendar
+		finally to VIEW calendar from RIGHT
 			and lookee here! back is still got edi tdonation!
 		AH! because i hit view from RIGHT, which apparently pushes?
 			pushing from homepage fucks shit up. big time.
 
- 
+
+export/print
+	pear spreadsheetwriter
+	the standard view stuff, minus pager
+	grab from last
+		in fact, grab EVERYTHING from last. s/b easy
+	default: export whatever columns are in the result set
+		unless there is a callback or columnlist
+		using toarray to format them
+	print-as-labels callback, if available?
+	vagaries: special crap like honouring do not contact?
+		don't deal with that now,  but will have to
+
+
+play with exporter/pythonpoint
+	for labels, and packaging stuff
+
+
 NOW! for invitations
 	family chooser?
 	and an excel export, which i think i've done
 		in perl. try python now!
+			fuck, this really wouldn't be too hard in PHP anyway
 		ah, the labelprinted stuff! important!
-	i.e. show a report, then some way to tag them as labelprinted
-		pick/choose date label printed too, or none
-		it's a searchable report, basically!
-	and, the "export to excel" just re-does that query as an excel export!
-		this is where mvc is cool. controller is same, view is different
-			excel view, web view
+    	i.e. show a report, then some way to tag them as labelprinted
+    		pick/choose date label printed too, or none
+    		it's a searchable report, basically!
+    	and, the "export to excel" just re-does that query as an excel export!
+    		this is where mvc is cool. controller is same, view is different
+    			excel view, web view
 
+
+ 
+    
 
 ??? PHP
 sponsorships fix

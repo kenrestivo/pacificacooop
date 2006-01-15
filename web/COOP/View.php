@@ -325,6 +325,10 @@ class coopView extends CoopObject
                     continue;
                 }
 
+                //TODO: find a way to migrate this to a function
+                // which i can put into coopobject,
+                // and call from linkfield stuff, to escape sub-elements
+
                 // XXX better way to do all this dispatching
 				if($this->isPermittedField($key) < ACCESS_VIEW){
                     //for USERLEVEL. mask the data. but put placeholder

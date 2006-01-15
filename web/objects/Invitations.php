@@ -62,12 +62,8 @@ class Invitations extends CoopDBDO
             
             $co->protectedJoin($leads, 'left');
             
-//             $co->overrides['leads']['fb_linkDisplayFields'] = 
-//                 array('last_name', 'first_name', 'company', 
-//                       'title', 'address1', 'address2', 'city', 'state', 'zip',
-//                       'country', 'phone');
-            
 
+            // my nice little label preview
             $co->obj->selectAdd(
 "concat_ws('\n'
 ,concat_ws(' ' , salutation, first_name, last_name)
