@@ -628,11 +628,11 @@ class coopPage
             }
             return sprintf('<p>Navigation: %s %s</p>',
                            implode(' &gt; ', $res), 
-                           $this->selfURL(
+                           count($res) > 1 ? $this->selfURL(
                                array('value'=>'Go Back',
                                      'par' => false,
                                      'inside' => array(
-                                         'pop' => 'true'))));
+                                         'pop' => 'true'))) : '');
         }
 
     // gets the last stack item, IN PLACE t
