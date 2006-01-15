@@ -14,15 +14,6 @@ coop web database
 
 
 
-STACK IS STILL FUCKED UP!
-	as cooke, edit donations IS STUCK!
-		i'd gone from homepage LEFT menu to edit donations
-		then back to homepage
-		finally to VIEW calendar from RIGHT
-			and lookee here! back is still got edi tdonation!
-		AH! because i hit view from RIGHT, which apparently pushes?
-			pushing from homepage fucks shit up. big time.
-
 
 export/print
 	pear spreadsheetwriter
@@ -5606,3 +5597,13 @@ push my ghui fixes live
 			well i did it programmatically, being the freak that i ampush the sponsorship stuff live
 	then run make-sponsorship live too
 	import all the historical alumni: anyone invited last year
+STACK IS STILL FUCKED UP!
+	as cooke, edit donations IS STUCK!
+		i'd gone from homepage LEFT menu to edit donations
+		then back to homepage
+		finally to VIEW calendar from RIGHT
+			and lookee here! back is still got edi tdonation!
+		AH! because i hit view from RIGHT, which apparently pushes?
+			pushing from homepage fucks shit up. big time.
+		no. problem was i needed to init stack at END of index.php page
+			and probably at the beginning too

@@ -154,10 +154,7 @@ class coopPage
 <![endif]-->
 ';
             // definitely into the safety of our own content here
-            printf('<div id="header">
-				<h2>%s</h2>',
-               $this->heading);
-			
+            print '<div id="header"';
 			
 			$this->debugCrap();
 			warnDev();
@@ -179,18 +176,12 @@ class coopPage
             /// TODO: yank HTML table and use CSS instead!
 			$tab =& new HTML_Table('width="100%"');
 
-			$tab->addCol(array(
-							 sprintf("<h3>Welcome %s!</h3>", $u['username'])));
-			$tab->addCol(array($this->selfURL(array(
-								   'value' => "Back to Main Menu", 
-                                   'inside' =>"action=menu", 
-								   'base' => "index.php")))
-						 ); // TODO: maybe make that backbutton hilighted?
-			$tab->addCol(array($this->selfURL(array('value' =>"Log Out", 
+			$tab->addRow(array(sprintf('<p><strong>%s</strong></p>', $this->heading),
+							 sprintf("<p>Logged in as: %s</p>", $u['username']) .
+                               $this->selfURL(array('value' =>"Log Out", 
+                                                    'par' => false,
 													'inside' =>'action=logout'))));
 			
-			
-						 
 			$res .= $tab->toHTML();
 
 			return $res;
@@ -610,6 +601,15 @@ class coopPage
             //'return($ar["table"]);'),
         //                    $this->vars['stack']);
 
+
+            $res[] = $this->selfURL(
+                array('value'=>'Main Menu',
+                      'par' => false,
+                      'base' => 'index.php',
+                      'inside' => array(
+                          'action' => 'menu')));
+            
+
             foreach($this->vars['stack'] as $stack){
                 if(!count($stack) || empty($stack['table'])){
                     continue;
@@ -626,17 +626,13 @@ class coopPage
                                  $co->table);
                 
             }
-            if(count($res)){
-                return sprintf('<p>Navigation: %s %s</p>',
-                               implode(' &gt; ', $res), 
-                               $this->selfURL(
-                                   array('value'=>'Go Back',
-                                         'par' => false,
-                                         'inside' => array(
-                                             'pop' => 'true'))));
-            }
-            
-            return '';
+            return sprintf('<p>Navigation: %s %s</p>',
+                           implode(' &gt; ', $res), 
+                           $this->selfURL(
+                               array('value'=>'Go Back',
+                                     'par' => false,
+                                     'inside' => array(
+                                         'pop' => 'true'))));
         }
 
     // gets the last stack item, IN PLACE t

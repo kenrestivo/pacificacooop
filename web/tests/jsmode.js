@@ -189,8 +189,8 @@ sendEmailNotice = function(self,audit_id){
 sendEmailNotice(a, 5431);
 
 
-w=window.open('http://www/coop-dev')
-
+w=window.open('http://www/coop-dev');
+w=window.open('http://www/coop-dev?auth[uid]=8&auth[pwd]=tester');
 
 /////
 
@@ -372,3 +372,4 @@ processCustomSelect = function(selectbox, target_id, showtext) {
 
 w.processCustomSelect(w.document.forms[0]['companies_income_join-company_id'], 
                       'companies-company_id')
+
