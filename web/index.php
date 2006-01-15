@@ -98,6 +98,11 @@ print $cp->newMenuRow(&$tab,
 
 print $tab->toHTML();
 
+
+// extra condom. necessary, apparently.
+// XXX MISERABLE hack, this.
+$cp->initStack();
+
 ///////////////////////
 
 // NOTE! i don't end rightcol div, since done does that for me
