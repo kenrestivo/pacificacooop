@@ -332,7 +332,7 @@ group by user_id,table_name,field_name";
     //forceuser means assume the record belongs to this user even if it does not (useful in menus, or where you want a best case situation)
     // forceyear is to assume that the record is this year's-- best case, i.e. in menus
 	function isPermittedField($key = NULL, $forceuser = false, 
-                              $forceyear = null)
+                              $forceyear = false)
 		{
 
 			// if it's a key, and we don't show them, then no
@@ -391,7 +391,7 @@ group by user_id,table_name,field_name";
             {
                 
             	$this->page->printDebug(
-                    "ispermitted($this->table : $key) {$this->obj->school_year} is NOT {$this->page->currentSchoolYear}, so limiting for permcheck", 
+                    "ispermitted($this->table : $key) {$this->obj->school_year} is NOT {$this->page->currentSchoolYear}, or the key is schoolyear, or forceyear is set $forceyear, so limiting for permcheck", 
                     4);
                 //PEAR::raiseError('foobar', 111);
                     //MIN! limit them.

@@ -3,7 +3,7 @@
 // $Id$
 
 require_once('HTML/QuickForm/select.php');
-
+require_once('Services/JSON.php');
 
 class HTML_QuickForm_customselect extends HTML_QuickForm_select
 {
@@ -15,10 +15,14 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
     var $sub; // cache of sub object
     var $vals; // cache selected values. NEED BECAUSE PHP CAN'T getvalues()[0]!
     var $showEditText = 0; // the edit link show the text USE 1/0 NOT TRUE/FALSE
+    var $editperms; // cache of editperms hidden field
 
-    function prepare()
+    function prepare(&$sub)
         {
+            $this->sub =& $sub;
             $this->cf =& $this->_parentForm->CoopForm; // save typing
+
+
 			list($table, $this->field) = explode('-', $this->getName());
 
 
@@ -26,10 +30,6 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
             list($target, $targfield) = $this->link;
             $target_id =  $target . '-'. $targfield;
-
-            //need for perms
-            $this->sub =& new CoopObject(&$this->cf->page, $target, 
-                                         &$this->cf);
 
 
             
@@ -43,6 +43,11 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                 $this->getName(), 
                 array('onkeyup' => $func,
                       'onchange' => $func));
+
+
+
+            $this->_addEditPerms();
+            $this->_populateEditPerms();
                       
              // TODO: WHEN i figure out how to remove the placeholder b4 saving
 //                if(count($this->vals) < 2){
@@ -51,6 +56,30 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 
 
         }
+
+    // editperms is the hidden field with the JSON perms array
+    // so it doesn't have to fetch it
+    function _addEditPerms()
+        {
+
+            $this->editperms =& $this->_parentForm->addElement(
+                'hidden',
+                'editperms-' . $this->getName(),
+                '{}',
+                array('id' => 'editperms-' . $this->getName()));
+        }
+
+
+    function _populateEditPerms($chooseone = true)
+        {
+            $opts = $this->sub->getLinkOptions($chooseone, true);
+            // XXX put this in prepare()?
+            // it is for customselect, but NOT for searchselect
+            $this->loadArray($opts['data']);
+            $json = new Services_JSON();// XXX call statically?
+            $this->editperms->setValue($json->encode($opts['editperms']));
+        }
+
 
 // XXX broken. doesn't work, and i haven't time to figure out why
 //     function getFrozenHTML(){
@@ -79,25 +108,30 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             
                 if($this->sub->isPermittedField(null, true, true) >= ACCESS_EDIT)
                 {
+                    $tmpsub =& new CoopObject(&$this->cf->page, $target, 
+                                              &$this->cf);
+
                     if($this->vals[0]){
-                        $this->sub->obj->get($this->vals[0]);
+                        // AAUCH! can't use the $this->sub, it's already searched
+                        $tmpsub->obj->get($this->vals[0]);
                     }
+
                     $res .= '&nbsp;' . $this->cf->page->selfURL(
                         array(
                             'value' =>sprintf(
                                 'Edit%s',
                                 $this->showEditText ? 
-                                ' '.htmlentities($this->sub->concatLinkFields()) : ''),
+                                ' '.htmlentities($tmpsub->concatLinkFields()) : ''),
                             'par' => false,
                             'elementid' => 'subedit-' . $this->getName(),
+                            'tags' => array('class' =>
+                                            $tmpsub->isPermittedField() < ACCESS_EDIT ? 'hidden' : ''),
                             'inside' => array('table' => $target,
                                               'action' => 'edit',
                                               $target_id => $this->vals[0],
                                               'push' => $this->getName())));
-                    // editperms is the hidden field with the JSON perms array
-                    // so it doesn't have to fetch it
-                    // right now i add it in coopform, but i'd rather do it here
                 }            
+
 
                 if($this->sub->isPermittedField(null, true, true) >= ACCESS_ADD)
                 {
@@ -114,9 +148,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                                                   'action' => 'add',
                                                   'push' => $this->getName())))
                         );
-                
+                    
                 }
-
                 return $res;
             }
         } //end func toHtml

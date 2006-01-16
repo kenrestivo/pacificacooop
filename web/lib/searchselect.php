@@ -7,12 +7,12 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
 {
 
     // XXX HACK! instead, i shoudl be doing some kind of multi-inclusion guard
-    function prepare()
+    function prepare(&$sub)
         {
             // needed before callign parent's prepare!
             $this->showEditText = 1;
 
-            parent::prepare();
+            parent::prepare(&$sub);
 
             $this->setSize(10);
 
@@ -25,6 +25,29 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
 
         }
 
+    // i am overriding the parents editperms and CONSTRAINING
+    // it here. without this little preamble, it will find ALL,
+    // which is definitely not what you want in a searchselect!
+    function _populateEditPerms($chooseone = false)
+        {
+            // obviously, only if there's a value there.
+            // otherwise, the thing gets populated with EVERYTHING!
+            if($this->vals[0] < 1){
+                return;
+            }
+
+            $this->sub->obj->whereAdd(sprintf('%s.%s = %d', 
+                                              $this->sub->table, 
+                                              $this->sub->pk,
+                                              $this->vals[0]));
+            $this->sub->obj->find();
+            $this->sub->grouper();
+            
+            parent::_populateEditPerms(false);
+        }
+
+
+
     function toHtml()
     {
 
@@ -34,6 +57,8 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
             
             $brows = $this->cf->page->getBrowserData();
 
+            // XXX THIS IS IDIOTIC!
+            // can i use addelement, please! or at least createElement
             $res = sprintf(
                 '<input type="text" name="search-%s" %s
                 onchange="combobox_%s.fetchData()" />
@@ -60,7 +85,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
        {
            $jspath = 'lib';
            $res = '';
-  
+           $js = "";
 
          $res .= $this->cf->page->jsRequireOnce(
                sprintf('%s/eventutils.js' , 

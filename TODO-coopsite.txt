@@ -12,6 +12,8 @@ coop web database
 	python translation (pythonport.txt)
 
 
+commit so far!
+
 move the "label" query to a fb_var
 	and use it wherever needed, i.e. companies, leads, territory details :-)
 		maybe even an override to linkdisplay?
@@ -5631,3 +5633,13 @@ STACK IS STILL FUCKED UP!
     	also, if i select NOTHING, the link should go away. js problem i expect.
 	    		javascript sucks so bad, i can't handle it
 			naw, js TOOLS suck so bad, that i fixed them. emacs now works!navigation back link: only on last
+	also the edit perms aren't showing up right at initial time
+		ah, have to check ispermitted on tmpsub
+	also companiesincome fix!
+more bugs
+	add new seems to have disappeared!? in searchselect only
+		and only in my coop-dev, live is fine
+			cvd in dev shows changes. live is sync'ed up now
+	waz the diff?
+		$sub botched! families stuttering!
+		weird! was a reference problem

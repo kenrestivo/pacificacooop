@@ -449,4 +449,7 @@ eval(eph.value);
 
 blah={"2":false, "3":true}
 
-ed.addEventListener('keyup',function(ev){processCustomSelect(this, 'families-family_id', 0)});
+ed.addEventListener('keyup',function(ev){processCustomSelect(this, 'families-family_id', 0)}, false);
+
+// MUCH simpler way of doing regexps!
+'foobah'.replace(/foo(\w+)/g, '$1ee')

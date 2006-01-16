@@ -643,7 +643,7 @@ class coopPage
             $this->confessArray($res, 'stackpath AFTER mangling', 4);
 
             return sprintf('<p>Navigation: %s</p>',
-                           implode(' &gt; ', $res));
+                           implode(' &lt; ', $res));
         }
 
     // gets the last stack item, IN PLACE t

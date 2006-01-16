@@ -32,7 +32,7 @@ require_once('lib/searchselect.php');
 require_once('lib/customdatebox.php');
 require_once('lib/customrequired.php');
 require_once('lib/mcetextarea.php');
-require_once('Services/JSON.php');
+
 
 //////////////////////////////////////////
 /////////////////////// COOP FORM CLASS
@@ -212,54 +212,22 @@ class coopForm extends CoopObject
 					$this->form->addElement(&$el);
 					$el->setName($fullkey); 
 				} else if($this->isLinkField($key)) {
-                    // TODO: pull this out into a function. it's too long.
-                    // actually, it'd be nice to move it to customselect element
 
-                    list($sub, $link)  = $this->findLinkOptions($key);
+                    // i do this out here, because i NEED TO FIND FIRST
+                    // so i know which kind of element to use!
+                    // damn do i hate this
+                    $sub  =& $this->findLinkOptions($key);
 
-                    $type = $sub->obj->N > COOP_MAX_SELECT_COUNT ?
-                    'searchselect' : 'customselect';
-                    
-            
-                    $el =& $this->form->addElement(
-                        $type, 
-                        $fullkey, false);
+                     $el =& $this->form->addElement(
+                        $sub->obj->N > COOP_MAX_SELECT_COUNT ?
+                        'searchselect' : 'customselect',
+                         $fullkey, false);
 
                     $el->setValue($val); // duplicate of bleow, but need it here
-					
-					// obviously, only if there's a value there.
-                    if($type == 'searchselect' && $val){
-                        $sub->obj->whereAdd(sprintf('%s.%s = %d', 
-                                                       $sub->table, 
-                                                       $sub->pk,
-                                                       $val));
-                        $sub->obj->find();
-                        $sub->grouper();
-                    }
 
-                    // TODO: blow off this hidden field, and just
-                    // do the javascript here directly to put the
-                    // editperms array into a javascript global var
-                    $editperms =& $this->form->addElement(
-                        'hidden',
-                        'editperms-' . $fullkey,
-                        '{}',
-                        array('id' => 'editperms-' . $fullkey));
-
-                    if($val || $type != 'searchselect'){
-                        $opts = $sub->getLinkOptions($type == 'customselect', 
-                                                     true);
-                        // XXX put this in prepare()?
-                        // it is for customselect, but NOT for searchselect
-                        $el->loadArray($opts['data']);
-                        $json = new Services_JSON();// XXX call statically?
-                        $editperms->setValue($json->encode($opts['editperms']));
-                    }
-
-                    
                     //XXX parentform isn't available at add, only at toHTML
                     $el->_parentForm =& $this->form;
-                    $el->prepare();
+                    $el->prepare(&$sub);// IMPORTANT! so options are found
 						
 				} else if(!empty($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
@@ -333,12 +301,6 @@ class coopForm extends CoopObject
                     "->setvalue($val)", 2);
 				$el->setValue($val);
 
-				if(is_array($this->obj->fb_userEditableFields) &&
- 							!in_array($key, 
- 									  $this->obj->fb_userEditableFields))
-				{
-					$frozen[] = $fullkey;
-				}
 
                 //ok, perms stuff here now
                 // i only need 
@@ -354,7 +316,7 @@ class coopForm extends CoopObject
 		}
 
     // return subform, and the link tuple (table, fieldname)
-	function findLinkOptions($key)
+	function &findLinkOptions($key)
 		{
 			$link = explode(':', $this->forwardLinks[$key]);
             
@@ -372,7 +334,7 @@ class coopForm extends CoopObject
             //$this->debugWrap(2);
 			$sub->obj->find();
 
-			return array(&$sub, $link);
+			return $sub;
 		}
 
 
@@ -623,7 +585,7 @@ class coopForm extends CoopObject
                     /// field until save time, *after* the validation has
                     /// already told the user that the field is empty. doh.
                     $side = 'client';
-                    if(is_array($this->obj->fb_textFields) && 
+                    if(!empty($this->obj->fb_textFields) && 
                        in_array($fieldname, $this->obj->fb_textFields))
                     {
                         $side = NULL;

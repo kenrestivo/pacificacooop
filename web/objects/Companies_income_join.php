@@ -65,24 +65,13 @@ class Companies_income_join extends CoopDBDO
             $inc->protectedJoin($coa);
             $inc->obj->whereAdd('chart_of_accounts.join_to_table like "%compan%"');
 
-            $inc->obj->find();
-            $opts = $inc->getLinkOptions(true, true);
-            $el->loadArray($opts['data']);
+            $inc->obj->find(); // in lieu of coopform::findlinkoptions()!
+            
             $el->setValue($this->income_id);
-
-            // TODO: fix the  hidden too!
-            $fullkey = $form->CoopForm->prependTable('income_id');
-            $editperms =& $form->addElement(
-                'hidden',
-                'editperms-' . $fullkey,
-                '{}',
-                array('id' => 'editperms-' . $fullkey));
-            $json = new Services_JSON();// XXX call statically?
-            $editperms->setValue($json->encode($opts['editperms']));
 
 
             $el->_parentForm =& $form;
-            $el->prepare();
+            $el->prepare(&$inc);
 
             $this->fb_preDefElements['income_id'] =& $el;
             
