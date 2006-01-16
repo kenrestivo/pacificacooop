@@ -20,7 +20,6 @@
 
 require_once('CoopPage.php');
 require_once('CoopView.php');
-require_once('CoopMenu.php');
 require_once('CoopForm.php');
 require_once('HTML/Table.php');
 
@@ -37,9 +36,8 @@ print $cp->pageTop();
 
 $atd = new CoopView(&$cp, 'companies', $none);
 
-$menu =& new CoopMenu(&$cp);
-print $menu->topNavigation();
-
+print $cp->topNavigation();
+print $cp->stackPath();
 
 print "\n<hr /></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div id="centerCol">';
@@ -253,17 +251,15 @@ order by cash_donations desc, auction_purchases desc,
     $view =& new CoopView(&$atd->page, 'companies', &$faketop);
     $view->chosenSchoolYear = $schoolyear; // hack!
 	$view->obj->fb_formHeaderText = 'Solicitation Summary by Company';
-    $view->obj->fb_fieldsToRender = array(); // bah, i must have crap in there
     $view->obj->fb_fieldLabels= array(
-        'company' => 'Company',
+        'company_label' => 'Company',
         'cash_donations' => 'Cash Donations',
         'auction_purchases' => 'Auction Purchases',
         'auction_donations' => 'Auction Donations',
         'in_kind_donations' => 'In-Kind Donations');
     $view->obj->query(
-" 
-select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
-    as company, companies.company_id,
+"select {$view->obj->fb_labelQuery},
+companies.company_id,
         sum(inc.payment_amount) as cash_donations,
         sum(pur.payment_amount) as auction_purchases,
         sum(auct.item_value) as auction_donations,
