@@ -78,12 +78,15 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             
                 if($this->sub->isPermittedField(null, true, true) >= ACCESS_EDIT)
                 {
+                    if($this->vals[0]){
+                        $this->sub->obj->get($this->vals[0]);
+                    }
                     $res .= '&nbsp;' . $this->cf->page->selfURL(
                         array(
                             'value' =>sprintf(
                                 'Edit%s',
                                 $this->showEditText ? 
-                                ' ' . htmlentities($this->cf->concatLinkFields()) : ''),
+                                ' '.htmlentities($this->sub->concatLinkFields()) : ''),
                             'par' => false,
                             'elementid' => 'subedit-' . $this->getName(),
                             'inside' => array('table' => $target,
