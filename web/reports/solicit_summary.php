@@ -251,6 +251,13 @@ order by cash_donations desc, auction_purchases desc,
     $view =& new CoopView(&$atd->page, 'companies', &$faketop);
     $view->chosenSchoolYear = $schoolyear; // hack!
 	$view->obj->fb_formHeaderText = 'Solicitation Summary by Company';
+    
+    $view->obj->preDefOrder= array(
+        'company_label' ,
+        'cash_donations' ,
+        'auction_purchases',
+        'auction_donations',
+        'in_kind_donations');
     $view->obj->fb_fieldLabels= array(
         'company_label' => 'Company',
         'cash_donations' => 'Cash Donations',

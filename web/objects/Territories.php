@@ -53,6 +53,7 @@ class Territories extends CoopDBDO
                 'auction_purchases' => 'Auction Purchases',
                 'auction_donations' => 'Auction Donations',
                 'in_kind_donations' => 'In-Kind Donations');
+            $view->obj->preDefOrder = array_keys($view->obj->fb_fieldLabels);
 
             $schoolyear = $co->getChosenSchoolYear(true);
             $view->obj->query(

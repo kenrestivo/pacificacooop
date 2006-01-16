@@ -27,7 +27,7 @@ while($co->obj->fetch()){
 }
 
 
-print '<p>A nifty utility to show you all the tables for which we have permissions, and the ORDER of the fields as they will be displayed, which is of course in the order of the fb_fieldLabels</p>';
+print '<p>A nifty utility to show you all the tables for which anyone has permissions, and the ORDER of the fields as they will be displayed, which is of course in the order determined by CoopObject::reorder()</p>';
 
             
 foreach($tables as $table){

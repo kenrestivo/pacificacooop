@@ -12,12 +12,18 @@ coop web database
 	python translation (pythonport.txt)
 
 
-push live the label and predeforder stuff
-	maybe the new topnav if it passes css mustard
+bugs!
+	ANY report which uses ANY table which has a predeforder, IS NOW FUCKED UP
+		go through adn find them somehow
+	ANYWHERE '\->fieldLabels' is set, bah
+
+
+re-test with bugfixes!!
+	push live the label and predeforder stuff
 
 
 my js stuff! working interpreter now!
-	show a summary somewhere, somehow
+	show a label or field:value summary somewhere, somehow
 		easiest is searchselect, with div
 	when you search, DO NOT remove the currently-chosen value!!
 
