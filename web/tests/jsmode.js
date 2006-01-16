@@ -191,6 +191,7 @@ sendEmailNotice(a, 5431);
 
 w=window.open('http://www/coop-dev');
 w=window.open('http://www/coop-dev?auth[uid]=8&auth[pwd]=tester');
+w.location = 'http://www/coop-dev?auth[uid]=8&auth[pwd]=tester';
 
 /////
 
@@ -372,4 +373,66 @@ processCustomSelect = function(selectbox, target_id, showtext) {
 
 w.processCustomSelect(w.document.forms[0]['companies_income_join-company_id'], 
                       'companies-company_id')
+
+try{
+    window.__proto__;
+}
+catch(error){
+    println(typeof error);
+}
+
+
+
+try{
+    throw 'up';
+}
+catch(e){
+    println(typeof e);
+}
+
+
+// doesn't work, but might
+/^\[xpconnect wrapped native/.test(window.toString())
+
+
+if(window instanceOf Object){
+    return true;
+}
+
+
+window instanceof Object
+window instanceof Array
+
+
+pprint(window)
+property_names(window)
+
+
+edlink = document.getElementById('subedit-invitations-lead_id');
+edlink.parentNode.removeChild(edlink);
+
+
+
+//get windows, using XUUL, emacs:
+// though it doensn't stay updated if you change the windows, oddly
+windows= [];
+en=Components.classes["@mozilla.org/appshell/window-mediator;1"].getService(Components.interfaces.nsIWindowMediator).getEnumerator("")
+while(en.hasMoreElements()) {
+    windows.push(en.getNext());
+}
+
+
+
+w.combobox_invitations_lead_id.selectBox.cleanBox = function ()
+{
+    for ( i=this.length; this.length> 0; i--) {
+        // UNLESS it is selected!! XXX this causes an endless loop
+        if(this.selectedIndex != i){
+            this.remove(i);
+        }
+    }
+}
+
+
+
 
