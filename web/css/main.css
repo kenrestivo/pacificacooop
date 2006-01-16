@@ -122,6 +122,16 @@ img {
 	text-align: center; 
 }
 
+#heading { 
+font-weight: bold; 
+float:left 
+}
+
+#loginblock{ 
+text-align: right;
+ }
+
+
 input, textarea, select {
   border: solid 1px black;
 }
