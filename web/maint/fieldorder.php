@@ -37,9 +37,13 @@ foreach($tables as $table){
 
     $labels = array();
     printf('<h3>%s (%s)</h3>', $targ->obj->fb_formHeaderText, $table);
-    foreach($targ->obj->fb_fieldLabels as $key => $label){
-        $labels[] = sprintf('%s (%s)', $label, $key);
+
+    foreach($targ->reorder($targ->obj->fb_fieldLabels) as $key => $title){
+        $labels[] = sprintf('%s (%s)', 
+                            $title,
+                            $key);
     }
+
     printf('<ul><li>%s</li></ul>', implode('</li><li>', $labels));
 }
 
