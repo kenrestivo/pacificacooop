@@ -173,19 +173,13 @@ class coopPage
 			// since it requires createlegacy adn i may not have that!
 			$u = getUser($this->auth['uid']);	// ugh.
 
-            /// TODO: yank HTML table and use CSS instead!
-			$tab =& new HTML_Table('width="100%"');
-
-			$tab->addRow(array(sprintf('<strong>%s</strong>', $this->heading),
-							 sprintf("Welcome %s!<br />%s", 
-                                     $u['username'],
-                                     $this->selfURL(array('value' =>"Log Out", 
-                                                    'par' => false,
-													'inside' =>'action=logout')))));
-			
-			$res .= $tab->toHTML();
-
-			return $res;
+			return sprintf(
+                '<div><strong>%s</strong>&nbsp;Welcome %s!&nbsp;%s</div>', 
+                $this->heading,
+                $u['username'],
+                $this->selfURL(array('value' =>"Log Out", 
+                                     'par' => false,
+                                     'inside' =>'action=logout')));
 		}
 	
 
