@@ -12,11 +12,6 @@ coop web database
 	python translation (pythonport.txt)
 
 
-my js stuff! working interpreter now!
-	and, show a summary somewhere, somehow
-		easiest is searchselect, with div
-	when you search, DO NOT remove the currently-chosen value!!
-
 
 move the "label" query to a fb_var
 	and use it wherever needed, i.e. companies, leads, territory details :-)
@@ -24,7 +19,15 @@ move the "label" query to a fb_var
 		AHA! labeldisplay?
 			maybe reports can use labeldisplay instead?
 			since they don't need to go in a popup
+	companies, leads... anything else so far?
 
+
+field order! i have ugly unsupported crap in my app. not good
+
+my js stuff! working interpreter now!
+	and, show a summary somewhere, somehow
+		easiest is searchselect, with div
+	when you search, DO NOT remove the currently-chosen value!!
 
 
 blow off pagetop completely
@@ -185,6 +188,8 @@ bring Packaging back to life!
 
 -----------
 BURNT (when too burnt out to do actual work)
+
+	read up on rest
 
 	move all the instructions over to the new thing
 
@@ -585,6 +590,9 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP/CVS
+renname kenflex to combobox, dammit. this is ridiculous
 
 ???PHP/SQL
 income is utterly botched. should constrain based on chardt of accounts join to table

@@ -1812,4 +1812,26 @@ select sponsorship_name, sponsorship_description, sponsorship_price, '2005-2006'
 from sponsorship_types 
 where school_year = '2004-2005';
 
+
+-- label query
+SELECT *, 
+concat_ws("\n", 
+    companies.company_name, 
+    if((length (companies.first_name) + length(companies.last_name)) > 1, 
+        concat_ws(" ", companies.first_name, companies.last_name), 
+        null), 
+    if(length(companies.address1) > 1, companies.address1, NULL), 
+    if(length(companies.address2) > 1, companies.address2, NULL), 
+    if(length(companies.city) > 1, companies.city, NULL), 
+    if (length(companies.phone) > 1, companies.phone, NULL), 
+    if(length (companies.email_address) > 1, companies.email_address, NULL)) 
+    as company_label , 
+companies.company_id as SAFE_company_id 
+FROM companies 
+WHERE company_name like 'A%' 
+GROUP BY companies.company_id , companies.company_id 
+ORDER BY companies.company_name,companies.last_name,companies.first_name ;
+
+
+
 --- EOF

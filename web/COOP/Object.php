@@ -745,19 +745,29 @@ group by user_id,table_name,field_name";
         {
             /// TODO: do something!!
         }
-
-
-
-    function reorder($things)
+    
+    
+    
+    // predeforder is the RIGHT way to do it!
+    // but, i did it the wrong way years ago. 
+    // so, if it's not present, use fbfieldlabels instead
+            function reorder($things)
         {
-            if(empty($this->obj->fb_fieldLabels)){
-                return $things;
+            if(!empty($this->obj->preDefOrder)){
+                foreach($this->obj->preDefOrder as $key){
+                    isset($things[$key]) && $sorted[$key] = $things[$key];
+                }
+                return $sorted;
+            }
+            
+            if(!empty($this->obj->fb_fieldLabels)){
+                foreach(array_keys($this->obj->fb_fieldLabels) as $key){
+                    isset($things[$key]) && $sorted[$key] = $things[$key];
+                }
+                return $sorted;
             }
 
-            foreach(array_keys($this->obj->fb_fieldLabels) as $key){
-                isset($things[$key]) && $sorted[$key] = $things[$key];
-            }
-            return $sorted;
+            return $things;
         }
 
 

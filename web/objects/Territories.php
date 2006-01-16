@@ -48,7 +48,7 @@ class Territories extends CoopDBDO
             $view->obj->fb_formHeaderText = 'Solicitation Summary by Company';
             $view->obj->fb_fieldsToRender = array(); // bah, i must have crap in there
             $view->obj->fb_fieldLabels= array(
-                'company' => 'Company',
+                'company_label' => 'Company',
                 'cash_donations' => 'Cash Donations',
                 'auction_purchases' => 'Auction Purchases',
                 'auction_donations' => 'Auction Donations',
@@ -57,16 +57,7 @@ class Territories extends CoopDBDO
             $schoolyear = $co->getChosenSchoolYear(true);
             $view->obj->query(
                 sprintf(" 
-select concat_ws('\n', company_name, 
-if(length(first_name) + length(last_name) > 1, 
-  concat_ws(' ', first_name, last_name), null),
-if(length(companies.address1) > 1, companies.address1, NULL), 
-if(length(companies.address2) > 1, companies.address2, NULL), 
-if(length(companies.city) > 1, companies.city, NULL), 
-if(length(companies.phone) > 1, companies.phone, NULL), 
-if(length(companies.email_address) > 1, companies.email_address, NULL)
-)
-    as company, companies.company_id,
+select %s, companies.company_id,
         sum(inc.payment_amount) as cash_donations,
         sum(pur.payment_amount) as auction_purchases,
         sum(auct.item_value) as auction_donations,
@@ -122,6 +113,7 @@ order by cash_donations desc, auction_purchases desc,
     auction_donations desc, in_kind_donations desc 
 
 ",
+                        $view->obj->fb_labelQuery,
                         $schoolyear,$schoolyear, $schoolyear, $schoolyear,
                         $this->{$co->pk}
                     ));

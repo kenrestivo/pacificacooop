@@ -62,26 +62,6 @@ class Companies extends CoopDBDO
 		"territory_id" => "Territory",
 		"flyer_ok" => "OK to place a flyer there?" 
 );
-	var $fb_fieldsToRender = array (
-		'company_name' ,
-		'salutation',
-		'last_name' ,
-		'first_name',
-		'title' ,
-		"address1", 
-		"address2" ,
-		"city" ,
-		"state" ,
-		"zip" ,
-		"country", 
-		"phone" ,
-		"fax" ,
-		"url",
-		"email_address" ,
-		'do_not_contact' ,
-		"territory_id" ,
-		"flyer_ok" 
-);
 	var $fb_enumFields = array ('flyer_ok');
 	var $fb_selectAddEmpty = array ('territory_id', 'family_id', 
 									'do_not_contact');
@@ -116,6 +96,39 @@ var $fb_defaults = array(
   'flyer_ok' => 'Unknown'
 );
 
+
+	var $preDefOrder = array (
+		'company_name',
+		"family_id" ,
+		'last_name',
+		'first_name',
+		'salutation',
+		'title',
+		"address1", 
+		"address2",
+		"city" ,
+		"state" ,
+		"zip" ,
+		"country", 
+		"phone" ,
+		"fax" ,
+		"email_address" ,
+		"url" ,
+		'do_not_contact',
+		"territory_id" ,
+		"flyer_ok" 
+);
+
+
+    var $fb_labelQuery = 'concat_ws("\n", companies.company_name, 
+if(length(companies.first_name) + length(companies.last_name) > 1, 
+  concat_ws(" ", companies.first_name, companies.last_name), null),
+if(length(companies.address1) > 1, companies.address1, NULL), 
+if(length(companies.address2) > 1, companies.address2, NULL), 
+if(length(companies.city) > 1, companies.city, NULL), 
+if(length(companies.phone) > 1, companies.phone, NULL), 
+if(length(companies.email_address) > 1, companies.email_address, NULL))
+    as company_label';
     
     var $fb_shortHeader = 'Contacts';
     
@@ -130,15 +143,11 @@ var $fb_defaults = array(
     function fb_display_view(&$co)
         {
             $ap = $co->alphaPager('company_name');
-            $this->fb_fieldsToRender = array('company_name', 
-                                           'last_name', 
-                                           'first_name', 
-                                           'address1',
-                                             'city',
-                                             'phone',
-                                             'email',
-                                             'url',
-                                             'territory_id');
+            $this->selectAdd($this->fb_labelQuery);
+            $this->fb_fieldLabels['company_label'] = 'Company Contact Information';
+            $this->preDefOrder = array('company_label', 
+                                       'url',
+                                       'territory_id');
             return $ap . $co->simpleTable() .$ap;
         }
 

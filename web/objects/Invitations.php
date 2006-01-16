@@ -47,9 +47,13 @@ class Invitations extends CoopDBDO
 		'label_printed' => 'Mailing Label Printed On'
 		);
 
-    /// XXX temporary hack, until i make coopform check N
-    var $fb_searchSelects = array('lead_id');
-
+	var $preDefOrder = array (
+		'lead_id' ,
+		'family_id', 
+		'relation' ,
+		'school_year', 
+		'label_printed'
+		);
 
 
 
@@ -64,26 +68,12 @@ class Invitations extends CoopDBDO
             
 
             // my nice little label preview
-            $co->obj->selectAdd(
-"concat_ws('\n'
-,concat_ws(' ' , salutation, first_name, last_name)
-,if(length(title)>0, title, null)
-,if(length(company)>0, company, null)
-,if(length(address1)>0, address1, null)
-,if(length(address2)>0, address2, null)
-,concat_ws(' ', concat(city, ', ', state), zip, if(country != 'USA', country, ''))
-) as label_like");
+            $co->obj->selectAdd($leads->obj->fb_labelQuery);
             
             
-            // NASTY!
-            $old=array_reverse(array_reverse($this->fb_fieldLabels)) ;
-            $this->fb_fieldLabels = array();
-            $this->fb_fieldLabels['label_like'] = 'Address Label Preview';
-            foreach($old as $k=>$v){
-                if($k != 'lead_id'){
-                    $this->fb_fieldLabels[$k] = $v;
-                }
-            }
+            $this->fb_fieldLabels['lead_label'] = 'Address Label Preview';
+            array_unshift($this->preDefOrder, 'lead_label');
+            $this->fb_fieldsToUnRender = array('lead_id');
 
             // only relevant for the big scary list
             $ap = "";

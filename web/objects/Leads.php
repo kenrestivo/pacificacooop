@@ -110,6 +110,16 @@ class Leads extends CoopDBDO
      'country' => 10
    );
 
+
+    var $fb_labelQuery = 'concat_ws("\n"
+,concat_ws(" " , leads.salutation, leads.first_name, leads.last_name)
+,if(length(leads.title)>0, leads.title, null)
+,if(length(leads.company)>0, leads.company, null)
+,if(length(leads.address1)>0, leads.address1, null)
+,if(length(leads.address2)>0, leads.address2, null)
+,concat_ws(" ", concat(leads.city, ", ", leads.state), leads.zip, if(leads.country != "USA", leads.country, ""))
+) as lead_label';
+
 	// can be called with no leadid if it's already in the object itself
 	// and no find is needed
 	// this is used in RSVP and tickets

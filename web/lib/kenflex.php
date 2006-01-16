@@ -24,6 +24,9 @@ require_once('CoopPage.php');
 require_once('CoopView.php');
 require_once('Services/JSON.php');
 
+
+// TODO: replace this with jsonrpc or REST
+
 $cp = new CoopPage($debug);
 $cp->pageTop(); 
 
