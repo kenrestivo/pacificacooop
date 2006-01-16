@@ -12,7 +12,11 @@ coop web database
 	python translation (pythonport.txt)
 
 
-commit so far!
+my js stuff! working interpreter now!
+	and, show a summary somewhere, somehow
+		easiest is searchselect, with div
+	when you search, DO NOT remove the currently-chosen value!!
+
 
 move the "label" query to a fb_var
 	and use it wherever needed, i.e. companies, leads, territory details :-)
@@ -21,11 +25,6 @@ move the "label" query to a fb_var
 			maybe reports can use labeldisplay instead?
 			since they don't need to go in a popup
 
-
-my js stuff! working interpreter now!
-	and, show a summary somewhere, somehow
-		easiest is searchselect, with div
-	when you search, DO NOT remove the currently-chosen value!!
 
 
 blow off pagetop completely
@@ -5643,3 +5642,4 @@ more bugs
 	waz the diff?
 		$sub botched! families stuttering!
 		weird! was a reference problem
+DO NOT SHOE PK IN EDIT OR NEW. EVER!

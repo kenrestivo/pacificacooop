@@ -129,7 +129,7 @@ var $fb_defaults = array(
     
     function fb_display_view(&$co)
         {
-            $res = $co->alphaPager('company_name');
+            $ap = $co->alphaPager('company_name');
             $this->fb_fieldsToRender = array('company_name', 
                                            'last_name', 
                                            'first_name', 
@@ -139,10 +139,7 @@ var $fb_defaults = array(
                                              'email',
                                              'url',
                                              'territory_id');
-            $res .= $co->simpleTable();
-            return $res;
-            
-
+            return $ap . $co->simpleTable() .$ap;
         }
 
    var $fb_sizes = array(

@@ -86,12 +86,11 @@ class Invitations extends CoopDBDO
             }
 
             // only relevant for the big scary list
+            $ap = "";
             if($co->isPermittedField() >= ACCESS_VIEW){
-                $res .= $co->alphaPager('last_name', 'leads');
+                $ap = $co->alphaPager('last_name', 'leads');
             }
-            $res .= $co->simpleTable();
-            return $res;
-
+            return $ap . $co->simpleTable() .$ap;
         }
 
 

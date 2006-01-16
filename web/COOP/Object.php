@@ -398,12 +398,16 @@ group by user_id,table_name,field_name";
                 $res = min($res, $usethese['year']);
             }
 
-
+            // finally, if this is a PK, NEVER EVER let anyone edit it
+            if($key == $this->pk && $res > ACCESS_VIEW){
+                $res =  ACCESS_VIEW;
+            }
 
 
             $this->page->printDebug(
-                sprintf('ispermitted(%s : %s) RETURNING for pk %d, OBJ famid [%s] , my famid [%d], force user [%s] force year [%s] perms [%s]', 
-                        $this->table, $key, 
+                sprintf('ispermitted(%s : %s%s) RETURNING for pk %d, OBJ famid [%s] , my famid [%d], force user [%s] force year [%s] perms [%s]', 
+                        $this->table, $key,
+                        $key == $this->pk ? ' [forcing view for PK!]' : '',
                         $this->obj->{$this->pk},
                         empty($this->obj->family_id) ? 
                         'NO FAMILY ID IN OBJECT' : $this->obj->family_id, 

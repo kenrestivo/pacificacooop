@@ -302,9 +302,8 @@ class coopForm extends CoopObject
 				$el->setValue($val);
 
 
-                //ok, perms stuff here now
-                // i only need 
-                if($perms < ACCESS_EDIT || $key == $this->pk) {
+                //only if they have perms
+                if($perms < ACCESS_EDIT ){
 					$frozen[] = $fullkey;
                 }
 

@@ -197,9 +197,8 @@ class Leads extends CoopDBDO
             $invites =& new CoopObject(&$co->page, 'invitations', &$co);
             $invites->linkConstraints();
             $co->protectedJoin($invites);
-            $res .= $co->alphaPager('last_name');
-            $res .= $co->simpleTable();
-            return $res;
+            $ap= $co->alphaPager('last_name');
+            return  $ap . $co->simpleTable(). $ap;
         }
 
 
