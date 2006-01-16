@@ -21,15 +21,19 @@ move the "label" query to a fb_var
 
 
 my js stuff! working interpreter now!
-	the 
+	and, show a summary somewhere, somehow
+		easiest is searchselect, with div
 	when you search, DO NOT remove the currently-chosen value!!
 
-
-navigation back link: only on last
 
 blow off pagetop completely
 	and use LOGIN like my template-friendly version
 	fix the CSS issues in exploiter too
+	separate out APP logic from PRESENTATION
+		the APP logic must occur in a certain order
+			the presentation logic is in a TOTALLY different order
+			shouldn't have anything to do with each other!
+
 
 
 BUGS
@@ -40,10 +44,6 @@ BUGS
 		best to programattically sort them, actually, first
 
 
-    edit is broken in my custom-weird box. why??!
-    	looks like js
-    	also, if i select NOTHING, the link should go away. js problem i expect.
-    		javascript sucks so bad, i can't handle it
     
 	also make sure the random solicitation people can't edit money
 
@@ -5626,3 +5626,8 @@ STACK IS STILL FUCKED UP!
 			pushing from homepage fucks shit up. big time.
 		no. problem was i needed to init stack at END of index.php page
 			and probably at the beginning too
+    edit is broken in my custom-weird box. why??!
+    	looks like js
+    	also, if i select NOTHING, the link should go away. js problem i expect.
+	    		javascript sucks so bad, i can't handle it
+			naw, js TOOLS suck so bad, that i fixed them. emacs now works!navigation back link: only on last

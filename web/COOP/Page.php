@@ -176,11 +176,12 @@ class coopPage
             /// TODO: yank HTML table and use CSS instead!
 			$tab =& new HTML_Table('width="100%"');
 
-			$tab->addRow(array(sprintf('<p><strong>%s</strong></p>', $this->heading),
-							 sprintf("<p>Logged in as: %s</p>", $u['username']) .
-                               $this->selfURL(array('value' =>"Log Out", 
+			$tab->addRow(array(sprintf('<strong>%s</strong>', $this->heading),
+							 sprintf("Welcome %s!<br />%s", 
+                                     $u['username'],
+                                     $this->selfURL(array('value' =>"Log Out", 
                                                     'par' => false,
-													'inside' =>'action=logout'))));
+													'inside' =>'action=logout')))));
 			
 			$res .= $tab->toHTML();
 

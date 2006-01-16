@@ -29,6 +29,8 @@ $atd =& $disp->handleStack();
 //in case of bug
 
 /// XXX i think this is the WRONG place for this
+// it should get inserted into the page template, then get rendered
+// really belongs at the very top header
 $cp->buffer($cp->stackPath());
 
 
