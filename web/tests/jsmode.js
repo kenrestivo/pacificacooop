@@ -435,4 +435,18 @@ w.combobox_invitations_lead_id.selectBox.cleanBox = function ()
 
 
 
+edlink = w.document.getElementById('subedit-invitations-family_id');
+ed = w.document.forms[0]['invitations-family_id'];
 
+
+
+eph=w.combobox_invitations_lead_id.editpermshidden;
+eph=w.document.getElementById('editperms-invitations-family_id');
+
+eph.value;
+eph.decoded;
+eval(eph.value);
+
+blah={"2":false, "3":true}
+
+ed.addEventListener('keyup',function(ev){processCustomSelect(this, 'families-family_id', 0)});

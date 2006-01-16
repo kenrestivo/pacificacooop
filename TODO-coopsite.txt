@@ -12,7 +12,44 @@ coop web database
 	python translation (pythonport.txt)
 
 
+move the "label" query to a fb_var
+	and use it wherever needed, i.e. companies, leads, territory details :-)
+		maybe even an override to linkdisplay?
+		AHA! labeldisplay?
+			maybe reports can use labeldisplay instead?
+			since they don't need to go in a popup
 
+
+my js stuff! working interpreter now!
+	the 
+	when you search, DO NOT remove the currently-chosen value!!
+
+
+navigation back link: only on last
+
+blow off pagetop completely
+	and use LOGIN like my template-friendly version
+	fix the CSS issues in exploiter too
+
+
+BUGS
+	the audit display of edit stuff, is WAY ugly on long files. fix diff
+	that solicit summary, should show view for debbie. why doesn't it?
+
+	what about alpha page thigns that begin with NOTHING
+		best to programattically sort them, actually, first
+
+
+    edit is broken in my custom-weird box. why??!
+    	looks like js
+    	also, if i select NOTHING, the link should go away. js problem i expect.
+    		javascript sucks so bad, i can't handle it
+    
+	also make sure the random solicitation people can't edit money
+
+
+ENTRY
+	fix UPS store: there are two of 'em, and that sucks
 
 
 export/print
@@ -60,24 +97,6 @@ printable page, or print button in tinymce
 ??PHP/JS
 a either-or chooser for JS. either leads or companies
 	hiding this is going to be challenging
-
-BUGS
-	that solicit summary, should show view for debbie. why doesn't it?
-
-	what about alpha page thigns that begin with NOTHING
-		best to programattically sort them, actually, first
-
-
-    edit is broken in my custom-weird box. why??!
-    	looks like js
-    	also, if i select NOTHING, the link should go away. js problem i expect.
-    		javascript sucks so bad, i can't handle it
-    
-	also make sure the random solicitation people can't edit money
-
-
-ENTRY
-	fix UPS store: there are two of 'em, and that sucks
 
 
 ???ENTRY

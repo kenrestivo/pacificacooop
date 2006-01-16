@@ -69,8 +69,12 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     this.populateEditperms = 
         function ()
         {
-            eval(this.editpermsname + ' =  this.matches.editperms');
-            
+            //NOTE! must eval the this.matches too, otherwise 'invalid label'
+            epm = this.matches.editperms;
+            this.editpermshidden.decoded = eval(epm);
+
+            // CLEAR OUT value! i am *not* going to unserialise this
+            this.editpermshidden.value  =  ""; 
         }
     
 // temporarily store the data in the object, then call populateBox to insert it
@@ -89,11 +93,13 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
                 return;
             }
             
-            //NOTE! must eval the this.matches too, otherwise 'invalid label'
+            //TODO: use mochikit json stuff
             eval('this.matches = ' + data.responseText);
             
+            //TODO: put the count found in here
+            this.status.innerHTML = 'Done';
             
-            if (!this.matches)
+            if (this.matches.data.length < 1)
             {
                 this.status.innerHTML= 'No matches for "' + 
                     this.searchBox.value + '".';
@@ -102,8 +108,6 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
                 return;
             }
             
-            //TODO: put the count found in here
-            this.status.innerHTML = 'Done';
             
             this.populateBox();
 
@@ -166,7 +170,7 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     this.searchBox = document.getElementsByName(searchBoxName)[0];
     this.selectBox = document.getElementsByName(selectBoxName)[0];
     this.status = document.getElementById('status-' + selectBoxName);
-    this.editpermsname = 'editperms_' + selectBoxName.replace(/-/g, '_');
+    this.editpermshidden = document.getElementById('editperms-' + selectBoxName);
 
     this.linkTableName = linkTableName;
     

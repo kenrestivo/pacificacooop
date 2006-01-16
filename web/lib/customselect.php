@@ -36,13 +36,14 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             //  need these for edit link
             $this->vals = $this->getValue();
 
+            $func = "processCustomSelect(this, '{$target_id}', 
+                                                {$this->showEditText})";
 
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
-                array('onchange' => 
-                      "processCustomSelect(this, '{$target_id}', 
-                                                {$this->showEditText})"));
-
+                array('onkeyup' => $func,
+                      'onchange' => $func));
+                      
              // TODO: WHEN i figure out how to remove the placeholder b4 saving
 //                if(count($this->vals) < 2){
 //                    $strHtmlSelected .= '<option value="">None</option>';
@@ -93,8 +94,9 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                                               'action' => 'edit',
                                               $target_id => $this->vals[0],
                                               'push' => $this->getName())));
-                    // TODO: add a hidden field with the JSON perms array
-                    // so it doesn't have to fetch it? or did i do this already?
+                    // editperms is the hidden field with the JSON perms array
+                    // so it doesn't have to fetch it
+                    // right now i add it in coopform, but i'd rather do it here
                 }            
 
                 if($this->sub->isPermittedField(null, true, true) >= ACCESS_ADD)
@@ -130,27 +132,27 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
             // rebuild the table/field because i can't use - in globals!
             // XXX this typeof is a hack to get around bug in httpunit
             // the right way would be to make this an onload or something
-            $js .= sprintf(
-                'window.onload = function (){ 
-                  eval(\'editperms_%s_%s = \' + document.getElementsByName(\'editperms-%s\')[0].value);
-                 }', 
-                $this->cf->table, $this->field,
-                $this->getName());
-
 
             // non-specific
             $js .= '
 /* begin javascript for HTML_QuickForm_customselect */
 function processCustomSelect(selectbox, target_id, showtext)
 {
-   edlink = document.getElementById("subedit-" + selectbox.name);
-   if(!edlink){
+   var edlink = document.getElementById("subedit-" + selectbox.name);
+   if(edlink == undefined){
         return;
    }
-   // XXX this is a global, and, that sucks
-   editperms = eval(\'editperms_\' + selectbox.name.replace(/-/g, \'_\'));
+   var edpermshidden = document.getElementById("editperms-" + selectbox.name);
+   if(edpermshidden == undefined){
+        return;
+   }
+    // instead of an onpageload
+   if(edpermshidden.decoded == undefined){
+       /// must put the fieldname INSIDE the eval when evaling a dict
+       eval("edpermshidden.decoded =" + edpermshidden.value);
+    }
 
-   if(selectbox.value > 0 && editperms[selectbox.value]){ 
+   if(selectbox.value > 0 && edpermshidden.decoded[selectbox.value]){ 
         edlink.className = "";
         // NOTE the THREE GODDAMNED BACKSLASHES HERE IN THE SOURCE CODE!!
         // to keep PHP from mangling it

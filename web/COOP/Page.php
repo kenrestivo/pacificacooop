@@ -626,6 +626,7 @@ class coopPage
                                  $co->table);
                 
             }
+            // TODO: instead of GO BACK, just make the last one a link
             return sprintf('<p>Navigation: %s %s</p>',
                            implode(' &gt; ', $res), 
                            count($res) > 1 ? $this->selfURL(

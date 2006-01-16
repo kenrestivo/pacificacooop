@@ -243,7 +243,8 @@ class coopForm extends CoopObject
                     $editperms =& $this->form->addElement(
                         'hidden',
                         'editperms-' . $fullkey,
-                        '{}');
+                        '{}',
+                        array('id' => 'editperms-' . $fullkey));
 
                     if($val || $type != 'searchselect'){
                         $opts = $sub->getLinkOptions($type == 'customselect', 
