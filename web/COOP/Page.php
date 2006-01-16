@@ -174,7 +174,7 @@ class coopPage
 			$u = getUser($this->auth['uid']);	// ugh.
 
 			return sprintf(
-                '<div><strong>%s</strong>&nbsp;Welcome %s!&nbsp;%s</div>', 
+                '<div><div style="font-weight: bold; float:left">%s</div><div style="text-align:right"><strong>Welcome %s!</strong><br>%s</div></div>', 
                 $this->heading,
                 $u['username'],
                 $this->selfURL(array('value' =>"Log Out", 
