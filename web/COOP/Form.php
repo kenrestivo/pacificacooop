@@ -304,7 +304,7 @@ class coopForm extends CoopObject
 
                 //ok, perms stuff here now
                 // i only need 
-                if($perms < ACCESS_EDIT ) {
+                if($perms < ACCESS_EDIT || $key == $this->pk) {
 					$frozen[] = $fullkey;
                 }
 
