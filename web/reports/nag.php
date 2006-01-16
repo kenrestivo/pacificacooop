@@ -525,7 +525,7 @@ function viewHack(&$cp)
 $cp = new coopPage( $debug);
 print $cp->pageTop();
 print $cp->topNavigation();
-
+print $cp->stackPath();
 
 $atd = new CoopView(&$cp, 'nags', $none);
 

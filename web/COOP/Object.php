@@ -741,33 +741,34 @@ group by user_id,table_name,field_name";
 
         }
     
-    function recurseJoin($stack)
-        {
-            /// TODO: do something!!
-        }
+//     function recurseJoin($stack)
+//         {
+//             /// TODO: do something!!
+//         }
     
     
-    
-    // predeforder is the RIGHT way to do it!
+   // predeforder is the RIGHT way to do it!
     // but, i did it the wrong way years ago. 
     // so, if it's not present, use fbfieldlabels instead
-            function reorder($things)
+    function reorder($things)
         {
-            if(!empty($this->obj->preDefOrder)){
-                foreach($this->obj->preDefOrder as $key){
-                    isset($things[$key]) && $sorted[$key] = $things[$key];
+            if(empty($this->obj->preDefOrder)){
+                if(!empty($this->obj->fb_fieldLabels)){
+                    $this->obj->preDefOrder = array_keys(
+                        $this->obj->fb_fieldLabels);
                 }
-                return $sorted;
             }
             
-            if(!empty($this->obj->fb_fieldLabels)){
-                foreach(array_keys($this->obj->fb_fieldLabels) as $key){
-                    isset($things[$key]) && $sorted[$key] = $things[$key];
-                }
-                return $sorted;
+            if(empty($this->obj->preDefOrder) ||
+                count($this->obj->preDefOrder < 1))
+            {
+                return $things;
             }
-
-            return $things;
+            
+            foreach($this->obj->preDefOrder as $key){
+                isset($things[$key]) && $sorted[$key] = $things[$key];
+            }
+            return $sorted;
         }
 
 

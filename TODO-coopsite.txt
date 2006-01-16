@@ -12,11 +12,8 @@ coop web database
 	python translation (pythonport.txt)
 
 
-shit, the reports don't have a navigation at all!
-	gotta fix that
-
-
 push live the label and predeforder stuff
+	maybe the new topnav if it passes css mustard
 
 
 my js stuff! working interpreter now!
@@ -5661,3 +5658,5 @@ move the "label" query to a fb_var
 	companies, leads... anything else so far?
 field order! i have ugly unsupported crap in my app. not good
 	twas easy
+shit, the reports don't have a navigation at all!
+	gotta fix that

@@ -20,7 +20,6 @@
 
 require_once('CoopPage.php');
 require_once('CoopView.php');
-require_once('CoopMenu.php');
 require_once('CoopForm.php');
 require_once('HTML/Table.php');
 
@@ -37,9 +36,8 @@ print $cp->pageTop();
 
 $atd = new CoopView(&$cp, 'families', $none);
 
-$menu =& new CoopMenu(&$cp);
-print $menu->topNavigation();
-
+print $cp->topNavigation();
+print $cp->stackPath();
 
 print "\n<hr /></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div id="centerCol">';

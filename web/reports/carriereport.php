@@ -241,10 +241,6 @@ order by Total desc
 				order by Payment_Type
 "
 					 		);
-
-
-
-
 	return $res;
 	 
 }
@@ -258,6 +254,7 @@ $cp = new coopPage( $debug);
 print $cp->pageTop();
 print $cp->topNavigation();
 
+print $cp->stackPath();
 
 $atd = new CoopView(&$cp, 'income', $none);
 
