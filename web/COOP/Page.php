@@ -626,14 +626,23 @@ class coopPage
                                  $co->table);
                 
             }
-            // TODO: instead of GO BACK, just make the last one a link
-            return sprintf('<p>Navigation: %s %s</p>',
-                           implode(' &gt; ', $res), 
-                           count($res) > 1 ? $this->selfURL(
-                               array('value'=>'Go Back',
-                                     'par' => false,
-                                     'inside' => array(
-                                         'pop' => 'true'))) : '');
+
+            $this->confessArray($res, 'stackpath before getting mangled', 4);
+
+            // instead of GO BACK, just make the last one a link
+            if(count($res) > 1){
+                $tmp = $res[count($res) - 1];
+                $res[count($res)-1] = $this->selfURL(
+                    array('value'=>$tmp,
+                          'par' => false,
+                          'inside' => array(
+                              'pop' => 'true')));
+            }
+
+            $this->confessArray($res, 'stackpath AFTER mangling', 4);
+
+            return sprintf('<p>Navigation: %s</p>',
+                           implode(' &gt; ', $res));
         }
 
     // gets the last stack item, IN PLACE t
