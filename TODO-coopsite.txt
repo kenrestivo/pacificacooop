@@ -13,9 +13,10 @@ coop web database
 	insurance, dammit
 
 
-PLEASE put the meeting and family chooser into the stack
-	ugly tho it is
-	on parent ed attendance
+add make-up table for parent ed
+	modeled on nag indulgences
+		KISS for now, but ultimately need to link stuff in
+			but that's a db nightmare
 
 
 add parent ed calculations to homepage
@@ -5794,3 +5795,16 @@ push the parent ed report live!
 build a very basic report, like solicit or enhancement
 	maybe use phptal NAW
 	details by family, np, standard coopview shit
+
+PLEASE put the meeting and family chooser into the stack
+	ugly tho it is
+	on parent ed attendance
+		bah, it was easy!
+the new really should grab the default from previous, for meeting and/or family
+	or, on new, PUSH the defaults
+	it needs to be a default that is BEFORE what's in the db, BEFORE REQUEST too
+		i can only setdefaults once though. drat.
+			injecting into the dbdo is evil, but it might work?
+	pregenerateform?
+	NO! EASY! go get it and stuff it into fb_defaults!!!
+		which is your first level of defaults, IIRC

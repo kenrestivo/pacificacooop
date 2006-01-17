@@ -45,6 +45,9 @@ class Parent_ed_attendance extends CoopDBDO
 
     function preGenerateForm(&$form)
         {
+            // a bit of a hack, since i don't push in links, i grab here
+            $prev =& $form->CoopForm->page->getPreviousStack();
+            $this->fb_defaults['calendar_event_id'] = $prev['calendar_event_id'];
 
             // XXXX this uses teh OLD pregen. doesn't use getlinkoptions
             // please rectify... or shitcan this whole thing anyway
@@ -66,8 +69,8 @@ class Parent_ed_attendance extends CoopDBDO
                 &$options);
             
             $this->fb_preDefElements['calendar_event_id'] = $el;
-			return $el;
-            
+
+
         }
 
     //link constraints: from here to parents to kids to enrollment

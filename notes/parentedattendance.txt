@@ -11,6 +11,9 @@ then, that meeting screen
 			POSTING what? json?
 				validation!!!
 					what rules am i using really
+					dupe check, what else?
+						can i modularise them?
+					or use qf... though that could really suck
 			how to report errors? 500? 400?
 		for now, just use json-rpc. post an ARRAY! the updated stuff
 			and let the server deal with it

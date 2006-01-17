@@ -109,7 +109,7 @@ class coopForm extends CoopObject
 			//$this->form->addElement('hidden', 'table', $this->table);
 
 
-			//set defaults for new
+			//set(clear!) defaults for new
 			if($this->id < 1){
 				$this->setDefaults();
 			}
@@ -609,6 +609,9 @@ class coopForm extends CoopObject
 	// XXX i don't like this. i need to set in object, not in form
 	// but where? if i'm populating from db, i don't want to clobber with this!
 	// maybe do like my fb_ stuff? if it's set, ignore it?
+    // SO HERE IS THE LOGIC: first default is system stuff (schoolyear/family)
+    // then whatever is in fbdefaults for the object (override with pregenerate)
+    // note that NEW forms have everything reset BEFORE this is called
 	function setDefaults()
 		{
 			$this->page->debug > 3 && confessObj($this->page, 
