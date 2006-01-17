@@ -59,45 +59,55 @@ class Invitations extends CoopDBDO
 
     function fb_display_view(&$co)
         {
-
-            $co->schoolYearChooser();
-
-            // families
-            $families[0] ='ALL';
-            $fam =& new CoopView(&$co->page, 'families', &$co);
-            $fam->constrainSchoolYear(true);
-            //$fam->debugWrap(2);
-            $fam->find(true); // go get, including any constraints/sorts
-            while($fam->obj->fetch()){
-                $families[$fam->obj->family_id] = $fam->obj->name;
-            }
-
-            if($co->perms[null]['group'] >= ACCESS_VIEW){
+            $ap = "";
+            // FAMILY AND ALPHABETIC CHOOSERS
+            if($co->isPermittedField() >= ACCESS_VIEW){
+                $co->schoolYearChooser();
+                
+                // families
+                $families[0] ='ALL';
+                $fam =& new CoopView(&$co->page, 'families', &$co);
+                $fam->constrainSchoolYear(true);
+                //$fam->debugWrap(2);
+                $fam->find(true); // go get, including any constraints/sorts
+                while($fam->obj->fetch()){
+                    $families[$fam->obj->family_id] = $fam->obj->name;
+                }
+                
+                
                 $famsel =& $co->searchForm->addElement('select', 'family_id', 
-                                               'Family', 
-                                               $families,
-                                               array('onchange' =>
-                                                     'this.form.submit()'));
-            }
+                                                       'Family', 
+                                                       $families,
+                                                       array('onchange' =>
+                                                             'this.form.submit()'));
+                // by default, no change button!
+                $co->searchForm->addElement('submit', 'savebutton', 'Change');
 
 
-            // by default, no change button!
-            $co->searchForm->addElement('submit', 'savebutton', 'Change');
+
                 
             
-            //COOL! this is the first place i am using vars->last
-            // this does the request stuff for me, doesn't it?
-            // i am a LITTLE worried about stomping on schoolyear tho
-            $co->searchForm->setDefaults(
-                array('family_id' => 
-                      $co->page->vars['last']['family_id']));
+                //COOL! this is the first place i am using vars->last
+                // this does the request stuff for me, doesn't it?
+                // i am a LITTLE worried about stomping on schoolyear tho
+                $co->searchForm->setDefaults(
+                    array('family_id' => 
+                          $co->page->vars['last']['family_id']));
             
-            if($famsel){
                 $bar = $famsel->getValue();
                 $family_id = $bar[0];
                 $co->page->vars['last']['family_id'] = $family_id;
-            }
 
+                // ALWAYS have either one or the other.
+                // no falling between the cracks here!
+                if($family_id > 0){
+                    $this->whereAdd(sprintf('%s.family_id = %d', 
+                                            $co->table,
+                                            $family_id));
+                } else {
+                    $ap = $co->alphaPager('last_name', 'leads');
+                }
+            }
 
             /// OK ALL DONE WITH THAT! now let's hep to it:
             $leads =  new CoopObject(&$co->page, 'leads', &$co);
@@ -106,9 +116,6 @@ class Invitations extends CoopDBDO
             
             $co->protectedJoin($leads, 'left');
             
-            $family_id && $this->whereAdd(sprintf('%s.family_id = %d', 
-                                                  $co->table,
-                                                  $family_id));
 
 
             // my nice little label preview
@@ -119,13 +126,6 @@ class Invitations extends CoopDBDO
             array_unshift($this->preDefOrder, 'lead_label');
             $this->fb_fieldsToUnRender = array('lead_id');
 
-            // only relevant for the big scary list
-            $ap = "";
-            if($co->isPermittedField() >= ACCESS_VIEW &&
-                $family_id < 1)
-            {
-                $ap = $co->alphaPager('last_name', 'leads');
-            }
             return $ap . $co->simpleTable() .$ap;
         }
 
