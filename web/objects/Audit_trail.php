@@ -40,6 +40,14 @@ class Audit_trail extends CoopDBDO
         'details' => 'What changed',
         'email_sent' => 'Email notification'
 		);
+	var $preDefOrder = array (
+		'table_name' ,
+		'index_id' ,
+		'audit_user_id', 
+		'updated' ,
+        'details' ,
+        'email_sent' 
+		);
 	var $fb_fieldsToRender = array ('audit_user_id', 'updated', 
                                     'email_sent', 'details');
     var $fb_recordActions = array();
@@ -153,10 +161,10 @@ class Audit_trail extends CoopDBDO
 
             /// DEAL WITH SUMMARY
             array_push($this->fb_fieldsToRender, 'summary');
-            // XXX ugly hack to prepend it to the beginning of the array
-            $this->fb_fieldLabels = array_merge(
-                array('summary' => 'Record Edited'),
-                $this->fb_fieldLabels);
+
+            $this->fb_fieldLabels['summary'] = 'Record Edited';
+            array_unshift($this->preDefOrder, 'summary');
+
             $this->selectAdd('index_id  as summary');
             $this->fb_displayCallbacks['summary'] = 'summarizeLink';
 

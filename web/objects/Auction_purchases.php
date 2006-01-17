@@ -69,7 +69,7 @@ order by variance desc",
                                  findSchoolYear()		  
                              ));
 
-            $this->fb_fieldsToRender = array('package_number', 
+            $this->preDefOrder = array('package_number', 
                                              'package_title', 
                                              'package_value',
                                              'variance',

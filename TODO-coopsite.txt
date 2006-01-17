@@ -1,21 +1,16 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
+	cleanups, code fixes, random goodies
+	json, REST, xmlrpc (subform.txt)
 	reports in phptal, or maybe json/rest/xmlrpc (reportnotes.txt)
 	sortable/searchable reports (searchfeature.txt)
-	json the subforms (subform.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	import the 20-year roster (20yearroster.txt)
 	insurance, dammit
 	python translation (pythonport.txt)
-
-
-bugs!
-	ANY report which uses ANY table which has a predeforder, IS NOW FUCKED UP
-		go through adn find them somehow
-	ANYWHERE '\->fieldLabels' is set, bah
 
 
 re-test with bugfixes!!
@@ -5666,3 +5661,9 @@ field order! i have ugly unsupported crap in my app. not good
 	twas easy
 shit, the reports don't have a navigation at all!
 	gotta fix that
+
+bugs!
+	ANY report which uses ANY table which has a predeforder, IS NOW FUCKED UP
+		go through adn find them somehow
+	ANYWHERE '\->fieldLabels' is set, bah
+	where is fieldsToRender used, if at all?

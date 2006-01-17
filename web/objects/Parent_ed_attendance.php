@@ -24,6 +24,25 @@ class Parent_ed_attendance extends CoopDBDO
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 
+
+	var $fb_linkDisplayFields = array('parent_id','calendar_event_id');
+	var $fb_fieldLabels = array (
+        'parent_id' => 'Co-Op Parent Attending',
+        'calendar_event_id' => 'Meeting',
+        'hours' => 'Hours attended'
+		);
+    var $fb_requiredFields = array ('parent_id', 'calendar_event_id');
+	var $fb_formHeaderText = 'Parent Education Meeting Attendance';
+	var $fb_shortHeader = 'Parent Ed';
+    
+    var $fb_joinPaths = array('school_year' => 'kids:enrollment');
+    var $fb_defaults = array('hours' => 3);
+	var $preDefOrder = array (
+        'parent_id' ,
+        'calendar_event_id',
+        'hours'
+		);
+
     function preGenerateForm(&$form)
         {
 
@@ -51,23 +70,8 @@ class Parent_ed_attendance extends CoopDBDO
             
         }
 
-
-    //TODO: link constraints: from here to parents to kids to enrollment
+    //link constraints: from here to parents to kids to enrollment
     //also need (for reports) links to calevent for sorting by date!
-
-	var $fb_linkDisplayFields = array('parent_id','calendar_event_id');
-	var $fb_fieldLabels = array (
-        'parent_id' => 'Co-Op Parent Attending',
-        'calendar_event_id' => 'Meeting',
-        'hours' => 'Hours attended'
-		);
-    var $fb_requiredFields = array ('parent_id', 'calendar_event_id');
-	var $fb_formHeaderText = 'Parent Education Meeting Attendance';
-	var $fb_shortHeader = 'Parent Ed';
-    
-    var $fb_joinPaths = array('school_year' => 'kids:enrollment');
-    var $fb_defaults = array('hours' => 3);
-
 	function fb_linkConstraints(&$co)
 		{
 
@@ -184,9 +188,8 @@ class Parent_ed_attendance extends CoopDBDO
             $family_id && $this->whereAdd(sprintf('parents.family_id = %d', 
                                     $family_id));
 
-            $this->fb_fieldLabels =  array_merge(array('name' => 'Co-Op Family'),
-                                                 $this->fb_fieldLabels);
-
+            $this->fb_fieldLabels['name'] = 'Co-Op Family';
+            array_unshift($this->preDefOrder, 'name');
 
 
             $this->selectAdd('families.name');
