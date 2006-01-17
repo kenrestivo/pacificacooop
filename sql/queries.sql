@@ -1835,8 +1835,9 @@ ORDER BY companies.company_name,companies.last_name,companies.first_name ;
 
 
 -------- parent ed attendance summary
-select  enrolled.name, 
-count(calendar_events.calendar_event_id) as meetings_required
+select distinct enrolled.name, 
+hours/3 as meetings_attended,
+count(distinct calendar_events.calendar_event_id) as meetings_required
 from calendar_events,
 (select distinct families.family_id, families.name, start_date, dropout_date
                     from families
@@ -1848,6 +1849,14 @@ from calendar_events,
                         or enrollment.dropout_date is null)
                     group by families.family_id
                     order by families.name) as enrolled
+left join (select sum(hours) as hours, family_id
+     from  parent_ed_attendance
+     left join parents    on parent_ed_attendance.parent_id = parents.parent_id
+     left join calendar_events 
+        on parent_ed_attendance.calendar_event_id = calendar_events.calendar_event_id
+     where school_year = '2005-2006'
+     group by family_id) as attended
+on attended.family_id = enrolled.family_id
 where school_year = '2005-2006' and event_id = 2
 and event_date >= start_date and  
     (event_date <= dropout_date or dropout_date is null)
@@ -1857,10 +1866,5 @@ order by enrolled.name
 ;
 
 
--- required meetings
-sum(hours)/3 as meetings_attended,
-left join parents on enrolled.family_id = parents.family_id
-left join parent_ed_attendance
-   on parent_ed_attendance.parent_id = parents.parent_id 
 
 --- EOF
