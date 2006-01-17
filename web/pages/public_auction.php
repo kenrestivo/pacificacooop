@@ -83,7 +83,7 @@ function sponsors(&$cp, $sy)
 			$sponsors .= sprintf("<li>%s</li>", $name);
 		}
 		$res .= sprintf(
-			'<p><b>%s Contributors</b> ($%.0f and above)</p><ul>%s</ul>', 
+			'<p><b>%s Contributors</b> <span class="small">($%.0f and above)</span></p><ul>%s</ul>', 
 			$level, $data['price'], $sponsors);
 		$sponsors ='';
 	}
@@ -181,8 +181,8 @@ $_SESSION['foo'] = 'foo';		// keep auth.inc happy
 
 
 $cp->title = "Springfest $sfyear"; 
-$cp->heading =	"Join us for Springfest $sfyear!"; 
 print $cp->header();
+print "<h2>Join us for Springfest $sfyear!</h2>"; 
 print "\n<hr /></div> <!-- end header div -->\n";
 
 print '<div id="leftCol">';
