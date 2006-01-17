@@ -101,7 +101,7 @@ class JSON_RPC_Server {
                     unset($funcs[$key]);
                 }
             }
-            return $funcs;
+            return array_values($funcs);
         }
 
 
