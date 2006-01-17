@@ -1836,8 +1836,9 @@ ORDER BY companies.company_name,companies.last_name,companies.first_name ;
 
 -------- parent ed attendance summary
 select distinct enrolled.name, 
-hours/3 as meetings_attended,
-count(distinct calendar_events.calendar_event_id) as meetings_required
+count(distinct calendar_events.calendar_event_id) - round(hours/3) as missed_meetings,
+count(distinct calendar_events.calendar_event_id) as meetings_required,
+hours/3 as meetings_attended
 from calendar_events,
 (select distinct families.family_id, families.name, start_date, dropout_date
                     from families
