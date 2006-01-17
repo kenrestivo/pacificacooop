@@ -1,12 +1,17 @@
+import ClientCookie
+
+from sys import path
+path.append('/mnt/www/restivo/py/jsonrpc')
+
+import jsonrpc
 
 #to log in
 uo=ClientCookie.urlopen('http://www/coop-dev?auth[uid]=8&auth[pwd]=tester')
 
 #the proxy
-sp=jsonrpc.ServiceProxy('http://www/coop-dev/dispatchproxy.php')
+sp=jsonrpc.ServiceProxy('http://www/coop-dev/api_server.php')
 
-sp2.echotest('foo')
+sp.ping('foo')
 
-sp2.throwPEARError()
 
-sp2.getPage()
+sp.getPage()
