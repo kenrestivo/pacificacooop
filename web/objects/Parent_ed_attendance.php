@@ -114,6 +114,9 @@ class Parent_ed_attendance extends CoopDBDO
         {
             $res = '';
 
+
+            // TODO: do as  with the invitation form, use existing sychooser
+
             /// THE CHOOSER FORM
             $syform =& new HTML_QuickForm($cp->table . 'chooser', false, false, 
                                           false, false, true);
@@ -186,8 +189,7 @@ class Parent_ed_attendance extends CoopDBDO
                 $co->page->vars['last']['family_id'] = $family_id;
             }
 
-            $res .= $syform->toHTML();
-
+            $co->searchForm =& $syform; // TODO: use this reference thruout
             
             $cal_id && $this->whereAdd(sprintf('%s.calendar_event_id = %d', 
                                     $co->table,

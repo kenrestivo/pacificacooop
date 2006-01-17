@@ -14,9 +14,7 @@ coop web database
 
 
 NOW! for invitations
-	family chooser-- in the stack, just like parented
 	show only invited names!
-	note her to edit in contacts not invites
 
 
 add make-up table for parent ed
@@ -5812,3 +5810,5 @@ the new really should grab the default from previous, for meeting and/or family
 	NO! EASY! go get it and stuff it into fb_defaults!!!
 		which is your first level of defaults, IIRC
 	um, a header maybe?
+	family chooser-- in the stack, just like parented
+	note her to edit in contacts not invites
