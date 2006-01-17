@@ -43,8 +43,9 @@ page.template_name  = 'debugtest'
 
 
 from posix import environ
-for j in ['%s: %s<br />' % i for i in environ.items()]:
-    page.raw_output.append(j)
+for i in environ.items():
+    page.raw_output.append('%s: %s<br />' % i )
+    
 
 
 

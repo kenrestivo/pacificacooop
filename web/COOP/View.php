@@ -791,7 +791,9 @@ class coopView extends CoopObject
 
             $res = "<h3>Detailed Permissions for {$this->obj->fb_formHeaderText}</h3>";
             $res .= $this->actionButtons();
+
             /// GETPERMS, AS CALCULATED
+            // TODO: format this a bit nicer, eh?
             $res .= sprintf("<pre>%s</pre>", print_r($this->perms, 1));
 
 
@@ -803,6 +805,12 @@ class coopView extends CoopObject
             $this->debugWrap(5);
             $targ->obj->fb_formHeaderText = 
                 "Total Permissions for {$this->obj->fb_formHeaderText}";
+            $targ->obj->fb_fieldLabels = array('table_name' => 'Table',
+                                            'field_name' => 'Field',
+                                            'cooked_user' => 'User Level',
+                                            'cooked_group' => 'Group Level',
+                                            'cooked_menu' => 'Menu Level',
+                                            'cooked_year' => 'Year Level');
             $targ->obj->query(sprintf($this->permsQuery,
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid'],
@@ -819,7 +827,7 @@ class coopView extends CoopObject
                 $this->page->userStruct['username'];
             $targ->obj->query(
                 sprintf('select max(user_level) as user_level, 
-max(group_level) as group_level,  max(year_level) as year_level, realm
+max(group_level) as group_level,  max(year_level) as year_level, short_description
 from user_privileges 
 left join realms on user_privileges.realm_id = realms.realm_id
 where user_id = %d 
@@ -829,6 +837,11 @@ order by realm',
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid']));
                     
+            $targ->obj->fb_fieldLabels = array('short_description' => 'Realm',
+                                            'user_level' => 'User Level',
+                                            'group_level' => 'Group Level',
+                                            'menu_level' => 'Menu Level',
+                                            'year_level' => 'Year Level');
             //confessObj($targ, 'targ');
             $res .= $targ->simpleTable(false);
 
@@ -858,7 +871,7 @@ where users_groups_join.user_id = %d
             $targ->obj->fb_formHeaderText = "Group Levels for ". 
                 $this->page->userStruct['username'];
             $targ->obj->query(
-                sprintf('select name as Group_Name, 
+                sprintf('select name,
 max(user_level) as user_level, 
 max(group_level) as group_level, 
 max(year_level) as year_level, 
@@ -875,6 +888,11 @@ order by realm',
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid']));
                     
+            $targ->obj->fb_fieldLabels = array('name' => 'Group',
+                                            'user_level' => 'User Level',
+                                            'group_level' => 'Group Level',
+                                            'menu_level' => 'Menu Level',
+                                            'year_level' => 'Year Level');
             //confessObj($targ, 'targ');
             $res .= $targ->simpleTable(false);
 
@@ -912,7 +930,7 @@ from report_permissions
 left join realms using (realm_id)
 order by report_name'));
                     
-            confessObj($targ, 'targ');
+            //confessObj($targ, 'targ');
             $res .= $targ->simpleTable(false);
 
 

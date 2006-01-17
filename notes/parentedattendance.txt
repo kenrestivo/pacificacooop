@@ -1,5 +1,8 @@
 parent ed attendance
 
+well for each family, their number of meetings depends on when they started!
+
+
 
 for fun, try building it as a command-line API
 	i like commandline apis
@@ -7,17 +10,33 @@ for fun, try building it as a command-line API
 	what about saving?
 		could do that individually, at least for the API
 
-	ALMOST the same as a straight coopobject felch, but not quite
-		hmm. maybe it *is* just coopobject/view queries?
-     	families [id] or [schoolyear]
-     		GET returns id, name of CURRENTLY ENROLLED
-     	attendance [schoolyear] [meetingid] [familynumber]
-     		GET returns list of families and meeting hours
-     		PUT/POST number of hours (requires meeting and family)
-     	meetings
-     		GET returns id, date, type
+	make it restful:
+		rest/  => returns  documentation on the API!
+		rest/[table]/   => everything in the table (perms? default constraint?)
+		rest/[table]/search?foo=bar&baz=quux  =>  all matches
+		rest/[table]/count   => total num records in db (perms? constraint?)
+		rest/[table]/count?foo=bar&baz=quux  =>  count of matches
+		rest/[table]/[id]       =>  single json record
+		rest/[table]/[id]?format=[label|html|json|xml]    =>  as label
+		rest/[table]/[id]/[subtable]/ => repeat as above!!
+	GET to get, POST to something with an id, to update, or to a table to NEW
+	use allyears to decide default schoolyear, just like in view
 
-     
+
+	so, in my parent ed example: rememmber, it's stateless!
+		a basic summary report shell, in html: queries.sql
+			optionally add in the required hours too, start/drop!
+			and some js for detail buttons
+		GET rest/parent_ed_attendance/search?family_id=some
+			HOW to deal with the links??
+			
+
+	
+	jeebus ther report is just group by in SQL		
+		
+
+
+	response format?
 
 
 per meeting form/report

@@ -51,7 +51,7 @@ class coopObject
                              'view' => 'View',
                              'edit'  => 'Edit');
     // used for getperms, and for report too. one place, no double-changing.
-    var $permsQuery = "select 
+    var $permsQuery = "select user_id,
 table_permissions.table_name, table_permissions.field_name,
 max(if((upriv.max_user <= table_permissions.user_level or
 table_permissions.user_level is null or table_permissions.user_level < 0), 

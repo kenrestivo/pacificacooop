@@ -1834,4 +1834,16 @@ ORDER BY companies.company_name,companies.last_name,companies.first_name ;
 
 
 
+-------- parent ed attendance summary
+select  families.name, sum(hours)/3 as meetings
+from parent_ed_attendance 
+left join parents on parent_ed_attendance.parent_id = parents.parent_id 
+left join families on parents.family_id  = families.family_id 
+left join calendar_events on calendar_events.calendar_event_id = parent_ed_attendance.calendar_event_id
+where school_year = '2005-2006'
+group by families.family_id
+order by families.name
+;
+
+
 --- EOF

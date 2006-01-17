@@ -1,2 +1,11 @@
-things that really really need to get cleaned up
+random things that really really need to get cleaned up
 
+
+??PHP
+blow off pagetop completely
+	and use LOGIN like my template-friendly version
+	fix the CSS issues in exploiter too
+	separate out APP logic from PRESENTATION
+		the APP logic must occur in a certain order
+			the presentation logic is in a TOTALLY different order
+			shouldn't have anything to do with each other!

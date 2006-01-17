@@ -1,35 +1,65 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	cleanups, code fixes, random goodies
-	json, REST, xmlrpc (subform.txt)
+	python translation (pythonport.txt)
 	reports in phptal, or maybe json/rest/xmlrpc (reportnotes.txt)
+	json, REST, xmlrpc (subform.txt)
 	sortable/searchable reports (searchfeature.txt)
+	cleanups and code fixes (cleanme.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	import the 20-year roster (20yearroster.txt)
 	insurance, dammit
-	python translation (pythonport.txt)
 
 
-re-test with bugfixes!!
-	push live the label and predeforder stuff
+
+margolis notes
+	maybe try his parent ed chooser thing too
+
+
+NOW! for invitations
+	family chooser?
+
+
+??PHP
+stick reports into the stack, somehow
+	maybe just a function in newdispatcher
+
+
+
+export/print
+	pear spreadsheetwriter
+		the easy way: just dump a fucking table of labels, already merged
+			with the response code in there
+
+	the standard view stuff, minus pager
+	grab from last
+		in fact, grab EVERYTHING from last. s/b easy
+	default: export whatever columns are in the result set
+		unless there is a callback or columnlist
+		using toarray to format them
+	print-as-labels callback, if available?
+	vagaries: special crap like honouring do not contact?
+		don't deal with that now,  but will have to
+	and an excel export, which i think i've done
+		in perl. try python now!
+			fuck, this really wouldn't be too hard in PHP anyway
+		ah, the labelprinted stuff! important!
+    	i.e. show a report, then some way to tag them as labelprinted
+    		pick/choose date label printed too, or none
+    		it's a searchable report, basically!
+    	and, the "export to excel" just re-does that query as an excel export!
+    		this is where mvc is cool. controller is same, view is different
+    			excel view, web view
+    play with exporter/pythonpoint
+    	for labels, and packaging stuff
+    
 
 
 my js stuff! working interpreter now!
 	show a label or field:value summary somewhere, somehow
 		easiest is searchselect, with div
-	when you search, DO NOT remove the currently-chosen value!!
-		for some reason, this was endless-looping. why?
-
-blow off pagetop completely
-	and use LOGIN like my template-friendly version
-	fix the CSS issues in exploiter too
-	separate out APP logic from PRESENTATION
-		the APP logic must occur in a certain order
-			the presentation logic is in a TOTALLY different order
-			shouldn't have anything to do with each other!
 
 
 
@@ -49,39 +79,6 @@ ENTRY
 	fix UPS store: there are two of 'em, and that sucks
 
 
-export/print
-	pear spreadsheetwriter
-	the standard view stuff, minus pager
-	grab from last
-		in fact, grab EVERYTHING from last. s/b easy
-	default: export whatever columns are in the result set
-		unless there is a callback or columnlist
-		using toarray to format them
-	print-as-labels callback, if available?
-	vagaries: special crap like honouring do not contact?
-		don't deal with that now,  but will have to
-
-
-play with exporter/pythonpoint
-	for labels, and packaging stuff
-
-
-NOW! for invitations
-	family chooser?
-	and an excel export, which i think i've done
-		in perl. try python now!
-			fuck, this really wouldn't be too hard in PHP anyway
-		ah, the labelprinted stuff! important!
-    	i.e. show a report, then some way to tag them as labelprinted
-    		pick/choose date label printed too, or none
-    		it's a searchable report, basically!
-    	and, the "export to excel" just re-does that query as an excel export!
-    		this is where mvc is cool. controller is same, view is different
-    			excel view, web view
-
-
- 
-    
 
 ??? PHP
 sponsorships fix
@@ -139,14 +136,6 @@ add END dates to calendar events!!
 	show start-end as needed in summaries
 
 
-
-???PHP
-alumni invite!
-	add all of last years' alumni!
-		basically, all the alumni invited last year, unless they're already in
-	also all of last year's PARENTS, who are now alumni-- gah
-		i have a script to do this already
-	de-dupe?
 
 
 
@@ -583,6 +572,18 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+???PHP/SQL
+de-dupe interface
+	find all records, for each, look for matches, various types
+		count them first, don't GET them
+	let the user then go fish them out, and have a look
+	pick a master (radiobutton?)
+		and checkbox for all which are duplicates
+		then DE-DUPE!
+	de-dupe back-end will go get all the references to non-match
+		and merge them in
+	
 
 ??PHP/SQL
 maybe reports can use labeldisplay instead?
@@ -3246,6 +3247,25 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+	ALMOST the same as a straight coopobject felch, but not quite
+		hmm. maybe it *is* just coopobject/view queries?
+     	families [id] or [schoolyear]
+     		GET returns id, name of CURRENTLY ENROLLED
+     	attendance [schoolyear] [meetingid] [familynumber]
+     		GET returns list of families and meeting hours
+     		PUT/POST number of hours (requires meeting and family)
+				validation? form?
+     	meetings
+     		GET returns id, date, type
+
+	let's try an API condom
+		i don't want people accessing low-level shit anyway
+		and, the things they need aren't in there. why clutter it up?
+		can i generalise the above?
+			GET, with id and **kv for sql constraints
+			SET, 
+		maybe an API_get() in each object?
 	makesponsorships linkconstraint is fuxored-- ambiguous schoolyear?
 		where do i whereadd schoolyear WITOUT a column?
 			NOWHERE: i needed sponsorships records for this year and had none
@@ -5667,3 +5687,83 @@ bugs!
 		go through adn find them somehow
 	ANYWHERE '\->fieldLabels' is set, bah
 	where is fieldsToRender used, if at all?
+	when you search, DO NOT remove the currently-chosen value!!
+		for some reason, this was endless-looping. why?
+			doh. it was deleting the same one over and over. needed to SAVE the thing first. and the decoded privs toore-test with bugfixes!!
+	push live the label and predeforder stuff
+
+???PHP
+alumni invite!
+	add all of last years' alumni!
+		basically, all the alumni invited last year, unless they're already in
+	also all of last year's PARENTS, who are now alumni-- gah
+		i have a script to do this already
+	twas easy
+	     jsonrpc problems... any notices cause the whole thing to puke!
+
+add to jsonrpc auto-adding of methods
+	make the jsonrpc.js introspect classes (get methods?) instead of specifying
+	copy/paste from jsmode
+	not quite working yet
+
+stack stuff
+	i can get a constipated stack. how to cleanse?
+	should hitting the index page wipe out the stack?
+	i think i fixed this already. test case?
+		done. cooppage does it
+
+??JS/PHP
+let them hit return to initiate a search?
+	on key? look at flexac
+	when hitting return before running a search
+	use my new interpreter to see what's going on there
+Source File: http://www/coop-dev/lib/flexac/kenflex.js
+Line: 61
+	STUCK: got to redesign combobox, make it OOP, in BELOW THE LINE!
+		done
+
+
+??JS/PHP
+fix combobox to make it OOP, add keydown events
+	don't use the global, make it a proper constructor
+	construct one for each combo, named after the selectbox
+		in tohtml, not getjs. why? because it'll be one for each
+		make sure getjs is getting called first, so its settings get set.
+	onchange methods should just call nameofglobal.fetchData() or something
+	the constructor is where keydown/up events get added!
+		done
+
+
+edit link must go away if there is nothing in the box!
+	why is edit link not hidden, when nothing selected?
+	javascript tweekage, execution order issue
+	done
+
+
+make 'enter' in the field do the search
+	tab works, but the arrows, etc, would be nice too
+		done
+note i have an onchange/onclick collision!
+	customselect has processcustomselect, i have setstatus
+	addeventlistener!
+	done
+
+
+test with FF, and exploiter too
+	before pushing live, make sure exploiter is ok with it
+		done
+
+
+Services_JSON seems to reccomend  $GLOBALS['HTTP_RAW_POST_DATA'];
+	which  how jsolait sends stuff
+
+integrate with QF and CoopForm!
+	start out with a pregenerateform
+		then integrate it into a customjsonselect
+    in coopform->addAndFillVars
+    	if linkdisplay, break out the dispatching
+    		do the link find
+    			if N > 50 or so, use jsoneselectbox
+    				load the javascript needed.
+    		otherwise use old customselect
+		done

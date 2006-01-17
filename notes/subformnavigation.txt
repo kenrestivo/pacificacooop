@@ -45,11 +45,6 @@ attempt to implement subform.. as an ajax
 
 
 
-add to jsonrpc auto-adding of methods
-	make the jsonrpc.js introspect classes (get methods?) instead of specifying
-	copy/paste from jsmode
-	not quite working yet
-
 
 big question: if i json it, how do i deal with input validation?
 	i have to go back to what i had. with some hidden var, showing which
@@ -64,12 +59,6 @@ json housekeeping
 	multiple classes: how to do it?
 		with .'s?
 			look at the python stuff
-
-
-stack stuff
-	i can get a constipated stack. how to cleanse?
-	should hitting the index page wipe out the stack?
-	i think i fixed this already. test case?
 
 
 ?? PHP
@@ -108,6 +97,7 @@ well first of all, THE VIEW/DETAILS SHOUDL PUSH!
 ???PHP JSON-RPC
 	do the jsonclass: hint, for all objects!
 		aha! it's a path to the class, useful for python
+			MONKEYPATCHING!
 		jsonrpcObj.__proto__ = (new Error).__proto__ seems to do 
  		jsonrpcObj.__proto__ = Error.prototype
 			look at how jsolait does it too. and/or htmlajax

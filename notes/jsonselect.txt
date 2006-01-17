@@ -1,46 +1,5 @@
-json select box notes
+json stuff
 
-
-
-??JS/PHP
-let them hit return to initiate a search?
-	on key? look at flexac
-	when hitting return before running a search
-	use my new interpreter to see what's going on there
-Source File: http://www/coop-dev/lib/flexac/kenflex.js
-Line: 61
-	STUCK: got to redesign combobox, make it OOP, in BELOW THE LINE!
-
-
-??JS/PHP
-fix combobox to make it OOP, add keydown events
-	don't use the global, make it a proper constructor
-	construct one for each combo, named after the selectbox
-		in tohtml, not getjs. why? because it'll be one for each
-		make sure getjs is getting called first, so its settings get set.
-	onchange methods should just call nameofglobal.fetchData() or something
-	the constructor is where keydown/up events get added!
-
-
-
-
-edit link must go away if there is nothing in the box!
-	why is edit link not hidden, when nothing selected?
-	javascript tweekage, execution order issue
-
-
-
-make 'enter' in the field do the search
-	tab works, but the arrows, etc, would be nice too
-
-note i have an onchange/onclick collision!
-	customselect has processcustomselect, i have setstatus
-	addeventlistener!
-
-
-
-test with FF, and exploiter too
-	before pushing live, make sure exploiter is ok with it
 
 
 how to deal with duplicates?
@@ -58,9 +17,6 @@ make the box bigger
 maybe render subforms by shipping them (minus their form tags) via json?
 
 
-
-Services_JSON seems to reccomend  $GLOBALS['HTTP_RAW_POST_DATA'];
-	which  how jsolait sends stuff
 		
 
 
@@ -73,14 +29,4 @@ json selectbox
 
 don't let the flexac.css override my font. keep what's already there!
 
-
-integrate with QF and CoopForm!
-	start out with a pregenerateform
-		then integrate it into a customjsonselect
-    in coopform->addAndFillVars
-    	if linkdisplay, break out the dispatching
-    		do the link find
-    			if N > 50 or so, use jsoneselectbox
-    				load the javascript needed.
-    		otherwise use old customselect
 

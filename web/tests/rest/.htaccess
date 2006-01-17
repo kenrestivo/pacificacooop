@@ -1,2 +1,2 @@
 RewriteEngine On
-RewriteRule  (^.*$)  ../restful.php/$1 [L]
+RewriteRule  (^.*$)  ../restful.py/$1 [L]

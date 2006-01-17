@@ -28,7 +28,8 @@ class Companies_auction_join extends CoopDBDO
 									  'company_id');
 
 	var $fb_fieldLabels = array ('auction_donation_item_id' => 'Auction Item',
-                                 'company_id' => 'Solicitation Company');
+                                 'company_id' => 'Solicitation Company',
+                                 'family_id' => 'Soliciting Family');
 
 	var $fb_formHeaderText =  'Springfest Solicitation Auction Donation Items';
 

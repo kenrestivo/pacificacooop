@@ -71,6 +71,7 @@ class JSON_RPC_Server {
         }
 
     // eventually take class as an argument
+    // XXX this function name is like this for json-rpc standard reasons?
     function methodList()
         {
             return $this->_getMethodsToExport();
@@ -243,7 +244,7 @@ class JSON_RPC_Server {
     function _errorHandler($errno, $errstr, $errfile, $errline) 
         {
             // do NOT stop for notices!!
-            if ($errno != E_NOTICE) {
+            if ($errno != E_NOTICE && $errno != E_USER_NOTICE) {
             
                 $this->response['error'] = $errstr;
 
