@@ -40,13 +40,19 @@ class ExposeAPI {
 
 
 
-    function getVars($tablename, $do = false)
+    function getObjectVars($tablename, $do = false)
         {
             $co =& new CoopObject(&$this->page, $tablename, &$nothing);
             return $do? get_object_vars($co->obj) : get_object_vars($co) ;
         }
 
 
+    function getClassVars($tablename, $do = false)
+        {
+            $co =& new CoopObject(&$this->page, $tablename, &$nothing);
+            return $do? get_class_vars(get_class($co->obj)) : 
+                get_class_vars(get_class($co)) ;
+        }
 
 
 } // end test class
