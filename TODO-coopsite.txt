@@ -1,10 +1,10 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
+	sortable/searchable views (searchfeature.txt)
 	python translation LOGGING (pythonport.txt)
 	reports in phptal, or maybe json/rest/xmlrpc (reportnotes.txt)
 	json, REST, xmlrpc (jsonselect.txt)
-	sortable/searchable reports (searchfeature.txt)
 	cleanups and code fixes (cleanme.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
@@ -13,27 +13,26 @@ coop web database
 	insurance, dammit
 
 
-push the parent ed report live!
+PLEASE put the meeting and family chooser into the stack
+	ugly tho it is
+	on parent ed attendance
 
 
 add parent ed calculations to homepage
 
 margolis notes-- read and reply
-	maybe try his parent ed chooser thing too
+
 
 
 NOW! for invitations
 	show only invited names!
-	family chooser?
-	easier editor? json perhaps?
+	family chooser-- in the stack
+	note her to edit in contacts not invites
 
 
 ??PHP
 stick reports into the stack, somehow
 	maybe just a function in newdispatcher
-
-
-
 
 
 export/print
@@ -74,6 +73,13 @@ my js stuff! working interpreter now!
 		easiest is searchselect, with div
 
 
+??PHP
+audit trails are a botch. formatting!
+	go through and strip all tags/html from these fuckers
+	and do it for each save too
+		canonical fuckup is
+			http://www/coop-dev/generic.php?table=audit_trail&realm=19
+
 
 BUGS
 	the audit display of edit stuff, is WAY ugly on long files. fix diff
@@ -110,13 +116,6 @@ a either-or chooser for JS. either leads or companies
 		and the gui version of the treasurer's description perhaps?
 
 
-
-??PHP
-audit trails are a botch. formatting!
-	go through and strip all tags/html from these fuckers
-	and do it for each save too
-		canonical fuckup is
-			http://www/coop-dev/generic.php?table=audit_trail&realm=19
 
 	
 
@@ -5790,3 +5789,8 @@ jeebus ther report is just group by in SQL
 
 		a basic summary report shell, in html: queries.sql
 			optionally add in the required hours too, start/drop!
+push the parent ed report live!
+
+build a very basic report, like solicit or enhancement
+	maybe use phptal NAW
+	details by family, np, standard coopview shit

@@ -1,8 +1,6 @@
 parent ed attendance
 
-build a very basic report, like solicit or enhancement
-	maybe use phptal
-	details by family, np, standard coopview shit
+FIX THE SESSION SHIT!!
 
 
 then, that meeting screen
@@ -10,6 +8,13 @@ then, that meeting screen
 	list of families, sub by parents, and 3 checkboxes
 	SAVE will do what?
 		calculate differences, and save those
+			POSTING what? json?
+				validation!!!
+					what rules am i using really
+			how to report errors? 500? 400?
+		for now, just use json-rpc. post an ARRAY! the updated stuff
+			and let the server deal with it
+
 
 
 for fun, try building it as a command-line API
