@@ -27,29 +27,29 @@ class ExposeAPI {
 
     function execute($tablename, $method, $args = null)
         {
-            $co =& new CoopObject(&$this->page, $tablename, &$nothing);
+            $co =& new CoopView(&$this->page, $tablename, &$nothing);
             return call_user_func_array(array($co, $method), $args);
         }
 
 
-    function getMethods($tablename, $do = false)
+    function get_methods($tablename, $do = false)
         {
-            $co =& new CoopObject(&$this->page, $tablename, &$nothing);
+            $co =& new CoopView(&$this->page, $tablename, &$nothing);
             return $do ? get_class_methods($co->obj) : get_class_methods($co) ;
         }
 
 
 
-    function getObjectVars($tablename, $do = false)
+    function get_object_vars($tablename, $do = false)
         {
-            $co =& new CoopObject(&$this->page, $tablename, &$nothing);
+            $co =& new CoopView(&$this->page, $tablename, &$nothing);
             return $do? get_object_vars($co->obj) : get_object_vars($co) ;
         }
 
 
-    function getClassVars($tablename, $do = false)
+    function get_class_vars($tablename, $do = false)
         {
-            $co =& new CoopObject(&$this->page, $tablename, &$nothing);
+            $co =& new CoopView(&$this->page, $tablename, &$nothing);
             return $do? get_class_vars(get_class($co->obj)) : 
                 get_class_vars(get_class($co)) ;
         }
