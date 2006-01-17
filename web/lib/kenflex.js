@@ -71,7 +71,8 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
         {
             //NOTE! must eval the this.matches too, otherwise 'invalid label'
             epm = this.matches.editperms;
-            this.editpermshidden.decoded = eval(epm);
+            this.editpermshidden.decoded = update(this.editpermshidden.decoded, 
+                                                  eval(epm));
 
             // CLEAR OUT value! i am *not* going to unserialise this
             this.editpermshidden.value  =  ""; 
@@ -185,21 +186,35 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
         eval('this.' +i+ ' = comboboxsettings.' +i);
     }
 
-    // utility function i'll need later
-    this.selectBox.cleanBox = function ()
-        {
-            for ( i=this.length; this.length> 0; i--) {
-                // UNLESS it is selected!! XXX this causes an endless loop
-                //if(this.selectedIndex != i){
-                this.remove(i);
-                    //}
-            }
-            
-        }
     var self = this; // needed for callbacks and reflection!
     this.selectBox.combobox=self;
     this.searchBox.combobox=self;
     this.status.combobox=self;
+
+
+    eval('self.editpermshidden.decoded = ' +self.editpermshidden.value);
+
+
+
+    // utility function i'll need later
+    this.selectBox.cleanBox = function ()
+        {
+
+            saver=this.options[this.selectedIndex];
+            saveperms = {};
+            saveperms[String(saver.value)] = self.editpermshidden.decoded[saver.value];
+            for ( i=this.length; this.length> 0; i--) {
+                this.remove(i);
+            }
+
+            this.options[0] = saver;
+            this.selectedIndex = 0;
+            
+            
+
+        }
+
+
 
     // add my callbacks for key handling
     EventUtils.addEventListener(this.searchBox, 'keyup', 

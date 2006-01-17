@@ -299,7 +299,7 @@ class Audit_trail extends CoopDBDO
             $res = "";
 
             $res .= $co->page->jsRequireOnce('lib/MochiKit/MochiKit.js',
-                                     'MOCHIKIT_EXISTS');
+                                     'INCLUDE_MOCHIKIT');
 
             
             $res .= $co->page->jsRequireOnce('lib/send_email.js', 

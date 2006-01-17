@@ -21,7 +21,7 @@ my js stuff! working interpreter now!
 	show a label or field:value summary somewhere, somehow
 		easiest is searchselect, with div
 	when you search, DO NOT remove the currently-chosen value!!
-
+		for some reason, this was endless-looping. why?
 
 blow off pagetop completely
 	and use LOGIN like my template-friendly version

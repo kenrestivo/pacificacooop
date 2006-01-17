@@ -92,11 +92,13 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
                        $jspath),
                'INCLUDE_EVENTUTILS');
   
+         $res .= $this->cf->page->jsRequireOnce('lib/MochiKit/MochiKit.js',
+                                          'INCLUDE_MOCHIKIT');
          
          $res .= $this->cf->page->jsRequireOnce(
                sprintf('%s/kenflex.js' , 
                        $jspath),
-               'HTML_QUICKFORM_SEARCHSELECT_EXISTS');
+               'INCLUDE_KENFLEX');
            
 
            

@@ -453,3 +453,28 @@ ed.addEventListener('keyup',function(ev){processCustomSelect(this, 'families-fam
 
 // MUCH simpler way of doing regexps!
 'foobah'.replace(/foo(\w+)/g, '$1ee')
+
+
+//////////
+sb=w.combobox_invitations_lead_id.selectBox;
+saver=sb.options[sb.selectedIndex];
+sv=sb.combobox.editpermshidden.decoded[saver.value];
+saveperms = {saver.value: sv};
+
+for ( i=sb.length; sb.length> 0; i--) {
+    sb.remove(i);
+}
+sb.options[0] = saver;
+sb.selectedIndex = 0;
+
+
+////// 
+foo={'bar': 'baz','fart':'belch'};
+bar={'aah': 'pook'};
+extend(foo, bar);
+foo=update(foo, bar);
+
+
+
+
+
