@@ -1859,9 +1859,26 @@ order by enrolled.name
 
 
 
-left join (select count(calendar_event_id) 
-from calendar_events wh
-) as meetings_since
+select enrolled.name, count(calendar_event_id) 
+from 
+(select distinct families.family_id, families.name, 
+                        start_date, dropout_date
+                    from families
+                        left join kids on families.family_id = kids.family_id 
+                        left join enrollment on kids.kid_id = enrollment.kid_id 
+                    where enrollment.school_year = "2005-2006"
+                    and (enrollment.dropout_date < "1900-01-01"
+                       or enrollment.dropout_date > "2006-01-06"
+                        or enrollment.dropout_date is null)
+                    group by families.family_id
+                    order by families.name) as enrolled
+left join calendar_events
+on event_date >= start_date and  
+    (event_date <= dropout_date or dropout_date is null)
+where school_year = '2005-2006' and event_id = 2
+group by enrolled.family_id
+order by enrolled.name
+;
 
 
 --- EOF
