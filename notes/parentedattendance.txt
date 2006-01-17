@@ -1,0 +1,94 @@
+parent ed attendance
+
+
+for fun, try building it as a command-line API
+	i like commandline apis
+		like my eventumbot thing
+	what about saving?
+		could do that individually, at least for the API
+
+	ALMOST the same as a straight coopobject felch, but not quite
+		hmm. maybe it *is* just coopobject/view queries?
+     	families [id] or [schoolyear]
+     		GET returns id, name of CURRENTLY ENROLLED
+     	attendance [schoolyear] [meetingid] [familynumber]
+     		GET returns list of families and meeting hours
+     		PUT/POST number of hours (requires meeting and family)
+     	meetings
+     		GET returns id, date, type
+
+     
+
+
+per meeting form/report
+	prototype it, just for fun, using phptal
+	meeting chooser at top (the one in the displayview might work!)
+	list of families with parents underneath
+		that's a phptal thing
+	finally the three dots-- checkboxes for now, keep it simple
+	
+	hey, maybe i don't need phptal at all?
+		saving? how?
+
+
+the neat margolis funky attendance form/report
+	FAMILIES alphabetical
+	use phptal
+	first just show a report with all the families and what they owe	
+
+
+
+margolis has an interesting idea
+	for parent ed attendance, show ALL attendance for one meeting
+		with checkboxes. check all, uncheck all
+		javascript: hide the actual hours, use checkboxes instead
+	at save time, save for the ENTIRE meeting
+		at least everyone who was enrolled at that time (start/drop dates)
+		you'd have to go through and look at which changed, save them only if
+		and of course INSERT for any parents who didn't have attendance
+	this'd be a wacky custom form, having little/nothing to do with coopform
+		might be fun playign with it!
+	i don't think pear is right for this. XUL?
+
+????
+	get that javascript listener shit for firefox going with emacs!
+	to talk to my own custom thing
+
+
+this WILL BE the view for parentedattendance IFF the user has group >= VIEW
+
+10 minutes
+	chooser for parent ed meeting (same popup that is in parentedattendance DBO)
+
+1 hour
+	custom html table
+	for each enrolled family (standard families query with the linkconstraints!)
+		show each parent, and their attendance for that meeting, if any
+
+
+
+attendance will be 3 checkboxes
+	optional: with a "check/uncheck all" button
+	this is pure javascript (look at advcheckbox and my add/remove thing)	
+	hidden field for hours
+
+
+2 hours
+
+	who's missing report: all enrolled parents, all meetings to date
+	
+	try thinking in terms of sets
+
+	parent ed attendance  report, similar to enhancement nag SQL
+		i think i'll be mangling it, using php not sql
+		i have to first get all the meetings to date
+
+	display_view subselect: grab all the meetings up to this date SQL
+		then sum the hours for each family!.... maybe hilite any nulls
+		and, only show those that having < 3 hours
+
+ 	alert needs to calculate how many meetings so far, based on date/sy SQL
+		then compare attendance to that date
+		gah, do it in sql.
+		subselect
+
