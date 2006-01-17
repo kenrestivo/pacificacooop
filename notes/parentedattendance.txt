@@ -1,7 +1,15 @@
 parent ed attendance
 
-well for each family, their number of meetings depends on when they started!
+build a very basic report, like solicit or enhancement
+	maybe use phptal
+	details by family, np, standard coopview shit
 
+
+then, that meeting screen
+	meeting chooser at top
+	list of families, sub by parents, and 3 checkboxes
+	SAVE will do what?
+		calculate differences, and save those
 
 
 for fun, try building it as a command-line API
@@ -24,16 +32,14 @@ for fun, try building it as a command-line API
 
 
 	so, in my parent ed example: rememmber, it's stateless!
-		a basic summary report shell, in html: queries.sql
-			optionally add in the required hours too, start/drop!
 			and some js for detail buttons
 		GET rest/parent_ed_attendance/search?family_id=some
 			HOW to deal with the links??
 			
 
 	
-	jeebus ther report is just group by in SQL		
-		
+
+				
 
 
 	response format?

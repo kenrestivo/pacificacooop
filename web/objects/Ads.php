@@ -73,6 +73,10 @@ class Ads extends CoopDBDO
    );
 
 
+//TODO: a form rule to either/or the company/invitee
+    // better still: a choose box to pick which one
+
+
 // set ad_copy lines = 3
 
 }

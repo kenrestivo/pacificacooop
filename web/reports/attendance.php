@@ -50,6 +50,7 @@ function viewHack(&$atd)
 
     $res = '';
 
+    // TODO: a nag only, like in enhancement
     
     $view =& new CoopView(&$atd->page, 'families', &$faketop);
 	$view->obj->fb_formHeaderText = 'Parent Ed Attendance';
