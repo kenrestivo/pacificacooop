@@ -817,6 +817,7 @@ class coopView extends CoopObject
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid'],
                                       $this->table));
+            $targ->obj->fb_recordActions = array();
             $res .= $targ->simpleTable(false);
 
 
@@ -836,7 +837,8 @@ order by realm',
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid']));
-                    
+              
+            $targ->obj->fb_recordActions = array();
             $targ->obj->fb_fieldLabels = array('short_description' => 'Realm',
                                             'user_level' => 'User Level',
                                             'group_level' => 'Group Level',
@@ -850,6 +852,7 @@ order by realm',
 
             /// GROUP MEMBERSHIP
             $targ =& new CoopView(&$this->page, 'groups', &$this);
+            $targ->obj->fb_recordActions = array();
             $targ->obj->fb_formHeaderText = "Groups for ". 
                 $this->page->userStruct['username'];
 
@@ -868,6 +871,7 @@ where users_groups_join.user_id = %d
 
             ///// GROUPS, that user belongs to
             $targ =& new CoopView(&$this->page, 'groups', &$this);
+            $targ->obj->fb_recordActions = array();
             $targ->obj->fb_formHeaderText = "Group Levels for ". 
                 $this->page->userStruct['username'];
             $targ->obj->query(
@@ -875,7 +879,7 @@ where users_groups_join.user_id = %d
 max(user_level) as user_level, 
 max(group_level) as group_level, 
 max(year_level) as year_level, 
- realm
+ short_description
 from user_privileges 
 left join realms on user_privileges.realm_id = realms.realm_id
 left join groups on groups.group_id = user_privileges.group_id
@@ -889,10 +893,11 @@ order by realm',
                                       $this->page->auth['uid']));
                     
             $targ->obj->fb_fieldLabels = array('name' => 'Group',
-                                            'user_level' => 'User Level',
-                                            'group_level' => 'Group Level',
-                                            'menu_level' => 'Menu Level',
-                                            'year_level' => 'Year Level');
+                                               'short_description' => 'Realm',
+                                               'user_level' => 'User Level',
+                                               'group_level' => 'Group Level',
+                                               'menu_level' => 'Menu Level',
+                                               'year_level' => 'Year Level');
             //confessObj($targ, 'targ');
             $res .= $targ->simpleTable(false);
 
@@ -914,7 +919,8 @@ order by table_name,field_name;
 ',
                                       $this->table));
                     
-            confessObj($targ, 'targ');
+            $targ->obj->fb_recordActions = array();
+            //confessObj($targ, 'targ');
             $res .= $targ->simpleTable(false);
 
 
@@ -930,6 +936,7 @@ from report_permissions
 left join realms using (realm_id)
 order by report_name'));
                     
+            $targ->obj->fb_recordActions = array();
             //confessObj($targ, 'targ');
             $res .= $targ->simpleTable(false);
 
