@@ -13,22 +13,25 @@ coop web database
 	insurance, dammit
 
 
+NOW! for invitations
+	family chooser-- in the stack, just like parented
+	show only invited names!
+	note her to edit in contacts not invites
+
+
 add make-up table for parent ed
 	modeled on nag indulgences
 		KISS for now, but ultimately need to link stuff in
 			but that's a db nightmare
-
+	and add yet another layer of subqueries to my report
+		go get sum of all indulgences this schoolyear by family
+			and calculate it in to meetings
 
 add parent ed calculations to homepage
+	number of meetings (like my big query)
 
-margolis notes-- read and reply
+margolis UI notes-- read and reply
 
-
-
-NOW! for invitations
-	show only invited names!
-	family chooser-- in the stack
-	note her to edit in contacts not invites
 
 
 ??PHP
@@ -5808,3 +5811,4 @@ the new really should grab the default from previous, for meeting and/or family
 	pregenerateform?
 	NO! EASY! go get it and stuff it into fb_defaults!!!
 		which is your first level of defaults, IIRC
+	um, a header maybe?

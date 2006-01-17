@@ -88,6 +88,7 @@ class Workers extends CoopDBDO
             $res = '';
             $this->fb_formHeaderText = 'Workday Summary';
             $this->fb_recordActions = array();
+            $this->fb_forceNoChooser = 1;
             $this->fb_fieldsToRender = array('workday', 'AM', 'PM');
             $this->fb_fieldLabels = array(
                 'workday' => 'Work Day',
@@ -127,6 +128,7 @@ order by  workday',
             $co2 = new CoopView(&$co->page, $co->table, &$nothing);
             $co2->obj->fb_formHeaderText = 'EPOD Summary';
             $co2->obj->fb_recordActions = array();
+            $this->fb_forceNoChooser = 1;
             $co2->obj->fb_fieldsToRender = array('epod', 'AM', 'PM');
             $co2->obj->fb_fieldLabels = array(
                 'epod' => 'EPOD',

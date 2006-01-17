@@ -137,7 +137,6 @@ class Invitations extends CoopDBDO
             // hack
             if($co->isPermittedField() >= ACCESS_VIEW){
                 $co->schoolYearChooser();
-                $res .= $co->searchForm->toHTML();
                 $res .= showRawQuery("Invitation  Counts", 
                                  sprintf('select relation, 
 			sum(if(invitations.family_id>0,0,1)) as Alumni_List ,

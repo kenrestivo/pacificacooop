@@ -458,7 +458,7 @@ class coopView extends CoopObject
                              $this->obj->N));
 
 
-            if($this->searchForm){
+            if($this->searchForm && empty($this->obj->fb_forceNoChooser)){
                 $title .= ' ' . $this->searchForm->toHTML();
             } else {
                 $title .=  ' School Year '. $this->getChosenSchoolYear(true);

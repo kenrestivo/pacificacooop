@@ -31,6 +31,8 @@ fb_allYears = 0/1 // show all years by default in schoolyearchooser
 fb_noHTML = 0/1  // use text, not html
 fb_addNewLinkFields = OBSOLETE. i use perms now to determine
 fb_searchSelects = array() fields for searchselect. XXX HACK-- will use N instead
+fb_forceNoChooser = 0/1 a HACK! for summaries which share one schoolyearchooser
+
 callbacks in DataObject (in objects directory):
 fb_linkConstraints() = called by linkconstraints. 
         overrides the defaults in COopObject
