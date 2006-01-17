@@ -1,5 +1,12 @@
 random things that really really need to get cleaned up
 
+???PHP
+do NOT dick with request in coopview!
+	instead, find some way to extend my merging code in dispatcher
+	so that it will include things like search/sort variables from view!
+	look at syform. quickform has its own ways of dealing with saved vars
+		find out whatever i do in coopform, and do it in syform too
+
 
 ??PHP
 blow off pagetop completely

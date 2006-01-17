@@ -165,9 +165,12 @@ class Parent_ed_attendance extends CoopDBDO
                 
             
             //COOL! this is the first place i am using vars->last
+            // this does the request stuff for me, doesn't it?
             $syform->setDefaults(
                 array('calendar_event_id' => 
-                      $co->page->vars['last']['calendar_event_id']));
+                      $co->page->vars['last']['calendar_event_id'],
+                      'family_id' => 
+                      $co->page->vars['last']['family_id']));
             
             // fucking PHP sucks. i so wish it allowed $sel->getValue()[0] here.
             $foo = $sel->getValue();

@@ -59,7 +59,7 @@ class Audit_trail extends CoopDBDO
 
     function BORKENfb_display_details(&$co)
         {
-            //XXX move this to a session var or somethign. or provide a chooser
+            //XXX move this to 'last'
             $limit = $_REQUEST['limit'] ? $_REQUEST['limit'] : 20;
 	 
             $session = new CoopView(&$co->page, 'session_info', $none);

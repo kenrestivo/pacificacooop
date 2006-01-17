@@ -692,6 +692,8 @@ class coopView extends CoopObject
                 $syform->addElement('hidden', 'coop', $sid); 
             }
             
+            // NOTE! this is the core of dealing with saved state
+            // i'll need to use this ugly-ass algorithm in many places
             if(!empty($this->page->vars['last']['chosenSchoolYear'])){
                 $defaultsy = $this->page->vars['last']['chosenSchoolYear'];
             } else if (!empty($this->obj->fb_allYears)) {
@@ -990,6 +992,7 @@ function getAlert()
             
             //searching code
             // use latest of course, if available
+            //XXX now wait a minute. i don't want to dick with request here.
             if(!empty($_REQUEST['startletter'])){
                 $this->page->vars['last']['startletter'] = $_REQUEST['startletter'];
             }
