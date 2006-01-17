@@ -1858,8 +1858,9 @@ order by enrolled.name
 ;
 
 
-
-select enrolled.name, count(calendar_event_id) 
+-- required meetings
+select enrolled.name, 
+count(calendar_event_id) as meetings_required
 from 
 (select distinct families.family_id, families.name, 
                         start_date, dropout_date
@@ -1876,7 +1877,8 @@ left join calendar_events
 on event_date >= start_date and  
     (event_date <= dropout_date or dropout_date is null)
 where school_year = '2005-2006' and event_id = 2
-group by enrolled.family_id
+and event_date <= now()
+group by family_id
 order by enrolled.name
 ;
 
