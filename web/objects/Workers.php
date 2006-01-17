@@ -79,11 +79,7 @@ class Workers extends CoopDBDO
 
     function  fb_display_summary(&$co)
         {
-
-            // XXX the summary is broken for non-current years
-            if($co->page->currentSchoolYear != $co->getChosenSchoolYear()){
-                return '';
-            }
+            $co->schoolYearChooser();
 
             $res = '';
             $this->fb_formHeaderText = 'Workday Summary';
@@ -128,7 +124,7 @@ order by  workday',
             $co2 = new CoopView(&$co->page, $co->table, &$nothing);
             $co2->obj->fb_formHeaderText = 'EPOD Summary';
             $co2->obj->fb_recordActions = array();
-            $this->fb_forceNoChooser = 1;
+            $co2->obj->fb_forceNoChooser = 1;
             $co2->obj->fb_fieldsToRender = array('epod', 'AM', 'PM');
             $co2->obj->fb_fieldLabels = array(
                 'epod' => 'EPOD',
