@@ -94,8 +94,7 @@ function sponsors(&$cp, $sy)
 
 function auctionItems(&$cp, $sy)
 {
-	$res .= sprintf('	<h2>Springfest Auction Items</h2>
-
+	$res .= sprintf('<hr>
 	<p>Here are some fabulous items that will be auctioned off 
 			at  Springfest!</p>');
 
@@ -183,7 +182,7 @@ $_SESSION['foo'] = 'foo';		// keep auth.inc happy
 $cp->title = "Springfest $sfyear"; 
 print $cp->header();
 print "<h2>Join us for Springfest $sfyear!</h2>"; 
-print "\n<hr /></div> <!-- end header div -->\n";
+print "\n</div> <!-- end header div -->\n";
 
 print '<div id="leftCol">';
 print sponsors(&$cp, $sy);
