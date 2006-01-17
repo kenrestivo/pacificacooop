@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule  (^.*$)  ../restful.php/$1 [L]
