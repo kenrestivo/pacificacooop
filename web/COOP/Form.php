@@ -989,7 +989,7 @@ class coopForm extends CoopObject
 	//from rsvpwizard
 	function floatOnly($val)
 		{
-            $this->page->printDebug("filtering $val", 4);
+            $this->page->printDebug("CoopForm::floatOnly() filtering $val", 4);
             return preg_replace('/[^0-9.]/', '', $val);
 		}
 

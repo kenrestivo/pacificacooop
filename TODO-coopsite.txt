@@ -1,16 +1,16 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	sortable/searchable views (searchfeature.txt)
-	python translation LOGGING (pythonport.txt)
-	reports in phptal, or maybe json/rest/xmlrpc (reportnotes.txt)
-	json, REST, xmlrpc (jsonselect.txt)
 	cleanups and code fixes (cleanme.txt)
+	python translation LOGGING (pythonport.txt)
+	json, REST, xmlrpc (jsonselect.txt)
+	reports in phptal, or maybe json/rest/xmlrpc (reportnotes.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	import the 20-year roster (20yearroster.txt)
 	insurance, dammit
+	sortable/searchable views (searchfeature.txt)
 
 
 

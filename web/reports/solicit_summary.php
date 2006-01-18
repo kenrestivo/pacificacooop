@@ -244,7 +244,7 @@ having cash_donations > 0 or auction_purchases > 0 or auction_donations > 0 or i
 order by cash_donations desc, auction_purchases desc, 
     auction_donations desc, in_kind_donations desc 
 ");
-    $res .= $view->simpleTable(false);
+    $res .= $view->simpleTable(false, true);
 
 
 
@@ -321,7 +321,7 @@ order by cash_donations desc, auction_purchases desc,
     auction_donations desc, in_kind_donations desc 
 
 ");
-    $res .= $view->simpleTable(false);
+    $res .= $view->simpleTable(false, true);
 
 
 
