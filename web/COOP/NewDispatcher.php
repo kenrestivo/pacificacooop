@@ -124,7 +124,8 @@ class CoopNewDispatcher
             
             $res .= $atd->getInstructions('view');
             
-            $res .= $atd->simpleTable();
+            // use the built-in find. AND FORCE ALWAYS TO SHOW!
+            $res .= $atd->simpleTable(true, true);
             
             return $res;
          			
@@ -310,7 +311,7 @@ class CoopNewDispatcher
             $aud->obj->table_name = $atd->table;
             $aud->obj->index_id = $id;
             $aud->obj->orderBy('updated desc');
-            $res .= $aud->simpleTable();
+            $res .= $aud->simpleTable(true,true);
 
 
             /// XXX TOTALLY BROKEN!! and i haven't time or patience to fix it

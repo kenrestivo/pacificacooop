@@ -73,36 +73,30 @@ class Session_info extends CoopDBDO
             $res .= "<p>Times are in Mountain Time (Phoenix, AZ).</p>";
                         
             /// THE CHOOSER FORM
-            $syform =& new HTML_QuickForm('sessioninfo', false, false, 
-                                          false, false, true);
-            $syform->removeAttribute('name');
-            $el =& $syform->addElement('text', 'limit', 'Records to show', 
-                                       '20',
-                                       array('onchange' =>
-                                             'this.form.submit()'));
-
-            if($sid = thruAuthCore($co->page->auth)){
-                $syform->addElement('hidden', 'coop', $sid); 
-            }
-            $syform->addElement('hidden', 'table', $co->table); 
+            $co->schoolYearChooser();
+            $el =& $co->searchForm->addElement('text', 'limit', 
+                                               'Records to show', 
+                                               '20',
+                                               array('onchange' =>
+                                                     'this.form.submit()'));
 
 
             // need change button?
-            $syform->addElement('submit', 'savebutton', 'Change');
+            $co->searchForm->addElement('submit', 'savebutton', 'Change');
                 
             
-            //COOL! this is the first place i am using vars->last
-            $syform->setDefaults(array('limit' =>20));
+            if(empty($co->page->vars['last']['limit'])){
+                $co->page->vars['last']['limit'] = 20;
+            }
+            $co->searchForm->setDefaults(
+                array('limit' =>$co->page->vars['last']['limit']));
             
             $limit = $el->getValue();
+
             $this->limit($limit);
             
 
-            $res .= $syform->toHTML();
-            
-            $res .= $co->simpleTable();
-            
-            return $res;
+            return $co->simpleTable(true,true);
             
         }
 

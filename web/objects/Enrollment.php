@@ -54,7 +54,12 @@ class Enrollment extends CoopDBDO
     var $fb_shortHeader = 'Roster';
     
     var $fb_joinPaths = array('family_id' => 'kids'); 
-    
+
+    /// XXX BROKEN! so i'm manaually hacking fb_details instead
+//     var $fb_extraDetails = array('kids:families:parents',
+//                                  'kids:families:families_income_join:income'
+//                                  );
+
 
 	function fb_linkConstraints(&$co)
 		{
@@ -85,8 +90,6 @@ class Enrollment extends CoopDBDO
 
 
  		}
-
-
 
 
     function fb_display_details(&$co)
@@ -145,6 +148,8 @@ class Enrollment extends CoopDBDO
             return $res;
 
         }
+
+
 
     function fb_display_view(&$co)
         {

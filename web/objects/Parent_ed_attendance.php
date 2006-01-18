@@ -108,8 +108,7 @@ class Parent_ed_attendance extends CoopDBDO
     /// custom displayview here
     function fb_display_view(&$co)
         {
-            $res = '';
-
+ 
             if($co->isPermittedField() >= ACCESS_VIEW &&
                 $co->schoolYearChooser())
             {
@@ -187,15 +186,12 @@ class Parent_ed_attendance extends CoopDBDO
 
                 $this->fb_fieldLabels['name'] = 'Co-Op Family';
                 array_unshift($this->preDefOrder, 'name');
-
+                $this->selectAdd('families.name');
             }
 
 
-            $this->selectAdd('families.name');
             //$co->debugWrap(2);
-            $res .= $co->simpleTable();
-
-            return $res;
+            return  $co->simpleTable(true, true);
         }
 
 }

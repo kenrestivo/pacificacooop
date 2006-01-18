@@ -90,7 +90,7 @@ class Kids extends CoopDBDO
             $co->overrides['leads']['fb_linkDisplayFields'] = 
                 array('last_name', 'first_name', 'phone');
             
-            return $co->simpleTable();
+            return $co->simpleTable(true,true);
         }
     
 

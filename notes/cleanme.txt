@@ -11,6 +11,11 @@ smaller damned font
 	how does this look in exploiter? font-size: 101%
 	http://www.nedbatchelder.com/code/modules/coverage.html
 
+
+go through the joinpaths in standard linkconstraints!
+	i bet i can blow off tons of wacko custom linkconstraints this way!
+
+
 shitcan flexac
 
     remove crufty files

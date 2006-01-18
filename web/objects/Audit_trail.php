@@ -83,7 +83,7 @@ class Audit_trail extends CoopDBDO
                     $aud->obj->table_name = $this->table_name;
                     $aud->obj->index_id = $this->index_id;
                     $aud->obj->orderBy('updated desc');
-                    print $aud->simpleTable();
+                    print $aud->simpleTable(true, true);
             }
 
 

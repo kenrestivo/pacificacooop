@@ -78,7 +78,7 @@ order by variance desc",
             $this->fb_fieldLabels['variance'] = 'Variance (over asking price)';
             $this->fb_fieldLabels['package_sale_price'] = 'Actual Sale Price';
             array_push($this->fb_currencyFields, 'variance');
-            return $co->simpleTable(false);
+            return $co->simpleTable(false, true);
 
         }
 

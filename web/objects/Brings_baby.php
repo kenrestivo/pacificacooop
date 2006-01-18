@@ -60,7 +60,7 @@ class Brings_baby extends CoopDBDO
             $this->fb_fieldLabels['epod'] = 'EPOD Day';
             $this->fb_fieldLabels['am_pm_session'] = 'Session';
 
-            return $co->simpleTable();
+            return $co->simpleTable(true,true);
         }
 
 

@@ -49,7 +49,7 @@ class Calendar_events extends CoopDBDO
         {
             // TODO: put this in linkconstraints so that popups use it too
             $this->orderBy('event_date asc');
-            return $co->simpleTable();
+            return $co->simpleTable(true, true);
         }
 
 

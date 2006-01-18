@@ -118,7 +118,7 @@ order by cash_donations desc, auction_purchases desc,
                         $schoolyear,$schoolyear, $schoolyear, $schoolyear,
                         $this->{$co->pk}
                     ));
-            $res .= $view->simpleTable(false);
+            $res .= $view->simpleTable(false, true);
 
 
 
@@ -127,7 +127,7 @@ order by cash_donations desc, auction_purchases desc,
             $aud->obj->table_name = $co->table;
             $aud->obj->index_id = $this->{$co->pk};
             $aud->obj->orderBy('updated desc');
-            $res .= $aud->simpleTable();
+            $res .= $aud->simpleTable(true, true);
 
             return $res;
         }

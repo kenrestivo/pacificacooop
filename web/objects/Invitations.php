@@ -126,7 +126,7 @@ class Invitations extends CoopDBDO
             array_unshift($this->preDefOrder, 'lead_label');
             $this->fb_fieldsToUnRender = array('lead_id');
 
-            return $ap . $co->simpleTable() .$ap;
+            return $ap . $co->simpleTable(true,true) .$ap;
         }
 
 

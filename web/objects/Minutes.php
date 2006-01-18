@@ -43,14 +43,14 @@ class Minutes extends CoopDBDO
     var $fb_joinPaths = array('school_year' => 'calendar_events');
 
 
-// 	function fb_linkConstraints(&$co)
-// 		{
-//             $cal =& new CoopObject(&$co->page, 'calendar_events', &$co);
-//             $co->protectedJoin($cal);
-//             $co->constrainSchoolYear();
-//             $co->orderByLinkDisplay();
-//             $co->grouper();
-// 		}
+	function fb_linkConstraints(&$co)
+		{
+            $cal =& new CoopObject(&$co->page, 'calendar_events', &$co);
+            $co->protectedJoin($cal);
+            $co->constrainSchoolYear();
+            $co->orderByLinkDisplay();
+            $co->grouper();
+		}
 
 
 

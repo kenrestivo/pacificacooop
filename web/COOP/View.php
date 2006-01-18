@@ -84,7 +84,7 @@ class coopView extends CoopObject
 		}
 
 	// formats object is current in this object, um, as a table
-	function simpletable($find= true)
+	function simpletable($find= true, $forceshow = false)
 		{
             $rowcnt = 0;
             
@@ -93,9 +93,14 @@ class coopView extends CoopObject
 
 
 			// NOTE. this object's find, not the DBDO find
-			if(!$this->find($find)){
-				return;
-			}
+			$found = $this->find($find);
+            if(!($found || $forceshow || 
+                 $this->isPermittedField(null, true, true) >= ACCESS_ADD))
+            {
+                $this->page->printDebug("CoopView::simpleTable({$this->table}) nothing found, not permitted to add, not forcing, so skipping display",
+                                        4);
+                return false;
+            }
 
 			$tab = new HTML_Table();	
 			while($this->obj->fetch()){
@@ -198,9 +203,7 @@ class coopView extends CoopObject
 			}
 
             $this->page->printDebug("CoopView::find($find) $this->table found $found", 2);
-            // ALSO. if i have "add" perms, then show the 'add new'
-            // even if nothign was found, force TRUE, so i get my enter new
-            return $found || $perms >= ACCESS_ADD;
+             return $found;
 		}
 
 
@@ -472,7 +475,7 @@ class coopView extends CoopObject
 							'class="tablecontainer"', "TH");
 			$toptab->addRow(array($contents), 'colspan="2"');
 			
-			return $toptab->toHTML();
+			return  $toptab->toHTML();
 		}
 
 	function oneLineTable($find= 1)

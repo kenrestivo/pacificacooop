@@ -469,13 +469,16 @@ group by user_id,table_name,field_name";
                 return $this->obj->fb_linkConstraints(&$this);
             } 
 
+            //TODO: recurse through the fb_joinPaths here,
+            // and do protectedjoins for each of them. yay.
+
 
             // XXX this might not be the right place for this
             $this->obj->groupBy(sprintf('%s.%s', $this->table, $this->pk));
 
             
-// XXX  you goddamned better have a path to family, everywhere
-// unless you have permissions to see all
+            // XXX  you goddamned better have a path to family, everywhere
+            // unless you have permissions to see all
             if($this->inObject('family_id')){
                 $this->constrainFamily();
             }
