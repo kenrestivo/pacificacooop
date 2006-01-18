@@ -80,6 +80,7 @@ class Invitations extends CoopDBDO
                                                        $families,
                                                        array('onchange' =>
                                                              'this.form.submit()'));
+                $co->showChooser = 1;
                 // by default, no change button!
                 $co->searchForm->addElement('submit', 'savebutton', 'Change');
 

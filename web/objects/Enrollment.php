@@ -178,13 +178,7 @@ class Enrollment extends CoopDBDO
         {
             $co->schoolYearChooser(); // to go fetch currentschoolyear from form!
 
-            if($session != 'AM'){
-                //$co->searchForm =& new HTML_QuickForm();
-            }
-            
-
-            $chosen = $co->perms[null]['year'] < ACCESS_VIEW ?
-                $co->page->currentSchoolYear : $co->getChosenSchoolYear();
+            $chosen = $co->getChosenSchoolYear();
 
             // TODO: do not show dropped enrollment!
 

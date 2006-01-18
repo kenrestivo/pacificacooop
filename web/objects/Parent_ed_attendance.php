@@ -178,6 +178,8 @@ class Parent_ed_attendance extends CoopDBDO
                 $cal_id && $this->whereAdd(sprintf('%s.calendar_event_id = %d', 
                                                    $co->table,
                                                    $cal_id));
+
+                $co->showChooser = 1;
                 // XXX i hard-code parents in here
                 // because i know not how else to dismbiguate it
                 // NOTE: you'll be in a world of hurt if they have view group perms

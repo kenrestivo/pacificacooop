@@ -80,7 +80,7 @@ class Session_info extends CoopDBDO
                                                array('onchange' =>
                                                      'this.form.submit()'));
 
-
+            $co->showChooser = 1;
             // need change button?
             $co->searchForm->addElement('submit', 'savebutton', 'Change');
                 

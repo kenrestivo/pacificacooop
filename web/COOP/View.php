@@ -40,7 +40,7 @@ class coopView extends CoopObject
     var $viewActions = array('add' => ACCESS_ADD, 
                              'view'=> ACCESS_VIEW);     
     var $searchForm; // cache of search form interface
-
+    var $showChooser = 0; //  set when valid stuff is built
 
     //chain up
 	function CoopView (&$page, $table, &$parentCO, $level = 0)
@@ -461,7 +461,7 @@ class coopView extends CoopObject
                              $this->obj->N));
 
 
-            if(count($this->searchForm->_elements) > 0 && 
+            if(!empty($this->searchForm) && $this->showChooser &&
                empty($this->obj->fb_forceNoChooser))
             {
                 $title .= ' ' . $this->searchForm->toHTML();
@@ -691,6 +691,7 @@ class coopView extends CoopObject
                                        //TODO check ispermittedfield for allyears!
                                        $this->getSchoolYears(null, true),
                                        array('onchange' =>'this.form.submit()'));
+                $this->showChooser = 1;
             }
             if($sid = thruAuthCore($this->page->auth)){
                 $syform->addElement('hidden', 'coop', $sid); 
