@@ -16,5 +16,3 @@
 
 -- add perms for parent ed report (didn't i do this already?)
 
--- view year perms for attendance for all group
--- ignore for parent ed table, duh

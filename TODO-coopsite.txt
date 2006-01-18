@@ -2,9 +2,9 @@ coop web database
 
  MY agenda! dammit, mine! for a change....
 	cleanups and code fixes (cleanme.txt)
-	python translation LOGGING (pythonport.txt)
 	json, REST, xmlrpc (jsonselect.txt)
-	reports in phptal, or maybe json/rest/xmlrpc (reportnotes.txt)
+	render in phptal, or maybe json/rest/xmlrpc (reportnotes.txt)
+	python translation LOGGING (pythonport.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
@@ -13,53 +13,9 @@ coop web database
 	sortable/searchable views (searchfeature.txt)
 
 
-
-then test and push live
-
-
-??? PHP/JS
-sponsorships fix
-	either/or for ads: lead or company. make it so!
-	a either-or chooser for JS. either leads or companies
-		hiding this is going to be challenging?
-	ad and sponsorship a few other places: a chooser for lead OR company!
-		and a form rule to require either not both
-
-
-???SQL/PHP
-add make-up table for parent ed
-	modeled on nag indulgences
-		KISS for now, but ultimately need to link stuff in
-			but that's a db nightmare
-	and add yet another layer of subqueries to my report
-		go get sum of all indulgences this schoolyear by family
-			and calculate it in to meetings
-
-
-
-add parent ed calculations to homepage
-	number of meetings (like my big query)
-
-
-margolis UI notes-- read and reply
-
-
-NITS(daytime)
-	css not bgcolor for publicauction
-	also fix the choosers colour
-
-
-??PHP
-stick reports into the stack, somehow
-	maybe just a function in newdispatcher
-
+put response code in somewhere, in invites/leads
 
 export/print
-	pear spreadsheetwriter
-		the easy way: just dump a fucking table of labels, already merged
-			with the response code in there
-		or raw. whatever. let her choose dammit
-
 	the standard view stuff, minus pager
 	grab from last
 		in fact, grab EVERYTHING from last. s/b easy
@@ -82,6 +38,65 @@ export/print
     play with exporter/pythonpoint
     	for labels, and packaging stuff
     
+
+
+??? PHP/JS
+sponsorships fix
+	either/or for ads: lead or company. make it so!
+	a either-or chooser for JS. either leads or companies
+		hiding this is going to be challenging?
+	ad and sponsorship a few other places: a chooser for lead OR company!
+		and a form rule to require either not both
+
+
+???SQL/PHP
+add make-up table for parent ed
+	meeting makeup types
+		$20 fee
+			(link to family fees!)
+		attend board meeting
+			(link to event!)
+		tour open house
+			(link to event!)
+		cover for someone
+			date/comments?
+			(link to coverage type)
+				maternity
+				assessment/conference week
+				teacher absence
+	modeled on nag indulgences
+		but this will need a js dispatch AND validation
+			based on type of event. fun! here comes json!
+	and add yet another layer of subqueries to my report
+		go get sum of all indulgences this schoolyear by family
+			and calculate it in to meetings
+
+	pattern
+		table A has a field i, which is the PK of table B. 
+		table A also 
+               needs to link to tables C, D, or E (not and!) 
+					based on the value of field i
+		 table B might have a PK and a *name* of a table for A to link to
+	select A.id, IF(A.tref = 'B',B.val,IF(A.tref='C',C.val,NULL)) val 
+			FROM A left join B using (id) left join C using (id);
+
+
+
+add parent ed calculations to homepage
+	number of meetings (like my big query)
+
+
+
+NITS(daytime)
+	css not bgcolor for publicauction
+	also fix the choosers colour
+
+
+??PHP
+stick reports into the stack, somehow
+	maybe just a function in newdispatcher
+
+
 
 
 my js stuff! working interpreter now!
@@ -3234,6 +3249,13 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	pear spreadsheetwriter
+		the easy way: just dump a fucking table of labels, already merged
+			with the response code in there
+		or raw. whatever. let her choose dammit
+
+		KISS for now, but ultimately need to link stuff in
+			but that's a db nightmare
 	NO. problem is that it's split!
 		table title html is called AFTER the query has run!
 			so i have to split it in 2 like wiht schoolyeachoooer
@@ -5835,3 +5857,10 @@ WAIT! that watch aint' waterproof!
 			looks fine now
 ???PHP
 FILTER all cash things: remove non-numeric characters except .!
+
+gah, numbers
+	beanie  60
+	wine 100
+	pastel 75
+margolis UI notes-- read and repl
+y

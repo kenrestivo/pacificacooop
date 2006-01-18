@@ -47,7 +47,7 @@ class Job_descriptions extends CoopDBDO
                                 'free_tuition_end_month', 
                                 'free_tuition_start_month');
 	var $fb_requiredFields = array('long_description', 'summary');
-    var $fb_longHeader = 'The virtual job description binder.';
+
 	var $fb_shortHeader = 'Descriptions';
 
     var $fb_joinPaths = array('family_id' => 'job_assignments');

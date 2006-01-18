@@ -59,3 +59,12 @@ clean up my inclusion order in proparation h for phptal
 	generic dispatcher
 		then use that for my fix-whateve
 
+
+
+add to instructions
+auctionpurchases
+ 	 'This is the "Jane Report": the actual purchases of Springfest Packages, along with their final bid price, and the variance between what they sold for and their estimated value. The most popular packages (those that sold for at or above their estimated value) are listed first.';
+
+job descriptions
+	 'The virtual job description binder.';
+

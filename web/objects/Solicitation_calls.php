@@ -40,7 +40,6 @@ class Solicitation_calls extends CoopDBDO
 		"school_year" => "School Year" 
 		);
 	var $fb_formHeaderText = 'Springfest Solicitation Miscellaneous Notes';
-    //var $fb_usePage = 'solicit_calls.php';
 
     var $fb_shortHeader = 'Misc. Notes';
 

@@ -121,11 +121,17 @@ class Invitations extends CoopDBDO
 
             // my nice little label preview
             $co->obj->selectAdd($leads->obj->fb_labelQuery);
-            
-            
+
+            if($co->isPermittedField() >= ACCESS_VIEW){
+                $this->selectAdd('invitations.lead_id as response_code');
+                $this->fb_fieldLabels['response_code'] = 'Response Code';
+                array_unshift($this->preDefOrder, 'response_code');
+            }
             $this->fb_fieldLabels['lead_label'] = 'Address Label Preview';
             array_unshift($this->preDefOrder, 'lead_label');
             $this->fb_fieldsToUnRender = array('lead_id');
+
+
 
             return $ap . $co->simpleTable(true,true) .$ap;
         }

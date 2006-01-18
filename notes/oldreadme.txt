@@ -145,3 +145,11 @@ the main state machine
 			'replace': same as save, but with "replace into" not "insert into"
 			'done' : no action, displaying is done.
 	and the possibel field members too: TODO
+
+
+------
+other deprecated crap
+
+fb_longHeader 
+fb_addNewLinkFields = OBSOLETE. i use perms now to determine
+fb_searchSelects = array() fields for searchselect. XXX HACK-- will use N instead

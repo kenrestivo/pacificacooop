@@ -6,20 +6,21 @@ this uses PEAR, particualrly HTML::QuickForm and DB::DataObject
 i tried to make it backwards-compatible to DB_DataObjects_FormBuilder ("FB")
 fields i added to the dataobject, which are *not* in FormBuilder
 
-vars in DataObject (in objects directory):
-fb_URLFIelds array(fieldn...)
+
+key vars that the system uses, which go in the DataObjects (in objects directory):
+-----------------
+fb_URLFIelds array(fieldn,)
 fb_joinPaths  array(table -> path:tghrough:links or array(path:through, more:through)). 
     used for disambiguating constrainschoolyear() and constrainfamily(),
         if there are multiple
     the path can be either one or more, if there are >1, it is coalesced
 fb_usePage    "" (old page)
-fb_longHeader "" (old summary, if applicable)
-fb_shortHeader "" (old shortdesc)
+fb_shortHeader = used in menu, and in table popps 
 fb_dupeIgnore array(fieldn...)
-fb_sizes  = array(field, size)
+fb_sizes  = array(field => size), this is WIDTH for inputfields, LINES for textarea!
 fb_fieldsToUnRender (always hide these! annoying, but needed.)
 preDefOrder= array(), compatible with FB, order the fields in this sequence
-    remember, fieldlabels is NOT ordered, php arrays aren't
+    remember, fieldlabels is NOT ordered, php assoc arrays aren't ordered!
 fb_displayFormat  array (field => sprintffrormat)
 fb_displayCallbacks = array (field => cb) overrides CoopView::toArray()
      the result of you callbacks WILL NOT be html escaped. that's your job.
@@ -28,13 +29,12 @@ fb_recordActions = array  (action => level)
 fb_extraDetails = array('path:to:other:details', 'path:to:more:details')
     // basically, backlinked tables i want to display. kind of a hack.
 fb_allYears = 0/1 // show all years by default in schoolyearchooser
-fb_noHTML = 0/1  // use text, not html
-fb_addNewLinkFields = OBSOLETE. i use perms now to determine
-fb_searchSelects = array() fields for searchselect. XXX HACK-- will use N instead
+fb_noHTML = 0/1  // render fields as text, not html. HACK not used anywhere except emails in audit trail, so far
 fb_forceNoChooser = 0/1 a HACK! for summaries which share one schoolyearchooser
 
-callbacks in DataObject (in objects directory):
-fb_linkConstraints() = called by linkconstraints. 
+callbacks aldo in the DataObjects (in objects directory):
+----------------
+fb_linkConstraints() = called by CoopObject::linkconstraints()
         overrides the defaults in COopObject
 fb_display_[view|details|alert"summary]() = called by the dispatcher. 
         overrides the default view, details, alert, or summary
@@ -53,10 +53,12 @@ afterInsert() = called, um, after insert. things that need to know the ID/key
 
 
 in coopview
+-----------
 fullText (do not truncate longtextfields)
 linkdisplayfields is a SUPERset of fieldstorender, in simpletable at least
 
 unique app-specific tweaks:
+-----------------------
 family_id and school_year are *special* fields
 	both are:
 		automatically populated with defaults in form, if empty
@@ -68,44 +70,48 @@ a field *must* be in fb_fieldLabels or it won't get rendered. do it.
 
 
 
-to create a new table: est time per table: 1-2 hours
+how to create a new table: est time per table: 1-2 hours
+-------------------------
 	add to sql/definitions.sql and then copy/paste definition into SQL
 	cd web; make update-dbobject update-links
 	edit the resulting table in objects/Tablename.php
-		fbformheadertext and fbshortheader and fblongheader
+		fbformheadertext and fbshortheader
 		fbrequiredfields
 		fbfieldlabels
 		linkdisplayFields
+        predeforder
         linkConstraints() function
 		optional
 			fbcrosslinks
 			any overrides: fb_display_FOO, pre/postgenerateform, etc
 	add it to a realm
-		optionally add a realm if not already there
+		optionally create a new realm if not already there
 		if the realm is new, add a default to user_privileges
 	add it to table_privileges, with menu/usr/group level
 
 
-if you ever, *ever* rename a table:
+if you ever, *ever* rename a table (avoid it like the plague):
     update table_permissions set table_name = 'new_name' where table_name = 'old_name';
     update audit_trail set table_name = 'new_name' where table_name = 'old_name';
+    this in addition to any code changes wherever that table may be used
 
+
+dealing with pear and other dependencies:
+---------------------------------------
 you MUST USE a local copy of PEAR. install it in some directory, i.e. your shell directory, and put that path into the dbhost.inc
+    lynx -source http://go-pear.org/ | php
+    set the paths correctly! expect libs in managed_pear/lib and data in managed_pear/data
+    then you must install PHPTAL packages for PHP4
+        first go get: Algo_map-0.1.1.tgz  HTML_Template_PHPTAL-0.7.0.tgz GetText-0.6.4.tgz   Types-0.3.2.tgz
+        then pear -c ~/.pearrc install <list of above package tarballs>
+            i don't know what they are for php5
+    
+    you must also install tiny_mce. i had this in cvs but it was ridiculous.
+        so you have to find it, download it, and install it, in the 'lib' directory
+    
 
-lynx -source http://go-pear.org/ | php
-set the paths correctly! expect libs in managed_pear/lib and data in managed_pear/data
-
-
-then you must install PHPTAL packages for PHP4
-first go get: Algo_map-0.1.1.tgz  HTML_Template_PHPTAL-0.7.0.tgz GetText-0.6.4.tgz   Types-0.3.2.tgz
-then pear -c ~/.pearrc install <list of above package tarballs>
-    i don't know what they are for php5
-
-you must also install tiny_mce. i had this in cvs but it was ridiculous.
-    so you have to find it, download it, and install it, in the 'lib' directory
-
-------------
-old AUTH permissions system
+ ------------
+pre-PEAR AUTH permissions system which is still in use
 auth
 	why are users not families??? why create a shadow abstraction?!
 		well, because users are NOT families! 
@@ -178,7 +184,7 @@ auth
 ---------------
 
 database things:
-	in general, i've been a relational database structure bigot. i am VERY much for segregation of data into separate tables, and ESPECIALLY where there's any duplication of data. any one-to-many's are done with direct joins, and many-to-many's are done with join ("glue") tables. often the join tables evolve into tables with useful data in their own right (example being the "attendance" table) and get their own names.
+	in general, i've been a relational database structure bigot. i am VERY much for 3nf normalisation of data into separate tables, and ESPECIALLY where there's any duplication of data. any one-to-many's are done with direct joins, and many-to-many's are done with join ("glue") tables. often the join tables evolve into tables with useful data in their own right (example being the "attendance" table) and get their own names.
 
 
 

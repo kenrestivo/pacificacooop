@@ -207,7 +207,16 @@ class Leads extends CoopDBDO
             $invites =& new CoopObject(&$co->page, 'invitations', &$co);
             $invites->linkConstraints();
             $co->protectedJoin($invites);
+
             $ap= $co->alphaPager('last_name');
+
+            $co->obj->selectAdd($this->fb_labelQuery);
+            $this->fb_fieldLabels['lead_label'] = 'Address Label Preview';
+
+            $this->selectAdd('leads.lead_id as response_code');
+            $this->fb_fieldLabels['response_code'] = 'Response Code';
+            $this->preDefOrder= array('lead_label', 'response_code');
+
             return  $ap . $co->simpleTable(true,true). $ap;
         }
 

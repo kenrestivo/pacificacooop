@@ -44,8 +44,6 @@ class Auction_purchases extends CoopDBDO
     var $fb_recordActions = array();
     var $fb_viewActions = array();
     var $fb_shortHeader = 'Purchases';
-    var $fb_longHeader = 'This is the "Jane Report": the actual purchases of Springfest Packages, along with their final bid price, and the variance between what they sold for and their estimated value. The most popular packages (those that sold for at or above their estimated value) are listed first.';
-
 
 
     function fb_display_view(&$co)
