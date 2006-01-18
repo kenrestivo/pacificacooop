@@ -144,7 +144,7 @@ class coopForm extends CoopObject
 
 			$this->form->addFormRule(array(&$this,'dupeCheck'));
             
-            confessObj($this->form, 'fubarific');
+
             //godDAMN do i hate php.
             if(is_callable(array($this->obj, 'postGenerateForm'))){
                 $this->page->printDebug(
