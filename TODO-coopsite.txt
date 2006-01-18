@@ -13,10 +13,34 @@ coop web database
 	insurance, dammit
 
 
-NOW! for invitations
-	show only invited names!
+??PHP
+parent ed chooser rehash-- incl schoolyear
+	disappears if old year
+	aha. there must be some way to get it to show ALWAYS	
 
 
+BUGS
+	editperms on auction items.
+		dammit. it used to calculate it
+		it needs to join to family. that's all.
+		well i stuck it in the linkconstraints. BUT THAT IS A HACK!
+
+???PHP
+FILTER all cash things: remove non-numeric characters except .!
+
+
+
+
+??? PHP/JS
+sponsorships fix
+	either/or for ads: lead or company. make it so!
+	a either-or chooser for JS. either leads or companies
+		hiding this is going to be challenging?
+	ad and sponsorship a few other places: a chooser for lead OR company!
+		and a form rule to require either not both
+
+
+???SQL/PHP
 add make-up table for parent ed
 	modeled on nag indulgences
 		KISS for now, but ultimately need to link stuff in
@@ -25,11 +49,18 @@ add make-up table for parent ed
 		go get sum of all indulgences this schoolyear by family
 			and calculate it in to meetings
 
+
+
 add parent ed calculations to homepage
 	number of meetings (like my big query)
 
+
 margolis UI notes-- read and reply
 
+
+NITS(daytime)
+	css not bgcolor for publicauction
+	also fix the choosers colour
 
 
 ??PHP
@@ -66,9 +97,6 @@ export/print
     	for labels, and packaging stuff
     
 
-ad and sponsorship a few other places: a chooser for lead OR company!
-	and a form rule to require either not both
-
 
 my js stuff! working interpreter now!
 	show a label or field:value summary somewhere, somehow
@@ -100,17 +128,6 @@ ENTRY
 
 
 
-??? PHP
-sponsorships fix
-	either/or for ads: lead or company. make it so!
-
-??JS
-printable page, or print button in tinymce
-
-
-??PHP/JS
-a either-or chooser for JS. either leads or companies
-	hiding this is going to be challenging
 
 
 ???ENTRY
@@ -586,6 +603,9 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+NOW! for invitations
+	show only invited names!
+
 ???PHP/SQL
 de-dupe interface
 	find all records, for each, look for matches, various types
@@ -596,6 +616,7 @@ de-dupe interface
 		then DE-DUPE!
 	de-dupe back-end will go get all the references to non-match
 		and merge them in
+	need levenshtien
 	
 
 ??PHP/SQL
@@ -647,39 +668,6 @@ invitations really needs to be an advmultiselect, a crosslink with field
 	except for the damned RELATIVE and FAMILY thing
 	so you don't DELETE invitations, you REMOVE them from the selectbox
 
-
-
-???PHP
-clean up my inclusion order in proparation h for phptal
-	remember the set names!!!
-
-
-???PHP/HTML 
-cleanups and speed improvements
-
-	construct the <HEAD> *last*, after the whole body is done
-		buffer the entire page, no matter how fucking enormous
-			this also gets me a <title> that makes sense too
-			wouldn't take much to TAL the whole app, actually
-
-    remove crufty files
-    	cvs remove the whole list of crufty files: foundold-clean.txt
-    		first awk/split it out
-    		then run another qa, just to be sure!
-    	save tickets and thankyou's and paddles, dammit.
-    		deal with that clusterfuck over the holiday
-
-
-	what about deletes? no audit trail on deletes... interesting
-
-
-	save the diff's, NOT the entire whooha
-		if that's possible in text/diff mode
-			maybe only the textfields
-		but how to format that for email??
-
-	generic dispatcher
-		then use that for my fix-whateve
 
 
 ??QA/python
@@ -3260,6 +3248,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	NO. problem is that it's split!
+		table title html is called AFTER the query has run!
+			so i have to split it in 2 like wiht schoolyeachoooer
+			do the SEARCH in find, the CHOOSING in title
+	almost easy... do it all in find, and save the giblets
+		separate out the html display
 
 	ALMOST the same as a straight coopobject felch, but not quite
 		hmm. maybe it *is* just coopobject/view queries?
@@ -5812,3 +5806,25 @@ the new really should grab the default from previous, for meeting and/or family
 	um, a header maybe?
 	family chooser-- in the stack, just like parented
 	note her to edit in contacts not invites
+
+??JS
+printable page, or print button in tinymce
+
+push live my invitations fixes!
+	and let people know about them!
+family chooser and/or sorter please, for invites
+	why is meeting chooser showing up for non-group users?
+	also schoolyear should show up
+		use my cleaner method from invitations.php!
+		problem is, it assumes it is SCHOOLYEAR chooser...
+			and it scrams if they don't have multi-year perms
+				which nobody does right now. shit.
+		ok, well i'm going to build a syform ALWAYS
+	add multiyear perms for all members
+	funny, still not showing up. wtf?
+	ALL groups and users, or ignore.
+		this ignore shit man
+	look at permsdetails: year 0, why?
+		AH! table
+	weird! not being honoured. why?
+	constrainschoolyear.

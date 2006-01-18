@@ -1868,4 +1868,25 @@ order by enrolled.name
 
 
 
+
+----
+SELECT auction_donation_items.quantity ,
+auction_donation_items.short_description , _cache_item_description , 
+'ERROR! use _cache_item_description field instead' as item_description ,
+auction_donation_items.item_value , auction_donation_items.item_type ,
+auction_donation_items.date_received , 
+auction_donation_items.location_in_garage ,
+auction_donation_items.school_year ,
+auction_donation_items.auction_donation_item_id ,
+auction_donation_items.thank_you_id ,
+auction_donation_items.auction_donation_item_id as SAFE_auction_donation_item_id
+FROM auction_donation_items 
+LEFT JOIN auction_items_families_join ON
+auction_items_families_join.auction_donation_item_id=
+auction_donation_items.auction_donation_item_id 
+WHERE school_year = "2005-2006"
+GROUP BY auction_donation_items.auction_donation_item_id 
+ORDER BY auction_donation_items.short_description
+\G
+
 --- EOF

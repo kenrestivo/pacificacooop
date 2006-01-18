@@ -1,30 +1,6 @@
 a cool nifty SEARCH BOX in all generic views!!
 
-family chooser and/or sorter please, for invites
 
-
-??PHP
-move the alpha chooser into the simpletable header
-	use an fb_pagerType flag
-	NO. problem is that it's split!
-		table title html is called AFTER the query has run!
-			so i have to split it in 2 like wiht schoolyeachoooer
-			do the SEARCH in find, the CHOOSING in title
-	almost easy... do it all in find, and save the giblets
-		separate out the html display
-	make alpha chooser part of sychooser
-		use it automatically if # of entries > certain amount
-			that's tricky though. i'd have to search twice
-				and dbdo won't let me do that. drat.
-
-
-???PROBLEM?
-saving these in last for now. is that OK?
-	i.e. what if multiple per page, i.e.  details
-
-
-experiment with the enhancement summary perhaps
-	maybe a nag reminder button too
 
 task:
 	turn the schoolyearchooser into a generic search/sort interface
@@ -35,11 +11,6 @@ task:
 	save/restore the state of the search.
 	support LIMIT box, which is *NOT* in the dbdo!
 	LO: eventually support pager
-
-special cases:
-	table_name link to realms		
-
-how?
 	a search-interface form
 		takes a list of fields to allow search on
 		build a form, similar to COopForm (subclass?)
@@ -60,9 +31,42 @@ how?
 			change name to searchsortchooer?
 		or, just store a reference to the BUILT FORM in coopview
 			and tohtml() it at rendering time. probably smarter.
+	what about sorting?
 
-what about sorting?
 
+
+??PHP
+other kinds of pagers
+	i.e. index, id, etc
+	have to do it *after* find. which means NOT syform
+		but where? can't do tabletitle because it is AFTER fetching
+			would have to be wedged in after find, before fetch
+	problem here is as with moving alphachooser: you don't know SIZE
+		at the point where you're building syform
+		but you *do* know just after doing find.
+			but by then, it's too late, you've already run the query
+		clone? then re-query
+	move the alpha chooser into the syform? or the title?
+	make alpha chooser part of sychooser
+		use it automatically if # of entries > certain amount
+			that's tricky though. i'd have to search twice
+				and dbdo won't let me do that. drat.
+				clone?
+	use an fb_pagerType flag
+
+
+???PROBLEM?
+saving these in last for now. is that OK?
+	i.e. what if multiple per page, i.e.  details
+
+
+experiment with the enhancement summary perhaps
+	maybe a nag reminder button too
+
+special cases:
+	table_name link to realms		
+
+how?
 ??? PHP
 proper generic search feature!!
 	i.e. the beginning of what i have in audit trail!!

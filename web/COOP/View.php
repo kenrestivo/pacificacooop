@@ -663,19 +663,13 @@ class coopView extends CoopObject
     function schoolYearChooser()
         {
             
-            if($this->perms[NULL]['year'] < ACCESS_VIEW)
-            {
-                return;
-            }
-            
-            
             if(!$this->isTop()){
-                return;
+                return false;
             }
             
             if(!empty($this->searchForm)){
                 //there's already one there
-                return;
+                return false;
             }
             
             
@@ -683,11 +677,16 @@ class coopView extends CoopObject
                                           false, false, false, false, true);
             $syform->removeAttribute('name');
             $syform->removeAttribute('target');
-            $el =& $syform->addElement('select', 'school_year', 'School Year', 
+ 
+           if($this->perms[NULL]['year'] >= ACCESS_VIEW)
+            {
+  
+                $el =& $syform->addElement('select', 
+                                           'school_year', 'School Year', 
                                        //TODO check ispermittedfield for allyears!
                                        $this->getSchoolYears(null, true),
                                        array('onchange' =>'this.form.submit()'));
-            
+            }
             if($sid = thruAuthCore($this->page->auth)){
                 $syform->addElement('hidden', 'coop', $sid); 
             }
@@ -712,11 +711,12 @@ class coopView extends CoopObject
             
             // TODO: move getchosenschoolyear back here, and do this in it!
             // and getelement(school_year) to get $el
-            $foo = $el->getValue();
-            $this->chosenSchoolYear = $foo[0];
-            $this->page->vars['last']['chosenSchoolYear'] = $this->chosenSchoolYear;
-            
-            return;
+            if($el){
+                $foo = $el->getValue();
+                $this->chosenSchoolYear = $foo[0];
+                $this->page->vars['last']['chosenSchoolYear'] = $this->chosenSchoolYear;
+            }
+            return true; 
         }
 
 

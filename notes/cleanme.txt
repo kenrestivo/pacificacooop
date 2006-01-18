@@ -1,5 +1,27 @@
 random things that really really need to get cleaned up
 
+
+	save the diff's, NOT the entire whooha
+		if that's possible in text/diff mode
+			maybe only the textfields
+		but how to format that for email??
+
+
+smaller damned font
+	how does this look in exploiter? font-size: 101%
+	http://www.nedbatchelder.com/code/modules/coverage.html
+
+shitcan flexac
+
+    remove crufty files
+    	cvs remove the whole list of crufty files: foundold-clean.txt
+    		first awk/split it out
+    		then run another qa, just to be sure!
+    	save tickets and thankyou's and paddles, dammit.
+    		deal with that clusterfuck over the holiday
+
+
+
 ???PHP
 do NOT dick with request in coopview!
 	instead, find some way to extend my merging code in dispatcher
@@ -16,3 +38,19 @@ blow off pagetop completely
 		the APP logic must occur in a certain order
 			the presentation logic is in a TOTALLY different order
 			shouldn't have anything to do with each other!
+	construct the <HEAD> *last*, after the whole body is done
+		buffer the entire page, no matter how fucking enormous
+			this also gets me a <title> that makes sense too
+			wouldn't take much to TAL the whole app, actually
+
+
+???PHP
+clean up my inclusion order in proparation h for phptal
+	remember the set names!!!
+
+	what about deletes? no audit trail on deletes... interesting
+
+
+	generic dispatcher
+		then use that for my fix-whateve
+

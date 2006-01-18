@@ -157,6 +157,7 @@ class Enrollment extends CoopDBDO
             
             // i need separate copies for am/pm
             $co2 =& new CoopView(&$co->page, $co->table, &$none);
+            $co2->obj->fb_forceNoChooser = 1;
             $res .= $co2->obj->_prepareView(&$co2, 'PM');
 
             $res .= '<p class="small">Legend: W=Worker, c=Child Attends, E=EPOD, B=Brings Baby</p>';

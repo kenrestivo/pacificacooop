@@ -92,9 +92,9 @@ class Auction_donation_items extends CoopDBDO
         'item_description' => 100
         );
 
-    // XXX ACK! multiple paths.
-    // i need some way to decide, based on previous table!
-    var $fb_joinPaths = array('family_id' => 'auction_items_families_join');
+    
+    var $fb_joinPaths = array('family_id' => array('auction_items_families_join',
+                                                   'companies_auction_join'));
 
 	function fb_linkConstraints(&$co)
 		{
@@ -103,6 +103,8 @@ class Auction_donation_items extends CoopDBDO
             $co->constrainSchoolYear();
             $co->constrainFamily();
             $co->protectedJoin($auc);
+            //XXX constrainfamily() should do this below for me!!
+            $this->selectAdd('auction_items_families_join.family_id');
             $co->orderByLinkDisplay();
             $co->grouper();
 		}
