@@ -134,9 +134,17 @@ class coopForm extends CoopObject
 
 			$this->form->applyFilter('__ALL__', 'trim');
 
+            if(!empty($this->obj->fb_currencyFields)){
+                foreach($this->obj->fb_currencyFields as $f){
+                    $this->form->applyFilter($this->prependTable($f), 
+                                             array(&$this, 'floatOnly'));
+                }
+                
+            }
+
 			$this->form->addFormRule(array(&$this,'dupeCheck'));
             
-
+            confessObj($this->form, 'fubarific');
             //godDAMN do i hate php.
             if(is_callable(array($this->obj, 'postGenerateForm'))){
                 $this->page->printDebug(
@@ -977,7 +985,14 @@ class coopForm extends CoopObject
 			$this->form =& $form;
 		}
 
-	
+
+	//from rsvpwizard
+	function floatOnly($val)
+		{
+            $this->page->printDebug("filtering $val", 4);
+            return preg_replace('/[^0-9.]/', '', $val);
+		}
+
 
 } // END COOP FORM CLASS
 

@@ -13,22 +13,8 @@ coop web database
 	insurance, dammit
 
 
-??PHP
-parent ed chooser rehash-- incl schoolyear
-	disappears if old year
-	aha. there must be some way to get it to show ALWAYS	
 
-
-BUGS
-	editperms on auction items.
-		dammit. it used to calculate it
-		it needs to join to family. that's all.
-		well i stuck it in the linkconstraints. BUT THAT IS A HACK!
-
-???PHP
-FILTER all cash things: remove non-numeric characters except .!
-
-
+then test and push live
 
 
 ??? PHP/JS
@@ -5828,3 +5814,24 @@ family chooser and/or sorter please, for invites
 		AH! table
 	weird! not being honoured. why?
 	constrainschoolyear.
+
+??PHP
+parent ed chooser rehash-- incl schoolyear
+	disappears if old year
+	aha. there must be some way to get it to show ALWAYS	
+		it showed always IFF they had add perms. no add perms, no dice
+		so i've changed completely the way simpletable works now
+
+BUGS
+	editperms on auction items.
+		dammit. it used to calculate it
+		it needs to join to family. that's all.
+		well i stuck it in the linkconstraints. BUT THAT IS A HACK!
+
+WAIT! that watch aint' waterproof!
+		looks like edit perms in auciton items is fuxored again!
+		that multipel join did it i think
+		but it's ok in popup. wtf?
+			looks fine now
+???PHP
+FILTER all cash things: remove non-numeric characters except .!
