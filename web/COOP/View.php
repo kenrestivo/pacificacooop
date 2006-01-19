@@ -696,7 +696,6 @@ class coopView extends CoopObject
                 return false;
             }
             
-            
             $syform =& new HTML_QuickForm($this->table . '-schoolyearchooser',
                                           false, false, false, false, true);
             $syform->removeAttribute('name');

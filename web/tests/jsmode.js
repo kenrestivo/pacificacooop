@@ -477,7 +477,7 @@ foo=update(foo, bar);
 
 
 filter(function(x){return  x[0] == 'coop'},
-       map(function(i){ return i.split('=')}, 
+       map(function(i){ if(typeof(i) == 'string'){return i.split('=')}}, 
            map(trim, w.document.cookie.split(';'))))[0][1]
     
 

@@ -116,6 +116,7 @@ class Enrollment extends CoopDBDO
 
             $view = new CoopView(&$cp, 'families', &$top);
             $view->obj->family_id = $family_id;
+            $view->obj->fb_forceNoChooser = 1;
             $res .= $view->simpleTable();
 
 
@@ -124,6 +125,7 @@ class Enrollment extends CoopDBDO
             $subenrol = new CoopView(&$cp, 'enrollment', &$top);
             $subenrol->obj->whereAdd("$mi = $cid");
             $subenrol->constrainSchoolYear(); // NOT family
+            $subenrol->obj->fb_forceNoChooser = 1;
             $res .= $subenrol->simpleTable();
 
             //parents are easier. most of the time ;-)
@@ -131,12 +133,14 @@ class Enrollment extends CoopDBDO
             $view->obj->family_id = $family_id;
             $view->obj->orderBy('type asc');
             //TODO actionbutons to edit
+            $view->obj->fb_forceNoChooser = 1;
             $res .= $view->simpleTable();
 	
             //workers
             $view = new CoopView(&$cp, 'workers', &$top);
             $view->obj->whereAdd(sprintf('family_id = %d',$family_id));
             $view->constrainSchoolYear(); // NOT family
+            $view->obj->fb_forceNoChooser = 1;
             $res .= $view->simpleTable();
 
             // standard audit trail, for all details
@@ -144,6 +148,7 @@ class Enrollment extends CoopDBDO
             $aud->obj->table_name = $top->table;
             $aud->obj->index_id = $this->{$top->pk};
             $aud->obj->orderBy('updated desc');
+            $view->obj->fb_forceNoChooser = 1;
             $res .= $aud->simpleTable();
 
             return $res;

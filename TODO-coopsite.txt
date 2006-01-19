@@ -13,16 +13,16 @@ coop web database
 	sortable/searchable views (searchfeature.txt)
 
 
-editlinks
-	no () if nothing there. phptal would be SO much nicer here!
+FIX SENDEMAIL BUG!
+	need cookies need to send cookie with xmlhttprequest
+
+push live and test out the rest of my changes
+	after first doing a backup-live and reset to use latest data/perms
 	
 PERMS again
 	territories for solicit
 	solicitation is ugly. everyone can see it but only some can dick with it
 
-
-push live and test out the rest of my changes
-	after first doing a backup-live and reset to use latest data/perms
 
 
 ??PHP
@@ -5926,3 +5926,5 @@ family details should have a year chooser, no?
 	give them access dood. or did i already?
 edit within link cells!
 don't need to float for now, just put the fucking link in there
+editlinks
+	no () if nothing there. phptal would be SO much nicer here!

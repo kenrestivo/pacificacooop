@@ -366,6 +366,7 @@ function gooseUnSent(&$cp)
 ignore_user_abort(); // IMPORTANT!
 
 $cp = new coopPage( $debug);
+$cp->logIn(); //XXX HACK! to handle the cookies
 
 if(!empty($_REQUEST['audit_id'])){
     notifyAll(&$cp, $_REQUEST['audit_id']);
