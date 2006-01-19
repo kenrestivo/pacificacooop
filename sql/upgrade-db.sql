@@ -14,6 +14,3 @@
 
 -- add sponsorshiptypes to the perms table, admin only, then test it out please
 
--- add perms for parent ed report (didn't i do this already?)
-
--- year perms for packages too, and auctions -- ignor!

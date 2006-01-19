@@ -78,6 +78,11 @@ class Families extends CoopDBDO
             // otherwise perms calculates based on the LAST of the years
             $co->obj->selectAdd('max(school_year) as school_year');
 
+
+            $this->whereAdd(
+                sprintf('(dropout_date is null or dropout_date < "2000-01-01" or dropout_date > "%s")', 
+                        date('Y-m-d')));
+
             $co->obj->orderBy();
             $co->obj->orderBy('families.name');
             $co->grouper();

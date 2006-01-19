@@ -73,6 +73,7 @@ class Enrollment extends CoopDBDO
                 sprintf('(dropout_date is null or dropout_date < "2000-01-01" or dropout_date > "%s")', 
                         date('Y-m-d')));
             
+            // XXX use constrainschoolyear instead?
             $this->whereAdd(sprintf('%s.school_year like "%s"',
                                     $co->table,
                                     $co->getChosenSchoolYear()));

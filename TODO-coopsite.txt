@@ -12,17 +12,20 @@ coop web database
 	insurance, dammit
 	sortable/searchable views (searchfeature.txt)
 
-SWAP the order of the add new link, or emphasise it somehow.
-	yes, you need to do this. yes, it is easy
-	fb_putNewFirst
 	
-family count is wrong
+family linkconstraint is wrong, go fix
+	in families. scaary!
+		well, i hacked it in there.
+
+history of nags, previous years
+	also indulgencs, and for board
 
 PERMS BUGS!!
 	contacts not showing up for non-root users. wtf?
 		though the perms seem ok, from editing, it's only the view that'sweird
 	white family and harvey family no auction root perms? wtf?
 	year perms for auctions, to sf at least
+		didn't i do this already?
 
 
 export/print
@@ -5873,4 +5876,6 @@ gah, numbers
 	wine 100
 	pastel 75
 margolis UI notes-- read and repl
-yput response code in somewhere, in invites/leadsinstructions for auction entry
+yput response code in somewhere, in invites/leadsinstructions for auction entrySWAP the order of the add new link, or emphasise it somehow.
+	yes, you need to do this. yes, it is easy
+	fb_putNewFirst

@@ -114,9 +114,9 @@ class Auction_donation_items extends CoopDBDO
         {
 //              $form->addRule($form->CoopForm->prependTable('item_description'), 
 //                             'Do not enter "cash donation" here. Simply write your check and hand it to the Springfest Coordinators, and you will be removed from this list.', 'regex', '/.*?(?!cash).*?/i', 'client');
-             $form->addRule($form->CoopForm->prependTable('item_description'), 
-                            'Need more description, please make it sound attractive to potential buyers. At least 40 characters long.', 
-                            'minlength', 40, 'client');
+//              $form->addRule($form->CoopForm->prependTable('item_description'), 
+//                             'Need more description, please make it sound attractive to potential buyers. At least 40 characters long.', 
+//                             'minlength', 40, 'client');
 
 
         }
