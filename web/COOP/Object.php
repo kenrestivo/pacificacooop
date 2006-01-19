@@ -215,16 +215,18 @@ group by user_id,table_name,field_name";
             // the right way to do this would be to add my linkfield methods
             // to the CoopDBDO subclass of DBDO. it is just plain wrong now.
             list($subtable, $subkey) = explode(':', $this->forwardLinks[$key]);
-			$sub =& new CoopObject(&$this->page, $subtable, &$this);
+			$sub =& new CoopView(&$this->page, $subtable, &$this);
             $sub->obj->get($subkey, $this->obj->$key);
             
 
-			return $sub->concatLinkFields();
+			return $sub;
 		}
 
 
     // NOTE! i pass the DBDO object in because getlinks DOES NOT KNOW how
     // to get my coopobject objects. duh.
+    // returns either an object reference OR a string, or nothing
+    // if it's a linkfield then you can do interesting things with the object
 	function concatLinkFields()
 		{
 			$ldfs = $this->obj->fb_linkDisplayFields;
@@ -243,11 +245,12 @@ group by user_id,table_name,field_name";
 					// might be more readable
                     // TODO: make sure i don't show the - if nothing there
                     // ALSO TODO: do the formatting i.e. coopview toArray!!
+                    $sub = $this->checkLinkField($linkfield, 
+                                          $this->obj->$linkfield);
 					$val .= sprintf(
                         "%s%s", 
                         $val ? ' ' . chr(183) . ' ' : "", 
-                        $this->checkLinkField($linkfield, 
-                                              $this->obj->$linkfield));
+                        is_object($sub) ? $sub->concatLinkFields() : $sub);
 				}
 			}
 			return $val;

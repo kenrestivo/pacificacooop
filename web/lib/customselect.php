@@ -85,7 +85,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
 //     function getFrozenHTML(){
 //         $res .= "";
 //         foreach($this->vals as $val){
-//             $res .= $this->cf->checkLinkField($this->field, $val);
+//             $sub =& $this->cf->checkLinkField($this->field, $val);
+//              do the sub stuff i.e in  coopvie::toarray
 //         }
 //         return $res;
 //     }

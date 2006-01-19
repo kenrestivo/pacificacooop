@@ -388,8 +388,21 @@ class coopView extends CoopObject
                     //TODO: a little checkbox PNG would be nice
                     $res[] =  $val? 'X' :'';
                 } else {
-                    $res[] = nl2br(htmlentities(
-                                       $this->checkLinkField($key, $val)));
+                    // append a direct edit link here, if permitted!
+                    // NOTE! DO NOT TAKE VALUE BY REFERENCE!!
+                    // if it returns a string, you'll be in a world of hurt
+                    $sub = $this->checkLinkField($key, $val);
+                    if(is_object($sub)){
+                        $res[] = sprintf('%s <span class="actions">(%s)</span>', 
+                                       nl2br(htmlentities(
+                                                 $sub->concatLinkFields())),
+                                         $sub->recordButtons(
+                                             $sub->obj->toArray(),
+                                             false));
+                    } else {
+                        $res[] = nl2br(htmlentities($sub));
+                    }
+
                 }
 				
 			}
@@ -578,7 +591,7 @@ class coopView extends CoopObject
                     $par || $res .= '&nbsp;';
                 }
 			}
-            return '<div class="actions">' . $res . '</div>';
+            return $res;
 		}
 
 

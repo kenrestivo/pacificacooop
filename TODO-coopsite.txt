@@ -12,16 +12,22 @@ coop web database
 	insurance, dammit
 	sortable/searchable views (searchfeature.txt)
 
-petra solicitation (territory?)
 
-susan questions
-	solicit summary, solicit family column?
-		ah, link to family details!
-	susan needs to delete auction items
+push live and test out the rest of my changes
+	after first doing a backup-live and reset to use latest data/perms
+
+
+??PHP
+stick reports into the stack, somehow
+	save report_id!!? it's unique!
+	maybe just a function in newdispatcher
+
 
 PERMS BUGS!!
 	contacts not showing up for non-root users. wtf?
 		though the perms seem ok, from editing, it's only the view that'sweird
+		AH! it only shows THEIRS! this is prolly a good thing
+			but then why does it show the pager then?
 	white family and harvey family no auction root perms? wtf?
 	year perms for auctions, to sf at least
 		didn't i do this already?
@@ -105,10 +111,6 @@ NITS(daytime)
 	css not bgcolor for publicauction
 	also fix the choosers colour
 
-
-??PHP
-stick reports into the stack, somehow
-	maybe just a function in newdispatcher
 
 
 
@@ -623,6 +625,11 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+???PHP/JS
+cascaded deletes
+	right now i have it as a bunch of links.
+	can i instead show all the cascades, and give them a choice?
 
 ???CSS/PHP/JS
 edit links WITHIN LINK CELLS!
@@ -5903,3 +5910,11 @@ family linkconstraint is wrong, go fix
 		well, i hacked it in there.
 	make reports view perms
 		and now fix massive fuckups in menulevel
+petra solicitation (territory?)
+susan questions
+	solicit summary, solicit family column?
+		ah, link to family details!
+	susan needs to delete auction items
+
+family details should have a year chooser, no?
+	give them access dood. or did i already?
