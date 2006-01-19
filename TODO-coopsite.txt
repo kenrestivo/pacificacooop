@@ -12,9 +12,11 @@ coop web database
 	insurance, dammit
 	sortable/searchable views (searchfeature.txt)
 
+petra solicitation (territory?)
 
 susan questions
 	solicit summary, solicit family column?
+		ah, link to family details!
 	susan needs to delete auction items
 
 PERMS BUGS!!

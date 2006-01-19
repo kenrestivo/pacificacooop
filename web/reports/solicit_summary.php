@@ -129,10 +129,20 @@ order by Before_Event desc, At_Event desc
 
 
 
+    $view =& new CoopView(&$atd->page, 'families', &$faketop);
+    $view->chosenSchoolYear = $schoolyear; // hack!
+	$view->obj->fb_formHeaderText = 'Top Soliciting Families';
+    $view->obj->fb_fieldsToRender = array(); // bah, i must have crap in there
+    $view->obj->fb_fieldLabels= array(
+        'Soliciting_family' => 'Soliciting Family',
+        'cash_donations' => 'Cash Donations',
+        'auction_purchases' => 'Auction Purchases',
+        'auction_donations' => 'Auction Donations',
+        'in_kind_donations' => 'In-Kind Donations');
+    $view->obj->query(
 
-	$res .= showRawQuery("Top Soliciting Families",
 " 
-select families.name as Soliciting_family,
+select families.name as Soliciting_family, families.family_id,
         sum(inc.payment_amount) as cash_donations,
         sum(auct.item_value) as auction_donations,
         sum(iks.item_value) as in_kind_donations
@@ -172,7 +182,8 @@ having cash_donations > 0 or auction_donations > 0 or in_kind_donations > 0
 order by cash_donations desc, 
     auction_donations desc, in_kind_donations desc 
 
-", 1);
+");
+    $res .= $view->simpleTable(false, true);
 
 
     
