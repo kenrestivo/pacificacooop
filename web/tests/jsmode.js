@@ -476,5 +476,33 @@ foo=update(foo, bar);
 
 
 
+filter(function(x){return  x[0] == 'coop'},
+       map(function(i){ return i.split('=')}, 
+           map(trim, w.document.cookie.split(';'))))[0][1]
+    
 
+    
+setRequestHeader!
+
+
+var strtrim = function(str) {
+	return str.replace(/^\s*|\s*$/g, "");
+};
+function strtrim() 
+{
+    return this.replace(/^\s+/,'').replace(/\s+$/,'');
+}
+
+
+' foobar '.replace(/^\s*|\s*$/g, "");
+
+
+var cookiesplit = function(i){if(i typeof String) return i.split('=')};
+cookie=filter(function(x){return  x[0] == 'coop'},
+              map(cookiesplit, 
+                      map(trim, document.cookie.split(';'))))[0][1]
+
+'foobar'.replace('/f/j', 'a')
+
+var trim = function(str){return str.replace(/^\s+|\s+$/g, "")};
 
