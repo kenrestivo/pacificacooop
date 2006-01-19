@@ -916,8 +916,9 @@ function triggerNotices($audit_id)
     // XXX it checks interal DBDO variables like _join. DANGEROUS!
     function protectedJoin(&$joinco, $jointype = 'left')
         {
-
-            if(strstr($this->obj->_join, $joinco->table)) {
+            // gah! notice the spaces here are significant!
+            // otherwise it false matches anything with the string IN it
+            if(strstr($this->obj->_join, ' '.$joinco->table . ' ')) {
                 $this->page->printDebug(
                     sprintf('protectedJoin(%s) already contains join for %s, skipping',
                             $this->table, 

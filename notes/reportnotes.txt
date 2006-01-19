@@ -1,15 +1,17 @@
 report notes
 $Id$
 
-
+??PYTHON (yeah baybee!)
 nifty label printing library reportlab!!
 	set page properties properly
 	do it as cgi
 		content type, custom cooppage object (i need to log in, really)
 			custom cooppage can have all the label stuff perhaps
+		um, LOGGING!
+		cgitb.enable(display=0, logdir='logs', format='text')
 	dump in some real data
 		use sqlobject directly?-- may be easier to start with this
-		do a jsonrpc call?
+		do a jsonrpc call? scary, not always reliable
 
 
 nfsn phptal notworking

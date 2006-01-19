@@ -34,7 +34,8 @@ class Companies_auction_join extends CoopDBDO
 	var $fb_formHeaderText =  'Springfest Solicitation Auction Donation Items';
 
 	var $fb_requiredFields = array('auction_donation_item_id', 
-                                   'company_id');
+                                   'company_id',
+                                   'family_id');
 
 
     var $fb_shortHeader = 'Solicitation Auction';
@@ -48,7 +49,7 @@ class Companies_auction_join extends CoopDBDO
             $auc->constrainSchoolYear();
             $co->protectedJoin($auc);
             // TODO: somehow make orderbylinkdisplay() recursive
-            $this->orderBy('item_description');
+            $this->orderBy('short_description, item_description');
             $co->grouper();
 		}
 

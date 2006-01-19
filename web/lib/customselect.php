@@ -162,7 +162,8 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                     // please make it cleaner and simpler
                     
                     if(!empty($this->cf->obj->fb_putNewFirst) &&
-                       in_array($this->field, $this->cf->obj->fb_putNewFirst))
+                       in_array($this->field, $this->cf->obj->fb_putNewFirst) &&
+                       $this->cf->page->vars['last']['action'] != 'edit')
                     {
                         $ord = array($addnew, $parent);
                     } else {

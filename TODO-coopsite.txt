@@ -1,8 +1,8 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
+	print labels (reportnotes.txt)
 	cleanups and code fixes (cleanme.txt)
-	export python (reportnotes.txt)
 	json, REST, xmlrpc (jsonselect.txt)
 	python translation LOGGING (pythonport.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
@@ -12,7 +12,10 @@ coop web database
 	insurance, dammit
 	sortable/searchable views (searchfeature.txt)
 
-	
+
+susan questions
+	solicit summary, solicit family column?
+	susan needs to delete auction items
 
 PERMS BUGS!!
 	contacts not showing up for non-root users. wtf?
@@ -222,8 +225,14 @@ BURNT (when too burnt out to do actual work)
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
 
+??PHP
+	solicit auction by company, perhaps?
+		this is a huge request. would break the entire app!
+	doing a multiple join causes fucking chaos!
+		for some reason, the blasted thing tries to select based on JOIN pk
+			i.e. auction item id, in addition to join id, thus getting me NOTHING
 
-	json: dom loading scripts
+
 
 	reports: sub-objects iteration, i.e. sqlobject MultipleJoin
 		or... my nifty python tal thing maybe??
@@ -615,16 +624,12 @@ BELOW THE LINE
 
 ???CSS/PHP/JS
 edit links WITHIN LINK CELLS!
-	 muhoo: it's possible
-	00:10 < muhoo> i.e. i want to float an A in the top-right corner of every cell, 
+	don't need to float for now, just put the fucking link in there
+	float an A in the top-right corner of every cell, 
                which will trigger some JS to edit it in place
-	00:10 < muhoo> deadroot: any special magick? or or will they float off to the top 
-               of the document?
-	00:12 < deadroot> muhoo: it shouldn't require anything special.  if that doesn't 
+	it shouldn't require anything special.  if that doesn't 
                   work properly however, try setting "position: relative;" to the 
                   parent element
-	00:13 < muhoo> parent element being the <td>? the <table>? the <div> the table is 
-               in?
 
 
 NOW! for invitations
@@ -3272,6 +3277,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	json: dom loading scripts
+
 	pear spreadsheetwriter
 		the easy way: just dump a fucking table of labels, already merged
 			with the response code in there
