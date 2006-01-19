@@ -122,7 +122,6 @@ group by user_id,table_name,field_name";
 			// i clobber here.
 			$this->readConf(&$top->overrides[$this->table], true, false);
             $this->getPerms();
-
 		}
  
 

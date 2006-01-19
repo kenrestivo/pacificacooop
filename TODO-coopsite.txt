@@ -13,6 +13,14 @@ coop web database
 	sortable/searchable views (searchfeature.txt)
 
 
+editlinks
+	no () if nothing there. phptal would be SO much nicer here!
+	
+PERMS again
+	territories for solicit
+	solicitation is ugly. everyone can see it but only some can dick with it
+
+
 push live and test out the rest of my changes
 	after first doing a backup-live and reset to use latest data/perms
 
@@ -632,8 +640,6 @@ cascaded deletes
 	can i instead show all the cascades, and give them a choice?
 
 ???CSS/PHP/JS
-edit links WITHIN LINK CELLS!
-	don't need to float for now, just put the fucking link in there
 	float an A in the top-right corner of every cell, 
                which will trigger some JS to edit it in place
 	it shouldn't require anything special.  if that doesn't 
@@ -5918,3 +5924,5 @@ susan questions
 
 family details should have a year chooser, no?
 	give them access dood. or did i already?
+edit within link cells!
+don't need to float for now, just put the fucking link in there

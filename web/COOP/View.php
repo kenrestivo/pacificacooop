@@ -23,6 +23,7 @@
 require_once('CoopObject.php');
 require_once('DB/DataObject.php');
 require_once("HTML/Table.php");
+require_once("HTML/QuickForm.php");
 require_once('object-config.php');
 
 //////////////////////////////////////////
@@ -393,12 +394,14 @@ class coopView extends CoopObject
                     // if it returns a string, you'll be in a world of hurt
                     $sub = $this->checkLinkField($key, $val);
                     if(is_object($sub)){
-                        $res[] = sprintf('%s <span class="actions">(%s)</span>', 
-                                       nl2br(htmlentities(
-                                                 $sub->concatLinkFields())),
+                        $res[] = sprintf('%s %s',
+                                         nl2br(htmlentities(
+                                                   $sub->concatLinkFields())) ,
                                          $sub->recordButtons(
                                              $sub->obj->toArray(),
-                                             false));
+                                             false,
+                                             array ('<span class="actions">(',
+                                                    ')</span>')));
                     } else {
                         $res[] = nl2br(htmlentities($sub));
                     }
@@ -550,7 +553,7 @@ class coopView extends CoopObject
 	// i accept the row and i don't toarray it myself.
 	// because i might need hidden fields that toarray would remove!
 	// NOTE! row is deprciated, it's not used for dbdo-based stuff, only old
-	function recordButtons(&$row, $par = true)
+	function recordButtons(&$row, $par = true, $wrap = null)
 		{
             $res = '';
 
@@ -591,6 +594,9 @@ class coopView extends CoopObject
                     $par || $res .= '&nbsp;';
                 }
 			}
+            if($res && $wrap && is_array($wrap)){
+                return $wrap[0] . $res . $wrap[1];
+            }
             return $res;
 		}
 
