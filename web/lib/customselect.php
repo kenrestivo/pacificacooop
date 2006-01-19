@@ -207,6 +207,7 @@ function processCustomSelect(selectbox, target_id, showtext)
    if(edpermshidden.decoded == undefined){
        /// must put the fieldname INSIDE the eval when evaling a dict
        eval("edpermshidden.decoded =" + edpermshidden.value);
+       edpermshidden.value = ""; // and wipe out so it doesnt resubmit
     }
 
    if(selectbox.value > 0 && edpermshidden.decoded[selectbox.value]){ 
