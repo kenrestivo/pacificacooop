@@ -1,6 +1,7 @@
 parent ed attendance
 
-FIX THE SESSION SHIT!!
+link for choosing only those who need nagging, vs those who do not
+	look at alphapager for inspiration
 
 
 then, that meeting screen

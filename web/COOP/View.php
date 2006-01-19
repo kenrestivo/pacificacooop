@@ -796,6 +796,10 @@ class coopView extends CoopObject
     function showPerms()
         {
 
+            // TODO: show ALL the totals for this user, um, on a user screen
+            // when called from a particular table, show ONLY those for this
+            // table, but... i'll need to calculate relavant realms in subquery
+            
 
             $res = "<h3>Detailed Permissions for {$this->obj->fb_formHeaderText}</h3>";
 
@@ -803,16 +807,16 @@ class coopView extends CoopObject
             // cute. the perms are about me, but they're executed in privs
             // so they execute with teh rights and permissions of privs.
             // TODO: do this gambit only if they have < 800 on this object
-            $targ =& new CoopView(&$this->page, 'users', &$this);
+            $targ =& new CoopView(&$this->page, 'table_permissions', &$this);
             $this->debugWrap(5);
             $targ->obj->fb_formHeaderText = 
                 "Total Permissions for {$this->obj->fb_formHeaderText}";
             $targ->obj->fb_fieldLabels = array('table_name' => 'Table',
-                                            'field_name' => 'Field',
-                                            'cooked_user' => 'User Level',
-                                            'cooked_group' => 'Group Level',
-                                            'cooked_menu' => 'Menu Level',
-                                            'cooked_year' => 'Year Level');
+                                               'field_name' => 'Field',
+                                               'cooked_user' => 'User Level',
+                                               'cooked_group' => 'Group Level',
+                                               'cooked_year' => 'Year Level',
+                                               'cooked_menu' => 'Menu Level');
             $targ->obj->query(sprintf($this->permsQuery,
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid'],
@@ -825,28 +829,23 @@ class coopView extends CoopObject
 
 
             ///// USER ONLY
-            $targ =& new CoopView(&$this->page, 'users', &$this);
+            $targ =& new CoopView(&$this->page, 'user_privileges', &$this);
             $targ->obj->fb_formHeaderText = "User Levels for ". 
                 $this->page->userStruct['username'];
-            $targ->obj->query(
-                sprintf('select max(user_level) as user_level, 
-max(group_level) as group_level,  max(year_level) as year_level, short_description
-from user_privileges 
-left join realms on user_privileges.realm_id = realms.realm_id
-where user_id = %d 
-group by realm
-order by realm',
+
+            $realm =& new CoopView(&$this->page, 'realms', &$targ);
+            $targ->protectedJoin($realm);
+            $targ->obj->whereAdd(sprintf('user_id = %d', 
                                         $this->page->auth['uid']));
               
             $targ->obj->fb_recordActions = array();
             $targ->obj->fb_fieldLabels = array('short_description' => 'Realm',
-                                            'user_level' => 'User Level',
-                                            'group_level' => 'Group Level',
-                                            'menu_level' => 'Menu Level',
-                                            'year_level' => 'Year Level');
+                                               'user_level' => 'User Level',
+                                               'group_level' => 'Group Level',
+                                               'year_level' => 'Year Level',
+                                               'menu_level' => 'Menu Level');
             //confessObj($targ, 'targ');
-            $res .= $targ->simpleTable(false,true);
-
+            $res .= $targ->simpleTable(true,true);
 
 
 
@@ -897,8 +896,8 @@ order by realms.short_description, groups.name',
                                                'name' => 'Group',
                                                'user_level' => 'User Level',
                                                'group_level' => 'Group Level',
-                                               'menu_level' => 'Menu Level',
-                                               'year_level' => 'Year Level');
+                                               'year_level' => 'Year Level',
+                                               'menu_level' => 'Menu Level');
             //confessObj($targ, 'targ');
             $res .= $targ->simpleTable(false,true);
 

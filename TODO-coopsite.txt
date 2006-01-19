@@ -2,8 +2,8 @@ coop web database
 
  MY agenda! dammit, mine! for a change....
 	cleanups and code fixes (cleanme.txt)
+	export python (reportnotes.txt)
 	json, REST, xmlrpc (jsonselect.txt)
-	render in phptal, or maybe json/rest/xmlrpc (reportnotes.txt)
 	python translation LOGGING (pythonport.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
@@ -15,8 +15,6 @@ coop web database
 	
 
 PERMS BUGS!!
-	make reports view perms
-		and now fix massive fuckups in menulevel
 	contacts not showing up for non-root users. wtf?
 		though the perms seem ok, from editing, it's only the view that'sweird
 	white family and harvey family no auction root perms? wtf?
@@ -614,6 +612,20 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+???CSS/PHP/JS
+edit links WITHIN LINK CELLS!
+	 muhoo: it's possible
+	00:10 < muhoo> i.e. i want to float an A in the top-right corner of every cell, 
+               which will trigger some JS to edit it in place
+	00:10 < muhoo> deadroot: any special magick? or or will they float off to the top 
+               of the document?
+	00:12 < deadroot> muhoo: it shouldn't require anything special.  if that doesn't 
+                  work properly however, try setting "position: relative;" to the 
+                  parent element
+	00:13 < muhoo> parent element being the <td>? the <table>? the <div> the table is 
+               in?
+
 
 NOW! for invitations
 	show only invited names!
@@ -5880,3 +5892,5 @@ yput response code in somewhere, in invites/leadsinstructions for auction entryS
 family linkconstraint is wrong, go fix
 	in families. scaary!
 		well, i hacked it in there.
+	make reports view perms
+		and now fix massive fuckups in menulevel
