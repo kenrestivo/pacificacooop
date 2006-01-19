@@ -193,6 +193,7 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
 
 
     eval('self.editpermshidden.decoded = ' +self.editpermshidden.value);
+    self.editpermshidden.value = ""; // so i don't submit it
 
 
 
