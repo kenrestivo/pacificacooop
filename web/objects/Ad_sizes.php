@@ -41,6 +41,13 @@ class Ad_sizes extends CoopDBDO
         'school_year'
         );
 
+    function fb_linkConstraints(&$co)
+		{
+            $co->constrainSchoolYear();
+            $this->orderBy('ad_price desc');
+            $co->grouper();
+		}
+
 
 
 

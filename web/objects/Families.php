@@ -70,6 +70,9 @@ class Families extends CoopDBDO
             $co->constrainSchoolYear();
 
             //$co->constrainFamily(): // no point in this?
+
+            // TODO: add teh drop day part of the query!!
+            // look at enrollment totals. this is a fairly invasive change
             
             // NEED THIS HACK,
             // otherwise perms calculates based on the LAST of the years

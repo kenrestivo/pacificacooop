@@ -12,8 +12,18 @@ coop web database
 	insurance, dammit
 	sortable/searchable views (searchfeature.txt)
 
+SWAP the order of the add new link, or emphasise it somehow.
+	yes, you need to do this. yes, it is easy
+	fb_putNewFirst
+	
+family count is wrong
 
-put response code in somewhere, in invites/leads
+PERMS BUGS!!
+	contacts not showing up for non-root users. wtf?
+		though the perms seem ok, from editing, it's only the view that'sweird
+	white family and harvey family no auction root perms? wtf?
+	year perms for auctions, to sf at least
+
 
 export/print
 	the standard view stuff, minus pager
@@ -5863,4 +5873,4 @@ gah, numbers
 	wine 100
 	pastel 75
 margolis UI notes-- read and repl
-y
+yput response code in somewhere, in invites/leadsinstructions for auction entry

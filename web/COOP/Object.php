@@ -331,6 +331,7 @@ group by user_id,table_name,field_name";
     // key is the field. leave blank to get ispermittedRECORD, basically.
     //forceuser means assume the record belongs to this user even if it does not (useful in menus, or where you want a best case situation)
     // forceyear is to assume that the record is this year's-- best case, i.e. in menus
+// when checking group perms 
 	function isPermittedField($key = NULL, $forceuser = false, 
                               $forceyear = false)
 		{

@@ -36,6 +36,7 @@ class Auction_items_families_join extends CoopDBDO
 
 
     var $fb_shortHeader = 'Family Donations';
+    var $fb_putNewFirst = array ('auction_donation_item_id');
 
     function fb_linkConstraints(&$co)
 		{

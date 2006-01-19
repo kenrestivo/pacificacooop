@@ -39,6 +39,8 @@ class Companies_auction_join extends CoopDBDO
 
     var $fb_shortHeader = 'Solicitation Auction';
 
+    var $fb_putNewFirst = array ('auction_donation_item_id');
+
     function fb_linkConstraints(&$co)
 		{
             $auc =& new CoopObject(&$co->page, 'auction_donation_items', 

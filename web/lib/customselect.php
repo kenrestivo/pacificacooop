@@ -101,10 +101,13 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                 list($target, $targfield) = $this->link;
                 $target_id =  $target . '-'. $targfield;
 
+
                 /// FINALLY, build the result
                 $res = "";
                 $res .= $this->_getJs();
-                $res .= parent::toHTML(); // the actual {element}!
+                $parent = parent::toHTML(); // the actual {element}!
+
+
             
                 if($this->sub->isPermittedField(null, true, true) >= ACCESS_EDIT)
                 {
@@ -116,7 +119,7 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                         $tmpsub->obj->get($this->vals[0]);
                     }
 
-                    $res .= '&nbsp;' . $this->cf->page->selfURL(
+                    $parent .= '&nbsp;' . $this->cf->page->selfURL(
                         array(
                             'value' =>sprintf(
                                 'Edit%s',
@@ -133,12 +136,12 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                 }            
 
 
+                $addnew = "";
+
                 if($this->sub->isPermittedField(null, true, true) >= ACCESS_ADD)
                 {
                     //XXX do i really need to wrap it in a div? or just use ID?
-                    $res .= sprintf(
-                        '<div>&nbsp;%s</div>',
-                        $this->cf->page->selfURL(
+                    $addnew = $this->cf->page->selfURL(
                             array(
                                 'value' =>sprintf(
                                     'Add New %s &gt;&gt;',
@@ -146,9 +149,29 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                                 'par' => false,
                                 'inside' => array('table' => $target,
                                                   'action' => 'add',
-                                                  'push' => $this->getName())))
-                        );
+                                                  'push' => $this->getName())));
                     
+
+
+                    $this->cf->page->confessArray(
+                        $this->cf->obj->fb_putNewFirst,
+                        "customsselect {$this->cf->table}-{$this->field}  checking addnew order", 
+                        4);
+                    
+                    // XXX this "algorithm" should be taken out and shot
+                    // please make it cleaner and simpler
+                    
+                    if(!empty($this->cf->obj->fb_putNewFirst) &&
+                       in_array($this->field, $this->cf->obj->fb_putNewFirst))
+                    {
+                        $ord = array($addnew, $parent);
+                    } else {
+                        $ord = array($parent, $addnew);
+                    }
+                    $res .= sprintf('<div>%s</div><div>OR&nbsp;%s</div>',
+                                    $ord[0], $ord[1] );
+                } else {
+                    $res .= $parent;
                 }
                 return $res;
             }

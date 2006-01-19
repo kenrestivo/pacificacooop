@@ -16,3 +16,4 @@
 
 -- add perms for parent ed report (didn't i do this already?)
 
+-- year perms for packages too, and auctions -- ignor!
