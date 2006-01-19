@@ -798,12 +798,6 @@ class coopView extends CoopObject
 
 
             $res = "<h3>Detailed Permissions for {$this->obj->fb_formHeaderText}</h3>";
-            $res .= $this->actionButtons();
-
-            /// GETPERMS, AS CALCULATED
-            // TODO: format this a bit nicer, eh?
-            $res .= sprintf("<pre>%s</pre>", print_r($this->perms, 1));
-
 
             //////  GETPERMS, from db
             // cute. the perms are about me, but they're executed in privs
@@ -826,7 +820,7 @@ class coopView extends CoopObject
                                       $this->page->auth['uid'],
                                       $this->table));
             $targ->obj->fb_recordActions = array();
-            $res .= $targ->simpleTable(false);
+            $res .= $targ->simpleTable(false,true);
 
 
 
@@ -842,9 +836,7 @@ left join realms on user_privileges.realm_id = realms.realm_id
 where user_id = %d 
 group by realm
 order by realm',
-                                      $this->page->auth['uid'],
-                                      $this->page->auth['uid'],
-                                      $this->page->auth['uid']));
+                                        $this->page->auth['uid']));
               
             $targ->obj->fb_recordActions = array();
             $targ->obj->fb_fieldLabels = array('short_description' => 'Realm',
@@ -853,7 +845,7 @@ order by realm',
                                             'menu_level' => 'Menu Level',
                                             'year_level' => 'Year Level');
             //confessObj($targ, 'targ');
-            $res .= $targ->simpleTable(false);
+            $res .= $targ->simpleTable(false,true);
 
 
 
@@ -873,12 +865,12 @@ where users_groups_join.user_id = %d
                                       $this->page->auth['uid']));
                     
             //confessObj($targ, 'targ');
-            $res .= $targ->simpleTable(false);
+            $res .= $targ->simpleTable(false,true);
 
 
 
             ///// GROUPS, that user belongs to
-            $targ =& new CoopView(&$this->page, 'groups', &$this);
+            $targ =& new CoopView(&$this->page, 'user_privileges', &$this);
             $targ->obj->fb_recordActions = array();
             $targ->obj->fb_formHeaderText = "Group Levels for ". 
                 $this->page->userStruct['username'];
@@ -886,6 +878,7 @@ where users_groups_join.user_id = %d
                 sprintf('select name,
 max(user_level) as user_level, 
 max(group_level) as group_level, 
+max(menu_level) as menu_level, 
 max(year_level) as year_level, 
  short_description
 from user_privileges 
@@ -894,20 +887,20 @@ left join groups on groups.group_id = user_privileges.group_id
 where (user_privileges.group_id in 
 (select group_id from users_groups_join 
 where user_id = %d)) 
-group by realm
-order by realm',
+group by realms.realm_id,groups.group_id
+order by realms.short_description, groups.name',
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid'],
                                       $this->page->auth['uid']));
                     
-            $targ->obj->fb_fieldLabels = array('name' => 'Group',
-                                               'short_description' => 'Realm',
+            $targ->obj->fb_fieldLabels = array('short_description' => 'Realm',
+                                               'name' => 'Group',
                                                'user_level' => 'User Level',
                                                'group_level' => 'Group Level',
                                                'menu_level' => 'Menu Level',
                                                'year_level' => 'Year Level');
             //confessObj($targ, 'targ');
-            $res .= $targ->simpleTable(false);
+            $res .= $targ->simpleTable(false,true);
 
 
 
@@ -916,37 +909,20 @@ order by realm',
             $targ =& new CoopView(&$this->page, 'table_permissions', &$this);
                  
             $targ->obj->fb_formHeaderText = "Table Permissions for {$this->obj->fb_formHeaderText}";
-            $targ->obj->query(
-                sprintf('
-select field_name, table_name, 
-user_level, group_level, table_permissions.realm_id 
-from table_permissions  
-left join realms using (realm_id)
-where table_name = "%s"
-order by table_name,field_name;
-',
-                                      $this->table));
+            $targ->obj->whereAdd(sprintf('table_name = "%s"',$this->table));
                     
             $targ->obj->fb_recordActions = array();
             //confessObj($targ, 'targ');
-            $res .= $targ->simpleTable(false);
+            $res .= $targ->simpleTable(true,true);
 
 
            /// REEPORTS
             $targ =& new CoopView(&$this->page, 'report_permissions', &$this);
                  
             $targ->obj->fb_formHeaderText = "Report Permissions";
-            $targ->obj->query(
-                sprintf('
-select report_name, page, 
-user_level, group_level, report_permissions.realm_id 
-from report_permissions  
-left join realms using (realm_id)
-order by report_name'));
-                    
             $targ->obj->fb_recordActions = array();
             //confessObj($targ, 'targ');
-            $res .= $targ->simpleTable(false);
+            $res .= $targ->simpleTable(true, true);
 
 
             return $res;
