@@ -5895,3 +5895,4 @@ FIX SENDEMAIL BUG!
 	need cookies need to send cookie with xmlhttprequest
 push live and test out the rest of my changes
 	after first doing a backup-live and reset to use latest data/perms
+wget -O - www/coop-dev/tests/labeltest.py?coop=232e091868aac020857cbb8d1b96c81c | gv -

@@ -226,12 +226,14 @@ group by user_id,table_name,field_name";
     // to get my coopobject objects. duh.
     // returns either an object reference OR a string, or nothing
     // if it's a linkfield then you can do interesting things with the object
-	function concatLinkFields()
+	function concatLinkFields($separator = false)
 		{
 			$ldfs = $this->obj->fb_linkDisplayFields;
 			if(!$ldfs){
 				return $val;
 			}
+            // default to middot  which is 183 in iso, my encoding
+            $separator = $separator ? $separator : chr(183) ;
 			//confessObj($this->obj, "concatlinkfields(obj)");
 			// only if i have linkfields in the dataobj
 			$val = false; 		// gotta reset it here.
@@ -248,8 +250,8 @@ group by user_id,table_name,field_name";
                                           $this->obj->$linkfield);
 					$val .= sprintf(
                         "%s%s", 
-                        $val ? ' ' . chr(183) . ' ' : "", 
-                        is_object($sub) ? $sub->concatLinkFields() : $sub);
+                        $val ? " $separator " : "", 
+                        is_object($sub) ? $sub->concatLinkFields($separator) : $sub);
 				}
 			}
 			return $val;

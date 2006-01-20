@@ -396,7 +396,7 @@ class coopView extends CoopObject
                     if(is_object($sub)){
                         $res[] = sprintf('%s %s',
                                          nl2br(htmlentities(
-                                                   $sub->concatLinkFields())) ,
+                                                   $sub->concatLinkFields("\n"))) ,
                                          $sub->recordButtons(
                                              $sub->obj->toArray(),
                                              false,
