@@ -4,11 +4,30 @@
 sendEmailNotice = function(self,audit_id){
     ih=self.innerHTML;
     self=swapDOM(self,P({},'Sending', IMG({'src':'/images/spinner.gif'})));
-    var trim = function(str){return str.replace(/^\s+|\s+$/g, "")};
-    cookie=filter(function(x){return  x[0] == 'coop'},
-       map(function(i){ if(typeof(i) == 'string'){return i.split('=')}}, 
-           map(trim, document.cookie.split(';'))))[0][1]
-
+    var trim = function(str){
+        return str.replace(/^\s+|\s+$/g, "")
+    };
+    var tuplesplit = function(i){ 
+        if(typeof(i) == 'string'){return i.split('=')}
+    };
+    var findcoop= function(x){return  x[0] == 'coop'};
+    try{
+        cookie=filter(findcoop,
+                      map(tuplesplit, 
+                          map(trim, document.cookie.split(';'))))[0][1]
+            } catch (e){
+                self.innerHTML = 'No cookies?';
+            }
+    // now the ugly no-cookie way
+    if(cookie == undefined){
+        try{
+            cookie=filter(findcoop,
+                          map(tuplesplit, 
+                              window.location.search.slice(1).split('&')))[0][1];
+        } catch (e){
+            self.innerHTML = "Can't find cookie";
+        }
+    }
 
     //TODO: send as a cookie header instead of passing this silly way
     d=doSimpleXMLHttpRequest('send_email.php', 
