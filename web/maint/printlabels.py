@@ -51,6 +51,7 @@ from reportlab.platypus.tables import Table,TableStyle
 from reportlab.lib import colors
 from reportlab.lib.units import inch
 
+from sqlobject import *
 
 page=coop_page.Page()
 page.headers['Content-Type'] = 'application/pdf'
@@ -65,9 +66,10 @@ def getData():
     return [rawdata[i:i+n] for i in range(0, len(rawdata), n)]
 
 
-def getDBresults(step=3):
-    """step through the result set
-    TODO: make this an iterator!"""
+class DBresults:
+    """step through the result set"""
+    c=None
+    step = 0
     lq = '''concat_ws("\n"
 ,concat_ws(" " , leads.salutation, leads.first_name, leads.last_name)
 ,if(length(leads.title)>0, leads.title, null)
@@ -76,9 +78,17 @@ def getDBresults(step=3):
 ,if(length(leads.address2)>0, leads.address2, null)
 ,concat_ws(" ", concat(leads.city, ", ", leads.state), leads.zip, if(leads.country != "USA", leads.country, ""))
 ) as lead_label'''
-    c=sqlhub.getConnection().getConnection().cursor()
-    c.execute('select invitations.lead_id, %s from invitations left join leads using (lead_id) where school_year = "2005-2006"' %(lq))
-    
+
+    def __init__(self, step):
+        self.step = step
+        self.c=sqlhub.getConnection().getConnection().cursor()
+        self.c.execute('''select invitations.lead_id, %s from invitations left join leads using (lead_id) where school_year = "2005-2006" order by invitations.lead_id''' %(self.lq))
+
+    def next(self):
+        res = []
+        for i in range(0, self.step):
+            res.append(self.c.fetchone())
+        return res
 
 
 
@@ -100,8 +110,9 @@ story.append(t)
 
 
 ##### finally output stuff
-page.output_headers()
-doc.build(story)
+if __name__ == '__main__':
+    page.output_headers()
+    doc.build(story)
 
 
 
