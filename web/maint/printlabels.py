@@ -109,7 +109,7 @@ class DBresults:
                 logging.warning('hey, less than 1')
             else :
                 # split them, each gets a paragraph object
-                res.append([Paragraph(p, style) for p in line[0].split('\n')])
+                res.append([Paragraph(p.strip(), style) for p in line[0].split('\n')])
             if len(res) < self.step and flag > 0:
                 raise StopIteration
         return res
