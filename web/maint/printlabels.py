@@ -52,8 +52,8 @@ for i in environ.items():
 
 
 ##### finally output stuff
-page.render_raw(True)
-#page.render_template()
+#page.render_raw(True)
+page.render_template()
 
 
 #END

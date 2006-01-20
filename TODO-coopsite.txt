@@ -9,26 +9,17 @@ coop web database
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	import the 20-year roster (20yearroster.txt)
+	templates and reports (templates.txt)
 	insurance, dammit
 	sortable/searchable views (searchfeature.txt)
 
 
-FIX SENDEMAIL BUG!
-	need cookies need to send cookie with xmlhttprequest
 
-push live and test out the rest of my changes
-	after first doing a backup-live and reset to use latest data/perms
-	
 PERMS again
 	territories for solicit
 	solicitation is ugly. everyone can see it but only some can dick with it
 
 
-
-??PHP
-stick reports into the stack, somehow
-	save report_id!!? it's unique!
-	maybe just a function in newdispatcher
 
 
 PERMS BUGS!!
@@ -75,38 +66,6 @@ sponsorships fix
 		hiding this is going to be challenging?
 	ad and sponsorship a few other places: a chooser for lead OR company!
 		and a form rule to require either not both
-
-
-???SQL/PHP
-add make-up table for parent ed
-	meeting makeup types
-		$20 fee
-			(link to family fees!)
-		attend board meeting
-			(link to event!)
-		tour open house
-			(link to event!)
-		cover for someone
-			date/comments?
-			(link to coverage type)
-				maternity
-				assessment/conference week
-				teacher absence
-	modeled on nag indulgences
-		but this will need a js dispatch AND validation
-			based on type of event. fun! here comes json!
-	and add yet another layer of subqueries to my report
-		go get sum of all indulgences this schoolyear by family
-			and calculate it in to meetings
-
-	pattern
-		table A has a field i, which is the PK of table B. 
-		table A also 
-               needs to link to tables C, D, or E (not and!) 
-					based on the value of field i
-		 table B might have a PK and a *name* of a table for A to link to
-	select A.id, IF(A.tref = 'B',B.val,IF(A.tref='C',C.val,NULL)) val 
-			FROM A left join B using (id) left join C using (id);
 
 
 
@@ -633,6 +592,10 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??JS
+hook the back button, and execute a Back Link instead.
+	look at the documentation, this is apparently a common AJAX task
 
 ???PHP/JS
 cascaded deletes
@@ -5928,3 +5891,7 @@ edit within link cells!
 don't need to float for now, just put the fucking link in there
 editlinks
 	no () if nothing there. phptal would be SO much nicer here!
+FIX SENDEMAIL BUG!
+	need cookies need to send cookie with xmlhttprequest
+push live and test out the rest of my changes
+	after first doing a backup-live and reset to use latest data/perms

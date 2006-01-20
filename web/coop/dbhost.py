@@ -1,9 +1,5 @@
 #$Id$
 
-import cgi
-import cgitb
-cgitb.enable()
-
 
 ##TODO: check dev!
 host='bc'

@@ -500,9 +500,12 @@ function strtrim()
 var cookiesplit = function(i){if(i typeof String) return i.split('=')};
 cookie=filter(function(x){return  x[0] == 'coop'},
               map(cookiesplit, 
-                      map(trim, document.cookie.split(';'))))[0][1]
+                      map(trim, w.document.cookie.split(';'))))[0][1]
 
 'foobar'.replace('/f/j', 'a')
 
 var trim = function(str){return str.replace(/^\s+|\s+$/g, "")};
 
+// doesn't work in javascript, alas
+tt=function(str){str.replace(/^\s+|\s+$/g, "")};
+tt(' foo ');
