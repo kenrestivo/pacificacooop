@@ -82,9 +82,6 @@ class Families extends CoopDBDO
             $co->obj->selectAdd('max(school_year) as school_year');
 
 
-            $this->whereAdd(
-                sprintf('(dropout_date is null or dropout_date < "2000-01-01" or dropout_date > "%s")', 
-                        date('Y-m-d')));
 
             $co->obj->orderBy();
             $co->obj->orderBy('families.name');
@@ -94,6 +91,21 @@ class Families extends CoopDBDO
             //$co->debugWrap(4);
 
  		}
+
+    function fb_display_view(&$co)
+        {
+
+            //whack the unenrolled
+            if($co->getChosenSchoolYear() != '%'){
+                $this->whereAdd(
+                    sprintf('(dropout_date is null or dropout_date < "2000-01-01" or dropout_date > "%s")', 
+                            date('Y-m-d')));
+            }
+
+            return $co->simpleTable(true,true);
+
+        }
+
 
     function afterInsert(&$co)
         {
