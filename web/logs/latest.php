@@ -6,7 +6,8 @@
 if ($handle = opendir('.')) {
     /* This is the correct way to loop over the directory. */
     while (false !== ($file = readdir($handle))) {
-        if(strstr($file, '-debug.')){
+        if(strstr($file, '-debug.') || preg_match('/tmp.+\.txt/', $file))
+        {
             $secondprev = $prev;
             $prev = $saver;
             $saver = $file;
@@ -21,6 +22,9 @@ if ($handle = opendir('.')) {
     printf('LATEST.php: %s is most recent. <a href="%s">%s</a> is previous. <a href="%s">%s</a> is third previous<br><br>',
            $saver, $prev, $prev, $secondprev, $secondprev);
     $fd = fopen($saver, 'r');
+    if(strstr($saver, '.txt')){
+        print "<pre>";
+    }
     do {
         $data = fread($fd, 8192);
         if (strlen($data) == 0) {
