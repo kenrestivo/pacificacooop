@@ -62,12 +62,27 @@ def getData():
     """note data must be multiple of 3, need to PAD IT OUT!!"""
     n=3
     rawdata = range(0, 105)
-    return [rawdata[i:i + n] for i in range(0, len(rawdata), n)]
+    return [rawdata[i:i+n] for i in range(0, len(rawdata), n)]
 
+
+def getDBresults(step=3):
+    """step through the result set
+    TODO: make this an iterator!"""
+    lq = '''concat_ws("\n"
+,concat_ws(" " , leads.salutation, leads.first_name, leads.last_name)
+,if(length(leads.title)>0, leads.title, null)
+,if(length(leads.company)>0, leads.company, null)
+,if(length(leads.address1)>0, leads.address1, null)
+,if(length(leads.address2)>0, leads.address2, null)
+,concat_ws(" ", concat(leads.city, ", ", leads.state), leads.zip, if(leads.country != "USA", leads.country, ""))
+) as lead_label'''
+    c=sqlhub.getConnection().getConnection().cursor()
+    c.execute('select invitations.lead_id, %s from invitations left join leads using (lead_id) where school_year = "2005-2006"' %(lq))
     
 
 
 
+#rendering!
 DEBUG_LAYOUT = TableStyle( [('OUTLINE', (0,0), (-1,-1), 0.25, colors.red),
                             ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
                             ('ALIGN', (0,0), (-1,-1), 'LEFT'),
