@@ -108,7 +108,8 @@ class DBresults:
             elif len(line) < 1:
                 logging.warning('hey, less than 1')
             else :
-                res.append(Paragraph(line[0], style))
+                # split them, each gets a paragraph object
+                res.append([Paragraph(p, style) for p in line[0].split('\n')])
             if len(res) < self.step and flag > 0:
                 raise StopIteration
         return res
@@ -123,7 +124,8 @@ if __name__ == '__main__':
                                 ('ALIGN', (0,0), (-1,-1), 'LEFT'),
                                 ('VALIGN', (0,0), (-1,-1), 'MIDDLE')] )
 
-    doc = SimpleDocTemplate(sys.stdout)
+    doc = SimpleDocTemplate(sys.stdout, title="Mailing Labels",
+                            author="Pacifica Co-Op Nursery School")
     story=[]
 
     t=Table([i for i in DBresults()], colWidths=2*inch, rowHeights=1.5*inch)
