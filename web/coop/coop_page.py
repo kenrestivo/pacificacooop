@@ -16,8 +16,10 @@
 
 import cgi
 import cgitb
-cgitb.enable()
+cgitb.enable(display=0, logdir='logs', format='text')
 from sys import stdout
+from datetime import datetime
+from posix import environ
 import session
 import logging
 
@@ -42,6 +44,24 @@ class Page:
         self.forminput = dict([(i.name, i.value)
                                for i in cgi.FieldStorage(keep_blank_values=True).list])
         self.session=session.Session(self)
+        self.initLogging()
+
+    def initLogging(self):
+        l=logging.getLogger()
+        for h in l.handlers:
+            l.removeHandler(h)
+
+        logging.basicConfig(level=logging.DEBUG,
+                            format='%(name)s %(levelname)s %(pathname)s (line %(lineno)s): %(message)s',
+                            filename='logs/%s-debug.log' % (datetime.now().strftime("%Y%m%d%H%M%s")),
+                            filemode='w')
+        logging.info('on %s %s %s' % (
+            datetime.now().strftime('%Y/%m/%d %H:%M:%S'),
+            environ['REQUEST_METHOD'],
+            environ['REQUEST_URI']
+            ))
+
+
 
 
     def add_header(self, line):
