@@ -33,7 +33,6 @@ except AttributeError:
 
 
 
-import cgi
 import coop_page
 
 
