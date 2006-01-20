@@ -40,6 +40,9 @@ class Families extends CoopDBDO
     var $fb_shortHeader = "Families";
     var $fb_joinPaths = array('school_year' => 'kids:enrollment');
 
+    // NOTE special case here: everythign must be dupignore to guarantee
+    // that name is unique: any dupe's by name will generate an error
+    var $fb_dupeIgnore = array('phone', 'address1', 'email');
 
     var $fb_extraDetails = array('parents:enhancement_hours',
                                  'families_income_join:income',
