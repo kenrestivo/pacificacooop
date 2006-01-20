@@ -1,0 +1,77 @@
+template engine notes
+
+nfsn phptal notworking
+	dunno why. but the iterator require Types dies
+
+
+ugly big huge reference problem
+	looks like the page that gets sent into the context is DIFFERENT
+		from the one that is in the dispatcher. this is deadly
+		make sure i understand exactly what is the behaviour
+			i.e. i can put things into dispatcher.
+				how do they get disconnected?
+		then go trace it through
+	maybe blow off the dispatcher???!
+		try to trace it back
+
+
+make attendance test use wholephptal model now!7
+	i think the secret is to change my brain. 
+	my view/add/confirmdelete/delete/etc code should NOT INCLUDE ANY HTML
+	 none whatsoever
+
+
+
+	which?
+		sf nag report
+			might be easiest to start with this!!!!
+    	show nags only by due dates passed!
+    		or, will my above alertstatus do it?
+        use alerts instead of logic inside of nagreport??
+			nice, to get a summary of all alerts for a family!
+    		yank that silly conditional at the top of the nagreport!
+			move calcs into object
+	add a 'send reminder' button, to send alerts
+ 	parent ed nag (best choice, start from scratch)
+			families, and all that they owe
+				total hours
+		also maybe that parent ed entry too
+			meeting, families, hours... though that's really a form
+	enhancement nag
+	solicitation summary
+	springfest totals (carriereport)
+	an expanded territory report maybe?
+	shirley's summary
+		first, all enrolled families (like in sandyreport?)
+		all enrollment totals (days)
+			by family and kid
+	make both reports group view only? 
+
+
+	could do, in each template
+		usemacro top
+		usemacro head
+			do stuff
+		usemacro foot
+	or, 
+		use-macro page-shell
+			fill-slot centerstuff
+			nice! you can fill slots conditionally!
+
+
+	how to SCRAM if no login?
+		have to scram the template AND the actual page-generating code, both
+		a center div which scrams if no auth! duh. that's easy
+			a conditaional fill-slot???!
+				no login, no SLOT
+
+	get details working
+		the problem is the STACK. it needs to push
+			and it needs to know how to get back from there
+
+
+	settings
+		cache dir? nocache? repository?
+		xhtml/xml mode?
+
+
