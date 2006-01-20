@@ -31,8 +31,6 @@ except AttributeError:
 
 #####end of setup?
 
-
-
 import coop_page
 
 
@@ -58,22 +56,27 @@ page=coop_page.Page()
 page.headers['Content-Type'] = 'application/pdf'
 page.headers['Content-Disposition'] = 'attachment; filename= "labeltest.pdf"'
 
-    
-    
-doc = SimpleDocTemplate(sys.stdout)
-story=[]
 
-## note data must be multiple of 3, need to PAD IT OUT!!
-n=3
-rawdata = range(0, 105)
-data = [rawdata[i:i + n] for i in range(0, len(rawdata), n)]
+
+def getData():
+    """note data must be multiple of 3, need to PAD IT OUT!!"""
+    n=3
+    rawdata = range(0, 105)
+    return [rawdata[i:i + n] for i in range(0, len(rawdata), n)]
+
+    
+
+
 
 DEBUG_LAYOUT = TableStyle( [('OUTLINE', (0,0), (-1,-1), 0.25, colors.red),
                             ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
                             ('ALIGN', (0,0), (-1,-1), 'LEFT'),
                             ('VALIGN', (0,0), (-1,-1), 'MIDDLE')] )
 
-t=Table(data, colWidths=2*inch, rowHeights=1.5*inch)
+doc = SimpleDocTemplate(sys.stdout)
+story=[]
+
+t=Table(getData(), colWidths=2*inch, rowHeights=1.5*inch)
 t.setStyle(DEBUG_LAYOUT)
 story.append(t)
     
