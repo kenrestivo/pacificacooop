@@ -44,12 +44,15 @@ for i in environ.items():
     page.raw_output.append('%s: %s<br />' % i )
     
 
-from reportlab.platypus import SimpleDocTemplate, Spacer
+from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.rl_config import defaultPageSize
 from reportlab.platypus.tables import Table,TableStyle
 from reportlab.lib import colors
 from reportlab.lib.units import inch
+from reportlab.lib.styles import getSampleStyleSheet
+
+import logging
 
 from sqlobject import *
 
@@ -57,6 +60,10 @@ page=coop_page.Page()
 page.headers['Content-Type'] = 'application/pdf'
 page.headers['Content-Disposition'] = 'attachment; filename= "labeltest.pdf"'
 
+
+# annoying crap reportalb wants
+styles = getSampleStyleSheet()
+style = styles["Normal"]
 
 
 def getData():
@@ -78,39 +85,54 @@ class DBresults:
 ,if(length(leads.address2)>0, leads.address2, null)
 ,concat_ws(" ", concat(leads.city, ", ", leads.state), leads.zip, if(leads.country != "USA", leads.country, ""))
 ) as lead_label'''
+    limit=""
 
-    def __init__(self, step):
+    def __init__(self, step=3):
         self.step = step
         self.c=sqlhub.getConnection().getConnection().cursor()
-        self.c.execute('''select invitations.lead_id, %s from invitations left join leads using (lead_id) where school_year = "2005-2006" order by invitations.lead_id''' %(self.lq))
+        self.c.execute('''select %s from invitations left join leads using (lead_id) where school_year = "2005-2006" order by invitations.lead_id''' %(self.lq))
+
+    def __iter__(self):
+        return self
 
     def next(self):
+        """this pads the db results out to the number of steps required"""
         res = []
+        flag = 0
         for i in range(0, self.step):
-            res.append(self.c.fetchone())
+            line=self.c.fetchone()
+            logging.debug(line)
+            if line == None:
+                flag = 1
+            elif len(line) < 2:
+                continue
+            else:
+                res.append(Paragraph(line[1], style))
+        if  flag:
+            raise StopIteration
+        logging.debug(i)
         return res
 
 
+### i hate the intending
+if __name__ == '__main__':
 
 #rendering!
-DEBUG_LAYOUT = TableStyle( [('OUTLINE', (0,0), (-1,-1), 0.25, colors.red),
-                            ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
-                            ('ALIGN', (0,0), (-1,-1), 'LEFT'),
-                            ('VALIGN', (0,0), (-1,-1), 'MIDDLE')] )
+    DEBUG_LAYOUT = TableStyle( [('OUTLINE', (0,0), (-1,-1), 0.25, colors.red),
+                                ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),
+                                ('ALIGN', (0,0), (-1,-1), 'LEFT'),
+                                ('VALIGN', (0,0), (-1,-1), 'MIDDLE')] )
 
-doc = SimpleDocTemplate(sys.stdout)
-story=[]
+    doc = SimpleDocTemplate(sys.stdout)
+    story=[]
 
-t=Table(getData(), colWidths=2*inch, rowHeights=1.5*inch)
-t.setStyle(DEBUG_LAYOUT)
-story.append(t)
-    
-
+    t=Table([i for i in DBresults()], colWidths=2*inch, rowHeights=1.5*inch)
+    t.setStyle(DEBUG_LAYOUT)
+    story.append(t)
 
 
 
 ##### finally output stuff
-if __name__ == '__main__':
     page.output_headers()
     doc.build(story)
 
