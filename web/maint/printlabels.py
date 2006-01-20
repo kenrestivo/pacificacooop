@@ -99,18 +99,18 @@ class DBresults:
         """this pads the db results out to the number of steps required"""
         res = []
         flag = 0
-        for i in range(0, self.step):
+        while len(res) < self.step:
             line=self.c.fetchone()
             logging.debug(line)
-            if line == None:
+            if line == None or line == '':
+                logging.info('END, got a none')
                 flag = 1
-            elif len(line) < 2:
-                continue
-            else:
-                res.append(Paragraph(line[1], style))
-        if  flag:
-            raise StopIteration
-        logging.debug(i)
+            elif len(line) < 1:
+                logging.warning('hey, less than 1')
+            else :
+                res.append(Paragraph(line[0], style))
+            if len(res) < self.step and flag > 0:
+                raise StopIteration
         return res
 
 
