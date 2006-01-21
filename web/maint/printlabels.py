@@ -90,7 +90,7 @@ class DBresults:
     def __init__(self, step=3):
         self.step = step
         self.c=sqlhub.getConnection().getConnection().cursor()
-        self.c.execute('''select %s from invitations left join leads using (lead_id) where school_year = "2005-2006" order by last_name, first_name''' %(self.lq))
+        self.c.execute('''select leads.lead_id, %s from invitations left join leads using (lead_id) where school_year = "2005-2006" order by last_name, first_name''' %(self.lq))
 
     def __iter__(self):
         return self
@@ -109,7 +109,9 @@ class DBresults:
                 logging.warning('hey, less than 1')
             else :
                 # split them, each gets a paragraph object
-                res.append([Paragraph(p.strip(), style) for p in line[0].split('\n')])
+                res.append([Paragraph(str(line[0]), style)]+
+                           [Paragraph(p.strip(), style)
+                            for p in line[1].split('\n')])
             if len(res) < self.step and flag > 0:
                 raise StopIteration
         return res
