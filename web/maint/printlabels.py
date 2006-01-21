@@ -67,12 +67,6 @@ response_code_style = ParagraphStyle(styles['Normal'])
 response_code_style.alignment = TA_RIGHT
 
 
-def getData():
-    """note data must be multiple of 3, need to PAD IT OUT!!"""
-    n=3
-    rawdata = range(0, 105)
-    return [rawdata[i:i+n] for i in range(0, len(rawdata), n)]
-
 
 class DBresults:
     """step through the result set"""
@@ -131,7 +125,7 @@ if __name__ == '__main__':
                             author="Pacifica Co-Op Nursery School")
     story=[]
 
-    t=Table([i for i in DBresults()], colWidths=2*inch, rowHeights=1.5*inch)
+    t=Table(list(DBresults()), colWidths=2*inch, rowHeights=1.5*inch)
     t.setStyle(DEBUG_LAYOUT)
     story.append(t)
 
