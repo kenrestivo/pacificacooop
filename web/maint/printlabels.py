@@ -45,12 +45,12 @@ for i in environ.items():
     
 
 from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import ParagraphStyle,getSampleStyleSheet
 from reportlab.rl_config import defaultPageSize
 from reportlab.platypus.tables import Table,TableStyle
 from reportlab.lib import colors
 from reportlab.lib.units import inch
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.enums import TA_RIGHT,TA_LEFT,TA_CENTER,TA_JUSTIFY
 
 import logging
 
@@ -63,7 +63,8 @@ page.headers['Content-Disposition'] = 'attachment; filename= "labeltest.pdf"'
 
 # annoying crap reportalb wants
 styles = getSampleStyleSheet()
-style = styles["Normal"]
+response_code_style = ParagraphStyle(styles['Normal'])
+response_code_style.alignment = TA_RIGHT
 
 
 def getData():
@@ -109,8 +110,8 @@ class DBresults:
                 logging.warning('hey, less than 1')
             else :
                 # split them, each gets a paragraph object
-                res.append([Paragraph(str(line[0]), style)]+
-                           [Paragraph(p.strip(), style)
+                res.append([Paragraph(str(line[0]), response_code_style)]+
+                           [Paragraph(p.strip(), styles['Normal'])
                             for p in line[1].split('\n')])
             if len(res) < self.step and flag > 0:
                 raise StopIteration
