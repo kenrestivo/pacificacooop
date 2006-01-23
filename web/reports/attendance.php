@@ -62,6 +62,7 @@ function viewHack(&$atd)
     $view->obj->preDefOrder= array_keys($view->obj->fb_fieldLabels);
     $view->obj->fb_recordActions = array('details' => ACCESS_VIEW);      
 
+    $view->schoolYearChooser(); // HACK to make it go fetch the data
     $view->obj->query(
         sprintf(
 'select distinct enrolled.family_id, enrolled.name, 
@@ -98,7 +99,7 @@ order by enrolled.name
         $view->getChosenSchoolYear(),
         $view->getChosenSchoolYear()
 ));
-    $res .= $view->simpleTable(false);
+    $res .= $view->simpleTable(false, true);
 
 
 	return $res;
