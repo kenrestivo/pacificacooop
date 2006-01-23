@@ -51,6 +51,7 @@ from reportlab.platypus.tables import Table,TableStyle
 from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.lib.enums import TA_RIGHT,TA_LEFT,TA_CENTER,TA_JUSTIFY
+from reportlab.lib.pagesizes import letter
 
 import logging
 
@@ -65,6 +66,20 @@ page.headers['Content-Disposition'] = 'attachment; filename= "labeltest.pdf"'
 styles = getSampleStyleSheet()
 response_code_style = ParagraphStyle(styles['Normal'])
 response_code_style.alignment = TA_RIGHT
+
+
+class LabelSettings:
+    margins= []  #left, top, right, bottom ? s/b same as css for consistency
+    row_height = 0
+    col_width = 0
+    row_gutter = 0
+    col_gutter = 0
+    main_style = None
+    number_style = None
+    debug = 0
+    
+    def __init__(self):
+        pass
 
 
 
@@ -121,8 +136,12 @@ if __name__ == '__main__':
                                 ('ALIGN', (0,0), (-1,-1), 'LEFT'),
                                 ('VALIGN', (0,0), (-1,-1), 'MIDDLE')] )
 
-    doc = SimpleDocTemplate(sys.stdout, title="Mailing Labels",
-                            author="Pacifica Co-Op Nursery School")
+
+#     title="Mailing Labels",
+#                             author="Pacifica Co-Op Nursery School")
+
+    ## NOTE! if you define your own template, you have to set pagesize for each
+    doc = SimpleDocTemplate(sys.stdout, pageSize=letter)
     story=[]
 
     t=Table(list(DBresults()), colWidths=2*inch, rowHeights=1.5*inch)

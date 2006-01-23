@@ -1,4 +1,4 @@
-#$Id$
+__version__ = """$Id$"""
 
 
 ##TODO: check dev!

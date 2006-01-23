@@ -14,25 +14,12 @@ coop web database
 	sortable/searchable views (searchfeature.txt)
 
 
-
-PERMS again
-	territories for solicit
-	solicitation is ugly. everyone can see it but only some can dick with it
+generic default thing
+	test it now
 
 
-
-
-PERMS BUGS!!
-	contacts not showing up for non-root users. wtf?
-		though the perms seem ok, from editing, it's only the view that'sweird
-		AH! it only shows THEIRS! this is prolly a good thing
-			but then why does it show the pager then?
-	white family and harvey family no auction root perms? wtf?
-	year perms for auctions, to sf at least
-		didn't i do this already?
-	history of nags, previous years
-		also indulgencs, and for board
-
+bring back raffle income please
+	well... maybe not. permissions
 
 export/print
 	the standard view stuff, minus pager
@@ -54,8 +41,26 @@ export/print
     	and, the "export to excel" just re-does that query as an excel export!
     		this is where mvc is cool. controller is same, view is different
     			excel view, web view
-    play with exporter/pythonpoint
-    	for labels, and packaging stuff
+
+
+PERMS again
+	territories for solicit
+	solicitation is ugly. everyone can see it but only some can dick with it
+
+
+
+
+PERMS BUGS!!
+	contacts not showing up for non-root users. wtf?
+		though the perms seem ok, from editing, it's only the view that'sweird
+		AH! it only shows THEIRS! this is prolly a good thing
+			but then why does it show the pager then?
+	white family and harvey family no auction root perms? wtf?
+	year perms for auctions, to sf at least
+		didn't i do this already?
+	history of nags, previous years
+		also indulgencs, and for board
+
     
 
 
@@ -3255,6 +3260,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+		do a jsonrpc call? scary, not always reliable 
+
 	json: dom loading scripts
 
 	pear spreadsheetwriter
@@ -5896,3 +5903,44 @@ FIX SENDEMAIL BUG!
 push live and test out the rest of my changes
 	after first doing a backup-live and reset to use latest data/perms
 wget -O - www/coop-dev/tests/labeltest.py?coop=232e091868aac020857cbb8d1b96c81c | gv -
+	do it as cgi
+		content type, custom cooppage object (i need to log in, really)
+			custom cooppage can have all the label stuff perhaps
+	um, LOGGING!
+		cgitb.enable(display=0, logdir='logs', format='text')
+	get logging going, understand it
+		FileHandler seems simple enough!
+python port
+	start logging stuff, to file, like php version
+	and cgitb
+for what? reports maybe? json/xml/rest services? fun? FOR LABELS
+    play with exporter/pythonpoint
+    	for labels, and packaging stuff
+
+on sendemail: try catch that map thing!
+	what if no cookies?
+	now logger too, not just cgitb death
+		FileHandler
+	how to pad a list? ITER
+		use sqlobject directly?-- may be easier to start with this
+			go fetch out the query. it's not a hard one.
+				look in queries.sql 
+				look in debug when running the real thing
+
+	file name. doesn't seem to honour?
+		nutscrapedoes
+FAMILY CONSTRAINT!
+	dump in some real data
+		gotta wrap. strings don't wrap: use paragraph
+
+	reg'lar users shouldn't see parentedsummary
+	how to do page size? test, make sure it works
+		pagesize arg to simpletemplate, or to pagetemplates if present
+	if  request, 
+		save to vars
+		return request
+	else if vars
+		return var
+	else
+		return default
+make calendar status an enum, isn't it? yes

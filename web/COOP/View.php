@@ -985,19 +985,8 @@ function getAlert()
         {
             $tablename = $tablename ? $tablename : $this->table;
             
-            ///XXX clean this up
-            /// last[startletter] =  request, last, 'A' (default)
-           
             
-            //searching code
-            // use latest of course, if available
-            //XXX now wait a minute. i don't want to dick with request here.
-            if(!empty($_REQUEST['startletter'])){
-                $this->page->vars['last']['startletter'] = $_REQUEST['startletter'];
-            }
-            // defautl to A if not there
-            $sl = empty($this->page->vars['last']['startletter']) ? 'A': 
-    $this->page->vars['last']['startletter'];
+            $sl = $this->getAndSaveDefault('startletter', 'A');
 
             // ok, find it!
             $this->obj->whereAdd("{$keyname} like '$sl%'");
@@ -1026,6 +1015,21 @@ function getAlert()
             return $res;
         }
 
+
+    // ya it's ugly, and i don't like dealing with request. but, gotta do it
+    function getAndSaveDefault($varname, $default = '')
+        {
+            if(isset($_REQUEST[$varname])){
+                // saving it here!
+                $this->page->vars['last'][$varname] = $_REQUEST[$varname];
+                return $_REQUEST[$varname];
+            } else if(isset($this->page->vars['last'][$varname])){
+                return $this->page->vars['last'][$varname];
+            } 
+            // TODO: save the default in vars, so others can make use of it?
+            // without having to call getandsavedefault?
+            return $default;
+        }
 
 
 } // END COOP VIEW CLASS

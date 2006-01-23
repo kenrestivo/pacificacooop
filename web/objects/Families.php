@@ -76,12 +76,14 @@ class Families extends CoopDBDO
 
             // TODO: add teh drop day part of the query!!
             // look at enrollment totals. this is a fairly invasive change
+
+            // XXX THIS HAS AN AWFUL BUG!
+            // it will grab dropout dates from OLD YEARS
+
             
             // NEED THIS HACK,
             // otherwise perms calculates based on the LAST of the years
             $co->obj->selectAdd('max(school_year) as school_year');
-
-
 
             $co->obj->orderBy();
             $co->obj->orderBy('families.name');
@@ -94,7 +96,7 @@ class Families extends CoopDBDO
 
     function fb_display_view(&$co)
         {
-
+            
             //whack the unenrolled
             if($co->getChosenSchoolYear() != '%'){
                 $this->whereAdd(

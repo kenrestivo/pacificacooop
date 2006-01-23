@@ -509,3 +509,11 @@ var trim = function(str){return str.replace(/^\s+|\s+$/g, "")};
 // doesn't work in javascript, alas
 tt=function(str){str.replace(/^\s+|\s+$/g, "")};
 tt(' foo ');
+
+tuplesplit = function(i){ 
+        if(typeof(i) == 'string'){return i.split('=')}
+    };
+
+map(tuplesplit, w.location.search.slice(1).split('&'));
+
+'fooa'.slice(1)

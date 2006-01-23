@@ -22,7 +22,8 @@ if ($handle = opendir('.')) {
     printf('LATEST.php: %s is most recent. <a href="%s">%s</a> is previous. <a href="%s">%s</a> is third previous<br><br>',
            $saver, $prev, $prev, $secondprev, $secondprev);
     $fd = fopen($saver, 'r');
-    if(strstr($saver, '.txt')){
+    if(strstr($saver, 'txt')){
+        $pre='i hate flags';
         print "<pre>";
     }
     do {
@@ -34,6 +35,9 @@ if ($handle = opendir('.')) {
     } while(true);
     fclose ($fd);
 
+    if($pre){
+        print "</pre>";
+    }
 }
 
 

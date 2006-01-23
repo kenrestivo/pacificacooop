@@ -33,7 +33,7 @@ except AttributeError:
 
 
 
-import cgi
+
 import coop_page
 
 
@@ -46,7 +46,6 @@ from posix import environ
 for i in environ.items():
     page.raw_output.append('%s: %s<br />' % i )
     
-
 
 
 

@@ -53,7 +53,7 @@ class Page:
 
         logging.basicConfig(level=logging.DEBUG,
                             format='%(name)s %(levelname)s %(pathname)s (line %(lineno)s): %(message)s',
-                            filename='logs/%s-debug.log' % (datetime.now().strftime("%Y%m%d%H%M%s")),
+                            filename='logs/%stxt-debug.log' % (datetime.now().strftime("%Y%m%d%H%M%s")),
                             filemode='w')
         logging.info('on %s %s %s' % (
             datetime.now().strftime('%Y/%m/%d %H:%M:%S'),

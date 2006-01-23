@@ -12,6 +12,9 @@ smaller damned font
 	http://www.nedbatchelder.com/code/modules/coverage.html
 
 
+handle changing user logins
+	wipe out the menu cache at login if login is different from last?
+
 go through the joinpaths in standard linkconstraints!
 	i bet i can blow off tons of wacko custom linkconstraints this way!
 
@@ -67,4 +70,10 @@ auctionpurchases
 
 job descriptions
 	 'The virtual job description binder.';
+
+
+coop_sendto
+	move to dbhost
+	need to be global ebcause it's referenced in session-init 
+	but i have to move it into cooppage somewhere-- setting
 

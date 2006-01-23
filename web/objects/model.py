@@ -36,9 +36,9 @@ class SessionInfo(SQLObject):
 
 
 
-
-# class JobDescriptions(SQLObject):
+# class Invitations(SQLObject):
 #        class sqlmeta:
 #               fromDatabase = True
-#               idName='job_description_id'
+#               idName='invitation_id'
+
 

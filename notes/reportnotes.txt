@@ -1,18 +1,96 @@
 report notes
 $Id$
 
+let's get serious about this then!
+	test splitting pages
+		invisible flowable NextPageTemplate
+		it's not really necessary, except maybe if different margins
+	xref shit
+		getting corrupted in transfer. try compression
+		where is it set? in canvas?
+
+supply templates, subclass doctemplate
+	nextpagetemplate to switch between them
+
+
 ??PYTHON (yeah baybee!)
 nifty label printing library reportlab!!
-	set page properties properly
-	do it as cgi
-		content type, custom cooppage object (i need to log in, really)
-			custom cooppage can have all the label stuff perhaps
-		um, LOGGING!
-		cgitb.enable(display=0, logdir='logs', format='text')
-	dump in some real data
-		use sqlobject directly?-- may be easier to start with this
-		do a jsonrpc call? scary, not always reliable 
+	play with styling in reg'lar text	
+	
+	create my own template "class"
+		or db table?
+		attributes
+			name (usually label name?)
+			pagesize  -- document or pagetemplate?
+			margins -- pagetemplate?
+			row/col height/width  -- table constructor
+			gutter (if any) -- table style
+			font size
+			font name (popup?)
+			debug (show lines)
 
+
+	note that table width/height must be specified inarray OF EACH
+		so, [ colwidth for i in steps]
+		and [ rowheight for i in numrows]  #the dbcalculates this i think
+
+
+	first line right-just? with responsecode? SMALL font? gray?
+		that's the quick hack anyway
+
+	any way to float the response code to upper right corner?
+		in pdf inside that table cell?
+		doesn't look like it, unless i manually canvas it onto the page.
+			style it?
+		try to create a THING, and stick the data inside it, with the code
+			flowable? can it contain other flowables?
+		what are HRflwable, PTOcontainer, paragraphandimage?
+			hr is an <hr>. pto is a (next/prev) trigger
+		and what's with the macros?
+			wow, allows access to the canvas!
+				maybe try one with a pdb exception,poke around
+		hey, fuck this. just have first line justified right?
+
+	also note pagebreak element,maybe
+
+	how to have two different pagestyles for different versions, in one doc?
+		without flowing.
+
+	get dimensions for teh label?
+		ana's stuff?
+		or use 5160/5167
+			5161 is slightly bigger
+			ana brought me 5660
+
+	serving it up
+		be sure to pass ?type=.pdf in any requests so IE doesn't flip out!
+		do i need to do a stringio hack? to get length for content-len
+		and should i use inline not attachment?
+			browsercam
+
+	Error (0): PDF file is damaged - attempting to reconstruct xref table...
+	Error: Couldn't find trailer dictionary
+	Error: Couldn't read xref table
+		so, build the xref table?
+
+
+	label form
+		choose
+			font
+			size
+			label template
+		python or php?
+		either way, pass values to my pdf thing via vars.last
+
+
+	return address labels are the big question mark
+		how to specify both? put them in the same document (multiple templates?)
+
+	launch the pdf in a popup window (i already have code for that IIRC)
+		and flip this page to a confirmation screen for "label printed"
+			list all the labels and response codes, with checkboxes
+				and a check all javascript
+			to save the labelprinted state
 
 ??PHP
 stick reports into the stack, somehow
@@ -24,10 +102,10 @@ create a subclass of dispatcher, or a new dispatcher
 	this will be a very MVC, rails-ish thing, i expect
 
 
-coop_sendto
-	move to dbhost
-	need to be global ebcause it's referenced in session-init 
-	but i have to move it into cooppage somewhere-- setting
+	set pdf page/author/etc properties properly
+		not that important, but not working either
+	would be nice to have a header/footer with date/version on it!
+
 
 
 margolisreport: see parentedattentance.txt
@@ -65,9 +143,8 @@ parent ed attendance report that makes sense
 	using adddefaultfamilyperms, as a model
 
 
-
-
-baby report: how many babies per workday and epod day
+??SQL/PHP
+baby summary?: how many babies per workday and epod day
 
 
 ??? PHP
