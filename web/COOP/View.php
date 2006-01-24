@@ -194,6 +194,11 @@ class coopView extends CoopObject
 
             $this->debugWrap(5);
 
+            // go do the pager now
+            if(!empty($this->obj->fb_pager) && is_array($this->obj->fb_pager)){
+                //TODO: raise error on invalid callback
+                $this->alphaPager();
+            }
 
             $this->page->printDebug("CoopView::find({$this->table})", 1);
 
@@ -985,9 +990,12 @@ function getAlert()
         }
 
 
-    function alphaPager($keyname, $tablename = false)
+    function alphaPager()
         {
-            $tablename = $tablename ? $tablename : $this->table;
+            $keyname= $this->obj->fb_pager['keyname'];
+            $tablename = empty($this->obj->fb_pager['tablename']) ? 
+    $this->table : 
+    $this->obj->fb_pager['tablename'] ;
             
             $tmp = $this->__clone();
             $tmp->debugWrap(2);

@@ -12,16 +12,17 @@ coop web database
 	sortable/searchable views (searchfeature.txt)
 
 
+put paging in simpletable!!
+	must TABLE PREFIX the searchables
+		there will be multiples on details pages now
+	try to render the pager at the end of a simpletable too
+	gah. gotta force showchooser. why??
+	go through and look at leads and companies too
+
 put the sources *table* in there, with admin only privs perhaps?
 
 	
 make the alphapager a custom qf element!
-	and thus separate out the db stuff from the display
-	it's fuckin retarded.
-	make paging happen IN SIMPLETABLE
-
-
-gah. gotta force showchooser. why??
 
 
 BUGS
@@ -5970,3 +5971,13 @@ some way of determining the alumni list?push the source chooser live
 this clone/count thing is mystic. wtf is it searching for??
 	maybe force linkconstraints and see what i get
 	that didit
+	and thus separate out the db stuff from the display
+	it's fuckin retarded.
+	make paging happen IN SIMPLETABLE
+
+	almostthere!
+		it's getting called but has no effect?
+			go trace
+		the found in simpletable is wrong,should use foundcount
+
+
