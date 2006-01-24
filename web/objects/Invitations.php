@@ -67,7 +67,7 @@ class Invitations extends CoopDBDO
                 
                 //////////// FAMILY CHOOSER
                 $families['%'] ='ALL';
-                $families[0] ='NONE (Alumni List)';
+                // CONFUSING $families[0] ='NONE (Alumni List)';
                 $fam =& new CoopView(&$co->page, 'families', &$co);
                 $fam->constrainSchoolYear(true);
                 //$fam->debugWrap(2);
