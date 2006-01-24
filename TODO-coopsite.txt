@@ -13,6 +13,22 @@ coop web database
 	insurance, dammit
 	sortable/searchable views (searchfeature.txt)
 
+BUGS
+	fix family drop bug
+		murphy ! they appear to have dropped, so they vapourise
+		i think this is the thing
+		enter new student, doesn't show old families. this SUCKS
+
+	the ugly hack is to override the family chooser
+		in kids, parents
+
+
+	the linkconstraints in coopform is the problem
+		SOME need to be constrained: like auction items
+		OTHERS need to be constrained only sometimes.... like families
+		fb_linkAllYears?
+		this is a total botch
+
 
 generic default thing
 	test it now
@@ -20,6 +36,9 @@ generic default thing
 
 bring back raffle income please
 	well... maybe not. permissions
+
+
+spreadsheet export-- do it now, just don't push it live until needed
 
 export/print
 	the standard view stuff, minus pager
@@ -5944,3 +5963,12 @@ FAMILY CONSTRAINT!
 	else
 		return default
 make calendar status an enum, isn't it? yes
+	save report_id!!? it's unique!
+	maybe just a function in newdispatcher
+
+pacheco family: deadlocked on user/family dependency
+	is it a circular dependency?
+		NO... users are subordinate to family.
+	users are complaining. why?
+	maybe override confirmdelete for it
+		ah, usergroups

@@ -454,7 +454,7 @@ function confirmdelete()
                 $found = $check->obj->find();
                 if($found){
                     $totalfound += $found;
-                    $res .= $check->simpleTable(false);
+                    $res .= $check->simpleTable(false,true);
                 }
             }
             

@@ -79,3 +79,6 @@ coop_sendto
 
 
 gah. can't delete a family if they have a user, but they have one AUTOMATICALLY when you careat ea family, and betsy can't delete it!!
+	have to perhaps override perms, or something. 
+	fb_display_delete? a callback that goes and whacks all user/group data?
+		will suck for audit
