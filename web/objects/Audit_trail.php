@@ -115,12 +115,6 @@ class Audit_trail extends CoopDBDO
             $sel->loadDbResult($realms->obj->getDatabaseResult(), 
                                'short_description', 'realm_id');
 
-            if($sid = thruAuthCore($co->page->auth)){
-                $syform->addElement('hidden', 'coop', $sid); 
-            }
-            $syform->addElement('hidden', 'table', $co->table); 
-
-
             // need change button?
             $syform->addElement('submit', 'savebutton', 'Change');
                 
@@ -186,7 +180,7 @@ class Audit_trail extends CoopDBDO
 
             array_push($this->fb_fieldsToRender, 'table_name');
 
-            $res .= $co->simpleTable();
+            $res .= $co->simpleTable(true, true);
 	 
 
             return $res;
