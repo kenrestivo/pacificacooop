@@ -951,7 +951,8 @@ function triggerNotices($audit_id)
                 return array();
             }
             foreach($this->obj->fb_linkDisplayFields as $ldf){
-                $this->obj->whereAdd(sprintf('%s like "%s%s%%"',
+                $this->obj->whereAdd(sprintf('%s.%s like "%s%s%%"',
+                                             $this->table,
                                              $ldf, 
                                              $beginsWith ? '' : '%',
                                              $query), 
