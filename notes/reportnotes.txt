@@ -1,6 +1,31 @@
 report notes
 $Id$
 
+
+??PHP
+stick reports into the stack, somehow
+	so i can navigate through them. AND so i can save stuff for them
+	call newdispatcher in reports
+	better yet, make the view function a subclass
+		or, a generic_report.php
+			which dispatches on reportid from list of reports
+	for
+		enhancement
+		carrie
+		nag
+		solicitsumm
+		attendance (new)
+	
+
+now, it might not need to be this complicated!
+	why not stick the report shit into the last for that table?
+		there almost always is a table, isn't there? a faketop?
+	problem there is back. great, it builds the chooser, but now what?
+		look at attendance
+
+
+excel export. fuck labels.
+
 let's get serious about this then!
 	test splitting pages
 		invisible flowable NextPageTemplate
@@ -91,11 +116,6 @@ nifty label printing library reportlab!!
 			list all the labels and response codes, with checkboxes
 				and a check all javascript
 			to save the labelprinted state
-
-??PHP
-stick reports into the stack, somehow
-	save report_id!!? it's unique!
-	maybe just a function in newdispatcher
 
 
 create a subclass of dispatcher, or a new dispatcher 
