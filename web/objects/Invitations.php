@@ -64,7 +64,7 @@ class Invitations extends CoopDBDO
             if($co->isPermittedField() >= ACCESS_VIEW){
                 $co->schoolYearChooser();
                 
-                // families
+                //////////// FAMILY CHOOSER
                 $families['%'] ='ALL';
                 $families[0] ='NONE (Alumni List)';
                 $fam =& new CoopView(&$co->page, 'families', &$co);
@@ -81,9 +81,6 @@ class Invitations extends CoopDBDO
                                                        $families,
                                                        array('onchange' =>
                                                              'this.form.submit()'));
-                $co->showChooser = 1;
-                // by default, no change button!
-                $co->searchForm->addElement('submit', 'savebutton', 'Change');
 
 
 
@@ -117,6 +114,58 @@ class Invitations extends CoopDBDO
                 }
             }
 
+
+
+            /////////////// SOURCE CHOOSER
+            // now the nightmare source id too
+            $sources['%'] ='ALL';
+            $src =& new CoopView(&$co->page, 'sources', &$co);
+            $src->obj->find(); // go get, including any constraints/sorts
+            while($src->obj->fetch()){
+                $sources[$src->obj->source_id] = $src->obj->description;
+            }
+            
+            
+            $srcsel =& $co->searchForm->addElement('select', 'source_id', 
+                                                   'Source', 
+                                                   $sources,
+                                                   array('onchange' =>
+                                                         'this.form.submit()'));
+            
+            
+            
+            //COOL! this is the first place i am using vars->last
+            // this does the request stuff for me, doesn't it?
+            // i am a LITTLE worried about stomping on schoolyear tho
+            $co->searchForm->setDefaults(
+                array('source_id' => 
+                      $co->page->vars['last']['source_id']));
+            
+            $bar = $srcsel->getValue();
+            $source_id = $bar[0];
+            $co->page->vars['last']['source_id'] = $source_id;
+            
+            //add the select And the where. notice they are different!
+            $co->obj->selectAdd('leads.source_id');
+
+            if($source_id > 0){
+                $this->whereAdd(sprintf('leads.source_id = %d', 
+                                        $source_id));
+            } else {
+                if($source_id == '0'){
+                    $this->whereAdd(
+                        'leads.source_id is null or leads.source_id < 1'); 
+                }
+            }
+
+
+            
+            // FINALLY crap for my choosers
+            $co->showChooser = 1;
+            // by default, no change button!
+            $co->searchForm->addElement('submit', 'savebutton', 'Change');
+
+
             /// OK ALL DONE WITH THAT! now let's hep to it:
             $leads =  new CoopObject(&$co->page, 'leads', &$co);
             
@@ -128,7 +177,7 @@ class Invitations extends CoopDBDO
 
             // my nice little label preview
             $co->obj->selectAdd($leads->obj->fb_labelQuery);
-
+            
             if($co->isPermittedField() >= ACCESS_VIEW){
                 $this->selectAdd('invitations.lead_id as response_code');
                 $this->fb_fieldLabels['response_code'] = 'Response Code';

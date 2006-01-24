@@ -42,6 +42,7 @@ class coopView extends CoopObject
                              'view'=> ACCESS_VIEW);     
     var $searchForm; // cache of search form interface
     var $showChooser = 0; //  set when valid stuff is built
+    var $foundCount;  // what is "found" via searching may not be same as N
 
     //chain up
 	function CoopView (&$page, $table, &$parentCO, $level = 0)
@@ -206,7 +207,7 @@ class coopView extends CoopObject
             $this->page->confessArray(
                 $this->obj->_query , 
                 "CoopView::find({$this->table} $find) ran query and  found $found", 
-                2);
+                1);
              return $found;
 		}
 
@@ -477,7 +478,7 @@ class coopView extends CoopObject
 							 $this->title(),
 							 is_a($par, 'CoopObject') ? 
 							 "for " . $par->concatLinkFields() : "",
-                             $this->obj->N));
+                             $this->getFound()));
 
 
             if(!empty($this->searchForm) && $this->showChooser &&
@@ -1032,6 +1033,14 @@ function getAlert()
             // TODO: save the default in vars, so others can make use of it?
             // without having to call getandsavedefault?
             return $default;
+        }
+
+    function getFound()
+        {
+            if(isset($this->foundCount)){
+                return $this->foundCount;
+            }
+            return $this->obj->N;
         }
 
 
