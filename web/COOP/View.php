@@ -1040,8 +1040,16 @@ function getAlert()
             
 
             if(!empty($this->searchForm)){
+
+                if($tablename == $this->table){
+                    $label = $this->obj->fb_fieldLabels[$keyname];
+                } else {
+                    $sub =& $this->obj->factory($tablename);
+                    $label = $sub->fb_fieldLabels[$keyname];
+                }
                 $this->searchForm->addElement('static', 'pager', 
-                                              'Begins with', $res);
+                                              "$label begins with:", 
+                                              $res);
             }
             return '<div>' . $res . '</div>';
         }
