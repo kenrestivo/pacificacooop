@@ -49,21 +49,22 @@ class Parents extends CoopDBDO
             $this->orderBy('parents.last_name, parents.first_name');
 
             
-            
-            $families =&  new CoopObject(&$co->page, 'families', &$co);
-            $families->linkConstraints();
-            
-            $co->protectedJoin($families);
-        
-            $co->constrainSchoolYear();
-    
+            if(!($co->isPopup && $co->perms[null]['year'] >= ACCESS_EDIT)) {
+                
+                $families =&  new CoopObject(&$co->page, 'families', &$co);
+                $families->linkConstraints();
+                
+                $co->protectedJoin($families);
+                
+                $co->constrainSchoolYear();
+                
             /// XXX do i really need this
             /// now that i specify table.schoolyear in link?
             /// is "outer" join sufficient to work this?
-            $this->selectAdd();
-            $this->selectAdd("{$co->table}.*");
-
-
+                $this->selectAdd();
+                $this->selectAdd("{$co->table}.*");
+            }
+            
             $co->orderByLinkDisplay();
             ///XXX this is redunannt. it is done elsewhere now.
             $co->grouper();

@@ -330,6 +330,8 @@ class coopForm extends CoopObject
             $this->page->confessArray($link, 'findlinkoptions link');
 
 			$sub =& new CoopObject(&$this->page, $link[0], &$this);
+
+            $sub->isPopup = 1;
             
             //$sub->chosenSchoolYear='%'; // ALWAYS force '%' for popups
 

@@ -63,7 +63,6 @@ class Enrollment extends CoopDBDO
 
 	function fb_linkConstraints(&$co)
 		{
-
             $kids = new CoopObject(&$co->page, 'kids', &$co);
 
             $co->protectedJoin($kids, 'left');
@@ -350,6 +349,9 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
                             $fam->email, $fam->email);
             return $res;
         }
+ 
+
+
 
 
 }

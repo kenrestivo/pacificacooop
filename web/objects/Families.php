@@ -64,26 +64,32 @@ class Families extends CoopDBDO
 		{
 
             // HACK! this is presuming VIEW, but in popup it could be EDIT
-            $enr =& new CoopObject(&$co->page, 'enrollment', &$co);
-            $kid =& new CoopObject(&$co->page, 'kids', &$co);
+             // the betsy hack
+            if(!($co->isPopup && $co->perms[null]['year'] >= ACCESS_EDIT))
+            {
 
-            $kid->protectedJoin($enr);
-            $co->protectedJoin($kid);
 
-            $co->constrainSchoolYear();
+                $enr =& new CoopObject(&$co->page, 'enrollment', &$co);
+                $kid =& new CoopObject(&$co->page, 'kids', &$co);
 
-            //$co->constrainFamily(): // no point in this?
+                $kid->protectedJoin($enr);
+                $co->protectedJoin($kid);
 
-            // TODO: add teh drop day part of the query!!
-            // look at enrollment totals. this is a fairly invasive change
+                $co->constrainSchoolYear();
 
-            // XXX THIS HAS AN AWFUL BUG!
-            // it will grab dropout dates from OLD YEARS
+                //$co->constrainFamily(): // no point in this?
+
+                // TODO: add teh drop day part of the query!!
+                // look at enrollment totals. this is a fairly invasive change
+
+                // XXX THIS HAS AN AWFUL BUG!
+                // it will grab dropout dates from OLD YEARS
 
             
-            // NEED THIS HACK,
-            // otherwise perms calculates based on the LAST of the years
-            $co->obj->selectAdd('max(school_year) as school_year');
+                // NEED THIS HACK,
+                // otherwise perms calculates based on the LAST of the years
+                $co->obj->selectAdd('max(school_year) as school_year');
+            }
 
             $co->obj->orderBy();
             $co->obj->orderBy('families.name');
@@ -97,7 +103,8 @@ class Families extends CoopDBDO
     function fb_display_view(&$co)
         {
             
-            //whack the unenrolled
+            $co->schoolYearChooser(); // so that getchosenschoolyear comes up!
+            //don't whack the unenrolled on allyears
             if($co->getChosenSchoolYear() != '%'){
                 $this->whereAdd(
                     sprintf('(dropout_date is null or dropout_date < "2000-01-01" or dropout_date > "%s")', 

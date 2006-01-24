@@ -81,6 +81,7 @@ where user_id = %d and table_name = '%s'
 group by user_id,table_name,field_name";
     var $changes = array();  // array('field' => array('old'=>serialisedstuff, 'new'=> serialisedstuff))
     var $chosenSchoolYear = ''; // the year to use by default, as chosen by user
+    var $isPopup = 0; // XXX nasty hack to do different joins on popup vs view
 
 
 	function CoopObject (&$page, $table, &$parentCO, $level = 0)
