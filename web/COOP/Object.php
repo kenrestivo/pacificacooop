@@ -1091,6 +1091,9 @@ function triggerNotices($audit_id)
         return new DB_DataObjectIterator(&$this->obj);
     }
 
+    function __clone() { return $this;}
+
+
 
 } // END COOP OBJECT CLASS
 

@@ -989,6 +989,10 @@ function getAlert()
         {
             $tablename = $tablename ? $tablename : $this->table;
             
+            $tmp = $this->__clone();
+            //$tmp->schoolYearChooser();
+            $tmp->find();
+            $this->foundCount = $tmp->obj->N;
             
             $sl = $this->getAndSaveDefault('startletter', 'A');
 
@@ -1017,7 +1021,7 @@ function getAlert()
 
             $this->searchForm->addElement('static', 'pager', 
                                           'Begins with', $res);
-            return $res;
+            return '<div>' . $res . '</div>';
         }
 
 
