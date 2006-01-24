@@ -65,7 +65,8 @@ class Invitations extends CoopDBDO
                 $co->schoolYearChooser();
                 
                 // families
-                $families[0] ='ALL';
+                $families['%'] ='ALL';
+                $families[0] ='NONE (Alumni List)';
                 $fam =& new CoopView(&$co->page, 'families', &$co);
                 $fam->constrainSchoolYear(true);
                 //$fam->debugWrap(2);
@@ -106,6 +107,12 @@ class Invitations extends CoopDBDO
                                             $co->table,
                                             $family_id));
                 } else {
+                    if($family_id == '0'){
+                        $this->whereAdd(
+                            sprintf('%s.family_id is null or %s.family_id < 1', 
+                                    $co->table, 
+                                    $co->table));
+                    }
                     $ap = $co->alphaPager('last_name', 'leads');
                 }
             }

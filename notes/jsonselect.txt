@@ -2,13 +2,34 @@ json stuff
 
 
 
-how to deal with duplicates?
+???PHP/JS/SQL
+de-dupe interface
+	find all records, for each, look for matches, various types
+		count them first, don't GET them
+	let the user then go fish them out, and have a look
+		list of possible duplicates. link to do something
+	pick a master (radiobutton?)
+		and checkbox for all which are duplicates
+		then DE-DUPE!
+	de-dupe back-end will go get all the references to non-match
+		and merge them in
+	need levenshtien
+
+at insert time too?
 	guess. then use it instead of inserting?
 	this is a bigger problem in ANY record, if i insert a dupe or near dupe
 		i should show a choose dialogue!
 			a, b, c, or NEW entry
 
-    
+
+??JS 
+show a label or field:value summary somewhere, somehow
+	for goodies, a 'details' box next to the select
+		showing more info on the selected item, javascript-refreshed
+		possibly: on select, show full record in displaybox
+			i.e. horiztable
+		easiest is searchselect, with div
+
 
 make the box bigger
 	auto-grow, maybe? js?
@@ -19,13 +40,6 @@ maybe render subforms by shipping them (minus their form tags) via json?
 
 		
 
-
-4 hours javascript/php
-json selectbox
-	for goodies, a 'details' box next to the select
-		showing more info on the selected item, javascript-refreshed
-		possibly: on select, show full record in displaybox
-			i.e. horiztable
 
 don't let the flexac.css override my font. keep what's already there!
 

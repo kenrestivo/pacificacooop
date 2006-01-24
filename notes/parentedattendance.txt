@@ -1,25 +1,5 @@
 parent ed attendance
 
-link for choosing only those who need nagging, vs those who do not
-	look at alphapager for inspiration
-
-
-then, that meeting screen
-	meeting chooser at top
-	list of families, sub by parents, and 3 checkboxes
-	SAVE will do what?
-		calculate differences, and save those
-			POSTING what? json?
-				validation!!!
-					what rules am i using really
-					dupe check, what else?
-						can i modularise them?
-					or use qf... though that could really suck
-			how to report errors? 500? 400?
-		for now, just use json-rpc. post an ARRAY! the updated stuff
-			and let the server deal with it
-
-
 
 ???SQL/PHP
 add make-up table for parent ed
@@ -42,7 +22,6 @@ add make-up table for parent ed
 	and add yet another layer of subqueries to my report
 		go get sum of all indulgences this schoolyear by family
 			and calculate it in to meetings
-
 	pattern
 		table A has a field i, which is the PK of table B. 
 		table A also 
@@ -51,6 +30,28 @@ add make-up table for parent ed
 		 table B might have a PK and a *name* of a table for A to link to
 	select A.id, IF(A.tref = 'B',B.val,IF(A.tref='C',C.val,NULL)) val 
 			FROM A left join B using (id) left join C using (id);
+
+
+link for choosing only those who need nagging, vs those who do not
+	look at alphapager for inspiration
+
+
+then, that meeting screen
+	meeting chooser at top
+	list of families, sub by parents, and 3 checkboxes
+	SAVE will do what?
+		calculate differences, and save those
+			POSTING what? json?
+				validation!!!
+					what rules am i using really
+					dupe check, what else?
+						can i modularise them?
+					or use qf... though that could really suck
+			how to report errors? 500? 400?
+		for now, just use json-rpc. post an ARRAY! the updated stuff
+			and let the server deal with it
+
+
 
 
 

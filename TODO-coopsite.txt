@@ -1,10 +1,8 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	print labels (reportnotes.txt)
 	cleanups and code fixes (cleanme.txt)
 	json, REST, xmlrpc (jsonselect.txt)
-	python translation LOGGING (pythonport.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
@@ -13,74 +11,34 @@ coop web database
 	insurance, dammit
 	sortable/searchable views (searchfeature.txt)
 
+
+some way of determining the alumni list?
+
+
 BUGS
-	fix family drop bug
-		murphy ! they appear to have dropped, so they vapourise
-		i think this is the thing
-		enter new student, doesn't show old families. this SUCKS
+	send-email:  make sure i'm not leaking SID... how?
 
-	the ugly hack is to override the family chooser
-		in kids, parents
-
-
-	the linkconstraints in coopform is the problem
-		SOME need to be constrained: like auction items
-		OTHERS need to be constrained only sometimes.... like families
-		fb_linkAllYears?
-		this is a total botch
+IMPORTANT TIME-SENSITIVE ITEMS!
+	labels/export
+	tickets/rsvps
+	package sheet printing
+	parent ed 
+		make-up stuff
+		nag-only (i.e. enhancement hack)
 
 
-generic default thing
-	test it now
 
-
-bring back raffle income please
-	well... maybe not. permissions
-
+also include details link from audit trail... why did i remove that?
 
 spreadsheet export-- do it now, just don't push it live until needed
 
-export/print
-	the standard view stuff, minus pager
-	grab from last
-		in fact, grab EVERYTHING from last. s/b easy
-	default: export whatever columns are in the result set
-		unless there is a callback or columnlist
-		using toarray to format them
-	print-as-labels callback, if available?
-	vagaries: special crap like honouring do not contact?
-		don't deal with that now,  but will have to
-	and an excel export, which i think i've done
-		in perl. try python now!
-			fuck, this really wouldn't be too hard in PHP anyway
-		ah, the labelprinted stuff! important!
-    	i.e. show a report, then some way to tag them as labelprinted
-    		pick/choose date label printed too, or none
-    		it's a searchable report, basically!
-    	and, the "export to excel" just re-does that query as an excel export!
-    		this is where mvc is cool. controller is same, view is different
-    			excel view, web view
+
+add link for springfest from homepage
+	actually, add it to the description
 
 
-PERMS again
-	territories for solicit
-	solicitation is ugly. everyone can see it but only some can dick with it
-
-
-
-
-PERMS BUGS!!
-	contacts not showing up for non-root users. wtf?
-		though the perms seem ok, from editing, it's only the view that'sweird
-		AH! it only shows THEIRS! this is prolly a good thing
-			but then why does it show the pager then?
-	white family and harvey family no auction root perms? wtf?
-	year perms for auctions, to sf at least
-		didn't i do this already?
-	history of nags, previous years
-		also indulgencs, and for board
-
-    
+24 hours PHP
+bring RSVPs and tickets back to life
 
 
 ??? PHP/JS
@@ -98,17 +56,11 @@ add parent ed calculations to homepage
 
 
 
-NITS(daytime)
+?? CSS/DOM/IE (daytime/browsercam)
 	css not bgcolor for publicauction
 	also fix the choosers colour
+		what is doing that?
 
-
-
-
-
-my js stuff! working interpreter now!
-	show a label or field:value summary somewhere, somehow
-		easiest is searchselect, with div
 
 
 ??PHP
@@ -120,41 +72,19 @@ audit trails are a botch. formatting!
 
 
 BUGS
-	the audit display of edit stuff, is WAY ugly on long files. fix diff
 	that solicit summary, should show view for debbie. why doesn't it?
-
 	what about alpha page thigns that begin with NOTHING
 		best to programattically sort them, actually, first
 
 
-    
 	also make sure the random solicitation people can't edit money
 
 
 ENTRY
 	fix UPS store: there are two of 'em, and that sucks
-
-
-
-
-
-???ENTRY
 	cut/paste massive 2nd vp job description in
 		and the gui version of the treasurer's description perhaps?
 
-
-
-	
-
-???PHP/SQL
-linkconstraiints in unusual circumstances
-		and then only when really wanted!
-			in popup
-				for families
-				BUT NOT auctions!
-			in details
-				for everything IN families OR companies
-				but not in most other things-- stick with the schoolyear
 
 
 ???PHP/SQL
@@ -175,6 +105,21 @@ add END dates to calendar events!!
 
 
 
+
+PERMS BUGS!!
+	enter new is showing up in details, for places where i DO NOT have new perms
+		i.e. actionbuttons needs to check id in ispermittedfield, if present
+	contacts not showing up for non-root users. wtf?
+		though the perms seem ok, from editing, it's only the view that'sweird
+		AH! it only shows THEIRS! this is prolly a good thing
+			but then why does it show the pager then?
+	white family and harvey family no auction root perms? wtf?
+	year perms for auctions, to sf at least
+		didn't i do this already?
+	history of nags, previous years
+		also indulgencs, and for board
+	territories for solicit
+	solicitation is ugly. everyone can see it but only some can dick with it
 
 
 BUGS
@@ -199,11 +144,6 @@ bring tickets, paddles, etc back to life!
 
 
 
-???PHP
-bring Packaging back to life! 
-	add additional auction validation rules: 
-		no cash
-
 
 
 -----------
@@ -219,6 +159,22 @@ BURNT (when too burnt out to do actual work)
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
+
+
+???PHP/SQL
+linkconstraiints in unusual circumstances
+		and then only when really wanted!
+			in popup
+				for families
+				BUT NOT auctions!
+			in details
+				for everything IN families OR companies
+				but not in most other things-- stick with the schoolyear
+		what is different?
+
+??JS
+hook reload and back buttons
+	so that i don't end up with stack pollution!
 
 ??PHP
 	solicit auction by company, perhaps?
@@ -617,6 +573,11 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+
+???PHP
+Packaging add additional auction validation rules: 
+		no cash
+
 ??JS
 hook the back button, and execute a Back Link instead.
 	look at the documentation, this is apparently a common AJAX task
@@ -634,20 +595,9 @@ cascaded deletes
                   parent element
 
 
-NOW! for invitations
-	show only invited names!
+bring back raffle income please
+	well... maybe not. permissions
 
-???PHP/SQL
-de-dupe interface
-	find all records, for each, look for matches, various types
-		count them first, don't GET them
-	let the user then go fish them out, and have a look
-	pick a master (radiobutton?)
-		and checkbox for all which are duplicates
-		then DE-DUPE!
-	de-dupe back-end will go get all the references to non-match
-		and merge them in
-	need levenshtien
 	
 
 ??PHP/SQL
@@ -662,6 +612,7 @@ renname kenflex to combobox, dammit. this is ridiculous
 
 ???PHP/SQL
 income is utterly botched. should constrain based on chardt of accounts join to table
+
 
 ???PHP
 job description matrix report!
@@ -3279,6 +3230,23 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	strip tags  out of the fuckers
+
+	that's a hack. the right thing to do is:
+		either unhtml the whole thing at send_email time, or at page time
+
+
+	DO NOT send editing links to families!!!
+
+NOW! for invitations
+	show only invited names!
+
+	the linkconstraints in coopform is the problem
+		SOME need to be constrained: like auction items
+		OTHERS need to be constrained only sometimes.... like families
+		fb_linkAllYears?
+		this is a total botch
+
 		do a jsonrpc call? scary, not always reliable 
 
 	json: dom loading scripts
@@ -5972,3 +5940,19 @@ pacheco family: deadlocked on user/family dependency
 	users are complaining. why?
 	maybe override confirmdelete for it
 		ah, usergroups
+	fix family drop bug
+		murphy ! they appear to have dropped, so they vapourise
+		i think this is the thing
+		enter new student, doesn't show old families. this SUCKS
+		the ugly hack is to override the family chooser
+			in kids, parents
+			isPopup.
+generic default thing
+	test it nowdouble check what i pushed live. i have confidence though
+	the customseelct  for parents--- BROKEN!
+		check teh rest too
+		ah, needed to specify table
+move the cgitb stuff to a more logical place
+	or  make sure it is calcuating perms for links based on EFFECTIVE userid
+		i.e. the userid the email is beign sent to
+		itis. force_user

@@ -228,3 +228,24 @@ total dump of families and names
 
 	flow stuff beyond the page: i.e. data lines > fit on page
 		IT FLOWS IT AUTOMATICALLY!!! YAY!!
+
+export/print
+	the standard view stuff, minus pager
+	grab from last
+		in fact, grab EVERYTHING from last. s/b easy
+	default: export whatever columns are in the result set
+		unless there is a callback or columnlist
+		using toarray to format them
+	print-as-labels callback, if available?
+	vagaries: special crap like honouring do not contact?
+		don't deal with that now,  but will have to
+	and an excel export, which i think i've done
+		in perl. try python now!
+			fuck, this really wouldn't be too hard in PHP anyway
+		ah, the labelprinted stuff! important!
+    	i.e. show a report, then some way to tag them as labelprinted
+    		pick/choose date label printed too, or none
+    		it's a searchable report, basically!
+    	and, the "export to excel" just re-does that query as an excel export!
+    		this is where mvc is cool. controller is same, view is different
+    			excel view, web view

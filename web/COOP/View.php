@@ -203,7 +203,10 @@ class coopView extends CoopObject
 				$found = $this->obj->N;
 			}
 
-            $this->page->printDebug("CoopView::find($find) $this->table found $found", 2);
+            $this->page->confessArray(
+                $this->obj->_query , 
+                "CoopView::find({$this->table} $find) ran query and  found $found", 
+                2);
              return $found;
 		}
 

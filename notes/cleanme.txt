@@ -1,6 +1,10 @@
 random things that really really need to get cleaned up
 
 
+send_email needs a rework
+	use TAL to template it: an HTML version and a non-html version
+	or optionally remove html tags
+
 	save the diff's, NOT the entire whooha
 		if that's possible in text/diff mode
 			maybe only the textfields
@@ -19,7 +23,10 @@ go through the joinpaths in standard linkconstraints!
 	i bet i can blow off tons of wacko custom linkconstraints this way!
 
 
-shitcan flexac
+shitcan flexac completely
+
+
+
 
     remove crufty files
     	cvs remove the whole list of crufty files: foundold-clean.txt
