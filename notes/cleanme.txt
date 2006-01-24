@@ -77,3 +77,5 @@ coop_sendto
 	need to be global ebcause it's referenced in session-init 
 	but i have to move it into cooppage somewhere-- setting
 
+
+gah. can't delete a family if they have a user, but they have one AUTOMATICALLY when you careat ea family, and betsy can't delete it!!
