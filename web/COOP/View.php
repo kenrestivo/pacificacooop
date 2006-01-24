@@ -989,11 +989,15 @@ function getAlert()
         {
             $tablename = $tablename ? $tablename : $this->table;
             
-//             $tmp = $this->__clone();
-//             //$tmp->schoolYearChooser();
-//             $tmp->find();
-//             $this->foundCount = $tmp->obj->N;
-            
+            $tmp = $this->__clone();
+            $tmp->debugWrap(2);
+            $tmp->linkConstraints();
+            $tmp->obj->find();
+            if($tmp->obj->N < COOP_MAX_PAGER){
+                return;
+            }
+            $this->foundCount = $tmp->obj->N;     
+
             $sl = $this->getAndSaveDefault('startletter', 'A');
 
             // ok, find it!
