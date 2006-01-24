@@ -997,7 +997,6 @@ function getAlert()
   
 
             // rendering code
-            $res .= '<div>Choose a letter to view:</div>';
             
             // XXX NO! clone it instead... ugly, impractical, and stupid
             // it might not have any. i can't think. i can't write in english.
@@ -1016,6 +1015,8 @@ function getAlert()
             $res .= implode('&nbsp;', $letterlist);
             
 
+            $this->searchForm->addElement('static', 'pager', 
+                                          'Begins with', $res);
             return $res;
         }
 

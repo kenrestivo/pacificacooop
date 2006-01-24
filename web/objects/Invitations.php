@@ -59,7 +59,8 @@ class Invitations extends CoopDBDO
 
     function fb_display_view(&$co)
         {
-            $ap = "";
+            $aphack = 0;
+            $aphtml = "";
             // FAMILY AND ALPHABETIC CHOOSERS
             if($co->isPermittedField() >= ACCESS_VIEW){
                 $co->schoolYearChooser();
@@ -103,69 +104,72 @@ class Invitations extends CoopDBDO
                     $this->whereAdd(sprintf('%s.family_id = %d', 
                                             $co->table,
                                             $family_id));
-                } else {
-                    if($family_id == '0'){
-                        $this->whereAdd(
-                            sprintf('%s.family_id is null or %s.family_id < 1', 
-                                    $co->table, 
-                                    $co->table));
-                    }
-                    $ap = $co->alphaPager('last_name', 'leads');
-                }
-            }
-
-
-
-            /////////////// SOURCE CHOOSER
-            // now the nightmare source id too
-            $sources['%'] ='ALL';
-            $src =& new CoopView(&$co->page, 'sources', &$co);
-            $src->obj->find(); // go get, including any constraints/sorts
-            while($src->obj->fetch()){
-                $sources[$src->obj->source_id] = $src->obj->description;
-            }
-            
-            
-            $srcsel =& $co->searchForm->addElement('select', 'source_id', 
-                                                   'Source', 
-                                                   $sources,
-                                                   array('onchange' =>
-                                                         'this.form.submit()'));
-            
-            
-            
-            //COOL! this is the first place i am using vars->last
-            // this does the request stuff for me, doesn't it?
-            // i am a LITTLE worried about stomping on schoolyear tho
-            $co->searchForm->setDefaults(
-                array('source_id' => 
-                      $co->page->vars['last']['source_id']));
-            
-            $bar = $srcsel->getValue();
-            $source_id = $bar[0];
-            $co->page->vars['last']['source_id'] = $source_id;
-            
-            //add the select And the where. notice they are different!
-            $co->obj->selectAdd('leads.source_id');
-
-            if($source_id > 0){
-                $this->whereAdd(sprintf('leads.source_id = %d', 
-                                        $source_id));
-            } else {
-                if($source_id == '0'){
+                } else if($family_id == '0'){
                     $this->whereAdd(
-                        'leads.source_id is null or leads.source_id < 1'); 
+                        sprintf('%s.family_id is null or %s.family_id < 1', 
+                                $co->table, 
+                                $co->table));
                 }
-            }
 
+
+
+
+                /////////////// SOURCE CHOOSER
+                // now the nightmare source id too
+                $sources['%'] ='ALL';
+                $src =& new CoopView(&$co->page, 'sources', &$co);
+                $src->obj->find(); // go get, including any constraints/sorts
+                while($src->obj->fetch()){
+                    $sources[$src->obj->source_id] = $src->obj->description;
+                }
+            
+            
+                $srcsel =& $co->searchForm->addElement('select', 'source_id', 
+                                                       'Source', 
+                                                       $sources,
+                                                       array('onchange' =>
+                                                             'this.form.submit()'));
+            
+            
+            
+                //COOL! this is the first place i am using vars->last
+                // this does the request stuff for me, doesn't it?
+                // i am a LITTLE worried about stomping on schoolyear tho
+                $co->searchForm->setDefaults(
+                    array('source_id' => 
+                          $co->page->vars['last']['source_id']));
+            
+                $bar = $srcsel->getValue();
+                $source_id = $bar[0];
+                $co->page->vars['last']['source_id'] = $source_id;
+            
+                //add the select And the where. notice they are different!
+                $co->obj->selectAdd('leads.source_id');
+
+                if($source_id > 0){
+                    $this->whereAdd(sprintf('leads.source_id = %d', 
+                                            $source_id));
+                } else {
+                    if($source_id == '0'){
+                        $this->whereAdd(
+                            'leads.source_id is null or leads.source_id < 1'); 
+                    }
+                }
+
+                
+
+                // last but not least, my counts and pagers
+                $aphack = 1;
+
+                
+                // FINALLY crap for my choosers
+                $co->showChooser = 1;
+                // by default, no change button!
+                $co->searchForm->addElement('submit', 'savebutton', 'Change');
+                
+            } 
 
             
-            // FINALLY crap for my choosers
-            $co->showChooser = 1;
-            // by default, no change button!
-            $co->searchForm->addElement('submit', 'savebutton', 'Change');
-
-
             /// OK ALL DONE WITH THAT! now let's hep to it:
             $leads =  new CoopObject(&$co->page, 'leads', &$co);
             
@@ -173,7 +177,7 @@ class Invitations extends CoopDBDO
             
             $co->protectedJoin($leads, 'left');
             
-
+            
 
             // my nice little label preview
             $co->obj->selectAdd($leads->obj->fb_labelQuery);
@@ -187,9 +191,12 @@ class Invitations extends CoopDBDO
             array_unshift($this->preDefOrder, 'lead_label');
             $this->fb_fieldsToUnRender = array('lead_id');
 
-
-
-            return $ap . $co->simpleTable(true,true) .$ap;
+            // MUST DO THIS LAST!
+            if($aphack){
+                $aphtml = $co->alphaPager('last_name', 'leads');
+            }
+            
+            return $co->simpleTable(true,true) .$aphtml;
         }
 
 
@@ -247,7 +254,7 @@ class Invitations extends CoopDBDO
             if($co->isPermittedField() >= ACCESS_VIEW){
                 $co->schoolYearChooser();
                 $res .= showRawQuery("Invitation  Counts", 
-                                 sprintf('select relation, 
+                                     sprintf('select relation, 
 			sum(if(invitations.family_id>0,0,1)) as Alumni_List ,
 			sum(if(invitations.family_id>0,1,0)) as Family_Supplied ,
 			count(distinct(lead_id)) as Total 
@@ -256,7 +263,7 @@ class Invitations extends CoopDBDO
 			  invitations.school_year = "%s" 
    		group by relation 
 		order by total desc',
-                                         $co->getChosenSchoolYear()));
+                                             $co->getChosenSchoolYear()));
                 return $res;
             }
             if($ok){
@@ -294,7 +301,7 @@ class Invitations extends CoopDBDO
                              sprintf("Congratulations! 
 						You have paid your forfeit fee of $%0.2f . 
 						You don't need to enter any names this year.", 
-                                    $cv->obj->_income_id->payment_amount));
+                                     $cv->obj->_income_id->payment_amount));
             }
 
 			// check for indulgences

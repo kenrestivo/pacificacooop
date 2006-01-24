@@ -12,7 +12,11 @@ coop web database
 	sortable/searchable views (searchfeature.txt)
 
 
-some way of determining the alumni list?
+push the source chooser live
+
+
+make the alphapager a custom qf element!
+	and thus separate out the db stuff from the display
 
 
 BUGS
@@ -5956,3 +5960,4 @@ move the cgitb stuff to a more logical place
 	or  make sure it is calcuating perms for links based on EFFECTIVE userid
 		i.e. the userid the email is beign sent to
 		itis. force_user
+some way of determining the alumni list?

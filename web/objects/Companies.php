@@ -148,7 +148,7 @@ if(length(companies.email_address) > 1, companies.email_address, NULL))
             $this->preDefOrder = array('company_label', 
                                               'url',
                                               'territory_id');
-            return $ap . $co->simpleTable(true,true) .$ap;
+            return $co->simpleTable(true,true) . $ap;
         }
 
    var $fb_sizes = array(
