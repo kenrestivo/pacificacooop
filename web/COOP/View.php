@@ -1019,8 +1019,10 @@ function getAlert()
             $res .= implode('&nbsp;', $letterlist);
             
 
-            $this->searchForm->addElement('static', 'pager', 
-                                          'Begins with', $res);
+            if(!empty($this->searchForm)){
+                $this->searchForm->addElement('static', 'pager', 
+                                              'Begins with', $res);
+            }
             return '<div>' . $res . '</div>';
         }
 

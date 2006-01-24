@@ -142,6 +142,7 @@ if(length(companies.email_address) > 1, companies.email_address, NULL))
     
     function fb_display_view(&$co)
         {
+            $co->schoolYearChooser();
             $ap = $co->alphaPager('company_name');
             $this->selectAdd($this->fb_labelQuery);
             $this->fb_fieldLabels['company_label'] = 'Company Contact Information';

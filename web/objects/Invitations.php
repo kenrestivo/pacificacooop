@@ -156,6 +156,11 @@ class Invitations extends CoopDBDO
                     }
                 }
 
+                // XXX hack, but it works
+                $co->forwardLinks['source_id'] = 'sources:source_id';
+                array_push($this->preDefOrder, 'source_id');
+                $this->fb_fieldLabels['source_id'] ='Source of Name';
+
                 
 
                 // last but not least, my counts and pagers
