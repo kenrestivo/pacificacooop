@@ -996,6 +996,7 @@ function getAlert()
             if($tmp->obj->N < COOP_MAX_PAGER){
                 return;
             }
+            $this->showChooser =1; // DAMN WELL BETTER!
             $this->foundCount = $tmp->obj->N;     
 
             $sl = $this->getAndSaveDefault('startletter', 'A');

@@ -59,7 +59,6 @@ class Invitations extends CoopDBDO
 
     function fb_display_view(&$co)
         {
-            $aphack = 0;
             $aphtml = "";
             // FAMILY AND ALPHABETIC CHOOSERS
             if($co->isPermittedField() >= ACCESS_VIEW){
@@ -164,11 +163,10 @@ class Invitations extends CoopDBDO
                 
 
                 // last but not least, my counts and pagers
-                $aphack = 1;
+                $co->showChooser = 1;
 
                 
                 // FINALLY crap for my choosers
-                $co->showChooser = 1;
                 // by default, no change button!
                 $co->searchForm->addElement('submit', 'savebutton', 'Change');
                 
@@ -197,9 +195,9 @@ class Invitations extends CoopDBDO
             $this->fb_fieldsToUnRender = array('lead_id');
 
             // MUST DO THIS LAST!
-            if($aphack){
-                $aphtml = $co->alphaPager('last_name', 'leads');
-            }
+            
+            $aphtml = $co->alphaPager('last_name', 'leads');
+
             
             return $co->simpleTable(true,true) .$aphtml;
         }
