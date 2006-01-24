@@ -49,6 +49,7 @@ define('COOP_DEFAULT_STARTING_BID_DIVISOR', 2);
 define('COOP_MAX_SELECT_COUNT', 150);
 define('COOP_MAX_LONGTEXT_DISPLAY', 60);
 
+define('COOP_MAX_PAGER', 50);
 
 /// defaults for phptal. relative to the root dir
 define('PHPTAL_CACHE_DIR', 'cache/');
