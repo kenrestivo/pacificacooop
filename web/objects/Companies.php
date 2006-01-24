@@ -143,12 +143,15 @@ if(length(companies.email_address) > 1, companies.email_address, NULL))
     function fb_display_view(&$co)
         {
             $co->schoolYearChooser();
-            $ap = $co->alphaPager('company_name');
             $this->selectAdd($this->fb_labelQuery);
             $this->fb_fieldLabels['company_label'] = 'Company Contact Information';
             $this->preDefOrder = array('company_label', 
                                               'url',
                                               'territory_id');
+
+            $this->fb_pager =array('method' => 'alpha',
+                                   'keyname' => 'company_name');
+
             return $co->simpleTable(true,true) . $ap;
         }
 

@@ -1,6 +1,8 @@
 a cool nifty SEARCH BOX in all generic views!!
 
 
+well i have it. almost there
+
 
 task:
 	turn the schoolyearchooser into a generic search/sort interface

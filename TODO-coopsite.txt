@@ -1,6 +1,7 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
+	sortable/searchable views (searchfeature.txt)
 	cleanups and code fixes (cleanme.txt)
 	json, REST, xmlrpc (jsonselect.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
@@ -9,15 +10,21 @@ coop web database
 	import the 20-year roster (20yearroster.txt)
 	templates and reports (templates.txt)
 	insurance, dammit
-	sortable/searchable views (searchfeature.txt)
 
 
 put paging in simpletable!!
-	must TABLE PREFIX the searchables
-		there will be multiples on details pages now
 	try to render the pager at the end of a simpletable too
 	gah. gotta force showchooser. why??
 	go through and look at leads and companies too
+	must TABLE PREFIX the searchables
+		anywhere in objects that searchForm is called
+			BUT BE CAREFUL! there are backreference issues
+				i.e. push will have table prepended, this is prolly good
+		there will be multiples on details pages now
+
+
+finally OTHER kinds of paging: LIMIT, numeric ,etc
+	i.. page 1..20.. this should be the default
 
 put the sources *table* in there, with admin only privs perhaps?
 
@@ -29,6 +36,7 @@ BUGS
 	send-email:  make sure i'm not leaking SID... how?
 
 IMPORTANT TIME-SENSITIVE ITEMS!
+	searchable reports
 	labels/export
 	tickets/rsvps
 	package sheet printing

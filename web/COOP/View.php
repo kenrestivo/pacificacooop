@@ -197,6 +197,7 @@ class coopView extends CoopObject
             // go do the pager now
             if(!empty($this->obj->fb_pager) && is_array($this->obj->fb_pager)){
                 //TODO: raise error on invalid callback
+                // TODO: also switch based on type too
                 $this->alphaPager();
             }
 
@@ -993,10 +994,16 @@ function getAlert()
     function alphaPager()
         {
             $keyname= $this->obj->fb_pager['keyname'];
+            if(!$keyname){
+                PEAR::raiseError('you CANNOT do a pager without a keyname', 
+                                 666);
+            }
             $tablename = empty($this->obj->fb_pager['tablename']) ? 
     $this->table : 
-    $this->obj->fb_pager['tablename'] ;
+    $this->obj->fb_pager['tablename'];
             
+            $this->page->printDebug("{$this->table} paging based on {$tablename}:{$keyname}", 2);
+
             $tmp = $this->__clone();
             $tmp->debugWrap(2);
             $tmp->linkConstraints();

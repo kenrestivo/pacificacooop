@@ -209,7 +209,7 @@ class Leads extends CoopDBDO
             $co->protectedJoin($invites);
 
             $co->schoolYearChooser();
-            $ap = $co->alphaPager('last_name');
+
 
             $co->obj->selectAdd($this->fb_labelQuery);
             $this->fb_fieldLabels['lead_label'] = 'Address Label Preview';
@@ -219,6 +219,9 @@ class Leads extends CoopDBDO
             $this->fb_fieldLabels['source_id'] = 'Source of Contact';
             $this->preDefOrder= array('lead_label', 'response_code', 
                                       'source_id');
+
+            $this->fb_pager =array('method' => 'alpha',
+                                   'keyname' => 'last_name');
 
             return  $co->simpleTable(true,true). $ap;
         }
