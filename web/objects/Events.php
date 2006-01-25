@@ -33,10 +33,13 @@ class Events extends CoopDBDO
         'description' => 'Description',
         'url' => 'For more information',
         'realm_id' => 'Data Realm (for grouping and permissions)',
-        'notes' => 'Details'
+        'notes' => 'More Information',
+        'url' => 'Link'
         );
 
-    // for now
-    var $fb_fieldsToUnRender = array('url');
+    var $fb_requiredFields = array('description', 'realm_id');
+    var $fb_textFields = array('notes');
+    var $fb_URLFields = array('url');
+
 
 }

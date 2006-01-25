@@ -19,105 +19,20 @@ gah! susan needs edit/delete on solicit auctions
 		but, alas, i think i have to.
 
 
-BUGS
-	send-email:  make sure i'm not leaking SID... how?
-	a global $format flag in page
-		do not do recordbuttons, etc, if it is not html
-
-
 IMPORTANT TIME-SENSITIVE ITEMS!
-	labels/export
-	tickets/rsvps
-	package sheet printing
+	labels/export -- python cgi on nfsn
+	tickets/rsvps -- just look at it.
 	parent ed 
 		make-up stuff
 		nag-only (i.e. enhancement hack)
-
-
-
-
-put the sources *table* in there, with admin only privs perhaps?
-
-	
-make the alphapager a custom qf element!
-
-
-also include details link from audit trail... why did i remove that?
-
-spreadsheet export-- do it now, just don't push it live until needed
-
-
-add link for springfest from homepage
-	actually, add it to the description
-
-
-24 hours PHP
-bring RSVPs and tickets back to life
-
-
-??? PHP/JS
-sponsorships fix
-	either/or for ads: lead or company. make it so!
-	a either-or chooser for JS. either leads or companies
-		hiding this is going to be challenging?
-	ad and sponsorship a few other places: a chooser for lead OR company!
-		and a form rule to require either not both
-
-
-
-add parent ed calculations to homepage
-	number of meetings (like my big query)
-
-
-
-?? CSS/DOM/IE (daytime/browsercam)
-	css not bgcolor for publicauction
-	also fix the choosers colour
-		what is doing that?
-
+	sponsorships fix
+	package sheet printing
 
 
 ??PHP
-audit trails are a botch. formatting!
-	go through and strip all tags/html from these fuckers
-	and do it for each save too
-		canonical fuckup is
-			http://www/coop-dev/generic.php?table=audit_trail&realm=19
-
-
-BUGS
-	that solicit summary, should show view for debbie. why doesn't it?
-	what about alpha page thigns that begin with NOTHING
-		best to programattically sort them, actually, first
-
-
-	also make sure the random solicitation people can't edit money
-
-
-ENTRY
-	fix UPS store: there are two of 'em, and that sucks
-	cut/paste massive 2nd vp job description in
-		and the gui version of the treasurer's description perhaps?
-
-
-
-???PHP/SQL
-vip stuff -- import
-	how did i do vip's? tickets?
-		yes, they were direct tickets.
-	vip category? i like what julie did here
-
-
-???PHP
-sf night-of event purchases is utterly fucked up
-
-
-???PHP/SQL
-add END dates to calendar events!!
-	it's ridiculous the way i have it now
-	show start-end as needed in summaries
-
-
+make the event information a textbox
+	add link for springfest from homepage
+		actually, add it to the description
 
 
 PERMS BUGS!!
@@ -586,6 +501,84 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+put the sources *table* in there, with admin only privs perhaps?
+
+	
+make the alphapager a custom qf element!
+
+
+also include details link from audit trail... why did i remove that?
+
+spreadsheet export-- do it now, just don't push it live until needed
+
+
+24 hours PHP
+bring RSVPs and tickets back to life
+
+
+??? PHP/JS
+sponsorships fix
+	either/or for ads: lead or company. make it so!
+	a either-or chooser for JS. either leads or companies
+		hiding this is going to be challenging?
+	ad and sponsorship a few other places: a chooser for lead OR company!
+		and a form rule to require either not both
+
+
+
+add parent ed calculations to homepage
+	number of meetings (like my big query)
+
+
+
+?? CSS/DOM/IE (daytime/browsercam)
+	css not bgcolor for publicauction
+	also fix the choosers colour
+		what is doing that?
+
+
+
+??PHP
+audit trails are a botch. formatting!
+	go through and strip all tags/html from these fuckers
+	and do it for each save too
+		canonical fuckup is
+			http://www/coop-dev/generic.php?table=audit_trail&realm=19
+
+
+BUGS
+	that solicit summary, should show view for debbie. why doesn't it?
+	what about alpha page thigns that begin with NOTHING
+		best to programattically sort them, actually, first
+
+
+	also make sure the random solicitation people can't edit money
+
+
+ENTRY
+	fix UPS store: there are two of 'em, and that sucks
+	cut/paste massive 2nd vp job description in
+		and the gui version of the treasurer's description perhaps?
+
+
+
+???PHP/SQL
+vip stuff -- import
+	how did i do vip's? tickets?
+		yes, they were direct tickets.
+	vip category? i like what julie did here
+
+
+???PHP
+sf night-of event purchases is utterly fucked up
+
+
+???PHP/SQL
+add END dates to calendar events!!
+	it's ridiculous the way i have it now
+	show start-end as needed in summaries
+
+
 
 
 ???PHP
@@ -5989,3 +5982,9 @@ this clone/count thing is mystic. wtf is it searching for??
 livesitetest
 	  wget --proxy=off -O - http://www.pacificacoop.org/members/tests/labeltest.py?coop=a88c49c1f8dbd6d5f5166db01f16038b > /tmp/labels.pdf
 	searchable reports
+
+	send-email:  make sure i'm not leaking SID... how?
+	a global $format flag in page
+		do not do recordbuttons, etc, if it is not html
+	ok, done
+remove all URLs for events! except the ones i need

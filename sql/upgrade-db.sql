@@ -15,3 +15,5 @@
 -- add sponsorshiptypes to the perms table, admin only, then test it out please
 
 -- add sources
+
+-- remove all URLs for events! except the ones i need

@@ -56,13 +56,14 @@ class Calendar_events extends CoopDBDO
     function homepage_summary(&$co, $publiconly = false)
         {
             
+            $publiconly = false;
             $ev =& $this->factory('events');
             $this->joinAdd($ev);
 
             // oh, this is a SILLY way to determine this
-            if(!$co->page->auth['token'] || $publiconly){
-                $clause = 'public'; 
-                $this->show_on_public_page = 'Yes';            
+            if(empty($co->page->auth['token']) || $publiconly){
+                $limit = 'public';
+                $this->whereAdd('show_on_public_page = "Yes"');            
             }
             $this->status = 'Active';
 
@@ -84,7 +85,7 @@ class Calendar_events extends CoopDBDO
 
             $this->find();
             while($this->fetch()){
-                $res .= sprintf("<p>%s%s:&nbsp;<b>%s</b></p><p>%s</p><br />", 
+                $res .= sprintf("<p>%s%s:&nbsp;<b>%s</b></p><p>%s&nbsp;%s</p><br />", 
                                 $this->human_date, 
                                 $this->human_time ? ' '. $this->human_time : '',
                                 $this->url ? sprintf('<a href="%s">%s</a>',
@@ -92,8 +93,12 @@ class Calendar_events extends CoopDBDO
                                                      $this->description)
                                 :$this->description, 
                                 $this->notes,
-                                $publiconly ? '' : 
-                                $co->recordButtons(&$this, false)
+                                $limit == 'public' ? '' : 
+                                $co->recordButtons(
+                                    &$this, 
+                                    false, 
+                                    array ('<span class="actions">(',
+                                           ')</span>'))
                     );
             }
 // XXX broken, don't know why. actionbuttons screwed up on members page IFF they have edit perms. weird... actionbuttons broken
