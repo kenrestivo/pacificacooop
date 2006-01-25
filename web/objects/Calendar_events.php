@@ -87,7 +87,10 @@ class Calendar_events extends CoopDBDO
                 $res .= sprintf("<p>%s%s:&nbsp;<b>%s</b></p><p>%s</p><br />", 
                                 $this->human_date, 
                                 $this->human_time ? ' '. $this->human_time : '',
-                                $this->description, 
+                                $this->url ? sprintf('<a href="%s">%s</a>',
+                                                     $this->url, 
+                                                     $this->description)
+                                :$this->description, 
                                 $this->notes,
                                 $publiconly ? '' : 
                                 $co->recordButtons(&$this, false)
