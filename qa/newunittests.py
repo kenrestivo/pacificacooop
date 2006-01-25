@@ -322,7 +322,7 @@ class Runner:
         fp=open(logfile, 'a')
         fp.write('================\n')
         for u in usersToTest:
-            print 'Starting user %s (%s)...' % (u, url)
+            print '----- Starting user %s (%s)...' % (u, url)
             self.ct = CoopTest(url, u, logfp=fp,  errnum=self.errnum)
             self.ct.run()
             self.errnum = self.ct.errnum
