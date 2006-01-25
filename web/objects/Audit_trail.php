@@ -193,7 +193,8 @@ class Audit_trail extends CoopDBDO
             require_once('Text/Diff.php');
             require_once('Text/Diff/Renderer.php');
             require_once('Text/Diff/Renderer/inline.php');
-            
+            require_once('lib/class.html2text.inc');
+
             
             $res = '';
             
@@ -218,16 +219,24 @@ class Audit_trail extends CoopDBDO
             
             //XXX what if this fails?
             $cho->obj->get($this->index_id);
+            $h2t =& new html2text();
+            $h2t->width = 9999;
+                
             
             foreach($changes as $field => $change){
                 
-                $cho->obj->$field = $change['old'];
-                $oldformatted = unHTML(strip_tags($cho->checkLinkField($field, 
-                                                     $cho->obj->$field)));
+                // XXX hack! stuffing these into the object
+                // so that checklinkfield is happy
+                $cho->obj->$field = $change['old']; 
+                $h2t->set_html($cho->checkLinkField($field, 
+                                                     $cho->obj->$field));
+                $oldformatted = $h2t->get_text();
 
-                $cho->obj->$field = $change['new'];
-                $newformatted = unHTML(strip_tags($cho->checkLinkField($field, 
-                                                     $cho->obj->$field)));
+
+                $cho->obj->$field = $change['new']; 
+                $h2t->set_html($cho->checkLinkField($field, 
+                                                     $cho->obj->$field));
+                $newformatted = $h2t->get_text();
 
                 // ok, so this is a bit of a duplication of coopview.
                 $res .=  empty($cho->obj->fb_fieldLabels[$field]) ?
@@ -240,8 +249,13 @@ class Audit_trail extends CoopDBDO
                 }                    
 
                 // finally, SHOW the damned thing
-
-                if(!empty($this->fb_noHTML)){        // for the emails
+                $count = strstr($oldformatted, "\n");
+                if($count > 1){
+                    $res .= "$count changes:";
+                }
+                
+                if(!strstr($co->page->content_type, 'html')){  
+                    // for the emails
                     $res .= sprintf(" '%s' changed to '%s'\n", 
                                     $oldformatted, $newformatted);
                 } else {
@@ -252,7 +266,7 @@ class Audit_trail extends CoopDBDO
                     //$co->page->confessArray($rend->getParams(), 'inline params', 4);
                     $res .= nl2br($rend->render($diff));
                 }
-                $res .= empty($this->fb_noHTML) ? '<br />': "\n" ;
+                $res .= strstr($co->page->content_type, 'html') ? '<br />': "\n" ;
             }
             //TODO: do a textto html here instead?!
             // based on content/type? or always?

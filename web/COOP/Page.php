@@ -90,7 +90,7 @@ class coopPage
 			PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 
 								   array(&$this, 'kensPEARErrorHandler'));
 			dump("debug level $this->debug");
-            $this->mergeSessionVars();
+            $this->mergeSessionVars(); // XXX this is cruft! unused!
             $this->currentSchoolYear = findSchoolYear();
 
            
@@ -556,6 +556,7 @@ class coopPage
 
 		}
 
+    //XXX THIS IS CRUFT! apparently is not used at all!
     function mergeSessionVars()
         {
             //OLD STUFF FIRST, THEN NEW STUFF. so REQ overrides SESSION!

@@ -37,6 +37,12 @@ build a unit test of the existing permissions results
 	then run the *new* perms query, and compare/contrast
 
 
+add a user name popup to the permissions screen
+	so that you can check it for *any* user!
+	edit links for admin, and here's a nice way to do it
+	this requires adding this to the stack too
+
+
 ???
 normalise the perms!
 	normalize user/group perms. two separate tables, not one tabel!

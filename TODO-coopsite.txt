@@ -11,12 +11,9 @@ coop web database
 	templates and reports (templates.txt)
 	insurance, dammit
 
-
-gah! susan needs edit/delete on solicit auctions
-	JUST solicit auctions. can i do this?
-	otherwise, just all
-	FUCK don't make me subclass ispermittedfield. goddammit.
-		but, alas, i think i have to.
+push live after cooke validates
+	enter sf link on livesite
+		url in events, and link in text too
 
 
 IMPORTANT TIME-SENSITIVE ITEMS!
@@ -28,11 +25,6 @@ IMPORTANT TIME-SENSITIVE ITEMS!
 	sponsorships fix
 	package sheet printing
 
-
-??PHP
-make the event information a textbox
-	add link for springfest from homepage
-		actually, add it to the description
 
 
 PERMS BUGS!!
@@ -287,7 +279,6 @@ make territory editing limited to sf admins
 add shirley to the audit trail mailing list!
 	umm. need a teachers table, with email. then add them to the query  
 
-details view of audit trail is busted-- didn't i fix this already?
 
 
 ??? PHP/SQL
@@ -3237,7 +3228,18 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	strip tags  out of the fuckers
+
+gah! susan needs edit/delete on solicit auctions
+	JUST solicit auctions. can i even do this?
+		how about forcing the realm?
+	fuck it, give her all perms then.
+	otherwise, just all
+	FUCK don't make me subclass ispermittedfield. goddammit.
+		but, alas, i think i have to.
+	so, solicit SHOULD NOT have perms for received or location
+	ok, BLOCK the received/location for all except packaging
+
+
 
 	that's a hack. the right thing to do is:
 		either unhtml the whole thing at send_email time, or at page time
@@ -5987,4 +5989,9 @@ livesitetest
 	a global $format flag in page
 		do not do recordbuttons, etc, if it is not html
 	ok, done
-remove all URLs for events! except the ones i need
+remove all URLs for events! except the ones i needdetails view of audit trail is busted-- didn't i fix this already?
+	yes, done. striphtml!	strip tags  out of the fuckers
+??PHP
+make the event information a textbox
+	add link for springfest from homepage
+		actually, add it to the description too

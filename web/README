@@ -29,7 +29,6 @@ fb_recordActions = array  (action => level)
 fb_extraDetails = array('path:to:other:details', 'path:to:more:details')
     // basically, backlinked tables i want to display. kind of a hack.
 fb_allYears = 0/1 // show all years by default in schoolyearchooser
-fb_noHTML = 0/1  // render fields as text, not html. HACK not used anywhere except emails in audit trail, so far
 fb_forceNoChooser = 0/1 a HACK! for summaries which share one schoolyearchooser
 
 callbacks aldo in the DataObjects (in objects directory):
@@ -108,6 +107,33 @@ you MUST USE a local copy of PEAR. install it in some directory, i.e. your shell
     
     you must also install tiny_mce. i had this in cvs but it was ridiculous.
         so you have to find it, download it, and install it, in the 'lib' directory
+
+
+THE STACK
+-----------
+the "stack" handling is the core of this application. here's how it works:
+
+stack-related data
+    CoopPage::vars is also $_SESSION['cpVars']
+        gets saved in session_info table
+        this 'vars' contains:
+            'last': the CURRENT state. i know it's called 'last'. that sucks
+                inside that:
+                    action
+                    table
+                    pop ???
+                    id: the CURRENT id.
+						gets ttransformed from the table-field format
+                    realm    
+
+
+stack-related actions
+   push:  you 'push' by including a variable 'push' in an http GET/POST request
+          this is how a page sends a message to the NEXT page,
+           to save the previous state before proceeding
+       
+
+
     
 
  ------------

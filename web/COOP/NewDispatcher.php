@@ -42,6 +42,7 @@ class CoopNewDispatcher
     // returns the atd for the view, if any
     function &handleStack()
         {
+            // save a copy of this stuff before merging
             // XXX ok what about reports? no table for those puppies.
             if(!empty($_REQUEST['table'])){
                 $atd =& new CoopView(&$this->page, $_REQUEST['table'], $none);
@@ -61,6 +62,7 @@ class CoopNewDispatcher
                 $this->page->vars['stack'][] = $this->page->vars['last'];
             } 
 
+            // save the request as 'last'-- which is current
             // ALWAYS use formatted as last.... if it exists, that is
             // it won't exist in cases where i'm coming back from a header location
             if(!empty($formatted)){
@@ -70,7 +72,8 @@ class CoopNewDispatcher
             // critical to do this here. 
             $prev = $this->page->popOff();
  
-            // no. what to do in case of report? there'll be no table, i expect
+            // if no dispacinformation was passed, redirect to members homepage
+            // XXX what to do in case of report? there'll be no table, i expect
             if(!$this->page->vars['last']['table']){
                 $this->page->headerLocation(
                     $this->page->selfURL(

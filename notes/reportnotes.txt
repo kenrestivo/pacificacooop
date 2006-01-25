@@ -4,6 +4,7 @@ $Id$
 
 ??PHP
 stick reports into the stack, somehow
+	DOCUMENT the stack
 	so i can navigate through them. AND so i can save stuff for them
 	call newdispatcher in reports
 	better yet, make the view function a subclass
