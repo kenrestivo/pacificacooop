@@ -222,12 +222,12 @@ class Audit_trail extends CoopDBDO
             foreach($changes as $field => $change){
                 
                 $cho->obj->$field = $change['old'];
-                $oldformatted = $cho->checkLinkField($field, 
-                                                     $cho->obj->$field);
+                $oldformatted = unHTML(strip_tags($cho->checkLinkField($field, 
+                                                     $cho->obj->$field)));
 
                 $cho->obj->$field = $change['new'];
-                $newformatted = $cho->checkLinkField($field, 
-                                                     $cho->obj->$field);
+                $newformatted = unHTML(strip_tags($cho->checkLinkField($field, 
+                                                     $cho->obj->$field)));
 
                 // ok, so this is a bit of a duplication of coopview.
                 $res .=  empty($cho->obj->fb_fieldLabels[$field]) ?
