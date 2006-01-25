@@ -126,9 +126,6 @@ class EmailChanges
             $aud =& $this->audit_co;
             $rec =& $this->record_co;
 
-            // need this, don't want html in here if i can avoid it
-            $aud->obj->fb_noHTML = 1;
-            $rec->obj->fb_noHTML = 1;
 
             $audformatted = $aud->toArrayWithKeys();
 
@@ -366,7 +363,7 @@ function gooseUnSent(&$cp)
 ignore_user_abort(); // IMPORTANT!
 
 $cp = new coopPage( $debug);
-$cp->content_type = 'text/plain';
+$cp->content_type = 'text/plain'; // VITALLY NECESSARY!
 $cp->logIn(); //XXX HACK! to handle the cookies
 
 if(!empty($_REQUEST['audit_id'])){

@@ -11,10 +11,6 @@ coop web database
 	templates and reports (templates.txt)
 	insurance, dammit
 
-push live after cooke validates
-	enter sf link on livesite
-		url in events, and link in text too
-
 
 IMPORTANT TIME-SENSITIVE ITEMS!
 	labels/export -- python cgi on nfsn
@@ -59,9 +55,6 @@ BUGS
     Source File: http://www/coop-dev/lib/kenflex.js
     Line: 64
     
-
-??PHP/SQL
-bring tickets, paddles, etc back to life!
 
 
 
@@ -3229,6 +3222,9 @@ i do however WANT to be able to copy the insurance info in!
 ----------------
 NOWHERE
 
+??PHP/SQL
+bring tickets, paddles, etc back to life!
+
 gah! susan needs edit/delete on solicit auctions
 	JUST solicit auctions. can i even do this?
 		how about forcing the realm?
@@ -5995,3 +5991,7 @@ remove all URLs for events! except the ones i needdetails view of audit trail is
 make the event information a textbox
 	add link for springfest from homepage
 		actually, add it to the description too
+
+push live after cooke validates
+	enter sf link on livesite
+		url in events, and link in text too

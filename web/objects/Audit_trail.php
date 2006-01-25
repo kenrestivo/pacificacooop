@@ -225,6 +225,11 @@ class Audit_trail extends CoopDBDO
             
             foreach($changes as $field => $change){
                 
+                // skip cached shorttext and any other privates
+                if(preg_match('/^_/', $field)){
+                    continue;
+                }
+
                 // XXX hack! stuffing these into the object
                 // so that checklinkfield is happy
                 $cho->obj->$field = $change['old']; 
@@ -247,15 +252,10 @@ class Audit_trail extends CoopDBDO
                     $res .= " (Not Permitted) ";
                     continue;
                 }                    
-
-                // finally, SHOW the damned thing
-                $count = strstr($oldformatted, "\n");
-                if($count > 1){
-                    $res .= "$count changes:";
-                }
                 
                 if(!strstr($co->page->content_type, 'html')){  
-                    // for the emails
+                    // for the emails, because the underline and
+                    // strikethroughs don't  convert to text
                     $res .= sprintf(" '%s' changed to '%s'\n", 
                                     $oldformatted, $newformatted);
                 } else {
