@@ -1,7 +1,7 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	sortable/searchable views (searchfeature.txt)
+	sortable/searchable/pagable views (searchfeature.txt)
 	cleanups and code fixes (cleanme.txt)
 	json, REST, xmlrpc (jsonselect.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
@@ -12,31 +12,20 @@ coop web database
 	insurance, dammit
 
 
-put paging in simpletable!!
-	try to render the pager at the end of a simpletable too
-	gah. gotta force showchooser. why??
-	go through and look at leads and companies too
-	must TABLE PREFIX the searchables
-		anywhere in objects that searchForm is called
-			BUT BE CAREFUL! there are backreference issues
-				i.e. push will have table prepended, this is prolly good
-		there will be multiples on details pages now
-
-
-finally OTHER kinds of paging: LIMIT, numeric ,etc
-	i.. page 1..20.. this should be the default
-
-put the sources *table* in there, with admin only privs perhaps?
-
-	
-make the alphapager a custom qf element!
+gah! susan needs edit/delete on solicit auctions
+	JUST solicit auctions. can i do this?
+	otherwise, just all
+	FUCK don't make me subclass ispermittedfield. goddammit.
+		but, alas, i think i have to.
 
 
 BUGS
 	send-email:  make sure i'm not leaking SID... how?
+	a global $format flag in page
+		do not do recordbuttons, etc, if it is not html
+
 
 IMPORTANT TIME-SENSITIVE ITEMS!
-	searchable reports
 	labels/export
 	tickets/rsvps
 	package sheet printing
@@ -44,6 +33,13 @@ IMPORTANT TIME-SENSITIVE ITEMS!
 		make-up stuff
 		nag-only (i.e. enhancement hack)
 
+
+
+
+put the sources *table* in there, with admin only privs perhaps?
+
+	
+make the alphapager a custom qf element!
 
 
 also include details link from audit trail... why did i remove that?
@@ -5989,3 +5985,7 @@ this clone/count thing is mystic. wtf is it searching for??
 		the found in simpletable is wrong,should use foundcount
 
 
+	go through and look at leads and companies too
+livesitetest
+	  wget --proxy=off -O - http://www.pacificacoop.org/members/tests/labeltest.py?coop=a88c49c1f8dbd6d5f5166db01f16038b > /tmp/labels.pdf
+	searchable reports

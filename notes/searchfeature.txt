@@ -1,7 +1,28 @@
 a cool nifty SEARCH BOX in all generic views!!
 
 
-well i have it. almost there
+
+put paging in simpletable!!
+	finally OTHER kinds of paging: LIMIT, numeric ,etc
+		i.. page 1..20.. this should be the default
+		divide the total by COOP_MAX
+			that's the number of pages
+				for each page, do a LIMIT(number * MAX, something)
+			ah, offset x limit max
+	put the test for quantity in find or elsewhere, then call default pager
+	gah. gotta force showchooser. why??
+		force it inside of the pager code,or in find
+	try to render the pager at the end of a simpletable too
+		true for all pagers
+	must TABLE PREFIX the searchables
+		will this happen anywhere? territories, maybe?
+		anywhere in objects that searchForm is called
+			BUT BE CAREFUL! there are backreference issues
+				i.e. push will have table prepended, this is prolly good
+		there will be multiples on details pages now
+
+the pager formula is:
+	[[i+1, i*max, i*max+max-1] for i in range(0, round(total/(max * 1.00)))]
 
 
 task:

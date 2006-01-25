@@ -254,6 +254,8 @@ class Audit_trail extends CoopDBDO
                 }
                 $res .= empty($this->fb_noHTML) ? '<br />': "\n" ;
             }
+            //TODO: do a textto html here instead?!
+            // based on content/type? or always?
             return $res;
         }
 

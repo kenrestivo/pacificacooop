@@ -82,7 +82,7 @@ class coopPage
     var $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';    // since tal can't escape it
     var $currentSchoolYear;   // cache so i'm not pounding findschoolyear
     var $browserData;    /// cache of data found
-
+    var $content_type = 'text/html;charset=utf-8';
     
 	function coopPage($debug = false)
 		{
@@ -108,27 +108,25 @@ class coopPage
 	// it's also a VERY ugly function
 	function header()
 		{
-            // default content is text/html. 
-            $content_type = 'text/html;charset=utf-8';
 
 
 /// NO! do not do this. evil evil evil
 //             // sniff the heaers. if agent supports it, send xhtml instead!
 //             $hdr= apache_request_headers();
 //             if(strstr( $hdr['Accept'], 'application/xhtml+xml')){
-//                 $content_type = 'application/xhtml+xml';
+//                 $this->content_type = 'application/xhtml+xml';
 //                 $doctype ='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
 //                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
 //             }
 
 
             // this commits our choice. browser now must follow us into it.
-            header('Content-Type: ' . $content_type, true);
+            header('Content-Type: ' . $this->content_type, true);
 			printf('%s
 <html  %s>
 ',            
                    $this->doctype,
-                   $content_type == 'application/xhtml+xml' ? 
+                   $this->content_type == 'application/xhtml+xml' ? 
                    'xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"' : 
                    'lang="en"');
             
@@ -139,9 +137,9 @@ class coopPage
  				content="%s" %s>
 <link rel="stylesheet" href="main.css" title="main" %s>
 ', 
-                   $content_type,
-                   $content_type == 'application/xhtml+xml' ? '/' :'',
-                   $content_type == 'application/xhtml+xml' ? '/' :'');
+                   $this->content_type,
+                   $this->content_type == 'application/xhtml+xml' ? '/' :'',
+                   $this->content_type == 'application/xhtml+xml' ? '/' :'');
 
             // almost out of the woods now and into content-related stuff
             printf('<title>%s</title>', $this->title);

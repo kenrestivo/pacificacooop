@@ -32,6 +32,20 @@ add make-up table for parent ed
 			FROM A left join B using (id) left join C using (id);
 
 
+meeting screen redux
+	stuff the whole thing into the display_view
+	NAG button, with reminder count
+		there is a nag table, whoopee
+		and a send reminder button
+			similar to send_email, but use json this time
+		count updates via js, when complete
+	perhaps another screen to choose those
+		show both parents for now
+	show only the parent who is on the real form?
+		maybe a button to choose another?
+
+
+
 link for choosing only those who need nagging, vs those who do not
 	look at alphapager for inspiration
 

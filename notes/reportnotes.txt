@@ -40,6 +40,9 @@ supply templates, subclass doctemplate
 
 ??PYTHON (yeah baybee!)
 nifty label printing library reportlab!!
+
+	big showstopper: sqlobject not being found by sys.path on nfsn
+
 	play with styling in reg'lar text	
 	
 	create my own template "class"

@@ -565,8 +565,12 @@ class coopView extends CoopObject
 	// NOTE! row is deprciated, it's not used for dbdo-based stuff, only old
 	function recordButtons(&$row, $par = true, $wrap = null)
 		{
-            $res = '';
+            // d-oh
+            if(!strstr($this->page->content_type, 'html')){
+                return;
+            }
 
+            $res = '';
 
             // handle the simple case first: i have old callbacks
 			if($this->legacyCallbacks){
@@ -615,6 +619,13 @@ class coopView extends CoopObject
     // TODO: showview is a legacy. when i whack legacy, remove showview
 	function actionButtons($showview = 0)
 		{
+
+            // d-oh
+            if(!strstr($this->page->content_type, 'html')){
+                return;
+            }
+
+
             $res = '';
 			
 			// handle the simple case first: i have old callbacks
