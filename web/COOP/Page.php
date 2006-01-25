@@ -559,6 +559,12 @@ class coopPage
     //XXX THIS IS CRUFT! apparently is not used at all!
     function mergeSessionVars()
         {
+            /// XXXX make sure nobody uses it, then WHACK it and all refs too!
+            if(isset($_REQUEST['cpVars'])){
+                PEAR::raiseError('THIS IS SOME CRUFTY OLD CODE! do not use', 
+                                 666);
+            }
+
             //OLD STUFF FIRST, THEN NEW STUFF. so REQ overrides SESSION!
             //TODO: empty() guards around this
             $_SESSION['cpVars'] =  array_merge($_SESSION['cpVars'], 

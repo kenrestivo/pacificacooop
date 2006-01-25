@@ -26,7 +26,8 @@ go through the joinpaths in standard linkconstraints!
 shitcan flexac completely
 
 
-
+remove mergesessionvars function!!! is it even used anywhere?
+	i hope it doesn't break anything!
 
     remove crufty files
     	cvs remove the whole list of crufty files: foundold-clean.txt

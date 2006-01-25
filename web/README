@@ -6,6 +6,20 @@ this uses PEAR, particualrly HTML::QuickForm and DB::DataObject
 i tried to make it backwards-compatible to DB_DataObjects_FormBuilder ("FB")
 fields i added to the dataobject, which are *not* in FormBuilder
 
+the whole application is basically a few files/classes:
+
+CoopObject: base class. wrapper around DB_DataObject, app-specific db stuff
+	CoopView: for displaying data, in tabular format. uses HTML_Table for now
+				also has lots of formatting stuff but that should get moved
+	CoopForm: for editing and saving data. wraps HTML_QuickForm 
+
+CoopPage: "globals" for the application, and app-wide utility functions
+	does most of the stack handling too
+
+CoopNewDispatcher: for navigating states, the 'action' GET/POST var
+					callbacks in this will 'dispatch' to views, forms, etc
+
+
 
 key vars that the system uses, which go in the DataObjects (in objects directory):
 -----------------
@@ -55,6 +69,11 @@ in coopview
 -----------
 fullText (do not truncate longtextfields)
 linkdisplayfields is a SUPERset of fieldstorender, in simpletable at least
+
+
+in cooppage
+------------
+(list vars here)
 
 unique app-specific tweaks:
 -----------------------
@@ -111,27 +130,33 @@ you MUST USE a local copy of PEAR. install it in some directory, i.e. your shell
 
 THE STACK
 -----------
-the "stack" handling is the core of this application. here's how it works:
+the "stack" handling is the core of this application. the "stack" is a lifo which is stored in a session var. it lets users bounce between pages and save state it also lets the pages send "messages" to another: basically modify each other's states, and particularly the trio of (current, previous, next) page
 
 stack-related data
     CoopPage::vars is also $_SESSION['cpVars']
-        gets saved in session_info table
-        this 'vars' contains:
-            'last': the CURRENT state. i know it's called 'last'. that sucks
+        gets saved in session_info table 'vars' contains:
+        'last': the CURRENT state. i know it's called 'last'. that sucks
                 inside that:
-                    action
-                    table
-                    pop ???
-                    id: the CURRENT id.
-						gets ttransformed from the table-field format
-                    realm    
-
+                 action
+                 table
+                 pop ???
+                 id: the CURRENT id.
+					ets ttransformed from the table-field format
+                 realm: ?? why?
+				submitvars: the quickform vars. i have to save them here
+							because QF dumps a lot of crap into the space
+							and because i need to clear them out afterwards!
+		'prev': ???
+	    'stack': a lifo of 'last' arrays, basically
 
 stack-related actions
    push:  you 'push' by including a variable 'push' in an http GET/POST request
           this is how a page sends a message to the NEXT page,
            to save the previous state before proceeding
-       
+   pop:  you 'pop' by either setting 'pop' in GET/POST, or setting it in 'last'
+		i.e. some page sets it for future
+		replaces whatever is in last, with whatever was last on stack
+		
 
 
     
