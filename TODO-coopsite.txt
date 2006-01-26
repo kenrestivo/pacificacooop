@@ -12,6 +12,14 @@ coop web database
 	insurance, dammit
 
 
+fix edit link! i broke it. dammit. nicole will not be too happy
+	why? ah. it's not a linkfield
+	it's braindead. i need to put the label into checklinkfield instead
+		bummer because it's so much faster in select!
+
+fix territories too
+
+make reset.sh more automated!
 
 IMPORTANT TIME-SENSITIVE ITEMS!
 	labels/export -- python cgi on nfsn

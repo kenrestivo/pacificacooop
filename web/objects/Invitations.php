@@ -196,7 +196,6 @@ class Invitations extends CoopDBDO
 
             // MUST DO THIS LAST!
             
-            //$aphtml = $co->alphaPager('last_name', 'leads');
             $this->fb_pager =array('method' => 'alpha',
                                    'keyname' => 'last_name',
                                    'tablename' => 'leads');

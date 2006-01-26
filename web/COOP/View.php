@@ -595,6 +595,7 @@ class coopView extends CoopObject
                     $res .= $this->page->selfURL(
 						array(
                             'value' => $this->actionnames[$action],
+                            'title' => $this->actionnames[$action], //why not?
                             'inside' => array( 
                                 'action' => $action,
                                 'table' => $this->table,
