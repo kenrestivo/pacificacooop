@@ -149,9 +149,6 @@ if(length(companies.email_address) > 1, companies.email_address, NULL))
                                               'url',
                                               'territory_id');
 
-            $this->fb_pager =array('method' => 'alpha',
-                                   'keyname' => 'company_name');
-
             return $co->simpleTable(true,true) . $ap;
         }
 
@@ -165,5 +162,9 @@ if(length(companies.email_address) > 1, companies.email_address, NULL))
    );
 
     var $fb_allYears = 1;
+
+    var $fb_pager =array('method' => 'alpha',
+                           'keyname' => 'company_name');
+
 
 }

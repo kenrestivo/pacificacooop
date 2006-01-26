@@ -110,6 +110,8 @@ class Leads extends CoopDBDO
      'country' => 10
    );
 
+    var $fb_pager =array('method' => 'alpha',
+                         'keyname' => 'last_name');
 
     var $fb_labelQuery = 'concat_ws("\n"
 ,concat_ws(" " , leads.salutation, leads.first_name, leads.last_name)
@@ -220,8 +222,6 @@ class Leads extends CoopDBDO
             $this->preDefOrder= array('lead_label', 'response_code', 
                                       'source_id');
 
-            $this->fb_pager =array('method' => 'alpha',
-                                   'keyname' => 'last_name');
 
             return  $co->simpleTable(true,true). $ap;
         }
