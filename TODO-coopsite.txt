@@ -12,14 +12,17 @@ coop web database
 	insurance, dammit
 
 
+
 IMPORTANT TIME-SENSITIVE ITEMS!
 	labels/export -- python cgi on nfsn
 	tickets/rsvps -- just look at it.
+		might be a simple thing, just some js choosers like sponsorships
 	parent ed 
 		make-up stuff
 		nag-only (i.e. enhancement hack)
 	sponsorships fix
 	package sheet printing
+
 
 
 
@@ -42,6 +45,9 @@ PERMS BUGS!!
 BUGS
 	why no enter new on front page? s/b same actionbuttons no?
 	why no spelling checker showing up??
+	send_email will die if no valid login supplied??!
+		gah, could log in, but would need to send cleartxt pwd?
+		maybe this works. oh wait, i think it does. cool.
 	duplicates in attendance! margolis
 		maybe do that margoilsreport in python? or use phptal?
 	fix -1 perms for family fees, income, babies, enhancement, 
@@ -5995,3 +6001,8 @@ make the event information a textbox
 push live after cooke validates
 	enter sf link on livesite
 		url in events, and link in text too
+
+menu fixes
+	treemenu maybe?
+	and titles
+		yay, done!

@@ -59,8 +59,15 @@ class CoopMenu extends HTML_Menu
 			switch($type){
 			case 'sitemap':
 				$this->renderer =& new HTML_Menu_DirectTreeRenderer();
-				$this->renderer->setEntryTemplate(HTML_MENU_ENTRY_ACTIVE, 
-												  '{title}');
+				$this->renderer->setEntryTemplate(
+                    array(
+                        HTML_MENU_ENTRY_ACTIVE =>
+                        '<span title="{help}">{title}</span>',
+                        HTML_MENU_ENTRY_INACTIVE    => 
+                        '<a href="{url}" title="{help}">{title}</a>',
+                        HTML_MENU_ENTRY_ACTIVEPATH  => 
+                        '<a href="{url}" title="{help}">{title}</a>'));
+
 				$this->render($this->renderer, $type);
 				break;
 			case 'urhere':
@@ -112,6 +119,7 @@ class CoopMenu extends HTML_Menu
                                         $subrl->obj->short_description, 
                                             2);
                 $res[$k]['title'] = $subrl->obj->short_description;
+                $res[$k]['help'] = $subrl->obj->fb_formHeaderText ? $subrl->obj->fb_formHeaderText : 'No Help Available';
                 // first the tables
                 $tab =& new CoopObject(&$this->page, 'table_permissions',
                                        &$subrl);
@@ -130,6 +138,7 @@ class CoopMenu extends HTML_Menu
                     $res[$k]['sub'][$i]['title']= 
                         $co->obj->fb_shortHeader ? $co->obj->fb_shortHeader : 
                         $tab->obj->table_name;
+                    $res[$k]['sub'][$i]['help'] = $co->obj->fb_formHeaderText ? $co->obj->fb_formHeaderText : 'No Help Available';
                     // check GROUPLEVEL for menulevel!
                     // XXX this is totally broken! use ispermittedfield!2
                     if($co->perms[NULL]['menu'] >= ACCESS_VIEW &&
@@ -162,6 +171,8 @@ class CoopMenu extends HTML_Menu
                     $i++;
                     // do add the tle always, but only url if 
                     $res[$k]['sub'][$i]['title']= $tab->obj->report_name;
+                    $res[$k]['sub'][$i]['help']= $tab->obj->report_name;
+                    // TODO: titles for reports
                     $rp =& new CoopObject(&$this->page, 'report_permissions',
                                        &$subrl);
                     if($this->getReportPerms(&$rp, $tab->obj->realm_id) >= ACCESS_VIEW)

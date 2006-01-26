@@ -6,7 +6,7 @@ this uses PEAR, particualrly HTML::QuickForm and DB::DataObject
 i tried to make it backwards-compatible to DB_DataObjects_FormBuilder ("FB")
 fields i added to the dataobject, which are *not* in FormBuilder
 
-the whole application is basically a few files/classes:
+the core of the application is basically a few files/classes:
 
 CoopObject: base class. wrapper around DB_DataObject, app-specific db stuff
 	CoopView: for displaying data, in tabular format. uses HTML_Table for now
@@ -146,7 +146,8 @@ stack-related data
 				submitvars: the quickform vars. i have to save them here
 							because QF dumps a lot of crap into the space
 							and because i need to clear them out afterwards!
-		'prev': ???
+		'prev': ugly, nasty hack. keeps a copy of what was popped
+				this is used for checking status of previous operation
 	    'stack': a lifo of 'last' arrays, basically
 
 stack-related actions
@@ -156,12 +157,17 @@ stack-related actions
    pop:  you 'pop' by either setting 'pop' in GET/POST, or setting it in 'last'
 		i.e. some page sets it for future
 		replaces whatever is in last, with whatever was last on stack
-		
+		inserts whatever was in last, into 'prev'. yes, this sucks
+
+ugly stack hacks:
+	i use CoopPage::getPreviousStack() to modify the previous stack frame
+		so that when you pop it off, your new data is there
+		i find this repulsive, but it's necessary in a few places. sorry.
 
 
     
 
- ------------
+------------
 pre-PEAR AUTH permissions system which is still in use
 auth
 	why are users not families??? why create a shadow abstraction?!

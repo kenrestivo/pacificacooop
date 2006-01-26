@@ -90,10 +90,9 @@ class coopPage
 			PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 
 								   array(&$this, 'kensPEARErrorHandler'));
 			dump("debug level $this->debug");
-            $this->mergeSessionVars(); // XXX this is cruft! unused!
             $this->currentSchoolYear = findSchoolYear();
+            $this->vars =& $_SESSION['cpVars']; // the most critical part!!
 
-           
 		}
 
 	// for use with the old, non-object-oriented, homegrown auth/dispatcher
@@ -556,22 +555,6 @@ class coopPage
 
 		}
 
-    //XXX THIS IS CRUFT! apparently is not used at all!
-    function mergeSessionVars()
-        {
-            /// XXXX make sure nobody uses it, then WHACK it and all refs too!
-            if(isset($_REQUEST['cpVars'])){
-                PEAR::raiseError('THIS IS SOME CRUFTY OLD CODE! do not use', 
-                                 666);
-            }
-
-            //OLD STUFF FIRST, THEN NEW STUFF. so REQ overrides SESSION!
-            //TODO: empty() guards around this
-            $_SESSION['cpVars'] =  array_merge($_SESSION['cpVars'], 
-                                               $_REQUEST['cpVars']);
-            $this->vars =& $_SESSION['cpVars'];
-            $this->confessArray($this->vars, 'merged session vars', 4);
-        }
 
     function finalDebug()
         {
@@ -660,6 +643,7 @@ class coopPage
 
 
     // destroys vars[last] and replaces it with last on stack
+    // IFF a pop was requested in last or REQUEST. safe otherwise, does nothing.
     // returns a copy of what was clobbered, or nothing if nothing popped
     function popOff()
         {
@@ -678,7 +662,9 @@ class coopPage
                     1);
                 ///COPY not ref, the old one i'm about to clobber
                 $prev = array_reverse(array_reverse($this->vars['last'])); 
+                //finally THIS IS THE POPPING. replace 'last'(current)
                 $this->vars['last'] = array_pop($this->vars['stack']);  
+                ///note i cache what was destroyed, it is used by dispatcher
                 $this->vars['prev'] = $prev;
                 return $prev;
             }
