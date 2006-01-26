@@ -142,10 +142,12 @@ order by cash_donations desc, auction_purchases desc,
                 'cash_donations' => 'Cash Donations',
                 'auction_purchases' => 'Auction Purchases',
                 'auction_donations' => 'Auction Donations',
-                'in_kind_donations' => 'In-Kind Donations');
+                'in_kind_donations' => 'In-Kind Donations',
+                'companies' => 'Number of Companies');
             $co->obj->query(
                 "
 select territories.description as territory, territories.territory_id,
+count(companies.company_id) as companies,
         sum(inc.payment_amount) as cash_donations,
         sum(pur.payment_amount) as auction_purchases,
         sum(auct.item_value) as auction_donations,
