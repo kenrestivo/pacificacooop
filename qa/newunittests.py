@@ -42,7 +42,8 @@ from org.apache.commons.httpclient.methods.multipart import *
 #from doesn't seem to work in py 2.1
 htmlunit = com.gargoylesoftware.htmlunit
 
-
+#globals/constants
+VALIDATOR_URL ='http://localhost/w3c-markup-validator/check'
 
 
 ## some utility funcs
@@ -102,19 +103,19 @@ class CoopTest:
     parser = None
     mainlinks=[]
     url= ""
-    validator_url = 'http://localhost/w3c-markup-validator/check'
+    validator_url =  None
     username= ""
     loggedin = 0
     logfp = None
     errnum = 0
     
-    def __init__(self, url, username, validator_url=None, logfp="", errnum=0):
+    def __init__(self, url, username, validator_url=VALIDATOR_URL,
+                 logfp="", errnum=0):
         self.url = url
         self.username = username
         self.logfp = logfp
         self.errnum=errnum
-        if validator_url:
-            self.validator_url = validator_url
+        self.validator_url = validator_url
 
 
     def setUp(self):
@@ -264,12 +265,18 @@ class CoopTest:
     def validateMarkup(self):
         """very simple, straightforward dom parsing. reject bad html"""
         print 'Validating markup...'
-        gm =  self.postMultipartFile()
-        try:
-            self.parser.parse(org.xml.sax.InputSource(open('w3ctmp.html', 'rb')))
-        except org.xml.sax.SAXParseException:
-            pass
-        result_doc = self.parser.getDocument()
+        while 1:
+            try:
+                gm =  self.postMultipartFile()
+                try:
+                    self.parser.parse(org.xml.sax.InputSource(open('w3ctmp.html', 'rb')))
+                except org.xml.sax.SAXParseException:
+                    self.logError('sax could not parse this')
+                result_doc = self.parser.getDocument()
+                break
+            except java.net.ConnectException:
+                self.logError('retrying javanet connection to %s!' % (self.validator_url))
+                continue
         if [i.getAttribute('class') for i in allTags(result_doc, 'h2')].count('valid') < 1:
             self.validationError()
 
@@ -297,7 +304,7 @@ class CoopTest:
         try:
             statusCode = htc.executeMethod(gm)
             if statusCode != HttpStatus.SC_OK:
-                print "Failed to connect: " + gm.getStatusLine()
+                print "Failed to connect to %s: %s" % (self.validator_url, gm.getStatusLine())
                 raise Exception
             rs=gm.getResponseBodyAsStream()
             self.saveStream('w3ctmp.html', rs)
@@ -313,7 +320,8 @@ class Runner:
     errnum  = 0
     ct=None
 
-    def ManyVisitHack(self,url, validate='http://localhost/w3c-markup-validator/check', logfile="tests.log"):
+    def ManyVisitHack(self, url, validator_url=VALIDATOR_URL,
+                      logfile="tests.log"):
         """runs multiple families in one url"""
         print '=== starting new test in %s ===' % (os.getcwd())
         os.system('make clean')
@@ -323,7 +331,8 @@ class Runner:
         fp.write('================\n')
         for u in usersToTest:
             print '----- Starting user %s (%s)...' % (u, url)
-            self.ct = CoopTest(url, u, logfp=fp,  errnum=self.errnum)
+            self.ct = CoopTest(url, u, logfp=fp,  errnum=self.errnum,
+                               validator_url=validator_url)
             self.ct.run()
             self.errnum = self.ct.errnum
         print 'All tests succeeded! Yay!'
