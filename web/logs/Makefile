@@ -26,5 +26,7 @@ help::
 	@egrep "^[a-z\-]*:" Makefile | awk '{print $$1}'
 
 clean::
-	find . -name '*.html' -maxdepth 1 -exec rm -f {} \;	
+	-find . -name '*.html' -maxdepth 1 -exec rm -f {} \;	
+	-find . -name '*.log' -maxdepth 1 -exec rm -f {} \;	
+	-find . -name '*.txt' -maxdepth 1 -exec rm -f {} \;	
 	rm -f tests.log forcepagetest.log tmp.html w3ctmp.html
