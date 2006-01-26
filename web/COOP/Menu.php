@@ -118,8 +118,8 @@ class CoopMenu extends HTML_Menu
                 $this->page->printDebug('checking realm ' . 
                                         $subrl->obj->short_description, 
                                             2);
-                $res[$k]['title'] = $subrl->obj->short_description;
-                $res[$k]['help'] = $subrl->obj->fb_formHeaderText ? $subrl->obj->fb_formHeaderText : 'No Help Available';
+                $res[$k]['title'] = htmlentities($subrl->obj->short_description);
+                $res[$k]['help'] = htmlentities($subrl->obj->fb_formHeaderText ? $subrl->obj->fb_formHeaderText : 'No Help Available');
                 // first the tables
                 $tab =& new CoopObject(&$this->page, 'table_permissions',
                                        &$subrl);
@@ -136,9 +136,9 @@ class CoopMenu extends HTML_Menu
                                          &$nothing);
                     // do add the tle always, but only url if 
                     $res[$k]['sub'][$i]['title']= 
-                        $co->obj->fb_shortHeader ? $co->obj->fb_shortHeader : 
-                        $tab->obj->table_name;
-                    $res[$k]['sub'][$i]['help'] = $co->obj->fb_formHeaderText ? $co->obj->fb_formHeaderText : 'No Help Available';
+                        htmlentities($co->obj->fb_shortHeader ? $co->obj->fb_shortHeader : 
+                        $tab->obj->table_name);
+                    $res[$k]['sub'][$i]['help'] = htmlentities($co->obj->fb_formHeaderText ? $co->obj->fb_formHeaderText : 'No Help Available');
                     // check GROUPLEVEL for menulevel!
                     // XXX this is totally broken! use ispermittedfield!2
                     if($co->perms[NULL]['menu'] >= ACCESS_VIEW &&
@@ -170,8 +170,8 @@ class CoopMenu extends HTML_Menu
                 while($tab->obj->fetch()){
                     $i++;
                     // do add the tle always, but only url if 
-                    $res[$k]['sub'][$i]['title']= $tab->obj->report_name;
-                    $res[$k]['sub'][$i]['help']= $tab->obj->report_name;
+                    $res[$k]['sub'][$i]['title']= htmlentities($tab->obj->report_name);
+                    $res[$k]['sub'][$i]['help']= htmlentities($tab->obj->report_name);
                     // TODO: titles for reports
                     $rp =& new CoopObject(&$this->page, 'report_permissions',
                                        &$subrl);

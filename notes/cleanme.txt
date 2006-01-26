@@ -25,7 +25,6 @@ go through the joinpaths in standard linkconstraints!
 
 shitcan flexac completely
 
-
 remove mergesessionvars function!!! is it even used anywhere?
 	i hope it doesn't break anything!
 

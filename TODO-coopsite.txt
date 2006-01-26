@@ -6006,3 +6006,7 @@ menu fixes
 	treemenu maybe?
 	and titles
 		yay, done!
+
+htmlentities on all coopmenu items:
+	title and help mostly
+	i think url is ok
