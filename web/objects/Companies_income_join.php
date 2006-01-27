@@ -37,6 +37,7 @@ class Companies_income_join extends CoopDBDO
 
 
     var $fb_shortHeader = 'Solicitation Cash';
+    var $preDefOrder = array('company_id', 'income_id');
 
     function fb_linkConstraints(&$co)
 		{
@@ -44,7 +45,12 @@ class Companies_income_join extends CoopDBDO
                                    &$co);
             $auc->constrainSchoolYear();
             $co->protectedJoin($auc);
-            // TODO: somehow make orderbylinkdisplay() recursive
+            $companies =& new CoopObject(&$co->page, 'companies', 
+                                   &$co);
+            $co->protectedJoin($companies);
+            
+           // TODO: somehow make orderbylinkdisplay() recursive
+            $co->obj->orderBy('companies.company_name, companies.last_name, income.check_date');
             $co->grouper();
 		}
 
