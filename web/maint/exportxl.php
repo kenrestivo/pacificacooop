@@ -56,6 +56,11 @@ $co->find();
 
 $i = 0;
 while($co->obj->fetch()){
+    //titles
+    if($i < 1){
+        $header = $co->makeHeader();
+        $sheet->writeRow($i++,0,$header['titles']);
+    }
     $sheet->writeRow($i,0,$co->toArray());
     $i++;
 }
