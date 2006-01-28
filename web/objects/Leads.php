@@ -38,8 +38,8 @@ class Leads extends CoopDBDO
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $preDefOrder = array( 'lead_id', 'last_name', 'first_name', 
-                                    'company',
-									'salutation', 'title', 'company',
+                                    'title', 'company',
+									'salutation', 
 									'address1', 'address2', 'city', 'state',
 									'zip', 'country', 'phone', 
 									'do_not_contact');
@@ -114,7 +114,7 @@ class Leads extends CoopDBDO
                          'keyname' => 'last_name');
 
     var $fb_labelQuery = 'concat_ws("\n"
-,concat_ws(" " , leads.salutation, leads.first_name, leads.last_name)
+,concat_ws(" " , if(leads.salutation, leads.salutation, null), leads.first_name, leads.last_name)
 ,if(length(leads.title)>0, leads.title, null)
 ,if(length(leads.company)>0, leads.company, null)
 ,if(length(leads.address1)>0, leads.address1, null)

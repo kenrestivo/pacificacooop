@@ -12,14 +12,13 @@ coop web database
 	insurance, dammit
 
 
-fix edit link! i broke it. dammit. nicole will not be too happy
-	why? ah. it's not a linkfield
-	it's braindead. i need to put the label into checklinkfield instead
-		bummer because it's so much faster in select!
+get really friendly with the excel export. in a hurry too
+	yep, here it is. just do it
+		isn't there a 255 char limit on excel cells?
 
-fix territories too
 
-make reset.sh more automated!
+sort audit trail by user, really, use the NEW format
+	grab code from parented
 
 IMPORTANT TIME-SENSITIVE ITEMS!
 	labels/export -- python cgi on nfsn
@@ -32,6 +31,10 @@ IMPORTANT TIME-SENSITIVE ITEMS!
 	package sheet printing
 
 
+
+counts are not in sync between carrie and nag report
+
+make reset.sh more automated!
 
 
 PERMS BUGS!!
@@ -87,6 +90,15 @@ BURNT (when too burnt out to do actual work)
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
+
+
+fix edit link! i broke it. dammit. nicole will not be too happy
+	why? ah. it's not a linkfield
+	it's braindead. i need to put the label into checklinkfield instead
+		bummer because it's so much faster in select!
+	checklinkfield is utterly broken
+		if there are recursives, it will report OBJ or ARRAY... not good
+	what is the right thing for it to do??
 
 
 ???PHP/SQL
@@ -506,6 +518,7 @@ make the alphapager a custom qf element!
 
 
 also include details link from audit trail... why did i remove that?
+	why not
 
 spreadsheet export-- do it now, just don't push it live until needed
 
@@ -3235,6 +3248,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	bah, just bring back the old one
+		broken, doesn't work
 
 ??PHP/SQL
 bring tickets, paddles, etc back to life!
@@ -5908,7 +5923,7 @@ FIX SENDEMAIL BUG!
 	need cookies need to send cookie with xmlhttprequest
 push live and test out the rest of my changes
 	after first doing a backup-live and reset to use latest data/perms
-wget -O - www/coop-dev/tests/labeltest.py?coop=232e091868aac020857cbb8d1b96c81c | gv -
+wget -O /tmp/labels.pdf www/coop-dev/tests/labeltest.py?coop=232e091868aac020857cbb8d1b96c81c 
 	do it as cgi
 		content type, custom cooppage object (i need to log in, really)
 			custom cooppage can have all the label stuff perhaps
@@ -5992,7 +6007,7 @@ this clone/count thing is mystic. wtf is it searching for??
 
 	go through and look at leads and companies too
 livesitetest
-	  wget --proxy=off -O - http://www.pacificacoop.org/members/tests/labeltest.py?coop=a88c49c1f8dbd6d5f5166db01f16038b > /tmp/labels.pdf
+	  wget --proxy=off -O  /tmp/labels.pdf  http://www.pacificacoop.org/members/tests/labeltest.py?coop=a88c49c1f8dbd6d5f5166db01f16038b 
 	searchable reports
 
 	send-email:  make sure i'm not leaking SID... how?
@@ -6018,3 +6033,10 @@ menu fixes
 htmlentities on all coopmenu items:
 	title and help mostly
 	i think url is ok
+fix territories too
+push live my solicitation territory adjustments
+	try excel spreadsheetwriter
+		works great here, no fucking luck on nfsn
+			damned logs
+		ah, it the OLE thing
+			'logs' not tmp

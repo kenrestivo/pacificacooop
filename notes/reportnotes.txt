@@ -2,43 +2,6 @@ report notes
 $Id$
 
 
-??PHP
-stick reports into the stack, somehow
-	DOCUMENT the stack
-	so i can navigate through them. AND so i can save stuff for them
-	call newdispatcher in reports
-	better yet, make the view function a subclass
-		or, a generic_report.php
-			which dispatches on reportid from list of reports
-	for
-		enhancement
-		carrie
-		nag
-		solicitsumm
-		attendance (new)
-	
-
-now, it might not need to be this complicated!
-	why not stick the report shit into the last for that table?
-		there almost always is a table, isn't there? a faketop?
-	problem there is back. great, it builds the chooser, but now what?
-		look at attendance
-
-
-excel export. fuck labels.
-
-let's get serious about this then!
-	test splitting pages
-		invisible flowable NextPageTemplate
-		it's not really necessary, except maybe if different margins
-	xref shit
-		getting corrupted in transfer. try compression
-		where is it set? in canvas?
-
-supply templates, subclass doctemplate
-	nextpagetemplate to switch between them
-
-
 ??PYTHON (yeah baybee!)
 nifty label printing library reportlab!!
 
@@ -120,6 +83,46 @@ nifty label printing library reportlab!!
 			list all the labels and response codes, with checkboxes
 				and a check all javascript
 			to save the labelprinted state
+
+
+
+
+
+??PHP
+stick reports into the stack, somehow
+	DOCUMENT the stack
+	so i can navigate through them. AND so i can save stuff for them
+	call newdispatcher in reports
+	better yet, make the view function a subclass
+		or, a generic_report.php
+			which dispatches on reportid from list of reports
+	for
+		enhancement
+		carrie
+		nag
+		solicitsumm
+		attendance (new)
+	
+
+now, it might not need to be this complicated!
+	why not stick the report shit into the last for that table?
+		there almost always is a table, isn't there? a faketop?
+	problem there is back. great, it builds the chooser, but now what?
+		look at attendance
+
+
+excel export. fuck labels.
+
+let's get serious about this then!
+	test splitting pages
+		invisible flowable NextPageTemplate
+		it's not really necessary, except maybe if different margins
+	xref shit
+		getting corrupted in transfer. try compression
+		where is it set? in canvas?
+
+supply templates, subclass doctemplate
+	nextpagetemplate to switch between them
 
 
 create a subclass of dispatcher, or a new dispatcher 

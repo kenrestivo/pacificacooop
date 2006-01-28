@@ -25,13 +25,19 @@
 //THIS STUFF MUST EXECUTE BEFORE ANY HTML IS SENT!!!! BEFORE HEADERS, ANYTHING!
 
 define('DB_DATAOBJECT_NO_OVERLOAD', true);
+
+
+
 // NOTE! i want the ISP's version of PEAR to override my local beta crap
+
+require_once('dbhost.inc');
+require_once('globals.inc');
+
 set_include_path(implode(PATH_SEPARATOR, 
                          array('local_pear',
                                COOP_LOCAL_PEAR_PATH,
                                get_include_path())));
 
-require_once('globals.inc');
 require_once("session-init.php");
 
 setupDB();

@@ -32,9 +32,10 @@ $xls->send("springfestinvitations.xls");
 $co->schoolYearChooser(); // fetch it from last?
 $sheet =& $xls->addWorksheet('Invitations');
 
-$title= sprintf('Springfest Invitations for %s exported %s',
+$title= sprintf('Springfest Invitations for %s exported %s by %s',
                 $co->getChosenSchoolYear(),
-                date("l F dS, Y h:i:s A"));
+                date("l F dS, Y h:i:s A"),
+                $co->page->userStruct['username']);
 $sheet->setFooter($title);
 
 

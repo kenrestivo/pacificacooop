@@ -107,7 +107,7 @@ errorHandler($errno, $msg, $filename, $linenum, $vars)
     // set of errors for which a var trace will be saved 
 	//TODO a way to turn NOTICE on and off at runtime, for debugging
 	$logthese = array (E_USER_NOTICE, E_USER_ERROR, E_USER_WARNING, 
-			E_ERROR, E_WARNING );
+			E_NOTICE, E_ERROR, E_WARNING );
     if (in_array($errno, $logthese)){
 		$err = sprintf("%s: %s in filename %s at %s ",
 			$errortype[$errno], $msg, $filename, $linenum
@@ -122,10 +122,10 @@ errorHandler($errno, $msg, $filename, $linenum, $vars)
 		error_log($err, 0);    
 	}
 
-    /* e-mail me if there is a critical user error
+    /* e-mail me if there is a critical user error */
     if ($errno == E_USER_ERROR)     
         mail($mailto,"Critical User Error",$err);
-	*/
+	
 
 }/* END ERRORHANDLER */
 

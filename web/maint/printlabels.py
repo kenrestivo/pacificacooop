@@ -9,11 +9,12 @@ import sys
 try:
     mydir=os.path.dirname(__file__)
     #ONLY FOR /test dir!
-    mydir = mydir + '/..'
-    sys.path.append(mydir)
 except NameError:
     mydir=os.getcwd()
     pass
+
+mydir = mydir + '/..'
+sys.path.append(mydir)
 
 sys.path.insert(0,'/'.join((mydir,'lib')))
 sys.path.insert(0,'/'.join((mydir,'objects')))

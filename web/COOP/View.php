@@ -403,17 +403,22 @@ class coopView extends CoopObject
                     // NOTE! DO NOT TAKE VALUE BY REFERENCE!!
                     // if it returns a string, you'll be in a world of hurt
                     $sub = $this->checkLinkField($key, $val);
-                    if(is_object($sub)){
+                    if(is_object($sub)) {
                         $res[] = sprintf('%s %s',
+                                         strstr($this->page->content_type, 
+                                                'html') ? 
                                          nl2br(htmlentities(
-                                                   $sub->concatLinkFields("\n"))) ,
+                                                   $sub->concatLinkFields("\n"))) : 
+                                         $sub->concatLinkFields("\n"),
+
                                          $sub->recordButtons(
                                              $sub->obj->toArray(),
                                              false,
                                              array ('<span class="actions">(',
                                                     ')</span>')));
                     } else {
-                        $res[] = nl2br(htmlentities($sub));
+                        $res[] = strstr($this->page->content_type, 'html') ?
+                            nl2br(htmlentities($sub)) : $sub;
                     }
 
                 }

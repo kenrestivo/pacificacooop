@@ -56,6 +56,10 @@ class Invitations extends CoopDBDO
 		);
 
 
+    var $fb_pager =array('method' => 'alpha',
+                         'keyname' => 'last_name',
+                         'tablename' => 'leads');
+ 
 
     function fb_display_view(&$co)
         {
@@ -194,11 +198,7 @@ class Invitations extends CoopDBDO
             array_unshift($this->preDefOrder, 'lead_label');
             $this->fb_fieldsToUnRender = array('lead_id');
 
-            // MUST DO THIS LAST!
             
-            $this->fb_pager =array('method' => 'alpha',
-                                   'keyname' => 'last_name',
-                                   'tablename' => 'leads');
             
             return $co->simpleTable(true,true);
         }
