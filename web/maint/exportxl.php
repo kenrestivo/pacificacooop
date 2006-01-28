@@ -9,6 +9,7 @@ require_once "Spreadsheet/Excel/Writer.php";
 
 $cp = new CoopPage();
 $cp->logIn();
+$cp->content_type = 'application/vnd.msexcel';
 
 //PEAR::raiseError('wtf?', 555);
 //$olderr = set_error_handler("errorHandler"); 
@@ -18,7 +19,6 @@ $cp->logIn();
 $xls =& new Spreadsheet_Excel_Writer();
 $xls->setTempDir('logs');
 
-$wrap =& $xls->addFormat();
 
 
 // Send HTTP headers to tell the browser what's coming
@@ -32,20 +32,31 @@ $sheet =& $xls->addWorksheet('Springfest Invitations');
 $co =  new CoopView(&$cp, 'invitations', &$none);
 $leads =  new CoopObject(&$cp, 'leads', &$co);
 
-$co->obj->selectAdd();
-$co->obj->selectAdd($leads->obj->fb_labelQuery);
-$co->obj->selectAdd('invitations.lead_id');
+ 
+$co->obj->selectAdd('invitations.lead_id as response_code');
+
+$co->obj->fb_fieldsToUnRender = array('lead_id');
+
 
 $co->protectedJoin($leads, 'left');
 
 $co->obj->orderBy('last_name, first_name, company');
 
+$co->obj->preDefOrder = array( 'response_code', 'salutation',
+                               'last_name', 'first_name', 
+                               'title','company',
+                               'address1', 'address2', 'city', 'state',
+                               'zip', 'country');
+
+// heh
+$co->obj->fb_fieldLabels = $leads->obj->fb_fieldLabels;
+$co->obj->fb_fieldLabels['response_code'] = 'Response Code';
+
 $co->find();
 
 $i = 0;
 while($co->obj->fetch()){
-    $sheet->write($i,0,$co->obj->lead_label, $wrap);
-    $sheet->write($i,1,$co->obj->lead_id);
+    $sheet->writeRow($i,0,$co->toArray());
     $i++;
 }
 
