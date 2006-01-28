@@ -9,7 +9,7 @@ require_once "Spreadsheet/Excel/Writer.php";
 
 $cp = new CoopPage();
 $cp->logIn();
-$cp->content_type = 'application/vnd.msexcel';
+$cp->content_type = 'application/vnd.ms-excel'; // irrelevant, just NOT html!
 
 
 $co =  new CoopView(&$cp, 'invitations', &$none);
@@ -50,7 +50,7 @@ $co->protectedJoin($leads, 'left');
 $co->obj->orderBy('last_name, first_name, company');
 
 $co->obj->preDefOrder = array( 'response_code', 'salutation',
-                               'last_name', 'first_name', 
+                               'first_name','last_name',  
                                'title','company',
                                'address1', 'address2', 'city', 'state',
                                'zip', 'country');
