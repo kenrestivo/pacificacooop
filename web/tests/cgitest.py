@@ -41,7 +41,11 @@ page=coop_page.Page()
 page.headers['Content-Type'] = 'text/html; charset=utf-8'
 page.template_name  = 'debugtest'
 
+# for reloading
+if page.session.sid:
+    page.raw_output.append('<a href="?coop=%s">refresh</a>' %(page.session.sid))
 
+#just some data so we know it worked
 from posix import environ
 for i in environ.items():
     page.raw_output.append('%s: %s<br />' % i )
