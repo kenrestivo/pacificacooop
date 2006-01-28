@@ -268,6 +268,14 @@ class Invitations extends CoopDBDO
    		group by relation 
 		order by total desc',
                                              $co->getChosenSchoolYear()));
+
+                $res .= $co->page->selfURL(
+                    array(
+                        'base' => 'maint/exportxl.php',
+                        'tags' => array('title' => 'Export to Excel Spreadsheet'),
+                        'value' => 
+                        '<img src="/images/x-office-spreadsheet.png"> Export ' . $this->fb_formHeaderText,
+                        'inside' => array('format' => 'excel')));
                 return $res;
             }
             if($ok){

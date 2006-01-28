@@ -12,13 +12,7 @@ coop web database
 	insurance, dammit
 
 
-get really friendly with the excel export. in a hurry too
-	yep, here it is. just do it
-		isn't there a 255 char limit on excel cells?
-
-
-sort audit trail by user, really, use the NEW format
-	grab code from parented
+export button
 
 IMPORTANT TIME-SENSITIVE ITEMS!
 	labels/export -- python cgi on nfsn
@@ -514,6 +508,9 @@ BELOW THE LINE
 put the sources *table* in there, with admin only privs perhaps?
 
 	
+sort audit trail by user, really, use the NEW format
+	grab code from parented
+
 make the alphapager a custom qf element!
 
 
@@ -6040,3 +6037,8 @@ push live my solicitation territory adjustments
 			damned logs
 		ah, it the OLE thing
 			'logs' not tmp
+
+get really friendly with the excel export. in a hurry too
+	yep, here it is. just do it
+		isn't there a 255 char limit on excel cells?
+			yes, so let her do it
