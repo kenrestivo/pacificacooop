@@ -8,7 +8,7 @@ require_once "CoopView.php";
 require_once "Spreadsheet/Excel/Writer.php";
 
 $cp = new CoopPage();
-
+$cp->logIn();
 
 //PEAR::raiseError('wtf?', 555);
 //$olderr = set_error_handler("errorHandler"); 
@@ -26,7 +26,7 @@ $sheet =& $xls->addWorksheet('Springfest Invitations');
 
 
 
-$co =  new CoopObject(&$cp, 'invitations', &$none);
+$co =  new CoopView(&$cp, 'invitations', &$none);
 $leads =  new CoopObject(&$cp, 'leads', &$co);
 
 $co->obj->selectAdd();
@@ -37,11 +37,13 @@ $co->protectedJoin($leads, 'left');
 
 $co->obj->orderBy('last_name, first_name, company');
 
-$co->obj->find();
+$co->find();
 
 $i = 0;
 while($co->obj->fetch()){
-    $sheet->write($i++,0,$co->obj->lead_label);
+    $sheet->write($i,0,$co->obj->lead_label);
+    $sheet->write($i,1,$co->obj->lead_id);
+    $i++;
 }
 
 // Finish the spreadsheet, dumping it to the browser
