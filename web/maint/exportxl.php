@@ -11,8 +11,6 @@ $cp = new CoopPage();
 $cp->logIn();
 $cp->content_type = 'application/vnd.msexcel';
 
-//PEAR::raiseError('wtf?', 555);
-//$olderr = set_error_handler("errorHandler"); 
 
 $co =  new CoopView(&$cp, 'invitations', &$none);
 $leads =  new CoopObject(&$cp, 'leads', &$co);
@@ -37,6 +35,7 @@ $title= sprintf('Springfest Invitations for %s exported %s by %s',
                 date("l F dS, Y h:i:s A"),
                 $co->page->userStruct['username']);
 $sheet->setFooter($title);
+$sheet->setLandscape();
 
 
 
