@@ -14,6 +14,10 @@ $cp->content_type = 'application/vnd.msexcel';
 //PEAR::raiseError('wtf?', 555);
 //$olderr = set_error_handler("errorHandler"); 
 
+$co =  new CoopView(&$cp, 'invitations', &$none);
+$leads =  new CoopObject(&$cp, 'leads', &$co);
+
+
 
 // Create an instance
 $xls =& new Spreadsheet_Excel_Writer();
@@ -25,12 +29,15 @@ $xls->setTempDir('logs');
 $xls->send("springfestinvitations.xls");
 
 // Add a worksheet to the file, returning an object to add data to
-$sheet =& $xls->addWorksheet('Springfest Invitations');
+$co->schoolYearChooser(); // fetch it from last?
+$sheet =& $xls->addWorksheet('Invitations');
+
+$title= sprintf('Springfest Invitations for %s exported %s',
+                $co->getChosenSchoolYear(),
+                date("l F dS, Y h:i:s A"));
+$sheet->setFooter($title);
 
 
-
-$co =  new CoopView(&$cp, 'invitations', &$none);
-$leads =  new CoopObject(&$cp, 'leads', &$co);
 
  
 $co->obj->selectAdd('invitations.lead_id as response_code');
@@ -55,9 +62,10 @@ $co->obj->fb_fieldLabels['response_code'] = 'Response Code';
 $co->find();
 
 $i = 0;
+$sheet->write($i++,0,$title); // so i have it somewhere
 while($co->obj->fetch()){
     //titles
-    if($i < 1){
+    if($i < 2){
         $header = $co->makeHeader();
         $sheet->writeRow($i++,0,$header['titles']);
     }
