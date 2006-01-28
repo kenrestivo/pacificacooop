@@ -18,6 +18,9 @@ $cp->logIn();
 $xls =& new Spreadsheet_Excel_Writer();
 $xls->setTempDir('logs');
 
+$wrap =& $xls->addFormat();
+
+
 // Send HTTP headers to tell the browser what's coming
 $xls->send("springfestinvitations.xls");
 
@@ -41,7 +44,7 @@ $co->find();
 
 $i = 0;
 while($co->obj->fetch()){
-    $sheet->write($i,0,$co->obj->lead_label);
+    $sheet->write($i,0,$co->obj->lead_label, $wrap);
     $sheet->write($i,1,$co->obj->lead_id);
     $i++;
 }
