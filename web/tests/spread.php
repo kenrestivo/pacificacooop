@@ -1,9 +1,21 @@
 <?php
-// Include PEAR::Spreadsheet_Excel_Writer
+
+chdir('../');
+
+require_once('first.inc');
+require_once "CoopPage.php";
 require_once "Spreadsheet/Excel/Writer.php";
+
+$cp = new CoopPage();
+
+
+//PEAR::raiseError('wtf?', 555);
+//$olderr = set_error_handler("errorHandler"); 
+
 
 // Create an instance
 $xls =& new Spreadsheet_Excel_Writer();
+$xls->setTempDir('logs');
 
 // Send HTTP headers to tell the browser what's coming
 $xls->send("test.xls");
