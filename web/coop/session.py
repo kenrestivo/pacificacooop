@@ -26,7 +26,7 @@ it's not very extensible at this time, beyond the coop database
 """
 
 
-import model
+from objects import model
 import Cookie
 from phpserialize.PHPSerialize import PHPSerialize
 from phpserialize.PHPUnserialize import PHPUnserialize

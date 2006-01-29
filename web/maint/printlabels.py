@@ -1,32 +1,18 @@
 #!/usr/bin/env python
 
 
-
 import os
 import sys
 
+
+
+#only for test and maint dirs
+os.chdir('../')
+sys.path.insert(0, os.getcwd())
+
 #housebreaking wee-wee pads, needed bfore i import stuffi need
-try:
-    mydir=os.path.dirname(__file__)
-    #ONLY FOR /test dir!
-except NameError:
-    mydir=os.getcwd()
-    pass
-
-mydir = mydir + '/..'
-sys.path.append(mydir)
-
-sys.path.insert(0,'/'.join((mydir,'lib')))
-sys.path.insert(0,'/'.join((mydir,'objects')))
-os.chdir(mydir)
-
-
-#jeez, second step in finding settings
-import dbhost
-try:
-    sys.path.insert(1,dbhost.sitepackages)
-except AttributeError:
-    pass
+sys.path.append(os.getcwd()+'/site-packages')
+sys.path.append(os.getcwd()+'/lib')
 
 
 
@@ -53,6 +39,7 @@ from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.lib.enums import TA_RIGHT,TA_LEFT,TA_CENTER,TA_JUSTIFY
 from reportlab.lib.pagesizes import letter
+from reportlab.pdfbase.ttfonts import TTFont
 
 import logging
 

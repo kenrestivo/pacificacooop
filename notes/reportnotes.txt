@@ -1,6 +1,9 @@
 report notes
 $Id$
 
+???PHP/CSS
+use CSS block for tabletitle instead of that enclosing table
+
 
 ??PYTHON (yeah baybee!)
 nifty label printing library reportlab!!
@@ -11,6 +14,7 @@ nifty label printing library reportlab!!
 	
 	create my own template "class"
 		or db table?
+			yes, db table. let themadd/edit
 		attributes
 			name (usually label name?)
 			pagesize  -- document or pagetemplate?

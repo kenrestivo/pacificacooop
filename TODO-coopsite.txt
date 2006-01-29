@@ -1,6 +1,8 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
+	treemenu (treemenu.txt)
+	tal templates and reports (templates.txt)
 	sortable/searchable/pagable views (searchfeature.txt)
 	cleanups and code fixes (cleanme.txt)
 	json, REST, xmlrpc (jsonselect.txt)
@@ -8,14 +10,21 @@ coop web database
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	import the 20-year roster (20yearroster.txt)
-	templates and reports (templates.txt)
 	insurance, dammit
+	labels/export -- python cgi on nfsn, formatting, etc.
 
 
-export button
+
+??PHP
+invitation goodness
+	make the export honour the last or form values
+		submit, maybe values in box?
+	also a searchbox for "label printed on" dates!!
+		"all", "none", and list of dates
+	"mark all as sent" button for invitations
+
 
 IMPORTANT TIME-SENSITIVE ITEMS!
-	labels/export -- python cgi on nfsn
 	tickets/rsvps -- just look at it.
 		might be a simple thing, just some js choosers like sponsorships
 	parent ed 
@@ -23,13 +32,17 @@ IMPORTANT TIME-SENSITIVE ITEMS!
 		nag-only (i.e. enhancement hack)
 	sponsorships fix
 	package sheet printing
+		using pdf? html? formatting?
 
-
+strongs are autoclosing in tinymce. fix that! no xml autocloses!
 
 counts are not in sync between carrie and nag report
 
 make reset.sh more automated!
 
+??JS/PHP/tinymce
+clean up html in instructions: strong self-closing tag!
+	look up on interweb
 
 PERMS BUGS!!
 	enter new is showing up in details, for places where i DO NOT have new perms
@@ -6042,3 +6055,4 @@ get really friendly with the excel export. in a hurry too
 	yep, here it is. just do it
 		isn't there a 255 char limit on excel cells?
 			yes, so let her do it
+export button
