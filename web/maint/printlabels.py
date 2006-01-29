@@ -62,7 +62,8 @@ class LabelSettings:
     col_width = 0
     row_gutter = 0
     col_gutter = 0
-    main_style = None
+    #this is brain dead. i need to expose these in a web interface chooser
+    text_style = None
     number_style = None
     debug = 0
     
