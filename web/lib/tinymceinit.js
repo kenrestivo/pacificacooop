@@ -17,8 +17,8 @@ tinyMCE.init({
             },
         plugin_preview_width : "500",
             plugin_preview_height : "600",
+            //doctype: '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">',
             verify_html: true,
-            doctype: '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">',
             valid_elements : "" 
         +"a[accesskey|charset|class|coords|dir<ltr?rtl|href|hreflang|id|lang|name"
 
