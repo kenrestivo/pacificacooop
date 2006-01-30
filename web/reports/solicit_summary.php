@@ -199,7 +199,8 @@ order by cash_donations desc,
     $view->chosenSchoolYear = $schoolyear; // hack!
 	$view->obj->fb_formHeaderText = 'Solicitation Summary by Company';
 
-    unset($view->obj->fb_pager);
+    unset($view->obj->fb_pager); // IMPORTANT! pager doesn't work here
+
     $view->obj->preDefOrder= array(
         'company_label' ,
         'cash_donations' ,

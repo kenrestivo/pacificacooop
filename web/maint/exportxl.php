@@ -48,7 +48,7 @@ $co->obj->fb_fieldsToUnRender = array('lead_id');
 $co->protectedJoin($leads, 'left');
 
 // SHOW ONLY UNSENT
-$co->whereAdd('label_sent is not null and label_sent > "1000-01-01"');
+$co->obj->whereAdd('label_printed is not null and label_printed > "1000-01-01"');
 
 $co->obj->orderBy('last_name, first_name, company');
 
@@ -74,7 +74,7 @@ $sheet->freezePanes(array(3,1,4,2));
 
 $i = 0;
 $sheet->write($i++,1,$title); // so i have it somewhere
-$sheet->write($i++,0,'ONLY UNPRINTED invitation labels shown here. Sent invitations will not export again.'); // so i have it somewhere
+$sheet->write($i++,1,'ONLY UNPRINTED invitation labels shown here. Labels already printed once will not export again.'); // so i have it somewhere
 while($co->obj->fetch()){
     //titles
     if($i < 2){

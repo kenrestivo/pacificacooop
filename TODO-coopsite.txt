@@ -14,6 +14,8 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 yank alumni list
+	first find out who bought what
+		didn't i do that query already?
 
 duncan details anomaly in enhancement
 
