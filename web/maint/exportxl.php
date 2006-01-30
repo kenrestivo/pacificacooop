@@ -47,6 +47,9 @@ $co->obj->fb_fieldsToUnRender = array('lead_id');
 
 $co->protectedJoin($leads, 'left');
 
+// SHOW ONLY UNSENT
+$co->whereAdd('label_sent is not null and label_sent > "1000-01-01"');
+
 $co->obj->orderBy('last_name, first_name, company');
 
 $co->obj->preDefOrder = array( 'response_code', 'salutation',
@@ -66,11 +69,12 @@ $co->find();
 // 2st Argument - horizontal split position (0 = no horizontal split)
 // 3st Argument - topmost visible row below the vertical split
 // 4th Argument - leftmost visible column after the horizontal split
-$sheet->freezePanes(array(2,1,3,2));
+$sheet->freezePanes(array(3,1,4,2));
 
 
 $i = 0;
 $sheet->write($i++,1,$title); // so i have it somewhere
+$sheet->write($i++,0,'ONLY UNPRINTED invitation labels shown here. Sent invitations will not export again.'); // so i have it somewhere
 while($co->obj->fetch()){
     //titles
     if($i < 2){

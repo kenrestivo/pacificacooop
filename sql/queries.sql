@@ -1889,4 +1889,55 @@ GROUP BY auction_donation_items.auction_donation_item_id
 ORDER BY auction_donation_items.short_description
 \G
 
+---this works but simpletable hates it. i don't know why
+select concat_ws("\n", companies.company_name, 
+if(length(companies.first_name) + length(companies.last_name) > 1, 
+concat_ws(" ", companies.first_name, companies.last_name), null), 
+if(length(companies.address1) > 1, companies.address1, NULL), 
+if(length(companies.address2) > 1, companies.address2, NULL), 
+if(length(companies.city) > 1, companies.city, NULL), 
+if(length(companies.phone) > 1, companies.phone, NULL), 
+if(length(companies.email_address) > 1, companies.email_address, NULL)) 
+as company_label, 
+companies.company_id, sum(inc.payment_amount) as cash_donations, 
+sum(pur.payment_amount) as auction_purchases, 
+sum(auct.item_value) as auction_donations, 
+sum(iks.item_value) as in_kind_donations 
+from companies 
+left join (select sum(item_value) as item_value, company_id 
+from companies_auction_join as caj 
+left join auction_donation_items as adi 
+on caj.auction_donation_item_id = adi.auction_donation_item_id 
+where school_year like '2005-2006' 
+group by caj.company_id) as auct 
+on auct.company_id = companies.company_id 
+left join (select sum(item_value) as item_value, company_id 
+from companies_in_kind_join as cikj 
+left join in_kind_donations as ikd 
+on cikj.in_kind_donation_id = ikd.in_kind_donation_id 
+where school_year like '2005-2006' 
+group by cikj.company_id) as iks 
+on iks.company_id = companies.company_id 
+left join (select sum(payment_amount) as payment_amount, company_id 
+from companies_income_join as cinj 
+left join income on cinj.income_id = income.income_id 
+where school_year like '2005-2006' 
+group by cinj.company_id) as inc 
+on inc.company_id = companies.company_id 
+left join (select payment_amount, company_id 
+from springfest_attendees as atd 
+left join auction_purchases as ap 
+on ap.springfest_attendee_id = atd.springfest_attendee_id 
+left join income on ap.income_id = income.income_id 
+where income.school_year like '2005-2006' 
+group by atd.company_id) as pur 
+on pur.company_id = companies.company_id 
+group by companies.company_id 
+having cash_donations > 0 or auction_purchases > 0 or auction_donations > 0 
+or in_kind_donations > 0 
+order by cash_donations desc, auction_purchases desc, 
+auction_donations desc, in_kind_donations desc
+
+
+
 --- EOF

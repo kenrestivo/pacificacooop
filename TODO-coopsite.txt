@@ -1,8 +1,8 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	treemenu (treemenu.txt)
 	tal templates and reports (templates.txt)
+	treemenu (treemenu.txt)
 	sortable/searchable/pagable views (searchfeature.txt)
 	cleanups and code fixes (cleanme.txt)
 	json, REST, xmlrpc (jsonselect.txt)
@@ -13,36 +13,33 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
+yank alumni list
 
+duncan details anomaly in enhancement
 
-??PHP
-invitation goodness
-	make the export honour the last or form values
-		submit, maybe values in box?
-	also a searchbox for "label printed on" dates!!
-		"all", "none", and list of dates
-	"mark all as sent" button for invitations
-
+only show unsent in export
+	push live
 
 IMPORTANT TIME-SENSITIVE ITEMS!
+	sponsorships fix
 	tickets/rsvps -- just look at it.
 		might be a simple thing, just some js choosers like sponsorships
 	parent ed 
 		make-up stuff
 		nag-only (i.e. enhancement hack)
-	sponsorships fix
 	package sheet printing
 		using pdf? html? formatting?
 
-strongs are autoclosing in tinymce. fix that! no xml autocloses!
+
+
+??JS/PHP/tinymce
+clean up html in instructions: strong self-closing tag!
+	strongs are autoclosing in tinymce. fix that! no xml autocloses!
+	look up on interweb
 
 counts are not in sync between carrie and nag report
 
 make reset.sh more automated!
-
-??JS/PHP/tinymce
-clean up html in instructions: strong self-closing tag!
-	look up on interweb
 
 PERMS BUGS!!
 	enter new is showing up in details, for places where i DO NOT have new perms
@@ -518,6 +515,16 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+
+??PHP
+invitation goodness
+	make the export honour the last or form values
+		submit, maybe values in box?
+	also a searchbox for "label printed on" dates!!
+		"all", "none", and list of dates
+	"mark all as sent" button for invitations
+
 put the sources *table* in there, with admin only privs perhaps?
 
 	
@@ -5933,7 +5940,7 @@ FIX SENDEMAIL BUG!
 	need cookies need to send cookie with xmlhttprequest
 push live and test out the rest of my changes
 	after first doing a backup-live and reset to use latest data/perms
-wget -O /tmp/labels.pdf www/coop-dev/tests/labeltest.py?coop=232e091868aac020857cbb8d1b96c81c 
+wget -O /tmp/labels.pdf www/coop-dev/maint/printlabels.py?coop=232e091868aac020857cbb8d1b96c81c 
 	do it as cgi
 		content type, custom cooppage object (i need to log in, really)
 			custom cooppage can have all the label stuff perhaps
@@ -6017,7 +6024,7 @@ this clone/count thing is mystic. wtf is it searching for??
 
 	go through and look at leads and companies too
 livesitetest
-	  wget --proxy=off -O  /tmp/labels.pdf  http://www.pacificacoop.org/members/tests/labeltest.py?coop=a88c49c1f8dbd6d5f5166db01f16038b 
+	  wget --proxy=off -O  /tmp/labels.pdf  http://www.pacificacoop.org/members/maint/printlabels.py?coop=a88c49c1f8dbd6d5f5166db01f16038b 
 	searchable reports
 
 	send-email:  make sure i'm not leaking SID... how?
