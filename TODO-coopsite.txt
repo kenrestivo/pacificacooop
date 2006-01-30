@@ -19,9 +19,6 @@ yank alumni list
 
 duncan details anomaly in enhancement
 
-only show unsent in export
-	push live
-
 IMPORTANT TIME-SENSITIVE ITEMS!
 	sponsorships fix
 	tickets/rsvps -- just look at it.
@@ -6065,3 +6062,6 @@ get really friendly with the excel export. in a hurry too
 		isn't there a 255 char limit on excel cells?
 			yes, so let her do it
 export button
+
+only show unsent in export
+	push live

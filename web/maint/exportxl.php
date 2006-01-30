@@ -77,7 +77,7 @@ $sheet->write($i++,1,$title); // so i have it somewhere
 $sheet->write($i++,1,'ONLY UNPRINTED invitation labels shown here. Labels already printed once will not export again.'); // so i have it somewhere
 while($co->obj->fetch()){
     //titles
-    if($i < 2){
+    if($i < 3){
         $header = $co->makeHeader();
         $sheet->writeRow($i++,0,$header['titles']);
     }
