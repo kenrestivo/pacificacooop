@@ -318,9 +318,13 @@ order by enrollment.am_pm_session, kids.last_name, kids.first_name';
                         date('Y-m-d')));
             $res .= $co->simpleTable(false);
 
+            $fam =& new CoopObject(&$co->page, 'families', &$co);
+            $res .= $fam->obj->familyTotals(&$co);
+
             return $res;
 
         }
+
 
     function _printoutDisclaimer(&$co)
         {

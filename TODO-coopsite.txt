@@ -13,6 +13,11 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
+BUGS
+	CRASH in solicit cash!
+	show solicit family in summary for solicit cash, goddamit
+		and... why is it showing upas CHOOSE ONE!!???!!! AUUIIGH!
+
 
 wait... why are names showing up after i remove the all.
 

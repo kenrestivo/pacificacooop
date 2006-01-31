@@ -115,6 +115,29 @@ class Families extends CoopDBDO
 
         }
 
+    // this is the summary we need for jefferson, for calculating sandy's salary
+    function familyTotals(&$co)
+        {
+            $sy = $co->getChosenSchoolYear();
+            $res = "<div>Enrolled Families for {$sy}:<br>";
+            $famtot = 0;
+            foreach (array('AM', 'PM') as $sess){
+                // NOTE: not $co->table, since you could be called elsewhere!
+                $co2 =& new CoopView($co->page, 'families', $none);
+                $co2->schoolYearChooser(); // to get the chosen above
+                $co2->forceNoChooser = 1;
+                $co2->obj->whereAdd("am_pm_session = '$sess'");
+                $co2->obj->whereAdd(
+                    sprintf('(dropout_date is null or dropout_date < "2000-01-01" or dropout_date > "%s")', 
+                            date('Y-m-d')));
+                $co2->find(true); // MY find, which does linkconstraints
+                $famtot += $co2->obj->N;
+                $res .= "$sess: {$co2->obj->N}<br>" ;
+            }
+            $res .= "Total: $famtot</div>";
+            return $res;
+        }
+
 
     function afterInsert(&$co)
         {
@@ -138,28 +161,6 @@ class Families extends CoopDBDO
 
             
         }
-
-    function juhsdTotal(&$co)
-        {
-            $res = '';
-            $this->whereAdd('am_pm_session = "AM"');
-            $co->find(true); // MY find
-            $res .= 'AM Families: ' .$co->obj->N ;
-
-            $co2 =& new CoopView($co->page, $co->table, $none);
-            $co2->obj->whereAdd('am_pm_session = "PM"');
-            $co2->find(true); // MY find
-            $res .= '<br />PM Families: ' .$co2->obj->N ;
-            return $res;
-        }
-
-
-    // TODO: a neat summary of kids, parents, etc
-//     function fb_display_summary(&$co)
-//         {
-
-//         }
-
 
     // NOTE i don't override delete because my confirmdelete link checks should find that
     
