@@ -48,7 +48,11 @@ class Companies_income_join extends CoopDBDO
             $companies =& new CoopObject(&$co->page, 'companies', 
                                    &$co);
             $co->protectedJoin($companies);
-            
+
+            /// XXX HACK! NEED THIS IF I LINK IN COMPANIES!!
+            /// because companies have a family_id.. ambiguous!
+            $co->obj->selectAdd('companies_income_join.family_id as family_id');
+
            // TODO: somehow make orderbylinkdisplay() recursive
             $co->obj->orderBy('companies.company_name, companies.last_name, income.check_date');
             $co->grouper();
