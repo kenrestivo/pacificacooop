@@ -34,7 +34,7 @@ class Ads extends CoopDBDO
     ###END_AUTOCODE
 	var $fb_linkDisplayFields = array ('ad_size_id' , 'ad_description');
 	var $fb_textFields = array ('ad_copy');
-	var $fb_enumFields = array ('artwork_provided');
+	var $fb_enumFields = array ('artwork_provided', 'freebie');
 	var $fb_formHeaderText = 'Springfest Ads';
 	var $fb_fieldLabels = array(
 		"company_id" => "Company Name",
