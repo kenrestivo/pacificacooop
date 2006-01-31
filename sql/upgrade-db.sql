@@ -16,4 +16,4 @@
 
 -- add sources
 
--- remove all URLs for events! except the ones i need
+alter table ads add column freebie enum('Unknown','Yes','No') default NULL;

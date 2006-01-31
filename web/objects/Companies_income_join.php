@@ -6,7 +6,7 @@ require_once 'DB/DataObject.php';
 
 class Companies_income_join extends CoopDBDO 
 {
-###START_AUTOCODE
+    ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'companies_income_join';           // table name
@@ -22,7 +22,7 @@ class Companies_income_join extends CoopDBDO
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Companies_income_join',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-###END_AUTOCODE
+    ###END_AUTOCODE
 	var $fb_linkDisplayFields = array('company_id', 'income_id');
 
 	var $fb_fieldLabels = array ('income_id' => 'Payment Information',

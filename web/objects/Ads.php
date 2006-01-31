@@ -22,6 +22,7 @@ class Ads extends CoopDBDO
     var $family_id;                       // int(32)  
     var $company_id;                      // int(32)  
     var $_cache_ad_copy;                  // string(255)  
+    var $freebie;                         // string(7)  enum
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -37,17 +38,18 @@ class Ads extends CoopDBDO
 	var $fb_formHeaderText = 'Springfest Ads';
 	var $fb_fieldLabels = array(
 		"company_id" => "Company Name",
-		"lead_id" => "Contact",
+		'lead_id' => "Invitee",
 		"ad_size_id" => "Ad size",
 		"artwork_provided" => "Customer will provide their own artwork?",
 		"artwork_received" => "Date Artwork Received" ,
 		"ad_copy" => "Type Ad Copy here (if applicable)" ,
 		"family_id" => "Soliciting Family",
 		"school_year" => "School Year" ,
+        'freebie' => 'Comp this ad (no payment required)',
 		'income_id' =>  'Payment Summary',
-		'lead_id' => "Invitee"
 		);
     
+
 
     var $fb_shortHeader = 'Ads';
 

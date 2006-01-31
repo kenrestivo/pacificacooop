@@ -13,13 +13,15 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
+make "listing" thing in companies
+	then disallow ZERO dollar ads
+
+wait... why are names showing up after i remove the all in the search
+	what's up with those? added after the labels printed?
+
 BUGS
-	CRASH in solicit cash!
-	show solicit family in summary for solicit cash, goddamit
-		and... why is it showing upas CHOOSE ONE!!???!!! AUUIIGH!
-
-
-wait... why are names showing up after i remove the all.
+	in kind donations are fucked up, go fix
+		then move the wine/cider/etc to it
 
 yank alumni list
 	first find out who bought what
@@ -38,6 +40,7 @@ IMPORTANT TIME-SENSITIVE ITEMS!
 		using pdf? html? formatting?
 
 
+families dammit... calculation is wrong
 
 ??JS/PHP/tinymce
 clean up html in instructions: strong self-closing tag!
@@ -6073,3 +6076,10 @@ export button
 
 only show unsent in export
 	push live
+
+BUGS
+	CRASH in solicit cash!
+	show solicit family in summary for solicit cash, goddamit
+		and... why is it showing upas CHOOSE ONE!!???!!! AUUIIGH!
+	i fucked it up by including companies. companies have a familyid.. ambiguous
+		ah, specify it in linkconstraints

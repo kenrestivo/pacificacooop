@@ -110,8 +110,11 @@ class Families extends CoopDBDO
                     sprintf('(dropout_date is null or dropout_date < "2000-01-01" or dropout_date > "%s")', 
                             date('Y-m-d')));
             }
-
-            return $co->simpleTable(true,true);
+            $res = $this->familyTotals(&$co);
+            array_push($co->obj->preDefOrder, 'am_pm_session');
+            $co->obj->fb_fieldLabels['am_pm_session'] = 'Session';
+            $res .= $co->simpleTable(true,true);
+            return $res;
 
         }
 
