@@ -173,10 +173,13 @@ class Invitations extends CoopDBDO
                 $dates =& new CoopView(&$co->page, 'invitations', &$co);
                 $dates->obj->query(
                     sprintf(
-                        'select distinct label_printed from invitations where school_year = "%s" order by label_printed', 
+                        'select distinct label_printed, 
+date_format(label_printed, "%%a %%m/%%d/%%Y %%l:%%i%%p") 
+                        as printed_human 
+from invitations where school_year = "%s" order by label_printed', 
                                            $co->getChosenSchoolYear()));
                 while($dates->obj->fetch()){
-                    $printed_dates[$dates->obj->label_printed] = $dates->obj->label_printed;
+                    $printed_dates[$dates->obj->label_printed] = $dates->obj->printed_human;
                 }
             
             
