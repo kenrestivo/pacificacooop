@@ -212,7 +212,7 @@ class coopView extends CoopObject
 
             $this->page->confessArray(
                 $this->obj->_query , 
-                "CoopView::find({$this->table} $find) ran query and  found $found", 
+                "=== QUERY QUERY QUERY=== CoopView::find({$this->table} $find) ran query and  found $found", 
                 1);
              return $found;
 		}

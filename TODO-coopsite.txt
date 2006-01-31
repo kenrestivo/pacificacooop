@@ -13,11 +13,16 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-make "listing" thing in companies
-	then disallow ZERO dollar ads
 
-wait... why are names showing up after i remove the all in the search
-	what's up with those? added after the labels printed?
+
+??PHP
+invitation goodness
+	make the export honour the last or form values
+		submit, maybe values in box?
+	also a searchbox for "label printed on" dates!!
+		"all", "none", and list of dates
+	"mark all as sent" button for invitations
+
 
 BUGS
 	in kind donations are fucked up, go fix
@@ -526,14 +531,10 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+??PHP/SQL
+make "listing" thing in companies
+	then disallow ZERO dollar ads
 
-??PHP
-invitation goodness
-	make the export honour the last or form values
-		submit, maybe values in box?
-	also a searchbox for "label printed on" dates!!
-		"all", "none", and list of dates
-	"mark all as sent" button for invitations
 
 put the sources *table* in there, with admin only privs perhaps?
 
@@ -3275,6 +3276,10 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+wait... why are names showing up after i remove the all in the search
+	what's up with those? added after the labels printed?
+		probably
 	bah, just bring back the old one
 		broken, doesn't work
 
@@ -6083,3 +6088,4 @@ BUGS
 		and... why is it showing upas CHOOSE ONE!!???!!! AUUIIGH!
 	i fucked it up by including companies. companies have a familyid.. ambiguous
 		ah, specify it in linkconstraints
+push live the comp ads thing

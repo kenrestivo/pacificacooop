@@ -48,7 +48,7 @@ $co->obj->fb_fieldsToUnRender = array('lead_id');
 $co->protectedJoin($leads, 'left');
 
 // SHOW ONLY UNSENT
-$co->obj->whereAdd('label_printed is null or label_printed < "1000-01-01"');
+$co->obj->whereAdd('(label_printed is null or label_printed < "1000-01-01")');
 
 $co->obj->orderBy('last_name, first_name, company');
 

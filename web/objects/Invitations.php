@@ -80,11 +80,12 @@ class Invitations extends CoopDBDO
                 }
                 
                 
-                $famsel =& $co->searchForm->addElement('select', 'family_id', 
-                                                       'Family', 
-                                                       $families,
-                                                       array('onchange' =>
-                                                             'this.form.submit()'));
+                $famsel =& $co->searchForm->addElement(
+                    'select', 'family_id', 
+                    $this->fb_fieldLabels['family_id'],
+                    $families,
+                    array('onchange' =>
+                          'this.form.submit()'));
 
 
 
@@ -165,7 +166,58 @@ class Invitations extends CoopDBDO
                 $this->fb_fieldLabels['source_id'] ='Source of Name';
 
                 
+                /////////////// PRINTED ON
+                // now the nightmare printed on
+                $printed_dates['%'] ='ALL';
+                $printed_dates[''] ='NOT YET';
+                $dates =& new CoopView(&$co->page, 'invitations', &$co);
+                $dates->obj->query(
+                    sprintf(
+                        'select distinct label_printed from invitations where school_year = "%s" order by label_printed', 
+                                           $co->getChosenSchoolYear()));
+                while($dates->obj->fetch()){
+                    $printed_dates[$dates->obj->label_printed] = $dates->obj->label_printed;
+                }
+            
+            
+                $datessel =& $co->searchForm->addElement(
+                    'select', 
+                    'label_printed', 
+                    $this->fb_fieldLabels['label_printed'], 
+                    $printed_dates,
+                    array('onchange' =>
+                          'this.form.submit()'));
+                        
+            
+                //COOL! this is the first place i am using vars->last
+                // this does the request stuff for me, doesn't it?
+                // i am a LITTLE worried about stomping on schoolyear tho
+                $co->searchForm->setDefaults(
+                    array('label_printed' => 
+                          empty($co->page->vars['last']['label_printed']) ? '%' : $co->page->vars['last']['label_printed']));
+            
+                $bar = $datessel->getValue();
+                $label_printed = $bar[0];
+                $co->page->vars['last']['label_printed'] = $label_printed;
+            
+                switch($label_printed){
+                case '%':
+                    // don't constrain at all by labelprinted, show 'em all!
+                    break;
+                case '':
+                    // nothing. only the nulls
+                    $this->whereAdd(
+                        '(label_printed is null or label_printed < "1000-01-01")'); 
+                    break;
+                default:
+                    // there is a valid (i hope) date in there, show it
+                    $this->whereAdd(sprintf('%s.label_printed = "%s"', 
+                                            $co->table,
+                                            $label_printed));
+                }
 
+
+                //////////////////////////////////////
                 // last but not least, my counts and pagers
                 $co->showChooser = 1;
 
@@ -198,7 +250,7 @@ class Invitations extends CoopDBDO
             array_unshift($this->preDefOrder, 'lead_label');
             $this->fb_fieldsToUnRender = array('lead_id');
 
-            
+            $co->debugWrap(2);
             
             return $co->simpleTable(true,true);
         }
