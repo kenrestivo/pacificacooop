@@ -45,7 +45,7 @@ class Ads extends CoopDBDO
 		"ad_copy" => "Type Ad Copy here (if applicable)" ,
 		"family_id" => "Soliciting Family",
 		"school_year" => "School Year" ,
-        'freebie' => 'Comp this ad (no payment required)',
+        'freebie' => 'Comp This Ad (no payment required)',
 		'income_id' =>  'Payment Summary',
 		);
     
