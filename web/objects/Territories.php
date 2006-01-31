@@ -47,6 +47,7 @@ class Territories extends CoopDBDO
             $view =& new CoopView(&$co->page, 'companies', &$co);
             $view->obj->fb_formHeaderText = 'Solicitation Summary by Company';
             $view->obj->fb_fieldsToRender = array(); // bah, i must have crap in there
+            unset($view->obj->fb_pager);
             $view->obj->fb_fieldLabels= array(
                 'company_label' => 'Company',
                 'cash_donations' => 'Cash Donations',
@@ -109,10 +110,9 @@ left join
         on pur.company_id = companies.company_id
 where companies.territory_id = %d
 group by companies.company_id
-having cash_donations > 0 or auction_purchases > 0 or auction_donations > 0 or in_kind_donations > 0
 order by cash_donations desc, auction_purchases desc, 
-    auction_donations desc, in_kind_donations desc 
-
+    auction_donations desc, in_kind_donations desc ,
+companies.company_name, companies.last_name
 ",
                         $view->obj->fb_labelQuery,
                         $schoolyear,$schoolyear, $schoolyear, $schoolyear,

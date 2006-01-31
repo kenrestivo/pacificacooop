@@ -13,6 +13,9 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
+
+wait... why are names showing up after i remove the all.
+
 yank alumni list
 	first find out who bought what
 		didn't i do that query already?
