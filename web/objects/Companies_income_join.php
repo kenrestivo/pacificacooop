@@ -37,7 +37,7 @@ class Companies_income_join extends CoopDBDO
 
 
     var $fb_shortHeader = 'Solicitation Cash';
-    var $preDefOrder = array('company_id', 'income_id');
+    var $preDefOrder = array('company_id', 'income_id', 'family_id');
 
     function fb_linkConstraints(&$co)
 		{
