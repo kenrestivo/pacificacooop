@@ -16,17 +16,12 @@ coop web database
 
 ??PHP/JS
 sponsorships fix
-	make a listing report
-		everyone who donated anything, and is not an ad or a sponsor
-			auctionjoin
-			income join
-			in-kind
-			tickets
-			attendees
-	fix the manual entry bug(s)
 	move listings to companies
-	add listings to public auction (for starters)
-
+		manually put them in there
+		now make the donors, ads, and sponsorships use the listing :-<
+	fix the manual entry bug(s)
+	program summary report that grabs stuff from the public auction
+		for now they can use public auction, it won't kill 'em
 
 
 ???PHP
@@ -6141,3 +6136,11 @@ make reset.sh more automated!
 	use python. do it right
 		stat all the files and sort them, or do it by name, or system() it
 	too cool!! easy! i'll never write another bash script again	let susan know about ads
+	make a listing report
+		everyone who donated anything, and is not an ad or a sponsor
+			auctionjoin
+			income join
+			in-kind
+			tickets
+			attendees
+	add listings to public auction (for starters)

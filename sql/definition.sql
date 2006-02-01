@@ -132,6 +132,7 @@ CREATE TABLE companies (
   territory_id int(32) default NULL,
   family_id int(32) default NULL,
   do_not_contact datetime default NULL,
+  listing varchar(255) default NULL,
   flyer_ok enum('Unknown','Yes','No') default NULL,
     PRIMARY KEY (company_id)
 ) ;

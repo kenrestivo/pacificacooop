@@ -30,6 +30,7 @@ class Companies extends CoopDBDO
     var $title;                           // string(255)  
     var $salutation;                      // string(50)  
     var $url;                             // string(255)  
+    var $listing;                         // string(255)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -43,6 +44,7 @@ class Companies extends CoopDBDO
 									  'first_name');
 	var $fb_fieldLabels = array (
 		'company_name' => 'Company Name',
+		'listing' => 'Publicly List Company As (appears on website and in program)',
 		"family_id" => 'Is this company owned by a Co-Op Family?',
 		'last_name' => "Last Name", 
 		'first_name' => "First Name",
@@ -99,6 +101,7 @@ var $fb_defaults = array(
 
 	var $preDefOrder = array (
 		'company_name',
+        'listing',
 		"family_id" ,
 		'last_name',
 		'first_name',
