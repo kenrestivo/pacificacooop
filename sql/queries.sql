@@ -1989,5 +1989,33 @@ group by companies.company_id
 order by cash_donations desc, auction_purchases desc, 
 auction_donations desc, in_kind_donations desc
 
+--- find any nobodies
+select leads.*
+select count(leads.lead_id)
+from leads
+left join tickets
+on leads.lead_id = tickets.lead_id
+left join leads_income_join
+on leads.lead_id = leads_income_join.lead_id
+left join sponsorships
+on leads.lead_id = sponsorships.lead_id
+left join companies
+on leads.company_id = companies.company_id
+left join ads
+on leads.lead_id = ads.lead_id
+left join springfest_attendees
+on leads.lead_id = springfest_attendees.lead_id
+left join kids
+on leads.lead_id = kids.doctor_id
+where tickets.lead_id is null 
+and ads.lead_id is null
+and sponsorships.lead_id is null
+and leads_income_join.lead_id is null
+and leads.company_id is null
+and springfest_attendees.lead_id is null
+and kids.doctor_id is null
+\G
+
+
 
 --- EOF
