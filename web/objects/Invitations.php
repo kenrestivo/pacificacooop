@@ -181,6 +181,8 @@ from invitations where school_year = "%s" order by label_printed',
                     $printed_dates[$dates->obj->label_printed] = $dates->obj->printed_human;
                 }
             
+                // do this AFTER the query, so that NOT YET
+                // gets assigned to the null value the query returns
                 $printed_dates[''] ='NOT YET';
             
                 $datessel =& $co->searchForm->addElement(

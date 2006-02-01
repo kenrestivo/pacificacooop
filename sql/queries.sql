@@ -1990,8 +1990,6 @@ order by cash_donations desc, auction_purchases desc,
 auction_donations desc, in_kind_donations desc
 
 --- delete some number of random nobodies
--- this query generates a false report of many hundreds
--- affected, but it really only affects the number in the limit. fear not
 update invitations join
 (select leads.lead_id
 from invitations
@@ -2024,8 +2022,9 @@ and kids.doctor_id is null
 order by rand()
 limit 100) as deadbeats
 on deadbeats.lead_id = invitations.lead_id
+and  invitations.school_year = '2005-2006'
 set invitations.label_printed = NULL
 ;
 
 
---- EOF
+--- EOF2

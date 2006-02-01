@@ -14,7 +14,9 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
-fix the label printed, it's not saving it in last, and that sucks
+
+GAH! my query removes from ALL YEARS not just this one
+	fix the on
 
 push my label printed live, and run the uninvite query
 
@@ -6101,3 +6103,5 @@ push live the comp ads thing
 		companies (?)
 		ads
 		doctor?
+fix the label printed, it's not saving it in last, and that sucks
+	isset not empty
