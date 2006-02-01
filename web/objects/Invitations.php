@@ -169,7 +169,6 @@ class Invitations extends CoopDBDO
                 /////////////// PRINTED ON
                 // now the nightmare printed on
                 $printed_dates['%'] ='ALL';
-                $printed_dates[''] ='NOT YET';
                 $dates =& new CoopView(&$co->page, 'invitations', &$co);
                 $dates->obj->query(
                     sprintf(
@@ -182,6 +181,7 @@ from invitations where school_year = "%s" order by label_printed',
                     $printed_dates[$dates->obj->label_printed] = $dates->obj->printed_human;
                 }
             
+                $printed_dates[''] ='NOT YET';
             
                 $datessel =& $co->searchForm->addElement(
                     'select', 
@@ -192,12 +192,10 @@ from invitations where school_year = "%s" order by label_printed',
                           'this.form.submit()'));
                         
             
-                //COOL! this is the first place i am using vars->last
-                // this does the request stuff for me, doesn't it?
-                // i am a LITTLE worried about stomping on schoolyear tho
                 $co->searchForm->setDefaults(
+                    // NOTE! isset not empty! preserve nulls!
                     array('label_printed' => 
-                          empty($co->page->vars['last']['label_printed']) ? '%' : $co->page->vars['last']['label_printed']));
+                          isset($co->page->vars['last']['label_printed']) ? $co->page->vars['last']['label_printed'] : '%'));
             
                 $bar = $datessel->getValue();
                 $label_printed = $bar[0];

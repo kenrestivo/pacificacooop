@@ -14,23 +14,21 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
+fix the label printed, it's not saving it in last, and that sucks
+
+push my label printed live, and run the uninvite query
+
 
 ??PHP
 invitation goodness
 	make the export honour the last or form values
 		submit, maybe values in box?
-	also a searchbox for "label printed on" dates!!
-		"all", "none", and list of dates
 	"mark all as sent" button for invitations
 
 
 BUGS
 	in kind donations are fucked up, go fix
 		then move the wine/cider/etc to it
-
-yank alumni list
-	first find out who bought what
-		didn't i do that query already?
 
 duncan details anomaly in enhancement
 
@@ -6089,3 +6087,17 @@ BUGS
 	i fucked it up by including companies. companies have a familyid.. ambiguous
 		ah, specify it in linkconstraints
 push live the comp ads thing
+	also a searchbox for "label printed on" dates!!
+		"all", "none", and list of dates
+	yank 50 old ones
+		from alumni list
+		first find out who bought what
+			didn't i do that query already?
+	links
+		tickets
+		attendees
+		leads_income
+		sponsorships
+		companies (?)
+		ads
+		doctor?

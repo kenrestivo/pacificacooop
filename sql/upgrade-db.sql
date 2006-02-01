@@ -16,4 +16,4 @@
 
 -- add sources
 
-alter table ads add column freebie enum('Unknown','Yes','No') default NULL;
+-- run the remove query

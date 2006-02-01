@@ -1989,9 +1989,11 @@ group by companies.company_id
 order by cash_donations desc, auction_purchases desc, 
 auction_donations desc, in_kind_donations desc
 
---- find any nobodies
---select leads.*
-select count(leads.lead_id)
+--- delete some number of random nobodies
+-- this query generates a false report of many hundreds
+-- affected, but it really only affects the number in the limit. fear not
+update invitations join
+(select leads.lead_id
 from invitations
 left join leads on invitations.lead_id = leads.lead_id
 left join tickets
@@ -2010,6 +2012,8 @@ left join kids
 on invitations.lead_id = kids.doctor_id
 where  invitations.school_year = '2005-2006'
 and leads.source_id = 2
+and (label_printed is not null and label_printed > "1000-01-01")
+and (invitations.family_id is null or invitations.family_id < 1)
 and tickets.lead_id is null 
 and ads.lead_id is null
 and sponsorships.lead_id is null
@@ -2017,8 +2021,11 @@ and leads_income_join.lead_id is null
 and leads.company_id is null
 and springfest_attendees.lead_id is null
 and kids.doctor_id is null
-\G
-
+order by rand()
+limit 100) as deadbeats
+on deadbeats.lead_id = invitations.lead_id
+set invitations.label_printed = NULL
+;
 
 
 --- EOF
