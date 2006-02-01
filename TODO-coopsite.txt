@@ -18,7 +18,6 @@ coop web database
 sponsorships fix
 	move listings to companies
 		manually put them in there
-		now make the donors, ads, and sponsorships use the listing :-<
 	fix the manual entry bug(s)
 	program summary report that grabs stuff from the public auction
 		for now they can use public auction, it won't kill 'em
@@ -6144,3 +6143,4 @@ make reset.sh more automated!
 			tickets
 			attendees
 	add listings to public auction (for starters)
+		now make the donors, ads, and sponsorships use the listing :-<

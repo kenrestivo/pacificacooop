@@ -55,12 +55,13 @@ function sponsors(&$cp, $sy)
 			// when i redo it, this is where the test for existing goes
 			if($co->obj->url > ''){
                 // ummmm, use selfurl?
-				$thing = sprintf('<a href="%s">%s</a>', 
-								 $cp->fixURL($co->obj->url),
-								 $co->obj->company_name);
+				$thing = sprintf(
+                    '<a href="%s">%s</a>', 
+                    $cp->fixURL($co->obj->url),
+                    $co->obj->listing? $co->obj->listing : $co->obj->company_name);
 			} else {
 				//XXX cheap congeal: company-lead hack
-				$thing = $co->obj->company_name . $co->obj->company;
+				$thing = $co->obj->listing ? $co->obj->listing : $co->obj->company_name . $co->obj->company;
 				if(!$thing){
 					$thing = sprintf("%s %s", $co->obj->first_name,
 									 $co->obj->last_name);
@@ -158,9 +159,10 @@ function ads(&$cp, $sy)
 		if($ad->obj->url > ''){
 			$res .= sprintf('<li><a href="%s">%s</a></li>', 
 							 $cp->fixURL($ad->obj->url),
-							 $ad->obj->company_name);
+							 $ad->obj->listing? $ad->obj->listing : $ad->obj->company_name);
 		} else {
-			$res .= sprintf("<li>%s</li>", $ad->obj->company_name);
+			$res .= sprintf("<li>%s</li>", 
+                            $ad->obj->listing? $ad->obj->listing: $ad->obj->company_name);
 		}
 	}
 	$res .= "</ul></div><!-- end ad div -->";
@@ -206,9 +208,10 @@ order by companies.company_name, companies.last_name");
 		if($companies->obj->url > ''){
 			$res .= sprintf('<li><a href="%s">%s</a></li>', 
 							 $cp->fixURL($companies->obj->url),
-							 $companies->obj->company_name);
+							 $companies->obj->listing? $companies->obj->listing : $companies->obj->company_name);
 		} else {
-			$res .= sprintf("<li>%s</li>", $companies->obj->company_name);
+			$res .= sprintf("<li>%s</li>", 
+                            $companies->obj->listing? $companies->obj->listing : $companies->obj->company_name);
 		}
 	}
 	$res .= "</ul></div><!-- end ad div -->";

@@ -158,6 +158,7 @@ if(length(companies.email_address) > 1, companies.email_address, NULL))
    var $fb_sizes = array(
      'salutation' => 20,
      'address1' => 50,
+     'listing' => 100,
      'city' => 15,
      'state' => 5,
      'zip' => 8,
