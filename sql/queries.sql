@@ -1990,24 +1990,27 @@ order by cash_donations desc, auction_purchases desc,
 auction_donations desc, in_kind_donations desc
 
 --- find any nobodies
-select leads.*
+--select leads.*
 select count(leads.lead_id)
-from leads
+from invitations
+left join leads on invitations.lead_id = leads.lead_id
 left join tickets
-on leads.lead_id = tickets.lead_id
+on invitations.lead_id = tickets.lead_id
 left join leads_income_join
-on leads.lead_id = leads_income_join.lead_id
+on invitations.lead_id = leads_income_join.lead_id
 left join sponsorships
-on leads.lead_id = sponsorships.lead_id
+on invitations.lead_id = sponsorships.lead_id
 left join companies
 on leads.company_id = companies.company_id
 left join ads
-on leads.lead_id = ads.lead_id
+on invitations.lead_id = ads.lead_id
 left join springfest_attendees
-on leads.lead_id = springfest_attendees.lead_id
+on invitations.lead_id = springfest_attendees.lead_id
 left join kids
-on leads.lead_id = kids.doctor_id
-where tickets.lead_id is null 
+on invitations.lead_id = kids.doctor_id
+where  invitations.school_year = '2005-2006'
+and leads.source_id = 2
+and tickets.lead_id is null 
 and ads.lead_id is null
 and sponsorships.lead_id is null
 and leads_income_join.lead_id is null
