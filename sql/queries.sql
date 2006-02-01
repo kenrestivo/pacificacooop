@@ -2026,5 +2026,34 @@ and  invitations.school_year = '2005-2006'
 set invitations.label_printed = NULL
 ;
 
+--- ugly donors query:
+-- everyone who donated something but DID NOT buy an ad or a sponsorship!
+select distinct companies.*
+from companies
+left join companies_auction_join 
+on companies_auction_join.company_id = companies.company_id 
+left join auction_donation_items 
+on companies_auction_join.auction_donation_item_id = auction_donation_items.auction_donation_item_id
+and auction_donation_items.school_year = "2005-2006"
+left join companies_income_join 
+on companies_income_join.company_id = companies.company_id
+left join income
+on companies_income_join.income_id = income.income_id
+and income.school_year = "2005-2006"
+left join companies_in_kind_join 
+on companies_in_kind_join.company_id = companies.company_id
+left join in_kind_donations
+on companies_in_kind_join.in_kind_donation_id = in_kind_donations.in_kind_donation_id
+and in_kind_donations.school_year = "2005-2006"
+left join sponsorships on sponsorships.company_id = companies.company_id
+left join ads on ads.company_id = companies.company_id
+where
+(income.payment_amount > 0
+or auction_donation_items.item_value > 0
+or in_kind_donations.item_value > 0)
+and ads.ad_id is null
+and sponsorships.sponsorship_id is null
+order by companies.company_name, companies.last_name
+\G
 
---- EOF2
+--- EOF
