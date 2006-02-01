@@ -74,6 +74,8 @@ class Ads extends CoopDBDO
      'ad_copy' => 100
    );
 
+/// TODO: put the list of DONORS there too, or a list of them
+
 
 //TODO: a form rule to either/or the company/invitee
     // better still: a choose box to pick which one

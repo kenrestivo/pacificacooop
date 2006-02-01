@@ -42,6 +42,7 @@ class Subscriptions extends CoopDBDO
 
     function preGenerateForm($form)
         {
+            // WHY is this even necessary??
             // XXX super butt ugly, with cheeze
             // i suspect this has been totally redone now with getlinkoptions
             $this->fb_defaults['user_id'] = $form->CoopForm->page->auth['uid'];

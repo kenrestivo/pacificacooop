@@ -14,13 +14,15 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
+push live
+	db alter
+	manually put the listings in there and whack the listing ads
+	then make all ads have a value: required field
+
+
 ??PHP/JS
 sponsorships fix
-	move listings to companies
-		manually put them in there
-	fix the manual entry bug(s)
-	program summary report that grabs stuff from the public auction
-		for now they can use public auction, it won't kill 'em
+	link to non-ad listings, or something
 
 
 ???PHP
@@ -541,6 +543,9 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+??PHP/SQL
+	program summary report that grabs stuff from the public auction
+		for now they can use public auction, it won't kill 'em
 
 ??SQL
 make a summary of MONEY by lead source!
@@ -6144,3 +6149,4 @@ make reset.sh more automated!
 			attendees
 	add listings to public auction (for starters)
 		now make the donors, ads, and sponsorships use the listing :-<
+	move listings to companies	fix the manual entry bug(s) aha. prependtable

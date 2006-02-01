@@ -56,18 +56,18 @@ class Sponsorships extends CoopDBDO
 
     function _onlyOne($vars)
         {
-            
-            $msg = "You can have an Invitee Name, or a Company Name, but not both.";
-            if($vars['lead_id'] > 0 && $vars['company_id'] > 0){
-                $err['lead_id'] = $msg;
-                $err['company_id'] = $msg;
+            // AHA! need to prependtable!
+            // XXX need to get a coopobject in here somehow
+            if($vars['sponsorships-lead_id'] > 0 && $vars['sponsorships-company_id'] > 0){
+                $msg = "You can have an Invitee Name, or a Company Name, but not both.";    $err['sponsorships-lead_id'] = $msg;
+                $err['sponsorships-company_id'] = $msg;
                 return $err;
             }
             
-            $msg = "You must have either an Invitee Name, or a Company Name.";
-            if($vars['lead_id'] <1 && $vars['company_id'] <1){
-                $err['lead_id'] = $msg;
-                $err['company_id'] = $msg;
+            if($vars['sponsorships-lead_id'] <1 && $vars['sponsorships-company_id'] <1){
+                $msg = "You must have either an Invitee Name, or a Company Name.";
+                $err['sponsorships-lead_id'] = $msg;
+                $err['sponsorships-company_id'] = $msg;
                 return $err;
             }
             
