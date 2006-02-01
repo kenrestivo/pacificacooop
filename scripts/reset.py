@@ -4,11 +4,12 @@
 
 # resets the COOP (main) db back to  live backup
 
+import sys
 from os import system,popen
 from getpass import getpass
 
-#XXX get args from shell calling this!
-args = ''
+#get args from shell
+args = ' '.join(sys.argv[1:])
 
 filenames = [[l[0:-1] for l in popen('ls -t backups/*%s*' % (i)).readlines()][0] for i in ['defs', 'data']]
 

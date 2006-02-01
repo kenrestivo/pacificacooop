@@ -1,7 +1,18 @@
 template engine notes
 
+
+revise the whole model
+	think in terms of everything generating s-expressions: nested dicts
+		which can then be implemented via TAL/kid/smarty templates
+			or shipped via JSON, or IPC'ed to python, etc
+				at JSON time they can be stuffed into mochikit/nevow things!
+				i can also perhaps ship the JS "template" for them too!
+	start with simpletable perhaps. try making it a client of a func
+
+
 nfsn phptal notworking
 	dunno why. but the iterator require Types dies
+		try it again
 
 
 ugly big huge reference problem
@@ -13,6 +24,7 @@ ugly big huge reference problem
 		then go trace it through
 	maybe blow off the dispatcher???!
 		try to trace it back
+		i think this whole approach is brain-dead
 
 
 make attendance test use wholephptal model now!7

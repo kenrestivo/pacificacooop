@@ -44,3 +44,6 @@ maybe render subforms by shipping them (minus their form tags) via json?
 don't let the flexac.css override my font. keep what's already there!
 
 
+
+hey, cool, there's a drag and drop in wiki for mochikit!
+	try it out

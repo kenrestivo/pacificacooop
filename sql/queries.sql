@@ -2034,17 +2034,17 @@ left join companies_auction_join
 on companies_auction_join.company_id = companies.company_id 
 left join auction_donation_items 
 on companies_auction_join.auction_donation_item_id = auction_donation_items.auction_donation_item_id
-and auction_donation_items.school_year = "2005-2006"
+and auction_donation_items.school_year = '2005-2006'
 left join companies_income_join 
 on companies_income_join.company_id = companies.company_id
 left join income
 on companies_income_join.income_id = income.income_id
-and income.school_year = "2005-2006"
+and income.school_year = '2005-2006'
 left join companies_in_kind_join 
 on companies_in_kind_join.company_id = companies.company_id
 left join in_kind_donations
 on companies_in_kind_join.in_kind_donation_id = in_kind_donations.in_kind_donation_id
-and in_kind_donations.school_year = "2005-2006"
+and in_kind_donations.school_year = '2005-2006'
 left join sponsorships on sponsorships.company_id = companies.company_id
 left join ads on ads.company_id = companies.company_id
 where

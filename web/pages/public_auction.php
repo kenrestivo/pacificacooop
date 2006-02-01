@@ -30,7 +30,6 @@ function sponsors(&$cp, $sy)
 // now a word from our sponsors
 	$res .= '<div class="sponsor">';
 	$res .= "<p><b>Thanks to our generous sponsors:</b></p>";
-	$tab =& new HTML_Table();
 
 		// check the sponsorship table, not calculate
 
@@ -46,7 +45,7 @@ function sponsors(&$cp, $sy)
 		while($sp->obj->fetch()){
 			//confessObj($sp->obj, 'sponb');
 			/// XXX i hate hate hate this database layout.
-			/// renormalise and group companies and leads into one!
+			/// normalise to 3NF and combine companies and leads into one!
 			
 			$table = $sp->obj->lead_id> 0 ? 'leads' : 'companies';
 			$co =& new CoopObject(&$cp, $table, &$nothing);
@@ -55,6 +54,7 @@ function sponsors(&$cp, $sy)
 			//confessObj($co->obj, 'co');
 			// when i redo it, this is where the test for existing goes
 			if($co->obj->url > ''){
+                // ummmm, use selfurl?
 				$thing = sprintf('<a href="%s">%s</a>', 
 								 $cp->fixURL($co->obj->url),
 								 $co->obj->company_name);
@@ -91,6 +91,8 @@ function sponsors(&$cp, $sy)
 	$res .= "</div><!-- end sponsor -->";
 	return $res;
 } // end sponsors
+
+
 
 function auctionItems(&$cp, $sy)
 {
@@ -148,7 +150,7 @@ function auctionItems(&$cp, $sy)
 function ads(&$cp, $sy)
 {
 	$res .= '<div class="sponsor">';
-	$res .= "<p><b>And our advertisers:</b></p>";
+	$res .= "<p><b>Our advertisers:</b></p>";
 	$ad =& new CoopObject(&$cp, 'ads', &$nothing);
 	$ad->obj->query("select distinct * from ads left join companies on companies.company_id = ads.company_id left join sponsorships on companies.company_id = sponsorships.company_id where ads.school_year = '$sy' and sponsorship_id is null order by company_name");
 	$res .= "<ul>";
@@ -159,6 +161,54 @@ function ads(&$cp, $sy)
 							 $ad->obj->company_name);
 		} else {
 			$res .= sprintf("<li>%s</li>", $ad->obj->company_name);
+		}
+	}
+	$res .= "</ul></div><!-- end ad div -->";
+
+	return $res;
+}
+
+
+function donors(&$cp, $sy)
+{
+	$res .= '<div class="sponsor">';
+	$res .= "<p><b>And Our Donors:</b></p>";
+	$companies =& new CoopObject(&$cp, 'companies', &$nothing);
+	$companies->obj->query(
+"select distinct companies.*
+from companies
+left join companies_auction_join 
+on companies_auction_join.company_id = companies.company_id 
+left join auction_donation_items 
+on companies_auction_join.auction_donation_item_id = auction_donation_items.auction_donation_item_id
+and auction_donation_items.school_year = '$sy'
+left join companies_income_join 
+on companies_income_join.company_id = companies.company_id
+left join income
+on companies_income_join.income_id = income.income_id
+and income.school_year = '$sy'
+left join companies_in_kind_join 
+on companies_in_kind_join.company_id = companies.company_id
+left join in_kind_donations
+on companies_in_kind_join.in_kind_donation_id = in_kind_donations.in_kind_donation_id
+and in_kind_donations.school_year = '$sy'
+left join sponsorships on sponsorships.company_id = companies.company_id
+left join ads on ads.company_id = companies.company_id
+where
+(income.payment_amount > 0
+or auction_donation_items.item_value > 0
+or in_kind_donations.item_value > 0)
+and ads.ad_id is null
+and sponsorships.sponsorship_id is null
+order by companies.company_name, companies.last_name");
+	$res .= "<ul>";
+	while($companies->obj->fetch()){
+		if($companies->obj->url > ''){
+			$res .= sprintf('<li><a href="%s">%s</a></li>', 
+							 $cp->fixURL($companies->obj->url),
+							 $companies->obj->company_name);
+		} else {
+			$res .= sprintf("<li>%s</li>", $companies->obj->company_name);
 		}
 	}
 	$res .= "</ul></div><!-- end ad div -->";
@@ -187,6 +237,7 @@ print "\n</div> <!-- end header div -->\n";
 print '<div id="leftCol">';
 print sponsors(&$cp, $sy);
 print ads(&$cp, $sy);
+print donors(&$cp, $sy);
 print '</div><!-- end leftcol div -->';
 
 

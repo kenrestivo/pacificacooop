@@ -6,9 +6,7 @@ add make-up table for parent ed
 	meeting makeup types
 		$20 fee
 			(link to family fees!)
-		attend board meeting
-			(link to event!)
-		tour open house
+		attend board meeting or open house
 			(link to event!)
 		cover for someone
 			date/comments?

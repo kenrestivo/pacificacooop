@@ -1,12 +1,12 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	tal templates and reports (templates.txt)
-	treemenu (treemenu.txt)
+	tal templates and reports, and json services (templates.txt)
 	sortable/searchable/pagable views (searchfeature.txt)
 	cleanups and code fixes (cleanme.txt)
 	json, REST, xmlrpc (jsonselect.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
+	menu imporovements and documentation (treemenu.txt)
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	import the 20-year roster (20yearroster.txt)
@@ -14,35 +14,67 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
+??PHP/JS
+sponsorships fix
+	make a listing report
+		everyone who donated anything, and is not an ad or a sponsor
+			auctionjoin
+			income join
+			in-kind
+			tickets
+			attendees
+	fix the manual entry bug(s)
+	move listings to companies
+	add listings to public auction (for starters)
 
-GAH! my query removes from ALL YEARS not just this one
-	fix the on
 
-push my label printed live, and run the uninvite query
+
+???PHP
+tickets/rsvps -- just look at it.
+	might be a simple thing, just some js choosers like sponsorships
+
+
+??PHP/SQL
+parent ed (parented.txt)
+		make-up stuff -- wacky sql joins
+		nag-only (i.e. enhancement hack)
+
+
+???PHP/PYTHON/CSS (day)
+package sheet printing -- FUN with CSS or PDF!
+		using pdf? html? formatting?
+
 
 
 ??PHP
-invitation goodness
-	make the export honour the last or form values
-		submit, maybe values in box?
-	"mark all as sent" button for invitations
-
-
-BUGS
-	in kind donations are fucked up, go fix
+in kind donations are fucked up, go fix
 		then move the wine/cider/etc to it
+
+
+
+-----------
+BURNT (when too burnt out to do actual work)
+
+	read up on rest
+
+	move all the instructions over to the new thing
+
+	read greenspun's sql book
+
+	turbogears tutorial-- see how it *should* be done!
+
+----------------
+STUCK - behind things that are either prerequisites or MORE IMPORTANT
+
+
+bring back the surfboard cash! i got vallemar station so far
 
 duncan details anomaly in enhancement
 
-IMPORTANT TIME-SENSITIVE ITEMS!
-	sponsorships fix
-	tickets/rsvps -- just look at it.
-		might be a simple thing, just some js choosers like sponsorships
-	parent ed 
-		make-up stuff
-		nag-only (i.e. enhancement hack)
-	package sheet printing
-		using pdf? html? formatting?
+
+fix the listings
+	list everyone who gave anything (dig out my old queries)
+		who are not otherwise a sponsor or an advertiser :-)
 
 
 families dammit... calculation is wrong
@@ -54,7 +86,6 @@ clean up html in instructions: strong self-closing tag!
 
 counts are not in sync between carrie and nag report
 
-make reset.sh more automated!
 
 PERMS BUGS!!
 	enter new is showing up in details, for places where i DO NOT have new perms
@@ -68,11 +99,13 @@ PERMS BUGS!!
 		didn't i do this already?
 	history of nags, previous years
 		also indulgencs, and for board
-	territories for solicit
+	territories for solicit. not everyone should be able to edit it
 	solicitation is ugly. everyone can see it but only some can dick with it
 
 
 BUGS
+	schoolyearchooser on details makes no sense in most cases
+		but it does make sense in others. odd.
 	why no enter new on front page? s/b same actionbuttons no?
 	why no spelling checker showing up??
 	send_email will die if no valid login supplied??!
@@ -91,23 +124,6 @@ BUGS
     Source File: http://www/coop-dev/lib/kenflex.js
     Line: 64
     
-
-
-
-
-
------------
-BURNT (when too burnt out to do actual work)
-
-	read up on rest
-
-	move all the instructions over to the new thing
-
-	read greenspun's sql book
-
-
-----------------
-STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
 
 
@@ -530,6 +546,17 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+
+??SQL
+make a summary of MONEY by lead source!
+	yes, i need to do this
+
+??PHP
+invitation goodness
+	make the export honour the last or form values
+		submit, maybe values in box?
+	"mark all as sent" button for invitations
 
 ??PHP/SQL
 make "listing" thing in companies
@@ -6105,3 +6132,12 @@ push live the comp ads thing
 		doctor?
 fix the label printed, it's not saving it in last, and that sucks
 	isset not empty
+GAH! my query removes from ALL YEARS not just this one
+	fix the on
+push my label printed live, and run the uninvite query
+
+???PYTHON
+make reset.sh more automated!
+	use python. do it right
+		stat all the files and sort them, or do it by name, or system() it
+	too cool!! easy! i'll never write another bash script again	let susan know about ads
