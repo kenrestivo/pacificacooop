@@ -99,5 +99,8 @@ ksql-live:
 mysql-live:
 	mysql -h  127.0.0.1 -u $(BKUSER) -P $(FARPORT) $(DBNAME)
 
+restore:
+	../scripts/reset.py
+
 #EOF
 
