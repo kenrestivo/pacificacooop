@@ -153,7 +153,7 @@ function ads(&$cp, $sy)
 	$res .= '<div class="sponsor">';
 	$res .= "<p><b>Our advertisers:</b></p>";
 	$ad =& new CoopObject(&$cp, 'ads', &$nothing);
-	$ad->obj->query("select distinct * from ads left join companies on companies.company_id = ads.company_id left join sponsorships on companies.company_id = sponsorships.company_id where ads.school_year = '$sy' and sponsorship_id is null order by company_name");
+	$ad->obj->query("select distinct * from ads left join companies on companies.company_id = ads.company_id left join sponsorships on companies.company_id = sponsorships.company_id where ads.school_year = '$sy' and sponsorship_id is null order by if(companies.listing is not null, companies.listing,companies.company_name)");
 	$res .= "<ul>";
 	while($ad->obj->fetch()){
 		if($ad->obj->url > ''){
@@ -202,7 +202,7 @@ or auction_donation_items.item_value > 0
 or in_kind_donations.item_value > 0)
 and ads.ad_id is null
 and sponsorships.sponsorship_id is null
-order by companies.company_name, companies.last_name");
+order by if(companies.listing is not null, companies.listing, companies.company_name), companies.last_name");
 	$res .= "<ul>";
 	while($companies->obj->fetch()){
 		if($companies->obj->url > ''){

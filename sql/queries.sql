@@ -2053,7 +2053,7 @@ or auction_donation_items.item_value > 0
 or in_kind_donations.item_value > 0)
 and ads.ad_id is null
 and sponsorships.sponsorship_id is null
-order by companies.company_name, companies.last_name
+order by if(companies.listing, companies.listing, companies.company_name), companies.last_name
 \G
 
 --- EOF
