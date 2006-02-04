@@ -2056,4 +2056,22 @@ and sponsorships.sponsorship_id is null
 order by if(companies.listing, companies.listing, companies.company_name), companies.last_name
 \G
 
+
+----- auction summaries
+select sum(if(auction_items_families_join.auction_donation_item_id is null, 0, 
+item_value)) as family_donations, 
+sum(if(companies_auction_join.auction_donation_item_id is null, 0, 
+item_value)) as solicitation_donations, sum(item_value), school_year
+from auction_donation_items
+left join companies_auction_join
+on companies_auction_join.auction_donation_item_id = 
+auction_donation_items.auction_donation_item_id
+left join auction_items_families_join
+on auction_items_families_join.auction_donation_item_id = 
+auction_donation_items.auction_donation_item_id
+group by school_year
+;
+
+
+
 --- EOF
