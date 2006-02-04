@@ -162,6 +162,25 @@ order by Before_Event desc, At_Event desc
 "
 					   ,1);
 
+	$res .= "<h2>Auction Donations</h2>";
+	$res .= showRawQuery("Auction Donations by Type", 
+"
+select 'Auction Donation Items', sum(if(auction_items_families_join.auction_donation_item_id is null, 0, 
+item_value)) as Family_Auction, 
+sum(if(companies_auction_join.auction_donation_item_id is null, 0, 
+item_value)) as Solicitation_Auction, sum(item_value) as Total_Auction
+from auction_donation_items
+left join companies_auction_join
+on companies_auction_join.auction_donation_item_id = 
+auction_donation_items.auction_donation_item_id
+left join auction_items_families_join
+on auction_items_families_join.auction_donation_item_id = 
+auction_donation_items.auction_donation_item_id
+where school_year = '$schoolyear'
+group by school_year
+"					   
+					   , 1);
+
 
 
 	$res .= "<h2>Invitations</h2>";
