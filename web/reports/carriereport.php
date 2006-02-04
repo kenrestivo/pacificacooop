@@ -162,10 +162,10 @@ order by Before_Event desc, At_Event desc
 "
 					   ,1);
 
-	$res .= "<h2>Auction Donations</h2>";
-	$res .= showRawQuery("Auction Donations by Type", 
+	$res .= "<h2>Auction Donations (NOT REAL MONEY)</h2>";
+	$res .= showRawQuery("NON-CASH ESTIMATED Auction Donations by Type", 
 "
-select 'Auction Donation Items', sum(if(auction_items_families_join.auction_donation_item_id is null, 0, 
+select 'Estimated \"Value\"', sum(if(auction_items_families_join.auction_donation_item_id is null, 0, 
 item_value)) as Family_Auction, 
 sum(if(companies_auction_join.auction_donation_item_id is null, 0, 
 item_value)) as Solicitation_Auction, sum(item_value) as Total_Auction
@@ -178,6 +178,17 @@ on auction_items_families_join.auction_donation_item_id =
 auction_donation_items.auction_donation_item_id
 where school_year = '$schoolyear'
 group by school_year
+"					   
+					   , 1);
+
+	$res .= showRawQuery("NON-CASH ESTIMATED Package Values", 
+"
+select 'Non-Cash Estimated Package \"Value\"', 
+sum(package_value) as Package_Estimate
+from packages
+where school_year = '$schoolyear'
+group by school_year
+
 "					   
 					   , 1);
 
