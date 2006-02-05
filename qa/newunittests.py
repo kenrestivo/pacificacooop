@@ -208,9 +208,10 @@ class CoopTest:
                  self.trySave()
 
     def trySave(self):
-         #TODO: click the save button, and check pageloaded
-         print "DEBUG: this is an edit page, i should try to save it"
-         pass
+        print 'trying to save %s...' % (self.getURL())
+        f=self.page.getForms()[0]
+        self.page= self.retryClick(f.getInputByName('savebutton'))
+        self.pageLoaded()
 
 
     def getURL(self):
