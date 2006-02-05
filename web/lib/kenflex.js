@@ -191,9 +191,10 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     this.searchBox.combobox=self;
     this.status.combobox=self;
 
-
-    eval('self.editpermshidden.decoded = ' +self.editpermshidden.value);
-    self.editpermshidden.value = ""; // so i don't submit it
+    if(self.editpermshidden.value){
+        eval('self.editpermshidden.decoded = ' +self.editpermshidden.value);
+        self.editpermshidden.value = ""; // so i don't submit it
+    }
 
 
 
