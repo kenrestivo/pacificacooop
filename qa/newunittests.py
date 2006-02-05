@@ -204,6 +204,13 @@ class CoopTest:
                                                            kind)
             self.page = self.retryClick(links[index])
             self.pageLoaded()
+            if kind == 'Edit':
+                 self.trySave()
+
+    def trySave(self):
+         #TODO: click the save button, and check pageloaded
+         print "DEBUG: this is an edit page, i should try to save it"
+         pass
 
 
     def getURL(self):
