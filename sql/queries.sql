@@ -2059,9 +2059,10 @@ order by if(companies.listing, companies.listing, companies.company_name), compa
 
 ----- auction summaries
 select sum(if(auction_items_families_join.auction_donation_item_id is null, 0, 
-item_value)) as family_donations, 
+item_value)) as family_auction, 
 sum(if(companies_auction_join.auction_donation_item_id is null, 0, 
-item_value)) as solicitation_donations, sum(item_value), school_year
+item_value)) as solicitation_auction, sum(item_value) as total_auction, 
+school_year
 from auction_donation_items
 left join companies_auction_join
 on companies_auction_join.auction_donation_item_id = 
@@ -2069,7 +2070,33 @@ auction_donation_items.auction_donation_item_id
 left join auction_items_families_join
 on auction_items_families_join.auction_donation_item_id = 
 auction_donation_items.auction_donation_item_id
+where school_year = '2005-2006'
 group by school_year
+;
+
+------- packages
+select 'Non-Cash Estimated Package \"Value\"', 
+sum(package_value) as Package_Estimate
+from packages
+where school_year = '$schoolyear'
+group by school_year
+;
+
+
+--- income by source
+select  invitations.relation,
+sum(if(invitations.family_id>0,0,ticket_quantity)) as Alumni_List ,
+sum(if(invitations.family_id>0,ticket_quantity,0)) as Family_Supplied ,
+sum(ticket_quantity)  as Total 
+from tickets
+left join invitations 
+on invitations.lead_id = tickets.lead_id
+and invitations.school_year  = '2004-2005'
+where tickets.lead_id is not null 
+and tickets.ticket_quantity > 0
+and tickets.school_year = '2004-2005'
+group by invitations.relation
+order by total desc
 ;
 
 

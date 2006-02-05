@@ -527,13 +527,15 @@ group by user_id,table_name,field_name";
 
     function constrainSchoolYear($force = false)
         {
-            
-            if(!empty($this->obj->fb_joinPaths['school_year'])){
+            // use local schoolyear, unless it's not there
+            if($this->inObject('school_year')){
+                $last = $this->table;
+            } else if(!empty($this->obj->fb_joinPaths['school_year'])){
                 $paths = explode(':', $this->obj->fb_joinPaths['school_year']);
                 $last = array_pop($paths);
                 $this->page->printDebug("CoopObject::constrainSchoolYear({$this->table}) final path is $last", 2);
             }
-
+            
             
             //this code ought to be taken out and shot.
             // XXX for starters, use ispermittedfied, not perms[null]
@@ -555,7 +557,9 @@ group by user_id,table_name,field_name";
                                 $chosen,
                                 empty($last) ? '' :  $last . '.' ,
                                 empty($last) ? '' :  $last . '.' ));
-                    $this->obj->orderBy('school_year desc');
+                    $this->obj->orderBy(
+                        sprintf('%sschool_year desc',
+                                empty($last) ? '' :  $last . '.' ));
                 }
             }
         }
@@ -564,9 +568,11 @@ group by user_id,table_name,field_name";
 
     function constrainFamily($force = false)
         {
-
+            // use local family, unless it's not there
+            if($this->inObject('family_id')){
+                $last = $this->table;
             // handle array case: more than one link to familyid
-            if(!empty($this->obj->fb_joinPaths['family_id'])){
+            } else if(!empty($this->obj->fb_joinPaths['family_id'])){
                 if(is_array($this->obj->fb_joinPaths['family_id'])){
                     foreach($this->obj->fb_joinPaths['family_id'] as $path){
                         $paths = explode(':', $path);

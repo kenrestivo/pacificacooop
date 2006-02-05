@@ -18,5 +18,3 @@
 
 -- run the remove query? WHAT remove query?
 
-alter table companies add column  listing varchar(255) default NULL;
-

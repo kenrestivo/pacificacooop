@@ -42,9 +42,10 @@ class Subscriptions extends CoopDBDO
 
     function preGenerateForm($form)
         {
-            // WHY is this even necessary??
+            // remmeber, we don't have family names in here.
             // XXX super butt ugly, with cheeze
             // i suspect this has been totally redone now with getlinkoptions
+            // and, it will BREAK for non-family users, like teachers. bad.
             $this->fb_defaults['user_id'] = $form->CoopForm->page->auth['uid'];
 
             //XXX this is HIDEOUS!! injecting family_id in there by force. EVIL!

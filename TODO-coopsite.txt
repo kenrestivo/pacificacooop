@@ -14,16 +14,27 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
-push live
-	db alter
-	manually put the listings in there and whack the listing ads
-	then make all ads have a value: required field
-
-
+	
 ??PHP/JS
 sponsorships fix
-	link to non-ad listings, or something
+	alphebetise them
+		auugh! trouble. my constrainschoool/family have been wrong all along!
+		and, when i alphabetise, my linkfields disappear in the report
+	link to non-ad donation listings, or something
+	maybe that report
+	make all ads have a value: required field
 
+
+
+PHP/SQL
+ad insertion anomaly
+bounce check
+
+
+PHP/SQL/Entry
+put the raffle stuff back in
+
+	
 
 ???PHP
 tickets/rsvps -- just look at it.
@@ -67,10 +78,6 @@ bring back the surfboard cash! i got vallemar station so far
 
 duncan details anomaly in enhancement
 
-
-fix the listings
-	list everyone who gave anything (dig out my old queries)
-		who are not otherwise a sponsor or an advertiser :-)
 
 
 families dammit... calculation is wrong
@@ -542,6 +549,9 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP
+put a limit in the item_value such that if they put something in over $20K, tell them that's ridiculous.
 
 ??PHP/SQL
 	program summary report that grabs stuff from the public auction
@@ -6150,3 +6160,12 @@ make reset.sh more automated!
 	add listings to public auction (for starters)
 		now make the donors, ads, and sponsorships use the listing :-<
 	move listings to companies	fix the manual entry bug(s) aha. prependtable
+	db alter
+push live
+	manually put the listings in there and whack the listing ads	alphabetise the PUBLIC AUCTION stuff
+
+fix the listings
+	list everyone who gave anything (dig out my old queries)
+		who are not otherwise a sponsor or an advertiser :-)
+show summary of auction item "values"
+	by solicit and familyut thusin

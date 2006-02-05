@@ -439,6 +439,7 @@ class coopView extends CoopObject
             $par = $this->getParent();
 			///confessArray($this->obj->toArray(), 'makeheader:toarray');
 			// get the fieldnames out the dataobject
+            //confessObj($this->obj, "wtf?");
 
             $labels = !empty($this->obj->fb_fieldLabels) ? 
                 array_keys($this->obj->fb_fieldLabels) : array();
@@ -458,7 +459,9 @@ class coopView extends CoopObject
 						// XXX moot... if it ain't in fieldlabels, doesn't show
 						$res[] = strtr(ucwords($key), '_', ' ');
 					}
-				}
+				} else {
+                    $this->page->printDebug("CoopView::makeHeader({$this->table}): skipping field $key, it is NOT PERMITTED!", 3);
+                }
 			}
 			
 			$res[] = 'Actions';

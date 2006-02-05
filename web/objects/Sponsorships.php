@@ -38,19 +38,46 @@ class Sponsorships extends CoopDBDO
 		'school_year' => 'School Year'
 		);
 	
-	var $fb_fieldsToRender = array (
-		'company_id' ,
-		'lead_id' ,
-		'sponsorship_type_id', 
-		'entry_type',
-		'school_year' 
-		);
 	var $fb_requiredFields = array (
 		'sponsorship_type_id', 
 		'entry_type',
 		'school_year' 
 		);
 
+
+
+    function fb_linkConstraints(&$co)
+		{
+            $type =& new CoopObject(&$co->page, 'sponsorship_types', 
+                                   &$co);
+            $co->protectedJoin($type);
+            $companies =& new CoopObject(&$co->page, 'companies', 
+                                   &$co);
+            $co->protectedJoin($companies);
+            $leads =& new CoopObject(&$co->page, 'leads', 
+                                   &$co);
+            $co->protectedJoin($leads);
+
+           // TODO: somehow make orderbylinkdisplay() recursive
+            $co->obj->orderBy('sponsorship_types.sponsorship_price desc, concat(companies.company_name, leads.company), concat(companies.last_name, leads.last_name)');
+            $co->constrainSchoolYear();
+            $co->grouper();
+            
+		}
+
+
+    function fb_display_view(&$co)
+        {
+            $companies =& new CoopObject(&$co->page, 'companies', &$co);
+            $co->obj->selectAdd($companies->obj->fb_labelQuery);
+            $leads =& new CoopObject(&$co->page, 'leads', &$co);
+            $co->obj->selectAdd($leads->obj->fb_labelQuery);
+            $co->obj->fb_fieldsToUnRender = array('company_id', 'lead_id');
+            $co->obj->fb_fieldLabels['company_label'] = 'Company Name';
+            $co->obj->fb_fieldLabels['lead_label'] = 'Invitee';
+            array_push($co->obj->preDefOrder,'company_label', 'lead_label');
+            return $co->simpleTable();
+        }
 
 
 
