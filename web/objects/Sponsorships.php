@@ -45,6 +45,13 @@ class Sponsorships extends CoopDBDO
 		);
 
 
+	var $preDefOrder = array (
+		'company_id',
+		'lead_id' ,
+		'sponsorship_type_id' ,
+		'entry_type' ,
+		'school_year' 
+		);
 
     function fb_linkConstraints(&$co)
 		{
@@ -75,7 +82,7 @@ class Sponsorships extends CoopDBDO
             $co->obj->fb_fieldsToUnRender = array('company_id', 'lead_id');
             $co->obj->fb_fieldLabels['company_label'] = 'Company Name';
             $co->obj->fb_fieldLabels['lead_label'] = 'Invitee';
-            array_push($co->obj->preDefOrder,'company_label', 'lead_label');
+            array_unshift($co->obj->preDefOrder,'company_label', 'lead_label');
             return $co->simpleTable();
         }
 

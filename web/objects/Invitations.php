@@ -234,7 +234,7 @@ from invitations where school_year = "%s" order by label_printed',
             
             /// OK ALL DONE WITH THAT! now let's hep to it:
             $leads =  new CoopObject(&$co->page, 'leads', &$co);
-            
+
             $this->orderBy('last_name, first_name, company');
             
             $co->protectedJoin($leads, 'left');
@@ -327,7 +327,8 @@ from invitations where school_year = "%s" order by label_printed',
                 $res .= $co->page->selfURL(
                     array(
                         'base' => 'maint/exportxl.php',
-                        'tags' => array('title' => 'Export to Excel Spreadsheet'),
+                        'tags' => array('alt' => 'Export to Excel Spreadsheet',
+                                        'title' => 'Export to Excel Spreadsheet'),
                         'value' => 
                         '<img src="/images/x-office-spreadsheet.png"> Export ' . $this->fb_formHeaderText,
                         'inside' => array('format' => 'excel')));

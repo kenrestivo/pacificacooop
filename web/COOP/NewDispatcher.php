@@ -240,8 +240,9 @@ class CoopNewDispatcher
                         $fr =& $atdf->form->getElement(
                             $atdf->prependTable($localfield));
                         $fr->freeze();
-                        $this->page->confessArray($this->page->vars, 
-                                                  "$localfield vars just before tohtml",
+                        $this->page->confessArray(
+                            $this->page->vars, 
+                            "$localfield vars just before tohtml",
                                                   4);
                     }
                 } else {

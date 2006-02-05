@@ -14,12 +14,18 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
+??PYTHON/JAVA/QA
+at edit test, hit the SAVE button and look for a valid response
+	what is valid if i'm being redirected? will the redirect die?
+
+	
+???PHP/SQL
+look for and use labelquery in concatlinkfields if present
+	this is dangerous and difficult
+	
 	
 ??PHP/JS
 sponsorships fix
-	alphebetise them
-		auugh! trouble. my constrainschoool/family have been wrong all along!
-		and, when i alphabetise, my linkfields disappear in the report
 	link to non-ad donation listings, or something
 	maybe that report
 	make all ads have a value: required field
@@ -6169,3 +6175,7 @@ fix the listings
 		who are not otherwise a sponsor or an advertiser :-)
 show summary of auction item "values"
 	by solicit and familyut thusin
+	alphebetise them
+		auugh! trouble. my constrainschoool/family have been wrong all along!
+		and, when i alphabetise, my linkfields disappear in the report
+			have to do it in uglyland
