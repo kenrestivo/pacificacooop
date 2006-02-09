@@ -58,5 +58,33 @@ class Raffle_income_join extends CoopDBDO
 		}
 
 
+    function preGenerateForm(&$form)
+        {
+            // the more "modern" way to do pregenerate form
+            $el =& $form->createElement(
+                'customselect', 
+                $form->CoopForm->prependTable('income_id'), false);
+
+            $inc =& new CoopObject(&$form->CoopForm->page, 'income', 
+                                   &$form->CoopForm);
+            
+            $inc->constrainSchoolYear();
+            $coa =& new CoopObject(&$form->CoopForm->page, 
+                                   'chart_of_accounts',
+                                   &$inc);
+            $inc->protectedJoin($coa);
+            $inc->obj->whereAdd('chart_of_accounts.join_to_table like "%raffle%"');
+
+            $inc->obj->find(); // in lieu of coopform::findlinkoptions()!
+            
+            $el->setValue($this->income_id);
+
+
+            $el->_parentForm =& $form;
+            $el->prepare(&$inc);
+
+            $this->fb_preDefElements['income_id'] =& $el;
+            
+        }
 
 }
