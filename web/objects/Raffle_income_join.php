@@ -23,4 +23,40 @@ class Raffle_income_join extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+	var $fb_linkDisplayFields = array('raffle_location_id', 'income_id');
+
+	var $fb_fieldLabels = array ('income_id' => 'Payment Information',
+                                 'raffle_location_id' => 'Raffle Location',
+                                 'family_id' => 'Family Handling This');
+
+	var $fb_formHeaderText =  'Springfest Raffle Sales';
+
+	var $fb_requiredFields = array('raffle_location_id',
+                                   'family_id',
+                                   'income_id');
+
+
+    var $fb_shortHeader = 'Raffle Sales';
+    var $preDefOrder = array('raffle_location_id', 'income_id', 'family_id');
+
+    var $fb_joinPaths = array('school_year' => 'income');
+
+
+    function fb_linkConstraints(&$co)
+		{
+            $auc =& new CoopObject(&$co->page, 'income', 
+                                   &$co);
+            $auc->constrainSchoolYear();
+            $co->protectedJoin($auc);
+            $companies =& new CoopObject(&$co->page, 'raffle_locations', 
+                                   &$co);
+            $co->protectedJoin($companies);
+
+           // TODO: somehow make orderbylinkdisplay() recursive
+            $co->obj->orderBy('raffle_locations.location_name,  income.check_date');
+            $co->grouper();
+		}
+
+
+
 }
