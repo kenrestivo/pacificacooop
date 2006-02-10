@@ -53,8 +53,6 @@ class Springfest_attendees extends CoopDBDO
 									'attended'
 		);
 	
-    var $fb_usePage = 'paddles.php';
-
     var $fb_shortHeader = 'Paddles';
     
     var $fb_requiredFields = array(
@@ -85,6 +83,8 @@ class Springfest_attendees extends CoopDBDO
 			$this->paddle_number = $id;
 			parent::insert();
 		}
+
+
 
 
 }

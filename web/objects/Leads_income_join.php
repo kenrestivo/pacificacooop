@@ -32,6 +32,29 @@ class Leads_income_join extends CoopDBDO
 
 	var $fb_linkDisplayFields = array('lead_id', 'income_id');
 
+    var $fb_shortHeader = 'RSVPs';
+ 
+    var $fb_joinPaths = array('school_year' => 'income',
+                              'family_id' => 'leads:invitations');
+
+
+    function fb_linkConstraints(&$co)
+		{
+            $auc =& new CoopObject(&$co->page, 'income', 
+                                   &$co);
+            $auc->constrainSchoolYear();
+            $co->protectedJoin($auc);
+            $leads =& new CoopObject(&$co->page, 'leads', 
+                                   &$co);
+            $co->protectedJoin($leads);
+
+           // TODO: somehow make orderbylinkdisplay() recursive
+            $co->obj->orderBy('leads.last_name, leads.first_name,  leads.company, income.check_date');
+            $co->grouper();
+		}
+
+
+
     function afterInsert(&$co)
         {
             return $this->_updateSponsors(&$co);

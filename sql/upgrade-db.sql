@@ -18,3 +18,8 @@
 
 -- run the remove query? WHAT remove query?
 
+
+-- add table rsvps
+-- past year perms for (tickets rsvps paddles)
+-- erin/debbie perms for tickets/rsvps/paddles too
+

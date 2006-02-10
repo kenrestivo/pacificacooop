@@ -14,37 +14,19 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
-??PYTHON/JAVA/QA
-at edit test, hit the SAVE button and look for a valid response
-	what is valid if i'm being redirected? will the redirect die?
-
 	
-???PHP/SQL
-look for and use labelquery in concatlinkfields if present
-	this is dangerous and difficult
-	
-	
-??PHP/JS
-sponsorships fix
-	link to non-ad donation listings, or something
-	maybe that report
-	make all ads have a value: required field
+2 hours PHP
+tickets/rsvps/paddles -- just look at it.
+	for all in rsvps(DONE), tickets, paddles
+		alphabetise
+		yearpath and familypath where needed
+			note familyid in tickets IS NOT WHAT I WANT!
+		constrain income properly as needed
 
 
-
-PHP/SQL
-ad insertion anomaly
-bounce check
-
-
-PHP/SQL/Entry
-put the raffle stuff back in
-
-	
-
-???PHP
-tickets/rsvps -- just look at it.
-	might be a simple thing, just some js choosers like sponsorships
+??PHP
+bring in-kind donations back
+		then move the wine/cider/etc to it
 
 
 ??PHP/SQL
@@ -59,14 +41,11 @@ package sheet printing -- FUN with CSS or PDF!
 
 
 
-??PHP
-in kind donations are fucked up, go fix
-		then move the wine/cider/etc to it
-
-
 
 -----------
 BURNT (when too burnt out to do actual work)
+
+	lisp reading/studying
 
 	read up on rest
 
@@ -113,6 +92,7 @@ PERMS BUGS!!
 
 
 BUGS
+	when you edit something without changing it, notices still go out!
 	schoolyearchooser on details makes no sense in most cases
 		but it does make sense in others. odd.
 	why no enter new on front page? s/b same actionbuttons no?
@@ -555,6 +535,28 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP
+ticket/paddles/rsvp enhancements
+	pager for the things
+	maybe slap a dispatch screen on top somewhere
+	then go generalise this stuff. it's about time.
+		the income join constraint needs to be general
+		the linkconstraints should follow the joinpaths
+
+
+??PHP/JS
+ad issues
+	link to non-ad donation listings, or something
+	maybe that report
+	make all ads have a value: required field
+	ad insertion anomaly? which one?
+
+???PHP/SQL
+look for and use labelquery in concatlinkfields if present
+	the problem is that view doesn't know that foo_label is a linkfield!
+	this is dangerous and difficult. the cascading is the hard part
+		wait a minute, why is it difficult? shouldn't be.
 
 ??PHP
 put a limit in the item_value such that if they put something in over $20K, tell them that's ridiculous.
@@ -3318,7 +3320,7 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-
+	might be a simple thing, just some js choosers like sponsorships
 wait... why are names showing up after i remove the all in the search
 	what's up with those? added after the labels printed?
 		probably
@@ -6179,3 +6181,17 @@ show summary of auction item "values"
 		auugh! trouble. my constrainschoool/family have been wrong all along!
 		and, when i alphabetise, my linkfields disappear in the report
 			have to do it in uglyland
+??PYTHON/JAVA/QA
+at edit test, hit the SAVE button and look for a valid response
+	what is valid if i'm being redirected? will the redirect die
+
+bug: people can't edit their auction items?
+	yes they can. it's a design flaw
+
+PHP/SQL/Entry
+bring the raffle stuff back in
+	easy, copy from companies_income, shoudl be the same
+
+	null or zero ticketid, after insert
+		there must be a better way
+		there is, use $co->id

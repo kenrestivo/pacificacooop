@@ -38,10 +38,7 @@ class Tickets extends CoopDBDO
 		'ticket_type_id' => 'Type of Reservation',
 		'vip_flag' => 'VIP?'
 		);
-	var $fb_fieldsToRender = array ('ticket_quantity',
-									'school_year', 'ticket_type', 'income_id',
-									'vip_flag','ticket_type_id'
-		);
+
 	var $fb_formHeaderText = "Springfest Event Reservations";
 
 	var $fb_linkDisplayFields = array('lead_id', 'income_id');
@@ -49,17 +46,20 @@ class Tickets extends CoopDBDO
 	var $fb_requiredFields = array('ticket_type_id', 'school_year', 
 								   'ticket_quantity');
 
-    var $fb_usePage = 'ticket_sales.php';
-    
     var $fb_shortHeader = 'Reservations';
     
 
 	var $fb_enumFields = array('vip_flag');
 
+    var $fb_joinPaths = array('family_id' => array('leads:invitations',
+                                                   'families'));
+
+
+
 	function updatePaddles(&$co)
 		{
 
-			if($this->ticket_id < 1){
+			if($co->id< 1){
 				PEAR::raiseError('null or zero ticketid. bad.', 666);
 				return;
 			}
@@ -79,7 +79,7 @@ class Tickets extends CoopDBDO
 						sum(if(entry_type='Manual',1,0)) as manual
 						from springfest_attendees
 						where ticket_id = %d group by ticket_id", 
-								$this->ticket_id),
+								$co->id),
 								 array(), DB_FETCHMODE_ASSOC);
             if (DB::isError($data)) {
                 die($data->getMessage());
@@ -89,13 +89,13 @@ class Tickets extends CoopDBDO
 			$man = $data['manual'];
 			$auto = $data['automatic'];
 			
-			//print "ticket $this->ticket_id man $man auto $auto<br />";
+			//print "ticket $co->id man $man auto $auto<br />";
 			// add tickets
 			$toadd = $this->ticket_quantity - ($man + $auto);
 			while($toadd-- > 0){
 				$pado = new CoopObject(&$co->page, 'springfest_attendees', &$top);
 				$clone = $pado->obj;
-				$pado->obj->ticket_id = $this->ticket_id;
+				$pado->obj->ticket_id = $co->id;
 				$pado->obj->entry_type  = 'Automatic';
 				$pado->obj->school_year = $this->school_year;
 
@@ -141,7 +141,7 @@ class Tickets extends CoopDBDO
 					user_error("Tickets.php::updatePaddles(): db badness", 
 							   E_USER_ERROR);
 				}
-				$pad->ticket_id = $this->ticket_id;
+				$pad->ticket_id = $co->id;
 				$pad->entry_type = 'Automatic';
 				$pad->find();
 				while($pad->fetch() && $todelete-- > 0){

@@ -527,15 +527,14 @@ group by user_id,table_name,field_name";
 
     function constrainSchoolYear($force = false)
         {
-            // use local schoolyear, unless it's not there
-            if($this->inObject('school_year')){
-                $last = $this->table;
-            } else if(!empty($this->obj->fb_joinPaths['school_year'])){
+            if(!empty($this->obj->fb_joinPaths['school_year'])){
                 $paths = explode(':', $this->obj->fb_joinPaths['school_year']);
                 $last = array_pop($paths);
                 $this->page->printDebug("CoopObject::constrainSchoolYear({$this->table}) final path is $last", 2);
-            }
-            
+            } else if($this->inObject('school_year')){
+                // use local schoolyear, unless it's not there
+                $last = $this->table;
+            }            
             
             //this code ought to be taken out and shot.
             // XXX for starters, use ispermittedfied, not perms[null]
@@ -568,11 +567,8 @@ group by user_id,table_name,field_name";
 
     function constrainFamily($force = false)
         {
-            // use local family, unless it's not there
-            if($this->inObject('family_id')){
-                $last = $this->table;
             // handle array case: more than one link to familyid
-            } else if(!empty($this->obj->fb_joinPaths['family_id'])){
+            if(!empty($this->obj->fb_joinPaths['family_id'])){
                 if(is_array($this->obj->fb_joinPaths['family_id'])){
                     foreach($this->obj->fb_joinPaths['family_id'] as $path){
                         $paths = explode(':', $path);
@@ -588,8 +584,10 @@ group by user_id,table_name,field_name";
                     $last = array_pop($paths);
                     $this->page->printDebug("CoopObject::constrainFamily({$this->table}) final path is $last", 2);
                 }
+            } else if($this->inObject('family_id')){
+                // use local family, unless it's not there
+                $last = $this->table;
             }
-
 
             if(($this->isPermittedField(null, false, true) < ACCESS_VIEW  || 
                 $force) &&
