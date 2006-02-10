@@ -55,7 +55,7 @@ class Tickets extends CoopDBDO
                                                    'families'));
 
 
-
+    // this function is magical, ugly, and weird. i hate it deeply.
 	function updatePaddles(&$co)
 		{
 
@@ -65,7 +65,7 @@ class Tickets extends CoopDBDO
 			}
 
 			// calc how many are present,  to delete or add
-			$pad = DB_DataObject::factory('springfest_attendees'); 
+			$pad = $this->factory('springfest_attendees'); 
  			if (PEAR::isError($pad)){
 				user_error("Tickets.php::updatePaddles(): db badness", 
 						   E_USER_ERROR);
@@ -85,16 +85,15 @@ class Tickets extends CoopDBDO
                 die($data->getMessage());
             }
 
-			//confessArray($data, 'data');
+			$co->page->confessArray($data, "updatePaddles({$co->id})", 3);
 			$man = $data['manual'];
 			$auto = $data['automatic'];
 			
-			//print "ticket $co->id man $man auto $auto<br />";
 			// add tickets
 			$toadd = $this->ticket_quantity - ($man + $auto);
 			while($toadd-- > 0){
 				$pado = new CoopObject(&$co->page, 'springfest_attendees', &$top);
-				$clone = $pado->obj;
+				$clone = $pado->obj->__clone();
 				$pado->obj->ticket_id = $co->id;
 				$pado->obj->entry_type  = 'Automatic';
 				$pado->obj->school_year = $this->school_year;

@@ -63,10 +63,17 @@ class Springfest_attendees extends CoopDBDO
 	//the paddle number
 	function insert()
 		{
+            // by default, the school year here,
+            // but don't i want getchosenschoolyear instead?
+            // i'd need to get the coopobject/cooppage in here then
 			if(!$this->school_year){
 				$this->school_year  = findSchoolYear();
 			}
-			$clone = $this;
+			$clone = $this->__clone();
+            
+            // check for no counter there for this year!!
+            $this->startPaddleForThisYear(&$co);
+
 			$clone->query(sprintf("update counters set 
 						counter = last_insert_id(counter+1) 
 				where column_name='paddle_number' 
@@ -76,15 +83,36 @@ class Springfest_attendees extends CoopDBDO
 
             $id =& $db->getOne('select last_insert_id()');
             if (DB::isError($data)) {
-                die($data->getMessage());
+                PEAR::raiseError($data->getMessage(), 666);
             }
 
-			//print "id $id<br />";
+			//user_error("paddle counter $id", E_USER_NOTICE);
 			$this->paddle_number = $id;
 			parent::insert();
 		}
 
 
+    function startPaddleForThisYear(&$co)
+        {
+            $db =& $this->getDatabaseConnection();
+
+            $count =& $db->getOne(
+                sprintf('select count(counter_id) from counters where column_name = "paddle_number" and school_year = "%s"', 
+                        $this->school_year));
+            if (DB::isError($count)) {
+                PEAR::raiseError($count->getMessage(), 666);
+            }
+            
+            if($count < 1){
+                $res =& $db->getOne(
+                    sprintf('insert into counters set column_name = "paddle_number", school_year = "%s", counter = 0', 
+                            $this->school_year));
+                if (DB::isError($res)) {
+                    PEAR::raiseError($res->getMessage(), 666);
+                }
+            }
+
+        }
 
 
 }

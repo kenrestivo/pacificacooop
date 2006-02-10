@@ -17,11 +17,17 @@ coop web database
 	
 2 hours PHP
 tickets/rsvps/paddles -- just look at it.
-	for all in rsvps(DONE), tickets, paddles
+	for all in tickets, paddles
+		linkconstraints
 		alphabetise
 		yearpath and familypath where needed
 			note familyid in tickets IS NOT WHAT I WANT!
-		constrain income properly as needed
+			i have to do it manually
+	in paddles, block or autogen the paddle number at insert time!
+		postgenerate form, i'd guess
+	paddle generating bugs? lila massage all over teh place
+		try a few
+	bring back the auto-parent-generating thing, and run it
 
 
 ??PHP
@@ -6194,4 +6200,5 @@ bring the raffle stuff back in
 
 	null or zero ticketid, after insert
 		there must be a better way
-		there is, use $co->id
+		there is, use $co->id		constrain income properly as needed
+rsvps DONE
