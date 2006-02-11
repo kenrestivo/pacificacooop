@@ -2100,5 +2100,19 @@ order by total desc
 ;
 
 
+--- find orphans
+select auction_donation_items.auction_donation_item_id,
+    packages.package_id, auction_packages_join.package_id 
+from auction_packages_join
+left join auction_donation_items
+    on auction_donation_items.auction_donation_item_id = 
+        auction_packages_join.auction_donation_item_id 
+left join packages on packages.package_id = auction_packages_join.package_id 
+where packages.package_id is null;
+
+-- unneeded
+ select * from auction_packages_join where auction_donation_item_id is null or auction_donation_item_id < 1 or package_id is null or package_id < 1;
+
+
 
 --- EOF

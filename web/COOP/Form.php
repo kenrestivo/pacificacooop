@@ -691,6 +691,12 @@ class coopForm extends CoopObject
                     // processing this could  blow away all the links.
                     // don't do it.
                     // so here i escape out, to avoid that ignoble fate
+                    if(devSite()){
+                        $this->page->printDebug("CoopForm::processCrossLinks({$this->table}) $longtf is not set in vars! You probably don't have javascript. Or something is wrong. Escaping!! Run away!!", 1);
+                    } else {
+                        $this->page->mailError('Someone editing without javascript, or you have a in CoopForm::processCrossLinks()!',
+                                               print_r($this, true));
+                    }
                     continue;  // 
  				}
 

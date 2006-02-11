@@ -28,7 +28,7 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 $cp = new coopPage( $debug);
 print $cp->pageTop();
 
-$targetTable = 'income';
+$targetTable ='income';
 
 $atd = new CoopView(&$cp, $targetTable, $none);
 $atd->recordActions = array('details' => 'Details',
@@ -39,8 +39,9 @@ print $menu->topNavigation();
 
 print "<p>Springfest Orphaned $targetTable</p>";
 
-print $cp->selfURL('View');
-print $cp->selfURL('Fix Zero Primary Keys', array('action' => 'unzero'));
+print $cp->selfURL(array('value'=>'View'));
+print $cp->selfURL(array('value'=>'Fix Zero Primary Keys', 
+                   'inside' =>array('action' => 'unzero')));
 
 
 function viewHack(&$cp, &$atd)
