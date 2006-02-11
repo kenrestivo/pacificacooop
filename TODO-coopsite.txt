@@ -19,7 +19,6 @@ BUGS
 	trying to add items, not all present?
 	
 
-	
 2 hours PHP
 tickets/rsvps/paddles -- just look at it.
 	for all in tickets, paddles
@@ -544,6 +543,14 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP
+show the _join tables in confirmdelete
+	tricky because you may not know which tables are on the other side
+	could do a detail view kind of thing, recursively show them all
+		any keys in the join which aren't my pk, basically
+		ugly nasty recursive code
+	
 
 ??PHP
 prevent dangerous joins where id's are < 1!!!

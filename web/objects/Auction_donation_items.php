@@ -176,6 +176,7 @@ class Auction_donation_items extends CoopDBDO
 						$prefix . 'item_type' => $this->item_type,
 						$prefix . 'package_description' => 
 						$this->item_description,
+						$prefix . 'package_title' => $this->short_description,
 						$prefix . 'donated_by_text' => $donatedby,
 						$prefix . 'package_value' => $this->item_value,
 						$prefix . 'bid_increment' => 
