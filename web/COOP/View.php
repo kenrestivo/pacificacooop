@@ -792,10 +792,10 @@ class coopView extends CoopObject
             // try to intelligently find all forward/backlinks
             // or intermediately, adapt findfamily, and pass a list of tables
             // let the code go fish out the path to 'em
-
+            // THESE are the *all* links, forward and backwards
             foreach($this->allLinks() as $table => $ids){
                 list($nearid, $farid) = $ids;
-                $this->page->printDebug("$this->table  link for $nearid {$this->obj->$nearid}  $table", 4);
+                $this->page->printDebug("CoopView:showLinkDetails($this->table)  link for $nearid {$this->obj->$nearid} to  $table", 4);
                 $aud =& new CoopView(&$this->page, $table, &$this);
                 $tabs = $aud->obj->table();
                 $farwhole = $farid;
@@ -806,11 +806,16 @@ class coopView extends CoopObject
                                             $farwhole, $this->obj->{$nearid}));
                 //confessObj($aud, 'aud');
                 $aud->debugWrap(5);
-                $res .= $aud->simpleTable();
+                // ONLY show it if it's not a repeat
+                if(!in_array($aud->table, $aud->getParentTree())){
+                    $res .= $aud->simpleTable();
+                }
             }
 
+            // here comes what you specify via extradetails
             // now, extradetails is a bit of a hack. it is used for join links
-            // there has to be a better way of doing it, generically
+            // there has to be a better way of doing it, generically,
+            // automatically navigating all backlinks
             if(is_array($this->obj->fb_extraDetails)){
                 foreach($this->obj->fb_extraDetails as $path){
                     // XXX this only handles one-degree-of-separation!
@@ -823,7 +828,7 @@ class coopView extends CoopObject
                     $real =& new CoopView(&$this->page, $dest, &$co2);
                     $real->obj->orderBy('school_year desc');
                     $real->protectedJoin($co2);
- 
+                    
                     /// XXX this is sketchy. could cause GRIEF
                     /// i need to add the $co2's PK to the REAL object
                     /// because the actionbuttons will need it!
@@ -831,13 +836,15 @@ class coopView extends CoopObject
 //                                              $co2->table, 
 //                                              $co2->pk));
 
-                    $res .= $real->simpleTable();
+                // ONLY show it if it's not a repeat
+                    if(!in_array($real->table, $real->getParentTree())){
+                        $res .= $real->simpleTable();
+                    }
                 }
-            }
-
+            }   
             return $res;
         }
-
+    
 
 
     // MOVE THIS TO TABLE PERMISSIONS. as details, perhapsxs?

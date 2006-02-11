@@ -15,9 +15,35 @@ coop web database
 
 
 BUGS
-	bring back make-packages?
-	trying to add items, not all present?
+	they can't delete 08
+		they can't find dominuts
+	they also can't delete d100000000000
+		package id 436
 	
+??PHP
+packages
+	bring back make-packages
+    	use a form with checkboxen. do it in batch mode.
+		list of orphans only which are received (done)
+			for each one,
+				add it to a package
+				make a new package
+		the right thing to do would be a drag and drop, methinks
+	add the donated by to the view, so i can use it for makepackages
+	search/sort by type (auction)
+	search/sort by 	type (packages)
+
+	
+BUGS
+	trying to add items, not all present?
+		i can't duplicate this
+		try on IE?
+
+
+?? cleanups
+	non-auction
+		that surfboard doesn't belong, put in indulgence instead
+	fix the damnd STRONG in blog entry add instructions dammit. annoying.
 
 2 hours PHP
 tickets/rsvps/paddles -- just look at it.
@@ -3342,7 +3368,29 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-		there is something there, but it's not showing up in the multiselect
+
+surfboard
+	200x208 for small, 845x877 for large
+	that fucking image browser
+		it's rfiles.php, stuff from config, root_dir
+	ok this IS FUCKED UP!!!!!
+		it insists that the FILESYSTEM path is the same as the URL path
+			and it is NOT!!! EVER!!! fucking IDIOTS!
+
+					that dispatch/table stuff is gonna hurt tho.
+    	hey, maybe do it a totally different way!
+    		add a "make package" button to the main view!
+    			if it is recieved could be a javascript thing
+    			naw, an html static qf element!
+    			use my display callback, as i do in audit trail!
+    				nope, that won't work
+    			a custom actionbutton then?
+    		this is worthwhile, it'll not fuck with my dispatchr
+    			you go to package, you return here.
+    			do it as a javascript, once i have the donor stuff in there
+    				have to POST, it's toooo big to get
+
+							there is something there, but it's not showing up in the multiselect
 		duh. no id
 			paddle generating bugs? lila massage all over teh place
 		try a few naw, i just typed in 33, dumbass
@@ -6224,3 +6272,4 @@ bring the raffle stuff back in
 		there is, use $co->id		constrain income properly as needed
 rsvps DONE		view perms, dammit. treat like user/groups join?
 	deleting package: dependencies present but not shown
+	search/sort by not received

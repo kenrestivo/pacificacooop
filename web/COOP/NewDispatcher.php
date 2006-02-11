@@ -457,16 +457,16 @@ function confirmdelete()
                 $check->obj->{$vatd->pk} = $id;
                 $found = $check->obj->find();
                 if($found){
-                    $this->page->printDebug("CoopNewDispatcher::bruteForce({$this->table}) $id found $found {$check->table}s", 
-                                            2);
                     $totalfound += $found;
+                    $this->page->printDebug("CoopNewDispatcher::bruteForce({$this->table}) $id found $found {$check->table}s, but not displaying it because i suck", 
+                                            2);
                     $subtable = $check->simpleTable(false,false);
                     if(!$subtable){
                         // there are tables we don't have perms to view
                         // XXX this is a nasty hack. a punt really.
                         // instead show the _join records, or an editor
                         $res .= sprintf(
-                            'Links for %s need to be removed by %s this record.', 
+                            '<p>Links for %s usually can be removed by %s the %s record above, or one of the records below.</p>', 
                             $check->title(),
                             $this->page->selfURL(
                                 array('value' => 'editing',
@@ -474,7 +474,12 @@ function confirmdelete()
                                       'inside' => array('push' => $vatd->table,
                                                         'table' => $vatd->table,
                                                         'action' => 'edit',
-                                                        $vatd->prependTable($vatd->pk) => $id))));
+                                                        $vatd->prependTable($vatd->pk) => $id))),
+                            $vatd->title());
+                        /// XXX totally borken
+                        while($check->obj->fetch()){
+                            $res .= $check->showLinkDetails();
+                        }
                     }
                     $res .= $subtable;
                 }

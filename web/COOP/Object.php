@@ -1098,6 +1098,19 @@ function triggerNotices($audit_id)
     function __clone() { return $this;}
 
 
+    function getParentTree()
+        {
+            $res = array();
+            $current =& $this->parentCO;
+            while($current){
+                $res[] = $current->table;
+                $current =& $current->parentCO;
+            }
+            $this->page->confessArray($res,
+                                      "parent tree for {$this->table}",
+                                      3);
+          return $res;
+        }
 
 } // END COOP OBJECT CLASS
 

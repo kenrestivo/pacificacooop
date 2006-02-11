@@ -103,8 +103,20 @@ class Auction_donation_items extends CoopDBDO
             $co->constrainSchoolYear();
             $co->constrainFamily();
             $co->protectedJoin($auc);
-            //XXX constrainfamily() should do this below for me!!
-            $this->selectAdd('auction_items_families_join.family_id');
+
+            //and go get the donor
+
+//             // TODO: add company join too, so i knwo who donated
+//             $companies =& new CoopObject(&$co->page, 'companies', 
+//                                    &$co);
+//             $caj =& new CoopObject(&$co->page, 'companies_auction_join', 
+//                                    &$co);
+//             $co->protectedJoin($caj);
+
+            /// XXX HACK! NEED THIS IF I LINK IN COMPANIES!!
+            /// because companies have a family_id.. ambiguous!
+
+            $this->selectAdd('auction_items_families_join.family_id as family_id');
             $co->orderByLinkDisplay();
             $co->grouper();
 		}

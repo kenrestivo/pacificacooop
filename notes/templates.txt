@@ -27,7 +27,8 @@ ugly big huge reference problem
 		i think this whole approach is brain-dead
 
 
-make attendance test use wholephptal model now!7
+make attendance test use wholephptal model now!
+	no it doesn't. i had to whack it
 	i think the secret is to change my brain. 
 	my view/add/confirmdelete/delete/etc code should NOT INCLUDE ANY HTML
 	 none whatsoever
