@@ -457,6 +457,8 @@ function confirmdelete()
                 $check->obj->{$vatd->pk} = $id;
                 $found = $check->obj->find();
                 if($found){
+                    $this->page->printDebug("CoopNewDispatcher::bruteForce({$this->table}) $id found $found {$check->table}s", 
+                                            2);
                     $totalfound += $found;
                     $subtable = $check->simpleTable(false,false);
                     if(!$subtable){
@@ -478,7 +480,7 @@ function confirmdelete()
                 }
             }
             
-            if($totalfound){
+            if($totalfound > 0){
                 $restop = $vatd->horizTable(false);
                 return $restop . '<p class="error">YOU CANNOT DELETE THIS RECORD because the records below depend on it. Fix these first.</p>' .  $res;
                 
