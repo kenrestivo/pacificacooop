@@ -14,6 +14,11 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
+BUGS
+	bring back make-packages?
+	trying to add items, not all present?
+	
+
 	
 2 hours PHP
 tickets/rsvps/paddles -- just look at it.
@@ -23,10 +28,12 @@ tickets/rsvps/paddles -- just look at it.
 		yearpath and familypath where needed
 			note familyid in tickets IS NOT WHAT I WANT!
 			i have to do it manually
-	in paddles, block or autogen the paddle number at insert time!
+		so people can see their own. this is the only place it is relevant
+	in paddles, forbid or autogen the paddle number at "enter new" time
 		postgenerate form, i'd guess
-	paddle generating bugs? lila massage all over teh place
-		try a few
+	also check that reservation holder thing
+	add an OR for the family/lead/solicit in the TICKETS
+		probably in paddles too
 	bring back the auto-parent-generating thing, and run it
 
 
@@ -46,8 +53,6 @@ package sheet printing -- FUN with CSS or PDF!
 		using pdf? html? formatting?
 
 
-
-
 -----------
 BURNT (when too burnt out to do actual work)
 
@@ -58,8 +63,6 @@ BURNT (when too burnt out to do actual work)
 	move all the instructions over to the new thing
 
 	read greenspun's sql book
-
-	turbogears tutorial-- see how it *should* be done!
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
@@ -542,6 +545,12 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+??PHP
+prevent dangerous joins where id's are < 1!!!
+	all required fields must be present!
+	this was a problem in packages/auction join
+		one had auction id 0, woudln't delete!
+	
 ??PHP
 ticket/paddles/rsvp enhancements
 	pager for the things
@@ -3326,7 +3335,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	might be a simple thing, just some js choosers like sponsorships
+		there is something there, but it's not showing up in the multiselect
+		duh. no id
+			paddle generating bugs? lila massage all over teh place
+		try a few naw, i just typed in 33, dumbass
+
+			might be a simple thing, just some js choosers like sponsorships
 wait... why are names showing up after i remove the all in the search
 	what's up with those? added after the labels printed?
 		probably
@@ -6201,4 +6215,5 @@ bring the raffle stuff back in
 	null or zero ticketid, after insert
 		there must be a better way
 		there is, use $co->id		constrain income properly as needed
-rsvps DONE
+rsvps DONE		view perms, dammit. treat like user/groups join?
+	deleting package: dependencies present but not shown

@@ -21,5 +21,6 @@
 
 -- add table rsvps
 -- past year perms for (tickets rsvps paddles)
+-- all family view perms for tickets and rsvps, all years too
 -- erin/debbie perms for tickets/rsvps/paddles too
 

@@ -449,16 +449,32 @@ function confirmdelete()
             // now check 'em
             foreach($checkme as $checktab){
                 $vatd->page->printDebug(
-                    sprintf('confirmdelete link checking %s => %s [%d]', 
+                    sprintf('CoopNewDispatcher::bruteForceDeleteCheck(%s)  %s [%d]', 
                             $vatd->table, $checktab, $id), 
-                    4);
+                    2);
                 $check =& new CoopView(&$vatd->page, $checktab, &$vatd);
                 $check->debugWrap(7);
                 $check->obj->{$vatd->pk} = $id;
                 $found = $check->obj->find();
                 if($found){
                     $totalfound += $found;
-                    $res .= $check->simpleTable(false,true);
+                    $subtable = $check->simpleTable(false,false);
+                    if(!$subtable){
+                        // there are tables we don't have perms to view
+                        // XXX this is a nasty hack. a punt really.
+                        // instead show the _join records, or an editor
+                        $res .= sprintf(
+                            'Links for %s need to be removed by %s this record.', 
+                            $check->title(),
+                            $this->page->selfURL(
+                                array('value' => 'editing',
+                                      'par' => false,
+                                      'inside' => array('push' => $vatd->table,
+                                                        'table' => $vatd->table,
+                                                        'action' => 'edit',
+                                                        $vatd->prependTable($vatd->pk) => $id))));
+                    }
+                    $res .= $subtable;
                 }
             }
             

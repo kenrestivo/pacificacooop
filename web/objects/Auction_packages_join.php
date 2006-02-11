@@ -22,4 +22,7 @@ class Auction_packages_join extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+    var $fb_formHeaderText = 'Auction Items in Packages';
+
 }

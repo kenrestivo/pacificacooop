@@ -457,7 +457,7 @@ group by user_id,table_name,field_name";
 			if($this->obj->fb_formHeaderText){ 
 				return $this->obj->fb_formHeaderText;
 			}
-			return ucwords($this->table);
+			return ucwords(preg_replace('/_/', ' ', $this->table));
 		}
 	
 	// by default, i want to constrain join/finds in this way:
