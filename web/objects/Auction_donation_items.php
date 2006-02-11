@@ -42,7 +42,7 @@ class Auction_donation_items extends CoopDBDO
 		"item_description" => "Long, Detailed Description of item" ,
 		'item_value' => 'Estimated TOTAL Value ($)' ,
 		"item_type" => "Physical Product or Gift Certificate",
-		"date_received" => "Date Item received" ,
+		"date_received" => "Date Item Received" ,
 		"location_in_garage" => "Where It's Located" ,
 		"school_year" => "School Year" ,
 		"auction_donation_item_id" => "Unique ID" ,
@@ -232,6 +232,84 @@ class Auction_donation_items extends CoopDBDO
             return $res;
         }
 
+
+
+    function fb_display_view(&$co)
+        {
+            $co->schoolYearChooser();
+            $aphtml = "";
+            // FAMILY AND ALPHABETIC CHOOSERS
+            if($co->isPermittedField() >= ACCESS_VIEW){
+                /////////////// RECEIVED ON
+                // now the nightmare received on
+                $printed_dates['%'] ='ALL';
+                $dates =& new CoopView(&$co->page, $this->__table, &$co);
+                $dates->obj->query(
+                    sprintf(
+                        'select distinct date_received, 
+date_format(date_received, "%%a %%m/%%d/%%Y") 
+                        as received_human 
+from %s where school_year = "%s" order by date_received', 
+                        $this->__table,
+                        $co->getChosenSchoolYear()));
+                while($dates->obj->fetch()){
+                    $printed_dates[$dates->obj->date_received] = $dates->obj->received_human;
+                }
+            
+                // do this AFTER the query, so that NOT YET
+                // gets assigned to the null value the query returns
+                $printed_dates[''] ='NOT YET';
+            
+                $datessel =& $co->searchForm->addElement(
+                    'select', 
+                    'date_received', 
+                    $this->fb_fieldLabels['date_received'], 
+                    $printed_dates,
+                    array('onchange' =>
+                          'this.form.submit()'));
+                        
+            
+                $co->searchForm->setDefaults(
+                    // NOTE! isset not empty! preserve nulls!
+                    array('date_received' => 
+                          isset($co->page->vars['last']['date_received']) ? $co->page->vars['last']['date_received'] : '%'));
+            
+                $bar = $datessel->getValue();
+                $date_received = $bar[0];
+                $co->page->vars['last']['date_received'] = $date_received;
+            
+                switch($date_received){
+                case '%':
+                    // don't constrain at all by labelprinted, show 'em all!
+                    break;
+                case '':
+                    // nothing. only the nulls
+                    $this->whereAdd(
+                        '(date_received is null or date_received < "1000-01-01")'); 
+                    break;
+                default:
+                    // there is a valid (i hope) date in there, show it
+                    $this->whereAdd(sprintf('%s.date_received = "%s"', 
+                                            $co->table,
+                                            $date_received));
+                }
+
+
+                //////////////////////////////////////
+                // last but not least, my counts and pagers
+                $co->showChooser = 1;
+
+                
+                // FINALLY crap for my choosers
+                // by default, no change button!
+                $co->searchForm->addElement('submit', 'savebutton', 'Change');
+                
+            } 
+
+            $co->linkConstraints();
+
+            return $co->simpleTable(true,true);
+        }
 
 // set item_description lines = 3
 	
