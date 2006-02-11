@@ -246,14 +246,18 @@ class Auction_donation_items extends CoopDBDO
                 $dates =& new CoopView(&$co->page, $this->__table, &$co);
                 $dates->obj->query(
                     sprintf(
-                        'select distinct date_received, 
+                        'select  date_received, 
 date_format(date_received, "%%a %%m/%%d/%%Y") 
-                        as received_human 
-from %s where school_year = "%s" order by date_received', 
+                        as received_human ,
+count(auction_donation_item_id) as count
+from %s where school_year = "%s" group by date_received order by date_received', 
                         $this->__table,
                         $co->getChosenSchoolYear()));
                 while($dates->obj->fetch()){
-                    $printed_dates[$dates->obj->date_received] = $dates->obj->received_human;
+                    $printed_dates[$dates->obj->date_received] = 
+                        sprintf('%s (%2d items)', 
+                                $dates->obj->received_human,
+                                $dates->obj->count);
                 }
             
                 // do this AFTER the query, so that NOT YET
