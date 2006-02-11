@@ -14,12 +14,6 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
-BUGS
-	i can't delete the last auction item in a package
-	they can't delete L08
-	they also can't delete d100000000000
-		package id 436
-
 			
 ??PHP
 packages
@@ -6278,3 +6272,7 @@ rsvps DONE		view perms, dammit. treat like user/groups join?
 		fuck, i can't find dominuts either. why?
 		123 rows, got 'em all
 			aha. safe_id. duh.
+	i can't delete the last auction item in a package
+	they can't delete L08
+	they also can't delete d100000000000
+		package id 436

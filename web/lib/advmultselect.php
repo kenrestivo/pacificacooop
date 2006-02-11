@@ -43,6 +43,10 @@
                $strHtmlHidden = '<select name="' . $this->getName() .
 				   "[]\" multiple=\"multiple\" style=\"overflow: hidden; visibility: hidden; display: none; width: 0px; height: 0px;\">\n";
 
+               // makes validators happy
+               // ALWAYS make this the first value!!
+               $strHtmlHidden .= '<option value="0">Nothing</option>';
+
 
                foreach ($this->_options as $option) {
                    if (is_array($this->_values) &&
@@ -141,6 +145,10 @@
                            menuHidden.options[menuHidden.length] = new Option(menuSelected.options[i].text, menuSelected.options[i].value);
                            menuHidden.options[menuHidden.length-1].selected = true;
                        }
+    if(menuHidden.selectedIndex < 0){
+        menuHidden.options[0].selected = true;
+    }
+
                    }
                    /* end javascript for HTML_QuickForm_advmultselect */
                ",

@@ -694,13 +694,14 @@ class coopForm extends CoopObject
                     if(devSite()){
                         $this->page->printDebug("CoopForm::processCrossLinks({$this->table}) $longtf is not set in vars! You probably don't have javascript. Or something is wrong. Escaping!! Run away!!", 1);
                     } else {
-                        $this->page->mailError('Someone editing without javascript, or you have a in CoopForm::processCrossLinks()!',
+                        $this->page->mailError('Someone editing without javascript, or you have a bug in CoopForm::processCrossLinks()!',
                                                print_r($this, true));
                     }
                     continue;  // 
  				}
 
-				//print "mt $mt tf $tf ft $ft nk $nk";
+				$this->page->printDebug(
+                    "CoopForm::processCrossLinks({$this->table}) mt: $mt tf $tf ft $ft nk $nk", 2);
 				
 				// yeah, array_diff is the long way with db thrashing.
 				// but i want clear, easily-debugged code
@@ -709,7 +710,10 @@ class coopForm extends CoopObject
 				$this->page->confessArray($indb, 
 										  'CoopForm::processCrossLinks(indb)');
 				$toSave = array_diff($vars[$longtf], $indb);
-				if(count($vars[$longtf]) < count($indb)){
+                // make sure to check for user clearing all! zero value.
+				if(count($vars[$longtf]) < count($indb) || 
+                   array_sum(array_values($vars[$longtf])) < 1)
+                {
 					$toDelete = array_diff($indb, $vars[$longtf]);
 				}
 				$this->page->confessArray($toSave, 
@@ -724,11 +728,19 @@ class coopForm extends CoopObject
 				// save
 				if(is_array($toSave)){
 					foreach($toSave as $saveme){
-						$mid =& new CoopObject(&$this->page, $mt, &$this);
-						$mid->obj->$tf = $saveme;
-						$mid->obj->$nk = $this->id;
-						// TODO: handle schoolyear/other vars here?
-						$mid->obj->insert();
+                        // NEVER insert a zero. TROUBLE will happen
+                        // sure, $this->id should *never* be <1, paranoia saves
+                        if($saveme < 1 || $this->id < 1){
+                            $this->page->printDebug(
+                                "user asked to clear all crosslinks in {$this->table} for $tf, cowardly refusing to save null id into $mt", 
+                                2);
+                            continue;
+                        }
+                        $mid =& new CoopObject(&$this->page, $mt, &$this);
+                        $mid->obj->$tf = $saveme;
+                        $mid->obj->$nk = $this->id;
+                        // TODO: handle schoolyear/other vars here?
+                        $mid->obj->insert();
 					}
 				}
 				
