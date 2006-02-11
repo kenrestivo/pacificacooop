@@ -792,12 +792,21 @@ class coopForm extends CoopObject
 
 				// IIRC this has a different name in FB. use theirs!
                 $far->linkConstraints();
+                $this->page->confessArray(
+                    $this->obj->_query , 
+                    "=== QUERY QUERY QUERY=== CoopForm::find({$this->table} $find) running query", 
+                1);
 
 				$far->obj->find();
 				while($far->obj->fetch()){
                     // XXX will this get safepk'ed?
                     // should i use getoptions instead?
-					$options[(string)$far->obj->$tf] = 
+                    $tid = $far->obj->{'SAFE_'. $tf};
+                    if($tid < 1){
+                        PEAR::raiseError("You have no ID for {$far->table}.$tid",
+                                         666);
+                    }
+					$options[$tid] = 
 							 sprintf('%.42s...', 
 									 htmlentities($far->concatLinkFields()));
 				}
