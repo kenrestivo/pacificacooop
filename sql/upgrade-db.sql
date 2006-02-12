@@ -19,13 +19,11 @@
 -- run the remove query? WHAT remove query?
 
 ----------------------------------------------------
---------- rsvp shit
+--------- rsvp/ticket shit
 INSERT INTO table_permissions (table_name , field_name
 , realm_id , user_level , group_level , menu_level , year_level )
 VALUES
 ('leads_income_join' , NULL, 7 , -1 , -1 , -1 , -1 );
-
---perms
 -- rsvp
 UPDATE user_privileges SET user_id = 0 , year_level = 200
 , menu_level = -1 WHERE user_privileges.privilege_id = 1114;

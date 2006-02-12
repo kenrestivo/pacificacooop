@@ -1,9 +1,9 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
+	tal templates and reports, and json services (templates.txt)
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
-	tal templates and reports, and json services (templates.txt)
 	sortable/searchable/pagable views (searchfeature.txt)
 	json, REST, xmlrpc (jsonselect.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
@@ -13,28 +13,34 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-
-??PHP/SQL
-live/silent/door/balloon sort
-	test and push live!
-
-			
+	
 2 hours PHP
 tickets/rsvps/paddles -- just look at it.
-	in paddles, forbid or autogen the paddle number at "enter new" time
-		postgenerate form, i'd guess
-	for all in tickets, paddles (copy rsvp or auction?)
-		linkconstraints-- limit to families
+	 paddles (copy tickets, probably)
 		alphabetise
+		linkconstraints-- limit to families
 		yearpath and familypath where needed
 			note familyid in tickets IS NOT WHAT I WANT!
 			i have to do it manually
+				THIS WILL SUCK! they will not be able to see their own
+				family_id needed for their-own-reservations
+					as well as for constrainfamily
+						perhaps don't use constrainfamily, use a custom then
 		so people can see their own. this is the only place it is relevant
+		
+	in paddles, forbid or autogen the paddle number at "enter new" time
+		postgenerate form, i'd guess
+		
 	also check that reservation holder thing???
-	add an OR for the family/lead/solicit in the TICKETS
-		probably in paddles too
-	bring back the auto-parent-generating thing, and run it
+
 	in RSVPs, need JS to search by code
+
+		
+??PHP
+ticket/rsvp fixes
+	bring back the auto-parent-generating thing, and run it
+	if it's paid for, dammit, then insist on payment!	
+
 
 
 	
@@ -196,6 +202,10 @@ new design
 		andreas07  http://www.oswd.org/design/preview/id/2426
 		winterheaven: http://www.oswd.org/design/preview/id/2423
 
+
+??PHP
+pager for tickets
+	impossible. the pager requires ONE table, this uses 3
 
 BUGS
 	go back and fix families: 
@@ -553,6 +563,11 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP ticket/rsvp fixes
+	coalesce the damned attendee, noting how they got in
+		instead of three tables for the same thing
+		this is very likely a phptal or raw htmltable thing
 
 ??PHP
 statistics and graphs
@@ -3377,6 +3392,21 @@ i do however WANT to be able to copy the insurance info in!
 ----------------
 NOWHERE
 
+BUGS
+	when refreshing a page with valid errors, kenflex DOES NOT WORK!
+		it is returnign the linkoptions
+		aha, editpermsdecoded has no properties,fucker
+		nasty hack. i just check it's there
+
+BUGS
+	kenflex is choking when more than one in same thing, at least in tickets
+		works FINE in sponsorhsips. wtf?
+		doesn't appear to be posting anything
+		transient error, works fine now
+
+BUGS
+		ticket menu not showing up for families, ever
+			gah, need to add my shit
 BUGS
 	ristorante mare? 422 L04? nothing submitted? wtf?
 
@@ -6319,3 +6349,12 @@ BUGS
 		fuck it, do it in auction items	make package type a link
 	include a column for sort order
 	then sort it everywhere by that... in packages, and public auction
+
+??PHP/SQL
+live/silent/door/balloon sort
+	run tests
+	push live (upgrade.sql)
+	familyid MUST BE DEFAULT NONE in tickets and probably paddles
+	add an OR for the family/lead/solicit in the TICKETS
+		probably in paddles too
+		copy from solicit, really, not hard

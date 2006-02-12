@@ -524,7 +524,8 @@ group by user_id,table_name,field_name";
             
         }
 
-
+    // XXX You had DAMN WELL BETTER have joined the tables in
+    // joinpaths manually using linkConstraints, or this will blow up
     function constrainSchoolYear($force = false)
         {
             if(!empty($this->obj->fb_joinPaths['school_year'])){
@@ -564,7 +565,8 @@ group by user_id,table_name,field_name";
         }
 
 
-
+    // XXX You had DAMN WELL BETTER have joined the tables in
+    // joinpaths manually using linkConstraints, or this will blow up
     function constrainFamily($force = false)
         {
             // handle array case: more than one link to familyid

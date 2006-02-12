@@ -54,8 +54,58 @@ class Tickets extends CoopDBDO
     var $fb_joinPaths = array('family_id' => array('leads:invitations',
                                                    'families'));
 
+    var $fb_defaults = array('family_id' => '',
+                             'ticket_type_id' => COOP_TICKET_TYPE_PAID,
+                             'vip_flag' => 'No'
+                             );
+
+//     WILL NOT WORK!! because i'm concating multiple fields
+//     var $fb_pager =array('method' => 'alpha',
+//                          'keyname' => 'last_name',
+//                          'tablename' => 'leads');
+
+    function fb_linkConstraints(&$co)
+		{
+
+
+
+            $leads =& new CoopObject(&$co->page, 'leads', 
+                                   &$co);
+            $inv =& new CoopObject(&$co->page, 'invitations', 
+                                   &$co);
+            $leads->protectedJoin($inv);
+
+            $co->protectedJoin($leads);
+
+            $income =& new CoopObject(&$co->page, 'income', 
+                                     &$co);
+
+            $co->protectedJoin($income);
+
+            $companies =& new CoopObject(&$co->page, 'companies', 
+                                     &$co);
+
+            $co->protectedJoin($companies);
+
+            $families =& new CoopObject(&$co->page, 'families', 
+                                     &$co);
+            $co->protectedJoin($families);
+
+
+            $co->constrainSchoolYear();
+
+            $co->constrainFamily();
+
+
+            $co->obj->orderBy('coalesce(leads.last_name, companies.company_name, families.name), income.check_date');
+
+            $co->grouper();
+		}
+
 
     // this function is magical, ugly, and weird. i hate it deeply.
+    // did i mention the intensity which which i despise it?
+    // i can't even blame it on PHP. this function is just shit.
 	function updatePaddles(&$co)
 		{
 
@@ -175,6 +225,38 @@ class Tickets extends CoopDBDO
         }
 
 
+    function _onlyOne($vars)
+        {
+            // AHA! need to prependtable!
+            // XXX need to get a coopobject in here somehow
+            if($vars['tickets-lead_id'] > 0 && $vars['tickets-company_id'] > 0
+                && $vars['tickets-family_id'] > 0)
+            {
+                $msg = "You can have ONLY ONE of Invitee Name, or a Company Name, or a Family Name, but two or more.";    
+                $err['tickets-lead_id'] = $msg;
+                $err['tickets-company_id'] = $msg;
+                $err['tickets-family_id'] = $msg;
+                return $err;
+            }
+            
+            if($vars['tickets-lead_id'] <1 && $vars['tickets-company_id'] <1
+                && $vars['tickets-family_id'] <1 )
+            {
+                $msg = "You must have either an Invitee Name, or a Company Name, or a Family (for current members).";
+                $err['tickets-lead_id'] = $msg;
+                $err['tickets-company_id'] = $msg;
+                $err['tickets-family_id'] = $msg;
+                return $err;
+            }
+            
+            return true; 				// copacetic
+        }
+    
+    function postGenerateForm(&$form)
+        {
+            $form->addFormRule(array($this, '_onlyOne'));
+
+        }
 
 
 }

@@ -488,7 +488,7 @@ VALUES
 
 
 
----- ITEMPORARILY YANKED THESE. BECAUSE, i have coding issues
+---- I TEMPORARILY YANKED THESE. BECAUSE, i have coding issues
 INSERT INTO `table_permissions` 
 (table_permissions_id , table_name , field_name , group_id , realm_id , 
 user_level , group_level)

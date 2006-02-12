@@ -204,7 +204,12 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
 
             saver=this.options[this.selectedIndex];
             saveperms = {};
-            saveperms[String(saver.value)] = self.editpermshidden.decoded[saver.value];
+
+            // XXX NASTY HAXCK!
+            if(saver.value && typeof self.editpermshidden.decodes != 'undefined')
+            {
+                saveperms[String(saver.value)] = self.editpermshidden.decoded[saver.value];
+            }
             for ( i=this.length; this.length> 0; i--) {
                 this.remove(i);
             }
