@@ -37,8 +37,13 @@ year_level = 200 , menu_level = -1 WHERE user_privileges.privilege_id = 548;
 UPDATE user_privileges SET year_level = 200 , menu_level
 = -1 WHERE user_privileges.privilege_id = 880;
 INSERT INTO user_privileges (user_id , group_id ,
-user_level , group_level , realm_id , year_level , menu_level ) VALUES 
+user_level , group_level , realm_id , year_level , menu_level )
+VALUES 
 ( 57 , 0 , 700 , 700 , 18 , 200 , -1 );
+-- paddles
+INSERT INTO user_privileges (user_id , group_id ,
+user_level , group_level , realm_id , year_level , menu_level ) 
+VALUES ( 0 , 1 , 200 , 100 , 18 , 200 , 0 );
 
 
 -- ignore for paddles??
