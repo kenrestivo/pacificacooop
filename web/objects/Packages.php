@@ -135,6 +135,21 @@ var $fb_currencyFields = array(
                 array('onchange' => 'setPackageDefaults(this)'));
         }
 
+        function fb_display_view(&$co)
+        {
+            $res ="";
+            
+            if($co->isPermittedField(null, true, true) >=  ACCESS_EDIT){
+                $res .= $co->page->selfURL(
+                    array('value' => 'Change Sort Order',
+                          'inside' => array('action' => 'view',
+                                            'table' => 'package_types',
+                                            'push' => $co->table)));
+            }
+            $res .= $co->simpleTable(true, true);
+            return $res;
+        }
+
 
 // set package_description lines = 3
 
