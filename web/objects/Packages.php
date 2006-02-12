@@ -42,7 +42,7 @@ class Packages extends CoopDBDO
 
     var $fb_shortHeader = 'Packages';
     var $fb_dupeIgnore = array(
-        'package_type',
+        'package_type_id',
         'package_title',
         'package_description',
         'donated_by_text',
@@ -54,7 +54,7 @@ class Packages extends CoopDBDO
 
 	var $fb_fieldLabels = array (
 		"package_id" => "Package ID" ,
-		"package_type" => "Package Type" ,
+		"package_type_id" => "Package Type" ,
 		"package_number" => "Package Number (as it will be printed in program)" ,
 		"package_title" => "Package Title (short)" ,
 		"package_description" => "Package Description (long)" ,
@@ -70,7 +70,7 @@ class Packages extends CoopDBDO
 
 
 var $fb_defaults = array(
-    'package_type' => 'Silent',
+    'package_type_id' => COOP_PACKAGE_TYPE_UNKNOWN,
     'display_publicly' => 'No'
 );
 
@@ -83,7 +83,7 @@ var $fb_currencyFields = array(
 	var $fb_requiredFields = array('package_description', 
 								   'starting_bid', 'bid_increment', 
 								   'school_year',
-								   'package_type', 
+								   'package_type_id', 
 								   'item_type', 'package_number');
 
 

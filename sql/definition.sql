@@ -988,6 +988,7 @@ body longtext
 create table package_types(
 package_type_id int(32) primary key not null unique auto_increment,
 package_type_short varchar(50),
+long_description varchar(255),
 sort_order int(3)
 );
 

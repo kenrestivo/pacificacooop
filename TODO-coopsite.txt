@@ -16,9 +16,6 @@ coop web database
 
 ??PHP/SQL
 live/silent/door/balloon sort
-	make package type a link
-	include a column for sort order
-	then sort it everywhere by that... in packages, and public auction
 	test and push live!
 
 			
@@ -556,6 +553,16 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP
+statistics and graphs
+	package average/median/stddev for price
+		by category: live, silent, etc
+	graph over time
+		checked into garage
+		donated/money
+			by family, solicitation, etc
+
 
 ???PHP
 add arbitrary columns to simpletable
@@ -6309,4 +6316,6 @@ BUGS
 	bring back make-packages
     	use a form with checkboxen. do it in batch mode.
 		i really wish i could add it to the main thing
-		fuck it, do it in auction items
+		fuck it, do it in auction items	make package type a link
+	include a column for sort order
+	then sort it everywhere by that... in packages, and public auction

@@ -23,8 +23,11 @@
 -- seed package types (seed)
 alter table packages add column   package_type_id int(32) default NULL;
 -- run the update query (queries)
+-- THEN push the code live
+-- add table perms (packaging realm)
 alter table packages drop column package_type;
--- add perms for package types: springfest chairs and packaging
+
+
 
 
 -- add table rsvps
