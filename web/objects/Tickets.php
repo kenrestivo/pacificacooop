@@ -41,7 +41,7 @@ class Tickets extends CoopDBDO
 
 	var $fb_formHeaderText = "Springfest Event Reservations";
 
-	var $fb_linkDisplayFields = array('lead_id', 'income_id');
+	var $fb_linkDisplayFields = array('lead_id', 'company_id', 'family_id', 'income_id');
 
 	var $fb_requiredFields = array('ticket_type_id', 'school_year', 
 								   'ticket_quantity');
@@ -171,6 +171,17 @@ class Tickets extends CoopDBDO
 						$pado->obj->lead_id = $this->lead_id;
 					}
 				}
+
+
+				if($this->company_id > 0){
+					// make sure at least one has this leadid
+					$clone->company_id = $this->company_id;
+					$found = $clone->find();
+					if(!$found){
+						$pado->obj->company_id = $this->company_id;
+					}
+				}
+
 
 				$pado->obj->insert();
 			}

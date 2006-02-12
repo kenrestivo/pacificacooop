@@ -35,7 +35,7 @@ class Springfest_attendees extends CoopDBDO
 	var $fb_linkDisplayFields = array('paddle_number');	
 	var $fb_fieldLabels = array (
 		'paddle_number' => 'Paddle Number',
-		'ticket_id' => 'Reservation Holder',
+		'ticket_id' => 'Reservation/Ticket',
 		'lead_id' => 'Invitee',
 		'company_id' => 'Company',
 		'parent_id' => 'Parent',

@@ -20,22 +20,16 @@ tickets/rsvps/paddles -- just look at it.
 		alphabetise
 		linkconstraints-- limit to families
 		yearpath and familypath where needed
-			note familyid in tickets IS NOT WHAT I WANT!
-			i have to do it manually
-				THIS WILL SUCK! they will not be able to see their own
-				family_id needed for their-own-reservations
-					as well as for constrainfamily
-						perhaps don't use constrainfamily, use a custom then
 		so people can see their own. this is the only place it is relevant
 		
-	in paddles, forbid or autogen the paddle number at "enter new" time
+	in paddles, forbid the paddle number at "enter new" time
 		postgenerate form, i'd guess
-		
-	also check that reservation holder thing???
 
 	in RSVPs, need JS to search by code
 
-		
+	what's that weird error when creating the first ticket
+		bug in startpaddleforthisyear? fix it.
+			
 ??PHP
 ticket/rsvp fixes
 	bring back the auto-parent-generating thing, and run it
@@ -563,6 +557,16 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP
+more ticket screwups
+			note familyid in tickets IS NOT WHAT I WANT!
+			i have to do it manually
+				THIS WILL SUCK! they will not be able to see their own
+				family_id needed for their-own-reservations
+					as well as for constrainfamily
+						perhaps don't use constrainfamily, use a custom then
+
 
 ??PHP ticket/rsvp fixes
 	coalesce the damned attendee, noting how they got in
@@ -6358,3 +6362,11 @@ live/silent/door/balloon sort
 	add an OR for the family/lead/solicit in the TICKETS
 		probably in paddles too
 		copy from solicit, really, not hard
+	reservation holder thing in paddles, needs to include companies too
+		or shitcan it
+
+BUGS
+	makepaddle
+		isn't it supposed to default to ticket's fam/lead/company id?
+		well, it ain't
+		it doesn't do company id. it needs to.
