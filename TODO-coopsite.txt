@@ -15,15 +15,6 @@ coop web database
 
 
 			
-??PHP
-packages
-	bring back make-packages
-    	use a form with checkboxen. do it in batch mode.
-		i really wish i could add it to the main thing
-	add the donated by to the view, so i can use it for makepackages
-		NOT easy. where to display it? simpletable balks
-	search/sort by type (auction)
-	search/sort by 	type (packages)
 
 
 
@@ -556,6 +547,13 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP
+packages
+	add the donated by to the view, so i can use it for makepackages
+		NOT easy. where to display it? simpletable balks
+	search/sort by type (auction)
+	search/sort by 	type (packages)
 
 ??PHP
 show the _join tables in confirmdelete
@@ -3355,7 +3353,11 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-		list of orphans only which are received (done)
+	what would a callback do?
+		take co as an arg
+		add a fucking checkbox
+
+				list of orphans only which are received (done)
 			for each one,
 				add it to a package
 				make a new package
@@ -6284,3 +6286,7 @@ BUGS
 	they can't delete L08
 	they also can't delete d100000000000
 		package id 436
+	bring back make-packages
+    	use a form with checkboxen. do it in batch mode.
+		i really wish i could add it to the main thing
+		fuck it, do it in auction items

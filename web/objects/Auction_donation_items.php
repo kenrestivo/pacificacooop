@@ -322,6 +322,45 @@ from %s where school_year = "%s" group by date_received order by date_received',
                 }
 
 
+
+
+
+                ////////package stuff
+                $haspackage =& $co->searchForm->addElement(
+                    'select', 
+                    'has_package', 
+                    'Is Part of a Package?', 
+                    array('%' => 'ALL',
+                          'yes'=>'Belongs to a Package', 
+                          'no' => 'Orphan (No package)'),
+                    array('onchange' =>
+                          'this.form.submit()')) ; 
+
+
+                $co->searchForm->setDefaults(
+                    // NOTE! isset not empty! preserve nulls!
+                    array('has_package' => 
+                          isset($co->page->vars['last']['has_package']) ? $co->page->vars['last']['has_package'] : '%'));
+
+
+                $foo = $haspackage->getValue();
+                $has_package = $foo[0];
+                $co->page->vars['last']['has_package'] = $has_package;
+
+                switch($has_package){
+                case 'yes':
+                    $co->obj->whereAdd('(auction_packages_join.package_id is not null and auction_packages_join.package_id > 0)');
+                    break;
+                case 'no':
+                    $co->obj->whereAdd('(auction_packages_join.package_id is null or auction_packages_join.package_id < 0)');
+                    break;
+                case '%':
+                default:
+                    break;
+                }
+
+
+
                 //////////////////////////////////////
                 // last but not least, my counts and pagers
                 $co->showChooser = 1;
@@ -334,6 +373,11 @@ from %s where school_year = "%s" group by date_received order by date_received',
             } 
 
             $co->linkConstraints();
+
+            //one more thing to add
+            $apj =& new CoopView(&$co->page, 'auction_packages_join', &$co);
+            $co->protectedJoin($apj);
+            
 
             return $co->simpleTable(true,true);
         }
