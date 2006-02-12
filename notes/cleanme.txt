@@ -1,6 +1,11 @@
 random things that really really need to get cleaned up
 
 
+smaller damned font
+	how does this look in exploiter? font-size: 101%
+	http://www.nedbatchelder.com/code/modules/coverage.html
+
+
 send_email needs a rework
 	use TAL to template it: an HTML version and a non-html version
 	or optionally remove html tags
@@ -9,11 +14,6 @@ send_email needs a rework
 		if that's possible in text/diff mode
 			maybe only the textfields
 		but how to format that for email??
-
-
-smaller damned font
-	how does this look in exploiter? font-size: 101%
-	http://www.nedbatchelder.com/code/modules/coverage.html
 
 
 handle changing user logins

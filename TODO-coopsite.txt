@@ -1,12 +1,12 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
+	cleanups and code fixes (cleanme.txt)
+	menu imporovements and documentation (treemenu.txt)
 	tal templates and reports, and json services (templates.txt)
 	sortable/searchable/pagable views (searchfeature.txt)
-	cleanups and code fixes (cleanme.txt)
 	json, REST, xmlrpc (jsonselect.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
-	menu imporovements and documentation (treemenu.txt)
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	import the 20-year roster (20yearroster.txt)
@@ -19,20 +19,12 @@ coop web database
 packages
 	bring back make-packages
     	use a form with checkboxen. do it in batch mode.
-		list of orphans only which are received (done)
-			for each one,
-				add it to a package
-				make a new package
-		the right thing to do would be a drag and drop, methinks
+		i really wish i could add it to the main thing
 	add the donated by to the view, so i can use it for makepackages
+		NOT easy. where to display it? simpletable balks
 	search/sort by type (auction)
 	search/sort by 	type (packages)
 
-	
-BUGS
-	trying to add items, not all present?
-		i can't duplicate this
-		try on IE?
 
 
 ?? cleanups
@@ -3363,6 +3355,18 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+		list of orphans only which are received (done)
+			for each one,
+				add it to a package
+				make a new package
+		the right thing to do woul d be a drag and drop, methinks
+			let's say i add a callback, i can't add a lambda
+
+BUG
+	aha! i didn't use javascript for this zero dummy thing, so WATCH OUT!
+		maybe create a dummy javascript-only field?
+			hmm. seems to be OK. i hope. BECAUSE THE ZERO IS UNSELECTED!
+				if someone selects somethin, without javascript, all bets are aoff
 
 surfboard
 	200x208 for small, 845x877 for large
@@ -6268,6 +6272,10 @@ bring the raffle stuff back in
 rsvps DONE		view perms, dammit. treat like user/groups join?
 	deleting package: dependencies present but not shown
 	search/sort by not received
+BUGS
+	trying to add items, not all present?
+		i can't duplicate this
+		try on IE?
 	they can't find dominuts
 		fuck, i can't find dominuts either. why?
 		123 rows, got 'em all

@@ -51,15 +51,17 @@ class Auction_donation_items extends CoopDBDO
 
 	var $fb_formHeaderText =  'Springfest Auction Donation Items';
 
-// XXX these appear to be broken! go fix.
-// 	var $fb_crossLinks = array(array('table' => 'auction_items_families_join', 
+
+	var $fb_crossLinks = array(
+// XXX this appears to be broken! go fix.
+// array('table' => 'auction_items_families_join', 
 // 									 'toTable' => 'families',
-// 									 'toField' => 'auction_item_id',
+// 									 'toField' => 'family_id',
 // 									 'type' => 'select'),
-//                                array('table' => 'auction_packages_join', 
-// 									 'toTable' => 'packages',
-// 									 'toField' => 'package_id',
-// 									 'type' => 'select'));
+                               array('table' => 'auction_packages_join', 
+									 'toTable' => 'packages',
+									 'toField' => 'package_id',
+									 'type' => 'select'));
 
 
 	var $fb_requiredFields = array('short_description',
@@ -100,23 +102,32 @@ class Auction_donation_items extends CoopDBDO
 		{
             $auc =& new CoopObject(&$co->page, 'auction_items_families_join', 
                                        &$co);
-            $co->constrainSchoolYear();
-            $co->constrainFamily();
+
+
+            $fam =& new CoopObject(&$co->page, 'families', &$co);
+
+            $auc->protectedJoin($fam);
             $co->protectedJoin($auc);
 
             //and go get the donor
 
-//             // TODO: add company join too, so i knwo who donated
-//             $companies =& new CoopObject(&$co->page, 'companies', 
-//                                    &$co);
-//             $caj =& new CoopObject(&$co->page, 'companies_auction_join', 
-//                                    &$co);
-//             $co->protectedJoin($caj);
+            //  add company join too, so i knwo who donated
+            $caj =& new CoopObject(&$co->page, 'companies_auction_join', 
+                                   &$co);
+            $companies =& new CoopObject(&$co->page, 'companies', 
+                                   &$co);
+            $caj->protectedJoin($companies);
 
-            /// XXX HACK! NEED THIS IF I LINK IN COMPANIES!!
-            /// because companies have a family_id.. ambiguous!
+            $co->protectedJoin($caj);
+            
+//             XXX HACK! NEED THIS IF I LINK IN COMPANIES!!
+//             because companies have a family_id.. ambiguous!
 
             $this->selectAdd('auction_items_families_join.family_id as family_id');
+
+            $co->constrainSchoolYear();
+            $co->constrainFamily();
+
             $co->orderByLinkDisplay();
             $co->grouper();
 		}

@@ -318,7 +318,7 @@ function hackvalues(o) {
 
 /////////
 addScript('http://www/coop-dev/lib/JsonRpc.js');
-p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
+p = new JsonRpcProxy('http://www/coop-dev/tests/dispatchproxy.php',
                      ['echotest', 'getPage', 'throwError', 
                       'throwPEARError', 'nothing']);
 
@@ -332,7 +332,7 @@ undefer(p.nothing());
 
 
 /// subform test!
-p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php',
+p = new JsonRpcProxy('http://www/coop-dev/tests/dispatchproxy.php',
                      ['getPage', 'dispatchTable']);
 undefer(p.getPage());
 
@@ -343,7 +343,7 @@ subform=n.document.getElementsByTagName('body')[0].appendChild(DIV({id:'subform'
 p.dispatchTable({action : 'add', table : 'ads'}).addCallback(function(data){ subform.innerHTML = data});
 
 
-p = new JsonRpcProxy('http://www/coop-dev/dispatchproxy.php')
+p = new JsonRpcProxy('http://www/coop-dev/tests/dispatchproxy.php')
 p.call('methodList').addCallback(function(data){p.addMethods(values(data))});
 
 
@@ -517,3 +517,4 @@ tuplesplit = function(i){
 map(tuplesplit, w.location.search.slice(1).split('&'));
 
 'fooa'.slice(1)
+ 

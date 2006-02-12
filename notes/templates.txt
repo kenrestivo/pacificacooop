@@ -1,6 +1,13 @@
 template engine notes
 
 
+things which suck, a lot, about simpletable
+	trying to add a column which isn't in the db. or a button callback
+		thank you
+		make-packages
+		parent ed
+
+
 revise the whole model
 	think in terms of everything generating s-expressions: nested dicts
 		which can then be implemented via TAL/kid/smarty templates

@@ -821,7 +821,7 @@ class coopForm extends CoopObject
                     // should i use getoptions instead?
                     $tid = $far->obj->{'SAFE_'. $tf};
                     if($tid < 1){
-                        PEAR::raiseError("You have no ID for {$far->table}.$tid",
+                        PEAR::raiseError("CoopForm::addCrossLinks({$this->table}) you have no ID for {$far->table}.{$tf}",
                                          666);
                     }
 					$options[$tid] = 
