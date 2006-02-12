@@ -70,7 +70,7 @@ class Packages extends CoopDBDO
 
 
 var $fb_defaults = array(
-    'package_type_id' => COOP_PACKAGE_TYPE_UNKNOWN,
+    'package_type_id' => COOP_PACKAGE_TYPE_SILENT,
     'display_publicly' => 'No'
 );
 
