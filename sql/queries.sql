@@ -2115,4 +2115,11 @@ where packages.package_id is null;
 
 
 
+--- update packages for new thing (one time only)
+update packages 
+left join package_types 
+    on packages.package_type = package_types.package_type_short 
+set packages.package_type_id = package_types.package_type_id
+
+
 --- EOF

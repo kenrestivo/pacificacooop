@@ -373,6 +373,12 @@ from %s where school_year = "%s" group by date_received order by date_received',
             } 
 
             $co->linkConstraints();
+            
+//             $co->obj->selectAdd(
+//                 'concat(families.name, companies.company_name) as donor');
+
+//             array_push($co->obj->preDefOrder, 'donor');
+//             $co->obj->fb_fieldLabels['donor'] = 'Donated By';
 
             //one more thing to add
             $apj =& new CoopView(&$co->page, 'auction_packages_join', &$co);

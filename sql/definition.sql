@@ -424,8 +424,7 @@ CREATE TABLE nags (
 
 CREATE TABLE packages (
   package_id int(32) NOT NULL unique auto_increment,
-  package_type enum('Unknown','Live','Silent','Balloon','Flat Fee', 'Door Prize') 
-    default NULL,
+  package_type_id int(32) default NULL,
   package_number varchar(20) default NULL,
   package_title varchar(255) default NULL,
   package_description longtext,
@@ -984,6 +983,15 @@ minutes_id int(32) primary key not null unique auto_increment,
 calendar_event_id int(32),
 body longtext
 );
+
+
+create table package_types(
+package_type_id int(32) primary key not null unique auto_increment,
+package_type_short varchar(50),
+sort_order int(3)
+);
+
+
 
 
 -- EOF

@@ -25,6 +25,7 @@ class Packages extends CoopDBDO
     var $wish_list;                       // string(3)  enum
     var $display_publicly;                // string(3)  enum
     var $_cache_package_description;      // string(255)  
+    var $package_type_id;                 // int(32)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -96,6 +97,17 @@ var $fb_currencyFields = array(
    );
 
     var $fb_extraDetails = array('auction_packages_join:auction_donation_items');
+
+
+    function fb_linkConstraints(&$co)
+		{
+            $par = new CoopObject(&$co->page, 'package_types', &$co);
+            $co->protectedJoin($par);
+            $co->constrainSchoolYear();
+            $co->obj->orderBy('package_types.sort_order, packages.package_number, packages.package_title, packages.package_description');
+
+        }
+    
 
     function postGenerateForm(&$form)
         {

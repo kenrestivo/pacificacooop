@@ -2,7 +2,7 @@ coop web database
 
  MY agenda! dammit, mine! for a change....
 	cleanups and code fixes (cleanme.txt)
-	menu imporovements and documentation (treemenu.txt)
+	menu improvements and documentation (treemenu.txt)
 	tal templates and reports, and json services (templates.txt)
 	sortable/searchable/pagable views (searchfeature.txt)
 	json, REST, xmlrpc (jsonselect.txt)
@@ -14,32 +14,39 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
+??PHP/SQL
+live/silent/door/balloon sort
+	make package type a link
+	include a column for sort order
+	then sort it everywhere by that... in packages, and public auction
+	test and push live!
+
 			
-
-
-
-?? cleanups
-	non-auction
-		that surfboard doesn't belong, put in indulgence instead
-	fix the damnd STRONG in blog entry add instructions dammit. annoying.
-
 2 hours PHP
 tickets/rsvps/paddles -- just look at it.
-	for all in tickets, paddles
-		linkconstraints
+	in paddles, forbid or autogen the paddle number at "enter new" time
+		postgenerate form, i'd guess
+	for all in tickets, paddles (copy rsvp or auction?)
+		linkconstraints-- limit to families
 		alphabetise
 		yearpath and familypath where needed
 			note familyid in tickets IS NOT WHAT I WANT!
 			i have to do it manually
 		so people can see their own. this is the only place it is relevant
-	in paddles, forbid or autogen the paddle number at "enter new" time
-		postgenerate form, i'd guess
-	also check that reservation holder thing
+	also check that reservation holder thing???
 	add an OR for the family/lead/solicit in the TICKETS
 		probably in paddles too
 	bring back the auto-parent-generating thing, and run it
+	in RSVPs, need JS to search by code
 
 
+	
+?? data cleanups
+	non-auction
+		that surfboard doesn't belong, put in indulgence instead
+	fix the damnd STRONG in blog entry add instructions dammit. annoying.
+	
+	
 ??PHP
 bring in-kind donations back
 		then move the wine/cider/etc to it
@@ -52,8 +59,9 @@ parent ed (parented.txt)
 
 
 ???PHP/PYTHON/CSS (day)
-package sheet printing -- FUN with CSS or PDF!
-		using pdf? html? formatting?
+package sheet printing -- some with CSS or PDF!
+	that means either i need python or phptal to work!
+	using pdf? html? formatting?
 
 
 -----------
@@ -104,6 +112,7 @@ PERMS BUGS!!
 
 
 BUGS
+	html in advmultiselect items
 	when you edit something without changing it, notices still go out!
 	schoolyearchooser on details makes no sense in most cases
 		but it does make sense in others. odd.
@@ -547,6 +556,13 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+???PHP
+add arbitrary columns to simpletable
+	package or donor or make-package for auction
+	coopview::toarray() change
+		use displaycallback?
+		or, step thru headerkeys not row!
 
 ??PHP
 packages
@@ -3353,7 +3369,11 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	what would a callback do?
+
+BUGS
+	ristorante mare? 422 L04? nothing submitted? wtf?
+
+		what would a callback do?
 		take co as an arg
 		add a fucking checkbox
 

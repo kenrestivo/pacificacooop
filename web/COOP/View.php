@@ -167,8 +167,6 @@ class coopView extends CoopObject
 			return $this->tableTitle($tab->toHTML());
 	
 		}
-
-
 	
     // the $find arg is whether to actually do the object find.
     // note that it's default false (assuming the caller found already),

@@ -473,6 +473,21 @@ insert into counters set
             school_year = '2004-2005',
             counter = 1;
 
+
+--- package types
+INSERT INTO  package_types
+(package_type_id, package_type_short, sort_order)
+VALUES 
+(1,'Live', 1),
+(2,'Silent', 2),
+(3,'Door Prize', 3),
+(4,'Balloon', 4),
+(5,'Flat Fee', 5),
+(6,'Unknown', 6 )
+;
+
+
+
 ---- ITEMPORARILY YANKED THESE. BECAUSE, i have coding issues
 INSERT INTO `table_permissions` 
 (table_permissions_id , table_name , field_name , group_id , realm_id , 
@@ -813,6 +828,9 @@ insert into instructions
 (table_name, action, instruction)
 values
 ('invitations', 'add', 'Every family must provide the names of people who should be invited to attend or donate to Springfest. These can be family, friends, business associates, etc. They will be sent formal invitations on behalf of the School. Only those names you invite (plus alumni) will be invited this year. The people you invite will not be invited ever again, unless you return to the school and re-invite them. First try the search feature below, if the name is already in the database it helps to keep it clean without duplicates. If the name is not already in there, then click "Add New Contact>>" to enter it. Also try to invite family and friends; alumni will be automatically invited anyway.');
+
+
+
 
 
 -- EOF

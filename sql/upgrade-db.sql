@@ -19,8 +19,16 @@
 -- run the remove query? WHAT remove query?
 
 
+-- add package types (definition)
+-- seed package types (seed)
+alter table packages add column   package_type_id int(32) default NULL;
+-- run the update query (queries)
+alter table packages drop column package_type;
+-- add perms for package types: springfest chairs and packaging
+
+
 -- add table rsvps
 -- past year perms for (tickets rsvps paddles)
--- all family view perms for tickets and rsvps, all years too
+-- all family view perms for tickets and rsvps, all years too2
 -- erin/debbie perms for tickets/rsvps/paddles too
 

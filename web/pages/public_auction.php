@@ -112,10 +112,11 @@ function auctionItems(&$cp, $sy)
 	$q = sprintf('select package_number, package_title, package_description,
         package_value
         from packages
+        left join package_types on packages.package_type_id = package_types.package_type_id
 		where display_publicly = "Yes"
 				and school_year = "%s"
-        order by package_type, package_number, package_title, 
-			package_description', $sy);
+order by package_types.sort_order, packages.package_number, packages.package_title, packages.package_description',
+                 $sy);
 
 	$listq = mysql_query($q);
 	$i = 0;
