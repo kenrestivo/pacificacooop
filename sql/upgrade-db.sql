@@ -18,20 +18,32 @@
 
 -- run the remove query? WHAT remove query?
 
+----------------------------------------------------
+--------- rsvp shit
+INSERT INTO table_permissions (table_name , field_name
+, realm_id , user_level , group_level , menu_level , year_level )
+VALUES
+('leads_income_join' , NULL, 7 , -1 , -1 , -1 , -1 );
 
--- add package types (definition)
--- seed package types (seed)
-alter table packages add column   package_type_id int(32) default NULL;
--- run the update query (queries)
--- THEN push the code live
--- add table perms (packaging realm)
-alter table packages drop column package_type;
+--perms
+-- rsvp
+UPDATE user_privileges SET user_id = 0 , year_level = 200
+, menu_level = -1 WHERE user_privileges.privilege_id = 1114;
+ UPDATE user_privileges SET year_level = 200 , menu_level
+= -1 WHERE user_privileges.privilege_id = 543;
+UPDATE user_privileges SET user_id = 57 , group_id = 0 ,
+year_level = 200 , menu_level = -1 WHERE user_privileges.privilege_id = 548;
+-- tickets
+UPDATE user_privileges SET year_level = 200 , menu_level
+= -1 WHERE user_privileges.privilege_id = 880;
+INSERT INTO user_privileges (user_id , group_id ,
+user_level , group_level , realm_id , year_level , menu_level ) VALUES 
+( 57 , 0 , 700 , 700 , 18 , 200 , -1 );
 
 
+-- ignore for paddles??
+-- UPDATE table_permissions SET field_name = NULL ,
+-- group_level = -1 WHERE table_permissions.table_permissions_id = 54;
 
 
--- add table rsvps
--- past year perms for (tickets rsvps paddles)
--- all family view perms for tickets and rsvps, all years too2
--- erin/debbie perms for tickets/rsvps/paddles too
 
