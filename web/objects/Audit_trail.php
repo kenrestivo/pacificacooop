@@ -302,7 +302,7 @@ class Audit_trail extends CoopDBDO
             if($sub->isPermittedField() < ACCESS_VIEW){
                 return '(Not permitted)';
             }
-            return htmlentities($sub->concatLinkFields());
+            return htmlentities(unHTML(strip_tags($sub->concatLinkFields())));
         }
 
 
