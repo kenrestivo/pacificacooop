@@ -2122,4 +2122,11 @@ left join package_types
 set packages.package_type_id = package_types.package_type_id
 
 
+--- heh
+update leads 
+set do_not_contact = now() where lead_id in 
+(1721,1023,857,871,1750,1751,722,421,834,957)
+
+
+
 --- EOF

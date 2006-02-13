@@ -278,5 +278,23 @@ class Tickets extends CoopDBDO
 
         }
 
+    function fb_display_view(&$co)
+        {
+            return $this->swapView(&$co) . $co->simpleTable(true,true);
+        }
+
+    function beforeForm(&$co)
+        {
+            return $this->swapView(&$co);
+        }
+
+    function swapView(&$co)
+        {
+            return $co->page->selfURL(
+                array('value' => 'Switch to NON-ATTENDING RSVPs instead of tickets',
+                      'inside' => array(
+                          'action' => $co->page->vars['last']['action'],
+                          'table' => 'leads_income_join' )));
+        }
 
 }

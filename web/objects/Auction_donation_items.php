@@ -136,13 +136,15 @@ class Auction_donation_items extends CoopDBDO
 
     function postGenerateForm(&$form)
         {
-//              $form->addRule($form->CoopForm->prependTable('item_description'), 
-//                             'Do not enter "cash donation" here. Simply write your check and hand it to the Springfest Coordinators, and you will be removed from this list.', 'regex', '/.*?(?!cash).*?/i', 'client');
-//              $form->addRule($form->CoopForm->prependTable('item_description'), 
+
+// TODO: wrap this in an ispermittedfield, whack it for anyone with group edit
 //                             'Need more description, please make it sound attractive to potential buyers. At least 40 characters long.', 
 //                             'minlength', 40, 'client');
 
 
+//              $form->addRule($form->CoopForm->prependTable('item_description'), 
+//                             'Do not enter "cash donation" here. Simply write your check and hand it to the Springfest Coordinators, and you will be removed from this list.', 'regex', '/.*?(?!cash).*?/i', 'client');
+//              $form->addRule($form->CoopForm->prependTable('item_description'), 
         }
 
     function afterForm(&$co)
@@ -378,7 +380,7 @@ from %s where school_year = "%s" group by date_received order by date_received',
             $co->linkConstraints();
             
 //             $co->obj->selectAdd(
-//                 'concat(families.name, companies.company_name) as donor');
+-//                 'concat(families.name, companies.company_name) as donor');
 
 //             array_push($co->obj->preDefOrder, 'donor');
 //             $co->obj->fb_fieldLabels['donor'] = 'Donated By';

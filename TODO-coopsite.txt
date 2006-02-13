@@ -14,35 +14,54 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
-??PHP
-paddles
-	flip back and forth between rsvp/tickets, selfurl
-
-		
-	
 BUGS
-	why are some invitees missing from paddles? fucking paddles.
-	rsvps for non-root famlies: WARNINGS! need constraints
 	constrain income, dammit, i think, in rsvp/tickets
-	why no edit on income, goddammit?! should link to an edit
-		fucking editperms, i suspect
-	returned address
-
+		constrain it in ENTERING the same way i constrian it for VIEWING
+		otherwise they can paint themselves into a corner
 
 	
+??PHP
+bring in-kind donations back
+		then move the wine/cider/etc to it
+
+
+??PHP
+flip back and forth between rsvp/tickets, selfurl
+	try with no push
+	make sure it appears in new and edit too, not just view
+
+	
+??PHP
+returned address
+	just take a list of numbers and confirm, then DNC = now() them
+	first show them and allow editing, though GAH i hate stateless PHP crap
+		
+
 ??PHP/Python
 the VIP list import! dammit. i need those in there
 	import them, i have the list already
 	fuck, there's only 20, do it manually goddammit
 
-						
+
 ??PHP
 ticket/rsvp fixes
 	bring back the auto-parent-generating thing, and run it
 	update it to note PAID FOR for the ticket, go grab from food/raffle fee
 	if it's paid for, dammit, then insist on payment!	
 
+				
+BUGS
+	why are some invitees missing from paddles? fucking paddles.
+	why no edit on income, goddammit?! should link to an edit
+		fucking editperms, i suspect. ONLY on new. edit is fine.
+		it doesn't show at pageload time! no link.
+			fucking customselect? works for jobs tho!
+			searchselect works!
+			what up with this?
+			my weird customconstrained in solicit cash is borken too!
+				WHY ONLY INCOME!!??
 
+	
 
 	
 ?? data cleanups
@@ -51,9 +70,6 @@ ticket/rsvp fixes
 	fix the damnd STRONG in blog entry add instructions dammit. annoying.
 	
 	
-??PHP
-bring in-kind donations back
-		then move the wine/cider/etc to it
 
 
 ??PHP/SQL
@@ -565,6 +581,10 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+??PHP
+bring back the auction description length constraint
+	BUT wrap it in an ispermittedfield first
+	yank it for those with group edit perms
 
 ??JABBASCRIPT/PHP
 customsel do not submit the fucking editperms goddammit!
@@ -6419,3 +6439,4 @@ BUGS
 18 hours PHP
 tickets/rsvps/paddles -- just look at it.
 	enter the damned things!
+	rsvps for non-root famlies: WARNINGS! need constraints

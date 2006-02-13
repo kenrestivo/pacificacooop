@@ -118,4 +118,26 @@ class Leads_income_join extends CoopDBDO
             $el->searchByID =  'RSVP Code';
         }
 
+
+
+    function fb_display_view(&$co)
+        {
+            return $this->swapView(&$co) . $co->simpleTable(true,true);
+        }
+
+    function beforeForm(&$co)
+        {
+            return $this->swapView(&$co);
+        }
+
+
+    function swapView(&$co)
+        {
+            return $co->page->selfURL(
+                array('value' => 'Switch to TICKETS instead of random donations',
+                      'inside' => array(
+                          'action' => $co->page->vars['last']['action'],
+                          'table' => 'tickets' )));
+        }
+
 }
