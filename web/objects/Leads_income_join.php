@@ -107,10 +107,7 @@ class Leads_income_join extends CoopDBDO
         {
             $el =& $form->getElement(
                 $form->CoopForm->prependTable('lead_id'));
-            if($form->CoopForm->isPermittedField() >= ACCESS_EDIT){
-                $el->searchByID =  'RSVP Code';
-            }
-
+            $el->searchByID =  'RSVP Code';
         }
 
 }

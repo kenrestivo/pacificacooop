@@ -237,7 +237,9 @@ class Auction_donation_items extends CoopDBDO
             $res = "";
 
             $pkgs = new CoopView(&$co->page, 'packages', &$co);
-            $pkgs->obj->whereAdd('package_type = "Live"');
+            $pkgs->obj->whereAdd(sprintf('%s.package_type_id = %d', 
+                                         $pkgs->table,
+                                         COOP_PACKAGE_TYPE_LIVE));
             
             $tab= new HTML_Table();
 			$tab->altRowAttributes(1, 'class="altrow1"', 

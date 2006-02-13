@@ -269,6 +269,10 @@ class Tickets extends CoopDBDO
     function postGenerateForm(&$form)
         {
             $form->addFormRule(array($this, '_onlyOne'));
+            $el =& $form->getElement(
+                $form->CoopForm->prependTable('lead_id'));
+            $el->searchByID =  'RSVP Code';
+                
 
         }
 
