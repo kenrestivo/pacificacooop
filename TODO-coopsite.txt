@@ -13,16 +13,10 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-
+	
 		
 2 hours PHP
 tickets/rsvps/paddles -- just look at it.
-	in RSVPs and tickets, need JS to search by code
-		extension to kenflex??!
-		put a searchbox in there
-			perms? how to know when it is OK to do that?
-			naw, postgenform
-
 	test the permissions stuff from upgrade before pushing
 	what's that weird error when creating the first ticket
 		bug in startpaddleforthisyear? fix it.
@@ -6392,3 +6386,12 @@ BUGS
 		linkconstraints-- limit to families
 		yearpath and familypath where needed
 		so people can see their own. this is the only place it is relevant
+	in RSVPs and tickets, need JS to search by code
+		extension to kenflex??!
+		put a searchbox in there
+			perms? how to know when it is OK to do that?
+			naw, postgenform
+
+BUGS
+	options should be escaped. why aren't they?
+		they are now!

@@ -821,8 +821,9 @@ class coopForm extends CoopObject
 
 				$far->obj->find();
 				while($far->obj->fetch()){
-                    // XXX will this get safepk'ed?
-                    // should i use getoptions instead?
+                    // NOTE! i CANNOT use $this->recoverSafePK()
+                    // because i'm not using PK, i'm using $tf,
+                    // which may be different
                     $tid = $far->obj->{'SAFE_'. $tf};
                     if($tid < 1){
                         PEAR::raiseError("CoopForm::addCrossLinks({$this->table}) you have no ID for {$far->table}.{$tf}",
@@ -830,7 +831,7 @@ class coopForm extends CoopObject
                     }
 					$options[$tid] = 
 							 sprintf('%.42s...', 
-									 htmlentities($far->concatLinkFields()));
+									 htmlentities(unHTML(strip_tags($far->concatLinkFields()))));
 				}
 				
 	
