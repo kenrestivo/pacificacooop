@@ -42,12 +42,20 @@ class Leads_income_join extends CoopDBDO
 		{
             $auc =& new CoopObject(&$co->page, 'income', 
                                    &$co);
-            $auc->constrainSchoolYear();
             $co->protectedJoin($auc);
+
+            $inv =& new CoopObject(&$co->page, 'invitations', 
+                                   &$co);
+
             $leads =& new CoopObject(&$co->page, 'leads', 
                                    &$co);
+            $leads->protectedJoin($inv);
+
             $co->protectedJoin($leads);
 
+            $co->constrainSchoolYear();
+
+            $co->constrainFamily();
            // TODO: somehow make orderbylinkdisplay() recursive
             $co->obj->orderBy('leads.last_name, leads.first_name,  leads.company, income.check_date');
             $co->grouper();

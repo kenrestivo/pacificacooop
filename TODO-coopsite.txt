@@ -13,17 +13,29 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-	
-		
-2 hours PHP
-tickets/rsvps/paddles -- just look at it.
-	test the permissions stuff from upgrade before pushing
-	what's that weird error when creating the first ticket
-		bug in startpaddleforthisyear? fix it.
-	push live
-	enter the damned things!
 
-					
+??PHP
+paddles
+	flip back and forth between rsvp/tickets, selfurl
+
+		
+	
+BUGS
+	why are some invitees missing from paddles? fucking paddles.
+	rsvps for non-root famlies: WARNINGS! need constraints
+	constrain income, dammit, i think, in rsvp/tickets
+	why no edit on income, goddammit?! should link to an edit
+		fucking editperms, i suspect
+	returned address
+
+
+	
+??PHP/Python
+the VIP list import! dammit. i need those in there
+	import them, i have the list already
+	fuck, there's only 20, do it manually goddammit
+
+						
 ??PHP
 ticket/rsvp fixes
 	bring back the auto-parent-generating thing, and run it
@@ -3398,6 +3410,10 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	vip should flag automatically based on lead or invite vip flag
+		gah, isn't one
+		ah! that javascript warning happens when there is a NEW record?
+		duplicate it? ah, not an error. happens whenever adding new
 	kenflex can get VERY confused when dealing with error reloads
 		i hacked around it, with a try/catch
 		
@@ -6394,4 +6410,12 @@ BUGS
 
 BUGS
 	options should be escaped. why aren't they?
-		they are now!
+		they are now!	test the permissions stuff from upgrade before pushing
+	what's that weird error when creating the first ticket
+		bug in startpaddleforthisyear? fix it.
+	push live
+	go check that i got 'em right
+
+18 hours PHP
+tickets/rsvps/paddles -- just look at it.
+	enter the damned things!

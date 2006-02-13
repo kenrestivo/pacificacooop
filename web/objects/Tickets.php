@@ -41,7 +41,9 @@ class Tickets extends CoopDBDO
 
 	var $fb_formHeaderText = "Springfest Event Reservations";
 
-	var $fb_linkDisplayFields = array('lead_id', 'company_id', 'family_id', 'income_id');
+	var $fb_linkDisplayFields = array('lead_id', 'company_id', 
+                                      'family_id', 'ticket_quantity', 
+                                      'income_id');
 
 	var $fb_requiredFields = array('ticket_type_id', 'school_year', 
 								   'ticket_quantity');
