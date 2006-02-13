@@ -49,16 +49,14 @@ class Springfest_attendees extends CoopDBDO
 	var $fb_selectAddEmpty = array ('lead_id', 'parent_id', 'company_id',
 									'ticket_id');
 	var $fb_formHeaderText =  'Springfest Attendees';
-	var $fb_fieldsToRender = array ('paddle_number' , 'ticket_id' , 
-									'lead_id' , 'company_id', 'parent_id',
-									'attended'
-		);
 	
     var $fb_shortHeader = 'Paddles';
+
+    var $fb_fieldsToUnRender = array('temp_name');
     
     var $fb_requiredFields = array(
-        'springfest_attendee_id',
-        'school_year'
+        'school_year',
+        'ticket_id'
         );
 
     var $fb_joinPaths = array('family_id' => array('parents',
@@ -66,6 +64,7 @@ class Springfest_attendees extends CoopDBDO
                                                    'companies'));
 
 
+    var $fb_defaults = array('entry_type' => 'Manual');
 
     function fb_linkConstraints(&$co)
 		{
@@ -160,6 +159,9 @@ class Springfest_attendees extends CoopDBDO
     function postGenerateForm(&$form)
         {
             $form->addFormRule(array($this, '_onlyOne'));
+            $el =& $form->getElement($form->CoopForm->prependTable('entry_type'));
+            $el->setValue('Manual');
+
 
             // XXX i should really do this in perms,
             // but perms are broken
