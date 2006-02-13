@@ -697,7 +697,7 @@ class coopForm extends CoopObject
                     // so here i escape out, to avoid that ignoble fate
                     // it's not an error, though, becuase NEW records
                     // will not have $longtf set. drat.
-                    $this->page->printDebug("CoopForm::processCrossLinks({$this->table}) $longtf is not set in vars. You probably don't have javascript, or this is a NEW record.", 1);
+                    $this->page->printDebug("CoopForm::processCrossLinks({$this->table}) $longtf is not set in vars. You probably don't have javascript, or this is a NEW record, so NOT processing crosslinks at all.", 2);
                     continue;  
  				}
 
