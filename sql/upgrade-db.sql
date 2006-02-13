@@ -38,12 +38,30 @@ INSERT INTO user_privileges (user_id , group_id ,
 user_level , group_level , realm_id , year_level , menu_level )
 VALUES 
 ( 57 , 0 , 700 , 700 , 18 , 200 , -1 );
--- paddles
+-- all members should see tickets
 INSERT INTO user_privileges (user_id , group_id ,
 user_level , group_level , realm_id , year_level , menu_level ) 
 VALUES ( 0 , 1 , 200 , 100 , 18 , 200 , 0 );
-
--- also add ticket perms for susan depriest too, and ME!
+-- also add ticket perms for susan depriest and margolistoo,
+-- and ticket and RSVP for ME!
+INSERT INTO user_privileges (user_id , group_id ,
+user_level , group_level , realm_id , year_level , menu_level ) VALUES 
+( 52 , 0 , 700 , 700 , 18 , 200 , 0 );
+INSERT INTO user_privileges (user_id , group_id ,
+user_level , group_level , realm_id , year_level , menu_level ) VALUES 
+( 52 , 0 , 700 , 700 , 7 , 200 , 0 );
+INSERT INTO user_privileges (user_id , group_id ,
+user_level , group_level , realm_id , year_level , menu_level ) VALUES 
+( 77 , 0 , 700 , 700 , 18 , 200 , 0 );
+INSERT INTO user_privileges (user_id , group_id ,
+user_level , group_level , realm_id , year_level , menu_level ) VALUES 
+( 77 , 0 , 700 , 700 , 7 , 200 , 0 );
+INSERT INTO user_privileges (user_id , group_id ,
+user_level , group_level , realm_id , year_level , menu_level ) VALUES 
+( 104 , 0 , 700 , 700 , 18 , 200 , 0 );
+INSERT INTO user_privileges (user_id , group_id ,
+user_level , group_level , realm_id , year_level , menu_level ) VALUES 
+( 104 , 0 , 700 , 700 , 7 , 200 , 0 );
 
 
 -- ignore for paddles??
