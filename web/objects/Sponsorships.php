@@ -92,17 +92,29 @@ class Sponsorships extends CoopDBDO
         {
             // AHA! need to prependtable!
             // XXX need to get a coopobject in here somehow
-            if($vars['sponsorships-lead_id'] > 0 && $vars['sponsorships-company_id'] > 0){
-                $msg = "You can have an Invitee Name, or a Company Name, but not both.";    $err['sponsorships-lead_id'] = $msg;
+
+            $count = 0;
+            foreach(array($vars['sponsorships-lead_id'],
+                          $vars['sponsorships-company_id']) 
+                    as $val)
+            {
+                if($val > 0){
+                    $count++;
+                }
+
+            }
+            if($count > 1){
+                $msg = "You can have an Invitee Name, or a Company Name, but not both.";    
+                $err['sponsorships-lead_id'] = $msg;
                 $err['sponsorships-company_id'] = $msg;
                 return $err;
             }
             
-            if($vars['sponsorships-lead_id'] <1 && $vars['sponsorships-company_id'] <1){
-                $msg = "You must have either an Invitee Name, or a Company Name.";
-                $err['sponsorships-lead_id'] = $msg;
-                $err['sponsorships-company_id'] = $msg;
-                return $err;
+            if($count < 1){
+                    $msg = "You must have either an Invitee Name, or a Company Name.";
+                    $err['sponsorships-lead_id'] = $msg;
+                    $err['sponsorships-company_id'] = $msg;
+                    return $err;
             }
             
             return true; 				// copacetic

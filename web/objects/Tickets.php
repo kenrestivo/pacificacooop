@@ -235,8 +235,12 @@ class Tickets extends CoopDBDO
         {
             // AHA! need to prependtable!
             // XXX need to get a coopobject in here somehow
+
+
+            $count = 0;
             foreach(array($vars['tickets-lead_id'],
-                          $vars['tickets-company_id']) as $val)
+                          $vars['tickets-company_id']) 
+                    as $val)
             {
                 if($val > 0){
                     $count++;

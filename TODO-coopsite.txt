@@ -16,8 +16,7 @@ coop web database
 
 BUGS
 	kenflex can get VERY confused when dealing with error reloads
-	do not submit the fucking editperms goddammit!
-		i thought i fixed this already!
+	customsel do not submit the fucking editperms goddammit!
 
 		
 2 hours PHP
@@ -3400,6 +3399,7 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+			i thought i fixed this already!yeah, in kenflex, not in customsel
 
 BUGS
 	when refreshing a page with valid errors, kenflex DOES NOT WORK!
