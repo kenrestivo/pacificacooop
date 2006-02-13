@@ -202,14 +202,12 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     this.selectBox.cleanBox = function ()
         {
 
+            try{
             saver=this.options[this.selectedIndex];
             saveperms = {};
 
-            // XXX NASTY HAXCK!
-            if(saver.value && typeof self.editpermshidden.decodes != 'undefined')
-            {
-                saveperms[String(saver.value)] = self.editpermshidden.decoded[saver.value];
-            }
+            saveperms[String(saver.value)] = self.editpermshidden.decoded[saver.value];
+            
             for ( i=this.length; this.length> 0; i--) {
                 this.remove(i);
             }
@@ -217,7 +215,9 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
             this.options[0] = saver;
             this.selectedIndex = 0;
             
-            
+            } catch(e){
+                //XXX do something dude!
+            }
 
         }
 

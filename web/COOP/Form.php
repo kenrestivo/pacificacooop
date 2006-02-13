@@ -358,7 +358,6 @@ class coopForm extends CoopObject
 											  $this->table), 
 									  2);
 
-			$old = $this->obj->__clone($this->obj); // copy, not ref!
 
             $from =$this->scrubForSave($vars);
 			$this->obj->setFrom(&$from);
@@ -380,7 +379,7 @@ class coopForm extends CoopObject
 
 			// better way to guess?
 			if($vars[$this->prependTable($this->pk)]){		
-				$this->update($old);
+				$this->update();
                 $type = 'edit';
 			} else {
 				$this->insert();
@@ -461,18 +460,23 @@ class coopForm extends CoopObject
 		}
 
 	
-	function update(&$old)
+	function update()
 		{
 
-            // first, *lots* of sanity czechs
+            
+            $old =& $this->obj->factory($this->table);
+            $old->get($this->id);
 
+            // first, *lots* of sanity czechs
             if($old->{$this->pk} < 1 || $this->obj->{$this->pk} < 1){
 				PEAR::raiseError('no PK for the old or new item. cannot update it', 666);
             }
 
-            if(!$old->find(true)){
-				PEAR::raiseError("save couldn't get its pk. did something else change the record in between editing and saving?", 888);
-			}
+            if($old->{$this->pk} != $this->id){
+				PEAR::raiseError('found PK is different than what is in ID. you have a problem', 666);
+            }
+
+            
             
             // clear any where's in there (only pk!), and put the damned condom on
             $this->obj->whereAdd();

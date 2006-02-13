@@ -34,6 +34,7 @@ class Springfest_attendees extends CoopDBDO
 	// really, this could be a lead, a parent, a ticket, a company. bah.
 	var $fb_linkDisplayFields = array('paddle_number');	
 	var $fb_fieldLabels = array (
+        'springfest_attendee_id' => 'Attendee ID (system internal only)',
 		'paddle_number' => 'Paddle Number',
 		'ticket_id' => 'Reservation/Ticket',
 		'lead_id' => 'Invitee',
@@ -59,6 +60,45 @@ class Springfest_attendees extends CoopDBDO
         'springfest_attendee_id',
         'school_year'
         );
+
+    var $fb_joinPaths = array('family_id' => array('parents',
+                                                   'tickets',
+                                                   'companies'));
+
+
+
+    function fb_linkConstraints(&$co)
+		{
+
+            $leads =& new CoopObject(&$co->page, 'leads', &$co);
+            $co->protectedJoin($leads);
+
+
+            $companies =& new CoopObject(&$co->page, 'companies', &$co);
+
+            $co->protectedJoin($companies);
+
+
+            $parents =& new CoopObject(&$co->page, 'parents', &$co);
+            $co->protectedJoin($parents);
+
+            $tickets =& new CoopObject(&$co->page, 'tickets', &$co);
+            $co->protectedJoin($tickets);
+
+            /// AACHHGH! i hate DBDO. it doesn't know which id to
+            /// use if you have more than one.
+            $co->obj->selectAdd('companies.company_id as company_id, springfest_attendees.lead_id as lead_id');
+
+            $co->constrainSchoolYear();
+
+            $co->constrainFamily();
+
+            $co->obj->orderBy('coalesce(leads.last_name, companies.company_name, parents.last_name), springfest_attendees.ticket_id');
+
+            $co->grouper();
+		}
+
+
 
 	//the paddle number
 	function insert()
@@ -86,8 +126,10 @@ class Springfest_attendees extends CoopDBDO
                 PEAR::raiseError($data->getMessage(), 666);
             }
 
-			//user_error("paddle counter $id", E_USER_NOTICE);
+            //NOTE: don't be a schmuck and try to enter one
+            //the system will override it right here:
 			$this->paddle_number = $id;
+
 			parent::insert();
 		}
 
@@ -114,5 +156,52 @@ class Springfest_attendees extends CoopDBDO
 
         }
 
+
+    function postGenerateForm(&$form)
+        {
+            $form->addFormRule(array($this, '_onlyOne'));
+
+            // XXX i should really do this in perms,
+            // but perms are broken
+            $form->freeze('springfest_attendees-paddle_number');
+
+        }
+
+ 
+    function _onlyOne($vars)
+        {
+
+            // AHA! need to prependtable!
+            // XXX need to get a coopobject in here somehow
+
+            $count = 0;
+            foreach(array($vars['springfest_attendees-lead_id'],
+                          $vars['springfest_attendees-company_id'],
+                          $vars['springfest_attendees-parent_id'])
+                    as $val)
+            {
+                if($val > 0){
+                    $count++;
+                }
+            }
+
+            if($count > 1) {
+                $msg = "You can have ONLY ONE of Invitee Name, or a Company Name, or Parent (for current members), but two or more.";    
+                $err['springfest_attendees-lead_id'] = $msg;
+                $err['springfest_attendees-company_id'] = $msg;
+                $err['springfest_attendees-parent_id'] = $msg;
+                return $err;
+            }
+            
+            if($count < 1){
+                $msg = "You must have either an Invitee Name, or a Company Name, or Parent (for current members).";
+                $err['springfest_attendees-lead_id'] = $msg;
+                $err['springfest_attendees-company_id'] = $msg;
+                $err['springfest_attendees-parent_id'] = $msg;
+                return $err;
+            }
+            
+            return true; 				// copacetic
+        }
 
 }

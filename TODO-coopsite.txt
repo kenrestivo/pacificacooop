@@ -13,26 +13,31 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-	
+
+BUGS
+	kenflex can get VERY confused when dealing with error reloads
+	do not submit the fucking editperms goddammit!
+		i thought i fixed this already!
+
+		
 2 hours PHP
 tickets/rsvps/paddles -- just look at it.
-	 paddles (copy tickets, probably)
-		alphabetise
-		linkconstraints-- limit to families
-		yearpath and familypath where needed
-		so people can see their own. this is the only place it is relevant
-		
-	in paddles, forbid the paddle number at "enter new" time
-		postgenerate form, i'd guess
-
-	in RSVPs, need JS to search by code
+ 
+	in RSVPs and tickets, need JS to search by code
+		extension to kenflex??!
+		put a searchbox in there
+			perms? how to know when it is OK to do that?
+			naw, postgenform
 
 	what's that weird error when creating the first ticket
 		bug in startpaddleforthisyear? fix it.
-			
+
+
+					
 ??PHP
 ticket/rsvp fixes
 	bring back the auto-parent-generating thing, and run it
+	update it to note PAID FOR for the ticket, go grab from food/raffle fee
 	if it's paid for, dammit, then insist on payment!	
 
 
@@ -6370,3 +6375,12 @@ BUGS
 		isn't it supposed to default to ticket's fam/lead/company id?
 		well, it ain't
 		it doesn't do company id. it needs to.
+	in paddles, forbid the paddle number at "enter new" time
+		postgenerate form, i'd guess? just whack it on new
+		this should be done with perms. it's always read-only
+
+	 paddles (copy tickets, probably)
+		alphabetise
+		linkconstraints-- limit to families
+		yearpath and familypath where needed
+		so people can see their own. this is the only place it is relevant

@@ -69,26 +69,21 @@ class Tickets extends CoopDBDO
 
 
 
-            $leads =& new CoopObject(&$co->page, 'leads', 
-                                   &$co);
-            $inv =& new CoopObject(&$co->page, 'invitations', 
-                                   &$co);
+            $leads =& new CoopObject(&$co->page, 'leads', &$co);
+            $inv =& new CoopObject(&$co->page, 'invitations', &$co);
             $leads->protectedJoin($inv);
 
             $co->protectedJoin($leads);
 
-            $income =& new CoopObject(&$co->page, 'income', 
-                                     &$co);
+            $income =& new CoopObject(&$co->page, 'income', &$co);
 
             $co->protectedJoin($income);
 
-            $companies =& new CoopObject(&$co->page, 'companies', 
-                                     &$co);
+            $companies =& new CoopObject(&$co->page, 'companies', &$co);
 
             $co->protectedJoin($companies);
 
-            $families =& new CoopObject(&$co->page, 'families', 
-                                     &$co);
+            $families =& new CoopObject(&$co->page, 'families', &$co);
             $co->protectedJoin($families);
 
 
@@ -240,9 +235,15 @@ class Tickets extends CoopDBDO
         {
             // AHA! need to prependtable!
             // XXX need to get a coopobject in here somehow
-            if($vars['tickets-lead_id'] > 0 && $vars['tickets-company_id'] > 0
-                && $vars['tickets-family_id'] > 0)
+            foreach(array($vars['tickets-lead_id'],
+                          $vars['tickets-company_id']) as $val)
             {
+                if($val > 0){
+                    $count++;
+                }
+            }
+            
+            if($count > 1){
                 $msg = "You can have ONLY ONE of Invitee Name, or a Company Name, or a Family Name, but two or more.";    
                 $err['tickets-lead_id'] = $msg;
                 $err['tickets-company_id'] = $msg;
@@ -250,9 +251,7 @@ class Tickets extends CoopDBDO
                 return $err;
             }
             
-            if($vars['tickets-lead_id'] <1 && $vars['tickets-company_id'] <1
-                && $vars['tickets-family_id'] <1 )
-            {
+            if($count < 1) {
                 $msg = "You must have either an Invitee Name, or a Company Name, or a Family (for current members).";
                 $err['tickets-lead_id'] = $msg;
                 $err['tickets-company_id'] = $msg;
