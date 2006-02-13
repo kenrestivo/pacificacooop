@@ -196,7 +196,7 @@ class Auction_donation_items extends CoopDBDO
 			
 			$prefix = 'packages-';
 			foreach(array(
-						$prefix . 'package_type' => 'Silent',
+						$prefix . 'package_type_id' => COOP_PACKAGE_TYPE_SILENT,
 						$prefix . 'item_type' => $this->item_type,
 						$prefix . 'package_description' => 
 						$this->item_description,
