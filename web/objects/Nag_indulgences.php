@@ -32,6 +32,7 @@ class Nag_indulgences extends CoopDBDO
 		'family_id' => 'Co-Op Family',
 		'school_year' => 'School Year'
 		);
+
 var $fb_formHeaderText = 'Springfest Nag Indulgences';
 
 
@@ -43,6 +44,6 @@ var $fb_requiredFields = array(
    'granted_date',
    'school_year'
 );
-
+    var $fb_enumFields = array ('indulgence_type');
 
 }
