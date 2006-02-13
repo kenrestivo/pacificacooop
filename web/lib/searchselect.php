@@ -5,6 +5,7 @@
 require_once('customselect.php');
 class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
 {
+    var $searchByID = ''; // the LABEL text. i know, nasty hack.
 
     // XXX HACK! instead, i shoudl be doing some kind of multi-inclusion guard
     function prepare(&$sub)
@@ -54,12 +55,25 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            
+            $res = "";
+
             $brows = $this->cf->page->getBrowserData();
+            $autocomplete = $brows['type'] == 'Explorer' ? 'autocomplete="off"' : '';
+
+            // the nifty little js thing. the 1 to fetchdata means by ID
+            if(!empty($this->searchByID)){
+                $res .= sprintf('%s: <input type="text" size="8" name="byID-%s" %s
+                                 onchange="combobox_%s.fetchData()" /><br />',
+                                $this->searchByID,
+                                $this->getName(),
+                                $autocomplete,
+                                strtr($this->getName(), '-', '_')
+                                );
+            }
 
             // XXX THIS IS IDIOTIC!
             // can i use addelement, please! or at least createElement
-            $res = sprintf(
+            $res .= sprintf(
                 '<input type="text" name="search-%s" %s
                 onchange="combobox_%s.fetchData()" />
 
@@ -68,7 +82,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
                         value="Search"/> &nbsp;
                 <p class="inline" id="status-%s"></p><br />',
                 $this->getName(),
-                $brows['type'] == 'Explorer' ? 'autocomplete="off"' : '',
+                $autocomplete,
                 strtr($this->getName(), '-', '_'),
                 strtr($this->getName(), '-', '_'),
                 $this->getName()
@@ -91,7 +105,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
                sprintf('%s/eventutils.js' , 
                        $jspath),
                'INCLUDE_EVENTUTILS');
-  
+         
          $res .= $this->cf->page->jsRequireOnce('lib/MochiKit/MochiKit.js',
                                           'INCLUDE_MOCHIKIT');
          

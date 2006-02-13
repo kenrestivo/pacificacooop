@@ -989,6 +989,11 @@ function triggerNotices($audit_id)
 			if($chooseone){
                 $options[] = "-- CHOOSE ONE --";
             }
+            
+            $this->page->confessArray(
+                $this->obj->_query , 
+                "=== QUERY QUERY QUERY=== CoopView::find({$this->table} $find) ran query and  found $found", 
+                1);
 
 
 			while($this->obj->fetch()){

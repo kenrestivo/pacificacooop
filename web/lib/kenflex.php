@@ -25,6 +25,8 @@ require_once('CoopView.php');
 require_once('Services/JSON.php');
 
 
+//$debug = 4;
+
 // TODO: replace this with jsonrpc or REST
 
 $cp = new CoopPage($debug);
@@ -50,6 +52,7 @@ class DataFetcher{
     function process($vars)
         {
 
+            // F is the fieldname, in two parts: table-field
             if( isset($vars["f"])){
                 $longfield = $vars['f'];
                 list($table, $fieldname) = explode('-', $longfield);
@@ -62,21 +65,30 @@ class DataFetcher{
             }
             
             $query = "";
-            if(isset($vars["q"])) 
+            // q is the actual query string
+            if(isset($vars["q"])) {
                 $query = $vars["q"];
-            
-            $limit = 0;
-            if(isset($vars["l"])) 
-                $limit = $vars["l"];
-            
-            $beginsWith = false;
-            if(isset($vars["b"])) 
-                $beginsWith = ($vars["b"] == "0" ? false : true);
-            
-            
-            $co->findAnywhereInLinkfields($query, $limit, $beginsWith);
-            return $this->json->encode($co->getLinkOptions(false));
 
+                $limit = 0;
+                if(isset($vars["l"])) 
+                    $limit = $vars["l"];
+                
+                $beginsWith = false;
+                if(isset($vars["b"])) 
+                    $beginsWith = ($vars["b"] == "0" ? false : true);
+                
+                
+                $co->findAnywhereInLinkfields($query, $limit, $beginsWith);
+                
+            } else if(isset($vars["i"])){
+                // search by id, there can be, only one
+                $id = $vars["i"];
+                $co->obj->whereAdd(sprintf('%s = %d', $co->pk, $id));
+                $co->obj->find();
+            }
+            
+            return $this->json->encode($co->getLinkOptions(false));
+                      
         }
 } // END DATAFETCHER
 

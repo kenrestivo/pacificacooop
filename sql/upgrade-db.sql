@@ -43,7 +43,7 @@ INSERT INTO user_privileges (user_id , group_id ,
 user_level , group_level , realm_id , year_level , menu_level ) 
 VALUES ( 0 , 1 , 200 , 100 , 18 , 200 , 0 );
 
--- also add ticket perms for susan depriest too
+-- also add ticket perms for susan depriest too, and ME!
 
 
 -- ignore for paddles??

@@ -14,23 +14,20 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
-BUGS
-	kenflex can get VERY confused when dealing with error reloads
-	customsel do not submit the fucking editperms goddammit!
-
 		
 2 hours PHP
 tickets/rsvps/paddles -- just look at it.
- 
 	in RSVPs and tickets, need JS to search by code
 		extension to kenflex??!
 		put a searchbox in there
 			perms? how to know when it is OK to do that?
 			naw, postgenform
 
+	test the permissions stuff from upgrade before pushing
 	what's that weird error when creating the first ticket
 		bug in startpaddleforthisyear? fix it.
-
+	push live
+	enter the damned things!
 
 					
 ??PHP
@@ -561,6 +558,14 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+
+??JABBASCRIPT/PHP
+customsel do not submit the fucking editperms goddammit!
+	onsubmit is bubbling phase
+	you should be able to add a handler for the capturing phase,
+		then preventBubble it. i.e. Evt.consume() like in kenflex.js
+
 
 ??PHP
 more ticket screwups
@@ -3399,7 +3404,10 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-			i thought i fixed this already!yeah, in kenflex, not in customsel
+	kenflex can get VERY confused when dealing with error reloads
+		i hacked around it, with a try/catch
+		
+				i thought i fixed this already!yeah, in kenflex, not in customsel
 
 BUGS
 	when refreshing a page with valid errors, kenflex DOES NOT WORK!

@@ -31,12 +31,24 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
 {
     
     this.trapKey  = function(ev){
+        var evt = new Evt(ev);
+        
+        // if i am the byid, wipe the search, and vice versa
+        if(typeof this.byID != 'undefined'){
+            var src =  evt.getSource();
+            if(src == this.searchBox) {
+                this.byID.value = '';
+            }
+            if(src == this.byID){
+                this.searchBox.value = '';
+            }
+        }
+        
         switch(ev.keyCode) 
         {
             // trap these keys
             case 13:
             case 39: 
-            evt = new Evt(ev);
             evt.consume();
             this.fetchData();
             return false;
@@ -61,7 +73,7 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
 /*                                    true); */
                 this.selectBox.options.add(o);
             }
-            
+
             this.selectBox.focus();
 
         }
@@ -121,12 +133,24 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
         function ()
         {
             var self = this; // CRITICAL for callbacks!
-            
-            // XXX is this right?
-            if(!this.searchBox.value || this.searchBox.value.length < 2){
-                this.status.innerHTML = 'Type at least 2 characters to search.';
-                return;
+
+            qo= {};
+            qo.f = this.linkTableName;
+
+            if(typeof this.byID != 'undefined' && 
+               this.byID.value > 0)
+            {
+                qo.i = this.byID.value;
+            } else {
+                // XXX is this right?
+                if(!this.searchBox.value || this.searchBox.value.length < 2)
+                {
+                    this.status.innerHTML = 'Type at least 2 characters to search.';
+                    return;
+                }
+                qo.q = this.searchBox.value;
             }
+
             
             this.status.innerHTML = 'Searching..';
             
@@ -134,7 +158,7 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
             {
                 this.xhr.abort();
                 delete this.xhr;
-    }
+            }
             
             this.xhr = new XHConn();
             
@@ -143,9 +167,6 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
             }
             
             
-            qo= {};
-            qo.q = this.searchBox.value;
-            qo.f = this.linkTableName;
             
             qa = [];
             for(x in qo){
@@ -164,7 +185,27 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
             this.status.innerHTML = "Failed connecting";
             
         }
-    
+
+    this.setTraps = function(obj)
+        {
+
+            EventUtils.addEventListener(
+                obj, 'keyup', 
+                function(ev){ return self.trapKey(ev) }, 
+                true);
+            EventUtils.addEventListener(
+                obj, 'keydown', 
+                function(ev){ return self.trapKey(ev) }, 
+                true);
+            EventUtils.addEventListener(
+                obj, 'keypress', 
+                function(ev){ return self.trapKey(ev) }, 
+                true);
+
+
+        }
+
+
 /// CONSTRUCTOR    
     
     // to handle more than one
@@ -172,6 +213,7 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     this.selectBox = document.getElementsByName(selectBoxName)[0];
     this.status = document.getElementById('status-' + selectBoxName);
     this.editpermshidden = document.getElementById('editperms-' + selectBoxName);
+    this.byID = document.getElementsByName('byID-' + selectBoxName)[0];
 
     this.linkTableName = linkTableName;
     
@@ -197,6 +239,14 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
     }
 
 
+    
+    // add my callbacks for key handling
+    this.setTraps(this.searchBox);
+    
+    if(typeof this.byID != 'undefined'){
+        this.byID.setAttribute('autocomplete', 'Off');
+        this.setTraps(this.byID);
+    }
 
     // utility function i'll need later
     this.selectBox.cleanBox = function ()
@@ -223,16 +273,6 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
 
 
 
-    // add my callbacks for key handling
-    EventUtils.addEventListener(this.searchBox, 'keyup', 
-                                function(ev){ return self.trapKey(ev) }, 
-                                true);
-    EventUtils.addEventListener(this.searchBox, 'keydown', 
-                                function(ev){ return self.trapKey(ev) }, 
-                                true);
-    EventUtils.addEventListener(this.searchBox, 'keypress', 
-                                function(ev){ return self.trapKey(ev) }, 
-                                true);
 
 
 } // end Combobox constructor
