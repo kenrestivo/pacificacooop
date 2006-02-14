@@ -18,7 +18,6 @@ from csvsqlobject import *
 from datetime import date
 
 
-rasta=[i for i in import_to_dict('/mnt/kens/ki/proj/coop/imports/AlumniRoster.csv') if i['Birthday'] != '']
 
 
 #MOVE TO A LIBRARY!
@@ -99,6 +98,25 @@ def fix_attended(data):
                 
 
 
+def make_enrollment_array(data):
+    for i in range(0,len(data)):
+        di=data[i]
+        years=di['fixed_attended'].split('-')
+        di['enroll'] = ['-'.join([str(i), str(i+1)]) for i in range(int(years[0]), int(years[1]))]
+            
+
+
+
+############# MAIN ##################
+if __name__ = '__main__':
+    rasta=[i for i in import_to_dict('/mnt/kens/ki/proj/coop/imports/AlumniRoster.csv') if i['Birthday'] != '']
+    first_pass(rasta)
+    fix_attended(rasta)
+
+
+
+
+"""
 ########
 [[i['Last Name'], i['Child(ren)'], i['fixed_attended']] for i in rasta]
 
@@ -115,3 +133,4 @@ bp=[i['Board Position'] for i in rasta if i['Board Position'] != '']
 
 ######## birthday tests
 [[dateFix(i['Birthday']), i['Last Name'], i['Child(ren)']] for i in rasta if i['Birthday'] != '']
+"""
