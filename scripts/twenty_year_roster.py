@@ -67,15 +67,17 @@ def parse_board_positions_field(b):
 
 
 
+########### my "iterators" TODO: use real iterators. find out how.
+
 
 def first_pass(data):
     """the first batch of data fixes. skip the first line, which is the header"""
     for i in range(0,len(data)):
         di=data[i]
         if di['Birthday'] != '':
-            di['fixed_birthday'] = dateFix(di['Birthday'])
+            di['kids-date_of_birth'] = dateFix(di['Birthday'])
         if di['Board Position'] != '':
-            di['boards'] = parse_board_positions_field(di['Board Position'])
+            di['board_list'] = parse_board_positions_field(di['Board Position'])
         if di['Year Attended'] != '':
             di['all_attended'] = [fix_years(y) for y in di['Year Attended'].split(',')]
             di['fixed_attended'] = di['all_attended'].pop(0)
@@ -98,20 +100,44 @@ def fix_attended(data):
                 
 
 
-def make_enrollment_array(data):
+def make_enrollment(data):
     for i in range(0,len(data)):
         di=data[i]
         years=di['fixed_attended'].split('-')
-        di['enroll'] = ['-'.join([str(i), str(i+1)]) for i in range(int(years[0]), int(years[1]))]
+        di['enroll_list'] = ['-'.join([str(i), str(i+1)]) for i in range(int(years[0]), int(years[1]))]
             
+
+ 
+def split_names(data):
+    """ this is ugly, and, i suspect, stupid too"""
+    for i in range(0,len(data)):
+        di=data[i]
+        if di['Dad Name'] != '':
+            di['dad'] = {}
+            dad=di['Dad Name'].split(' ')
+            di['dad']['first_name'] = dad[0]
+            if len(dad) > 1:
+                di['dad']['last_name'] = dad[1]
+            else:
+                di['dad']['last_name'] = di['Last Name']
+        if di['Mom Name'] != '':
+            di['mom'] = {}
+            mom=di['Mom Name'].split(' ')
+            di['mom']['first_name'] = mom[0]
+            if len(mom) > 1:
+                di['mom']['last_name'] = mom[1]
+            else:
+                di['mom']['last_name'] = di['Last Name']
 
 
 
 ############# MAIN ##################
 if __name__ = '__main__':
+    """filter out lines with no birthday, which are invalid xrefs"""
     rasta=[i for i in import_to_dict('/mnt/kens/ki/proj/coop/imports/AlumniRoster.csv') if i['Birthday'] != '']
     first_pass(rasta)
     fix_attended(rasta)
+    make_enrollment(rasta)
 
 
 
