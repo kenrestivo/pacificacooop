@@ -54,18 +54,22 @@ def fix_board_position(pos):
            '2nd VP': '2nd Vice President',
            'Chair of Bd': 'President',
            'First VP': '1st Vice President'}
+    p=pos.strip()
     try:
-        return fixes[pos]
+        return fixes[p]
     except KeyError:
-        return pos
+        return p
 
 
 def parse_board_positions_field(b):
     """truly ugly. change 'Position(yy-yy),Position(yy-yy)' to a struct"""
-    return [[m.replace(')', '') for m in k.strip().split('(')] for k in b.split(',')]
-
-
-
+    try:
+        jobs=b.split(',')
+        jobyears=[map(lambda x: x.replace(')', ''), i.split('(')) for i in jobs]
+        cleanyears=[[fix_board_position(j[0]), fix_years(j[1])] for j in jobyears]
+        return [dict(zip(['job_description', 'school_year'], jy)) for jy in cleanyears]
+    except IndexError:
+        return b + ' IS BROKEN'
 
 ########### my "iterators" TODO: use real iterators. find out how.
 
@@ -108,7 +112,7 @@ def make_enrollment(data):
             
 
  
-def split_names(data):
+def split_parents(data):
     """ this is ugly, and, i suspect, stupid too"""
     for i in range(0,len(data)):
         di=data[i]
@@ -138,7 +142,7 @@ if __name__ = '__main__':
     first_pass(rasta)
     fix_attended(rasta)
     make_enrollment(rasta)
-
+    split_parents(rasta)
 
 
 
