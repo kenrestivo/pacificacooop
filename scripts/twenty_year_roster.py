@@ -18,7 +18,7 @@ from sys import path
 path.append('/mnt/kens/ki/is/python/lib')
 
 from csvsqlobject import *
-from datetime import date
+from datetime import date,datetime
 
 
 
@@ -26,13 +26,23 @@ from datetime import date
 #MOVE TO A LIBRARY!
 def dateFix(d):
     """Deal with Excel dates, which sometimes come up unformatted
-    as integers. NOTE the -2 to deal with excel/lotus bugs."""
+    as integers. NOTE the -2 to deal with excel/lotus bugs.
+    returns an SQL-formatted date... maybe"""
     if d.count('/') > 1:
-        return d
+        return _human_to_dt(d)
     else:
         return date.fromordinal(
             int(d) - 2 +
-            date.toordinal(date(1900,1,1))).strftime("%m/%d/%y")
+            date.toordinal(date(1900,1,1))).strftime("%Y-%m-%d")
+
+    
+def _human_to_dt(dob):
+    """move to a library!!!"""
+    d=map(int, dob.split('/'))
+    d.insert(0,d.pop())             # date wants y,m,d
+    if d[0] < 1900: d[0]+=1900
+    if d[0] < 1950: d[0]+=100
+    return datetime.date(*d)
 
 
 
@@ -88,7 +98,8 @@ def first_pass(data):
         if di['Year Attended'] != '':
             di['all_attended'] = [fix_years(y) for y in di['Year Attended'].split(',')]
             di['fixed_attended'] = di['all_attended'].pop(0)
-            
+        if di['Board Position'] != '':
+            di['board_list'] = parse_board_positions_field(di['Board Position'])
                 
 
 
