@@ -1,0 +1,13 @@
+create a  proper springfest microsite
+
+home
+	little blurbs and links to all of below, in order
+
+event
+	the invitation text, basically
+	pdf of invitation itself
+
+sponsorship
+	pdfs of sponsorship info
+	donate/paypal buttons?
+
