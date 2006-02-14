@@ -37,7 +37,18 @@ def fix_years(yy):
             
 
 
-def parse_board_positions(b):
+def fix_board_position(pos):
+    fixes={'1st VP': '1st Vice President',
+           '2nd VP': '2nd Vice President',
+           'Chair of Bd': 'President',
+           'First VP': '1st Vice President'}
+    try:
+        return fixes[pos]
+    except KeyError:
+        return pos
+
+
+def parse_board_positions_field(b):
     """truly ugly. change 'Position(yy-yy),Position(yy-yy)' to a struct"""
     return [[m.replace(')', '') for m in k.strip().split('(')] for k in b.split(',')]
 
@@ -50,5 +61,5 @@ def parse_board_positions(b):
 ####################
 #board pos tests
 bp=[i['Board Position'] for i in d if i['Board Position'] != '']
-[parse_board_positions(j)  for j in bp]
+[parse_board_positions_field(j)  for j in bp]
 
