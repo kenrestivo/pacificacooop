@@ -13,9 +13,22 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-
-
+	
+BUGS
+	fix that ad insertion anomaly in the report
+	
+	
 export button for tickets/paddles
+	well, just generalise view, really
+		i'll need all the schoolyearchooser shit though, to honour it in export
+		no pager though, that's the only thing to leave out
+		basically, everything in view except for the simpletable. fuck.
+	fb_export()?
+	things i'll need that are specific to exporting
+		spreadsheetname
+		worksheet name
+		landscape/portrait
+		any special notes
 
 	
 ??PHP
@@ -32,10 +45,16 @@ the VIP list import! dammit. i need those in there
 	fuck, there's only 20, do it manually goddammit
 
 
+??PHP/SQL
+parent ed (parented.txt)
+		make-up stuff -- wacky sql joins
+		nag-only (i.e. enhancement hack)
+
 	
 ??PHP/SQL
 de-dupe and/or alumni hack2
 	ugly linktable to glue actual alumni to the alumni list
+	let the user choose
 
 			
 ??PHP
@@ -77,11 +96,6 @@ BUGS
 	
 	
 
-
-??PHP/SQL
-parent ed (parented.txt)
-		make-up stuff -- wacky sql joins
-		nag-only (i.e. enhancement hack)
 
 
 ???PHP/PYTHON/CSS (day)
