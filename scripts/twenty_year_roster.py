@@ -14,6 +14,9 @@
 """
 
 
+from sys import path
+path.append('/mnt/kens/ki/is/python/lib')
+
 from csvsqlobject import *
 from datetime import date
 
@@ -63,13 +66,13 @@ def fix_board_position(pos):
 
 def parse_board_positions_field(b):
     """truly ugly. change 'Position(yy-yy),Position(yy-yy)' to a struct"""
-    try:
-        jobs=b.split(',')
-        jobyears=[map(lambda x: x.replace(')', ''), i.split('(')) for i in jobs]
-        cleanyears=[[fix_board_position(j[0]), fix_years(j[1])] for j in jobyears]
-        return [dict(zip(['job_description', 'school_year'], jy)) for jy in cleanyears]
-    except IndexError:
-        return b + ' IS BROKEN'
+    jobs=b.split(',')
+    jobyears=[map(lambda x: x.replace(')', ''), i.split('(')) for i in jobs]
+    cleanyears=[[fix_board_position(j[0]), fix_years(j[1])] for j in jobyears]
+    return [dict(zip(['job_description', 'school_year'], jy)) for jy in cleanyears]
+
+
+
 
 ########### my "iterators" TODO: use real iterators. find out how.
 
