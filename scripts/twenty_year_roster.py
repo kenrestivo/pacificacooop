@@ -1,6 +1,19 @@
 #!/usr/bin/env python
 
 
+"""
+{'Address': '2120 Francisco',
+ 'Birthday': '28962',
+ 'Board Position': '',
+ 'Child(ren)': 'Shira',
+ 'Dad Name': 'Bob Zuckerman',
+ 'Last Name': 'Zuckerman',
+ 'Mom Name': 'Desda Zuckerman',
+ 'Phone': '355-5333',
+ 'Year Attended': '82-84'}
+"""
+
+
 from csvsqlobject import *
 from datetime import date
 
@@ -56,6 +69,9 @@ def parse_board_positions_field(b):
 
 
 
+###########  attended tests
+enrol=[i['Year Attended'] for i in rasta if i['Year Attended'] != '']enrol
+[[fix_years(y) for y in e.split(',')] for e in enrol]
 
 
 ####################
