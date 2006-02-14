@@ -16,6 +16,10 @@
 
 from sys import path
 path.append('/mnt/kens/ki/is/python/lib')
+path.append('/mnt/kens/ki/proj/coop/scripts')
+path.append('/mnt/kens/ki/proj/coop/web')
+path.append('/mnt/kens/ki/proj/coop/web/objects')
+
 
 from csvsqlobject import *
 from datetime import date,datetime
