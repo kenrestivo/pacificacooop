@@ -21,10 +21,25 @@ def dateFix(self, d):
 
 
 
+def un_y2k(y):
+    """changes a yy to yyyy"""
+    y= int(y)
+    if y < 1900:
+        y += 1900
+    if y < 1950:
+        y += 100
+    return y
+
+
+def fix_years(yy):
+    """changes yy-yy to yyyy-yyyy"""
+    return '-'.join([str(un_y2k(year)) for year in yy.split('-')])
+            
+
+
 def parse_board_positions(b):
     """truly ugly. change 'Position(yy-yy),Position(yy-yy)' to a struct"""
     return [[m.replace(')', '') for m in k.strip().split('(')] for k in b.split(',')]
-
 
 
 #board pos
