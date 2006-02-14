@@ -7,7 +7,7 @@ d=import_to_dict('/mnt/kens/ki/proj/coop/imports/AlumniRoster.csv')
 
 
 def parse_board_positions(b):
-    return [k.strip() for k in b.split(',')]
+    return [[m.replace(')', '') for m in k.strip().split('(')] for k in b.split(',')]
 
 #board pos
 bp=[i['Board Position'] for i in d if i['Board Position'] != '']
