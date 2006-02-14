@@ -83,7 +83,7 @@ def parse_board_positions_field(b):
     jobs=b.split(',')
     jobyears=[map(lambda x: x.replace(')', ''), i.split('(')) for i in jobs]
     cleanyears=[[fix_board_position(j[0]), fix_years(j[1])] for j in jobyears]
-    return [dict(zip(['job_description', 'school_year'], jy)) for jy in cleanyears]
+    return [dict(zip(['job_description', 'schoolYear'], jy)) for jy in cleanyears]
 
 
 
@@ -95,9 +95,6 @@ def first_pass(data):
     """the first batch of data fixes. skip the first line, which is the header"""
     for i in range(0,len(data)):
         di=data[i]
-        if di['Birthday'] != '':
-            di['kids'] = {}
-            di['kids']['date_of_birth'] = dateFix(di['Birthday'])
         if di['Board Position'] != '':
             di['job_assignments'] = parse_board_positions_field(di['Board Position'])
         if di['Year Attended'] != '':
@@ -124,7 +121,7 @@ def make_enrollment(data):
     for i in range(0,len(data)):
         di=data[i]
         years=di['fixed_attended'].split('-')
-        di['enrollment'] = ['-'.join([str(i), str(i+1)]) for i in range(int(years[0]), int(years[1]))]
+        di['enrollment'] = [dict(schoolYear='-'.join([str(i), str(i+1)])) for i in range(int(years[0]), int(years[1]))]
             
 
  
@@ -134,20 +131,22 @@ def split_parents(data):
         di=data[i]
         if di['Dad Name'] != '':
             di['dad'] = {}
+            di['dad']['type'] = 'Dad'
             dad=di['Dad Name'].split(' ')
-            di['dad']['first_name'] = dad[0]
+            di['dad']['firstName'] = dad[0]
             if len(dad) > 1:
-                di['dad']['last_name'] = dad[1]
+                di['dad']['lastName'] = dad[1]
             else:
-                di['dad']['last_name'] = di['Last Name']
+                di['dad']['lastName'] = di['Last Name']
         if di['Mom Name'] != '':
             di['mom'] = {}
+            di['mom']['type'] = 'Mom'
             mom=di['Mom Name'].split(' ')
-            di['mom']['first_name'] = mom[0]
+            di['mom']['firstName'] = mom[0]
             if len(mom) > 1:
-                di['mom']['last_name'] = mom[1]
+                di['mom']['lastName'] = mom[1]
             else:
-                di['mom']['last_name'] = di['Last Name']
+                di['mom']['lastName'] = di['Last Name']
 
 
 def marshal_to_db(data):
@@ -156,17 +155,54 @@ def marshal_to_db(data):
     for i in range(0,len(data)):
         di=data[i]
         if di['Child(ren)']:
-            di['kids']['first_name'] = di['Child(ren)']
+            di['kids'] = {}
+            di['kids']['firstName'] = di['Child(ren)']
             if di['Last Name']:
-                di['kids']['last_name'] = di['Last Name']
+                di['kids']['lastName'] = di['Last Name']
                 lnc = di['Last Name']
             else:
-                di['kids']['last_name'] = lnc
+                di['kids']['lastName'] = lnc
+            if di['Birthday'] != '':
+                di['kids']['dateOfBirth'] = dateFix(di['Birthday'])
         if di['Address']:
             di['families'] ={}
-            di['families']['address'] = di['Address']
+            di['families']['address1'] = di['Address']
             di['families']['phone'] = di['Phone']
             di['families']['name'] = di['Last Name']
+
+
+
+
+
+#######ideas
+"""
+## of course you need to SEARCH FIRST!
+
+r=rasta[45]
+
+f=Families(**r['families'])
+#no automagick, need to KNOW THE ID IN SQLMETA STUPID FORMAT!
+#getattr/setattr uglyName
+
+r['kids']['familyID'] = f.id
+k=Kids(**r['kids'])
+
+for i in r['enrollment']:
+    i['amPmSession']='AM'
+    i['kidID'] = k.id
+    Enrollment(**i)
+
+for i in ['mom', 'dad']:
+    r[i]['familyID'] = f.id
+    Parents(**r[i])
+
+
+#can't do left joins-- fuck you sqlobject-- so get its connect handle
+
+
+
+"""
+
             
         
 
@@ -180,6 +216,22 @@ if __name__ == '__main__':
     make_enrollment(rasta)
     split_parents(rasta)
     marshal_to_db(rasta)
+    exit()
+
+    
+######now the importation
+    from model import *
+
+    families = Importer(Families, ['name', 'address', 'phone'], None)
+    kids = Importer(Kids, ['firstName', 'lastName'], families)
+    enrollment = Importer(Enrollment, ['schoolYear'], kids)
+    parents = Importer(Parents, ['firstName', 'lastName'], families)
+    jobs = Importer(JobAssignments, ['schoolYear'], families)
+    
+    
+    for l in rasta:
+        for i in [families,kids,enrollment,parents,jobs]:
+            i.insert(l)
 
 
 """
