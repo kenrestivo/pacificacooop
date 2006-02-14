@@ -1,13 +1,30 @@
 create a  proper springfest microsite
 
-home
-	little blurbs and links to all of below, in order
+layout:
+    home
+    	little blurbs and links to all of below, in order
+    event
+    	the invitation text, basically
+    	pdf of invitation itself
+		map to event location
+    sponsorship
+    	pdfs of sponsorship info
+    	donate/paypal buttons?
+    raffle
+    	article and picture of surfboard
+	auction items
+		the list of fabulous auction items
+    about
+    	basic info about the school
+    
+on each page: 	  
+	links to donate buttons
+	sponsorship blogroll down the side
 
-event
-	the invitation text, basically
-	pdf of invitation itself
 
-sponsorship
-	pdfs of sponsorship info
-	donate/paypal buttons?
+i should database-ize this!
+	it'll be the same shit every year, so just put it in the system
+	i'll want to keep previous years for history purposes
 
+
+use phptal for this beast
