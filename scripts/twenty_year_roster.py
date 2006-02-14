@@ -69,6 +69,22 @@ def parse_board_positions_field(b):
 
 
 
+def first_pass(data):
+    """the first batch of data fixes"""
+    for i in range(0,len(data)):
+        di=data[i]
+        if di['Birthday'] != '':
+            di['fixed_birthday'] = dateFix(di['Birthday'])
+        if di['Board Position'] != '':
+            di['boards'] = parse_board_positions_field(di['Board Position'])
+        if di['Year Attended'] != '':
+            di['fixed_attended'] = [fix_years(y) for y in di['Year Attended'].split(',')]
+
+
+
+
+
+
 ###########  attended tests
 enrol=[i['Year Attended'] for i in rasta if i['Year Attended'] != '']enrol
 [[fix_years(y) for y in e.split(',')] for e in enrol]
