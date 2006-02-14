@@ -5,11 +5,11 @@ from csvsqlobject import *
 from datetime import date
 
 
-d=import_to_dict('/mnt/kens/ki/proj/coop/imports/AlumniRoster.csv')
+rasta=import_to_dict('/mnt/kens/ki/proj/coop/imports/AlumniRoster.csv')
 
 
 #MOVE TO A LIBRARY!
-def dateFix(self, d):
+def dateFix(d):
     """Deal with Excel dates, which sometimes come up unformatted
     as integers. NOTE the -2 to deal with excel/lotus bugs."""
     if d.count('/') > 1:
@@ -60,6 +60,9 @@ def parse_board_positions_field(b):
 
 ####################
 #board pos tests
-bp=[i['Board Position'] for i in d if i['Board Position'] != '']
+bp=[i['Board Position'] for i in rasta if i['Board Position'] != '']
 [parse_board_positions_field(j)  for j in bp]
 
+
+######## birthday tests
+[[dateFix(i['Birthday']), i['Last Name'], i['Child(ren)']] for i in rasta if i['Birthday'] != '']
