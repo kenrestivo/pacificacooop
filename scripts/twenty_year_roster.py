@@ -22,7 +22,7 @@ def dateFix(self, d):
 
 
 def un_y2k(y):
-    """changes a yy to yyyy"""
+    """changes a yy to yyyy. returns an int. YOU deal with coercing it"""
     y= int(y)
     if y < 1900:
         y += 1900
@@ -32,7 +32,7 @@ def un_y2k(y):
 
 
 def fix_years(yy):
-    """changes yy-yy to yyyy-yyyy"""
+    """changes yy-yy string to yyyy-yyyy string"""
     return '-'.join([str(un_y2k(year)) for year in yy.split('-')])
             
 
@@ -42,7 +42,13 @@ def parse_board_positions(b):
     return [[m.replace(')', '') for m in k.strip().split('(')] for k in b.split(',')]
 
 
-#board pos
+
+
+
+
+
+####################
+#board pos tests
 bp=[i['Board Position'] for i in d if i['Board Position'] != '']
 [parse_board_positions(j)  for j in bp]
 
