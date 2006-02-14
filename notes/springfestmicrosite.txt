@@ -28,3 +28,7 @@ i should database-ize this!
 
 
 use phptal for this beast
+
+/springfest will always lead to currentschoolyear
+	do some REST underneath
+	springfest/2006 , springfest/2005, etc
