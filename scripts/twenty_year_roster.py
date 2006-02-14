@@ -18,7 +18,7 @@ from csvsqlobject import *
 from datetime import date
 
 
-rasta=import_to_dict('/mnt/kens/ki/proj/coop/imports/AlumniRoster.csv')
+rasta=[i for i in import_to_dict('/mnt/kens/ki/proj/coop/imports/AlumniRoster.csv') if i['Birthday'] != '']
 
 
 #MOVE TO A LIBRARY!
@@ -70,7 +70,7 @@ def parse_board_positions_field(b):
 
 
 def first_pass(data):
-    """the first batch of data fixes"""
+    """the first batch of data fixes. skip the first line, which is the header"""
     for i in range(0,len(data)):
         di=data[i]
         if di['Birthday'] != '':
@@ -78,12 +78,29 @@ def first_pass(data):
         if di['Board Position'] != '':
             di['boards'] = parse_board_positions_field(di['Board Position'])
         if di['Year Attended'] != '':
-            di['fixed_attended'] = [fix_years(y) for y in di['Year Attended'].split(',')]
+            di['all_attended'] = [fix_years(y) for y in di['Year Attended'].split(',')]
+            di['fixed_attended'] = di['all_attended'].pop(0)
+            
+                
 
 
 
 
+def fix_attended(data):
+    """enrollment is in an ugly format: mixed lines on one. fix this."""
+    for i in range(0,len(data)):
+        di=data[i]
+        if di.keys().count('fixed_attended') < 1:
+            if data[i-1].keys().count('all_attended') and len(data[i-1]['all_attended']) > 0:
+                di['fixed_attended'] = data[i-1]['all_attended'].pop(0)
+            else:
+                di['fixed_attended'] = data[i-1]['fixed_attended']
+                
+                
 
+
+########
+[[i['Last Name'], i['Child(ren)'], i['fixed_attended']] for i in rasta]
 
 ###########  attended tests
 enrol=[i['Year Attended'] for i in rasta if i['Year Attended'] != '']enrol
