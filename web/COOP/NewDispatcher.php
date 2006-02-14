@@ -51,7 +51,7 @@ class CoopNewDispatcher
                                    $_REQUEST['action'] : 
                                    'view', 
                                    'pop' => @$_REQUEST['pop'], 
-                                   'id' =>$_REQUEST[$atd->prependTable($atd->pk)],
+                                   'id' =>@$_REQUEST[$atd->prependTable($atd->pk)],
                                    'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
                                    $this->page->vars['last']['realm']);
             }

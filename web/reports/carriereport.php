@@ -228,7 +228,7 @@ order by Total desc
 					   , 1);
 
 
-    $res .= showRawQuery('Ticket Income',
+    $res .= showRawQuery('Non-Ticket RSVP Income',
                          sprintf('select  invitations.relation,
     sum(if(invitations.family_id>0,0,payment_amount)) as Alumni_List ,
     sum(if(invitations.family_id>0,payment_amount,0)) as Family_Supplied ,
@@ -245,7 +245,7 @@ order by total desc ',
                                  $schoolyear, $schoolyear),
                          1);
 
-    $res .= showRawQuery('RSVP Income',
+    $res .= showRawQuery('Ticket Income',
                          sprintf('select  invitations.relation,
     sum(if(invitations.family_id>0,0,payment_amount)) as Alumni_List ,
     sum(if(invitations.family_id>0,payment_amount,0)) as Family_Supplied ,

@@ -2083,7 +2083,7 @@ group by school_year
 ;
 
 
---- income by source
+--- tickets by source
 select  invitations.relation,
 sum(if(invitations.family_id>0,0,ticket_quantity)) as Alumni_List ,
 sum(if(invitations.family_id>0,ticket_quantity,0)) as Family_Supplied ,
@@ -2097,6 +2097,71 @@ and tickets.ticket_quantity > 0
 and tickets.school_year = '2004-2005'
 group by invitations.relation
 order by total desc
+;
+
+-----ticket income by source
+select  invitations.relation,
+    sum(if(invitations.family_id>0,0,payment_amount)) as Alumni_List ,
+    sum(if(invitations.family_id>0,payment_amount,0)) as Family_Supplied ,
+    sum(payment_amount)  as Total 
+from leads_income_join
+   left join invitations 
+       on invitations.lead_id = leads_income_join.lead_id
+       and invitations.school_year  = "2005-2006"
+   left join income on income.income_id = leads_income_join.income_id
+where leads_income_join.lead_id is not null 
+     and income.school_year = "2005-2006"
+group by invitations.relation
+order by total desc
+;
+
+-- RSVP income by source
+select  invitations.relation,
+    sum(if(invitations.family_id>0,0,payment_amount)) as Alumni_List ,
+    sum(if(invitations.family_id>0,payment_amount,0)) as Family_Supplied ,
+    sum(payment_amount)  as Total 
+from tickets
+   left join invitations 
+       on invitations.lead_id = tickets.lead_id
+       and invitations.school_year  = "2005-2006"
+   left join income on income.income_id = tickets.income_id
+where tickets.lead_id is not null 
+     and tickets.ticket_quantity > 0
+     and tickets.school_year = "2005-2006"
+group by invitations.relation
+order by total desc
+;
+
+--- both
+select  relation,
+    sum(if(family_id>0,0,payment_amount)) as Alumni_List ,
+    sum(if(family_id>0,payment_amount,0)) as Family_Supplied ,
+    sum(payment_amount)  as Total 
+from
+(select invitations.relation as relation, 
+invitations.family_id as family_id, 
+payment_amount 
+  from tickets
+   left join invitations 
+       on invitations.lead_id = tickets.lead_id
+       and invitations.school_year  = "2005-2006"
+   left join income on income.income_id = tickets.income_id
+where tickets.lead_id is not null 
+     and tickets.ticket_quantity > 0
+     and tickets.school_year = "2005-2006"
+group by invitations.relation) as ticket_sum
+ join
+(select invitations.relation as relation, 
+invitations.family_id as family_id, 
+payment_amount 
+  from leads_income_join
+   left join invitations 
+       on invitations.lead_id = leads_income_join.lead_id
+       and invitations.school_year  = "2005-2006"
+   left join income on income.income_id = leads_income_join.income_id
+where leads_income_join.lead_id is not null 
+     and income.school_year = "2005-2006"
+group by invitations.relation) as rsvp_sum
 ;
 
 

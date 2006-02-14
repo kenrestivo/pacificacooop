@@ -14,33 +14,35 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
-BUGS
-	constrain income, dammit, i think, in rsvp/tickets
-		constrain it in ENTERING the same way i constrian it for VIEWING
-		otherwise they can paint themselves into a corner
+
+export button for tickets/paddles
 
 	
 ??PHP
 bring in-kind donations back
-		then move the wine/cider/etc to it
+	then move the wine/cider/etc to it
+	only the linktable is there, or that's the one missing
+		i need both, alas	
 
 
-??PHP
-flip back and forth between rsvp/tickets, selfurl
-	try with no push
-	make sure it appears in new and edit too, not just view
+		
+??PHP/Python
+the VIP list import! dammit. i need those in there
+	import them, i have the list already
+	fuck, there's only 20, do it manually goddammit
+
 
 	
+??PHP/SQL
+de-dupe and/or alumni hack2
+	ugly linktable to glue actual alumni to the alumni list
+
+			
 ??PHP
 returned address
 	just take a list of numbers and confirm, then DNC = now() them
 	first show them and allow editing, though GAH i hate stateless PHP crap
 		
-
-??PHP/Python
-the VIP list import! dammit. i need those in there
-	import them, i have the list already
-	fuck, there's only 20, do it manually goddammit
 
 
 ??PHP
@@ -60,6 +62,10 @@ BUGS
 			what up with this?
 			my weird customconstrained in solicit cash is borken too!
 				WHY ONLY INCOME!!??
+	constrain income, dammit, i think, in rsvp/tickets
+		constrain it in ENTERING the same way i constrian it for VIEWING
+		otherwise they can paint themselves into a corner
+
 
 	
 
@@ -6440,3 +6446,8 @@ BUGS
 tickets/rsvps/paddles -- just look at it.
 	enter the damned things!
 	rsvps for non-root famlies: WARNINGS! need constraints
+
+??PHP
+flip back and forth between rsvp/tickets, selfurl
+	try with no push
+	make sure it appears in new and edit too, not just view
