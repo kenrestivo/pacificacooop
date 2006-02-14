@@ -96,15 +96,13 @@ def first_pass(data):
     for i in range(0,len(data)):
         di=data[i]
         if di['Birthday'] != '':
-            di['kids-date_of_birth'] = dateFix(di['Birthday'])
+            di['kids'] = {}
+            di['kids']['date_of_birth'] = dateFix(di['Birthday'])
         if di['Board Position'] != '':
-            di['board_list'] = parse_board_positions_field(di['Board Position'])
+            di['job_assignments'] = parse_board_positions_field(di['Board Position'])
         if di['Year Attended'] != '':
             di['all_attended'] = [fix_years(y) for y in di['Year Attended'].split(',')]
             di['fixed_attended'] = di['all_attended'].pop(0)
-        if di['Board Position'] != '':
-            di['board_list'] = parse_board_positions_field(di['Board Position'])
-                
 
 
 
@@ -126,7 +124,7 @@ def make_enrollment(data):
     for i in range(0,len(data)):
         di=data[i]
         years=di['fixed_attended'].split('-')
-        di['enroll_list'] = ['-'.join([str(i), str(i+1)]) for i in range(int(years[0]), int(years[1]))]
+        di['enrollment'] = ['-'.join([str(i), str(i+1)]) for i in range(int(years[0]), int(years[1]))]
             
 
  
@@ -152,16 +150,36 @@ def split_parents(data):
                 di['mom']['last_name'] = di['Last Name']
 
 
+def marshal_to_db(data):
+    """might as well marshal all of them into a nested struct"""
+    lnc = ""
+    for i in range(0,len(data)):
+        di=data[i]
+        if di['Child(ren)']:
+            di['kids']['first_name'] = di['Child(ren)']
+            if di['Last Name']:
+                di['kids']['last_name'] = di['Last Name']
+                lnc = di['Last Name']
+            else:
+                di['kids']['last_name'] = lnc
+        if di['Address']:
+            di['families'] ={}
+            di['families']['address'] = di['Address']
+            di['families']['phone'] = di['Phone']
+            di['families']['name'] = di['Last Name']
+            
+        
+
 
 ############# MAIN ##################
-if __name__ = '__main__':
+if __name__ == '__main__':
     """filter out lines with no birthday, which are invalid xrefs"""
     rasta=[i for i in import_to_dict('/mnt/kens/ki/proj/coop/imports/AlumniRoster.csv') if i['Birthday'] != '']
     first_pass(rasta)
     fix_attended(rasta)
     make_enrollment(rasta)
     split_parents(rasta)
-
+    marshal_to_db(rasta)
 
 
 """
