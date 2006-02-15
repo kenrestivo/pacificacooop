@@ -1098,10 +1098,13 @@ function triggerNotices($audit_id)
 
 
     function getNewIterator()
-    {
-        return new DB_DataObjectIterator(&$this->obj);
-    }
+        {
+            $this->page->printDebug("CoopObject::getNewIterator({$this->table})", 
+                                    2);
+            return new DB_DataObjectIterator(&$this->obj);
+        }
 
+    // different from the __clone in the DB_DO obj, of course
     function __clone() { return $this;}
 
 

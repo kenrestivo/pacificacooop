@@ -2189,5 +2189,13 @@ set do_not_contact = now() where lead_id in
 (38,455,296)
 
 
+-- check for squashed alumni
+select leads.lead_id, last_name from leads 
+left join invitations on leads.lead_id = invitations.lead_id
+    and invitations.school_year = '2005-2006'
+where (source_id = 2 or source_id = 7) and invitations.lead_id is null
+order by leads.last_name
+;
+
 
 --- EOF

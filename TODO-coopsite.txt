@@ -31,6 +31,9 @@ BUGS
 the VIP list import! dammit. i need those in there
 	import them, i have the list already
 	fuck, there's only 20, do it manually goddammit
+	how did i do vip's? tickets?
+		yes, they were direct tickets.
+	vip category? i like what julie did here
 
 
 ??PHP/SQL
@@ -599,6 +602,12 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+???PHP
+audit trail fixes
+	please limit the size of the "record details" to... something < huge
+	and put in a "details" recordbuttons link for it too, if possible
+
+	
 ??SQL
 whatever query i was using to invite alumni, it was fucked up
 	it wasn't inviting anyone who DROPPED, goddammit.
@@ -782,12 +791,6 @@ ENTRY
 		and the gui version of the treasurer's description perhaps?
 
 
-
-???PHP/SQL
-vip stuff -- import
-	how did i do vip's? tickets?
-		yes, they were direct tickets.
-	vip category? i like what julie did here
 
 
 ???PHP

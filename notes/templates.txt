@@ -1,12 +1,18 @@
 template engine notes
 
+create a variation on simpletable which returns dicts
+	using CoopView->toArray()
+		which means the data will already be properly html escaped
+	as an iterable- how?
+
 
 things which suck, a lot, about simpletable
 	trying to add a column which isn't in the db. or a button callback
 		thank you
 		make-packages
 		parent ed
-
+	you masically have to create a fake column with nothing in it
+		then create a displaycallback to add it
 
 revise the whole model
 	think in terms of everything generating s-expressions: nested dicts

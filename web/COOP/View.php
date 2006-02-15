@@ -389,12 +389,12 @@ class coopView extends CoopObject
                 {
                     //NOTE nl2br is to deal with old text imports
                     //TODO: don't use val, specifically go get _cache_$key here
-                    $res[] = nl2br($this->fullText ? '<div>' . $val . '</div>' : 
-                                   strip_tags(
-                                       sprintf('%.' . 
+                    // XXX WAIT! shouldn't i htmlentities this too?
+                    $res[] = nl2br($this->fullText ? '<div>' . $val . '</div>' 
+                                   : sprintf('%.' . 
                                                COOP_MAX_LONGTEXT_DISPLAY .
                                                's...',
-                                               $this->obj->{'_cache_' . $key}))); 
+                                               strip_tags($this->obj->{'_cache_' . $key}))); 
                 } else if ($table[$key] &  DB_DATAOBJECT_BOOL){
                     //TODO: a little checkbox PNG would be nice
                     $res[] =  $val? 'X' :'';
@@ -402,6 +402,7 @@ class coopView extends CoopObject
                     // append a direct edit link here, if permitted!
                     // NOTE! DO NOT TAKE VALUE BY REFERENCE!!
                     // if it returns a string, you'll be in a world of hurt
+                    // XXX this function is also miserably ugly and unreadable
                     $sub = $this->checkLinkField($key, $val);
                     if(is_object($sub)) {
                         $res[] = sprintf('%s %s',

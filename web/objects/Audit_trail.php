@@ -57,37 +57,6 @@ class Audit_trail extends CoopDBDO
                                      'email_sent' => 'sendNow');
                                      
 
-    function BORKENfb_display_details(&$co)
-        {
-            //XXX move this to 'last'
-            $limit = $_REQUEST['limit'] ? $_REQUEST['limit'] : 20;
-	 
-            $session = new CoopView(&$co->page, 'session_info', $none);
-
-            // this is an interesting pseudo sub-dispatcher
-            if($_REQUEST[$co->prependTable($co->pk)]){
-                $this->{$co->pk} = 
-                    $_REQUEST[$co->prependTable(
-                                  $co->pk)];
-                    //array_push($this->fb_fieldsToRender, 'table_name', 'index_id');
-                    $this->find(true);
-                    //print $co->horizTable();
-			 
-                    // basically the stuff in genericdetails.
-                    $thing = new CoopView(&$co->page, $this->table_name, &$nothing);
-                    $thing->obj->{$thing->pk} = $this->index_id;
-                    print $thing->horizTable();
-			 
-                    // standard audit trail, for all details
-                    $aud =& new CoopView(&$co->page, 'audit_trail', &$thing);
-                    $aud->obj->table_name = $this->table_name;
-                    $aud->obj->index_id = $this->index_id;
-                    $aud->obj->orderBy('updated desc');
-                    print $aud->simpleTable(true, true);
-            }
-
-
-        }
 
     function fb_display_view(&$co)
         {
@@ -302,7 +271,11 @@ class Audit_trail extends CoopDBDO
             if($sub->isPermittedField() < ACCESS_VIEW){
                 return '(Not permitted)';
             }
-            return htmlentities(unHTML(strip_tags($sub->concatLinkFields())));
+            $res = nl2br(htmlentities(unHTML(strip_tags($sub->concatLinkFields("\n")))));
+            return sprintf('%.' . COOP_MAX_AUDIT_SUMMARY_DISPLAY . 's%s',
+                        $res,
+                        strlen($res) > COOP_MAX_AUDIT_SUMMARY_DISPLAY ? '...' : '');
+                        
         }
 
 
