@@ -27,7 +27,10 @@ $top = new CoopObject(&$cp, 'enrollment', $none);
 // i hope i fix the db schema so i'll never have do to this again
 // but if i did, the right thing would be to search for "not this year"
 
-$top->obj->school_year = $cp->decrementSchoolYear();
+$top->obj->whereAdd(); //CLEAR ALL!
+$top->obj->whereAdd(sprintf('%s = "%s"',
+                            $cp->decrementSchoolYear()));
+
 $top->obj->find();
 //print $top->simpleTable();
 

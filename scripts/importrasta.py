@@ -114,7 +114,7 @@ class RastaImport:
         """Utility method to clean up input record"""
         return x.replace('*','').strip()
 
-    def _dateFix(self, d):
+    def dateFix(self, d):
         """Deal with Excel dates, which sometimes come up unformatted
         as integers. NOTE the -2 to deal with excel/lotus bugs."""
         if d.count('/') > 1:
@@ -276,6 +276,7 @@ class Kid(Adder):
 
 
     def _human_to_dt(self,dob):
+        """move to a library!!!"""
         d=map(int, dob.split('/'))
         d.insert(0,d.pop())             # date wants y,m,d
         if d[0] < 1900: d[0]+=1900

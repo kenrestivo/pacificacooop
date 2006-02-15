@@ -36,9 +36,48 @@ class SessionInfo(SQLObject):
 
 
 
-# class Invitations(SQLObject):
-#        class sqlmeta:
-#               fromDatabase = True
-#               idName='invitation_id'
+class Families(SQLObject):
+       class sqlmeta:
+              fromDatabase = True
+              idName='family_id'
+              uglyName='familyID'
 
 
+
+class Parents(SQLObject):
+       class sqlmeta:
+              fromDatabase = True
+              idName='parent_id'
+              uglyName='parentID'
+
+
+
+class Kids(SQLObject):
+       class sqlmeta:
+              fromDatabase = True
+              idName='kid_id'
+              uglyName='kidID'
+
+
+
+class Enrollment(SQLObject):
+       class sqlmeta:
+              fromDatabase = True
+              idName='enrollment_id'
+              uglyName='enrollmentID'
+
+
+
+class JobAssignments(SQLObject):
+       class sqlmeta:
+              fromDatabase = True
+              idName='job_assignment_id'
+              uglyName='jobAssignmentID'
+  
+
+
+class JobDescriptions(SQLObject):
+       class sqlmeta:
+              fromDatabase = True
+              idName='job_description_id'
+              uglyName='jobDescriptionID'

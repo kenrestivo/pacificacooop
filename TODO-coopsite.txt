@@ -1,6 +1,7 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
+ 	import the 20-year roster (20yearroster.txt)
 	tal templates and reports, and json services (templates.txt)
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
@@ -9,34 +10,21 @@ coop web database
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
-	import the 20-year roster (20yearroster.txt)
+	springfest microsite (microsite.txt)
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-	
-BUGS
-	fix that ad insertion anomaly in the report
-	
-	
-export button for tickets/paddles
-	well, just generalise view, really
-		i'll need all the schoolyearchooser shit though, to honour it in export
-		no pager though, that's the only thing to leave out
-		basically, everything in view except for the simpletable. fuck.
-	fb_export()?
-	things i'll need that are specific to exporting
-		spreadsheetname
-		worksheet name
-		landscape/portrait
-		any special notes
 
-	
 ??PHP
 bring in-kind donations back
 	then move the wine/cider/etc to it
 	only the linktable is there, or that's the one missing
 		i need both, alas	
 
+	
+BUGS
+	fix that ad insertion anomaly in the report
+	counts are not in sync between carrie and nag report
 
 		
 ??PHP/Python
@@ -56,20 +44,35 @@ de-dupe and/or alumni hack2
 	ugly linktable to glue actual alumni to the alumni list
 	let the user choose
 
-			
-??PHP
-returned address
-	just take a list of numbers and confirm, then DNC = now() them
-	first show them and allow editing, though GAH i hate stateless PHP crap
-		
+	
+??PHP/SQL
+remember paddles will be SPLIT
+	members and non-members separate
 
-
+	
 ??PHP
 ticket/rsvp fixes
 	bring back the auto-parent-generating thing, and run it
 	update it to note PAID FOR for the ticket, go grab from food/raffle fee
 	if it's paid for, dammit, then insist on payment!	
 
+
+???PHP, nasty				
+export button for tickets/paddles
+	well, just generalise view, really
+		i'll need all the schoolyearchooser shit though, to honour it in export
+		no pager though, that's the only thing to leave out
+		basically, everything in view except for the simpletable. fuck.
+			yes. this is stupid: presentation and logic stuck together!
+	fb_export()?
+	things i'll need that are specific to exporting
+		spreadsheetname
+		worksheet name
+		landscape/portrait
+		any special notes
+	could change display_view to be everything EXCEPT calling simpletable
+		almost all do exactly that, and end with true,true
+		or, hack simpletable so it doesn't run if spreasdheet-- EVIL
 				
 BUGS
 	why are some invitees missing from paddles? fucking paddles.
@@ -94,8 +97,6 @@ BUGS
 		that surfboard doesn't belong, put in indulgence instead
 	fix the damnd STRONG in blog entry add instructions dammit. annoying.
 	
-	
-
 
 
 ???PHP/PYTHON/CSS (day)
@@ -119,20 +120,20 @@ BURNT (when too burnt out to do actual work)
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
 
-bring back the surfboard cash! i got vallemar station so far
 
 duncan details anomaly in enhancement
 
 
 
-families dammit... calculation is wrong
+families dammit... calculation is wrong? or at least strange
+	it doesn't add up
+
 
 ??JS/PHP/tinymce
 clean up html in instructions: strong self-closing tag!
 	strongs are autoclosing in tinymce. fix that! no xml autocloses!
 	look up on interweb
 
-counts are not in sync between carrie and nag report
 
 
 PERMS BUGS!!
@@ -170,9 +171,6 @@ BUGS
 			fuck, i gotta use it everywhere: reports, table, userprivs
     if they search for something else, KEEP what they already had selected!
     	go find out how. it doesn't really work. endlessloop!!?
-   	weird js error: Error: [Exception... "'Permission denied to get property XULElement.selectedIndex' when calling method: [nsIAutoCompletePopup::selectedIndex]"  nsresult: "0x8057001e (NS_ERROR_XPC_JS_THREW_STRING)"  location: "JS frame :: http://www/coop-dev/lib/kenflex.js :: anonymous :: line 64"  data: no]
-    Source File: http://www/coop-dev/lib/kenflex.js
-    Line: 64
     
 
 
@@ -600,6 +598,16 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??SQL
+whatever query i was using to invite alumni, it was fucked up
+	it wasn't inviting anyone who DROPPED, goddammit.
+
+??PHP
+returned address
+	just take a list of numbers and confirm, then DNC = now() them
+	first show them and allow editing, though GAH i hate stateless PHP crap
+
 
 ??PHP
 bring back the auction description length constraint
@@ -3450,6 +3458,11 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	hmm, i can save the parent obj right in there, then pull it out with **
+		NO! only the id
+
+		dicts aren't in any order. i need line numbers in improt
+
 	vip should flag automatically based on lead or invite vip flag
 		gah, isn't one
 		ah! that javascript warning happens when there is a NEW record?
@@ -6465,3 +6478,46 @@ tickets/rsvps/paddles -- just look at it.
 flip back and forth between rsvp/tickets, selfurl
 	try with no push
 	make sure it appears in new and edit too, not just view
+bring back the surfboard cash! i got vallemar station so far
+   	weird js error: Error: [Exception... "'Permission denied to get property XULElement.selectedIndex' when calling method: [nsIAutoCompletePopup::selectedIndex]"  nsresult: "0x8057001e (NS_ERROR_XPC_JS_THREW_STRING)"  location: "JS frame :: http://www/coop-dev/lib/kenflex.js :: anonymous :: line 64"  data: no]
+    Source File: http://www/coop-dev/lib/kenflex.js
+    Line: 64
+		SOLUTION: autocomplete. must turn it off	first i have to yearify the roster form
+		so as to yank edit's out of ALL previous-year enrollments!
+	board positoin is odd but predictabe: TITLE(yy-yy),TITLE(yy-yy)
+		1st VP => 1st Vice President (2nd too)
+	the birthdays are in EXCEL EPOCH format... look at my rasta import
+	multiple years attended, separated
+		enrollment
+	this is not difficult.
+	then make a php or python gui for dupe-fixing
+	then i have to clean up the spreadsheet
+		empty lines are whatever was previous
+			do it MANUALLY? there are uglinessen
+		fix the 2-digit dates: manually, most likely
+			naw. easy in python
+		make the former-board-member stuff logical: manually? too	
+	i will need to deal with joins here if mult kids!
+		basically, if parent lines above are same, use same familyid 
+	AHAa! multiple kids are on the SAME YEAR, which sucks
+			the first one is the current. the second is for one afterwards
+		some have NO years, that means it's same as above
+some are > 1 year! i.e. 1988-1992
+first cleanup step
+	split mom/dad names
+	assume pacifica unless otherwise noted, i think i have this code somewhere
+	ignore the "see" lines
+
+tables i'd need to have in python sqlobject format
+	families
+	parents
+	kids
+	enrollment
+	job descr
+	job assig
+		sqlbuilder? i do want an object
+			getting an objec with cursor ain't so easy
+			naw, sqlbuilder sucks. get a fucking cursor
+
+new surfboard pitcures. DUDE
+post the actual invitation	

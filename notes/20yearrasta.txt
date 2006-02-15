@@ -1,34 +1,49 @@
 the 20 year roster!!
 
+ok, try some db stuff, see how it goes.
+	families should be easiest
+		match on family name, of course
+		but if NEITHER of parents or phone match, CREATE NEW
+			using parents first names
+	kids second easiest... just grab familyobj from above
+	parents then, for each mom and dad, insert with defaults "type" mom/dad
+	next the enrollment... it's a list and i need to insert all of them
+		will also need some defaults perhaps: am/pm, etc
+	finally the hard one: job assignments
+		have to either look up job description, or foreign key it
+		use connect, blow off sqlobject
+		
+as you iterate through the lines
+	go for it
+		
 
-tweeks:
-	birthdays need to be y2k'ed (like my old rasta import)
-	year attended is fucked. it's yy-yy,yy-yy,yy-yy for each subsequent line
-	board positoin is odd but predictabe: TITLE(yy-yy),TITLE(yy-yy)
-		also first/1st, second/2nd inconsistency
-	assume pacifica unless otherwise noted, i think i have this code somewhere
-	ignore the "see" lines
-	this is not difficult.
-	then make a php or python gui for dupe-fixing
+the ONLY data editing i needed to do was the duplicated 1st vp(87-88,
 
 
+how to handle divorced parents?
+	use the same parent name, i suppose, no problem there
+	are these two different families??!
 
+watch out for duplicate LAST NAMES
+	go have a look, sort, count
+
+	
+	blank last/mom/dad are same as previous
+		BUT ONLY for last/mom/dad/address/phone
+		so, as i iterate through, what to do?
+		i don't think it's a problem with my current Whatever
+
+		
+	
 import the bitchen 20-year alumni rasta!
 	bummer: lots of work
-	first i have to yearify the roster form
-		so as to yank edit's out of ALL previous-year enrollments!
-	then i have to clean up the spreadsheet
-		empty lines are whatever was previous
-			do it MANUALLY? there are uglinessen
-		fix the 2-digit dates: manually, most likely
-			naw. easy in php. explode, then guess > 50 < 50
-		make the former-board-member stuff logical: manually? too	
 	at import time, need to check for duplicate last-names/family names
 		search db first, avoid collisions but also let merges happen!
 			soundexes on parent names? auugh.
-	i will need to deal with joins here if mult kids!
-		basically, if parent lines above are same, use same familyid 
 	finally the address hacks from alumni-hack.php
 		but different: there are no zipcodes?
 	then once it's in, got to reconcile with the "alumni" leads list!
 
+
+
+might need to create user names too. some alumni might be back later.

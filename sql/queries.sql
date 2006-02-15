@@ -1750,7 +1750,7 @@ insert into invitations
 (school_year, lead_id, family_id, relation) 
 (select '2005-2006', lead_id, family_id, relation 
 from invitations 
-where  (family_id = 0 and school_year = '2004-2005'));
+where (family_id = 0 or relation == 'Alumni') and school_year = '2004-2005');
 
 
 --- last audit. used often
@@ -1758,7 +1758,11 @@ select * from audit_trail
 where audit_trail_id = (select max(audit_trail_id) from audit_trail) \G
 
 -- one-off to fix invites stuff
-select distinct leads.lead_id from audit_trail left join leads on leads.lead_id = index_id left join invitations on index_id = invitations.lead_id where audit_user_id = 118 and table_name = 'leads' and invitation_id is null;
+select distinct leads.lead_id 
+from audit_trail 
+    left join leads on leads.lead_id = index_id 
+    left join invitations on index_id = invitations.lead_id 
+where audit_user_id = 118 and table_name = 'leads' and invitation_id is null;
 
 
 
@@ -2179,10 +2183,10 @@ left join package_types
 set packages.package_type_id = package_types.package_type_id
 
 
---- heh
+--- cute little utility to whack bad addresses
 update leads 
 set do_not_contact = now() where lead_id in 
-(1721,1023,857,871,1750,1751,722,421,834,957)
+(38,455,296)
 
 
 

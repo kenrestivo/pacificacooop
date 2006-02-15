@@ -177,13 +177,15 @@ def marshal_to_db(data):
 #######ideas
 """
 ## of course you need to SEARCH FIRST!
-
+#getattr/setattr uglyName too
+ 
 r=rasta[45]
 
 f=Families(**r['families'])
 #no automagick, need to KNOW THE ID IN SQLMETA STUPID FORMAT!
-#getattr/setattr uglyName
 
+
+#standard importer should handle this case
 r['kids']['familyID'] = f.id
 k=Kids(**r['kids'])
 
@@ -198,8 +200,8 @@ for i in ['mom', 'dad']:
 
 
 #can't do left joins-- fuck you sqlobject-- so get its connect handle
-
-
+c=f._connection.getConnection().cursor()
+c.execute()!
 
 """
 
