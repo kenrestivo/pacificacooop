@@ -2186,7 +2186,7 @@ set packages.package_type_id = package_types.package_type_id
 --- cute little utility to whack bad addresses
 update leads 
 set do_not_contact = now() where lead_id in 
-(38,455,296)
+(500)
 
 
 -- check for squashed alumni
@@ -2196,6 +2196,18 @@ left join invitations on leads.lead_id = invitations.lead_id
 where (source_id = 2 or source_id = 7) and invitations.lead_id is null
 order by leads.last_name
 ;
+
+
+--  reanimate invitations
+insert into invitations 
+(school_year, relation, lead_id)
+values
+('2005-2006', relation = 'Alumni', 666),
+1189,667,670,672,675,1190,684,692,699,1191,716,719,727,1192,735,740,746,750,752,754,1173,1194,1174,1175,785,788,790,793,796,800,802,1197,806,811,1198,821,831,832,1199, 1177,850,864,865,1179,1201,873,1202,1180,1728,1204,914,1210,919,920,927,1174,1182,932,935,1206,1207,944,947,952,953,963,971,1209,986,995,996,1007,1009,1013,1018,1019,1029,1041,1186,1187,1188,1067)
+;
+
+
+--- trujillo address
 
 
 --- EOF
