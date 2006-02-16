@@ -7,9 +7,8 @@
         <th>Parent Ed Hours Owed</th>
       </tr>
       <tr tal:repeat="family report/families" >
-        <td tal:content="family/name" colspan="2" >Family</td>
-          <div tal:omit-tag=""  tal:repeat="parents family/parents" > 
-          </div>
+        <td tal:content="family/name">Family</td>
+        <td tal:content="family/family_id">ID</td>
       </tr>
     </table>
   </div>
