@@ -1994,7 +1994,8 @@ order by cash_donations desc, auction_purchases desc,
 auction_donations desc, in_kind_donations desc
 
 --- delete some number of random nobodies
-update invitations join
+update invitations 
+join
 (select leads.lead_id
 from invitations
 left join leads on invitations.lead_id = leads.lead_id
@@ -2194,20 +2195,29 @@ select leads.lead_id, last_name from leads
 left join invitations on leads.lead_id = invitations.lead_id
     and invitations.school_year = '2005-2006'
 where (source_id = 2 or source_id = 7) and invitations.lead_id is null
+and (do_not_contact is not null and do_not_contact > "1000-01-01")
 order by leads.last_name
 ;
 
 
---  reanimate invitations
-insert into invitations 
-(school_year, relation, lead_id)
-values
-('2005-2006', relation = 'Alumni', 666),
-1189,667,670,672,675,1190,684,692,699,1191,716,719,727,1192,735,740,746,750,752,754,1173,1194,1174,1175,785,788,790,793,796,800,802,1197,806,811,1198,821,831,832,1199, 1177,850,864,865,1179,1201,873,1202,1180,1728,1204,914,1210,919,920,927,1174,1182,932,935,1206,1207,944,947,952,953,963,971,1209,986,995,996,1007,1009,1013,1018,1019,1029,1041,1186,1187,1188,1067)
+--- THERE IS A REASON WHY THOSE WERE DELETED!
+--- whack them all
+create temporary table dead (
+    lead_id int(32) not null unique
+);
+insert into dead
+(select distinct invitations.lead_id 
+from invitations
+left join leads 
+    on leads.lead_id = invitations.lead_id
+where (do_not_contact is not null and do_not_contact > "1000-01-01") 
+    and school_year = "2005-2006"
+    and (label_printed is null or label_printed < "1000-01-01"))
 ;
-
-
---- trujillo address
-
+delete
+from invitations 
+where invitations.lead_id  in
+(select * from dead)
+;
 
 --- EOF
