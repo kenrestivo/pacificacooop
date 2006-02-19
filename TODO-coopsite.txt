@@ -6600,3 +6600,5 @@ rest the content pages!
 ok, now do the css
 	menu
 	floaties
+	it'll be the same shit every year, so just put it in the system
+	i'll want to keep previous years for history purposes

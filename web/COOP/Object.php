@@ -872,8 +872,6 @@ group by user_id,table_name,field_name";
         {
             //XXX note! orcurrent isn't used anymore, since version 1.133!!
             ///yank orcurent, or fix it!
-            $this->page->printDebug("CoopObject::getChosenSchoolYear({$this->table})", 
-                                    3);
             if($this->chosenSchoolYear){
                 $this->page->printDebug(
                     "getChosenSchoolyear {$this->table} found {$this->chosenSchoolYear}", 
@@ -885,7 +883,8 @@ group by user_id,table_name,field_name";
             if(!$this->isTop(&$top)){
                 return $top->getChosenSchoolYear();
             }
-            
+            $this->page->printDebug("CoopObject::getChosenSchoolYear({$this->table}): nothign found, using currentschoolyear", 
+                                    3);
             return $this->page->currentSchoolYear;
         }
 

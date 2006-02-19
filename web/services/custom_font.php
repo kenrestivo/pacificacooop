@@ -23,17 +23,11 @@ $im = imagecreate(450,40);
 $white = imagecolorallocate($im, 255, 255, 255);
 $blue1 = imagecolorallocate($im, 175, 188, 199);
 $blue2 = imagecolorallocate($im, 64, 99, 122);
+$black = imagecolorallocate($im, 0, 0, 10);
  
-imagefilltoborder($im, 0, 0, $blue1, $blue1);
+//imagefilltoborder($im, 0, 0, $blue1, $blue1);
 
-// now draw out the outline (stroke) on the text
-for ($ox = -$stroke; $ox <= $stroke; $ox++) {
-    for ($oy = -$stroke; $oy <= $stroke; $oy++) {
-        imagettftext($im, $font_size, $font_angle, $startx+$ox, $starty+$oy,
-                $blue2, $font, $text);
-    }
-}
-imagettftext($im, $font_size, $font_angle, $startx, $starty, $white, $font, $text);
+imagettftext($im, $font_size, $font_angle, $startx, $starty, $black, $font, $text);
  
 // set the correct HTTP header for a PNG image
 header("Content-type: image/png");

@@ -1,11 +1,38 @@
 create a  proper springfest microsite
 
+the schoolyear constraint seems broken, go fix
+
+database-ize this!
+	pages table:
+		"name", basically URL short
+		menushort-- display
+		class?!
+		possibly different each schoolyear too... remmeber to put in new year!
+		text (short)		
+		text (extended)
+			handle it like a dkos blog entry, two editors on one page
+	attachments/links table? or let it go in freeform?
+	some will be SPECIAL, like auction and home and about, always required
+
+
+the sponsors show up on every page, go do that
+	
+ok, now abstract all this out somehow
+	one big class for The Whole Thing
+	functions for each //// item
+	possibly a dispatcher
+
 specials:
 	home page: list of all the summaries!
-		crap. might have to use template here
+		crap. might have to use METAL here for this one
 	auction page: the list of the packages
+	about page: previous years's springfests links.. any past pages or data
 
-	
+
+include edit links in template, if cookie'ed and permitted
+
+
+		
 layout:
     home
     	little blurbs and links to all of below, in order
@@ -28,19 +55,6 @@ on each page:
 	links to donate buttons
 	sponsorship blogroll down the side
 
-
-database-ize this!
-	it'll be the same shit every year, so just put it in the system
-	i'll want to keep previous years for history purposes
-	pages are just a joinfield
-		home,event,sponnsorship,raffle, auction, about
-	fields/tables for each "page"
-		foreignkey popup of which page
-		text (short)		
-		text (extended)
-			handle it like a blog entry, two fields on one page
-		attachments/links
-	include edit links if cookie'ed and permitted
 
 use phptal for this beast
 	
