@@ -67,6 +67,9 @@ class HTML_QuickForm_customselect extends HTML_QuickForm_select
                 'editperms-' . $this->getName(),
                 '{}',
                 array('id' => 'editperms-' . $this->getName()));
+            // so that the perms won't submit!!
+            $this->editperms->removeAttribute('name'); 
+
         }
 
 
