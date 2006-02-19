@@ -1,11 +1,8 @@
 create a  proper springfest microsite
 
-ok, now do the css
-	menu
-	floaties
-
 specials:
 	home page: list of all the summaries!
+		crap. might have to use template here
 	auction page: the list of the packages
 
 	

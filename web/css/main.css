@@ -308,7 +308,8 @@ ul.navbar {
   float:left; 
   display:block; 
   width:100%; 
-  line-height:1.5em; 
+  text-align: center;
+/*   line-height:1.5em;  */
   clear:both; 
   margin:0; 
   padding:0; 
@@ -321,7 +322,7 @@ a.nav:link, a.nav:visited {
   display:block; 
   float:left; 
   width:24.5%; 
-  padding:1.2em 0 1.2em 0; 
+  padding:0.5em 0 0.5em 0; 
   margin:0; 
   text-decoration:none; 
   background-color:#999999; 
@@ -331,17 +332,17 @@ a.nav:hover {
   display:block; 
   float:left; 
   width:24.5%; 
-  padding:1.2em 0 1.2em 0; 
+  padding:0.5em 0 0.5em 0; 
   margin:0; 
   text-decoration:none; 
-  background-color:#bf0000; 
+  background-color: #aabbff;
 color:#FFFFFF;}
 
 a.nav:active {
   display:block; 
   float:left; 
   width:24.5%; 
-  padding:1.2em 0 1.2em 0; 
+  padding:0.5em 0 0.5em 0; 
   margin:0; 
   text-decoration:none; 
   background-color:#999999; 
@@ -351,10 +352,10 @@ a.navcurrent {
   display:block; 
   float:left; 
   width:24.5%; 
-  padding:1.2em 0 1.2em 0; 
+  padding:0.5em 0 0.5em 0; 
   margin:0; 
   text-decoration:none; 
-  background-color:#ad91ed; 
+  background-color: #aa99ff;
   color:#FFFFFF;}
 
 
