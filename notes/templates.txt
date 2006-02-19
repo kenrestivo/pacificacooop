@@ -1,10 +1,39 @@
 template engine notes
 
-ok test it out now!
 
+hey, do that springfest microsite thing
+	just to get competent and comfortable
+	(microsite.txt)
+
+	
+???PHP/CSS (day)
+package sheet printing -- some with CSS or PDF!
+	get the basics there
+	figure out how to do page breaks
+		read!
+
+	
+revise the whole model
+	think in terms of everything generating s-expressions: nested dicts
+		which can then be implemented via TAL/kid/smarty templates
+			or shipped via JSON, or IPC'ed to python, etc
+				at JSON time they can be stuffed into mochikit/nevow things!
+				i can also perhaps ship the JS "template" for them too!
+	ok, in coopview:  makeheader and a fetch through toarraywithkeys
+		you can build any table with mochikit using these two!
+		build a jsonrpc or REST to go get this
+			tricky bit will be the conditions
+		these are your subtables when done
+
+wow, i can do forms as templates!!
+	dynamically deciding what things to put in the form!
+	use that table-less thing
+
+		
 subtables/linktables
 	fisch them out of forwardlinks/backlinks
-	return iterators of them
+	if they're already not linked, link them, like details view does
+	return iterator of them
 	
 	
 things which suck, a lot, about simpletable
@@ -15,26 +44,7 @@ things which suck, a lot, about simpletable
 	you masically have to create a fake column with nothing in it
 		then create a displaycallback to add it
 
-revise the whole model
-	think in terms of everything generating s-expressions: nested dicts
-		which can then be implemented via TAL/kid/smarty templates
-			or shipped via JSON, or IPC'ed to python, etc
-				at JSON time they can be stuffed into mochikit/nevow things!
-				i can also perhaps ship the JS "template" for them too!
-	start with simpletable perhaps. try making it a client of a func
 
-
-
-ugly big huge reference problem
-	looks like the page that gets sent into the context is DIFFERENT
-		from the one that is in the dispatcher. this is deadly
-		make sure i understand exactly what is the behaviour
-			i.e. i can put things into dispatcher.
-				how do they get disconnected?
-		then go trace it through
-	maybe blow off the dispatcher???!
-		try to trace it back
-		i think this whole approach is brain-dead
 
 
 make attendance test use wholephptal model now!
@@ -98,3 +108,14 @@ make attendance test use wholephptal model now!
 		xhtml/xml mode?
 
 
+
+ugly big huge reference problem
+	looks like the page that gets sent into the context is DIFFERENT
+		from the one that is in the dispatcher. this is deadly
+		make sure i understand exactly what is the behaviour
+			i.e. i can put things into dispatcher.
+				how do they get disconnected?
+		then go trace it through
+	maybe blow off the dispatcher???!
+		try to trace it back
+		i think this whole approach is brain-dead

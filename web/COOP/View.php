@@ -160,6 +160,7 @@ class coopView extends CoopObject
                              'class="altrow1"');
 			}
 
+            /// legacy only used by thankyounotes, iirc
 			if($this->extraRecordButtons){
 				$tab->addRow(array("", $this->extraRecordButtons));
 			}

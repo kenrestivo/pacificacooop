@@ -1,6 +1,7 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
+	springfest microsite (microsite.txt)
 	tal templates and reports, and json services (templates.txt)
  	import the 20-year roster (20yearroster.txt)
 	cleanups and code fixes (cleanme.txt)
@@ -10,11 +11,11 @@ coop web database
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
-	springfest microsite (microsite.txt)
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-	
+
+		
 
 ??PHP
 export the packages list in csv format too
@@ -98,11 +99,6 @@ BUGS
 	
 
 
-???PHP/PYTHON/CSS (day)
-package sheet printing -- some with CSS or PDF!
-	that means either i need python or phptal to work!
-	using pdf? html? formatting?
-
 
 -----------
 BURNT (when too burnt out to do actual work)
@@ -110,6 +106,9 @@ BURNT (when too burnt out to do actual work)
 	lisp reading/studying
 
 	read up on rest
+
+	read up on CSS page breaks, didn't i find a good tutorial on it?
+		quirksmode?
 
 	move all the instructions over to the new thing
 
@@ -637,12 +636,15 @@ bring back the auction description length constraint
 	BUT wrap it in an ispermittedfield first
 	yank it for those with group edit perms
 
+	
 ??JABBASCRIPT/PHP
 customsel do not submit the fucking editperms goddammit!
 	onsubmit is bubbling phase
 	you should be able to add a handler for the capturing phase,
 		then preventBubble it. i.e. Evt.consume() like in kenflex.js
-
+	hmm. i think i solved this by removing the NAME attribute
+		check and make sure
+		
 
 ??PHP
 more ticket screwups
@@ -3475,7 +3477,15 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	hmm, i can save the parent obj right in there, then pull it out with **
+let's get serious about this then!
+	test splitting pages
+		invisible flowable NextPageTemplate
+		it's not really necessary, except maybe if different margins
+	xref shit
+		getting corrupted in transfer. try compression
+		where is it set? in canvas?
+
+			hmm, i can save the parent obj right in there, then pull it out with **
 		NO! only the id
 
 		dicts aren't in any order. i need line numbers in improt
@@ -6566,3 +6576,10 @@ create a variation on simpletable which returns dicts
 	as an iterable- how?
 		a coopiterator, duh. return $this->toArrayWithKeys()
 	similar to CoopObject::getLinkOptions()
+	start with simpletable perhaps. try making it a client of a func
+ok test it out now! it works!
+	that means either i need python or phptal to work!
+	using pdf? html? formatting?
+
+package exaha!
+shitcan the editperms NAME attribute and browser won't submit it!

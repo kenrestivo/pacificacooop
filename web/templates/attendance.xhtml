@@ -3,10 +3,10 @@
   <div metal:fill-slot="center_column">
     <table>
       <tr class="tableheaders">
-        <th  tal:content="report/families/obj/fb_fieldLabels/name">Name</th>
+        <th  tal:content="families/obj/fb_fieldLabels/name">Name</th>
         <th>Parent Ed Hours Owed</th>
       </tr>
-      <tr tal:repeat="family report/families" >
+      <tr tal:repeat="family families" >
         <td tal:content="family/name">Family</td>
         <td tal:content="family/phone">Phone</td>
       </tr>
