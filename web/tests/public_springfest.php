@@ -49,7 +49,7 @@ function &build(&$page)
                                    'content' => 'About Us')
         );
 
-    // handle the no-year-equals-this-year navigation
+    ///////////// handle the no-year-equals-this-year navigation
     $path = explode('/', $_SERVER['PATH_INFO']);
     if(preg_match('/^\d{4}$/', $path[1])){
         $sy = $path[1];
@@ -59,7 +59,7 @@ function &build(&$page)
         list($nothing, $sy) = explode('-', $page->currentSchoolYear);
     }
 
-    // make current nav
+    /////////////// make current nav
     if(in_array($nav, array_keys($menu))){
         $menu[$nav]['class'] = 'navcurrent';
     } else {
@@ -68,16 +68,17 @@ function &build(&$page)
     
     $template->setRef('nav', $menu);
 
-    // object time
-    $families =& new CoopView(&$page, 'families', 
-                                    &$nothing);
-    $families->chosenSchoolYear = sprintf('%d-%d', $sy -1, $sy);
+    ////////////// object time
+    $families =& new CoopView(&$page, 'families', &$nothing);
+    // bah! gotta put it in last, because that's where view fishes it out of
+    $page->vars['last']['chosenSchoolYear'] = sprintf('%d-%d', $sy -1, $sy);
     $families->find(true);
     $page->title = 'Springfest ' . $sy;
     $template->setRef('families', $families);
 
 
-    $page->printDebug("sy $sy nav $nav", 1);
+    $page->printDebug("sy $sy nav $nav ". $families->getChosenSchoolYear(), 1);
+
 
     return $template;
 }
