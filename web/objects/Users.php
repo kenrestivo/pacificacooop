@@ -32,6 +32,13 @@ class Users extends CoopDBDO
 	var $fb_shortHeader = 'Users';
 	var $fb_fieldsToUnRender = array('password');
 
+    /// XXX need to put in linkconstraints so that this works
+//     var $fb_extraDetails = array('users_groups_join:groups');
+//     var $fb_joinPaths = array('school_year' => 'families:kids:enrollment');
+
+
+
+
 // XXX doesn't work?
  // 	function preGenerateForm() {
 //          unset($this->fb_fieldsToUnRender);

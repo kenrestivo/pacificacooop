@@ -23,7 +23,8 @@ class Realms extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
-
+    
+    var $fb_fieldsToUnRender = array('realm');
 	var $fb_linkDisplayFields = array('realm');
 	var $fb_formHeaderText = 'Data Realms';
 	var $fb_shortHeader = 'Realms';
@@ -32,9 +33,9 @@ class Realms extends CoopDBDO
 // 									 'toTable' => 'users',
 // 									 'toField' => 'user_id',
 // 									 'type' => 'select'));
-    var $fb_fieldsToRender = array ('short_description', 'meta_realm_id');
+
     var $fb_linkDisplayFields = array ('short_description');
-    var $fb_fieldLabels = array('realm' => 'Id',
+    var $fb_fieldLabels = array('realm' => 'OLD ID (not used anymore)',
                                 'short_description' => 'Data/Menu Realm',
                                 'meta_realm_id' => 'Is Subrealm of');
 

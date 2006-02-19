@@ -27,7 +27,7 @@ class Leads_income_join extends CoopDBDO
         'income_id' => "Payment Information",
 		'lead_id' => 'Invitee',
 		);
-	var $fb_fieldsToRender = array ('lead_id', 'income_id');
+
 	var $fb_formHeaderText = "Springfest Donations from Invitations";
 
 	var $fb_linkDisplayFields = array('lead_id', 'income_id');

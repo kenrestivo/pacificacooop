@@ -2220,4 +2220,10 @@ where invitations.lead_id  in
 (select * from dead)
 ;
 
+-- periodically
+update invitations 
+set label_printed = "2006-02-17 17:00" 
+where (label_printed is null or label_printed < "1000-01-01") 
+    and school_year = "2005-2006";
+
 --- EOF

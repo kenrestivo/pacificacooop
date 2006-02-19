@@ -28,9 +28,6 @@ class Solicitation_calls extends CoopDBDO
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 
-// 	var $fb_fieldsToRender = array ('method_of_contact', 'call_note', 
-// 									'family_id', 'done' );
-
 	var $fb_fieldLabels = array(
 		"company_id" => "Company Name",
 		"method_of_contact" => "Contact Method",

@@ -85,7 +85,6 @@ class Workers extends CoopDBDO
             $this->fb_formHeaderText = 'Workday Summary';
             $this->fb_recordActions = array();
             $this->fb_forceNoChooser = 1;
-            $this->fb_fieldsToRender = array('workday', 'AM', 'PM');
             $this->fb_fieldLabels = array(
                 'workday' => 'Work Day',
                 'AM' => 'Total AM',

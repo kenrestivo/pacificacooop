@@ -28,9 +28,7 @@ class Report_permissions extends CoopDBDO
     ###END_AUTOCODE
 	var $fb_formHeaderText =  'Report Permissions';
     var $fb_shortHeader = 'Reports';
-    var $fb_fieldsToRender = array('report_name', 'page', 
-                                   'realm_id', 'menu_level');
-
+    var $fb_fieldsToUnRender = array('user_level', 'group_level');
 	var $fb_fieldLabels = array(
 		'report_name' => 'Report Short Name',
         'realm_id' => 'Data/Menu Realm',

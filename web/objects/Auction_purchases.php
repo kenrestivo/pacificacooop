@@ -33,11 +33,6 @@ class Auction_purchases extends CoopDBDO
 		'package_sale_price' => 'Final Bid Price',
 		'income_id' => "Payment Information"
 		);
-	var $fb_fieldsToRender = array (
-		'package_id',
-//		'income_id',
-		'package_sale_price'
-		);
 	var $fb_formHeaderText =  'Springfest Auction Purchases';
 	var $fb_currencyFields = array('package_sale_price');
 

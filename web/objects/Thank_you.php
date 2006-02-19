@@ -34,7 +34,6 @@ class Thank_you extends CoopDBDO
 		'family_id' => 'Printed/Sent By'
 		);
 	var $fb_formHeaderText =  'Springfest Thank-You Notes';
-	var $fb_fieldsToRender = array ('date_sent', 'method', 'family_id');
 
 
 var $fb_usePage = 'thank_you_notes.php';

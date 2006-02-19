@@ -36,9 +36,6 @@ class Job_assignments extends CoopDBDO
 								   'school_year',
 								   'family_id');
 
-	var $fb_fieldsToRender = array('job_description_id', 
-								   'school_year',
-								   'family_id');
 
     function fb_linkConstraints(&$co)
 		{

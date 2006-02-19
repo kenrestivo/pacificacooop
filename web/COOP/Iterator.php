@@ -13,7 +13,7 @@
 
 require_once('Types/Iterator.php');
 
-class DB_DataObjectIterator extends Iterator
+class CoopIterator extends Iterator
 {
     var $_src;
     var $_index = -1;
@@ -21,17 +21,14 @@ class DB_DataObjectIterator extends Iterator
     var $_value;
     
     /**
-     * dbdo Iterator constructor.
-
-i am not in this case using any of that Ref class crap. 
-the coopiterator does though.
-
-     * @param DB_DataObject $result
+     * Iterator constructor.
+     *
+     * @param Coop $result
      *        The query result.
      */
-    function DB_DataObjectIterator(&$dataobject)
+    function CoopIterator(&$co)
     {
-        $this->_src =& $dataobject;
+        $this->_src =& $co;
         $this->reset();
     }
 
@@ -51,7 +48,8 @@ the coopiterator does though.
     function size()
     {
         if (!isset($this->_size)) {
-            $this->_size = $this->_src->N;
+            // GAH! this stupid ref class uses obj, and so does coopobject
+            $this->_size = $this->_src->obj->N;
         }
         return $this->_size;
     }
@@ -67,22 +65,26 @@ the coopiterator does though.
     /**
      * Return the next row in this result.
      *
-     * This method calls toArray() on the DB_DataObject, the return type depends
-     * of the DB_DataObject->toArray. Please specify it before executing the 
+     * This method calls toArray() on the Coop, the return type depends
+     * of the Coop->toArray. Please specify it before executing the 
      * template.
      *
      * @return mixed
      */
     function &next()
     {
-        if ($this->_end || ++ $this->_index >= $this->size()) {
+        if ($this->_end || ++$this->_index >= $this->size()) {
             $this->_end = true;
             return false;
         }
+        
 
         unset($this->_value);
-        $this->_src->fetch();
-        $this->_value = $this->_src;
+        //note! this obj is the Ref class obj, which is the coopobject,
+        //not the coopobject's obj, which is a DB_DataObject. gah.
+        $this->_src->obj->fetch();
+        $this->_value = $this->_src->toArrayWithKeys();
+        //$this->_src->page->confessArray($this->_value, 'the value', 1);
         return $this->_value;
     }
     
@@ -105,6 +107,14 @@ the coopiterator does though.
     {
         return $this->_index;
     }
+
+    function key()
+        {
+            // this abomination gives me the PK, the id of this record
+            // the coopview does the recovery  of the safe pk
+            return $this->_src->obj->obj->{$this->_src->obj->pk};
+        }
+
 }
 
 

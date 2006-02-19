@@ -39,6 +39,7 @@ class Calendar_events extends CoopDBDO
         );
 	var $fb_formHeaderText =  'Calendar of Events';
 	var $fb_shortHeader =  'Calendar';
+    /// XXX HACK. this is an unused field right now
     var $fb_fieldsToUnRender = array('keep_event_hidden_until_date');
     var $fb_enumFields = array('show_on_public_page', 'status');
     var $fb_defaults = array('status' => 'Active');

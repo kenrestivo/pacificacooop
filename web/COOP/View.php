@@ -1107,6 +1107,16 @@ function getAlert()
         }
 
 
+    function getNewIterator()
+        {
+            $this->page->printDebug("CoopView::getNewIterator({$this->table})", 
+                                    2);
+            return new CoopIterator(&$this);
+        }
+
+
+
+
 } // END COOP VIEW CLASS
 
 

@@ -1,8 +1,8 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
- 	import the 20-year roster (20yearroster.txt)
 	tal templates and reports, and json services (templates.txt)
+ 	import the 20-year roster (20yearroster.txt)
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
 	sortable/searchable/pagable views (searchfeature.txt)
@@ -14,7 +14,12 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
+	
 
+??PHP
+export the packages list in csv format too
+
+		
 ??PHP
 bring in-kind donations back
 	then move the wine/cider/etc to it
@@ -26,16 +31,7 @@ BUGS
 	fix that ad insertion anomaly in the report
 	counts are not in sync between carrie and nag report
 
-		
-??PHP/Python
-the VIP list import! dammit. i need those in there
-	import them, i have the list already
-	fuck, there's only 20, do it manually goddammit
-	how did i do vip's? tickets?
-		yes, they were direct tickets.
-	vip category? i like what julie did here
-
-
+			
 ??PHP/SQL
 parent ed (parented.txt)
 		make-up stuff -- wacky sql joins
@@ -601,6 +597,24 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP
+do NOT allow deleting any entries which are used in globals
+	this needs to be in bruteforcedeletecheck
+	
+
+???PHP
+mark all unprinted as printed button
+
+??PHP
+filter/search for past events in calendar events
+	but only if chosenschoolyear is not this one.... interesting
+
+
+???PHP
+add "notes" field for calendar events
+	NOT JUST FOR EVENTS! but for each calendar instance of it too
+	
 
 ???PHP
 audit trail fixes
@@ -6524,3 +6538,31 @@ tables i'd need to have in python sqlobject format
 
 new surfboard pitcures. DUDE
 post the actual invitation	
+
+nfsn phptal notworking
+	dunno why. but the iterator require Types dies
+		try it again
+			WORKS!
+
+???ENTERING
+manually go fix the vip lists
+	as schuman or weatherston
+	then do a quick SQL to buy them 2 tickets each, with VIP status
+	import them, i have the list already
+	fuck, there's only 20, do it manually goddammit
+	how did i do vip's? tickets?
+		yes, they were direct tickets.
+	vip category? i like what julie did here
+fix trujillo and lerohl
+	also the couple other dupes i whacked the wrong ones!
+	create coopview iterator (toarraywithkeys)
+		possibly use ref or clone to copy it? could get expensive
+		definitely set $this->key to the $id
+
+
+create a variation on simpletable which returns dicts
+	using CoopView->toArrayWithKeys()
+		which means the data will already be properly html escaped
+	as an iterable- how?
+		a coopiterator, duh. return $this->toArrayWithKeys()
+	similar to CoopObject::getLinkOptions()

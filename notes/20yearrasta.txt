@@ -1,5 +1,9 @@
 the 20 year roster!!
 
+do very simple rasta importer copy/paste or subclass
+
+
+
 ok, try some db stuff, see how it goes.
 	families should be easiest
 		match on family name, of course

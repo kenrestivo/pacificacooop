@@ -1,11 +1,12 @@
 template engine notes
 
-create a variation on simpletable which returns dicts
-	using CoopView->toArray()
-		which means the data will already be properly html escaped
-	as an iterable- how?
+ok test it out now!
 
-
+subtables/linktables
+	fisch them out of forwardlinks/backlinks
+	return iterators of them
+	
+	
 things which suck, a lot, about simpletable
 	trying to add a column which isn't in the db. or a button callback
 		thank you
@@ -22,10 +23,6 @@ revise the whole model
 				i can also perhaps ship the JS "template" for them too!
 	start with simpletable perhaps. try making it a client of a func
 
-
-nfsn phptal notworking
-	dunno why. but the iterator require Types dies
-		try it again
 
 
 ugly big huge reference problem

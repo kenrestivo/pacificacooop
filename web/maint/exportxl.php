@@ -7,7 +7,10 @@ require_once "CoopPage.php";
 require_once "CoopView.php";
 require_once "Spreadsheet/Excel/Writer.php";
 
-$cp = new CoopPage();
+/// XXX EVIL HACK!!! I *MUST* HARDCODE this debug to 4,
+/// otherwise the whole damn thing fails on nfsn. works fine here of course
+/// bizarre
+$cp = new CoopPage(4);
 $cp->logIn();
 $cp->content_type = 'application/vnd.ms-excel'; // irrelevant, just NOT html!
 
