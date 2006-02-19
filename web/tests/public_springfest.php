@@ -31,13 +31,46 @@ require_once('CoopIterator.php');  // XXX hack, around problems on nfsn
 function &build(&$page)
 {
     // let the template know all about it
-    $template = new PHPTAL('attendance.xhtml');
+    $template = new PHPTAL('springfest-microsite-shell.xhtml');
+
     
+    /// menu
+    $menu = array('home' => array('class' => 'nav',
+                                  'content' => 'Springfest Home'),
+                  'event' => array('class' => 'nav',
+                                   'content' => 'Where and When'),
+                  'sponsorship' => array('class' => 'nav',
+                                         'content' => 'Sponsorship'),
+                  'auction' => array('class' => 'nav',
+                                     'content' => 'Auction'),
+                  'raffle' => array('class' => 'nav',
+                                    'content' => 'Raffle'),
+                  'about' => array('class' => 'nav',
+                                   'content' => 'About Us')
+        );
+
+    // navigation
+    $path = explode('/', $_SERVER['PATH_INFO']);
+    $nav = $path[1];
+    if(in_array($nav, array_keys($menu))){
+        $menu[$nav]['class'] = 'navcurrent';
+    } else {
+        $menu['home']['class'] = 'navcurrent';
+    }
+    
+    $template->setRef('nav', $menu);
+
+    // object time
     $families =& new CoopView(&$page, 'families', 
                                     &$nothing);
     $families->find(true);
-    $page->title = 'Parent Ed Attendance Summary Report';
+    $page->title = 'Springfest';
     $template->setRef('families', $families);
+
+
+
+    $template->setRef('extra_stuff', print_r($path, true));
+
     return $template;
 }
 

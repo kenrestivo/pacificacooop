@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<div metal:define-macro="main_page">
-  <div tal:replace="structure page/doctype" tal:comment="XXX hack" ></div>
-  <html  lang="en">
-    <head>
-      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-      <link rel="stylesheet" href="main.css" title="main" />
-      
-      <title tal:content="page/title"></title>
-    </head>
-    <body>
-      <!--[if gte IE 5.5000]> 
-          <script type="text/javascript" src="lib/pngfix.js"></script> 
-          <![endif]--> 
-      
-      <div class="container">
-        <div class="titleblock">
-          <h1>Springfest!</h1>
-        </div>
-
-      <div><ul class="navbar">
-        <li><a href="springfest" class="navcurrent">Springfest</a></li>
-        <li><a href="event" class="nav">Where and When</a></li>
-        <li><a href="raffle" class="nav">Raffle</a></li>
-        <li><a href="sponsorship" class="nav">Sponsorships</a></li>
-        <li><a href="auction" class="nav">Auction</a></li>
-        <li><a href="about" class="nav">About Us</a></li>
-      </ul></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html  lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" href="main.css" title="main" />
     
+    <title tal:content="page/title"></title>
+  </head>
+  <body>
+    <!--[if gte IE 5.5000]> 
+        <script type="text/javascript" src="lib/pngfix.js"></script> 
+        <![endif]--> 
+    
+    <div class="container">
+      <div class="titleblock">
+        <h1 tal:content="page/title"></h1>
+      </div>
+
+      <div>
+        <ul class="navbar">
+        <li tal:repeat="item nav"><a 
+               tal:attributes="class item/class; href repeat/item/key"
+               tal:content="item/content">Nav Item</a>
+        </li>
+        </ul>
+      </div>
+      
 
       <div class="leftcolumn">
-        <div  metal:define-slot="let_column">The Left Column</div>
+        <div tal:replace="structure sponsorship_html">Our Sponsors</div>
       </div>
 
       <div class="content" >
-        <div metal:define-slot="center_column">The Center Column Slot</div>
+        <div class="short_summary" 
+             tal:content="structure short_summary">Short summary</div>
+        <div class="long_content" 
+             tal:content="structure long_content">Long Content</div>
+        <div class="extra_stuff" 
+             tal:content="structure extra_stuff">Extra programattic stuff</div>
+
       </div>
       
+
       <div class="footer">
         <div class="right">
           <p> Pacifica Nursery School, Inc.</p>
@@ -43,8 +49,8 @@
         </div>
         <p><a href="mailto:info@pacificacoop.org">Email Us</a></p>
       </div>
+
       
-      </div>
-    </body>
-  </html> 
-</div>
+    </div>
+  </body>
+</html> 

@@ -6583,3 +6583,9 @@ ok test it out now! it works!
 
 package exaha!
 shitcan the editperms NAME attribute and browser won't submit it!
+
+each page center column
+	from db: summary
+	from db: long stuff
+	specials dependign on page:
+		auction: list of packages

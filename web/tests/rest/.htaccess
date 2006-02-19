@@ -1,2 +1,2 @@
 RewriteEngine On
-RewriteRule  (^.*$)  ../restful.py/$1 [L]
+RewriteRule  (^.*$)  ../public_springfest.php/$1 [L]

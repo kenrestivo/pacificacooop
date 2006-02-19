@@ -1,8 +1,15 @@
 create a  proper springfest microsite
 
-this is pretty much stuck behind the ibrowser in tinymce
-	get that working, and you're ready to go with this
+rest the content pages!
+	build the rest thing
+	do it
+	
 
+/springfest will always lead to currentschoolyear
+	do some REST underneath, PATH_INFO will tell me what year to do
+	springfest/2006 , springfest/2005, etc
+
+	
 layout:
     home
     	little blurbs and links to all of below, in order
@@ -39,6 +46,7 @@ database-ize this!
 		attachments/links
 	include edit links if cookie'ed and permitted
 
+use phptal for this beast
 	
 then enter the crap for previous years, from OLD directory on public website
 
@@ -46,8 +54,8 @@ then enter the crap for previous years, from OLD directory on public website
 each year, update script
 	copy/paste from previous year, mostly
 
-use phptal for this beast
 
-/springfest will always lead to currentschoolyear
-	do some REST underneath, PATH_INFO will tell me what year to do
-	springfest/2006 , springfest/2005, etc
+
+
+multi-user self-editing is pretty much stuck behind the ibrowser in tinymce
+	get that working, and you're ready to go with this
