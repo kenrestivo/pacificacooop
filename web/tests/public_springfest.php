@@ -49,9 +49,17 @@ function &build(&$page)
                                    'content' => 'About Us')
         );
 
-    // navigation
+    // handle the no-year-equals-this-year navigation
     $path = explode('/', $_SERVER['PATH_INFO']);
-    $nav = $path[1];
+    if(preg_match('/^\d{4}$/', $path[1])){
+        $sy = $path[1];
+        $nav = $path[2];
+    } else {
+        $nav = $path[1];
+        list($nothing, $sy) = explode('-', $page->currentSchoolYear);
+    }
+
+    // make current nav
     if(in_array($nav, array_keys($menu))){
         $menu[$nav]['class'] = 'navcurrent';
     } else {
@@ -63,13 +71,13 @@ function &build(&$page)
     // object time
     $families =& new CoopView(&$page, 'families', 
                                     &$nothing);
+    $families->chosenSchoolYear = sprintf('%d-%d', $sy -1, $sy);
     $families->find(true);
-    $page->title = 'Springfest';
+    $page->title = 'Springfest ' . $sy;
     $template->setRef('families', $families);
 
 
-
-    $template->setRef('extra_stuff', print_r($path, true));
+    $page->printDebug("sy $sy nav $nav", 1);
 
     return $template;
 }
