@@ -40,7 +40,7 @@ print $cp->topNavigation();
 print $cp->stackPath();
 
 print "\n<hr /></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
-print '<div id="centerCol">';
+print '<div class="centerCol">';
 
 function schoolYearChooser(&$atd, $table)
 {

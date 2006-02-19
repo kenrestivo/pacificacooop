@@ -49,6 +49,19 @@ function &build(&$page)
                                    'content' => 'About Us')
         );
 
+    /// split up the nav sizes
+    $css = '<style type="text/css">';
+    $menu_width = 100.0/count(array_keys($menu));
+    foreach(array('a.nav:link', 'a.nav:visited', 'a.nav:hover', 
+                  'a.nav:active', 'a.navcurrent') as $selector)
+    {
+        $css .= sprintf('%s { width: %0.2f%% } ', 
+                        $selector, $menu_width);
+    }
+    $css .= '</style>';
+    $template->setRef('extra_css', $css);
+    
+
     ///////////// handle the no-year-equals-this-year navigation
     $path = explode('/', $_SERVER['PATH_INFO']);
     if(preg_match('/^\d{4}$/', $path[1])){
@@ -75,7 +88,6 @@ function &build(&$page)
     $families->find(true);
     $page->title = 'Springfest ' . $sy;
     $template->setRef('families', $families);
-
 
     $page->printDebug("sy $sy nav $nav ". $families->getChosenSchoolYear(), 1);
 
@@ -109,7 +121,6 @@ if(headers_sent($file, $line)){
 }
 print  $template->execute();
 $cp->finalDebug();
-
 
 
 ?>

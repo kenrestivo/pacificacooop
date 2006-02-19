@@ -60,11 +60,11 @@ $cp->initStack();
 
 
 //confessObj($menu, "menuonb");
-print '<div id="leftCol">';
+print '<div class="leftCol">';
 print $menu->kenRender();
 print '</div><!-- end leftcol div -->';
 
-print '<div id="rightCol">';
+print '<div class="rightCol">';
 
 $tab =& new HTML_Table();
 

@@ -238,7 +238,7 @@ print $cp->header();
 print "<h2>Join us for Springfest $sfyear!</h2>"; 
 print "\n</div> <!-- end header div -->\n";
 
-print '<div id="leftCol">';
+print '<div class="leftCol">';
 print sponsors(&$cp, $sy);
 print ads(&$cp, $sy);
 print donors(&$cp, $sy);
@@ -246,7 +246,7 @@ print '</div><!-- end leftcol div -->';
 
 
 ///// the main stuff
-print '<div id="rightCol">';
+print '<div class="rightCol">';
 
 // show year-specific HTML
 $prettyname = sprintf("static/%s-springfest.template.html", 

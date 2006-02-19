@@ -3,8 +3,10 @@
 <html  lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <link rel="stylesheet" href="main.css" title="main" />
-    
+    <link rel="stylesheet" href="main.css" title="main" 
+          tal:attributes="href string:${page/uri_path}/main.css" />
+    <div tal:replace="structure extra_css"></div>
+
     <title tal:content="page/title"></title>
   </head>
   <body>
@@ -27,13 +29,14 @@
       </div>
       
 
-      <div class="leftcolumn">
+      <div class="leftCol">
         <div tal:replace="structure sponsorship_html">Our Sponsors</div>
       </div>
 
-      <div class="content" >
+      <div class="centerCol" >
         <div class="short_summary" 
              tal:content="structure short_summary">Short summary</div>
+        <!-- TODO: "more" link -->
         <div class="long_content" 
              tal:content="structure long_content">Long Content</div>
         <div class="extra_stuff" 
@@ -44,7 +47,7 @@
 
       <div class="footer">
         <div class="right">
-          <p> Pacifica Nursery School, Inc.</p>
+          <p><a href="/">© Pacifica Nursery School, Inc.</a></p>
           <!-- put stuff for left side here, if any -->
         </div>
         <p><a href="mailto:info@pacificacoop.org">Email Us</a></p>

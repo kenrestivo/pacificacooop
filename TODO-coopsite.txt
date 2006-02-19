@@ -6589,3 +6589,11 @@ each page center column
 	from db: long stuff
 	specials dependign on page:
 		auction: list of packages
+rest the content pages!
+	build the rest thing
+	do it
+	
+
+/springfest will always lead to currentschoolyear
+	do some REST underneath, PATH_INFO will tell me what year to do
+	springfest/2006 , springfest/2005, etc

@@ -83,6 +83,7 @@ class coopPage
     var $currentSchoolYear;   // cache so i'm not pounding findschoolyear
     var $browserData;    /// cache of data found
     var $content_type = 'text/html;charset=utf-8';
+    var $uri_path = COOP_ABSOLUTE_URL_PATH; // TAL and REST need this in a var
     
 	function coopPage($debug = false)
 		{

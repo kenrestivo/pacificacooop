@@ -91,7 +91,7 @@ img {
 
 
 
-#leftCol {
+div.leftCol {
   width: 25ex;
 	background-color:  #ffcc99;
 	  float: left;
@@ -103,13 +103,13 @@ img {
 	padding-left: 4px;
  }
 
-#rightCol {
+div.rightCol {
  	margin-left: 30ex; 
    margin-right: 2ex; 
 	/* margin: 0 0 0 40ex; */
 }
 
-#centerCol {
+div.centerCol {
  	margin-left: 1ex; 
    margin-right: 2ex; 
 }
@@ -295,6 +295,69 @@ div.possible_packages {
     word-wrap: break-word; /* IE */
     wrap-option: emergency; /* CSS 3 */
 }
+
+.container {
+  background-color:#FFFFFF; 
+  margin:0 auto 0 auto; 
+  padding:0; 
+  width:85%;}
+
+
+ul.navbar {
+  list-style-type:none; 
+  float:left; 
+  display:block; 
+  width:100%; 
+  line-height:1.5em; 
+  clear:both; 
+  margin:0; 
+  padding:0; 
+  background-color:#999999;}
+
+ul.navbar li {
+  display:inline;}
+
+a.nav:link, a.nav:visited {
+  display:block; 
+  float:left; 
+  width:24.5%; 
+  padding:1.2em 0 1.2em 0; 
+  margin:0; 
+  text-decoration:none; 
+  background-color:#999999; 
+  color:#FFFFFF;}
+
+a.nav:hover {
+  display:block; 
+  float:left; 
+  width:24.5%; 
+  padding:1.2em 0 1.2em 0; 
+  margin:0; 
+  text-decoration:none; 
+  background-color:#bf0000; 
+color:#FFFFFF;}
+
+a.nav:active {
+  display:block; 
+  float:left; 
+  width:24.5%; 
+  padding:1.2em 0 1.2em 0; 
+  margin:0; 
+  text-decoration:none; 
+  background-color:#999999; 
+  color:#FFFFFF;}
+
+a.navcurrent {
+  display:block; 
+  float:left; 
+  width:24.5%; 
+  padding:1.2em 0 1.2em 0; 
+  margin:0; 
+  text-decoration:none; 
+  background-color:#ad91ed; 
+  color:#FFFFFF;}
+
+
 
 
 @media print { 	
