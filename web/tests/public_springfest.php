@@ -170,6 +170,9 @@ function &build(&$page)
     $page->vars['last']['chosenSchoolYear'] = sprintf('%d-%d', $sy -1, $sy);
 
 
+    $page->title = 'Springfest ' . $sy;
+
+
     // let the template know all about it
     $template = new PHPTAL('springfest-microsite-shell.xhtml');
 
@@ -221,7 +224,6 @@ function &build(&$page)
     ////////////// object time. PLACEHOLDER
     $families =& new CoopView(&$page, 'families', &$nothing);
     $families->find(true);
-    $page->title = 'Springfest ' . $sy;
     $template->setRef('families', $families);
 
     $page->printDebug("sy $sy nav $nav ". $families->getChosenSchoolYear(), 1);

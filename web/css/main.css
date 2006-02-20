@@ -365,6 +365,27 @@ div.bidsheet {
  }
 
 
+span.label, span.value {
+	display: block;
+	width: 150px;
+	float: left;
+	margin-bottom: 10px;
+}
+
+span.label {
+	text-align: right;
+	width: 75px;
+	padding-right: 20px;
+}
+
+p.lineitem {
+	clear: left;
+}
+
+div.bidtable { 
+  clear: left
+}   
+
 @media print { 	
   #header { display:none }	
   #footer { display:none }	
