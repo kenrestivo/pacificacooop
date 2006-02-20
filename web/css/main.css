@@ -122,7 +122,7 @@ div.centerCol {
 	text-align: center; 
 }
 
-#heading { 
+div.heading { 
 font-weight: bold; 
 float:left 
 }
@@ -359,6 +359,10 @@ a.navcurrent {
   color:#FFFFFF;}
 
 
+
+div.bidsheet { 
+  page-break-after: always
+ }
 
 
 @media print { 	

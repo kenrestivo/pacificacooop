@@ -167,22 +167,26 @@ class coopPage
 		{
             $res = '';
 
+			return sprintf(
+                '<div><div class="heading">%s</div>%s',
+                $this->heading,
+                $this->loginBlock());
+		}
+	
+    function loginBlock()
+        {
 			// i don't user this->page->userStruct
 			// since it requires createlegacy adn i may not have that!
 			$u = getUser($this->auth['uid']);	// ugh.
 
 			return sprintf(
-                '<div><div id="heading">%s</div>
-                <div id="loginblock"><strong>Welcome %s!</strong><br>
+                '<div id="loginblock"><strong>Welcome %s!</strong><br>
                 %s</div></div>', 
-                $this->heading,
                 $u['username'],
                 $this->selfURL(array('value' =>"Log Out", 
                                      'par' => false,
                                      'inside' =>'action=logout')));
 		}
-	
-
 
 
 	function debugCrap()

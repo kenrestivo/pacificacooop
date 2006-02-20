@@ -1,6 +1,6 @@
 create a  proper springfest microsite
 
-the schoolyear constraint seems broken, go fix
+put the login block in, so people know what they got
 
 database-ize this!
 	pages table:
@@ -69,3 +69,5 @@ each year, update script
 
 multi-user self-editing is pretty much stuck behind the ibrowser in tinymce
 	get that working, and you're ready to go with this
+
+the schoolyear constraint is a miserable hack, go fix

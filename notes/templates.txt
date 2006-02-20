@@ -1,17 +1,13 @@
 template engine notes
 
-
-hey, do that springfest microsite thing
-	just to get competent and comfortable
-	(microsite.txt)
-
 	
 ???PHP/CSS (day)
 package sheet printing -- some with CSS or PDF!
 	get the basics there
 	figure out how to do page breaks
 		read!
-
+	page-break-before and page-break-after:always work just fine, or should
+	wow, should just be a tal repeat!!
 	
 revise the whole model
 	think in terms of everything generating s-expressions: nested dicts

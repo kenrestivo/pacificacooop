@@ -16,7 +16,11 @@
     
     <div class="container">
       <div class="titleblock">
-        <h1 tal:content="page/title"></h1>
+        <h1 style="float: left" tal:content="page/title"></h1>
+
+        <div tal:condition="page/auth/uid" 
+             tal:content="structure page/loginBlock"></div>
+
       </div>
 
       <div>
