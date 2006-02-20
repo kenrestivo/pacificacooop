@@ -1,7 +1,10 @@
 the 20 year roster!!
 
-do very simple rasta importer copy/paste or subclass
+first tweek the PHP pager, so that i can force current family NOT to page
+	should be easy, just whack it in displayview
 
+
+do very simple rasta importer copy/paste or subclass
 
 
 ok, try some db stuff, see how it goes.

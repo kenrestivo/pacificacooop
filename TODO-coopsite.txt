@@ -14,11 +14,21 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-
 		
-
-??PHP
-export the packages list in csv format too
+???PHP/CSS (day)
+printing
+	bid sheets
+		only show minimum and increment if it is a silent
+		format the fucker
+	gift certs
+		only export the ones which are gift certs, duh
+		add donated by
+	program export
+		go look at what previous years programs looked like
+		csv format too, probably
+	add printing instructions on the first "page" so they print.
+		but make them non-printable anyway
+	deal with priceless
 
 		
 ??PHP
@@ -118,6 +128,10 @@ BURNT (when too burnt out to do actual work)
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
 
+??PHP
+in popups, you MUST constrain to the schoolyear of vars[last]!
+	i.e. if i'm entering somethign from last year, constrain LAST year!
+	
 
 duncan details anomaly in enhancement
 
@@ -596,6 +610,8 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+
 
 ??PHP
 do NOT allow deleting any entries which are used in globals
@@ -3477,7 +3493,9 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-let's get serious about this then!
+		get the grid going
+
+		let's get serious about this then!
 	test splitting pages
 		invisible flowable NextPageTemplate
 		it's not really necessary, except maybe if different margins
@@ -6602,3 +6620,14 @@ ok, now do the css
 	floaties
 	it'll be the same shit every year, so just put it in the system
 	i'll want to keep previous years for history purposes
+
+hey, do that springfest microsite thing
+	just to get competent and comfortable
+	(microsite.txt)
+	get the basics there
+	figure out how to do page breaks
+		read!
+	page-break-before and page-break-after:always work just fine, or should
+	wow, should just be a tal repeat!!
+	use separate stylesheet
+		only export them at all for live and silent

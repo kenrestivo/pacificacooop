@@ -36,9 +36,19 @@ function &build(&$page)
 
     ////////////// object time. PLACEHOLDER
     $packages =& new CoopView(&$page, 'packages', &$nothing);
-    $packages->fullText= 1; // gotta have it
+    $pt =& new CoopView(&$page, 'package_types', &$packages);
+    $packages->protectedJoin($pt);
+    $packages->obj->whereAdd('(package_type_short = "Silent" or package_type_short = "Live")');
+    // tal needs this to decide whether to print the increment
+    array_push($packages->obj->fb_preDefOrder, 'package_type_short');
+    $packages->obj->fb_fieldLabels['package_type_short'] = 'Package Type';
     
-    $packages->obj->limit(10); // XXX HACK FOR TESTING
+
+    $packages->fullText= 1; // gotta have it
+
+    if(devSite()){
+        //$packages->obj->limit(10); // XXX HACK FOR TESTING
+    }
 
     $packages->find(true);
     $template->setRef('packages', $packages);
