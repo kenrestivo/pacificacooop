@@ -47,7 +47,7 @@ function &build(&$page)
     $packages->fullText= 1; // gotta have it
 
     if(devSite()){
-        //$packages->obj->limit(10); // XXX HACK FOR TESTING
+        $packages->obj->limit(10); // XXX HACK FOR TESTING
     }
 
     $packages->find(true);
