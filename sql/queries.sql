@@ -2187,7 +2187,7 @@ set packages.package_type_id = package_types.package_type_id
 --- cute little utility to whack bad addresses
 update leads 
 set do_not_contact = now() where lead_id in 
-(500)
+(487,453);
 
 
 -- check for squashed alumni

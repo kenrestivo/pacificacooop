@@ -79,7 +79,7 @@ def fix_board_position(pos):
 
 
 def parse_board_positions_field(b):
-    """truly ugly. change 'Position(yy-yy),Position(yy-yy)' to a struct"""
+    """truly ugly. changes 'Position(yy-yy),Position(yy-yy)' to a struct"""
     jobs=b.split(',')
     jobyears=[map(lambda x: x.replace(')', ''), i.split('(')) for i in jobs]
     cleanyears=[[fix_board_position(j[0]), fix_years(j[1])] for j in jobyears]
@@ -92,7 +92,7 @@ def parse_board_positions_field(b):
 
 
 def first_pass(data):
-    """the first batch of data fixes. skip the first line, which is the header"""
+    """the first batch of data fixes."""
     for i in range(0,len(data)):
         di=data[i]
         if di['Board Position'] != '':
@@ -105,7 +105,7 @@ def first_pass(data):
 
 
 def fix_attended(data):
-    """enrollment is in an ugly format: mixed lines on one. fix this."""
+    """enrollment is in an ugly format: mixed lines on one. this fixes it."""
     for i in range(0,len(data)):
         di=data[i]
         if di.keys().count('fixed_attended') < 1:
@@ -118,6 +118,7 @@ def fix_attended(data):
 
 
 def make_enrollment(data):
+    """years are in the spreadhsheet as multiyear ranges. this splits them up"""
     for i in range(0,len(data)):
         di=data[i]
         years=di['fixed_attended'].split('-')
@@ -150,7 +151,8 @@ def split_parents(data):
 
 
 def marshal_to_db(data):
-    """might as well marshal all of them into a nested struct"""
+    """might as well marshal all of them into a nested struct.
+    thus making the database import easier later."""
     lnc = ""
     for i in range(0,len(data)):
         di=data[i]
@@ -185,7 +187,7 @@ f=Families(**r['families'])
 #no automagick, need to KNOW THE ID IN SQLMETA STUPID FORMAT!
 
 
-#standard importer should handle this case
+#the standard importer i write or adapt should handle this case
 r['kids']['familyID'] = f.id
 k=Kids(**r['kids'])
 
@@ -198,6 +200,7 @@ for i in ['mom', 'dad']:
     r[i]['familyID'] = f.id
     Parents(**r[i])
 
+#now, the job assignments-- NEED JOIN TO JOB DESCR!
 
 #can't do left joins-- fuck you sqlobject-- so get its connect handle
 c=f._connection.getConnection().cursor()

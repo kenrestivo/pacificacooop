@@ -1,13 +1,12 @@
 the 20 year roster!!
 
-first tweek the PHP pager, so that i can force current family NOT to page
-	should be easy, just whack it in displayview
-
-
-do very simple rasta importer copy/paste or subclass
-
 
 ok, try some db stuff, see how it goes.
+	STUCK: finally the hard one: job assignments
+		have to either look up job description, or foreign key it
+		use connect, blow off sqlobject
+			at least to get the assignment
+		NO!! just go get it in a separate python step, fuck joins
 	families should be easiest
 		match on family name, of course
 		but if NEITHER of parents or phone match, CREATE NEW
@@ -16,9 +15,14 @@ ok, try some db stuff, see how it goes.
 	parents then, for each mom and dad, insert with defaults "type" mom/dad
 	next the enrollment... it's a list and i need to insert all of them
 		will also need some defaults perhaps: am/pm, etc
-	finally the hard one: job assignments
-		have to either look up job description, or foreign key it
-		use connect, blow off sqlobject
+
+
+first tweek the PHP pager, so that i can force current family NOT to page
+	should be easy, just whack it in displayview
+
+
+do very simple rasta importer copy/paste or subclass
+
 		
 as you iterate through the lines
 	go for it

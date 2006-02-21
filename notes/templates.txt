@@ -1,22 +1,15 @@
 template engine notes
 
 	
-	
 revise the whole model
-	think in terms of everything generating s-expressions: nested dicts
-		which can then be implemented via TAL/kid/smarty templates
-			or shipped via JSON, or IPC'ed to python, etc
-				at JSON time they can be stuffed into mochikit/nevow things!
-				i can also perhaps ship the JS "template" for them too!
-	ok, in coopview:  makeheader and a fetch through toarraywithkeys
-		you can build any table with mochikit using these two!
 		build a jsonrpc or REST to go get this
 			tricky bit will be the conditions
 		these are your subtables when done
 
-wow, i can do forms as templates!!
+		
+wow, i can do forms as TAL templates!!
 	dynamically deciding what things to put in the form!
-	use that table-less thing
+	using that table-less thing i've got in bidsheets
 
 		
 subtables/linktables

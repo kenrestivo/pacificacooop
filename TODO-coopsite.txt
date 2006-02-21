@@ -14,21 +14,24 @@ coop web database
 	insurance, dammit
 	labels/export -- python cgi on nfsn, formatting, etc.
 
+
+perms for sogo and day
+	watch out... there may be dragons here.
+	
 		
 ???PHP/CSS (day)
 printing
 	bid sheets
-		only show minimum and increment if it is a silent
-		format the fucker
+		get that logo to the BOTTOM, it's not.
+		conditional absolute for IE. FF should work fine.
 	gift certs
 		only export the ones which are gift certs, duh
 		add donated by
-	program export
+	program export!
+		packages, sponsors, donors
 		go look at what previous years programs looked like
 		csv format too, probably
-	add printing instructions on the first "page" so they print.
-		but make them non-printable anyway
-	deal with priceless
+	deal with priceless... or do i already?
 
 		
 ??PHP
@@ -611,6 +614,12 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+??PHP
+bid sheets tweekage
+	springfest general settings db
+		slogan for that year
+		anything else? check my before-i-hand-off notes
+	do that GD thing perhaps for the slogan at the bottom
 
 
 ??PHP
@@ -6631,3 +6640,14 @@ hey, do that springfest microsite thing
 	wow, should just be a tal repeat!!
 	use separate stylesheet
 		only export them at all for live and silent
+	think in terms of everything generating s-expressions: nested dicts
+		which can then be implemented via TAL/kid/smarty templates
+			or shipped via JSON, or IPC'ed to python, etc
+				at JSON time they can be stuffed into mochikit/nevow things!
+				i can also perhaps ship the JS "template" for them too!
+	ok, in coopview:  makeheader and a fetch through toarraywithkeys
+		you can build any table with mochikit using these two!
+		only show minimum and increment if it is a silent
+		format the fucker
+	add printing instructions on the first "page" so they print.
+		but make them non-printable anyway
