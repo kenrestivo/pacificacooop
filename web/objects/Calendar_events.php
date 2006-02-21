@@ -50,6 +50,49 @@ class Calendar_events extends CoopDBDO
         {
             // TODO: put this in linkconstraints so that popups use it too
             $this->orderBy('event_date asc');
+
+
+            $co->schoolYearChooser();
+
+            if($co->getChosenSchoolYear() == $co->page->currentSchoolYear){
+                ////////past events stuff
+                $iscurrent =& $co->searchForm->addElement(
+                    'select', 
+                    'is_current', 
+                    'Show only past events?', 
+                    array('%' => 'All Events',
+                          'yes'=>'Only Upcoming Events', 
+                          'no' => 'Only Past Events'),
+                    array('onchange' =>
+                          'this.form.submit()')) ; 
+
+
+                $co->searchForm->setDefaults(
+                    // NOTE! isset not empty! preserve nulls!
+                    array('is_current' => 
+                          isset($co->page->vars['last']['is_current']) ? $co->page->vars['last']['is_current'] : 'yes'));
+
+
+                $foo = $iscurrent->getValue();
+                $is_current = $foo[0];
+                $co->page->vars['last']['is_current'] = $is_current;
+
+                switch($is_current){
+                case 'yes':
+                    $co->obj->whereAdd('event_date >= now()');
+                    break;
+                case 'no':
+                    $co->obj->whereAdd('event_date <= now()');
+                    break;
+                case '%':
+                default:
+                    break;
+                }
+                $co->showChooser = 1;
+                $co->searchForm->addElement('submit', 'savebutton', 'Change');
+
+            }
+
             return $co->simpleTable(true, true);
         }
 
