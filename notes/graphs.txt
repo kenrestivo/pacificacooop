@@ -1,0 +1,11 @@
+??PHP/PYTHON
+statistics and graphs
+	graph over time
+		checked into garage
+		donated/money
+			by family, solicitation, etc
+		attendance at meetings
+		enhancement hours
+		enrollment, family hours am/pm, workers, etc.
+	package average/median/stddev for price
+		by category: live, silent, etc

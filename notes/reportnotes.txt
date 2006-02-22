@@ -1,9 +1,16 @@
 report notes
 $Id$
 
+a new paradigm: the BACKWARDS link... right joins
+	i.e. everything in linktable, REGARDLESS of whether anything present here
+	slots, basically
+		all families/parents for a meeting (the button/bubble interface)
+			even if nobody attended
+		job assignments (show all job descriptions, including blanks)
+
+
 ???PHP/CSS
 use CSS block for tabletitle instead of that enclosing table
-
 
 
 
@@ -29,7 +36,10 @@ now, it might not need to be this complicated!
 	problem there is back. great, it builds the chooser, but now what?
 		look at attendance
 
+		
 
+
+		
 excel export. fuck labels.
 
 

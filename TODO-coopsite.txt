@@ -4,17 +4,21 @@ coop web database
  	import the 20-year roster (20yearroster.txt)
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
-	sortable/searchable/pagable views (searchfeature.txt)
 	json, REST, xmlrpc (jsonselect.txt)
 	fix money: make it INVOICES and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
+	graphs and charts (graphs.txt)
 	springfest microsite (microsite.txt)
 	json services (templates.txt)
-	labels/export -- python cgi on nfsn, formatting, etc.
+	sortable/searchable/pagable views (searchfeature.txt)
+	labels/export -- python cgi on nfsn, formatting, etc.ian dlut ib
 
 
+simple show all for the packages, probably, fulltext
+	checkbox, i'd guess
+	
 BUGS!
 	gift certs not page breaking. goddammit
 		
@@ -114,9 +118,6 @@ BURNT (when too burnt out to do actual work)
 	lisp reading/studying
 
 	read up on rest
-
-	read up on CSS page breaks, didn't i find a good tutorial on it?
-		quirksmode?
 
 	move all the instructions over to the new thing
 
@@ -681,15 +682,6 @@ more ticket screwups
 	coalesce the damned attendee, noting how they got in
 		instead of three tables for the same thing
 		this is very likely a phptal or raw htmltable thing
-
-??PHP
-statistics and graphs
-	package average/median/stddev for price
-		by category: live, silent, etc
-	graph over time
-		checked into garage
-		donated/money
-			by family, solicitation, etc
 
 
 ???PHP
@@ -3498,7 +3490,19 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-		get the grid going
+	
+ugly big huge reference problem
+	looks like the page that gets sent into the context is DIFFERENT
+		from the one that is in the dispatcher. this is deadly
+		make sure i understand exactly what is the behaviour
+			i.e. i can put things into dispatcher.
+				how do they get disconnected?
+		then go trace it through
+	maybe blow off the dispatcher???!
+		try to trace it back
+		i think this whole approach is brain-dead
+
+			get the grid going
 
 		let's get serious about this then!
 	test splitting pages
@@ -6665,3 +6669,6 @@ perms for sogo and day
 		displaycallback, basically
 	fix the span problem
 		can't have div's inside spans
+
+	read up on CSS page breaks, didn't i find a good tutorial on it?
+		quirksmode?
