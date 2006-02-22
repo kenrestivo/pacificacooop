@@ -18,12 +18,12 @@ coop web database
 		
 ???PHP/CSS (day)
 printing
+	fix the span problem
+		can't have div's inside spans
 	program sheets!
 		packages, sponsors, donors
 		go look at what previous years programs looked like
 		csv format too, probably
-	deal with priceless... or do i already?
-		displaycallback, basically
 	and that report for michelle: showing all the items and compoennts
 
 		
@@ -6660,3 +6660,5 @@ perms for sogo and day
 		only export the ones which are gift certs, duh
 		add donated by
 	stick 'em in bid sheets, do both?
+	deal with priceless... or do i already?
+		displaycallback, basically
