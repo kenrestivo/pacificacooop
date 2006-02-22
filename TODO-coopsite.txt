@@ -18,12 +18,11 @@ coop web database
 		
 ???PHP/CSS (day)
 printing
-	tweeks
-		make the minimum/increment smaller; it's too big
-		what about that getway?
 	gift certs
+		first the format
 		only export the ones which are gift certs, duh
 		add donated by
+	stick 'em in bid sheets, do both?
 
 	program sheets!
 		packages, sponsors, donors
@@ -6655,3 +6654,6 @@ perms for sogo and day
 	watch out... there may be dragons here.
 	bid sheets
 		conditional absolute for IE. FF should work fine.
+	tweeks
+		make the minimum/increment smaller; it's too big
+		what about that getway?
