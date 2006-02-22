@@ -327,8 +327,7 @@ from invitations where school_year = "%s" group by label_printed order by label_
                 $res .= $co->page->selfURL(
                     array(
                         'base' => 'maint/exportxl.php',
-                        'tags' => array('alt' => 'Export to Excel Spreadsheet',
-                                        'title' => 'Export to Excel Spreadsheet'),
+                        'tags' => array('title' => 'Export to Excel Spreadsheet'),
                         'value' => 
                         '<img src="/images/x-office-spreadsheet.png"> Export ' . $this->fb_formHeaderText,
                         'inside' => array('format' => 'excel')));
