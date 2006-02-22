@@ -1,0 +1,15 @@
+<div metal:define-macro="header">
+  
+  <div id="warning" tal:condition="page/devSite" ><strong>NOTE! THIS IS THE DEV SITE! 
+  THIS IS NOT LIVE DATA, THIS IS ONLY FOR TESTING.</strong>
+  <br />If you want the live site, use the "members" link, 
+  NOT "members-dev". Thanks.</div>
+  
+      <div tal:content="structure page/logIn"></div>
+      <div tal:condition="page/auth/uid" 
+           tal:content="structure page/topNavigation">Top Navigation</div>
+      <div tal:condition="page/auth/uid" 
+           tal:content="structure page/stackPath">Stack</div>
+      <h3 tal:content="page/title" tal:on-error="">Table Description</h3>
+      <hr />
+</div>
