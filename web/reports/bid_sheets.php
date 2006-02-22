@@ -73,7 +73,18 @@ function &build(&$page)
     $giftcerts->find(true);
     $template->setRef('giftcerts', $giftcerts);
 
-
+    
+    /// convoluted way of getting this year's springfest date
+    $eventdate =& new CoopView(&$page, 'calendar_events', &$nothing);
+    $eventdate->obj->selectAdd('date_format(event_date, "%W %M %D, %Y") as human_date');
+    $eventdate->obj->whereAdd();
+    $eventdate->obj->whereAdd(sprintf('event_id = %d', 
+                                      COOP_SPRINGFEST_EVENT_DATE));
+    $eventdate->obj->whereAdd(sprintf('school_year = "%s"',
+                                      $eventdate->getChosenSchoolYear()));
+    $eventdate->obj->find(true);
+    $template->setRef('eventdate', $eventdate->obj->human_date);
+    
 
     return $template;
 }
