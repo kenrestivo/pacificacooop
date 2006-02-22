@@ -34,27 +34,45 @@ function &build(&$page)
     $template = new PHPTAL('bid-sheet.xhtml');
 
 
-    ////////////// object time. PLACEHOLDER
-    $packages =& new CoopView(&$page, 'packages', &$nothing);
-    $pt =& new CoopView(&$page, 'package_types', &$packages);
-    $packages->protectedJoin($pt);
-    $packages->obj->whereAdd('(package_type_short = "Silent" or package_type_short = "Live")');
+    ////////////// BIDSHEETS
+    $bidsheets =& new CoopView(&$page, 'packages', &$nothing);
+    $pt =& new CoopView(&$page, 'package_types', &$bidsheets);
+    $bidsheets->protectedJoin($pt);
+    $bidsheets->obj->whereAdd('(package_type_short = "Silent" or package_type_short = "Live")');
     // tal needs this to decide whether to print the increment
-    array_push($packages->obj->fb_preDefOrder, 'package_type_short');
-    $packages->obj->fb_fieldLabels['package_type_short'] = 'Package Type';
+    array_push($bidsheets->obj->fb_preDefOrder, 'package_type_short');
+    $bidsheets->obj->fb_fieldLabels['package_type_short'] = 'Package Type';
     
 
-    $packages->fullText= 1; // gotta have it
+    $bidsheets->fullText= 1; // gotta have it
 
     if(devSite() && $_REQUEST['limit']){
          // XXX TEMPORARY HACK FOR TESTING
-        $packages->obj->limit($_REQUEST['limit']);
+        $bidsheets->obj->limit($_REQUEST['limit']);
     }
 
-    $packages->find(true);
-    $template->setRef('bidsheets', $packages);
+    $bidsheets->find(true);
+    $template->setRef('bidsheets', $bidsheets);
 
-    $page->printDebug("sy $sy nav $nav ". $packages->getChosenSchoolYear(), 1);
+    $page->printDebug("sy $sy nav $nav ". $bidsheets->getChosenSchoolYear(), 1);
+
+
+    ////////////// GIFT CERTIFICATES 
+    $giftcerts =& new CoopView(&$page, 'packages', &$nothing);
+    $pt =& new CoopView(&$page, 'package_types', &$giftcerts);
+    $giftcerts->protectedJoin($pt);
+    $giftcerts->obj->whereAdd('item_type = "Gift Certificate"');
+
+    $giftcerts->fullText= 1; // gotta have it
+
+    if(devSite() && $_REQUEST['limit']){
+         // XXX TEMPORARY HACK FOR TESTING
+        $giftcerts->obj->limit($_REQUEST['limit']);
+    }
+
+    $giftcerts->find(true);
+    $template->setRef('giftcerts', $giftcerts);
+
 
 
     return $template;
