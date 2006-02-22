@@ -1,7 +1,6 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	springfest microsite (microsite.txt)
 	tal templates and reports, and json services (templates.txt)
  	import the 20-year roster (20yearroster.txt)
 	cleanups and code fixes (cleanme.txt)
@@ -12,22 +11,21 @@ coop web database
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
+	springfest microsite (microsite.txt)
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-
-perms for sogo and day
-	watch out... there may be dragons here.
 	
 		
 ???PHP/CSS (day)
 printing
-	bid sheets
-		get that logo to the BOTTOM, it's not.
-		conditional absolute for IE. FF should work fine.
+	tweeks
+		make the minimum/increment smaller; it's too big
+		what about that getway?
 	gift certs
 		only export the ones which are gift certs, duh
 		add donated by
-	program export!
+
+	program sheets!
 		packages, sponsors, donors
 		go look at what previous years programs looked like
 		csv format too, probably
@@ -6651,3 +6649,9 @@ hey, do that springfest microsite thing
 		format the fucker
 	add printing instructions on the first "page" so they print.
 		but make them non-printable anyway
+		get that logo to the BOTTOM, it's not.
+
+perms for sogo and day
+	watch out... there may be dragons here.
+	bid sheets
+		conditional absolute for IE. FF should work fine.
