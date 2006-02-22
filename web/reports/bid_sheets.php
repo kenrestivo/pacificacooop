@@ -33,6 +33,7 @@ function &build(&$page)
     // let the template know all about it
     $template = new PHPTAL('bid-sheet.xhtml');
 
+    $page->title = 'Bid Sheets and Gift Certificates';
 
     ////////////// BIDSHEETS
     $bidsheets =& new CoopView(&$page, 'packages', &$nothing);

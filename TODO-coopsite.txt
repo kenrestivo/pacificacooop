@@ -18,12 +18,6 @@ coop web database
 		
 ???PHP/CSS (day)
 printing
-	gift certs
-		first the format
-		only export the ones which are gift certs, duh
-		add donated by
-	stick 'em in bid sheets, do both?
-
 	program sheets!
 		packages, sponsors, donors
 		go look at what previous years programs looked like
@@ -6659,3 +6653,8 @@ perms for sogo and day
 	tweeks
 		make the minimum/increment smaller; it's too big
 		what about that getway?
+	gift certs
+		first the format
+		only export the ones which are gift certs, duh
+		add donated by
+	stick 'em in bid sheets, do both?
