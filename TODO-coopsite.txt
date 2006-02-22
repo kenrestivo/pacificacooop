@@ -14,12 +14,13 @@ coop web database
 	json services (templates.txt)
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-	
+
+BUGS!
+	gift certs not page breaking. goddammit
+		
 		
 ???PHP/CSS (day)
 printing
-	fix the span problem
-		can't have div's inside spans
 	program sheets!
 		packages, sponsors, donors
 		go look at what previous years programs looked like
@@ -6662,3 +6663,5 @@ perms for sogo and day
 	stick 'em in bid sheets, do both?
 	deal with priceless... or do i already?
 		displaycallback, basically
+	fix the span problem
+		can't have div's inside spans
