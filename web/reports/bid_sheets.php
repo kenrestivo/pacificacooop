@@ -39,7 +39,7 @@ function &build(&$page)
     $bidsheets =& new CoopView(&$page, 'packages', &$nothing);
     $pt =& new CoopView(&$page, 'package_types', &$bidsheets);
     $bidsheets->protectedJoin($pt);
-    $bidsheets->obj->whereAdd('(package_type_short = "Silent" or package_type_short = "Live")');
+    $bidsheets->obj->whereAdd('package_type_short = "Silent"');
     // tal needs this to decide whether to print the increment
     array_push($bidsheets->obj->fb_preDefOrder, 'package_type_short');
     $bidsheets->obj->fb_fieldLabels['package_type_short'] = 'Package Type';
@@ -74,17 +74,10 @@ function &build(&$page)
     $giftcerts->find(true);
     $template->setRef('giftcerts', $giftcerts);
 
-    
-    /// convoluted way of getting this year's springfest date
-    $eventdate =& new CoopView(&$page, 'calendar_events', &$nothing);
-    $eventdate->obj->selectAdd('date_format(event_date, "%W %M %D, %Y") as human_date');
-    $eventdate->obj->whereAdd();
-    $eventdate->obj->whereAdd(sprintf('event_id = %d', 
-                                      COOP_SPRINGFEST_EVENT_DATE));
-    $eventdate->obj->whereAdd(sprintf('school_year = "%s"',
-                                      $eventdate->getChosenSchoolYear()));
-    $eventdate->obj->find(true);
-    $template->setRef('eventdate', $eventdate->obj->human_date);
+    // simple year.
+    list($crap, $year) = explode('-', $giftcerts->getChosenSchoolYear());
+    $year = 'Springfest ' . $year;
+    $template->setRef('eventdate', $year);
     
 
     return $template;
