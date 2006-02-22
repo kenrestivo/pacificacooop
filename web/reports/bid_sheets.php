@@ -52,7 +52,7 @@ function &build(&$page)
     }
 
     $packages->find(true);
-    $template->setRef('packages', $packages);
+    $template->setRef('bidsheets', $packages);
 
     $page->printDebug("sy $sy nav $nav ". $packages->getChosenSchoolYear(), 1);
 

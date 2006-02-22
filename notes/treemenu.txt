@@ -1,6 +1,16 @@
 tree menu
 
 
+open questions
+	STUCK: how to get the stuff in /usr/share/php/data to the browser?
+		look at how html_ajax does it
+			they just open it generateClient()
+		or just link or copy it, goddammit
+	can i do title tags? how? i need them
+	what about these extra little thingies?
+		what teh FUCK is an "extra little thingie"??!
+
+		
 debbie's and lisa's idea is excellent: pages for each subitem
 	with the old-style front-page menu summaries!
 	i.e. instead of a single index page, lots of subindex pages
@@ -11,14 +21,6 @@ debbie's and lisa's idea is excellent: pages for each subitem
 		and the listbox at the top of all other pages
 
 	
-open questions
-	how to get the stuff in /usr/share/php/data to the browser?
-		look at how html_ajax does it
-			they just open it generateClient()
-		or just link or copy it, goddammit
-	can i do title tags? how? i need them
-	what about these extra little thingies?
-		what teh FUCK is an "extra little thingie"??!
 		
 
 

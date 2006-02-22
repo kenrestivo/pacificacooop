@@ -1,7 +1,6 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	tal templates and reports, and json services (templates.txt)
  	import the 20-year roster (20yearroster.txt)
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
@@ -12,6 +11,7 @@ coop web database
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 	springfest microsite (microsite.txt)
+	json services (templates.txt)
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 	
@@ -41,6 +41,7 @@ bring in-kind donations back
 BUGS
 	fix that ad insertion anomaly in the report
 	counts are not in sync between carrie and nag report
+	perms for packages with user_id 0 are ADMIN PRIVS!??!
 
 			
 ??PHP/SQL
@@ -610,6 +611,7 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
 
 ??PHP
 bid sheets tweekage
