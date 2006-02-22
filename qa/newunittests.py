@@ -333,7 +333,7 @@ class Runner:
         """runs multiple families in one url"""
         print '=== starting new test in %s ===' % (os.getcwd())
         os.system('make clean')
-        usersToTest= ['Bartlett Family', 'Restivo Family', 'Cooke Family',
+        usersToTest= ['Cooke Family', 'Bartlett Family', 'Restivo Family',
                       'Teacher Sandy', 'Shirley']
         fp=open(logfile, 'a')
         fp.write('================\n')

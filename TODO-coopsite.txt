@@ -23,6 +23,8 @@ printing
 		go look at what previous years programs looked like
 		csv format too, probably
 	deal with priceless... or do i already?
+		displaycallback, basically
+	and that report for michelle: showing all the items and compoennts
 
 		
 ??PHP

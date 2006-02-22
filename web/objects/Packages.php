@@ -80,6 +80,7 @@ var $fb_currencyFields = array(
    'starting_bid',
    'bid_increment'
 );
+    var $fb_displayCallbacks = array('package_value' => 'priceless');
 
 	var $fb_requiredFields = array('package_description', 
 								   'starting_bid', 'bid_increment', 
@@ -153,6 +154,14 @@ var $fb_currencyFields = array(
 
 
 // set package_description lines = 3
+
+  function priceless(&$co, $val, $key)
+        {
+            if($val <= 0){
+                return 'Priceless';
+            }
+            return sprintf('$%0.02f', $val);
+        }
 
 }
 
