@@ -16,12 +16,18 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.ian dlut ib
 
 
+BUGS
+	i gotta put the fucking honeycomb in there. goddammit
+	exploiter
+	larger print and spread out on gift certs
+		only for silent and live
+	blank bid sheet, second page
+
+	
+??PHP	
 simple show all for the packages, probably, fulltext
 	checkbox, i'd guess
 	
-BUGS!
-	gift certs not page breaking. goddammit
-		
 		
 ???PHP/CSS (day)
 printing
@@ -6672,3 +6678,5 @@ perms for sogo and day
 
 	read up on CSS page breaks, didn't i find a good tutorial on it?
 		quirksmode?
+BUGS!
+	gift certs not page breaking. goddammit. ah. gotta have that bidinfo in there

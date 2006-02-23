@@ -63,6 +63,7 @@ function &build(&$page)
     $pt =& new CoopView(&$page, 'package_types', &$giftcerts);
     $giftcerts->protectedJoin($pt);
     $giftcerts->obj->whereAdd('item_type = "Gift Certificate"');
+    $bidsheets->obj->whereAdd('(package_type_short = "Live" or package_type_short = "Silent")');
 
     $giftcerts->fullText= 1; // gotta have it
 
