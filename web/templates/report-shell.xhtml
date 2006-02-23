@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<div metal:define-macro="report_shell">
+  <div tal:replace="structure page/doctype" tal:comment="XXX hack" ></div>
+  <html  lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    
+    <link rel="stylesheet" href="bid_sheet.css" title="bidsheet"     
+          tal:attributes="href string:${page/uri_path}/bid_sheet.css" />
+    <title tal:content="page/title"></title>
+  </head>
+  <body>
+    <!--[if gte IE 5.5000]> 
+        <script type="text/javascript" src="lib/pngfix.js"></script> 
+        <![endif]--> 
+
+    <!-- obnoxious. but, alas, necessary -->
+    <!--[if IE]>
+        <style> div.footer {position: absolute;} </style>
+        <![endif]-->
+
+        <div tal:condition="page/auth/uid" 
+             metal:define-slot="inner_content">The Content of the Page</div>
+
+
+    <!-- TODO: add the webpage footer in here, wrappped in a nonprinting div -->
+
+  </body>
+</html> 
+</div>
