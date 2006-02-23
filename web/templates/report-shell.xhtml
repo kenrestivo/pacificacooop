@@ -19,6 +19,10 @@
         <style> div.footer {position: absolute;} </style>
         <![endif]-->
 
+        <div class="instructions">
+          <div metal:use-macro="header.xhtml/header"></div>
+        </div>
+        
         <div tal:condition="page/auth/uid" 
              metal:define-slot="inner_content">The Content of the Page</div>
 

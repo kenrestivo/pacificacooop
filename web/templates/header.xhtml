@@ -4,9 +4,13 @@
   THIS IS NOT LIVE DATA, THIS IS ONLY FOR TESTING.</strong>
   <br />If you want the live site, use the "members" link, 
   NOT "members-dev". Thanks.</div>
-  
+
+<!--  XXX this is supposed to show the login if they're not logged in, 
+     but it doesn't -->
       <div tal:content="structure page/logIn"></div>
-      <div tal:condition="page/auth/uid" 
+
+      <div tal:comment="must not allow top nav unless htey're logged in"
+           tal:condition="page/auth/uid" 
            tal:content="structure page/topNavigation">Top Navigation</div>
       <div tal:condition="page/auth/uid" 
            tal:content="structure page/stackPath">Stack</div>
