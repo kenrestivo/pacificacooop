@@ -20,7 +20,9 @@
 
 require_once('CoopReport.php');
 
-class GiftCertificateReport extends CoopReport
+// XXX PHP IS BROKEN!! YOU CANNNOT CANNOT CANNOT HAVE LONG CLASS NAMES!
+// i originally named this class GiftCertificateREport, but PHP puked on it
+class GCR extends CoopReport
 {
 
 // specific to this page. when i dispatch with REST, i'll need several
@@ -59,7 +61,7 @@ class GiftCertificateReport extends CoopReport
 }
 
 
-    $r =& new GiftCertificateReport($debug);
+    $r =& new GCR($debug);
     $r->run();
 
 
