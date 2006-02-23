@@ -60,7 +60,9 @@ $cp->initStack();
 
 
 //confessObj($menu, "menuonb");
-print '<div class="leftCol">';
+/// XXX AUUGH! for some reason this totaly breaks, only on the live site
+/// if you don't have id=leftCol. makes no sense, there is no id, it's a class
+print '<div class="leftCol" id="leftCol">';
 print $menu->kenRender();
 print '</div><!-- end leftcol div -->';
 

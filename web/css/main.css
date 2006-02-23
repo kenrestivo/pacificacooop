@@ -360,39 +360,13 @@ a.navcurrent {
 
 
 
-div.bidsheet { 
-  page-break-after: always
- }
-
-
-span.label, span.value {
-	display: block;
-	width: 150px;
-	float: left;
-	margin-bottom: 10px;
-}
-
-span.label {
-	text-align: right;
-	width: 75px;
-	padding-right: 20px;
-}
-
-p.lineitem {
-	clear: left;
-}
-
-div.bidtable { 
-  clear: left
-}   
-
 @media print { 	
   #header { display:none }	
   #footer { display:none }	
-  #leftCol { display:none }
+  .leftCol { display:none }
   #springfestpretty { display:none }
   .actions { display: none }	
-  #rightCol { margin: 0 }
+  .rightCol { margin: 0 }
   td { 
     padding-bottom: 10pt; 
     vertical-align: middle;

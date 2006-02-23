@@ -26,8 +26,7 @@ PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
 function sponsors(&$cp, $sy)
 {
-
-// now a word from our sponsors
+    // now a word from our sponsors
 	$res .= '<div class="sponsor">';
 	$res .= "<p><b>Thanks to our generous sponsors:</b></p>";
 
@@ -76,7 +75,7 @@ function sponsors(&$cp, $sy)
 	}
 	
 	// gah. whew. all done
-	//confessArray($spons, 'spns');
+	$cp->confessArray($spons, 'sponsors array, formatted and sorted', 3);
 	foreach($spons as $level => $data){
 		sort($data['names']);
 		//confessArray($data, 'data');
@@ -227,7 +226,7 @@ $sy = findSchoolYear();
 $tmp = explode('-', $sy);
 $sfyear = $tmp[1];
 
-$cp =& new CoopPage();
+$cp =& new CoopPage($debug);
 $_SESSION['foo'] = 'foo';		// keep auth.inc happy
 
 

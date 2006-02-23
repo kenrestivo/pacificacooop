@@ -13,31 +13,45 @@ coop web database
 	springfest microsite (microsite.txt)
 	json services (templates.txt)
 	sortable/searchable/pagable views (searchfeature.txt)
-	labels/export -- python cgi on nfsn, formatting, etc.ian dlut ib
+	labels/export -- python cgi on nfsn, formatting, etc.
 
 
-BUGS
-	firefoxcrash: separate bid and gift
-	exploiter
-	larger print and spread out on gift certs
-		only for silent and live
-	blank bid sheet, second page
-	i gotta put the fucking honeycomb in there. goddammit
-	format per china!
-	
-??PHP	
-simple show all for the packages, probably, fulltext
-	checkbox, i'd guess
-	
-		
 ???PHP/CSS (day)
 printing
 	program sheets!
 		packages, sponsors, donors
+			use algorithm from public_auction
+			is this easy or hard?
+				easy. use the algorithm, produce an array, use template
 		go look at what previous years programs looked like
 		csv format too, probably
 	and that report for michelle: showing all the items and compoennts
 
+
+??PHP	
+simple show all for the packages, probably, fulltext
+	checkbox, i'd guess
+
+	
+??PHP
+gift certs
+	china's format
+	larger print and spread out on gift certs
+
+
+		
+BUGS
+	exploiter: absolute won't print at bottom of EVERY page, just the first one
+		maybe that height hack will work
+		look at the alistapart tutorial
+			http://www.alistapart.com/articles/footers
+	firefoxcrash: separate bid and gift
+		auugh. gift not working
+	i gotta put the fucking honeycomb in there. goddammit
+	blank bid sheet, second page
+	format per china!
+	
+	
 		
 ??PHP
 bring in-kind donations back
@@ -6681,3 +6695,4 @@ perms for sogo and day
 		quirksmode?
 BUGS!
 	gift certs not page breaking. goddammit. ah. gotta have that bidinfo in there
+		only for silent and live
