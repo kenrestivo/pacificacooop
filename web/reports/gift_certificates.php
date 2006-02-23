@@ -20,7 +20,7 @@
 
 require_once('CoopReport.php');
 
-class BidSheetReport extends CoopReport
+class GiftCertificateReport extends CoopReport
 {
 
 // specific to this page. when i dispatch with REST, i'll need several
@@ -28,38 +28,38 @@ class BidSheetReport extends CoopReport
         {
 
             // let the template know all about it
-            $this->template = new PHPTAL('bid-sheet.xhtml');
+            $this->template = new PHPTAL('gift-certificates.xhtml');
 
-            $this->page->title = 'Springfest Packaging Bid Sheets';
+            $this->page->title = 'Springfest Packaging Gift Certificates';
 
-            ////////////// BIDSHEETS
-            $bidsheets =& new CoopView(&$this->page, 'packages', &$nothing);
-            $pt =& new CoopView(&$this->page, 'package_types', &$bidsheets);
-            $bidsheets->protectedJoin($pt);
-            $bidsheets->obj->whereAdd('package_type_short = "Silent"');
-            // tal needs this to decide whether to print the increment
-            array_push($bidsheets->obj->fb_preDefOrder, 'package_type_short');
-            $bidsheets->obj->fb_fieldLabels['package_type_short'] = 'Package Type';
-    
 
-            $bidsheets->fullText= 1; // gotta have it
+            ////////////// GIFT CERTIFICATES 
+            $giftcerts =& new CoopView(&$this->page, 'packages', &$nothing);
+            $pt =& new CoopView(&$this->page, 'package_types', &$giftcerts);
+            $giftcerts->protectedJoin($pt);
+            $giftcerts->obj->whereAdd('item_type = "Gift Certificate"');
+            $giftcerts->obj->whereAdd('(package_type_short = "Live" or package_type_short = "Silent")');
+
+            $giftcerts->fullText= 1; // gotta have it
 
             if(devSite() && $_REQUEST['limit']){
                 // XXX TEMPORARY HACK FOR TESTING
-                $bidsheets->obj->limit($_REQUEST['limit']);
+                $giftcerts->obj->limit($_REQUEST['limit']);
             }
 
-            $bidsheets->find(true);
-            $this->template->setRef('bidsheets', $bidsheets);
+            $giftcerts->find(true);
+            $this->template->setRef('giftcerts', $giftcerts);
 
-            $this->page->printDebug("sy $sy nav $nav ". $bidsheets->getChosenSchoolYear(), 1);
-
+            // simple year.
+            list($crap, $year) = explode('-', $giftcerts->getChosenSchoolYear());
+            $year = 'Springfest ' . $year;
+            $this->template->setRef('eventdate', $year);
     
         }
 }
 
 
-    $r =& new BidSheetReport($debug);
+    $r =& new GiftCertificateReport($debug);
     $r->run();
 
 
