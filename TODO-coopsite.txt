@@ -17,12 +17,13 @@ coop web database
 
 
 BUGS
-	i gotta put the fucking honeycomb in there. goddammit
+	firefoxcrash: separate bid and gift
 	exploiter
 	larger print and spread out on gift certs
 		only for silent and live
 	blank bid sheet, second page
-
+	i gotta put the fucking honeycomb in there. goddammit
+	format per china!
 	
 ??PHP	
 simple show all for the packages, probably, fulltext
