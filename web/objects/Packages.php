@@ -139,6 +139,7 @@ var $fb_currencyFields = array(
 
         function fb_display_view(&$co)
         {
+            $co->schoolYearChooser();
             $res ="";
             
             if($co->isPermittedField(null, true, true) >=  ACCESS_EDIT){
@@ -148,6 +149,35 @@ var $fb_currencyFields = array(
                                             'table' => 'package_types',
                                             'push' => $co->table)));
             }
+
+
+            //// ADD SHOW DETAILS BUTTON
+                $longdescr =& $co->searchForm->addElement(
+                    'advcheckbox', 
+                    'show_long_description', 
+                    'Show long description?',
+                    '(page may take forever to display if checked)', 
+                    array('onchange' =>
+                          'this.form.submit()')) ; 
+
+
+                $co->searchForm->setDefaults(
+                    // NOTE! isset not empty! preserve nulls!
+                    array('show_long_description' => 
+                          isset($co->page->vars['last']['show_long_description']) ? $co->page->vars['last']['show_long_description'] : 0));
+
+
+                $show_long_description = $longdescr->getValue();
+                $co->page->vars['last']['show_long_description'] = $show_long_description;
+                $co->fullText = $show_long_description;
+
+
+
+                $co->showChooser = 1;
+                $co->searchForm->addElement('submit', 'savebutton', 'Change');
+
+
+
             $res .= $co->simpleTable(true, true);
             return $res;
         }

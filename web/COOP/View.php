@@ -234,7 +234,9 @@ class coopView extends CoopObject
 
             $this->obj->selectAdd();// clear!
             foreach($this->obj->fb_fieldLabels as $key => $val){
-                if(in_array($key, $this->obj->fb_textFields))
+                // NOTE that fulltext overrides this
+                if(in_array($key, $this->obj->fb_textFields) && 
+                   !$this->fullText)
                 {
                     $this->obj->selectAdd(
                         sprintf('_cache_%s', $key));
