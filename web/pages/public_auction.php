@@ -234,7 +234,8 @@ $_SESSION['foo'] = 'foo';		// keep auth.inc happy
 
 $cp->title = "Springfest $sfyear"; 
 print $cp->header();
-print "<h2>Join us for Springfest $sfyear!</h2>"; 
+printf('<img src="custom_font.php?text=Join%%20us%%20for%%20Springfest%%20%s&size=18" />', 
+       $sfyear);
 print "\n</div> <!-- end header div -->\n";
 
 print '<div class="leftCol">';
