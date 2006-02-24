@@ -16,7 +16,7 @@ if (!isset($_GET["size"])){
 
 
 // set this to the location of the TrueType font file that you want to use
-$font = "/mnt/kens/ki/proj/coop/imports/Bernhard_Modern_BT.ttf";
+$font = "../../fonts/Bernhard_Modern_BT.ttf";
 
 
 // angle of the font in degrees
