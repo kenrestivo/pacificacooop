@@ -1,6 +1,9 @@
 report notes
 $Id$
 
+JAVA=/usr/local/java/bin/java JAVAHOME=/usr/local/java /usr/local/java/bin/java -jar css2fop1_2.jar -pdf /tmp/foo.pdf http://www/coop-dev
+
+
 a new paradigm: the BACKWARDS link... right joins
 	i.e. everything in linktable, REGARDLESS of whether anything present here
 	slots, basically

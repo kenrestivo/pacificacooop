@@ -21,9 +21,8 @@ BUGS
 	blank bid sheet, second page
 	format per china! when i get it.
 
-
-try that gd font trick
-	size, weight
+in redirect, &coop not coop, causes TROUBLE with no cookies
+	
 	
 ???PHP/CSS (day)
 printing
@@ -6704,3 +6703,5 @@ simple show all for the packages, probably, fulltext
 	firefoxcrash: separate bid and gift
 		auugh. gift not working
 		aha. i had too many footers.
+try that gd font trick
+	size, weight

@@ -2,7 +2,7 @@
  
 // if no text is provided, we will use some default text
 if (!isset($_GET["text"])){
-    $text = "Please Enter Some Text!!";
+    $text = "No text supplied. There is a bug somewhere!!";
 }    else {
     $text = $_GET["text"];
 }
@@ -15,7 +15,8 @@ if (!isset($_GET["size"])){
 }
 
 
-// set this to the location of the TrueType font file that you want to use
+// TODO: go get the font name/path from the database, based on schoolyear
+// springfest settings
 $font = "../fonts/Bernhard_Modern_BT.ttf";
 
 
