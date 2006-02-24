@@ -388,6 +388,65 @@ from %s where school_year = "%s" group by date_received order by date_received',
             return $co->simpleTable(true,true);
         }
 
+/// XXX NOTE THIS FUNCTION NEEDS TO BE REWRITTEN!
+/// it does not use the proper format for inclusion here in the dataobject
+/// it needs to also return a hashtable(array) which can then be formatted
+/// by the caller in whatever CSS or javascript way is needed
+function public_auctions(&$cp, $sy)
+{
+	$res .= sprintf('<hr>
+	<p>Here are some fabulous items that will be auctioned off 
+			at  Springfest!</p>');
+
+	$tab =& new HTML_Table();
+	$tab->addRow(array('Item Number',
+					   'Item Name',
+					   'Description',
+					   'Value'), 
+				 'bgcolor=#aabbff align=left', 'TH');
+
+
+	$q = sprintf('select package_number, package_title, package_description,
+        package_value
+        from packages
+        left join package_types on packages.package_type_id = package_types.package_type_id
+		where display_publicly = "Yes"
+				and school_year = "%s"
+order by package_types.sort_order, packages.package_number, packages.package_title, packages.package_description',
+                 $sy);
+
+	$listq = mysql_query($q);
+	$i = 0;
+	$err = mysql_error();
+	if($err){
+		user_error("public_auction($title): [$q]: $err", E_USER_ERROR);
+	}
+	if(mysql_num_rows($listq) < 1){
+		return "<p>Coming soon! Watch this space for fabulous auction items.</p>";
+	}
+	while($row = mysql_fetch_assoc($listq)){
+		$tdrow = array();
+		while ( list( $key, $val ) = each($row)) {
+			if($key == 'package_value'){
+				if($val < 1){
+					$tdrow[] = "Priceless";
+				} else {
+					$tdrow[] = sprintf("$%0.2f",$val);
+				}
+			} else {
+				$tdrow[] = $val;
+			}
+		}
+		$tab->addRow($tdrow, 'style="tableheader"');
+	}
+    $tab->altRowAttributes(1, 'class="altrow1"', 
+                           'class="altrow2"');
+
+
+	return $res . $tab->toHTML();
+} // end auctions
+
+
 // set item_description lines = 3
 	
 }

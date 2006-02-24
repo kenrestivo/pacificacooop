@@ -93,8 +93,8 @@ img {
 
 div.leftCol {
   width: 25ex;
-	background-color:  #ffcc99;
-	  float: left;
+  background-color:  #ffcc99;
+  float: left;
 	margin-left:  .5em;
 	padding-left:  .5em;
 }
@@ -363,7 +363,6 @@ a.navcurrent {
 @media print { 	
   #header { display:none }	
   #footer { display:none }	
-  .leftCol { display:none }
   #springfestpretty { display:none }
   .actions { display: none }	
   .rightCol { margin: 0 }

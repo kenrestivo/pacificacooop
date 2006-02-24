@@ -66,6 +66,58 @@ var $fb_currencyFields = array(
 
 // set item_description lines = 3
 
+/// XXX NOTE THIS FUNCTION NEEDS TO BE REWRITTEN!
+/// it does not use the proper format for inclusion here in the dataobject
+/// it needs to also return a hashtable(array) which can then be formatted
+/// by the caller in whatever CSS or javascript way is needed
+// XXX MORE! this also doesn't really belong in in_kind_donations either
+function public_donors(&$cp, $sy)
+{
+	$res .= '<div class="sponsor">';
+	$res .= "<p><b>And Our Donors:</b></p>";
+	$companies =& new CoopObject(&$cp, 'companies', &$nothing);
+	$companies->obj->query(
+"select distinct companies.*
+from companies
+left join companies_auction_join 
+on companies_auction_join.company_id = companies.company_id 
+left join auction_donation_items 
+on companies_auction_join.auction_donation_item_id = auction_donation_items.auction_donation_item_id
+and auction_donation_items.school_year = '$sy'
+left join companies_income_join 
+on companies_income_join.company_id = companies.company_id
+left join income
+on companies_income_join.income_id = income.income_id
+and income.school_year = '$sy'
+left join companies_in_kind_join 
+on companies_in_kind_join.company_id = companies.company_id
+left join in_kind_donations
+on companies_in_kind_join.in_kind_donation_id = in_kind_donations.in_kind_donation_id
+and in_kind_donations.school_year = '$sy'
+left join sponsorships on sponsorships.company_id = companies.company_id
+left join ads on ads.company_id = companies.company_id
+where
+(income.payment_amount > 0
+or auction_donation_items.item_value > 0
+or in_kind_donations.item_value > 0)
+and ads.ad_id is null
+and sponsorships.sponsorship_id is null
+order by if(companies.listing is not null, companies.listing, companies.company_name), companies.last_name");
+	$res .= "<ul>";
+	while($companies->obj->fetch()){
+		if($companies->obj->url > ''){
+			$res .= sprintf('<li><a href="%s">%s</a></li>', 
+							 $cp->fixURL($companies->obj->url),
+							 $companies->obj->listing? $companies->obj->listing : $companies->obj->company_name);
+		} else {
+			$res .= sprintf("<li>%s</li>", 
+                            $companies->obj->listing? $companies->obj->listing : $companies->obj->company_name);
+		}
+	}
+	$res .= "</ul></div><!-- end ad div -->";
+
+	return $res;
+}
 
 
 }

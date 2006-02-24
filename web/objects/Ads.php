@@ -83,4 +83,31 @@ class Ads extends CoopDBDO
 
 // set ad_copy lines = 3
 
+/// XXX NOTE THIS FUNCTION NEEDS TO BE REWRITTEN!
+/// it does not use the proper format for inclusion here in the dataobject
+/// it needs to also return a hashtable(array) which can then be formatted
+/// by the caller in whatever CSS or javascript way is needed
+function public_ads(&$cp, $sy)
+{
+	$res .= '<div class="sponsor">';
+	$res .= "<p><b>Our advertisers:</b></p>";
+	$ad =& new CoopObject(&$cp, 'ads', &$nothing);
+	$ad->obj->query("select distinct * from ads left join companies on companies.company_id = ads.company_id left join sponsorships on companies.company_id = sponsorships.company_id where ads.school_year = '$sy' and sponsorship_id is null order by if(companies.listing is not null, companies.listing,companies.company_name)");
+	$res .= "<ul>";
+	while($ad->obj->fetch()){
+		if($ad->obj->url > ''){
+			$res .= sprintf('<li><a href="%s">%s</a></li>', 
+							 $cp->fixURL($ad->obj->url),
+							 $ad->obj->listing? $ad->obj->listing : $ad->obj->company_name);
+		} else {
+			$res .= sprintf("<li>%s</li>", 
+                            $ad->obj->listing? $ad->obj->listing: $ad->obj->company_name);
+		}
+	}
+	$res .= "</ul></div><!-- end ad div -->";
+
+	return $res;
+}
+
+
 }

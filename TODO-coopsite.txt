@@ -16,14 +16,6 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
-BUGS
-	i gotta put the fucking honeycomb in there. goddammit
-	blank bid sheet, second page
-	format per china! when i get it.
-
-in redirect, &coop not coop, causes TROUBLE with no cookies
-	
-	
 ???PHP/CSS (day)
 printing
 	program sheets!
@@ -34,6 +26,15 @@ printing
 		go look at what previous years programs looked like
 		csv format too, probably
 	and that report for michelle: showing all the items and compoennts
+
+	
+BUGS
+	i gotta put the fucking honeycomb in there. goddammit
+	blank bid sheet, second page
+
+in redirect, &coop not coop, causes TROUBLE with no cookies
+	
+	
 
 
 	
@@ -3505,6 +3506,7 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	format per china! when i get it.
 
 	exploiter: absolute won't print at bottom of EVERY page, just the first one
 		maybe that height hack will work
@@ -6705,3 +6707,4 @@ simple show all for the packages, probably, fulltext
 		aha. i had too many footers.
 try that gd font trick
 	size, weight
+	hair techniques is stuttering. why?
