@@ -16,7 +16,7 @@
 
     <!-- obnoxious. but, alas, necessary -->
     <!--[if IE]>
-        <style> div.footer {position: absolute;} </style>
+        <style> @media print{ #footer {position: absolute;}} </style>
         <![endif]-->
 
         <div class="instructions">
@@ -26,6 +26,11 @@
         <div tal:condition="page/auth/uid" 
              metal:define-slot="inner_content">The Content of the Page</div>
 
+        <div id="footer" class="footer">
+          Sunset Surf
+          <img class="logo" alt="Pacifica Co-Op Nursery School Logo" 
+               src="/round-small-logo.gif" />
+        </div>
 
     <!-- TODO: add the webpage footer in here, wrappped in a nonprinting div -->
 

@@ -16,6 +16,19 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
+BUGS
+	exploiter: absolute won't print at bottom of EVERY page, just the first one
+		maybe that height hack will work
+		look at the alistapart tutorial
+			http://www.alistapart.com/articles/footers
+		aha! fixedlayoutexample5.htm works! at least in FF
+	firefoxcrash: separate bid and gift
+		auugh. gift not working
+	i gotta put the fucking honeycomb in there. goddammit
+	blank bid sheet, second page
+	format per china!
+
+	
 ???PHP/CSS (day)
 printing
 	program sheets!
@@ -28,10 +41,6 @@ printing
 	and that report for michelle: showing all the items and compoennts
 
 
-??PHP	
-simple show all for the packages, probably, fulltext
-	checkbox, i'd guess
-
 	
 ??PHP
 gift certs
@@ -40,16 +49,6 @@ gift certs
 
 
 		
-BUGS
-	exploiter: absolute won't print at bottom of EVERY page, just the first one
-		maybe that height hack will work
-		look at the alistapart tutorial
-			http://www.alistapart.com/articles/footers
-	firefoxcrash: separate bid and gift
-		auugh. gift not working
-	i gotta put the fucking honeycomb in there. goddammit
-	blank bid sheet, second page
-	format per china!
 	
 	
 		
@@ -6696,3 +6695,7 @@ perms for sogo and day
 BUGS!
 	gift certs not page breaking. goddammit. ah. gotta have that bidinfo in there
 		only for silent and live
+
+??PHP	
+simple show all for the packages, probably, fulltext
+	checkbox, i'd guess

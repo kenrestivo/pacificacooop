@@ -125,8 +125,9 @@ class Sponsorships extends CoopDBDO
             $form->addFormRule(array($this, '_onlyOne'));
             $el =& $form->getElement($form->CoopForm->prependTable('entry_type'));
             $el->setValue('Manual');
-
+ 
         }
 
+ 
 
 }
