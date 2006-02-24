@@ -17,17 +17,13 @@ coop web database
 
 
 BUGS
-	exploiter: absolute won't print at bottom of EVERY page, just the first one
-		maybe that height hack will work
-		look at the alistapart tutorial
-			http://www.alistapart.com/articles/footers
-		aha! fixedlayoutexample5.htm works! at least in FF
-	firefoxcrash: separate bid and gift
-		auugh. gift not working
 	i gotta put the fucking honeycomb in there. goddammit
 	blank bid sheet, second page
-	format per china!
+	format per china! when i get it.
 
+
+try that gd font trick
+	size, weight
 	
 ???PHP/CSS (day)
 printing
@@ -3510,7 +3506,13 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	
+
+	exploiter: absolute won't print at bottom of EVERY page, just the first one
+		maybe that height hack will work
+		look at the alistapart tutorial
+			http://www.alistapart.com/articles/footers
+		aha! fixedlayoutexample5.htm works! at least in FF
+
 ugly big huge reference problem
 	looks like the page that gets sent into the context is DIFFERENT
 		from the one that is in the dispatcher. this is deadly
@@ -6699,3 +6701,6 @@ BUGS!
 ??PHP	
 simple show all for the packages, probably, fulltext
 	checkbox, i'd guess
+	firefoxcrash: separate bid and gift
+		auugh. gift not working
+		aha. i had too many footers.

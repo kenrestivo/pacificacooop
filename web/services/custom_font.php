@@ -37,11 +37,10 @@ $im = imagecreate($x_size * 1.05, $y_size * 1.25);
  
 // define the colours that we will be using
 $bgcolor = imagecolorallocate($im, 255, 255, 255);
-$textcolor = imagecolorallocate($im, 0, 0, 10);
+$textcolor = imagecolorallocate($im, 0, 0, 0);
  
-//imagefilltoborder($im, 0, 0, $blue1, $blue1);
 $startx = $font_size/4;
-$starty = $font_size*1.5;
+$starty = $font_size*1.25;
 
 imagettftext($im, $font_size, $font_angle, $startx, $starty, 
              $textcolor, $font, $text);

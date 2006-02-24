@@ -234,8 +234,8 @@ $_SESSION['foo'] = 'foo';		// keep auth.inc happy
 
 $cp->title = "Springfest $sfyear"; 
 print $cp->header();
-printf('<img src="custom_font.php?text=Join%%20us%%20for%%20Springfest%%20%s&size=18" />', 
-       $sfyear);
+printf('<img src="%s/custom_font.php?text=Join%%20us%%20for%%20Springfest%%20%s&size=18" />', 
+       COOP_ABSOLUTE_URL_PATH, $sfyear);
 print "\n</div> <!-- end header div -->\n";
 
 print '<div class="leftCol">';
