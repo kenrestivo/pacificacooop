@@ -238,7 +238,7 @@ printf('<img src="%s/custom_font.php?text=Join%%20us%%20for%%20Springfest%%20%s&
        COOP_ABSOLUTE_URL_PATH, $sfyear);
 print "\n</div> <!-- end header div -->\n";
 
-print '<div class="leftCol">';
+print '<div class="leftCol" id="leftCol">';
 print sponsors(&$cp, $sy);
 print ads(&$cp, $sy);
 print donors(&$cp, $sy);
