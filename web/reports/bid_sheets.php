@@ -55,7 +55,7 @@ class BidSheetReport extends CoopReport
             $this->page->printDebug("sy $sy nav $nav ". $bidsheets->getChosenSchoolYear(), 1);
 
 
-            $crap = array_fill(0,20,'');
+            $crap = array_fill(0,10,'');
             $this->template->setRef('blanklines', $crap);
 
             
