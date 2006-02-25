@@ -146,7 +146,7 @@ class Sponsorships extends CoopDBDO
             
 
             foreach($spons as $level => $data){
-                foreach($data['values'] as $val){
+                foreach($data['names'] as $val){
                     $sponsors .= $val['url'] ? 
                         sprintf('<li><a href="%s">%s</a></li>',
                                 $val['url'], $val['name']) : 
@@ -190,7 +190,7 @@ if(companies.listing is not null, companies.listing,
             while($co->obj->fetch()){
                 $res[$co->obj->sponsorship_name]['price'] = 
                     $co->obj->sponsorship_price;
-                $res[$co->obj->sponsorship_name]['values'][] = 
+                $res[$co->obj->sponsorship_name]['names'][] = 
                     array('name' =>$co->obj->sponsor_formatted,
                           'url' => $co->obj->url);
             }

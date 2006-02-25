@@ -34,7 +34,7 @@ class ProgramSummary extends CoopReport
 
             $sp =& new CoopView(&$this->page, 'sponsorships', &$none);
             $spons_struct =  $sp->obj->public_sponsors_structure(&$sp);
-            $this->template->setRef('sponsors', $spons);
+            $this->template->setRef('sponsors', $spons_struct);
 
             return;
             $inkind =& new CoopObject(&$this->page, 'in_kind_donations',
