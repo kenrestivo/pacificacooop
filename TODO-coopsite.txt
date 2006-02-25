@@ -19,10 +19,8 @@ coop web database
 ???PHP/CSS (day)
 printing
 	program export!
-		format the table
-			l01 |  title  | value
-				   descr ....
-		get the ads in 
+		do some formatting: bolds for package names, etc
+			and, remember don't use the standard formatting for tables
 	csv format too, probably, if possible, should be with iterator or toarray
 	and that report for michelle: showing all the items and compoennts
 		subiterators, tricky
@@ -34,11 +32,8 @@ BUGS
 
 	
 in redirect, &coop not coop, causes TROUBLE with no cookies
-	
-	
 
 
-	
 ??PHP
 gift certs
 	china's format
@@ -6730,3 +6725,7 @@ BUGS
 				somehow get that summary
 				so it in a sensible way for phptal, then copy to public-au
 		go look at what previous years programs looked like
+		format the table
+			l01 |  title  | value
+				   descr ....
+		get the ads in 

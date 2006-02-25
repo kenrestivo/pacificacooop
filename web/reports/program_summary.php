@@ -54,11 +54,10 @@ class ProgramSummary extends CoopReport
 
             $this->template->setRef('packages', $pac);
 
-            return; //XXX FOR DEBUG ONLY!
-
 
             $ads =& new CoopView(&$this->page, 'ads', 
                                    &$none);
+            $ads->fullText = 1; // making their lives easier
             $ads = $ads->simpleTable();
             $this->template->setRef('ads', $ads);
 
