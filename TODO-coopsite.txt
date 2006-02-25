@@ -15,11 +15,18 @@ coop web database
 	sortable/searchable/pagable views (searchfeature.txt)
 	labels/export -- python cgi on nfsn, formatting, etc.
 
+BUGS
+	sort order, alpha/numeric silent/live
+		how did i fix this?
+		cast as signed, once i filter out the SHIT	
 
 ???PHP/CSS (day)
 printing
 	program sheets!
 		packages, sponsors, donors
+			re-do the sponsors report in pure SQL, not that wacky shit
+				somehow get that summary
+				so it in a sensible way for phptal, then copy to public-au
 		go look at what previous years programs looked like
 		csv format too, probably, if possible
 	and that report for michelle: showing all the items and compoennts
@@ -6512,6 +6519,7 @@ BUGS
 
 ??PHP/SQL
 live/silent/door/balloon sort
+	what the FUCK does this mean??!
 	run tests
 	push live (upgrade.sql)
 	familyid MUST BE DEFAULT NONE in tickets and probably paddles
@@ -6714,3 +6722,5 @@ try that gd font trick
 			use algorithm from public_auction
 			is this easy or hard?
 				easy. use the algorithm, produce an array, use template
+			order by sponsorship price desc
+				join and congeal, look i've done it before... donors?

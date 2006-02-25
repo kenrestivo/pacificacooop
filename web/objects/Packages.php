@@ -106,7 +106,8 @@ var $fb_currencyFields = array(
             $par = new CoopObject(&$co->page, 'package_types', &$co);
             $co->protectedJoin($par);
             $co->constrainSchoolYear();
-            $co->obj->orderBy('package_types.sort_order, packages.package_number, packages.package_title, packages.package_description');
+            /// NOTE! package number here assumes JUST ONE letter, then numbers
+            $co->obj->orderBy('package_types.sort_order, cast(substring(package_number,2,length(package_number)) as signed), packages.package_title, packages.package_description');
 
         }
     
@@ -217,7 +218,7 @@ function public_packages(&$cp, $sy)
         left join package_types on packages.package_type_id = package_types.package_type_id
 		where display_publicly = "Yes"
 				and school_year = "%s"
-order by package_types.sort_order, packages.package_number, packages.package_title, packages.package_description',
+order by package_types.sort_order, cast(substring(package_number,2,length(package_number)) as signed), packages.package_title, packages.package_description',
                  $sy);
 
 	$listq = mysql_query($q);

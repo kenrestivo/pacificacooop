@@ -2252,4 +2252,8 @@ if(companies.listing is not null, companies.listing,
 ;
 
 
+--- signed
+select cast(substring(package_number,2,length(package_number)) as signed) from packages where package_type_id = 2 and school_year = '2005-2006' order by package_number;
+
+
 --- EOF
