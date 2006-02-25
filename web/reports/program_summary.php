@@ -42,12 +42,20 @@ class ProgramSummary extends CoopReport
             $this->template->setRef('donors', $donors);
 
 
+            $pac =& new CoopView(&$this->page, 'packages', &$none);
+            $pt =& new CoopView(&$this->page, 'package_types', &$pac);
+            $pac->protectedJoin($pt);
+            $pac->obj->whereAdd('(package_type_short = "Live" or package_type_short = "Silent")');
+            array_push($pac->obj->fb_preDefOrder, 'package_type_short');
+            $pac->obj->fb_fieldLabels['package_type_short'] = 'Package Type';
+
+            $pac->find(true);
+            $pac->fullText= 1; // gotta have it
+
+            $this->template->setRef('packages', $pac);
+
             return; //XXX FOR DEBUG ONLY!
 
-            $pac =& new CoopView(&$this->page, 'packages', 
-                                   &$none);
-            $packages = $pac->simpleTable();
-            $this->template->setRef('packages', $packages);
 
             $ads =& new CoopView(&$this->page, 'ads', 
                                    &$none);

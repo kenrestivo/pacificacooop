@@ -10,8 +10,13 @@
 
 
 
-    <!-- packages come first -->
-    <div tal:replace="structure packages"></div>
+    <h1>Live and Silent Auction Items</h1>
+    <div tal:repeat="package packages">
+      <span tal:content="package/package_number"></span>
+      <span tal:content="package/package_title"></span>
+      <span tal:content="package/package_value"></span>
+      <span tal:content="structure package/package_description"></span>
+    </div>
 
 
     <h1>Sponsors and Generous Donors</h1>
