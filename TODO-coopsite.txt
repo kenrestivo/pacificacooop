@@ -19,6 +19,7 @@ coop web database
 ???PHP/CSS (day)
 printing
 	program export!
+		split the live and silent into separate tables... somehow
 		do some formatting: bolds for package names, etc
 			and, remember don't use the standard formatting for tables
 	csv format too, probably, if possible, should be with iterator or toarray
