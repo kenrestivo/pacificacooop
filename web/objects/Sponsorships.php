@@ -128,14 +128,11 @@ class Sponsorships extends CoopDBDO
  
         }
 
-/// XXX NOTE THIS FUNCTION NEEDS TO BE REWRITTEN!
-/// it does not use the proper format for inclusion here in the dataobject
-/// it needs to also return a hashtable(array) which can then be formatted
-/// by the caller in whatever CSS or javascript way is needed
+    // XXX WHACK THIS and use css and templates instead.
+    // this should be deprecieated. because it sucks.
     function public_sponsors(&$co, $sy)
         {
             $cp =& $co->page; // lazy
-
             $co->chosenSchoolYear = $sy; ///XXX nasty hack
 
             // now a word from our sponsors
@@ -144,12 +141,13 @@ class Sponsorships extends CoopDBDO
 
             $spons = $this->public_sponsors_structure(&$co);
             
-
+            // XXX this is the stuff that needs to be done with PHPTAL instead
             foreach($spons as $level => $data){
                 foreach($data['names'] as $val){
                     $sponsors .= $val['url'] ? 
                         sprintf('<li><a href="%s">%s</a></li>',
-                                $val['url'], $val['name']) : 
+                                $val['url'], 
+                                $val['name']) : 
                         sprintf("<li>%s</li>", $val['name']);
                 }
                 $res .= sprintf(
@@ -192,7 +190,7 @@ if(companies.listing is not null, companies.listing,
                     $co->obj->sponsorship_price;
                 $res[$co->obj->sponsorship_name]['names'][] = 
                     array('name' =>$co->obj->sponsor_formatted,
-                          'url' => $co->obj->url);
+                          'url' => $co->obj->url > '' ? $co->page->fixURL($co->obj->url) : false);
             }
             $co->page->confessArray($res, 'sponsorship structure', 4);
             return $res;
