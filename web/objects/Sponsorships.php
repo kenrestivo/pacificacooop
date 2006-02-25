@@ -136,6 +136,8 @@ class Sponsorships extends CoopDBDO
         {
             $cp =& $co->page; // lazy
 
+            $co->chosenSchoolYear = $sy; ///XXX nasty hack
+
             // now a word from our sponsors
             $res .= '<div class="sponsor">';
             $res .= "<p><b>Thanks to our generous sponsors:</b></p>";
