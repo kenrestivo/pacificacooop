@@ -42,17 +42,20 @@ class ProgramSummary extends CoopReport
             $this->template->setRef('donors', $donors);
 
 
-            $pac =& new CoopView(&$this->page, 'packages', &$none);
-            $pt =& new CoopView(&$this->page, 'package_types', &$pac);
-            $pac->protectedJoin($pt);
-            $pac->obj->whereAdd('(package_type_short = "Live" or package_type_short = "Silent")');
-            array_push($pac->obj->fb_preDefOrder, 'package_type_short');
-            $pac->obj->fb_fieldLabels['package_type_short'] = 'Package Type';
+            $pacs = array();
+            foreach (array('Live', 'Silent') as $ptype){
+                $pacs[$ptype] =& new CoopView(&$this->page, 'packages', &$none);
+                $pt =& new CoopView(&$this->page, 'package_types', &$pacs[$ptype]);
+                $pacs[$ptype]->protectedJoin($pt);
+                $pacs[$ptype]->obj->whereAdd(
+                    sprintf('package_type_short = "%s"', $ptype));
+                array_push($pacs[$ptype]->obj->fb_preDefOrder, 'package_type_short');
+                $pacs[$ptype]->obj->fb_fieldLabels['package_type_short'] = 'Package Type';
+                $pacs[$ptype]->find(true);
+                $pacs[$ptype]->fullText= 1; // gotta have it
+            }
 
-            $pac->find(true);
-            $pac->fullText= 1; // gotta have it
-
-            $this->template->setRef('packages', $pac);
+            $this->template->setRef('packagetypes', $pacs);
 
 
             $ads =& new CoopView(&$this->page, 'ads', 

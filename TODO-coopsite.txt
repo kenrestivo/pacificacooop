@@ -18,11 +18,6 @@ coop web database
 	
 ???PHP/CSS (day)
 printing
-	program export!
-		split the live and silent into separate tables... somehow
-		do some formatting: bolds for package names, etc
-			and, remember don't use the standard formatting for tables
-	csv format too, probably, if possible, should be with iterator or toarray
 	and that report for michelle: showing all the items and compoennts
 		subiterators, tricky
 
@@ -622,6 +617,8 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+csv or quark xtags format too, probably, if possible, should be with iterator or toarray
 
 ??PHP
 change the public auction stuff to proper dict-producing algorithms
@@ -6730,3 +6727,7 @@ BUGS
 			l01 |  title  | value
 				   descr ....
 		get the ads in 
+		do some formatting: bolds for package names, etc
+			and, remember don't use the standard formatting for tables
+	program export!
+		split the live and silent into separate tables... somehow
