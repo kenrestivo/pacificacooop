@@ -45,7 +45,11 @@ $pdf->AddPage();
 $pdf->SetFont('Arial','B',16);
 $pdf->Cell(0,22,'Hello at '. date('r'));
 $pdf->Ln();
-$pdf->Cell(0,22,'this rules');
+
+$moretext = 'this rules';
+// gestringwidthis braindead. you have to manually add padding!
+$mtw = $pdf->GetStringWidth($moretext) + 6;
+$pdf->Cell($mtw,22,$moretext, 1);
 $pdf->Output();
 
 ?> 
