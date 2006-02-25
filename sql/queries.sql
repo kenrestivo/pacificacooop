@@ -2227,4 +2227,29 @@ set label_printed = "2006-02-17 17:00"
 where (label_printed is null or label_printed < "1000-01-01") 
     and school_year = "2005-2006";
 
+
+-- sponsors, sorted and formatted
+select if(companies.listing is not null, 
+        companies.listing,
+        if(coalesce(companies.company_name, leads.company) is not null,
+            coalesce(companies.company_name, leads.company), 
+            concat_ws(' ', coalesce(leads.first_name, companies.first_name),
+                    coalesce(leads.last_name, companies.last_name)))) 
+        as sponsor_formatted,
+    companies.url,
+    sponsorship_types.sponsorship_name, sponsorship_types.sponsorship_price
+from sponsorships
+left join sponsorship_types 
+    on sponsorship_types.sponsorship_type_id = sponsorships.sponsorship_type_id
+left join companies on companies.company_id = sponsorships.company_id
+left join leads on leads.lead_id = sponsorships.lead_id
+where sponsorships.school_year = '2005-2006'
+order by sponsorship_price desc, 
+if(companies.listing is not null, companies.listing, 
+    if(coalesce(companies.company_name, leads.company) is not null, 
+    coalesce(companies.company_name, leads.company),
+    coalesce(leads.last_name, companies.last_name))) asc
+;
+
+
 --- EOF
