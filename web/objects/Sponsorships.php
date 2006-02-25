@@ -132,66 +132,26 @@ class Sponsorships extends CoopDBDO
 /// it does not use the proper format for inclusion here in the dataobject
 /// it needs to also return a hashtable(array) which can then be formatted
 /// by the caller in whatever CSS or javascript way is needed
-    function public_sponsors(&$cp, $sy)
+    function public_sponsors(&$co, $sy)
         {
+            $cp =& $co->page; // lazy
+
             // now a word from our sponsors
             $res .= '<div class="sponsor">';
             $res .= "<p><b>Thanks to our generous sponsors:</b></p>";
 
-            // check the sponsorship table, not calculate
+            $spons = $this->public_sponsors_structure(&$co);
+            
 
-            $st =& new CoopObject(&$cp, 'sponsorship_types', &$nothing);
-            $st->obj->school_year = $sy;
-            $st->obj->orderBy('sponsorship_price desc');
-            $st->obj->find();
-            while($st->obj->fetch()){
-                //confessObj($st->obj, 'st obh');
-                $sp =& new CoopObject(&$cp, 'sponsorships', &$nothing);
-                $sp->obj->{$st->pk} = $st->obj->{$st->pk};
-                $sp->obj->find();
-                while($sp->obj->fetch()){
-                    //confessObj($sp->obj, 'sponb');
-                    /// XXX i hate hate hate this database layout.
-                    /// normalise to 3NF and combine companies and leads into one!
-			
-                    $table = $sp->obj->lead_id> 0 ? 'leads' : 'companies';
-                    $co =& new CoopObject(&$cp, $table, &$nothing);
-                    $co->obj->{$co->pk} = $sp->obj->{$co->pk};
-                    $co->obj->find(true);
-                    //confessObj($co->obj, 'co');
-                    // when i redo it, this is where the test for existing goes
-                    if($co->obj->url > ''){
-                        // ummmm, use selfurl?
-                        $thing = sprintf(
-                            '<a href="%s">%s</a>', 
-                            $cp->fixURL($co->obj->url),
-                            $co->obj->listing? $co->obj->listing : $co->obj->company_name);
-                    } else {
-                        //XXX cheap congeal: company-lead hack
-                        $thing = $co->obj->listing ? $co->obj->listing : $co->obj->company_name . $co->obj->company;
-                        if(!$thing){
-                            $thing = sprintf("%s %s", $co->obj->first_name,
-                                             $co->obj->last_name);
-                        }
-				
-                        $spons[$st->obj->sponsorship_name]['price'] = 
-                            $st->obj->sponsorship_price;
-                        $spons[$st->obj->sponsorship_name]['names'][] = $thing;
-                    }
-			
-                }
-            }
-	
-            // gah. whew. all done
-            $cp->confessArray($spons, 'sponsors array, formatted and sorted', 3);
             foreach($spons as $level => $data){
-                sort($data['names']);
-                //confessArray($data, 'data');
-                foreach($data['names'] as $name){
-                    $sponsors .= sprintf("<li>%s</li>", $name);
+                foreach($data['values'] as $val){
+                    $sponsors .= $val['url'] ? 
+                        sprintf('<li><a href="%s">%s</a></li>',
+                                $val['url'], $val['name']) : 
+                        sprintf("<li>%s</li>", $val['name']);
                 }
                 $res .= sprintf(
-                    '<p><b>%s Contributors</b> <span class="small">($%.0f and above)</span></p><ul>%s</ul>', 
+                    '<p><b>%s Contributors</b><br /><span class="small">($%.0f and above)</span></p><ul>%s</ul>', 
                     $level, $data['price'], $sponsors);
                 $sponsors ='';
             }
@@ -203,7 +163,6 @@ class Sponsorships extends CoopDBDO
 
     function public_sponsors_structure(&$co)
         {
-            $co->schoolYearChooser();
             $co->obj->query(sprintf('select if(companies.listing is not null, 
         companies.listing,
         if(coalesce(companies.company_name, leads.company) is not null,

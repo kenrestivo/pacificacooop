@@ -18,8 +18,7 @@
 
 require_once("first.inc");
 require_once("shared.inc");
-require_once("CoopObject.php");
-require_once("HTML/Table.php");
+require_once("CoopView.php");
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
@@ -44,8 +43,8 @@ print "\n</div> <!-- end header div -->\n";
 
 print '<div class="leftCol" id="leftCol">';
 
-$sp =& new CoopObject(&$cp, 'sponsorships', &$none);
-print $sp->obj->public_sponsors(&$cp, $sy);
+$sp =& new CoopView(&$cp, 'sponsorships', &$none);
+print $sp->obj->public_sponsors(&$sp, $sy);
 
 $ad =& new CoopObject(&$cp, 'ads', &$none);
 print $ad->obj->public_ads(&$cp, $sy);
