@@ -68,8 +68,8 @@ if(file_exists($prettyname)){
 }
 
 
-$auc =& new CoopObject(&$cp, 'auction_donation_items', &$none);
-print $auc->obj->public_auction(&$cp, $sy);
+$pac =& new CoopObject(&$cp, 'packages', &$none);
+print $pac->obj->public_packages(&$cp, $sy);
 
 
 print "<p><a href='../'>Home</a></p>
