@@ -11,12 +11,8 @@ class TestPDF extends FPDF
     
     function Header()
         {
-
-
-            //Move to the right
-            $this->Cell(100);
-
-            $this->Cell(100,22,'this is title',0,0,'C');
+            $this->SetFont('Times','B',15);
+            $this->Cell(0,22,'this is title',1,0,'C');
 
             //starts the non-header stuff THIS FAR from where i left off
             $this->Ln(200);
@@ -25,7 +21,7 @@ class TestPDF extends FPDF
 
     function Footer()
         {
-            //this is utterly wrong. everything specified literally!
+            //this just sucks. everything specified literally!
             $logoheight= 80;
             $logowidth = 100;
             $this->Image('images/round-small-logo.png',
