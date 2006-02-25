@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<div metal:use-macro="outershell-templ.xhtml/main_page">
+  <div metal:fill-slot="inner_content">
+
+
+    <style  type="text/css">
+      div.sponsor, div.sponsortype{ text-align: center}
+      div.sponsortype {font-size: 150%; padding-top: 1em}
+    </style>
+
+
+
+    <!-- packages come first -->
+
+
+
+    <h1>Sponsors and Generous Donors</h1>
+
+    <div tal:repeat="level sponsors">
+      <div class="sponsortype" tal:content="repeat/level/key">level name</div>
+      <div tal:repeat="sponsor level/names"
+           class="sponsor" 
+           tal:content="sponsor/name">sponsor name</div>
+    </div>    
+
+
+    <div tal:replace="structure donors"></div>
+    <div tal:replace="structure packages"></div>
+    <div tal:replace="structure ads"></div>
+
+
+    <!--  finally the ads -->
+
+
+  </div>
+</div>
