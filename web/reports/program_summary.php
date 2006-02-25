@@ -32,12 +32,11 @@ class ProgramSummary extends CoopReport
 
             $this->page->title = 'Springfest Program Export';
 
-            $sp =& new CoopObject(&$this->page, 'sponsorships', &$none);
-            $spons =  $sp->obj->public_sponsors(
-                &$this->page,
-                $this->page->currentSchoolYear);
+            $sp =& new CoopView(&$this->page, 'sponsorships', &$none);
+            $spons_struct =  $sp->obj->public_sponsors_structure(&$sp);
             $this->template->setRef('sponsors', $spons);
 
+            return;
             $inkind =& new CoopObject(&$this->page, 'in_kind_donations',
                                       &$none);
             $donors =  $inkind->obj->public_donors(
