@@ -4,26 +4,28 @@
   <html  lang="en">
     <head>
       <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-      <link rel="stylesheet" href="main.css" title="main" />
       
+      <link rel="stylesheet" href="main.css" title="main"     
+            tal:attributes="href string:${page/uri_path}/main.css" />
       <title tal:content="page/title"></title>
     </head>
     <body>
-      <!--[if gte IE 5.5000]> <script type="text/javascript" src="lib/pngfix.js"></script> <![endif]-->    
+      <!--[if gte IE 5.5000]> 
+          <script type="text/javascript" src="lib/pngfix.js"></script> 
+          <![endif]--> 
 
-      <div class="header">
-        <div metal:use-macro="header.xhtml/header"></div>        
-      </div>    
       
-      
+      <div id="header">
+        <div  metal:use-macro="header.xhtml/header"></div>
+      </div>
 
       <div class="centerCol" 
            tal:comment="this ID is used for css. keep it here." >
         <div tal:condition="page/auth/uid" 
-             metal:define-slot="center_column">The Center Column Slot</div>
+             metal:define-slot="inner_content">The Content of the Page</div>
       </div>
       
-
+      
       <div id="footer">
         <hr />
         <div><a href="http://validator.w3.org/check/referer">
@@ -37,3 +39,4 @@
     </body>
   </html> 
 </div>
+

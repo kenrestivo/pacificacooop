@@ -20,11 +20,8 @@ coop web database
 printing
 	program sheets!
 		packages, sponsors, donors
-			use algorithm from public_auction
-			is this easy or hard?
-				easy. use the algorithm, produce an array, use template
 		go look at what previous years programs looked like
-		csv format too, probably
+		csv format too, probably, if possible
 	and that report for michelle: showing all the items and compoennts
 
 	
@@ -626,6 +623,12 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+??PHP
+change the public auction stuff to proper dict-producing algorithms
+	which are sutable for use with PHPTAL or mochikit
+ 	objects/Ads.php:public_ads()
+	objects/Sponsorships.php:public_sponsors()
+	objects/In_kind_donations.php:public_donors()
 
 ??PHP
 bid sheets tweekage
@@ -6708,3 +6711,6 @@ simple show all for the packages, probably, fulltext
 try that gd font trick
 	size, weight
 	hair techniques is stuttering. why?
+			use algorithm from public_auction
+			is this easy or hard?
+				easy. use the algorithm, produce an array, use template
