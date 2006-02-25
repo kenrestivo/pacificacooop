@@ -4,8 +4,8 @@
 
 
     <style  type="text/css">
-      div.sponsor, div.sponsortype{ text-align: center}
-      div.sponsortype {font-size: 150%; padding-top: 1em}
+      .sponsor, .sponsortype{ text-align: center}
+      h3.sponsortype {font-size: 150%; padding-top: 1em}
     </style>
 
 
@@ -17,14 +17,16 @@
     <h1>Sponsors and Generous Donors</h1>
 
     <div tal:repeat="level sponsors">
-      <div class="sponsortype" tal:content="repeat/level/key">level name</div>
+      <h3 class="sponsortype" tal:content="repeat/level/key">level name</h3>
       <div tal:repeat="sponsor level/names"
            class="sponsor" 
            tal:content="sponsor/name">sponsor name</div>
     </div>    
 
-
-    <div tal:replace="structure donors"></div>
+    <h3 class="sponsortype">Thank You to All Our Donors</h3>
+    <div tal:repeat="donor donors"
+         class="sponsor" 
+         tal:content="donor/name">donor name</div>
     
     
 
