@@ -29,7 +29,6 @@ class In_kind_donations extends CoopDBDO
 ###END_AUTOCODE
 	var $fb_formHeaderText = 'Springfest In-Kind Donations';
 	var $fb_fieldLabels = array(
-		"family_id" => "Co-Op Family",
 		"quantity" => "Quantity of items", 
 		"item_description" => "Description of item" ,
 		'item_value' => 'Estimated TOTAL Value ($)' ,
@@ -47,7 +46,6 @@ class In_kind_donations extends CoopDBDO
         'quantity',
         'item_description',
         'item_value',
-        'family_id',
         'school_year'
         );
 

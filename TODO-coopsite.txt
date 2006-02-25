@@ -15,19 +15,12 @@ coop web database
 	sortable/searchable/pagable views (searchfeature.txt)
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-	
-???PHP/CSS (day)
-printing
-	and that report for michelle: showing all the items and compoennts
-		subiterators, tricky
 
-	
-BUGS
+
+??PHP
+bid sheets
 	i gotta put the fucking honeycomb in there. goddammit
 	blank bid sheet, second page
-
-	
-in redirect, &coop not coop, causes TROUBLE with no cookies
 
 
 ??PHP
@@ -35,24 +28,21 @@ gift certs
 	china's format
 	larger print and spread out on gift certs
 
+	
+			
+???PHP/CSS (day)
+printing
+	and that report for michelle: showing all the items and compoennts
+		subiterators, tricky, but i need to tackle this
 
 		
-	
-	
-		
-??PHP
-bring in-kind donations back
-	then move the wine/cider/etc to it
-	only the linktable is there, or that's the one missing
-		i need both, alas	
-
-	
 BUGS
 	fix that ad insertion anomaly in the report
 	counts are not in sync between carrie and nag report
 	perms for packages with user_id 0 are ADMIN PRIVS!??!
+	in redirect, &coop not coop, causes TROUBLE with no cookies
 
-			
+				
 ??PHP/SQL
 parent ed (parented.txt)
 		make-up stuff -- wacky sql joins
@@ -172,7 +162,6 @@ PERMS BUGS!!
 
 
 BUGS
-	html in advmultiselect items
 	when you edit something without changing it, notices still go out!
 	schoolyearchooser on details makes no sense in most cases
 		but it does make sense in others. odd.
@@ -230,15 +219,6 @@ hook reload and back buttons
 	reports: sub-objects iteration, i.e. sqlobject MultipleJoin
 		or... my nifty python tal thing maybe??
 
-
-BUGS BUGS BUGS
-    AAAGH!!
-    	the stack is still totally fucked up??
-		at elast on the live site, it certainly is!
-		my unset fix work?
-	the stack is fucked: if i edit, i should be returned to VIEW
-		hmm, well it does work... sometimes...
-			add, then go back, then edit, no?
 
 
 ???PHP shell
@@ -3506,6 +3486,15 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+BUGS BUGS BUGS
+    AAAGH!!
+    	the stack is still totally fucked up??
+		at elast on the live site, it certainly is!
+		my unset fix work?
+	the stack is fucked: if i edit, i should be returned to VIEW
+		hmm, well it does work... sometimes...
+			add, then go back, then edit, no?
 	format per china! when i get it.
 
 	exploiter: absolute won't print at bottom of EVERY page, just the first one
@@ -6731,3 +6720,14 @@ BUGS
 			and, remember don't use the standard formatting for tables
 	program export!
 		split the live and silent into separate tables... somehow
+	only the linktable is there, or that's the one missing
+		i need both, alas	
+		twas easy	html in advmultiselect items
+	then move the wine/cider/etc to it
+	linda mar 1 director 2 teachers weaterston 60
+	chocolate cake duncan 100 french patiseree
+	wine crews 83.88 $300
+	what about the coffee?? was in the wrong place
+
+??PHP
+bring in-kind donations back
