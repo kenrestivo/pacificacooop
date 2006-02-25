@@ -139,6 +139,9 @@ sessionSetup()
 
 	user_error("-------- NEW SESSION ----------------\nsessionSetup(): setting up session", E_USER_NOTICE);
 
+    // default, it seems, but just being anal
+	ini_set('session.cache_limiter', 'nocache');
+
 	/* magic quotes aren't magic, they're evil! turn them off!!
 	ini_set('magic_quotes_gpc', 0);
 	*/
@@ -153,8 +156,6 @@ sessionSetup()
 	// How to store data
 	ini_set('session.serialize_handler', 'php');
 
-	/* Name of our var TODO: make this a constant! use it EVERWHERE!
-	ini_set('session.name', 'coop'); */
 
 	// Garbage collection
 	ini_set('session.gc_probability', 1);
@@ -169,7 +170,10 @@ sessionSetup()
 								"writeSess",
 								"destroySess",
 								"GCsess");
+
+	// Name of our var TODO: make this a constant! use it EVERWHERE!
 	session_name("coop");
+
 	session_start();
 	user_error(sprintf("started session with id [%s]", session_id()), 
 			E_USER_NOTICE);
