@@ -11,13 +11,20 @@
 
 
     <h1>Live and Silent Auction Items</h1>
-    <div tal:repeat="package packages">
-      <span tal:content="package/package_number"></span>
-      <span tal:content="package/package_title"></span>
-      <span tal:content="package/package_value"></span>
-      <span tal:content="structure package/package_description"></span>
-    </div>
-
+    <table>
+      <div tal:omit-tag="" tal:repeat="package packages">
+        <tr>
+          <td tal:content="package/package_number"></td>
+          <td tal:content="package/package_title"></td>
+          <td tal:content="string: Value ${package/package_value}"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="2" 
+              tal:content="structure package/package_description"></td>
+        </tr>
+      </div>
+    </table>
 
     <h1>Sponsors and Generous Donors</h1>
 

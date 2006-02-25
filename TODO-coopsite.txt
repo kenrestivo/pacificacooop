@@ -15,27 +15,24 @@ coop web database
 	sortable/searchable/pagable views (searchfeature.txt)
 	labels/export -- python cgi on nfsn, formatting, etc.
 
-BUGS
-	sort order, alpha/numeric silent/live
-		how did i fix this?
-		cast as signed, once i filter out the SHIT	
-
+	
 ???PHP/CSS (day)
 printing
-	program sheets!
-		packages, sponsors, donors
-			re-do the sponsors report in pure SQL, not that wacky shit
-				somehow get that summary
-				so it in a sensible way for phptal, then copy to public-au
-		go look at what previous years programs looked like
-		csv format too, probably, if possible
+	program export!
+		format the table
+			l01 |  title  | value
+				   descr ....
+		get the ads in 
+	csv format too, probably, if possible, should be with iterator or toarray
 	and that report for michelle: showing all the items and compoennts
+		subiterators, tricky
 
 	
 BUGS
 	i gotta put the fucking honeycomb in there. goddammit
 	blank bid sheet, second page
 
+	
 in redirect, &coop not coop, causes TROUBLE with no cookies
 	
 	
@@ -6717,10 +6714,19 @@ simple show all for the packages, probably, fulltext
 		auugh. gift not working
 		aha. i had too many footers.
 try that gd font trick
-	size, weight
-	hair techniques is stuttering. why?
+	size, weight	hair techniques is stuttering. why?
 			use algorithm from public_auction
 			is this easy or hard?
 				easy. use the algorithm, produce an array, use template
 			order by sponsorship price desc
 				join and congeal, look i've done it before... donors?
+
+BUGS
+	sort order, alpha/numeric silent/live
+		how did i fix this?
+		cast as signed, once i filter out the SHIT	
+		packages, sponsors, donors
+			re-do the sponsors report in pure SQL, not that wacky shit
+				somehow get that summary
+				so it in a sensible way for phptal, then copy to public-au
+		go look at what previous years programs looked like
