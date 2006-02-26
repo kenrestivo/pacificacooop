@@ -1,0 +1,81 @@
+i have to redesign cooppage to separate out presentation and code
+
+
+the whole cooppage class is brain-dead
+	it combines controller and view stuff in same class: stupid
+	things like dispatching, login, etc ARE NOT VIEW ITEMS!
+		they belong in a controller class
+	page literally should be a view: a display page
+	this is tricky
+		cooppage is used everywhere, stupidly.
+		you'd have to pull out the controller-related and display-related stuff
+		like, auth frinstance
+
+read up on turbogears and/or LOL, and look up where these things belong
+		
+
+dispatcher/session-related (controller?):
+   	$vars
+    requestOrSession()
+    stackPath()
+    popOff()
+    initStack()
+    mergeRequest()
+    headerLocation()
+    getStatus()
+
+
+				
+controller-related:
+	$currentSchoolYear
+	$browserData
+    createLegacy() -- deprecated
+    yearNotSetupYet()
+    getBrowserData()
+    auth/user/login specific:
+    	$auth
+    	$userStruct
+    	forceUser()
+    debugging specific:
+		$debug
+        mailError()
+        kensPEARErrorHandler()
+        confessObj()
+        dump()
+        confessArray()
+        printDebug()
+        debugCrap()
+        finalDebug()
+    
+    
+    
+
+utilities (used elsewhere not just here):
+    fixURL()
+    mergeArrays()
+    selfURL()
+    jsRequireOnce()
+    decrementSchoolYear()
+    devSite()
+    
+
+view-related:
+	$indexed_all
+	$buffered_output
+	$title
+	$heading
+	$doctype
+	$content_type
+	$uri_path
+    header()
+    loginBlock()
+    pageTop()
+    formatURLVars()
+    buffer()
+    done()
+    logIn()
+    topNavigation()
+    indexEverything() -- deprecated
+    flushBuffer()
+    newMenuRow()
+    
