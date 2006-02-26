@@ -16,16 +16,15 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 
 
-
+ 
 ??PHP
-bid sheets
+bid sheets and gift certs
+	integrate with cooppage, or perhaps reportshelll, somehow
+		for now just copy and paste coopreport was too general a name
+	use the iterator
 	i gotta put the fucking honeycomb in there. goddammit
 	blank bid sheet, second page
-
-
-??PHP
-gift certs
-	china's format
+	china's format? should i do that?
 	larger print and spread out on gift certs
 
 	
@@ -70,7 +69,7 @@ ticket/rsvp fixes
 ???PHP, nasty				
 export button for tickets/paddles
 	well, just generalise view, really
-		i'll need all the schoolyearchooser shit though, to honour it in export
+be t		i'll need all the schoolyearchooser shit though, to honour it in export
 		no pager though, that's the only thing to leave out
 		basically, everything in view except for the simpletable. fuck.
 			yes. this is stupid: presentation and logic stuck together!
@@ -3486,6 +3485,7 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+		try that pdf xslt thing?
 
 BUGS BUGS BUGS
     AAAGH!!
@@ -6731,3 +6731,5 @@ BUGS
 
 ??PHP
 bring in-kind donations back
+ wget --proxy=off -O  /tmp/test.pdf  http://www/coop-dev/tests/pdftest.php?coop=d57f85743e375a3ca983571b910aa0f3
+	pdflib!

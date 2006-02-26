@@ -2,9 +2,7 @@
 
 chdir('../');
 
-require_once('CoopPage.php');
-require_once('lib/fpdf.php');
-
+require_once('CoopPDF.php');
 
 class TestPDF extends FPDF
 {
@@ -34,22 +32,32 @@ class TestPDF extends FPDF
             $this->Cell(100,22,'this is a very long footer',0,0,'R');
         }
 
-
-
 }
 
-$pdf=new TestPDF('P', 'pt', 'Letter');
-$pdf->AliasNbPages(); // just for testing, i'll not often use this
-$pdf->SetMargins(36,36,36,36);
-$pdf->AddPage();
-$pdf->SetFont('Arial','B',16);
-$pdf->Cell(0,22,'Hello at '. date('r'));
-$pdf->Ln();
+class TestReport extends CoopPDF
+{
 
-$moretext = 'this rules';
-// gestringwidthis braindead. you have to manually add padding!
-$mtw = $pdf->GetStringWidth($moretext) + 6;
-$pdf->Cell($mtw,22,$moretext, 1);
-$pdf->Output();
+    function build()
+        {
+            $this->fpdf=new TestPDF('P', 'pt', 'Letter');
+            $this->fpdf->AliasNbPages(); // just for testing, i'll not often use this
+            $this->fpdf->SetMargins(36,36,36,36);
+            $this->fpdf->AddPage();
+            $this->fpdf->SetFont('Arial','B',16);
+            $this->fpdf->Cell(0,22,'Hello at '. date('r'));
+            $this->fpdf->Ln();
+
+            $moretext = 'this rules';
+            // gestringwidthis braindead. you have to manually add padding!
+            $mtw = $this->fpdf->GetStringWidth($moretext) + 6;
+            $this->fpdf->Cell($mtw,22,$moretext, 1);
+
+        }
+}
+
+
+$r =& new TestReport($debug);
+$r->run();
+
 
 ?> 
