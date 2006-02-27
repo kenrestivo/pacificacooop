@@ -21,6 +21,7 @@ class PDML extends FPDF {
     var $left_margin = array( 28.35 ); // 1cm
     var $right_margin = array( 28.35 ); // 1cm
     var $bottom_margin = array( 28.35 ); // 1cm
+  var $cell_margin;
     var $div_x = array();
     var $div_y = array();
     var $cell_info; // stuff to keep around until a </cell> shows up
@@ -30,6 +31,17 @@ class PDML extends FPDF {
     var $footer='';
     var $parserBreak; // when you want to break parsing, put a stop word here.
     var $multicol = array(); // stack of columns. you never know.
+  var $stringAttrs = array();  // attributes of current cell string
+  var $a_table = array();          // stack of tables
+  var $table;          // current working table
+  var $orientation;
+
+  function PDML($orientation,$unit,$papersize)
+  {
+    // call parent constructor
+    $this->FPDF($orientation,$unit,$papersize);
+    $this->orientation = $orientation;
+  }
 
     /* Rotation extension. Should go away with 1.6 */
     var $angle=0;
@@ -356,6 +368,9 @@ class PDML extends FPDF {
             case 51:
                 $this->cell_text .= $text;
                 break;
+      case 54:
+        $this->table['tr'][$this->table['rows']]
+              [$this->table['current_col']]['text'] .= $text;
             case 10:
                 $this->script .= $text;
                 break;
@@ -429,6 +444,7 @@ class PDML extends FPDF {
                 }
                 $this->inPage=true;
                 $this->AddPage($o);
+        $this->orientation = $o; // save last orientation
                 break;
             case "BR":
                 // no enforcement.
@@ -474,8 +490,20 @@ class PDML extends FPDF {
             case "B":
             case "I":
             case "U":
+        // if we are processing a cell, record the formatting info
+        // and add the bolded text
+        if($this->parserState == 51) {
+          $this->stringAttrs[] =
+            array('start'=>strlen($this->cell_text), 'tag'=>$tag);
+        } else if($this->parserState == 54) {
+          $item = &$this->table['tr'][$this->table['rows']]
+                         [$this->table['current_col']];
+          $item['stringAttrs'][] = 
+             array('tag'=>$tag, 'start'=>strlen($item['text']));
+        } else {
                 $this->_enforceState(50,50);
                 $this->_setStyle($tag, true);
+        }
                 break;
             case "FONT":
                 $this->_enforceState(50,50);
@@ -503,9 +531,14 @@ class PDML extends FPDF {
                 array_unshift($this->font_mask, $mask);
                 break;
             case "IMG":
+        if($this->parserState != 54) {
                 $this->_enforceState(50,50);
+        }
+
                 if (!isset($attr["SRC"])) break;
                 $src = $attr["SRC"];
+
+        if($this->parserState != 54) {
                 $x = $this->GetX();
                 if (isset($attr["LEFT"])) {
                     $x = $this->_getUnit($attr["LEFT"], $this->wPt);
@@ -522,6 +555,7 @@ class PDML extends FPDF {
                 if (isset($attr["HEIGHT"])) {
                     $height = $this->_getUnit($attr["HEIGHT"], $this->hPt);
                 }
+        }
                 // try to resolve src a bit if necessary.
                 if (!file_exists($src)) {
                     $src1 = getenv("DOCUMENT_ROOT")."/".$src;
@@ -532,11 +566,16 @@ class PDML extends FPDF {
                         $src = $src2;
                     }
                 }
+        // Draw immediately unless inside a table
+        if($this->parserState != 54) {
                 if (sizeof($this->href)>0) {
                     $this->Image($src, $x, $y, $width, $height, '', $this->href[0]);
                 } else {
                     $this->Image($src, $x, $y, $width, $height);
                 }
+        } else {
+          $this->table['tr'][$this->table['rows']][$this->table['current_col']]['img'] = array('src'=>$src);
+        }
                 break;
             case "LINE":
                 $this->_enforceState(50,50);
@@ -544,15 +583,19 @@ class PDML extends FPDF {
                 $y1 = $this->GetY();
                 if (isset($attr["FROM"])) {
                     list($x1,$y1) = explode(',',$attr["FROM"]);
-                    $x1 = $this->_getUnit($x1, $this->wPt);
-                    $y1 = $this->_getUnit($y1, $this->hPt);
+          if($x1 == '.') { $x1 = $this->GetX(); } 
+          else { $x1 = $this->_getUnit($x1, $this->wPt); }
+          if($y1 == '.') { $y1 = $this->GetY(); }
+          else { $y1 = $this->_getUnit($y1, $this->hPt); }
                 }
                 $x2 = $this->wPt;
                 $y2 = $y1;
                 if (isset($attr["TO"])) {
                     list($x2,$y2) = explode(',',$attr["TO"]);
-                    $x2 = $this->_getUnit($x2, $this->wPt);
-                    $y2 = $this->_getUnit($y2, $this->hPt);
+          if($x2 == '.') { $x2 = $this->GetX(); } 
+          else { $x2 = $this->_getUnit($x2, $this->wPt); }
+          if($y2 == '.') { $y2 = $this->GetY(); }
+          else { $y2 = $this->_getUnit($y2, $this->hPt); }
                 }
                 $color = "000000";
                 if (isset($attr["COLOR"])) {
@@ -815,6 +858,27 @@ class PDML extends FPDF {
                 $this->SetLeftMargin($this->left_margin[0]);
                 $this->SetAutoPageBreak(true, $this->bottom_margin[0]);
                 break;
+      case "TABLE":
+        // nested table
+        if($this->parserState == 54) {
+          $this->_enforceState(54,52);
+          array_push($this->a_table,$this->table);
+        } else {
+          $this->_enforceState(50,52);
+        }
+        $this->table = array('attr'=>$attr,'rows'=>0,'cols'=>0,
+                             'current_col'=>0,'tr'=>array());
+        break;
+      case "TR":
+        $this->_enforceState(52,53);
+        $this->table['tr'][$this->table['rows']] = array('attr'=>$attr);
+        $this->table['current_col'] = 0;
+        break;
+      case "TD":
+        $this->_enforceState(53,54);
+        $this->table['tr'][$this->table['rows']]
+              [$this->table['current_col']]['attr'] = $attr;
+        break;
         }
     }
 
@@ -856,7 +920,26 @@ class PDML extends FPDF {
             case "B":
             case "I":
             case "U":
+        if($this->parserState == 51) {
+          // find the last item of tag
+          for($jj=count($this->stringAttrs)-1;$jj >= 0; $jj--) {
+            if($this->stringAttrs[$jj]['tag'] == $tag) {
+              $this->stringAttrs[$jj]['end'] = strlen($this->cell_text)-1;
+              break;
+            }
+          }
+        } else if($this->parserState == 54) {
+          $item = &$this->table['tr'][$this->table['rows']][$this->table['current_col']];
+          // find the last item of tag
+          for($jj=count($item['stringAttrs'])-1;$jj >= 0; $jj--) {
+            if($item['stringAttrs'][$jj]['tag'] == $tag) {
+              $item['stringAttrs'][$jj]['end'] = strlen($item['text'])-1;
+              break;
+            }
+          }
+        } else {
                 $this->_setStyle($tag, false);
+        }
                 break;
             case "FONT":
                 if (sizeof($this->font_mask)>0) {
@@ -899,6 +982,9 @@ class PDML extends FPDF {
                     $this->cell_info[3],
                     $this->cell_info[4],
                     $this->cell_info[5]);
+
+        // clear string attributes
+        $this->stringAttrs = array();
                 break;
             case "CELL":
                 $this->_enforceState(51,50);
@@ -921,7 +1007,8 @@ class PDML extends FPDF {
                         $this->cell_info[6],
                         $this->cell_info[4],
                         $this->cell_info[5],
-                        $this->href[0]);
+            $this->href[0],
+            $this->stringAttrs);
                     if ($this->href_style[0]) {
                         $this->_setStyle('U', $this->U>0, true);
                         $this->_setFontColor($this->font_color[0]);
@@ -934,8 +1021,14 @@ class PDML extends FPDF {
                         $this->cell_info[3],
                         $this->cell_info[6],
                         $this->cell_info[4],
-                        $this->cell_info[5]);
+            $this->cell_info[5],
+            '',
+            $this->stringAttrs);
                 }
+        
+        
+        // clear string attributes
+        $this->stringAttrs = array();
                 break;
             case "ROTATE":
                 $this->rotate(0);
@@ -956,6 +1049,38 @@ class PDML extends FPDF {
                 $this->SetLeftMargin($this->left_margin[0]);
                 $this->SetAutoPageBreak(true, $this->bottom_margin[0]);
                 break;
+      case "TABLE":
+        if(count($this->a_table) > 0) {
+          $this->_enforceState(52,54);
+        } else {
+          $this->_enforceState(52,50);
+        }
+        // render table
+        if(!count($this->a_table)) {
+          $this->render_table($this->table);
+        } else {
+          $table = &$this->a_table[count($this->a_table)-1];
+          $table['tr'][$table['rows']][$table['current_col']]['table']
+            = $this->table;
+          $this->table = array_pop($this->a_table);
+        }
+        break;
+      case "TR":
+        $this->_enforceState(53,52);
+        $this->table['rows']++;
+        break;
+      case "TD":
+        $this->_enforceState(54,53);
+        $colspan = max(intval($this->table['tr'][$this->table['rows']][$this->table['current_col']]['attr']['COLSPAN']),1);
+
+        for($jj=0;$jj<$colspan-1;$jj++) {
+          $this->table['current_col']++;
+          $this->table['tr'][$this->table['rows']][$this->table['current_col']]
+            = array();
+        }
+        $this->table['current_col']++;
+        $this->table['cols'] = max($this->table['cols'],$this->table['current_col']);
+        break;
         }
     }
 
@@ -1039,11 +1164,275 @@ class PDML extends FPDF {
     }
 
 
+  function describe_table(&$table)
+  {
+    $a_col_width = array();
+    $a_row_height = array();
+    $a_width = array(); // width of each cell
+
+    for($jj=0; $jj<$table['cols']; $jj++) { 
+      $a_col_width[$jj] = 0;
+    }
+    for($jj=0; $jj<$table['rows']; $jj++) { 
+      $a_row_height[$jj] = 0;
+    }
+
+    if(isset($table['attr']['CELLPADDING'])) {
+      $table['cMargin'] = $this->_getUnit($table['attr']['CELLPADDING']);
+    } else {
+      $table['cMargin'] = $this->cMargin;
+    }
+    
+    // Determine column width and row height
+    for($jj=0; $jj<$table['rows']; $jj++) {
+      $a_width[$jj] = array();
+      for($kk=0; $kk<$table['cols']; $kk++) {
+        if(!isset($table['tr'][$jj][$kk])) continue;
+        $cell = &$table['tr'][$jj][$kk];
+        $width = 0;
+        $this->createTextArray($cell['text'],
+                               $cell['stringAttrs'],
+                               $width);
+        if($width) $width += 2 * $table['cMargin'];
+
+        $colspan = min(max(1,intval($cell['attr']['COLSPAN'])),
+                       $table['cols']-$kk);
+        // TODO: calculate actual height
+        $a_row_height[$jj] = max($a_row_height[$jj],
+                                 $this->font_size[0] + 2*$table['cMargin']);
+
+        if(isset($cell['table'])) 
+        {
+          $this->describe_table($cell['table']);
+          $a_row_height[$jj] = max($a_row_height[$jj],
+                                   $cell['table']['height']
+				   + 2*$cell['table']['cMargin']);
+          $width = max($width, $cell['table']['width']
+	                       + 2*$cell['table']['cMargin']);
+        }
+
+        if(isset($cell['img'])) {
+          $info = GetImageSize($cell['img']['src']);
+
+          //Put image at 72 dpi
+          $w=$info[0]/$this->k;
+          $h=$info[1]/$this->k;
+          $cell['img']['width'] = $w;
+          $cell['img']['height'] = $h;
+
+          $width = max($width, $w+2*$table['cMargin']);
+          $a_row_height[$jj] = max($a_row_height[$jj], $h+2*$table['cMargin']);
+        }
+        if(isset($cell['attr']['WIDTH'])) {
+          $width=$this->_getUnit($cell['attr']['WIDTH'],
+                                 $this->wPt-$this->lMargin-$this->rMargin);
+        }
+        $a_width[$jj][$kk]['w'] = $width;
+        $a_width[$jj][$kk]['c'] = $colspan;
+
+        $a_col_width[$kk] = max($a_col_width[$kk], $width);
+      }
+      if($table['tr'][$jj]['attr']['UNDERLINE']) {
+        $a_col_height[$jj] += 3;
+      }
+    }
+
+    // Go back through table and handle colspan's
+    for($jj=0; $jj<$table['rows']; $jj++) {
+      for($kk=0; $kk<$table['cols']; $kk++) {
+        if(!isset($table['tr'][$jj][$kk])) continue;
+        $cell = &$table['tr'][$jj][$kk];
+
+        $colspan = min(intval($cell['attr']['COLSPAN']),$table['cols']-$kk);
+        if($colspan > 1) {
+          // columns that are spanned should be readjusted for width
+
+          // recompute widths of columns without this cell
+          $a_w = array();
+          for($ii=0; $ii<$table['rows']; $ii++) {
+            for($nn=$kk; $nn<$colspan+$kk; $nn++) {
+              if($ii != $jj || $nn != $kk) {
+                $a_w[$nn] = max($a_w[$nn],$a_width[$ii][$nn]['w']);
+              }
+            }
+          }
+
+          $sum = 0;
+          for($nn=$kk; $nn<$colspan+$kk; $nn++) {
+            if(isset($a_w[$nn])) {
+              $a_col_width[$nn] = $a_w[$nn];
+              $sum += $a_w[$nn];
+            }
+          }
+          // we need to distribute the slack across the other cells
+          if($a_width[$jj][$kk]['w'] > $sum) {
+            $slack = ($a_width[$jj][$kk]['w'] - $sum)/$colspan;
+            for($nn=$kk; $nn<$colspan+$kk; $nn++) {
+              $a_col_width[$nn] += $slack;
+            }
+          }
+        }
+      }
+    }
+
+    $width = 0;
+    for($jj=0; $jj<$table['cols']; $jj++) { 
+      $width += $a_col_width[$jj];
+    }
+    $height = 0;
+    for($jj=0; $jj<$table['rows']; $jj++) { 
+      $height += $a_row_height[$jj];
+    }
+    $table['width'] = $width;
+    $table['height'] = $height;
+    $table['described'] = true;
+    $table['col_widths'] = $a_col_width;
+    $table['row_heights'] = $a_row_height;
+  }
+
+  function render_table($table)
+  {
+    // auto-create a page if needed.
+    if (!$this->inPage) {
+      $this->inPage = true;
+      $this->AddPage();
+    }
+
+    if(!$table['described']) {
+      $this->describe_table($table);
+    }
+
+    // Actually render each cell
+    for($jj=0; $jj<$table['rows']; $jj++) {
+      $rowx = $this->GetX();
+
+      // Determine if we should break the page
+
+      // no room, so we have to break the page
+      if(($this->GetY() + $table['row_heights'][$jj]
+           + $this->bottom_margin[0]) > $this->hPt) {
+        $this->AddPage($this->orientation);
+        $this->render_table_header($table);
+      }
+      // check to see if this is a "suggested" page break
+      if($table['tr'][$jj]['attr']["BREAK"]) {
+        $h = 0;
+        for($kk=$jj; $kk<$table['rows']; $kk++) {
+          if($kk>$jj && $table['tr'][$kk]['attr']["BREAK"]) break;
+          $h += $table['row_heights'][$kk];
+        }
+        if(($this->GetY() + $h + $this->bottom_margin[0]) > $this->hPt) {
+          $this->AddPage($this->orientation);
+          $this->render_table_header($table);
+        }
+      }
+      // render this row
+      $this->render_row($table, $jj);
+
+    }
+  }
+
+  function render_table_header(&$table)
+  {
+    for($jj=0; $jj<$table['rows']; $jj++) {
+      if($table['tr'][$jj]['attr']['HEADER']) {
+        $this->render_row($table,$jj);
+      }
+    }
+  }
+
+  function render_row(&$table, $j_row)
+  {
+    $row = &$table['tr'][$j_row];
+    $rowx = $this->GetX();
+
+    for($kk=0; $kk<$table['cols']; $kk++) {
+      if(!isset($row[$kk])) continue;
+      $cell = &$row[$kk];
+ 
+      if(!isset($cell['text']) && !isset($cell['table'])) continue;
+        
+      $col_width = $table['col_widths'][$kk];
+
+      $colspan = min(intval($cell['attr']['COLSPAN']),$table['cols']-$kk);
+      if($colspan > 1)
+      {
+        $col_width = 0;
+        for($ii=$kk; $ii<$colspan+$kk; $ii++) {
+          $col_width += $table['col_widths'][$ii];
+        }
+      }
+
+      if(isset($cell['table']) || isset($cell['img'])) { 
+        $x = $this->GetX();
+        $y = $this->GetY();
+
+
+        if(isset($cell['table'])) {
+          $w = $cell['table']['width'];
+          $h = $cell['table']['height'];
+        } else {
+          $w = $cell['img']['width'];
+          $h = $cell['img']['height'];
+        }
+
+        // WARNING: it is important to set Y first!
+        if(!strcasecmp($cell['attr']['VALIGN'],"bottom")) {
+          $y2 = $y + $table['row_heights'][$j_row] - $h - $table['cMargin'];
+        } else if(!strcasecmp($cell['attr']['VALIGN'],"middle")) {
+          $y2 = $y + $table['row_heights'][$j_row]/2 - $h/2;
+        } else {
+          $y2 = $y + $table['cMargin'];
+        }
+
+        if(!strcasecmp($cell['attr']['ALIGN'],"right")) {
+          $x2 = $x + $col_width - $w - $table['cMargin'];
+        } else if(!strcasecmp($cell['attr']['ALIGN'],"center")) {
+          $x2 = $x + $col_width/2 - $w/2;
+        } else {
+          $x2 = $x + $table['cMargin'];
+        }
+
+        if(isset($cell['table'])) {
+          $this->SetXY($x2,$y2);
+          $this->render_table($cell['table']);
+          $this->SetXY($x,$y);
+        } else {
+          $this->Image($cell['img']['src'],$x2,$y2);
+        }
+      }
+      $old_margin = $this->cMargin;
+      $this->cMargin = $table['cMargin'];
+      $this->Cell($col_width,
+                  $table['row_heights'][$j_row],
+                  $cell['text'],
+                  $table['attr']['BORDER'],
+                  0,
+                  strtoupper($cell['attr']['ALIGN']{0}),
+                  0,
+                  '',
+                  $cell['stringAttrs']);
+
+      // restore original cell margin
+      $this->cMargin = $old_margin;
+    }
+    $x = $this->GetX();
+    $this->Ln($table['row_heights'][$j_row]);
+    $this->SetX($rowx);
+    if($row['attr']['UNDERLINE']) {
+      $this->SetLineWidth(doubleval($row['attr']['UNDERLINE']));
+      if(!(strpos(strtolower($row['attr']['USTYLE']),"dashed") === false)) {
+        $dash = true;
+      }
+      $this->Line($this->GetX(),$this->GetY()+1,$x,$this->GetY()+1,$dash);
+      $this->Ln(3);
+    }
+  }
 }
 
 
 function ob_pdml($buffer) {
-  $pdml = new PDML('P','pt','A4'); // P and A4 should be customizable. XXX
+  $pdml = new PDML('P','pt','Letter'); // P and Letter should be customizable. XXX
   $pdml->compress=0;
   $pdml->ParsePDML($buffer);
   $s = $pdml->Output("","S");
