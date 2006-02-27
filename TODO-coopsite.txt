@@ -19,7 +19,7 @@ coop web database
  
 ??PHP
 bid sheets and gift certs
-	pdf or fix footer in css, you pick
+	printable
 	honeycomb
 	blank bid sheet, second page
 	china's format? should i do that?
@@ -3483,6 +3483,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+auugh!!! pdfdom, and php_jh_pdf!! might be better than pdml!
+
 	need to use xslt to generate a fo
 	xsl-fo sucks, but if you generate it programatically it's not too bad
 		i can do this in tal i'm sure
@@ -6771,3 +6773,11 @@ bring in-kind donations back
 	then apply the tables patch and try to get it working, dammit
 		using their sample page first
 		then output of TAL!
+	how to get stuff centered, goddammit
+		have to use multicell
+	must get word wrappign inside of cells!! how?
+		must use multicell. everything else chokes
+	is there a better way to set the default font??
+		other than wrapping the whole thing in a font tag?
+			yes, set $this->fpdf->font_size=array('20')
+A WORKABLE SOLUTION NEEEDED pdml

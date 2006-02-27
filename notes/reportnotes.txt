@@ -1,30 +1,17 @@
 report notes
 $Id$
 
-auugh!!! pdfdom, and php_jh_pdf!! might be better than pdml!
 
-
-outputting to pdf.. A WORKABLE SOLUTION NEEEDED
-	how to get stuff centered, goddammit
-	must get word wrappign inside of cells!! how?
-	is there a better way to set the default font??
-		other than wrapping the whole thing in a font tag?
-
-			  
-     <table border="1">
-        <tr>
-          <td align="center">Bidder Number</td>
-          <td align="center">Amount</td>
-        </tr>
-        <tr tal:repeat="line blanklines">
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr> 
-      </table> 
-
-
-		
+outputting to pdf..
+	ok, try the custom font now!
+		make the metrics, go for it.
 	
+		
+unicode for fpdf! i might need this
+	http://www.acko.net/node/56
+
+
+			
 a new paradigm: the BACKWARDS link... right joins
 	i.e. everything in linktable, REGARDLESS of whether anything present here
 	slots, basically

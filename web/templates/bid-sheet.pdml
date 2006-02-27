@@ -12,14 +12,16 @@
       <page />
 
       <font size="24pt">
-        <multicell align="center"
-                   tal:content="string:Bid Sheet for ${package/package_number}">package title</multicell>
+        <multicell 
+            align="center">
+          <span tal:content="string:Bid Sheet for ${package/package_number}">package number</span>
+        </multicell>
+
         <br />
-        <br />
-        
         <multicell align="center" tal:condition="package/package_title"
                    tal:content="package/package_title">title </multicell>
-        
+
+        <br />
         <multicell align="center" >Value: ${package/package_value}</multicell>
         
       </font>

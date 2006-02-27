@@ -14,9 +14,10 @@ class TestPDML extends CoopPDF
     function build()
         {
             /// set some defaults
+            $this->fpdf->AddFont('bernhard-modern');
             $this->fpdf->font_size = array('18');
-
-
+            $this->fpdf->font_face = array('bernhard-modern');
+           
 
             ////////////// BIDSHEETS
             $bidsheets =& new CoopView(&$this, 'packages', &$nothing);
