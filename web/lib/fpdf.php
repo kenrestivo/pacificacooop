@@ -425,6 +425,7 @@ function GetStringWidth($s)
 {
 	//Get width of a string in the current font
 	$s=(string)$s;
+  
 	$cw=&$this->CurrentFont['cw'];
 	$w=0;
 	$l=strlen($s);
@@ -441,10 +442,12 @@ function SetLineWidth($width)
 		$this->_out(sprintf('%.2f w',$width*$this->k));
 }
 
-function Line($x1,$y1,$x2,$y2)
+  function Line($x1,$y1,$x2,$y2,$dash=false)
 {
+    if($dash) $this->_out("[3] 0 d\n");
 	//Draw a line
 	$this->_out(sprintf('%.2f %.2f m %.2f %.2f l S',$x1*$this->k,($this->h-$y1)*$this->k,$x2*$this->k,($this->h-$y2)*$this->k));
+    if($dash) $this->_out("[] 0 d\n");
 }
 
 function Rect($x,$y,$w,$h,$style='')
@@ -563,8 +566,13 @@ function SetFont($family,$style='',$size=0)
 	$this->FontSizePt=$size;
 	$this->FontSize=$size/$this->k;
 	$this->CurrentFont=&$this->fonts[$fontkey];
+  
+    $s = sprintf('BT /F%d %.2f Tf ET',$this->CurrentFont['i'],$this->FontSizePt);
+  
 	if($this->page>0)
-		$this->_out(sprintf('BT /F%d %.2f Tf ET',$this->CurrentFont['i'],$this->FontSizePt));
+      $this->_out($s);
+  
+    return $s;
 }
 
 function SetFontSize($size)
@@ -619,9 +627,61 @@ function AcceptPageBreak()
 	return $this->AutoPageBreak;
 }
 
-function Cell($w,$h=0,$txt='',$border=0,$ln=0,$align='',$fill=0,$link='')
+  
+  function createTextArray($txt, $attrs, &$width)
 {
+    // create text array broken up by style
+  
+    $style = '';
+    $txt2 = '';
+    for($jj=0;$jj<strlen($txt);$jj++) {
+      // build style in this section
+      $new_style = '';
+      for($ii=0;$ii<count($attrs);$ii++) {
+        if($jj >= $attrs[$ii]['start'] && $jj <= $attrs[$ii]['end'])
+          $new_style .= $attrs[$ii]['tag'];
+      }
+      if($new_style != $style) {
+        if(strlen($txt2))
+          $a_txt[] = array('txt'=>$txt2, 'style'=>$style);
+        $style = $new_style;
+        $txt2 = '';
+      }
+      $txt2 .= $txt{$jj};
+    }
+    if(strlen($txt2)) {
+      $a_txt[] = array('txt'=>$txt2, 'style'=>$style);
+      $style = $new_style;
+    }
+  
+    if(!count($attrs))
+    {
+      $style = $this->FontStyle;
+      $style = $this->underline?'U':'';
+      $a_txt[0]['style'] = $style;
+    }
+  
+    $width = 0;
+    // determine string width
+    for($jj=0; $jj<count($a_txt); $jj++) {
+  
+      $this->SetFont('',$a_txt[$jj]['style']);
+      $width += $this->GetStringWidth($a_txt[$jj]['txt']);
+    }
+  
+    return $a_txt;
+  }
+  
 	//Output a cell
+  function Cell($w,$h=0,$txt='',$border=0,$ln=0,$align='',$fill=0,$link='',$attrs=array())
+  {
+    $a_txt = array();
+    if($txt != '') {
+      $a_txt = $this->createTextArray($txt, $attrs, $width);
+  
+      if($w == -1) $w = $width;
+    }
+  
 	$k=$this->k;
 	if($this->y+$h>$this->PageBreakTrigger && !$this->InFooter && $this->AcceptPageBreak())
 	{
@@ -665,20 +725,41 @@ function Cell($w,$h=0,$txt='',$border=0,$ln=0,$align='',$fill=0,$link='')
 		if(strpos($border,'B')!==false)
 			$s.=sprintf('%.2f %.2f m %.2f %.2f l S ',$x*$k,($this->h-($y+$h))*$k,($x+$w)*$k,($this->h-($y+$h))*$k);
 	}
-	if($txt!=='')
+
+    // Render actual text
+    if(count($a_txt))
 	{
 		if($align=='R')
-			$dx=$w-$this->cMargin-$this->GetStringWidth($txt);
+            $dx=$w-$this->cMargin-$width;
 		elseif($align=='C')
-			$dx=($w-$this->GetStringWidth($txt))/2;
+            $dx=($w-$width)/2;
 		else
 			$dx=$this->cMargin;
+        // handle color
 		if($this->ColorFlag)
 			$s.='q '.$this->TextColor.' ';
-		$txt2=str_replace(')','\\)',str_replace('(','\\(',str_replace('\\','\\\\',$txt)));
-		$s.=sprintf('BT %.2f %.2f Td (%s) Tj ET',($this->x+$dx)*$k,($this->h-($this->y+.5*$h+.3*$this->FontSize))*$k,$txt2);
-		if($this->underline)
-			$s.=' '.$this->_dounderline($this->x+$dx,$this->y+.5*$h+.3*$this->FontSize,$txt);
+        
+        for($jj=0; $jj<count($a_txt); $jj++) {
+            
+            $s .= $this->SetFont('',$a_txt[$jj]['style']);
+            $txt2 = str_replace(')','\\)',
+                                str_replace('(','\\(',
+                                            str_replace('\\','\\\\',$a_txt[$jj]['txt'])));
+            
+            $s .= sprintf(' BT %.2f %.2f Td (%s) Tj ET ',
+                          ($this->x+$dx)*$k,
+                          ($this->h-($this->y+.5*$h+.3*$this->FontSize))*$k,
+                          $txt2);
+            
+            if($this->underline) {
+                $s.=' '.$this->_dounderline($this->x+$dx,
+                                            $this->y+.5*$h+.3*$this->FontSize,
+                                            $a_txt[$jj]['txt']).' ';
+            }
+            $dx += $this->GetStringWidth($a_txt[$jj]['txt']);
+        }
+
+
 		if($this->ColorFlag)
 			$s.=' Q';
 		if($link)
@@ -816,7 +897,12 @@ function Write($h,$txt,$link='')
 	//Output text in flowing mode
 	$cw=&$this->CurrentFont['cw'];
 	$w=$this->w-$this->rMargin-$this->x;
+  
+    if($this->FontSize)
 	$wmax=($w-2*$this->cMargin)*1000/$this->FontSize;
+    else
+      $wmax=($w-2*$this->cMargin)*1000/8;
+    
 	$s=str_replace("\r",'',$txt);
 	$nb=strlen($s);
 	$sep=-1;
@@ -880,7 +966,10 @@ function Write($h,$txt,$link='')
 			{
 				$this->x=$this->lMargin;
 				$w=$this->w-$this->rMargin-$this->x;
+                            if($this->FontSize)
 				$wmax=($w-2*$this->cMargin)*1000/$this->FontSize;
+          else
+            $wmax=($w-2*$this->cMargin)*1000/8;
 			}
 			$nl++;
 		}
@@ -1490,6 +1579,7 @@ function _dounderline($x,$y,$txt)
 	$ut=$this->CurrentFont['ut'];
 	$w=$this->GetStringWidth($txt)+$this->ws*substr_count($txt,' ');
 	return sprintf('%.2f %.2f %.2f %.2f re f',$x*$this->k,($this->h-($y-$up/1000*$this->FontSize))*$this->k,$w*$this->k,-$ut/1000*$this->FontSizePt);
+  
 }
 
 function _parsejpg($file)
