@@ -6765,3 +6765,9 @@ bring in-kind donations back
 	pdflib!
 	integrate with cooppage, or perhaps reportshelll, somehow
 		for now just copy and paste coopreport was too general a name
+	try pdml
+		first get some kind of working shell to make it happen
+		run the test pages (old style)
+	then apply the tables patch and try to get it working, dammit
+		using their sample page first
+		then output of TAL!

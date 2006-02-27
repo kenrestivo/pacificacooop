@@ -2,17 +2,8 @@ report notes
 $Id$
 
 outputting to pdf.. A WORKABLE SOLUTION NEEEDED
-	try pdml
-		first get some kind of working shell to make it happen
-		run the test pages (old style)
-	then apply the tables patch and try to get it working, dammit
-		using their sample page first
-		then output of TAL!
+	how to get stuff centered, goddammit
 
-
-
-<cell tal:content="string:Bid Sheet for ${package/package_number}"
-              align="center"></cell>
 			  
      <table border="1">
         <tr>

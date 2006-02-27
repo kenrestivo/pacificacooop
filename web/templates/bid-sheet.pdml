@@ -9,19 +9,18 @@
         
         <page />
         
+        <font tal:comment="you HAVE to wrap this in a font, or it won't work"
+            tal:content="string:Bid Sheet for ${package/package_number}">package title</font>
+        <br />
 
         <table border="0">
           <tr>
             <td >Value: </td>
-            <td tal:content="package/package_value">
-              bar
-            </td>
+            <td tal:content="package/package_value"> bar </td>
           </tr>
           <tr tal:condition="package/package_title">
             <td >Title: </td>
-            <td  tal:content="package/package_title">
-              bar
-            </td>
+            <td  tal:content="package/package_title"> bar </td>
         </tr>        
         <tr>
           <td >Description: </td>
