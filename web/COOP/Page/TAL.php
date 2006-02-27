@@ -37,6 +37,13 @@ class CoopTALPage extends coopPage
         }
 
 
+    // for raw TAL, it's just executing. for other things i.e. pdf, it parses
+    function output()
+        {
+            print $this->template->execute();
+        }
+
+
     function run()
         {
             // got to login before anything makes sense
@@ -53,7 +60,9 @@ class CoopTALPage extends coopPage
             if(headers_sent($file, $line)){
                 PEAR::raiseError("headers sent at $file $line ", 666);
             }
-            print  $this->template->execute();
+
+            $this->output();
+
             $this->finalDebug();
 
         }

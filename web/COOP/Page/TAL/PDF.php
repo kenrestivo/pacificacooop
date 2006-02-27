@@ -18,36 +18,22 @@
 
 //$Id$
 
-require_once('CoopPage.php');
-require_once('CoopView.php');
-require_once('CoopIterator.php');  // XXX cowardly not including it in CoopPage
+require_once('CoopTALPage.php');
 require_once('lib/pdml.php');
 require_once('lib/fpdf.php');
 
 
-class CoopPDF extends coopPage
+class CoopPDF extends CoopTALPage
 {
     var $fpdf; // reference to fpdf object
     
-    function build()
+
+    function output()
         {
-            // virtual function.
-            //subclass should create the thing here. stuff it in $this->fpdf
-        }
-
-
-    function run()
-        {
-            $this->logIn();
-
-            $this->build();
+            $this->fpdf->ParsePDML($this->template->execute());
 
             $this->fpdf->Output();
-
-            $this->finalDebug();
-
         }
-
 
 
 } // END COOPPDF
