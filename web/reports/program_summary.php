@@ -22,13 +22,14 @@ require_once('CoopTALPage.php');
 
 class ProgramSummary extends CoopTALPage
 {
+    var $template_file = 'program_summary.xhtml';
 
 // specific to this page. when i dispatch with REST, i'll need several
     function build()
         {
 
-            // let the template know all about it
-            $this->template = new PHPTAL('program_summary.xhtml');
+
+
 
             $this->title = 'Springfest Program Export';
 

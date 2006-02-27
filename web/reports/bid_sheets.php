@@ -23,13 +23,13 @@ require_once('CoopTALPage.php');
 class BidSheetReport extends CoopTALPage
 {
 
+    var $template_file = 'bid-sheet.xhtml';
+
+
 // specific to this page. when i dispatch with REST, i'll need several
     function build()
         {
-
-            // let the template know all about it
-            $this->template = new PHPTAL('bid-sheet.xhtml');
-
+            
             $this->title = 'Springfest Packaging Bid Sheets';
 
             ////////////// BIDSHEETS

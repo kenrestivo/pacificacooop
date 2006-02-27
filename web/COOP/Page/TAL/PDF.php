@@ -25,7 +25,7 @@ require_once('lib/fpdf.php');
 
 class CoopPDF extends CoopTALPage
 {
-    var $fpdf; // reference to fpdf object
+    var $fpdf; // reference to pdml object (subclass of fpdf)
     
 
     function output()

@@ -24,6 +24,7 @@ require_once('CoopTALPage.php');
 
 class BidSheetReport extends CoopTALPage
 {
+    var $template_file = 'springfest-microsite-shell.xhtml';
 
     function build()
         {
@@ -44,8 +45,8 @@ class BidSheetReport extends CoopTALPage
     $this->title = 'Springfest ' . $sy;
 
 
-    // let the template know all about it
-    $this->template = new PHPTAL('springfest-microsite-shell.xhtml');
+
+
 
     
     /// TODO: move this to the database!! let user change names, add/remove

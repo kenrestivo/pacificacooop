@@ -28,13 +28,14 @@ require_once('CoopIterator.php');  // XXX hack, around problems on nfsn
 class CoopTALPage extends coopPage
 {
     var $template; // reference to phptal template
+    var $template_file; // filename of template.
     
-    
+    // virtual method. put your stuff in subclass of it
     function build()
         {
-            // virtual function. put your stuff in subclass of this.
-            $template = new PHPTAL('sometemplate.xhtml');
+            return;
         }
+    
 
 
     // for raw TAL, it's just executing. for other things i.e. pdf, it parses
@@ -48,6 +49,8 @@ class CoopTALPage extends coopPage
         {
             // got to login before anything makes sense
             $this->logIn();
+
+            $this->template = new PHPTAL($this->template_file);
 
             $this->build();
 

@@ -24,13 +24,13 @@ require_once('CoopTALPage.php');
 // i originally named this class GiftCertificateREport, but PHP puked on it
 class GCR extends CoopTALPage
 {
-
+    var $template_file = 'gift-certificates.xhtml';
+    
 // specific to this page. when i dispatch with REST, i'll need several
     function build()
         {
 
             // let the template know all about it
-            $this->template = new PHPTAL('gift-certificates.xhtml');
 
             $this->title = 'Springfest Packaging Gift Certificates';
 

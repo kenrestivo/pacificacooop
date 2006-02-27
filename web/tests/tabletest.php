@@ -11,10 +11,12 @@ class TestPDML extends CoopPDF
 
     function build()
         {
-            $this->template = new PHPTAL('/mnt/www/restivo/bc/pdml/'. $_REQUEST['filename']);
+            $this->template_file = '/mnt/www/restivo/bc/pdml/'. $_REQUEST['filename'];
 
             // should this go in parent build or output?
             $this->fpdf = new PDML('P','pt','Letter'); 
+    
+            
         }
 }
 
