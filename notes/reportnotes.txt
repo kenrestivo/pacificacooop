@@ -1,10 +1,13 @@
 report notes
 $Id$
 
-
 outputting to pdf.. A WORKABLE SOLUTION NEEEDED
 	try pdml
-	apply the tables patch and try to get it working, dammit
+		first get some kind of working shell to make it happen
+		run the test pages (old style)
+	then apply the tables patch and try to get it working, dammit
+		using their sample page first
+		then output of TAL!
 
 	
 a new paradigm: the BACKWARDS link... right joins
