@@ -1,8 +1,14 @@
 report notes
 $Id$
 
+auugh!!! pdfdom, and php_jh_pdf!! might be better than pdml!
+
+
 outputting to pdf.. A WORKABLE SOLUTION NEEEDED
 	how to get stuff centered, goddammit
+	must get word wrappign inside of cells!! how?
+	is there a better way to set the default font??
+		other than wrapping the whole thing in a font tag?
 
 			  
      <table border="1">

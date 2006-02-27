@@ -1,72 +1,69 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <pdml>
+  <head>
+  </head>
+
   <body>
-
     
-    <font size="24pt">
+    <div tal:omit-tag="" 
+         tal:repeat="package bidsheets" 
+         tal:condition="package/package_description">
       
-      <div tal:omit-tag="" 
-           tal:repeat="package bidsheets" 
-           tal:condition="package/package_description">
-        
-        <page />
-        
-        <font tal:comment="you HAVE to wrap this in a font, or it won't work"
-            tal:content="string:Bid Sheet for ${package/package_number}">package title</font>
-        <br />
+      <page />
 
-        <table border="0">
-          <tr>
-            <td >Value: </td>
-            <td tal:content="package/package_value"> bar </td>
-          </tr>
-          <tr tal:condition="package/package_title">
-            <td >Title: </td>
-            <td  tal:content="package/package_title"> bar </td>
-        </tr>        
+      <font size="24pt">
+        <multicell align="center"
+                   tal:content="string:Bid Sheet for ${package/package_number}">package title</multicell>
+        <br />
+        <br />
+        
+        <multicell align="center" tal:condition="package/package_title"
+                   tal:content="package/package_title">title </multicell>
+        
+        <multicell align="center" >Value: ${package/package_value}</multicell>
+        
+      </font>
+      <br />
+
+      <multicell align="left"
+                 tal:content="php: strip_tags(${package/package_description})">Description</multicell>
+
+
+
+      <br />
+
+      <table tal:condition="php: package.package_type_short != 'Live'" 
+             width="100%" align="center">
         <tr>
-          <td >Description: </td>
-          <td >
-            <p tal:content="php: strip_tags(${package/package_description})">
-            </p>
+          <td>
+            <span> Minimum Bid: </span>
+            <span tal:content="package/starting_bid">Amount</span>
+          </td>
+          <td>
+            <span >Increment: </span>
+            <span tal:content="package/bid_increment">Amount</span>
           </td>
         </tr>
-        </table>
-
-
-
-        <table tal:condition="php: package.package_type_short != 'Live'" 
-               width="100%" class="bidinfo">
-          <tr>
-            <td>
-              <span class="minbid">Minimum Bid: </span>
-            <span tal:content="package/starting_bid">Amount</span>
-            </td>
-            <td>
-              <span class="bidincrement">Increment: </span>
-              <span tal:content="package/bid_increment">Amount</span>
-            </td>
-          </tr>
-        </table>
-        
-
-        <table border="1">
-          <tr>
-            <td>Bidder Number</td>
-            <td >Amount</td>
-          </tr>
-          <tr tal:repeat="line blanklines">
-            <td></td>
-            <td></td>
-          </tr> 
-          
-        </table>
-
-
-        
-      </div>      
+      </table>
       
-    </font>
+      <br />
+
+      <table border="1">
+        <tr>
+          <td align="center" width="50%">Bidder Number</td>
+          <td align="center" width="50%">Amount</td>
+        </tr>
+        <tr tal:repeat="line blanklines">
+          <td></td>
+          <td></td>
+        </tr> 
+        
+      </table>
+
+
+      
+    </div>      
+    
     
   </body>
 </pdml>
