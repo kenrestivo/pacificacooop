@@ -3,16 +3,10 @@ $Id$
 
 
 outputting to pdf.. A WORKABLE SOLUTION NEEEDED
-	need to use xslt to generate a fo
-	xsl-fo sucks, but if you generate it programatically it's not too bad
-		i can do this in tal i'm sure
-	fo is really the right way to do this
-	PEAR::XML_fo2pdf !
-		AH SHIT!! IT REQUIRES JAVA!
-	re-read the xslt to pdf tutorial. try to do it in PHP
-		file:///mnt/kens/ki/is/htmlgeneral/xsl-fo-pdf-tutorial.html
-	or is there a tool to convert xhtml to fo... OTHER than the apache one?
+	try pdml
+	apply the tables patch and try to get it working, dammit
 
+	
 a new paradigm: the BACKWARDS link... right joins
 	i.e. everything in linktable, REGARDLESS of whether anything present here
 	slots, basically

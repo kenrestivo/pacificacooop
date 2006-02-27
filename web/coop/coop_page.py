@@ -85,6 +85,7 @@ class Page:
         try:
             self.auth = self.session.data['auth']
             self.cpVars = self.session.data['cpVars']
+            #TODO: won't i need menu in here too?
         except KeyError:
             return "TODO: port the log in code here!"
 
@@ -118,7 +119,7 @@ class Page:
         templateFile = open ('templates/%s.xhtml' % (self.template_name), 'r')
         template = simpleTAL.compileXMLTemplate (templateFile)
         templateFile.close()
-        template.expand (context, stdout, docType=self.elements['doctype'],
+        template.expand(context, stdout, docType=self.elements['doctype'],
                          suppressXMLDeclaration=True)
 
 

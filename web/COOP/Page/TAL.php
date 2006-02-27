@@ -25,37 +25,28 @@ require_once "lib/phptal_filters.php";
 require_once('CoopIterator.php');  // XXX hack, around problems on nfsn
 
 
-class CoopReport
+class CoopTALPage extends coopPage
 {
-    var $page; // coop page cache
     var $template; // reference to phptal template
     
-    function CoopReport($debug = false)
-        {
-            $this->page =& new coopPage( $debug);
-            
-            // got to RUN certain things before anything makes sense
-            $this->page->logIn();
-
-        }
-
     
     function build()
         {
             // virtual function. put your stuff in subclass of this.
             $template = new PHPTAL('sometemplate.xhtml');
-            
         }
-
 
 
     function run()
         {
+            // got to login before anything makes sense
+            $this->logIn();
+
             $this->build();
 
             // NOTE: if this ref is unavailable,
             // the whole page fails except done()
-            $this->template->setRef('page', $this->page);
+            $this->template->setRef('page', $this);
         
             $this->template->addOutputFilter(new XML_to_HTML());
             
@@ -63,7 +54,7 @@ class CoopReport
                 PEAR::raiseError("headers sent at $file $line ", 666);
             }
             print  $this->template->execute();
-            $this->page->finalDebug();
+            $this->finalDebug();
 
         }
 

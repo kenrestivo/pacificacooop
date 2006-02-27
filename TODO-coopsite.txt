@@ -1,6 +1,7 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
+	springfest microsite (microsite.txt)
  	import the 20-year roster (20yearroster.txt)
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
@@ -10,7 +11,6 @@ coop web database
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 	graphs and charts (graphs.txt)
-	springfest microsite (microsite.txt)
 	json services (templates.txt)
 	sortable/searchable/pagable views (searchfeature.txt)
 	labels/export -- python cgi on nfsn, formatting, etc.
@@ -19,10 +19,8 @@ coop web database
  
 ??PHP
 bid sheets and gift certs
-	integrate with cooppage, or perhaps reportshelll, somehow
-		for now just copy and paste coopreport was too general a name
-	use the iterator
-	i gotta put the fucking honeycomb in there. goddammit
+	pdf or fix footer in css, you pick
+	honeycomb
 	blank bid sheet, second page
 	china's format? should i do that?
 	larger print and spread out on gift certs
@@ -3485,7 +3483,39 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-		try that pdf xslt thing?
+	need to use xslt to generate a fo
+	xsl-fo sucks, but if you generate it programatically it's not too bad
+		i can do this in tal i'm sure
+	fo is really the right way to do this
+	PEAR::XML_fo2pdf !
+		AH SHIT!! IT REQUIRES JAVA!
+	re-read the xslt to pdf tutorial. try to do it in PHP
+		file:///mnt/kens/ki/is/htmlgeneral/xsl-fo-pdf-tutorial.html
+	or is there a tool to convert xhtml to fo... OTHER than the apache one?
+
+
+ An introduction into formating objects can be found at
+  http://www.w3.org/TR/xsl/slice6.html#fo-section
+  http://www.ibiblio.org/xml/books/bible/updates/15.html
+ A tutorial is here:
+  http://www.xml.com/pub/a/2001/01/17/xsl-fo/
+  http://www.xml.com/pub/a/2001/01/24/xsl-fo/
+ A html_to_fo.xsl can also be found there
+  http://www.xml.com/2001/01/24/xsl-fo/fop_article.tgz
+  but it didn't work for my simple xhtml files..
+
+JAVA=/usr/local/java/bin/java JAVAHOME=/usr/local/java /usr/local/java/bin/java -jar css2fop1_2.jar -pdf /tmp/foo.pdf http://www/coop-dev
+
+
+
+		at each, pour stuff into the template
+		this isn't tal. use functions not templates?
+		or, *do* use tal, and generate xml not xhtml
+	or html2pdf, using fpdf!
+	html2ps does css? http://www.rustyparts.com/pdf.php
+	pdml??
+
+			try that pdf xslt thing?
 
 BUGS BUGS BUGS
     AAAGH!!
@@ -6733,3 +6763,5 @@ BUGS
 bring in-kind donations back
  wget --proxy=off -O  /tmp/test.pdf  http://www/coop-dev/tests/pdftest.php?coop=d57f85743e375a3ca983571b910aa0f3
 	pdflib!
+	integrate with cooppage, or perhaps reportshelll, somehow
+		for now just copy and paste coopreport was too general a name

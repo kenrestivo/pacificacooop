@@ -18,11 +18,11 @@
 
 //$Id$
 
-require_once('CoopReport.php');
+require_once('CoopTALPage.php');
 
 // XXX PHP IS BROKEN!! YOU CANNNOT CANNOT CANNOT HAVE LONG CLASS NAMES!
 // i originally named this class GiftCertificateREport, but PHP puked on it
-class GCR extends CoopReport
+class GCR extends CoopTALPage
 {
 
 // specific to this page. when i dispatch with REST, i'll need several
@@ -32,12 +32,12 @@ class GCR extends CoopReport
             // let the template know all about it
             $this->template = new PHPTAL('gift-certificates.xhtml');
 
-            $this->page->title = 'Springfest Packaging Gift Certificates';
+            $this->title = 'Springfest Packaging Gift Certificates';
 
 
             ////////////// GIFT CERTIFICATES 
-            $giftcerts =& new CoopView(&$this->page, 'packages', &$nothing);
-            $pt =& new CoopView(&$this->page, 'package_types', &$giftcerts);
+            $giftcerts =& new CoopView(&$this, 'packages', &$nothing);
+            $pt =& new CoopView(&$this, 'package_types', &$giftcerts);
             $giftcerts->protectedJoin($pt);
             $giftcerts->obj->whereAdd('item_type = "Gift Certificate"');
             $giftcerts->obj->whereAdd('(package_type_short = "Live" or package_type_short = "Silent")');

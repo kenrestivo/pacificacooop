@@ -18,9 +18,9 @@
 
 //$Id$
 
-require_once('CoopReport.php');
+require_once('CoopTALPage.php');
 
-class ProgramSummary extends CoopReport
+class ProgramSummary extends CoopTALPage
 {
 
 // specific to this page. when i dispatch with REST, i'll need several
@@ -30,13 +30,13 @@ class ProgramSummary extends CoopReport
             // let the template know all about it
             $this->template = new PHPTAL('program_summary.xhtml');
 
-            $this->page->title = 'Springfest Program Export';
+            $this->title = 'Springfest Program Export';
 
-            $sp =& new CoopView(&$this->page, 'sponsorships', &$none);
+            $sp =& new CoopView(&$this, 'sponsorships', &$none);
             $spons_struct =  $sp->obj->public_sponsors_structure(&$sp);
             $this->template->setRef('sponsors', $spons_struct);
 
-            $inkind =& new CoopObject(&$this->page, 'in_kind_donations',
+            $inkind =& new CoopObject(&$this, 'in_kind_donations',
                                       &$none);
             $donors =  $inkind->obj->public_donors_structure(&$inkind);
             $this->template->setRef('donors', $donors);
@@ -44,8 +44,8 @@ class ProgramSummary extends CoopReport
 
             $pacs = array();
             foreach (array('Live', 'Silent') as $ptype){
-                $pacs[$ptype] =& new CoopView(&$this->page, 'packages', &$none);
-                $pt =& new CoopView(&$this->page, 'package_types', &$pacs[$ptype]);
+                $pacs[$ptype] =& new CoopView(&$this, 'packages', &$none);
+                $pt =& new CoopView(&$this, 'package_types', &$pacs[$ptype]);
                 $pacs[$ptype]->protectedJoin($pt);
                 $pacs[$ptype]->obj->whereAdd(
                     sprintf('package_type_short = "%s"', $ptype));
@@ -58,7 +58,7 @@ class ProgramSummary extends CoopReport
             $this->template->setRef('packagetypes', $pacs);
 
 
-            $ads =& new CoopView(&$this->page, 'ads', 
+            $ads =& new CoopView(&$this, 'ads', 
                                    &$none);
             $ads->fullText = 1; // making their lives easier
             $ads = $ads->simpleTable();

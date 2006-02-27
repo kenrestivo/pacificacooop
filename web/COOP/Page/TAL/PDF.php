@@ -20,24 +20,14 @@
 
 require_once('CoopPage.php');
 require_once('CoopView.php');
-require_once('CoopIterator.php');  // XXX really should include it in coopobj
+require_once('CoopIterator.php');  // XXX cowardly not including it in CoopPage
 require_once('lib/fpdf.php');
 
 
-class CoopPDF
+class CoopPDF extends coopPage
 {
-    var $page; // coop page cache
     var $fpdf; // reference to fpdf object
     
-    function CoopPDF($debug = false)
-        {
-            $this->page =& new coopPage( $debug);
-            
-            // got to RUN certain things before anything makes sense
-            $this->page->logIn();
-
-        }
-
     function build()
         {
             // virtual function.
@@ -47,17 +37,19 @@ class CoopPDF
 
     function run()
         {
+            $this->logIn();
+
             $this->build();
 
             $this->fpdf->Output();
 
-            $this->page->finalDebug();
+            $this->finalDebug();
 
         }
 
 
 
-} // END COOPREPORT
+} // END COOPPDF
 
 
 ?>

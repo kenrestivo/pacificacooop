@@ -20,20 +20,13 @@
 
 chdir('../');
 
-require_once('CoopPage.php');
-require_once('CoopNewDispatcher.php');
-require_once "HTML/Template/PHPTAL.php";
-require_once "lib/phptal_filters.php";
-require_once('CoopIterator.php');  // XXX hack, around problems on nfsn
+require_once('CoopTALPage.php');
 
-
-
-
-
-// specific to this page. when i dispatch with REST, i'll need several
-function &build(&$page)
+class BidSheetReport extends CoopTALPage
 {
 
+    function build()
+        {
     ///////////// handle the no-year-equals-this-year navigation
     // must do this before choosign template
     $path = explode('/', $_SERVER['PATH_INFO']);
@@ -42,20 +35,20 @@ function &build(&$page)
         $nav = $path[2];
     } else {
         $nav = $path[1];
-        list($nothing, $sy) = explode('-', $page->currentSchoolYear);
+        list($nothing, $sy) = explode('-', $this->currentSchoolYear);
     }
     // bah! gotta put it in vars, because that's where view fishes it out of
-    $page->vars['last']['chosenSchoolYear'] = sprintf('%d-%d', $sy -1, $sy);
+    $this->vars['last']['chosenSchoolYear'] = sprintf('%d-%d', $sy -1, $sy);
 
 
-    $page->title = 'Springfest ' . $sy;
+    $this->title = 'Springfest ' . $sy;
 
 
     // let the template know all about it
-    $template = new PHPTAL('springfest-microsite-shell.xhtml');
+    $this->template = new PHPTAL('springfest-microsite-shell.xhtml');
 
     
-    /// menu
+    /// TODO: move this to the database!! let user change names, add/remove
     $menu = array('home' => array('class' => 'nav',
                                   'content' => 'Overview'),
                   'event' => array('class' => 'nav',
@@ -70,7 +63,8 @@ function &build(&$page)
                                    'content' => 'About Us')
         );
 
-    /// split up the nav sizes
+
+    /// XXX miserable hack, there has to be a better way to do it in pure CSS
     $css = '<style type="text/css">';
     $menu_width = 100.0/count(array_keys($menu));
     foreach(array('a.nav:link', 'a.nav:visited', 'a.nav:hover', 
@@ -80,7 +74,7 @@ function &build(&$page)
                         $selector, $menu_width);
     }
     $css .= '</style>';
-    $template->setRef('extra_css', $css);
+    $this->template->setRef('extra_css', $css);
     
 
     /////////////// set current nav
@@ -90,43 +84,21 @@ function &build(&$page)
         $menu['home']['class'] = 'navcurrent';
     }
     
-    $template->setRef('nav', $menu);
+    $this->template->setRef('nav', $menu);
 
 
     ///TODO: put in the stuff from public_auction here
 
-    $page->printDebug("sy $sy nav $nav ". $families->getChosenSchoolYear(), 1);
+    $this->printDebug("sy $sy nav $nav ". $families->getChosenSchoolYear(), 1);
 
-
-    return $template;
+ }
 }
-
 
 
 //////// MAIN
-$cp =& new coopPage( $debug);
+$r =& new PublicSpringfest($debug);
+$r->run();
 
-
-// got to RUN certain things before anything makes sense
-$cp->logIn();
-
-
-$template =& build(&$cp);
-
-// NOTE: if this ref is unavailable, the whole page fails except done()
-$template->setRef('page', $cp);
-
-
-//confessObj($template->getContext(), 'context');
-
-
-$template->addOutputFilter(new XML_to_HTML());
-
-if(headers_sent($file, $line)){
-    PEAR::raiseError("headers sent at $file $line ", 666);
-}
-print  $template->execute();
-$cp->finalDebug();
 
 
 ?>

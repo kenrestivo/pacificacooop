@@ -18,9 +18,9 @@
 
 //$Id$
 
-require_once('CoopReport.php');
+require_once('CoopTALPage.php');
 
-class BidSheetReport extends CoopReport
+class BidSheetReport extends CoopTALPage
 {
 
 // specific to this page. when i dispatch with REST, i'll need several
@@ -30,11 +30,11 @@ class BidSheetReport extends CoopReport
             // let the template know all about it
             $this->template = new PHPTAL('bid-sheet.xhtml');
 
-            $this->page->title = 'Springfest Packaging Bid Sheets';
+            $this->title = 'Springfest Packaging Bid Sheets';
 
             ////////////// BIDSHEETS
-            $bidsheets =& new CoopView(&$this->page, 'packages', &$nothing);
-            $pt =& new CoopView(&$this->page, 'package_types', &$bidsheets);
+            $bidsheets =& new CoopView(&$this, 'packages', &$nothing);
+            $pt =& new CoopView(&$this, 'package_types', &$bidsheets);
             $bidsheets->protectedJoin($pt);
             $bidsheets->obj->whereAdd('package_type_short = "Silent"');
             // tal needs this to decide whether to print the increment
@@ -52,7 +52,7 @@ class BidSheetReport extends CoopReport
             $bidsheets->find(true);
             $this->template->setRef('bidsheets', $bidsheets);
 
-            $this->page->printDebug("sy $sy nav $nav ". $bidsheets->getChosenSchoolYear(), 1);
+            $this->printDebug("sy $sy nav $nav ". $bidsheets->getChosenSchoolYear(), 1);
 
 
             $crap = array_fill(0,10,'');

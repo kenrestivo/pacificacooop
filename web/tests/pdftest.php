@@ -10,7 +10,7 @@ class TestPDF extends FPDF
     function Header()
         {
             $this->SetFont('Times','B',15);
-            $this->Cell(0,22,'this is title',1,0,'C');
+            $this->Cell(0,22,'this is title','T',0,'C');
 
             //starts the non-header stuff THIS FAR from where i left off
             $this->Ln(200);
