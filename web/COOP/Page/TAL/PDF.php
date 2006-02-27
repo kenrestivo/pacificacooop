@@ -27,6 +27,12 @@ class CoopPDF extends CoopTALPage
 {
     var $fpdf; // reference to pdml object (subclass of fpdf)
     
+    function prepare()
+        {
+            parent::prepare();
+            $this->fpdf = new PDML('P','pt','Letter'); 
+
+        }
 
     function output()
         {

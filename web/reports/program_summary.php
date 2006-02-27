@@ -24,12 +24,9 @@ class ProgramSummary extends CoopTALPage
 {
     var $template_file = 'program_summary.xhtml';
 
-// specific to this page. when i dispatch with REST, i'll need several
+    // specific to this page. when i dispatch with REST, i'll need several
     function build()
         {
-
-
-
 
             $this->title = 'Springfest Program Export';
 

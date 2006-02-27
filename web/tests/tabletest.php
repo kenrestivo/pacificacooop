@@ -8,14 +8,17 @@ require_once('CoopPDF.php');
 class TestPDML extends CoopPDF
 {
 
+    function TestPDML($debug)
+        {
+            $this->template_file = '/mnt/www/restivo/bc/pdml/'. $_REQUEST['filename'];
+            parent::CoopPDF($debug);
+        }
+
 
     function build()
         {
-            $this->template_file = '/mnt/www/restivo/bc/pdml/'. $_REQUEST['filename'];
 
-            // should this go in parent build or output?
-            $this->fpdf = new PDML('P','pt','Letter'); 
-    
+            //put some data in
             
         }
 }

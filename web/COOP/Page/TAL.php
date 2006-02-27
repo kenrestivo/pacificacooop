@@ -35,7 +35,14 @@ class CoopTALPage extends coopPage
         {
             return;
         }
-    
+
+
+    // sets up any sub-objects needed by this page, before build() can run.
+    // for starters, that'd be phptal. in subclasses, it might be Other Things.
+    function prepare()
+        {
+            $this->template = new PHPTAL($this->template_file);
+        }
 
 
     // for raw TAL, it's just executing. for other things i.e. pdf, it parses
@@ -50,7 +57,7 @@ class CoopTALPage extends coopPage
             // got to login before anything makes sense
             $this->logIn();
 
-            $this->template = new PHPTAL($this->template_file);
+            $this->prepare();
 
             $this->build();
 
