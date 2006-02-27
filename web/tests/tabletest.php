@@ -11,7 +11,7 @@ class TestPDML extends CoopPDF
 
     function build()
         {
-            $fname='/mnt/www/restivo/bc/pdml/hello.pdml';
+            $fname='/mnt/www/restivo/bc/pdml/'. $_REQUEST['filename'];
             $f = fopen($fname, 'r');
             $data = fread($f, filesize($fname));
             fclose ($f);
