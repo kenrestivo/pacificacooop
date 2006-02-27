@@ -1,6 +1,5 @@
 <?php
 
-define('FPDF_FONTPATH','font/');
 require "fpdf.php";
 
 class PDML extends FPDF {
@@ -1062,6 +1061,5 @@ function pdml_entity_decode( $given_html, $quote_style = ENT_QUOTES ) {
 }
 
 
-ob_start("ob_pdml");
 
 ?>
