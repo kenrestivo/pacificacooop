@@ -5,7 +5,9 @@
     
     <font size="24pt">
       
-      <div tal:omit-tag="" tal:repeat="package bidsheets">
+      <div tal:omit-tag="" 
+           tal:repeat="package bidsheets" 
+           tal:condition="package/package_description">
         
         <page />
         
@@ -30,6 +32,37 @@
           </td>
         </tr>
         </table>
+
+
+
+        <table tal:condition="php: package.package_type_short != 'Live'" 
+               width="100%" class="bidinfo">
+          <tr>
+            <td>
+              <span class="minbid">Minimum Bid: </span>
+            <span tal:content="package/starting_bid">Amount</span>
+            </td>
+            <td>
+              <span class="bidincrement">Increment: </span>
+              <span tal:content="package/bid_increment">Amount</span>
+            </td>
+          </tr>
+        </table>
+        
+
+        <table border="1">
+          <tr>
+            <td>Bidder Number</td>
+            <td >Amount</td>
+          </tr>
+          <tr tal:repeat="line blanklines">
+            <td></td>
+            <td></td>
+          </tr> 
+          
+        </table>
+
+
         
       </div>      
       
