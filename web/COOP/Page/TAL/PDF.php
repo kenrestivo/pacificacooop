@@ -21,6 +21,7 @@
 require_once('CoopPage.php');
 require_once('CoopView.php');
 require_once('CoopIterator.php');  // XXX cowardly not including it in CoopPage
+require_once('lib/pdml.php');
 require_once('lib/fpdf.php');
 
 
