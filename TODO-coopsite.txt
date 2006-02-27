@@ -28,9 +28,9 @@ bid sheets and gift certs
 	
 			
 ???PHP/CSS (day)
-printing
-	and that report for michelle: showing all the items and compoennts
-		subiterators, tricky, but i need to tackle this
+that report for michelle: showing all the items and compoennts
+	subiterators, tricky? but i need to tackle this
+	where are my notes on this?
 
 		
 BUGS

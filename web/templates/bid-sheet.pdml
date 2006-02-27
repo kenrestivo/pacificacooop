@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdml>
+  <body>
+
+    
+    <font size="24pt">
+      
+      <div tal:omit-tag="" tal:repeat="package bidsheets">
+        
+        <page />
+        
+
+        <table border="0">
+          <tr>
+            <td >Value: </td>
+            <td tal:content="package/package_value">
+              bar
+            </td>
+          </tr>
+          <tr tal:condition="package/package_title">
+            <td >Title: </td>
+            <td  tal:content="package/package_title">
+              bar
+            </td>
+        </tr>        
+        <tr>
+          <td >Description: </td>
+          <td >
+            <p tal:content="php: strip_tags(${package/package_description})">
+            </p>
+          </td>
+        </tr>
+        </table>
+        
+      </div>      
+      
+    </font>
+    
+  </body>
+</pdml>

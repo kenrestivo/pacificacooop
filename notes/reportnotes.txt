@@ -9,6 +9,24 @@ outputting to pdf.. A WORKABLE SOLUTION NEEEDED
 		using their sample page first
 		then output of TAL!
 
+
+
+<cell tal:content="string:Bid Sheet for ${package/package_number}"
+              align="center"></cell>
+			  
+     <table border="1">
+        <tr>
+          <td align="center">Bidder Number</td>
+          <td align="center">Amount</td>
+        </tr>
+        <tr tal:repeat="line blanklines">
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr> 
+      </table> 
+
+
+		
 	
 a new paradigm: the BACKWARDS link... right joins
 	i.e. everything in linktable, REGARDLESS of whether anything present here
