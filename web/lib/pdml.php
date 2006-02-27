@@ -1,6 +1,7 @@
 <?php
 
-require "fpdf.php";
+require_once "PEAR.php";
+require_once "fpdf.php";
 
 class PDML extends FPDF {
 
@@ -960,7 +961,7 @@ class PDML extends FPDF {
 
     function _enforceState($from, $to) {
         if ($this->parserState!=$from) {
-            error_log("unexpected tag (from $from to $to, but state=".$this->parserState.")");
+            PEAR::raiseError("unexpected tag (from $from to $to, but state=".$this->parserState.")", 999);
         //$this->Write("[unexpected tag (from $from to $to)]");
         }
         $this->parserState=$to;
