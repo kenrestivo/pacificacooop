@@ -18,19 +18,22 @@
 
 //$Id$
 
-require_once('CoopTALPage.php');
+require_once('CoopPDF.php');
 
-class BidSheetReport extends CoopTALPage
+
+class BidSheetReport extends CoopPDF
 {
 
-    var $template_file = 'bid-sheet.xhtml';
+    var $template_file = 'bid-sheet.pdml';
 
 
-// specific to this page. when i dispatch with REST, i'll need several
     function build()
         {
-            
-            $this->title = 'Springfest Packaging Bid Sheets';
+            /// set some defaults
+            $this->fpdf->AddFont('bernhard-modern');
+            $this->fpdf->font_size = array('18');
+            $this->fpdf->font_face = array('bernhard-modern');
+           
 
             ////////////// BIDSHEETS
             $bidsheets =& new CoopView(&$this, 'packages', &$nothing);
@@ -57,7 +60,6 @@ class BidSheetReport extends CoopTALPage
 
             $crap = array_fill(0,10,'');
             $this->template->setRef('blanklines', $crap);
-
             
         }
 }
