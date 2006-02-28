@@ -6785,3 +6785,5 @@ A WORKABLE SOLUTION NEEEDED pdml	ok, try the custom font now!
 	strip out html chars... doesn't coopview do this for me?
 		or, make pdml understand them, i.e &quot;
 		try setting content type to something more reasonable
+	copy/paste tabletest to bidsheet.php, use that now
+		set them in object: left/riht/bottom

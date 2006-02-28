@@ -18,17 +18,22 @@
 
 //$Id$
 
-require_once('CoopTALPage.php');
+require_once('CoopPDF.php');
 
-// XXX PHP IS BROKEN!! YOU CANNNOT CANNOT CANNOT HAVE LONG CLASS NAMES!
-// i originally named this class GiftCertificateREport, but PHP puked on it
-class GCR extends CoopTALPage
+// XXX PHP IS BROKEN? YOU CANNNOT CANNOT CANNOT HAVE LONG CLASS NAMES!?
+// i originally named his class GiftCertificateREport, but PHP puked on it
+class GCR extends CoopPDF
 {
-    var $template_file = 'gift-certificates.xhtml';
+    var $template_file = 'gift-certificates.pdml';
     
 // specific to this page. when i dispatch with REST, i'll need several
     function build()
         {
+
+            /// set some defaults
+            $this->fpdf->AddFont('bernhard-modern');
+            $this->fpdf->font_size = array('18');
+            $this->fpdf->font_face = array('bernhard-modern');
 
             // let the template know all about it
 
