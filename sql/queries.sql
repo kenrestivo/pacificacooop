@@ -2187,7 +2187,7 @@ set packages.package_type_id = package_types.package_type_id
 --- cute little utility to whack bad addresses
 update leads 
 set do_not_contact = now() where lead_id in 
-(671,891,107)
+(911,766,998,810,690,1752,1048)
 ;
 
 

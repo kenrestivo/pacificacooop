@@ -6780,4 +6780,8 @@ bring in-kind donations back
 	is there a better way to set the default font??
 		other than wrapping the whole thing in a font tag?
 			yes, set $this->fpdf->font_size=array('20')
-A WORKABLE SOLUTION NEEEDED pdml
+A WORKABLE SOLUTION NEEEDED pdml	ok, try the custom font now!
+		make the metrics, go for it.
+	strip out html chars... doesn't coopview do this for me?
+		or, make pdml understand them, i.e &quot;
+		try setting content type to something more reasonable

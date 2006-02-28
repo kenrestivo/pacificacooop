@@ -348,39 +348,39 @@ class PDML extends FPDF {
 
     function ProcessText($text) {
         switch ($this->parserState) {
-            case 0:
-            case 1:
-            case 2:
+        case 0:
+        case 1:
+        case 2:
                 // ignore text/whitespace in there.
-                break;
-            case 3:
-                $this->SetTitle($text);
-                break;
-            case 4:
-                $this->SetSubject($text);
-                break;
-            case 5:
+            break;
+        case 3:
+            $this->SetTitle($text);
+            break;
+        case 4:
+            $this->SetSubject($text);
+            break;
+        case 5:
                 $this->SetAuthor($text);
                 break;
-            case 6:
+        case 6:
                 $this->SetKeywords($text);
                 break;
-            case 51:
-                $this->cell_text .= $text;
-                break;
-      case 54:
-        $this->table['tr'][$this->table['rows']]
-              [$this->table['current_col']]['text'] .= $text;
-            case 10:
-                $this->script .= $text;
-                break;
-            case 63:
-                $this->header .= $text;
-                break;
-            case 64:
-                $this->footer .= $text;
-                break;
-            default:
+        case 51:
+            $this->cell_text .= $text;
+            break;
+        case 54:
+            $this->table['tr'][$this->table['rows']]
+                [$this->table['current_col']]['text'] .= $text;
+        case 10:
+            $this->script .= $text;
+            break;
+        case 63:
+            $this->header .= $text;
+            break;
+        case 64:
+            $this->footer .= $text;
+            break;
+        default:
                 // ignore pure whitespace
                 if (preg_match("/^[ \\n\\t\\r]*$/",$text)) break;
                 // auto-create a page if needed.

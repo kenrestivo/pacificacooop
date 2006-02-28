@@ -1,12 +1,19 @@
 report notes
 $Id$
 
-
 outputting to pdf..
-	ok, try the custom font now!
-		make the metrics, go for it.
-	
-		
+	copy/paste tabletest to bidsheet.php, use that now
+	margins! it doesn't look like there are any. find them, set them.
+	figure out bold for the package title: how to style text in a multicell?
+		and italic for the bid sheet number
+		and bold for biddernumber/amount headings
+	font line spacing... more leading!
+	finally, the nested divs and such inside of multicell. i HAVE to have this!
+		look at flowable documentation. there has to be a way.
+		and quote escaping too
+	escaping of characters is fucked in the longtext, but seems fine elsewhere
+
+			
 unicode for fpdf! i might need this
 	http://www.acko.net/node/56
 

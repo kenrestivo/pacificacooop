@@ -26,6 +26,7 @@ require_once('lib/fpdf.php');
 class CoopPDF extends CoopTALPage
 {
     var $fpdf; // reference to pdml object (subclass of fpdf)
+    var $content_type = 'application/pdf;charset=utf-8';
     
     function prepare()
         {
