@@ -33,7 +33,7 @@
         </font>
 
         <multicell align="left"  inter="24pt"
-                   tal:content="php: strip_tags(${package/package_description})">Description</multicell>
+                   tal:content="php: strip_tags(unHTML(${package/package_description}))">Description</multicell>
         
         <br />
 

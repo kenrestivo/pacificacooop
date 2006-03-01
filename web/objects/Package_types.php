@@ -31,19 +31,24 @@ class Package_types extends CoopDBDO
 
     var $fb_dupeIgnore = array(
         'sort_order',
-        'long_description'
+        'long_description',
+        'prefix'
         );
 
 	var $fb_fieldLabels = array (
 		"package_type_id" => "Package Type ID" ,
 		"package_type_short" => "Package Type" ,
+        'prefix' => 'Single-letter Prefix (to appear before package number)',
         'long_description' => 'Extended Description',
         'sort_order' => 'Sort in This Order'
         );
 
 	var $fb_requiredFields = array('package_type_short',
+                                   'prefix',
 								   'sort_order');
     
+    var $fb_sizes = array('prefix' => 2);
+
 
     function fb_linkConstraints(&$co)
 		{

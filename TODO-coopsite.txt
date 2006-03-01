@@ -17,12 +17,10 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 	
-??PHP
-
 ???PHP/SQL
 change the package_number to a real fucking number!!
-	and make the package displays just append the first letter
-	stick the prefix letter into the package type table
+	constrain this number to be numeric, somehow! in coopform
+	go grab some clean data and redo my update
 	then deal with deletes too, eliminate holes in package number
 		- all	
  
@@ -6824,3 +6822,5 @@ A WORKABLE SOLUTION NEEEDED pdml	ok, try the custom font now!
 	re-sort the silents
 		intercept insert?
 		if the number is taken, renumber everything after it +1
+	stick the prefix letter into the package type table
+	and make the package displays just append the first letter

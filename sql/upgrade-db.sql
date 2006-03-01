@@ -25,6 +25,14 @@
 -- group_level = -1 WHERE table_permissions.table_permissions_id = 54;
 
 
-update packages set package_number = cast(substring(package_number,2,length(package_number)) as signed);
+update packages set package_number = cast(package_number as signed);
 alter table packages change column package_number package_number int(5) default NULL;
 alter table package_types add column prefix varchar(3);
+
+update package_types set prefix = 'L' where package_type_id = 1;
+update package_types set prefix = 'S' where package_type_id = 2;
+update package_types set prefix = 'D' where package_type_id = 3;
+update package_types set prefix = 'B' where package_type_id = 4;
+update package_types set prefix = 'F' where package_type_id = 5;
+update package_types set prefix = 'U' where package_type_id = 6;
+

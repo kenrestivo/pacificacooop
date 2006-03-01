@@ -77,7 +77,8 @@ var $fb_currencyFields = array(
    'starting_bid',
    'bid_increment'
 );
-    var $fb_displayCallbacks = array('package_value' => 'priceless');
+    var $fb_displayCallbacks = array('package_value' => 'priceless',
+                                     'package_number' => 'prefixLetter');
 
 	var $fb_requiredFields = array('package_description', 
 								   'starting_bid', 'bid_increment', 
@@ -102,8 +103,10 @@ var $fb_currencyFields = array(
             $par = new CoopObject(&$co->page, 'package_types', &$co);
             $co->protectedJoin($par);
             $co->constrainSchoolYear();
-            /// NOTE! package number here assumes JUST ONE letter, then numbers
-            $co->obj->orderBy('package_types.sort_order, packages.package_number, packages.package_title, packages.package_description');
+            $co->obj->selectAdd('package_types.prefix');
+            // XXX for some reason, i still have to cast this thing
+            // to get it to sort properly
+            $co->obj->orderBy('package_types.sort_order, cast(packages.package_number as signed), packages.package_title, packages.package_description');
 
         }
     
@@ -190,6 +193,15 @@ var $fb_currencyFields = array(
             return sprintf('$%0.02f', $val);
         }
 
+
+  function prefixLetter(&$co, $val, $key)
+        {
+            return sprintf('%s%02d', 
+                           $this->prefix,
+                           $val);
+        }
+
+
 /// XXX NOTE THIS FUNCTION NEEDS TO BE REWRITTEN!
 /// it does not use the proper format for inclusion here in the dataobject
 /// it needs to also return a hashtable(array) which can then be formatted
@@ -208,13 +220,14 @@ function public_packages(&$cp, $sy)
 				 'bgcolor=#aabbff align=left', 'TH');
 
 
-	$q = sprintf('select package_number, package_title, package_description,
+	$q = sprintf('select concat(package_types.prefix, lpad(package_number,2,0)),
+       package_title, package_description,
         package_value
         from packages
         left join package_types on packages.package_type_id = package_types.package_type_id
 		where display_publicly = "Yes"
 				and school_year = "%s"
-order by package_types.sort_order, packages.package_number, packages.package_title, packages.package_description',
+order by package_types.sort_order, cast(packages.package_number as signed), packages.package_title, packages.package_description',
                  $sy);
 
 	$listq = mysql_query($q);

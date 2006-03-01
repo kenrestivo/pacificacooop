@@ -476,14 +476,14 @@ insert into counters set
 
 --- package types
 INSERT INTO  package_types
-(package_type_id, package_type_short, sort_order, long_description)
+(package_type_id, package_type_short, sort_order, long_description, prefix)
 VALUES 
-(1,'Live', 1, 'Auctioned off by a live cryer on stage.'),
-(2,'Silent', 2, 'Attendees write in their own bids.'),
-(3,'Door Prize', 3, 'I have no idea what this means.'),
-(4,'Balloon', 4,'Someone walks around the event with balloons attached to them. People can pop them and win a prize.'),
-(5,'Flat Fee', 5, "Pay what the sticker price says. Most gift certificates are silly to auction off since they have a fixed value."),
-(6,'Unknown', 6,"If you haven't yet decided")
+(1,'Live', 1, 'Auctioned off by a live cryer on stage.', 'L'),
+(2,'Silent', 2, 'Attendees write in their own bids.', 'S'),
+(3,'Door Prize', 3, 'I have no idea what this means.', 'D'),
+(4,'Balloon', 4,'Someone walks around the event with balloons attached to them. People can pop them and win a prize.', 'B'),
+(5,'Flat Fee', 5, "Pay what the sticker price says. Most gift certificates are silly to auction off since they have a fixed value.", 'F'),
+(6,'Unknown', 6,"If you haven't yet decided", 'U')
 ;
 
 

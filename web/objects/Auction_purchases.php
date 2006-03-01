@@ -44,6 +44,7 @@ class Auction_purchases extends CoopDBDO
     function fb_display_view(&$co)
         {
 
+            //XXXX concat the new package_types.prefix too!
 
             //TODO: school year chooser!
 
