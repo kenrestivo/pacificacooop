@@ -3,7 +3,7 @@
 //$Id$
 
 /*
-	Copyright (C) 2004-2005  ken restivo <ken@restivo.org>
+	Copyright (C) 2004-2006  ken restivo <ken@restivo.org>
 	 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ class coopForm extends CoopObject
 
 
 
-	// i got disgusted with FB. fuck that. i roll my own here.
+	// i got disgusted with FB.  i roll my own here.
 	function &build($vars = false)
 		{
 			$this->page->confessArray($vars, "CoopForm::build({$this->table})", 3);

@@ -99,15 +99,21 @@ var $fb_currencyFields = array(
    );
 
     var $fb_extraDetails = array('auction_packages_join:auction_donation_items');
-
+    // TODO: make this more flexible, to filter out ALL letters!
+    var $_numericPackageNumberQuery = 'cast(substring(package_number,2,length(package_number)) as signed)';
+    
 
     function fb_linkConstraints(&$co)
 		{
             $par = new CoopObject(&$co->page, 'package_types', &$co);
             $co->protectedJoin($par);
             $co->constrainSchoolYear();
+            $co->obj->selectAdd(sprintf('%s as numeric_package_number',
+                                        $this->_numericPackageNumberQuery));
             /// NOTE! package number here assumes JUST ONE letter, then numbers
-            $co->obj->orderBy('package_types.sort_order, cast(substring(package_number,2,length(package_number)) as signed), packages.package_title, packages.package_description');
+            $co->obj->orderBy(
+                sprintf('package_types.sort_order, %s, packages.package_title, packages.package_description', 
+                        $this->_numericPackageNumberQuery));
 
         }
     

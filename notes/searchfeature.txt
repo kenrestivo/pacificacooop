@@ -1,5 +1,11 @@
 a cool nifty SEARCH BOX in all generic views!!
 
+sortable views!
+	use mochikit sortable_tables example, it rules
+	ajax/json version of coopview, subclass, my ajax thingus
+		json response is
+			'columns' : coopview::header(),
+			rows: coopView::toarray()- iterated
 
 
 put paging in simpletable!!

@@ -3,11 +3,12 @@ create a  proper springfest microsite
 put the login block in, so people know what they got
 
 database-ize this!
-	pages table:
+	pages table-- one for each page:
 		"name", basically URL short
 		menushort-- display
 		class?!
-		possibly different each schoolyear too... remmeber to put in new year!
+		different each schoolyear too... remmeber to put in new year!
+			pre-insert "nothing here yet" if nothing there
 		text (short)		
 		text (extended)
 			handle it like a dkos blog entry, two editors on one page
@@ -18,7 +19,7 @@ database-ize this!
 		solicit
 		about
 
-specials:
+specials, in addition to the stuff in the text boxin:
 	home page: list of all the summaries!
 		crap. might have to use METAL here for this one
 	auction page: the list of the packages

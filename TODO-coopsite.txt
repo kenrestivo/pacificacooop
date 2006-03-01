@@ -2,6 +2,7 @@ coop web database
 
  MY agenda! dammit, mine! for a change....
 	springfest microsite (microsite.txt)
+	sortable/searchable/pagable views (searchfeature.txt)
  	import the 20-year roster (20yearroster.txt)
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
@@ -12,10 +13,15 @@ coop web database
 	insurance, dammit
 	graphs and charts (graphs.txt)
 	json services (templates.txt)
-	sortable/searchable/pagable views (searchfeature.txt)
 	labels/export -- python cgi on nfsn, formatting, etc.
+	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
-
+	
+??PHP
+	re-sort the silents
+		intercept insert?
+		if the number is taken, renumber everything below it +1
+	
  
 ??PHP
 bid sheets and gift certs
@@ -32,7 +38,13 @@ that report for michelle: showing all the items and compoennts
 	subiterators, tricky? but i need to tackle this
 	where are my notes on this?
 
-		
+
+???PHP/JS
+any way to renumber the packages??!
+	i.e. some drag and drop interface?
+	or even an up/down thing would be nice
+
+	
 BUGS
 	fix that ad insertion anomaly in the report
 	counts are not in sync between carrie and nag report
@@ -3483,7 +3495,23 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-auugh!!! pdfdom, and php_jh_pdf!! might be better than pdml!
+	finally, the nested divs and such inside of multicell. i HAVE to have this!
+		look at flowable documentation. there has to be a way.
+		and quote escaping too
+
+				instrument this thing with debug code, and figure out what's goign on!
+		what is the x/y after div, and before table
+		then make it set xy to end of any wrapped text
+		ok, i think div and font do it correctly, table does NOT
+			it doens't honour whatever x/y setting div leaves off at
+			is it all multicells, or just table?
+			AHA! it is cell!
+    	so the problem is mixing tables in with any other content!!
+    		it doesn't work. you either have to make everything a table, or don't
+    		AUUGH! i can't do that, because i need to flow text and nest divs,
+    			can't do that in a table cell
+
+				auugh!!! pdfdom, and php_jh_pdf!! might be better than pdml!
 
 	need to use xslt to generate a fo
 	xsl-fo sucks, but if you generate it programatically it's not too bad
@@ -6787,3 +6815,5 @@ A WORKABLE SOLUTION NEEEDED pdml	ok, try the custom font now!
 		try setting content type to something more reasonable
 	copy/paste tabletest to bidsheet.php, use that now
 		set them in object: left/riht/bottom
+	margins! make sure they *do* something
+	font line spacing... more leading! 'inter=' tag
