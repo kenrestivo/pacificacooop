@@ -6,7 +6,7 @@ require_once 'DB/DataObject.php';
 
 class In_kind_donations extends CoopDBDO 
 {
-###START_AUTOCODE
+    ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'in_kind_donations';               // table name
@@ -26,7 +26,7 @@ class In_kind_donations extends CoopDBDO
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('In_kind_donations',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-###END_AUTOCODE
+    ###END_AUTOCODE
 	var $fb_formHeaderText = 'Springfest In-Kind Donations';
 	var $fb_fieldLabels = array(
 		"quantity" => "Quantity of items", 

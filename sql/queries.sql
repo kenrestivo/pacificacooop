@@ -2264,4 +2264,7 @@ where  cast(substring(package_number,2,length(package_number)) as signed)  >= 5
 and package_type_id = 2 and school_year = '2005-2006';
 
 
+-- silly! use numeric package numbers instead
+update packages set package_number = cast(substring(package_number,2,length(package_number)) as signed);
+
 --- EOF

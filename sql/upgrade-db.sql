@@ -25,4 +25,6 @@
 -- group_level = -1 WHERE table_permissions.table_permissions_id = 54;
 
 
--- program report
+update packages set package_number = cast(substring(package_number,2,length(package_number)) as signed);
+alter table packages change column package_number package_number int(5) default NULL;
+alter table package_types add column prefix varchar(3);

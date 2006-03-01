@@ -6,7 +6,7 @@ require_once 'DB/DataObject.php';
 
 class Sponsorships extends CoopDBDO 
 {
-###START_AUTOCODE
+    ###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'sponsorships';                    // table name
@@ -24,7 +24,7 @@ class Sponsorships extends CoopDBDO
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Sponsorships',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-###END_AUTOCODE
+    ###END_AUTOCODE
 	var $fb_enumFields = array ('entry_type');
 	var $fb_formHeaderText =  'Springfest Sponsorships';
     var $fb_shortHeader = 'Sponsorships';

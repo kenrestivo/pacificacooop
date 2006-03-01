@@ -12,7 +12,6 @@ class Packages extends CoopDBDO
 
     var $__table = 'packages';                        // table name
     var $package_id;                      // int(32)  not_null primary_key unique_key auto_increment
-    var $package_type;                    // string(10)  enum
     var $package_number;                  // string(20)  
     var $package_title;                   // string(255)  
     var $package_description;             // blob(16777215)  blob
@@ -97,19 +96,14 @@ var $fb_currencyFields = array(
    );
 
     var $fb_extraDetails = array('auction_packages_join:auction_donation_items');
-    // TODO: make this more flexible, to filter out ALL letters!
-    var $_numericPackageNumberQuery = 'cast(substring(package_number,2,length(package_number)) as signed)';
-    
 
     function fb_linkConstraints(&$co)
 		{
             $par = new CoopObject(&$co->page, 'package_types', &$co);
             $co->protectedJoin($par);
             $co->constrainSchoolYear();
-            $co->obj->selectAdd(sprintf('%s as numeric_package_number',
-                                        $this->_numericPackageNumberQuery));
             /// NOTE! package number here assumes JUST ONE letter, then numbers
-            $co->obj->orderBy('package_types.sort_order, numeric_package_number, packages.package_title, packages.package_description');
+            $co->obj->orderBy('package_types.sort_order, packages.package_number, packages.package_title, packages.package_description');
 
         }
     
@@ -220,9 +214,8 @@ function public_packages(&$cp, $sy)
         left join package_types on packages.package_type_id = package_types.package_type_id
 		where display_publicly = "Yes"
 				and school_year = "%s"
-order by package_types.sort_order, %s, packages.package_title, packages.package_description',
-                 $sy, 
-                 $this->_numericPackageNumberQuery);
+order by package_types.sort_order, packages.package_number, packages.package_title, packages.package_description',
+                 $sy);
 
 	$listq = mysql_query($q);
 	$i = 0;
@@ -264,13 +257,10 @@ function incrementPackages()
             $fixer->query(
                 sprintf(
                     'update packages 
-set package_number = concat("%s", lpad(%s + 1, 2, 0))
-where  %s  >= %d
+set package_number = package_number + 1
+where  package_number  >= %d
 and package_type_id = %d and school_year = "%s"',
-                    substr($this->package_number, 0, 1),
-                    $this->_numericPackageNumberQuery,
-                    $this->_numericPackageNumberQuery,
-                    preg_replace('/[^0-9]/','', $this->package_number),
+                    $this->package_number,
                     $this->package_type_id,
                     $this->school_year));
         }

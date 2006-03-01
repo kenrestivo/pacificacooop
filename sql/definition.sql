@@ -425,7 +425,7 @@ CREATE TABLE nags (
 CREATE TABLE packages (
   package_id int(32) NOT NULL unique auto_increment,
   package_type_id int(32) default NULL,
-  package_number varchar(20) default NULL,
+  package_number int(5) default NULL,
   package_title varchar(255) default NULL,
   package_description longtext,
   donated_by_text varchar(255) default NULL,
@@ -990,6 +990,7 @@ package_type_id int(32) primary key not null unique auto_increment,
 package_type_short varchar(50),
 long_description varchar(255),
 sort_order int(3)
+prefix varchar(3)
 );
 
 

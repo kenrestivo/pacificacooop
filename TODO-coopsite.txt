@@ -18,10 +18,13 @@ coop web database
 
 	
 ??PHP
-	re-sort the silents
-		intercept insert?
-		if the number is taken, renumber everything after it +1
-	
+
+???PHP/SQL
+change the package_number to a real fucking number!!
+	and make the package displays just append the first letter
+	stick the prefix letter into the package type table
+	then deal with deletes too, eliminate holes in package number
+		- all	
  
 ??PHP
 bid sheets and gift certs
@@ -606,11 +609,6 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
-
-???PHP/SQL
-change the package_number to a real fucking number!!
-	and make the package displays just append the first letter
-	stick the prefix letter into the package type table
 
 	
 csv or quark xtags format too, probably, if possible, should be with iterator or toarray
@@ -6823,3 +6821,6 @@ A WORKABLE SOLUTION NEEEDED pdml	ok, try the custom font now!
 		set them in object: left/riht/bottom
 	margins! make sure they *do* something
 	font line spacing... more leading! 'inter=' tag
+	re-sort the silents
+		intercept insert?
+		if the number is taken, renumber everything after it +1
