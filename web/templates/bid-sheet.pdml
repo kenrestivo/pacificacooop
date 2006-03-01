@@ -11,41 +11,40 @@
       
       <page />
 
-      <font size="24pt">
-        <multicell 
-            align="center">
-          <i tal:content="string:Bid Sheet for ${package/package_number}">package number</i>
-        </multicell>
+      <column count="1">
 
-        <br />
-        <multicell align="center" tal:condition="package/package_title">
-          <b tal:content="package/package_title">title</b>
-        </multicell>
+        <font size="24pt">
+          <multicell align="center" >
+            <i tal:content="string:Bid Sheet for ${package/package_number}">package number</i>
+          </multicell>
+          
+          <br />
+          
+          <div tal:omit-tag="" tal:condition="package/package_title">
+            <multicell align="center" >
+              <b tal:content="package/package_title">title</b>
+            </multicell>
+            <br />
+          </div>
 
-        <br />
-        <multicell align="center" >Value: ${package/package_value}</multicell>
+          <multicell align="center" >Value: ${package/package_value}</multicell>
+
+          <br />
+        </font>
+
+        <multicell align="left"  inter="24pt"
+                   tal:content="php: strip_tags(${package/package_description})">Description</multicell>
         
-      </font>
-      <br />
-
-      <multicell align="left" size="18pt" inter="22pt"
-                 tal:content="package/package_description">Description</multicell>
+        <br />
 
 
 
-      <br />
-
-      <table tal:condition="php: package.package_type_short != 'Live'" 
-             width="100%" align="center">
+      <table tal:condition="php: package.package_type_short != 'Live'" >
         <tr>
-          <td>
-            <span> Minimum Bid: </span>
-            <span tal:content="package/starting_bid">Amount</span>
-          </td>
-          <td>
-            <span >Increment: </span>
-            <span tal:content="package/bid_increment">Amount</span>
-          </td>
+          <td align="center" width="50%"
+              tal:content="string: Minimum Bid: ${package/starting_bid}"></td>
+          <td align="center" width="50%"
+              tal:content="string: Increment: ${package/bid_increment}"></td>
         </tr>
       </table>
       
@@ -61,10 +60,14 @@
           <td></td>
         </tr> 
         
+
       </table>
 
 
-      
+        
+        
+      </column>
+
     </div>      
     
     
