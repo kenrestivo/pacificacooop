@@ -88,6 +88,8 @@ class coopForm extends CoopObject
 			// will need to guess field types
 			$this->_tableDef = $this->obj->table();
 
+            $this->page->confessArray($this->_tableDef, 'tabledef', 3);
+                    
             // NOTE! i must do this before calling generators
             $this->form->CoopForm =& $this; 
 
@@ -134,13 +136,8 @@ class coopForm extends CoopObject
 
 			$this->form->applyFilter('__ALL__', 'trim');
 
-            if(!empty($this->obj->fb_currencyFields)){
-                foreach($this->obj->fb_currencyFields as $f){
-                    $this->form->applyFilter($this->prependTable($f), 
-                                             array(&$this, 'floatOnly'));
-                }
-                
-            }
+
+
 
 			$this->form->addFormRule(array(&$this,'dupeCheck'));
             
@@ -296,8 +293,16 @@ class coopForm extends CoopObject
                             $fullkey, 
                             array('size' =>$this->obj->fb_sizes[$key]));
                     }
-                    $this->page->confessArray($this->_tableDef, 'tabb');
 				}
+
+
+                // filter ints and floats, regardless of above
+                if($this->_tableDef[$key] & DB_DATAOBJECT_INT){
+                    $this->form->applyFilter($this->prependTable($key), 
+                                             array(&$this, 'floatOnly'));
+                }
+
+
 				//print $key . "->" .$this->obj->fb_fieldLabels[$key] . "<br />";
 				// TODO: uppercase this thing, replace _ with spaces
 				$el->setLabel($label);
@@ -314,6 +319,8 @@ class coopForm extends CoopObject
                 if($perms < ACCESS_EDIT ){
 					$frozen[] = $fullkey;
                 }
+
+                
 
 			}
 			$this->page->confessArray($frozen, 
@@ -510,6 +517,7 @@ class coopForm extends CoopObject
     // populates $this->changes array, which saveaudit needs!
     function calcChanges(&$old)
         {
+            //TODO: use $this->_tableDef();
             foreach($this->obj->table() as $key => $type){
                 if($this->obj->$key != $old->$key){
                     // NOTE: i save the whole thing. i do formatting at display

@@ -19,10 +19,15 @@ coop web database
 	
 ???PHP/SQL
 change the package_number to a real fucking number!!
-	constrain this number to be numeric, somehow! in coopform
+	write a stupid php or python script to go fix this
+		preg_replace, basically
+		and deal with the 0's too
+			what happens when you update 0, i wonder?
 	go grab some clean data and redo my update
 	then deal with deletes too, eliminate holes in package number
-		- all	
+		- all
+	these dvd/movie/game things are a bitch
+		they are Fx, dammit. fix that.
  
 ??PHP
 bid sheets and gift certs
@@ -48,6 +53,7 @@ any way to renumber the packages??!
 	
 BUGS
 	fix that ad insertion anomaly in the report
+		solicitation ad inserton != grand total ad insertion. why?
 	counts are not in sync between carrie and nag report
 	perms for packages with user_id 0 are ADMIN PRIVS!??!
 	in redirect, &coop not coop, causes TROUBLE with no cookies
@@ -6824,3 +6830,5 @@ A WORKABLE SOLUTION NEEEDED pdml	ok, try the custom font now!
 		if the number is taken, renumber everything after it +1
 	stick the prefix letter into the package type table
 	and make the package displays just append the first letter
+	constrain this number to be numeric, somehow! in coopform
+		don't i filter cash already? do that.

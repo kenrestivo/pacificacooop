@@ -81,3 +81,11 @@ class JobDescriptions(SQLObject):
               fromDatabase = True
               idName='job_description_id'
               uglyName='jobDescriptionID'
+
+
+
+class Packages(SQLObject):
+       class sqlmeta:
+              fromDatabase = True
+              idName='package_id'
+              uglyName='packageID'
