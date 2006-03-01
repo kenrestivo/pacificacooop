@@ -111,9 +111,7 @@ var $fb_currencyFields = array(
             $co->obj->selectAdd(sprintf('%s as numeric_package_number',
                                         $this->_numericPackageNumberQuery));
             /// NOTE! package number here assumes JUST ONE letter, then numbers
-            $co->obj->orderBy(
-                sprintf('package_types.sort_order, %s, packages.package_title, packages.package_description', 
-                        $this->_numericPackageNumberQuery));
+            $co->obj->orderBy('package_types.sort_order, numeric_package_number, packages.package_title, packages.package_description');
 
         }
     
@@ -224,8 +222,9 @@ function public_packages(&$cp, $sy)
         left join package_types on packages.package_type_id = package_types.package_type_id
 		where display_publicly = "Yes"
 				and school_year = "%s"
-order by package_types.sort_order, cast(substring(package_number,2,length(package_number)) as signed), packages.package_title, packages.package_description',
-                 $sy);
+order by package_types.sort_order, %s, packages.package_title, packages.package_description',
+                 $sy, 
+                 $this->_numericPackageNumberQuery);
 
 	$listq = mysql_query($q);
 	$i = 0;
@@ -259,7 +258,38 @@ order by package_types.sort_order, cast(substring(package_number,2,length(packag
 } // end public packages
 
 
+// bump all package numbers ahead of the current one
+function incrementPackages()
+        {
+            $fixer =& $this->__clone();
 
+            $fixer->query(
+                sprintf(
+                    'update packages 
+set package_number = concat("%s", lpad(%s + 1, 2, 0))
+where  %s  >= %d
+and package_type_id = %d and school_year = "%s"',
+                    substr($this->package_number, 0, 1),
+                    $this->_numericPackageNumberQuery,
+                    $this->_numericPackageNumberQuery,
+                    preg_replace('/[^0-9]/','', $this->package_number),
+                    $this->package_type_id,
+                    $this->school_year));
+        }
+
+
+
+function update()
+        {
+            $this->incrementPackages();
+            parent::update();
+        }
+
+function insert()
+        {
+            $this->incrementPackages();
+            parent::insert();
+        }
 
 }
 
