@@ -44,8 +44,6 @@ class Packages extends CoopDBDO
     var $fb_shortHeader = 'Packages';
     var $fb_dupeIgnore = array(
         'package_type_id',
-        'package_title',
-        'package_description',
         'donated_by_text',
         'item_type',
         'package_value',

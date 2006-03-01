@@ -2253,7 +2253,15 @@ if(companies.listing is not null, companies.listing,
 
 
 --- signed
-select cast(substring(package_number,2,length(package_number)) as signed) from packages where package_type_id = 2 and school_year = '2005-2006' order by package_number;
+select cast(substring(package_number,2,length(package_number)) as signed) as numeric_package_number from packages where package_type_id = 2 and school_year = '2005-2006' order by numeric_package_number;
+
+
+--- try to bump all the packages
+update packages set package_number = concat('S', 
+    lpad(cast(substring(package_number,2,length(package_number)) as signed) + 1,
+     2, 0))
+where  cast(substring(package_number,2,length(package_number)) as signed)  >= 5
+and package_type_id = 2 and school_year = '2005-2006';
 
 
 --- EOF
