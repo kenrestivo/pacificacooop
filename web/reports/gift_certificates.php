@@ -60,7 +60,7 @@ class GCR extends CoopPDF
             // simple year.
             list($prevyr, $year) = explode('-', 
                                            $giftcerts->getChosenSchoolYear());
-            $year = 'Springfest ' . $year
+            $year = 'Springfest ' . $year;
             // it has to be a reference, so i have to use a tempvar
             $this->template->setRef('eventdate', $year);
     
