@@ -39,37 +39,47 @@
 
 
 
-      <table tal:condition="php: package.package_type_short != 'Live'" >
-        <tr>
-          <td align="center" width="50%"
-              tal:content="string: Minimum Bid: ${package/starting_bid}"></td>
-          <td align="center" width="50%"
-              tal:content="string: Increment: ${package/bid_increment}"></td>
-        </tr>
-      </table>
-      
-      <br />
-
-      <table border="1">
-        <tr header="header">
-          <td align="center" width="50%">Bidder Number</td>
-          <td align="center" width="50%">Amount</td>
-        </tr>
-        <tr tal:repeat="line blanklines">
-          <td></td>
-          <td></td>
-        </tr> 
+        <table tal:condition="php: package.package_type_short != 'Live'" >
+          <tr>
+            <td align="center" width="50%"
+                tal:content="string: Minimum Bid: ${package/starting_bid}"></td>
+            <td align="center" width="50%"
+                tal:content="string: Increment: ${package/bid_increment}"></td>
+          </tr>
+        </table>
         
+        <br />
 
-      </table>
+        <table border="1">
+          <tr header="header">
+            <td align="center" width="50%">Bidder Number</td>
+            <td align="center" width="50%">Amount</td>
+          </tr>
+          <tr tal:repeat="line blanklines">
+            <td></td>
+            <td></td>
+          </tr> 
+          
 
-
-        
+        </table>
         
       </column>
 
+
+      <footer>    
+        <img border="0" left="7.5in" top="10in" height="48pt" 
+             src="../images/round-small-logo.png" />
+        <cell align="right" width="6.3in"  top="10.5in">Sunset Surf</cell>        
+      </footer>
+
     </div>      
     
+
+
+    
+
+
+
     
   </body>
 </pdml>
