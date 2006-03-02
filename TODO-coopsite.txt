@@ -18,12 +18,11 @@ coop web database
 
 	
 
-	
 ??PHP
 bid sheets and gift certs
-	gift cert!
+	try to actually print a page or two
 	blank bid sheet, second page
-	china's border? should i do that?
+	china's border? should i try that?
 
 	
 			
@@ -33,6 +32,7 @@ that report for michelle: showing all the items and compoennts
 	where are my notes on this?
 
 
+	
 ???PHP/JS
 any way to renumber the packages??!
 	i.e. some drag and drop interface?
@@ -52,7 +52,7 @@ BUGS
 				
 ??PHP/SQL
 parent ed (parented.txt)
-		make-up stuff -- wacky sql joins
+		make-up stuff -- wacky sql joins, i fear it.
 		nag-only (i.e. enhancement hack)
 
 	
@@ -81,7 +81,8 @@ be t		i'll need all the schoolyearchooser shit though, to honour it in export
 		no pager though, that's the only thing to leave out
 		basically, everything in view except for the simpletable. fuck.
 			yes. this is stupid: presentation and logic stuck together!
-	fb_export()?
+	fb_export()? or a subclass of coopview or cooppage?
+		like i have with pdf
 	things i'll need that are specific to exporting
 		spreadsheetname
 		worksheet name
@@ -6848,4 +6849,7 @@ change the package_number to a real fucking number!!
 excel export. fuck labels.
 	larger print and spread out on gift certs
 	printable
-		honeycombe
+		honeycomb
+e
+	now the gift certificate, goddammit
+	gift cert!

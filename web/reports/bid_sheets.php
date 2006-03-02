@@ -55,7 +55,7 @@ class BidSheetReport extends CoopPDF
             $bidsheets->find(true);
             $this->template->setRef('bidsheets', $bidsheets);
 
-            $this->printDebug("sy $sy nav $nav ". $bidsheets->getChosenSchoolYear(), 1);
+            $this->printDebug("sy $sy ". $bidsheets->getChosenSchoolYear(), 1);
 
 
             $crap = array_fill(0,10,'');

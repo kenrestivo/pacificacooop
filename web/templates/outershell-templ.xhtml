@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<div metal:define-macro="main_page">
+<div tal:omit-tag="" metal:define-macro="main_page">
   <div tal:replace="structure page/doctype" tal:comment="XXX hack" ></div>
   <html  lang="en">
     <head>
@@ -8,7 +8,11 @@
       <link rel="stylesheet" href="main.css" title="main"     
             tal:attributes="href string:${page/uri_path}/main.css" />
       <title tal:content="page/title"></title>
+
+      <div metal:define-slot="extra_header_stuff"></div>
+
     </head>
+
     <body>
       <!--[if gte IE 5.5000]> 
           <script type="text/javascript" src="lib/pngfix.js"></script> 
@@ -16,7 +20,7 @@
 
       
       <div id="header">
-        <div  metal:use-macro="header.xhtml/header"></div>
+        <div  tal:omit-tag="" metal:use-macro="header.xhtml/header"></div>
       </div>
 
       <div class="centerCol" 

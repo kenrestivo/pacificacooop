@@ -7,7 +7,6 @@ outputting to pdf..
 		and italic for the bid sheet number
 		and bold for biddernumber/amount headings
 	somehow clamp the honeycomb, might be able to skid along as we are
-	now the gift certificate, goddammit
 
 						
 unicode for fpdf! i might need this
