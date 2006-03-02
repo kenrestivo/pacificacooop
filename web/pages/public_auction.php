@@ -37,8 +37,8 @@ $_SESSION['foo'] = 'foo';		// keep auth.inc happy
 
 $cp->title = "Springfest $sfyear"; 
 print $cp->header();
-printf('<img src="%s/custom_font.php?text=Join%%20us%%20for%%20Springfest%%20%s&size=18" />', 
-       COOP_ABSOLUTE_URL_PATH, $sfyear);
+printf('<img src="%s/custom_font.php?text=Join%%20us%%20for%%20Springfest%%20%s&amp;size=18" alt="Join us for Springfest %s"/>', 
+       COOP_ABSOLUTE_URL_PATH, $sfyear, $sfyear);
 print "\n</div> <!-- end header div -->\n";
 
 print '<div class="leftCol" id="leftCol">';
