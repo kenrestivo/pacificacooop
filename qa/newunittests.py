@@ -170,8 +170,13 @@ class CoopTest:
 
     def pageLoaded(self):
         print 'Checking load of [%s] ...' % (self.getURL(), )
+        wr = self.page.getWebResponse()
+        ## if it isn't html (i.e. pdf), then don't bother with this!
+        if wr.getResponseHeaderValue('content-type').count('html') < 1:
+            print '[%s] IS NOT AN HTML page.' % (self.getURL(), )
+            return
         self.dumpHTML()
-        assert(1 == self.page.getWebResponse().getContentAsString().count('</html>'))
+        assert(1 == wr.getContentAsString().count('</html>'))
         if self.validator_url:
             self.validateMarkup()
 
@@ -350,10 +355,10 @@ class Runner:
     
     def force_page(self, urlbase, urlmore, username, fp=None):
         """utility for validating one particular long url""" 
-        ct=CoopTest(urlbase, username,  logfp=open('forcepagetest.log', 'w'))
-        ct.getToMainPage()
-        ct.page=ct.wc.getPage(URL('/'.join((urlbase,urlmore))))
-        ct.pageLoaded()
+        self.ct=CoopTest(urlbase, username,  logfp=open('forcepagetest.log', 'w'))
+        self.ct.getToMainPage()
+        self.ct.page=self.ct.wc.getPage(URL('/'.join((urlbase,urlmore))))
+        self.ct.pageLoaded()
         print 'page loaded successfully!'
     
 
