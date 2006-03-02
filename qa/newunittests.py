@@ -164,8 +164,8 @@ class CoopTest:
         assert(len(self.mainlinks) > 0)
         for i in self.mainlinks:
             self.page = self.retryClick(i)
-            self.pageLoaded()
-            self.tryOperationsOnPage()
+            if self.pageLoaded() == 1:
+                self.tryOperationsOnPage()
 
 
     def pageLoaded(self):
@@ -174,11 +174,12 @@ class CoopTest:
         ## if it isn't html (i.e. pdf), then don't bother with this!
         if wr.getResponseHeaderValue('content-type').count('html') < 1:
             print '[%s] IS NOT AN HTML page.' % (self.getURL(), )
-            return
+            return 0
         self.dumpHTML()
         assert(1 == wr.getContentAsString().count('</html>'))
         if self.validator_url:
             self.validateMarkup()
+        return 1
 
 
             
