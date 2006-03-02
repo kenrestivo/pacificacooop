@@ -25,7 +25,7 @@
 -- group_level = -1 WHERE table_permissions.table_permissions_id = 54;
 
 
--- run a fucking php script to convert the package numbers!!!!
+-- run the python script to convert the package numbers!!!!
 
 alter table packages change column package_number package_number int(5) default NULL;
 alter table package_types add column prefix varchar(3);

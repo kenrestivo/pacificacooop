@@ -266,6 +266,8 @@ order by package_types.sort_order, cast(packages.package_number as signed), pack
 function incrementPackages()
         {
             $fixer =& $this->__clone();
+            
+            ///NOTE! the package number here in the DBObject is the NEW one
 
             $fixer->query(
                 sprintf(
@@ -279,9 +281,33 @@ and package_type_id = %d and school_year = "%s"',
         }
 
 
+// fill up hole left by deleted package
+function decrementPackages()
+        {
+            $fixer =& $this->__clone();
+
+            ///NOTE! the package number here in the DBObject is the NEW one
+            ///so we have to go fish out the old one to find its number
+            // and don't dare clone it! bad things happen when you clone.
+            $old =& $this->factory($this->__table);
+            $old->get($this->{$this->CoopObject->pk});
+
+            $fixer->query(
+                sprintf(
+                    'update packages 
+set package_number = package_number - 1 
+where  package_number  >= %d
+and package_type_id = %d and school_year = "%s"',
+                    $old->package_number,
+                    $this->package_type_id,
+                    $this->school_year));
+        }
+
 
 function update()
         {
+            /// does it matter what order i do this in? test it.
+            $this->decrementPackages();
             $this->incrementPackages();
             parent::update();
         }
@@ -291,6 +317,14 @@ function insert()
             $this->incrementPackages();
             parent::insert();
         }
+
+
+function delete()
+        {
+            $this->decrementPackages();
+            parent::delete();
+        }
+
 
 }
 
