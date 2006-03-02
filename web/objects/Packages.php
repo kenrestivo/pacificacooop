@@ -52,8 +52,8 @@ class Packages extends CoopDBDO
 
 	var $fb_fieldLabels = array (
 		"package_id" => "Package ID" ,
-		"package_type_id" => "Package Type" ,
-		"package_number" => "Package Number (as it will be printed in program)" ,
+		"package_type_id" => 'Package Type' ,
+		"package_number" => 'Package Number',
 		"package_title" => "Package Title (short)" ,
 		"package_description" => "Package Description (long)" ,
 		"donated_by_text" => "Generously Donated By" ,
@@ -136,20 +136,21 @@ var $fb_currencyFields = array(
 
 
             // if there is no package number, get max set default to max
-            $temp =& $this->factory($this->__table);
-            $temp->query(sprintf(
-                    'select max(package_number) as max_package
+            if($this->package_number < 1){
+                $temp =& $this->factory($this->__table);
+                $temp->query(sprintf(
+                                 'select max(package_number) as max_package
                  from %s
                 where package_type_id = %d and school_year = "%s"',
-                    $this->__table,
-                    COOP_PACKAGE_TYPE_SILENT,
+                                 $this->__table,
+                                 COOP_PACKAGE_TYPE_SILENT,
                     $form->CoopForm->getChosenSchoolYear()));
-            $temp->fetch();
-            
-            $form->setDefaults(
-                array($form->CoopForm->prependTable('package_number') => 
-                      (int) $temp->max_package + 1));
-
+                $temp->fetch();
+                
+                $form->setDefaults(
+                    array($form->CoopForm->prependTable('package_number') => 
+                          (int) $temp->max_package + 1));
+            }
         }
 
 

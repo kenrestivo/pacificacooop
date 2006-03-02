@@ -20,7 +20,7 @@ coop web database
 	
 ???PHP/SQL
 change the package_number to a real fucking number!!
-	likewise when creating a new package, pre-insert the max number for S
+	clamp to 1. no integers < 1
 
 
 	
@@ -6840,3 +6840,4 @@ A WORKABLE SOLUTION NEEEDED pdml	ok, try the custom font now!
 	also subtract all in the hole made by this one going away!
 		do this at update time!
 	then hook deletes too, eliminate holes in package number
+	likewise when creating a new package, pre-insert the max number for S
