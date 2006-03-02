@@ -1,21 +1,15 @@
 report notes
 $Id$
 
+
 outputting to pdf..
 	figure out bold for the package title: how to style text in a multicell?
 		and italic for the bid sheet number
 		and bold for biddernumber/amount headings
-		this is ridiculous. there has to be a better way to get wrapped text
-			look at their sample code again
-		aha! you wrap text in a font, and it can have divs. structure, cool.
-			bold still doesn't work tho
-    header and footer now!!
-	nasty bug with my wrapping longtext
-		the problem is putting div's inside of multicells, goddammit.
-			ok, do an xslt transform to turn that embedded html into pdml then!
-	escaping of characters is fucked in the longtext, but seems fine elsewhere
+	somehow clamp the honeycomb, might be able to skid along as we are
+	now the gift certificate, goddammit
 
-			
+						
 unicode for fpdf! i might need this
 	http://www.acko.net/node/56
 
@@ -27,8 +21,6 @@ a new paradigm: the BACKWARDS link... right joins
 		all families/parents for a meeting (the button/bubble interface)
 			even if nobody attended
 		job assignments (show all job descriptions, including blanks)
-
-		
 
 		
 
@@ -61,9 +53,11 @@ now, it might not need to be this complicated!
 
 		
 
+		the problem is putting div's inside of multicells, goddammit.
+			ok, do an xslt transform to turn that embedded html into pdml then!
+				some other time!
 
 		
-excel export. fuck labels.
 
 
 supply templates, subclass doctemplate

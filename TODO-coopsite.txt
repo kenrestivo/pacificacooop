@@ -21,11 +21,9 @@ coop web database
 	
 ??PHP
 bid sheets and gift certs
-	printable
-	honeycomb
+	gift cert!
 	blank bid sheet, second page
-	china's format? should i do that?
-	larger print and spread out on gift certs
+	china's border? should i do that?
 
 	
 			
@@ -3499,7 +3497,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	finally, the nested divs and such inside of multicell. i HAVE to have this!
+		this is ridiculous. there has to be a better way to get wrapped text
+			look at their sample code again
+		aha! you wrap text in a font, and it can have divs. structure, cool.
+			bold still doesn't work tho
+
+				finally, the nested divs and such inside of multicell. i HAVE to have this!
 		look at flowable documentation. there has to be a way.
 		and quote escaping too
 
@@ -6838,3 +6841,11 @@ A WORKABLE SOLUTION NEEEDED pdml	ok, try the custom font now!
 	likewise when creating a new package, pre-insert the max number for S???PHP/SQL
 change the package_number to a real fucking number!!
 	clamp to 1. no integers < 1
+    header and footer now!!
+		ugly, but it works
+	nasty bug with my wrapping longtext... fuck it, just yank the formatting	escaping of characters is fucked in the longtext, but seems fine elsewhere
+		i just unhtml it
+excel export. fuck labels.
+	larger print and spread out on gift certs
+	printable
+		honeycombe
