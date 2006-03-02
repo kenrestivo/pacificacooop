@@ -130,12 +130,29 @@ var $fb_currencyFields = array(
                               'setPackageDefaults_script', '',
                               wrapJS($js));
             
-            
-
             $form->updateElementAttr(
                 array($form->CoopForm->prependTable('package_value')), 
                 array('onchange' => 'setPackageDefaults(this)'));
+
+
+            // if there is no package number, get max set default to max
+            $temp =& $this->factory($this->__table);
+            $temp->query(sprintf(
+                    'select max(package_number) as max_package
+                 from %s
+                where package_type_id = %d and school_year = "%s"',
+                    $this->__table,
+                    COOP_PACKAGE_TYPE_SILENT,
+                    $form->CoopForm->getChosenSchoolYear()));
+            $temp->fetch();
+            
+            $form->setDefaults(
+                array($form->CoopForm->prependTable('package_number') => 
+                      (int) $temp->max_package + 1));
+
         }
+
+
 
         function fb_display_view(&$co)
         {
@@ -271,10 +288,11 @@ function incrementPackages()
 
             $fixer->query(
                 sprintf(
-                    'update packages 
+                    'update %s
 set package_number = package_number + 1
 where  package_number  >= %d
 and package_type_id = %d and school_year = "%s"',
+                    $this->__table,
                     $this->package_number,
                     $this->package_type_id,
                     $this->school_year));
@@ -294,10 +312,11 @@ function decrementPackages()
 
             $fixer->query(
                 sprintf(
-                    'update packages 
+                    'update %s
 set package_number = package_number - 1 
 where  package_number  >= %d
 and package_type_id = %d and school_year = "%s"',
+                    $this->__table,
                     $old->package_number,
                     $this->package_type_id,
                     $this->school_year));

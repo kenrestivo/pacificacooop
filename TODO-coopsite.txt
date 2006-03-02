@@ -17,15 +17,13 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 	
+	
 ???PHP/SQL
 change the package_number to a real fucking number!!
-	also subtract all in the hole made by this one going away!
-		do this at update time!
-	then hook deletes too, eliminate holes in package number
-	these dvd/movie/game things are a bitch
-		they are Fx, dammit. fix that.
-	likewise when creating a new package, pre-insert the max number for it
- 
+	likewise when creating a new package, pre-insert the max number for S
+
+
+	
 ??PHP
 bid sheets and gift certs
 	printable
@@ -54,6 +52,9 @@ BUGS
 	counts are not in sync between carrie and nag report
 	perms for packages with user_id 0 are ADMIN PRIVS!??!
 	in redirect, &coop not coop, causes TROUBLE with no cookies
+	intermittent: when you delete sub records, then come back through stack
+		TROUBLE ensues. when you finally delete the remaining package.
+		CoopForm::build() cached (requested edit) id 470 is not 0 which was found in find!
 
 				
 ??PHP/SQL
@@ -610,6 +611,9 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+	these dvd/movie/game things are a bitch
+		they are Fx, dammit. fix that. or do i need to? shouldn't
 
 	
 csv or quark xtags format too, probably, if possible, should be with iterator or toarray
@@ -6833,3 +6837,6 @@ A WORKABLE SOLUTION NEEEDED pdml	ok, try the custom font now!
 		preg_replace, basically
 		and deal with the 0's too, make them the max + 1
 	go grab some clean data and redo my update
+	also subtract all in the hole made by this one going away!
+		do this at update time!
+	then hook deletes too, eliminate holes in package number
