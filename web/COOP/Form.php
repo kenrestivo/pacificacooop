@@ -835,8 +835,10 @@ class coopForm extends CoopObject
                                          666);
                     }
 					$options[$tid] = 
-							 sprintf('%.42s...', 
-									 htmlentities(unHTML(strip_tags($far->concatLinkFields()))));
+                        htmlentities(
+                            sprintf('%.42s...', 
+                                    unHTML(
+                                        strip_tags($far->concatLinkFields()))));
 				}
 				
 	
@@ -857,9 +859,10 @@ class coopForm extends CoopObject
                         //TODO: try instead $far->obj->get($tf, $key)
 						$far->obj->$tf = $key;
 						$far->obj->find(true);
+                        //XXX why am i not doing unhtml(strip_tags()) here???
 						$options[$key] = 
-							 sprintf('%.42s...', 
-									 htmlentities($far->concatLinkFields()));
+							 htmlentities(sprintf('%.42s...', 
+                                                  $far->concatLinkFields()));
 					}
 				}
 				
