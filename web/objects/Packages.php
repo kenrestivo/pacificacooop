@@ -237,7 +237,7 @@ function public_packages(&$cp, $sy)
 					   'Value'), 
 				 'bgcolor=#aabbff align=left', 'TH');
 
-
+    // leading zeroes
 	$q = sprintf('select concat(package_types.prefix, lpad(package_number,2,0)),
        package_title, package_description,
         package_value
@@ -314,7 +314,7 @@ function decrementPackages()
             $fixer->query(
                 sprintf(
                     'update %s
-set package_number = package_number - 1 
+set package_number = abs(package_number - 1)
 where  package_number  >= %d
 and package_type_id = %d and school_year = "%s"',
                     $this->__table,
