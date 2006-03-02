@@ -21,13 +21,13 @@ coop web database
 change the package_number to a real fucking number!!
 	write a stupid php or python script to go fix this
 		preg_replace, basically
-		and deal with the 0's too
-			what happens when you update 0, i wonder?
+		and deal with the 0's too, make them the max + 1
 	go grab some clean data and redo my update
 	then deal with deletes too, eliminate holes in package number
 		- all
 	these dvd/movie/game things are a bitch
 		they are Fx, dammit. fix that.
+	likewise when creating a new package, pre-insert the max number for it
  
 ??PHP
 bid sheets and gift certs

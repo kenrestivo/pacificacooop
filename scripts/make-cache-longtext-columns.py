@@ -22,7 +22,7 @@ def alterTables(c):
         table=t['name']
         c.execute('explain %s' % (table)
         cols=c.fetchall()
-        c.execute('alter table %s add column %s_cache varchar(255)' % (table, )) 
+        c.execute('alter table %s add column _cache%s_ varchar(255)' % (table, )) 
 
 
 

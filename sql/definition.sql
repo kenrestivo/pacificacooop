@@ -29,6 +29,7 @@ USE coop;
 CREATE TABLE auction_donation_items (
   auction_donation_item_id int(32) NOT NULL unique auto_increment,
   item_description longtext,
+    _cache_item_description varchar(255),
   short_description varchar(255),
   quantity int(5) default NULL,
   item_value decimal(9,2) default NULL,
@@ -76,6 +77,7 @@ CREATE TABLE blog_entry (
   family_id int(32) default NULL,
   short_title varchar(255) default NULL,
   body longtext,
+    _cache_body varchar(255),
   show_on_members_page enum('Unknown','Yes','No') default 'Yes',
   show_on_public_page enum('Unknown','Yes','No') default 'No',
   PRIMARY KEY  (blog_entry_id)
@@ -211,6 +213,7 @@ CREATE TABLE enhancement_projects (
   enhancement_project_id int(32) NOT NULL unique auto_increment,
   project_name varchar(255) default NULL,
   project_description longtext,
+    _cache_project_description varchar,
   project_complete date default NULL,
   PRIMARY KEY  (enhancement_project_id),
 ) ;
@@ -243,6 +246,7 @@ CREATE TABLE events (
   description varchar(255) default NULL,
   realm_id int(32) default NULL,
   notes longtext,
+    _cache_notes varchar(255),
   url varchar(255) default NULL,
   PRIMARY KEY  (event_id)
 ) ;
@@ -428,6 +432,7 @@ CREATE TABLE packages (
   package_number int(5) default NULL,
   package_title varchar(255) default NULL,
   package_description longtext,
+     _cache_package_description varchar(255),
   donated_by_text varchar(255) default NULL,
   starting_bid decimal(9,2) default NULL,
   bid_increment decimal(9,2) default NULL,
@@ -719,6 +724,7 @@ CREATE TABLE ads (
     ad_id int(32) NOT NULL unique auto_increment,
     ad_description varchar(255) default NULL,
     ad_copy longtext default NULL,
+    _cache_ad_copy varchar(255),    
     freebie enum('Unknown','Yes','No') default NULL,
     artwork_provided enum('Unknown','Yes','No') default NULL,
     school_year varchar(50) default NULL,
@@ -747,6 +753,7 @@ CREATE TABLE solicitation_calls (
     method_of_contact enum('None', 'Email','Phone','InPerson') default NULL,
   company_id int(32) default NULL,
   call_note longtext,
+    _cache_call_note varchar(255), 
   family_id int(32) default NULL,
   done date default NULL,
     school_year varchar(50) default NULL,
@@ -785,6 +792,7 @@ CREATE TABLE files (
 CREATE TABLE in_kind_donations (
   in_kind_donation_id int(32) NOT NULL unique auto_increment,
   item_description longtext,
+    _cache_item_description varchar(255),
   quantity int(5) default NULL,
   item_value decimal(9,2) default NULL,
   date_received date default NULL,
@@ -852,6 +860,7 @@ CREATE TABLE job_descriptions (
   job_description_id int(32) NOT NULL unique auto_increment,
   summary varchar(255) default NULL,
   long_description longtext,
+    _cache_long_description varchar(255),
     family_type enum('New', 'Returning') default 'New',
     board_position enum('No', 'Yes') default 'No',
   free_tuition_days int(3),
@@ -974,14 +983,16 @@ create table instructions(
 instruction_id int(32) primary key not null unique auto_increment,
 table_name varchar(255) default NULL,
 action enum('Add', 'Edit', 'Delete', 'View', 'Details') default null,
-instruction longtext
+instruction longtext,
+_cache_instruction varchar(255)
 );
 
 
 create table minutes(
 minutes_id int(32) primary key not null unique auto_increment,
 calendar_event_id int(32),
-body longtext
+body longtext,
+_cache_body varchar(255)
 );
 
 

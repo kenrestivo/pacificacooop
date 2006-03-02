@@ -89,3 +89,9 @@ class Packages(SQLObject):
               fromDatabase = True
               idName='package_id'
               uglyName='packageID'
+
+
+## XXX ugly hack required to deal with leading column names in packages, alas
+for i in Packages.sqlmeta.columnList:
+    if i.dbName == 'cache_package_description':
+        i.dbName = '_cache_package_description'
