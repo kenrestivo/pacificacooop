@@ -22,9 +22,10 @@ chdir('../');
 
 require_once('CoopTALPage.php');
 
-class BidSheetReport extends CoopTALPage
+class PublicSpringfest extends CoopTALPage
 {
     var $template_file = 'springfest-microsite-shell.xhtml';
+    var $formattedTitle = array();
 
     function build()
         {
@@ -45,21 +46,18 @@ class BidSheetReport extends CoopTALPage
     $this->title = 'Springfest ' . $sy;
 
 
-
-
-
     
     /// TODO: move this to the database!! let user change names, add/remove
     $menu = array('home' => array('class' => 'nav',
                                   'content' => 'Overview'),
                   'event' => array('class' => 'nav',
-                                   'content' => 'Where and When'),
+                                   'content' => 'The Event'),
                   'sponsorship' => array('class' => 'nav',
                                          'content' => 'Sponsorship'),
                   'auction' => array('class' => 'nav',
                                      'content' => 'Auction'),
                   'raffle' => array('class' => 'nav',
-                                    'content' => 'Surfboard Raffle'),
+                                    'content' => 'Raffle'),
                   'about' => array('class' => 'nav',
                                    'content' => 'About Us')
         );
@@ -89,8 +87,15 @@ class BidSheetReport extends CoopTALPage
 
 
     ///TODO: put in the stuff from public_auction here
+    $this->formattedTitle = array(
+        'src'=> sprintf('%s/custom_font.php?text=%s&amp;size=18&amp;font=%s',
+                        COOP_ABSOLUTE_URL_PATH, 
+                        urlencode($this->title), 
+                        $this->title,
+                        // TODO: get font name out of db
+                        urlencode('Bernhard_Modern_BT.ttf')),
+        'alt'=> $this->title); 
 
-    $this->printDebug("sy $sy nav $nav ". $families->getChosenSchoolYear(), 1);
 
  }
 }

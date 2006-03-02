@@ -37,3 +37,4 @@ update package_types set prefix = 'B' where package_type_id = 4;
 update package_types set prefix = 'F' where package_type_id = 5;
 update package_types set prefix = 'U' where package_type_id = 6;
 
+-- update package instructions: about renumbering

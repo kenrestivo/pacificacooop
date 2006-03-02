@@ -1074,6 +1074,8 @@ function triggerNotices($audit_id)
             if($found < 1){
                 return ;
             }
+            // TODO: EVIL HTML IN HERE! just retun instruction
+            // let the caller format it as needed (html, json, xls, pdf, etc)
             return '<div class="instructions">' . $inst->instruction . '</div>';
         }
     

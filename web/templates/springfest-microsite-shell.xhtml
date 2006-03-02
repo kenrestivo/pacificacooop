@@ -16,7 +16,8 @@
     
     <div class="container">
       <div class="titleblock">
-        <h1 style="float: left" tal:content="page/title"></h1>
+        <img style="float: left" 
+             tal:attributes="src page/formattedTitle/src; alt page/formattedTitle/alt"></img>
 
         <div tal:condition="page/auth/uid" 
              tal:content="structure page/loginBlock"></div>

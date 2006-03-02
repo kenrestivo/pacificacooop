@@ -176,6 +176,8 @@ class CoopTest:
             print '[%s] IS NOT AN HTML page.' % (self.getURL(), )
             return 0
         self.dumpHTML()
+        #XXX if there's a zero response on a non-html page,
+        # this misleading error gets thrown
         assert(1 == wr.getContentAsString().count('</html>'))
         if self.validator_url:
             self.validateMarkup()

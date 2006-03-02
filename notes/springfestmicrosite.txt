@@ -2,6 +2,8 @@ create a  proper springfest microsite
 
 put the login block in, so people know what they got
 
+instead of setref, put stuff in THIS, page
+
 database-ize this!
 	pages table-- one for each page:
 		"name", basically URL short

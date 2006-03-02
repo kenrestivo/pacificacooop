@@ -14,10 +14,14 @@ if (!isset($_GET["size"])){
     $font_size = $_GET["size"];
 }
 
+if (!isset($_GET["font"])){
+    $font = 'Bernhard_Modern_BT.ttf';
+}    else {
+    $font = $_GET["font"];
+}
 
-// TODO: go get the font name/path from the database, based on schoolyear
-// springfest settings
-$font = "../fonts/Bernhard_Modern_BT.ttf";
+
+$fontpath = "../fonts/$font";
 
 
 // angle of the font in degrees
@@ -28,7 +32,7 @@ $stroke = 2;
  
 
 
-$bbox = imagettfbbox($font_size, $font_angle, $font, $text);
+$bbox = imagettfbbox($font_size, $font_angle, $fontpath, $text);
 $x_size = abs($bbox[4] - $bbox[0]);
 $y_size = abs($bbox[5] - $bbox[1]);
 
@@ -44,7 +48,7 @@ $startx = $font_size/4;
 $starty = $font_size*1.25;
 
 imagettftext($im, $font_size, $font_angle, $startx, $starty, 
-             $textcolor, $font, $text);
+             $textcolor, $fontpath, $text);
  
 // set the correct HTTP header for a PNG image
 header("Content-type: image/png");
