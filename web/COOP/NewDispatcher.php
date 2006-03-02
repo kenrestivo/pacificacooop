@@ -114,6 +114,12 @@ class CoopNewDispatcher
                 $res .= $alert;
             }
             $res .= '</div>';
+
+
+            //TODO: some variation on the old "perms display" from auth.inc
+            //maybe at or top of doc? with editor to change them? ;-)
+            
+            $res .= $atd->getInstructions('view');
             
 
             if(is_callable(array($atd->obj, 'fb_display_view'))){
@@ -121,11 +127,6 @@ class CoopNewDispatcher
                 return $res . $atd->obj->fb_display_view(&$atd);
             }
             
-
-            //TODO: some variation on the old "perms display" from auth.inc
-            //maybe at or top of doc? with editor to change them? ;-)
-            
-            $res .= $atd->getInstructions('view');
             
             // use the built-in find. AND FORCE ALWAYS TO SHOW!
             $res .= $atd->simpleTable(true, true);
