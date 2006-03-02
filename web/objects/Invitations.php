@@ -329,7 +329,7 @@ from invitations where school_year = "%s" group by label_printed order by label_
                         'base' => 'maint/exportxl.php',
                         'tags' => array('title' => 'Export to Excel Spreadsheet'),
                         'value' => 
-                        '<img src="/images/x-office-spreadsheet.png"> Export ' . $this->fb_formHeaderText,
+                        '<img src="/images/x-office-spreadsheet.png" alt="Export to Excel Spreadsheet"> Export ' . $this->fb_formHeaderText,
                         'inside' => array('format' => 'excel')));
                 return $res;
             }

@@ -20,8 +20,9 @@ coop web database
 
 ??PHP
 bid sheets and gift certs
-	try to actually print a page or two
 	blank bid sheet, second page
+		sb easy. just junk array, repeat more
+	try to actually print a page or two
 	china's border? should i try that?
 
 	
@@ -32,13 +33,7 @@ that report for michelle: showing all the items and compoennts
 	where are my notes on this?
 
 
-	
-???PHP/JS
-any way to renumber the packages??!
-	i.e. some drag and drop interface?
-	or even an up/down thing would be nice
-
-	
+		
 BUGS
 	fix that ad insertion anomaly in the report
 		solicitation ad inserton != grand total ad insertion. why?
@@ -6853,3 +6848,7 @@ excel export. fuck labels.
 e
 	now the gift certificate, goddammit
 	gift cert!
+???PHP/JS
+any way to renumber the packages??!
+	i.e. some drag and drop interface?
+	or even an up/down thing would be nice
