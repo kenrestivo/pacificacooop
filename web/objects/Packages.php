@@ -326,7 +326,10 @@ and package_type_id = %d and school_year = "%s"',
 
 function update()
         {
-            /// does it matter what order i do this in? test it.
+            // clamp. people will put dashes in; avoid Trouble
+            $this->package_number = abs($this->package_number);
+
+            /// does it matter what order i do this in? this seems right.
             $this->decrementPackages();
             $this->incrementPackages();
             parent::update();
@@ -334,6 +337,9 @@ function update()
 
 function insert()
         {
+            // clamp. people will put dashes in; avoid Trouble
+            $this->package_number = abs($this->package_number);
+
             $this->incrementPackages();
             parent::insert();
         }
