@@ -29,6 +29,7 @@ class CoopTALPage extends coopPage
 {
     var $template; // reference to phptal template
     var $template_file; // filename of template.
+    var $extra_header_stuff = ''; // any other header structure info, css, etc
     
     // virtual method. put your stuff in subclass of it
     function build()

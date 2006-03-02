@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <link rel="stylesheet" href="main.css" title="main" 
           tal:attributes="href string:${page/uri_path}/main.css" />
-    <div tal:replace="structure extra_css"></div>
+    <div tal:replace="structure page/extra_header_stuff"></div>
 
     <title tal:content="page/title"></title>
   </head>
@@ -26,7 +26,7 @@
 
       <div>
         <ul class="navbar">
-        <li tal:repeat="item nav"><a 
+        <li tal:repeat="item page/nav"><a 
                tal:attributes="class item/class; href repeat/item/key"
                tal:content="item/content">Nav Item</a>
         </li>

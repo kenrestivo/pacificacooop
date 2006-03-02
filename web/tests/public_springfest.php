@@ -26,6 +26,7 @@ class PublicSpringfest extends CoopTALPage
 {
     var $template_file = 'springfest-microsite-shell.xhtml';
     var $formattedTitle = array();
+    var $nav = array();
 
     function build()
         {
@@ -48,7 +49,7 @@ class PublicSpringfest extends CoopTALPage
 
     
     /// TODO: move this to the database!! let user change names, add/remove
-    $menu = array('home' => array('class' => 'nav',
+    $this->nav = array('home' => array('class' => 'nav',
                                   'content' => 'Overview'),
                   'event' => array('class' => 'nav',
                                    'content' => 'The Event'),
@@ -64,26 +65,25 @@ class PublicSpringfest extends CoopTALPage
 
 
     /// XXX miserable hack, there has to be a better way to do it in pure CSS
-    $css = '<style type="text/css">';
-    $menu_width = 100.0/count(array_keys($menu));
+    $this->extra_header_stuff = '<style type="text/css">';
+    $menu_width = 100.0/count(array_keys($this->nav));
     foreach(array('a.nav:link', 'a.nav:visited', 'a.nav:hover', 
                   'a.nav:active', 'a.navcurrent') as $selector)
     {
-        $css .= sprintf('%s { width: %0.2f%% } ', 
+        $this->extra_header_stuff .= sprintf('%s { width: %0.2f%% } ', 
                         $selector, $menu_width);
     }
-    $css .= '</style>';
-    $this->template->setRef('extra_css', $css);
+    $this->extra_header_stuff .= '</style>';
     
 
     /////////////// set current nav
-    if(in_array($nav, array_keys($menu))){
-        $menu[$nav]['class'] = 'navcurrent';
+    if(in_array($nav, array_keys($this->nav))){
+        $this->nav[$nav]['class'] = 'navcurrent';
     } else {
-        $menu['home']['class'] = 'navcurrent';
+        $this->nav['home']['class'] = 'navcurrent';
     }
     
-    $this->template->setRef('nav', $menu);
+
 
 
     ///TODO: put in the stuff from public_auction here

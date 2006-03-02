@@ -20,3 +20,4 @@ AddCharset utf-8 .php .inc .html
 # just for testing
 #RewriteEngine on
 #RewriteRule ^RSVP$ tests/sane-donate.php
+#RewriteRule  ^springfest(.*$)  tests/public_springfest.php/$1 [L]
