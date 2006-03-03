@@ -38,19 +38,43 @@
         <p>Thanks to our generous sponsors:</p>
         <div tal:repeat="level page/sponsors">
           <p>${repeat/level/key} Contributors<br />
-          <span class="small">($$FOO and above)</span></p>
+          <span class="small">(${level/price} and above)</span></p>
           <ul>
-          <li tal:repeat="sponsor level/names"
-               tal:content="sponsor/name">sponsor name</li>
+            <li tal:repeat="sponsor level/names">
+              <span  tal:condition="not:sponsor/url" 
+                    tal:content="sponsor/name">sponsor name</span>
+              <a tal:condition="sponsor/url" 
+                 tal:attributes="href sponsor/url" 
+                 tal:content="sponsor/name">sponsor name</a>
+              
+            </li>
           </ul>
         </div>    
         
+        
+        <p>Our Advertisers</p>
+        <ul>
+          <li tal:repeat="sponsor page/ads">
+            <span  tal:condition="not:sponsor/url" 
+                   tal:content="sponsor/name">sponsor name</span>
+            <a tal:condition="sponsor/url" 
+               tal:attributes="href sponsor/url" 
+                 tal:content="sponsor/name">sponsor name</a>
+            
+          </li>
+        </ul>
+        
         <p>And Our Donors</p>
         <ul>
-          <li tal:repeat="donor page/donors"
-              tal:content="donor/name">donor name</li>
-        </ul>
-
+            <li tal:repeat="sponsor page/donors">
+              <span  tal:condition="not:sponsor/url" 
+                    tal:content="sponsor/name">sponsor name</span>
+              <a tal:condition="sponsor/url" 
+                 tal:attributes="href sponsor/url" 
+                 tal:content="sponsor/name">sponsor name</a>
+              
+            </li>
+          </ul>
       </div>
 
 
