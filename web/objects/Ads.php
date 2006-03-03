@@ -91,23 +91,41 @@ function public_ads(&$cp, $sy)
 {
 	$res .= '<div class="sponsor">';
 	$res .= "<p><b>Our advertisers:</b></p>";
-	$ad =& new CoopObject(&$cp, 'ads', &$nothing);
-	$ad->obj->query("select distinct * from ads left join companies on companies.company_id = ads.company_id left join sponsorships on companies.company_id = sponsorships.company_id where ads.school_year = '$sy' and sponsorship_id is null order by if(companies.listing is not null, companies.listing,companies.company_name)");
-	$res .= "<ul>";
-	while($ad->obj->fetch()){
-		if($ad->obj->url > ''){
-			$res .= sprintf('<li><a href="%s">%s</a></li>', 
-							 $cp->fixURL($ad->obj->url),
-							 $ad->obj->listing? $ad->obj->listing : $ad->obj->company_name);
-		} else {
-			$res .= sprintf("<li>%s</li>", 
-                            $ad->obj->listing? $ad->obj->listing: $ad->obj->company_name);
-		}
-	}
+
+    $ads = $this->public_ads_structure(&$co);
+    
+    foreach($ads as $ad){
+        $res .= $ad['url'] 
+            ? sprintf('<li><a href="%s">%s</a></li>', 
+                      $ad['url'],
+                      $ad['name'])
+            :sprintf("<li>%s</li>", 
+                     $ad['name']);
+        
+    }
 	$res .= "</ul></div><!-- end ad div -->";
 
 	return $res;
 }
 
+  function public_ads_structure(&$co)
+        {
+            $sy = $co->getChosenSchoolYear();
+            $companies =& new CoopView(&$co->page, 'companies', &$nothing);
+            $companies->obj->query("select distinct * from ads left join companies on companies.company_id = ads.company_id left join sponsorships on companies.company_id = sponsorships.company_id where ads.school_year = '$sy' and sponsorship_id is null order by if(companies.listing is not null, companies.listing,companies.company_name)");
+            $res = array();
+                        $i = 0;
+            while($companies->obj->fetch()){
+                $res[$i]['name'] =  $companies->obj->listing? 
+                    $companies->obj->listing : 
+                    $companies->obj->company_name;
+                $res[$i]['url'] = $companies->obj->url > '' ?
+                    $co->page->fixURL($companies->obj->url) : false;
+                $i++;
+            }
+            
+            $co->page->confessArray($res, 'ads structure', 4);
+            return $res;
+        }
 
 }

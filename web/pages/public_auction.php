@@ -46,11 +46,11 @@ print '<div class="leftCol" id="leftCol">';
 $sp =& new CoopView(&$cp, 'sponsorships', &$none);
 print $sp->obj->public_sponsors(&$sp, $sy);
 
-$ad =& new CoopObject(&$cp, 'ads', &$none);
+$ad =& new CoopView(&$cp, 'ads', &$none);
 print $ad->obj->public_ads(&$cp, $sy);
 
 
-$inkind =& new CoopObject(&$cp, 'in_kind_donations', &$none);
+$inkind =& new CoopView(&$cp, 'in_kind_donations', &$none);
 print $inkind->obj->public_donors(&$inkind, $sy);
 print '</div><!-- end leftcol div -->';
 

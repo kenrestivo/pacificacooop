@@ -34,9 +34,26 @@
       </div>
       
 
-      <div class="leftCol" id="leftCol">
-        <div tal:replace="structure sponsors">Our Sponsors</div>
+      <div class="leftCol sponsor" id="leftCol">
+        <p>Thanks to our generous sponsors:</p>
+        <div tal:repeat="level page/sponsors">
+          <p>${repeat/level/key} Contributors<br />
+          <span class="small">($$FOO and above)</span></p>
+          <ul>
+          <li tal:repeat="sponsor level/names"
+               tal:content="sponsor/name">sponsor name</li>
+          </ul>
+        </div>    
+        
+        <p>And Our Donors</p>
+        <ul>
+          <li tal:repeat="donor page/donors"
+              tal:content="donor/name">donor name</li>
+        </ul>
+
       </div>
+
+
 
       <div class="centerCol" >
         <div class="short_summary" 

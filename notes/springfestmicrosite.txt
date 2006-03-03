@@ -1,9 +1,9 @@
 create a  proper springfest microsite
 
-put the login block in, so people know what they got
+put the links in on the microsite!! i have the data in teh struct, use it
+	attribute, i think, conditionally
 
-instead of setref, put stuff in THIS, page
-	ah, extra_css was replaced with some header thing in tal templ, go look
+put the login block in, so people know what they got
 
 place for the briery, band, etc, info
 

@@ -97,6 +97,16 @@ class PublicSpringfest extends CoopTALPage
         'alt'=> $this->title); 
 
 
+    $sp =& new CoopView(&$this, 'sponsorships', &$none);
+    $this->sponsors =& $sp->obj->public_sponsors_structure(&$sp);
+
+    $inkind =& new CoopObject(&$this, 'in_kind_donations', &$none);
+    $this->donors =& $inkind->obj->public_donors_structure(&$inkind);
+
+    $ad =& new CoopObject(&$this, 'ads', &$none);
+    $this->ads =& $ad->obj->public_ads_structure(&$ad);
+
+
  }
 }
 
