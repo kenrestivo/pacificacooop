@@ -13,6 +13,11 @@
     <!--[if gte IE 5.5000]> 
         <script type="text/javascript" src="lib/pngfix.js"></script> 
         <![endif]--> 
+
+    <div tal:omit-tag="" metal:define-macro="sponsor_line">
+    </div>
+
+
     
     <div class="container">
       <div class="titleblock">
@@ -38,7 +43,9 @@
         <p>Thanks to our generous sponsors:</p>
         <div tal:repeat="level page/sponsors">
           <p>${repeat/level/key} Contributors<br />
-          <span class="small">(${level/price} and above)</span></p>
+          <span class="small" 
+                tal:comment="XXX the $$$ won't work, need space" >
+          ($$ ${level/price} and above)</span></p>
           <ul>
             <li tal:repeat="sponsor level/names">
               <span  tal:condition="not:sponsor/url" 

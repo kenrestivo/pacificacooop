@@ -1,9 +1,6 @@
 create a  proper springfest microsite
 
-put the links in on the microsite!! i have the data in teh struct, use it
-	attribute, i think, conditionally
-
-put the login block in, so people know what they got
+$! how? htmlentities?
 
 place for the briery, band, etc, info
 
@@ -66,15 +63,12 @@ on each page:
 	sponsorship blogroll down the side
 
 
-use phptal for this beast
 	
 then enter the crap for previous years, from OLD directory on public website
 
 	
 each year, update script
 	copy/paste from previous year, mostly
-
-
 
 
 multi-user self-editing is pretty much stuck behind the ibrowser in tinymce
