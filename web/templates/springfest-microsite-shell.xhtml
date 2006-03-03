@@ -14,9 +14,14 @@
         <script type="text/javascript" src="lib/pngfix.js"></script> 
         <![endif]--> 
 
-    <div tal:omit-tag="" metal:define-macro="sponsor_line">
+    <div tal:omit-tag="" metal:define-macro="iterate_sponsors">
+        <span  tal:condition="not:sponsor/url" 
+               tal:content="sponsor/name">sponsor name</span>
+        <a tal:condition="sponsor/url" 
+           tal:attributes="href sponsor/url" 
+           tal:content="sponsor/name">sponsor name</a>
     </div>
-
+      
 
     
     <div class="container">
@@ -48,12 +53,7 @@
           ($$ ${level/price} and above)</span></p>
           <ul>
             <li tal:repeat="sponsor level/names">
-              <span  tal:condition="not:sponsor/url" 
-                    tal:content="sponsor/name">sponsor name</span>
-              <a tal:condition="sponsor/url" 
-                 tal:attributes="href sponsor/url" 
-                 tal:content="sponsor/name">sponsor name</a>
-              
+              <div metal:use-macro="iterate_sponsors"></div>
             </li>
           </ul>
         </div>    
@@ -62,26 +62,17 @@
         <p>Our Advertisers</p>
         <ul>
           <li tal:repeat="sponsor page/ads">
-            <span  tal:condition="not:sponsor/url" 
-                   tal:content="sponsor/name">sponsor name</span>
-            <a tal:condition="sponsor/url" 
-               tal:attributes="href sponsor/url" 
-                 tal:content="sponsor/name">sponsor name</a>
-            
-          </li>
+              <div metal:use-macro="iterate_sponsors"></div>
+            </li>
+
         </ul>
         
         <p>And Our Donors</p>
         <ul>
-            <li tal:repeat="sponsor page/donors">
-              <span  tal:condition="not:sponsor/url" 
-                    tal:content="sponsor/name">sponsor name</span>
-              <a tal:condition="sponsor/url" 
-                 tal:attributes="href sponsor/url" 
-                 tal:content="sponsor/name">sponsor name</a>
-              
+          <li tal:repeat="sponsor page/donors">
+            <div metal:use-macro="iterate_sponsors"></div>
             </li>
-          </ul>
+        </ul>
       </div>
 
 

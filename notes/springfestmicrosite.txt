@@ -1,7 +1,5 @@
 create a  proper springfest microsite
 
-$! how? htmlentities?
-
 place for the briery, band, etc, info
 
 database-ize this!
@@ -75,3 +73,5 @@ multi-user self-editing is pretty much stuck behind the ibrowser in tinymce
 	get that working, and you're ready to go with this
 
 the schoolyear constraint is a miserable hack, go fix
+
+$! how? htmlentities?
