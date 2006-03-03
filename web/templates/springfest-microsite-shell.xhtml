@@ -14,15 +14,16 @@
         <script type="text/javascript" src="lib/pngfix.js"></script> 
         <![endif]--> 
 
-    <div tal:omit-tag="" metal:define-macro="iterate_sponsors">
-        <span  tal:condition="not:sponsor/url" 
-               tal:content="sponsor/name">sponsor name</span>
-        <a tal:condition="sponsor/url" 
-           tal:attributes="href sponsor/url" 
-           tal:content="sponsor/name">sponsor name</a>
-    </div>
+    <li metal:define-macro="iterate_sponsors"
+        tal:comment="remember to name the sponsors 'sponsor' when using this">
+      <span  tal:condition="not:sponsor/url" 
+             tal:content="sponsor/name">sponsor name</span>
+      <a tal:condition="sponsor/url" 
+         tal:attributes="href sponsor/url" 
+         tal:content="sponsor/name">sponsor name</a>
+    </li>
       
-
+    
     
     <div class="container">
       <div class="titleblock">
@@ -52,26 +53,23 @@
                 tal:comment="XXX the $$$ won't work, need space" >
           ($$ ${level/price} and above)</span></p>
           <ul>
-            <li tal:repeat="sponsor level/names">
-              <div metal:use-macro="iterate_sponsors"></div>
-            </li>
+            <li tal:repeat="sponsor level/names" 
+                metal:use-macro="iterate_sponsors"></li>
           </ul>
         </div>    
         
         
         <p>Our Advertisers</p>
         <ul>
-          <li tal:repeat="sponsor page/ads">
-              <div metal:use-macro="iterate_sponsors"></div>
-            </li>
+          <li tal:repeat="sponsor page/ads"
+              metal:use-macro="iterate_sponsors"></li>
 
         </ul>
         
         <p>And Our Donors</p>
         <ul>
-          <li tal:repeat="sponsor page/donors">
-            <div metal:use-macro="iterate_sponsors"></div>
-            </li>
+          <li tal:repeat="sponsor page/donors"
+              metal:use-macro="iterate_sponsors"> </li>
         </ul>
       </div>
 
