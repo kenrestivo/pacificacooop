@@ -52,7 +52,7 @@ class PublicSpringfest extends CoopTALPage
     $this->nav = array('home' => array('class' => 'nav',
                                   'content' => 'Overview'),
                   'event' => array('class' => 'nav',
-                                   'content' => 'The Event'),
+                                   'content' => 'Event'),
                   'sponsorship' => array('class' => 'nav',
                                          'content' => 'Sponsorship'),
                   'auction' => array('class' => 'nav',

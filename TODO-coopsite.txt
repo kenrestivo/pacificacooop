@@ -20,6 +20,7 @@ coop web database
 
 ??PHP
 bid sheets and gift certs
+	fix left/right margins
 	china's border? should i try that?
 	blank bid sheet, second page
 		sb easy. just junk array, repeat more
@@ -6863,3 +6864,6 @@ put the links in on the microsite!! i have the data in teh struct, use it
 	attribute, i think, conditionally
 put the login block in, so people know what they got
 use phptal for this beast
+
+place for the briery, band, etc, info--- where??!
+	freeform, in event, dammit.

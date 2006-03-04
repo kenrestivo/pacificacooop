@@ -1,12 +1,12 @@
 create a  proper springfest microsite
 
-place for the briery, band, etc, info
 
 database-ize this!
 	pages table-- one for each page:
-		"name", basically URL short
-		menushort-- display
-		class?!
+		shorturl fragment
+		menu short name-- display
+		class?! or use shorturl?
+			i.e. dispatch to a subclass based on name
 		different each schoolyear too... remmeber to put in new year!
 			pre-insert "nothing here yet" if nothing there
 		text (short)		
@@ -18,6 +18,12 @@ database-ize this!
 		home
 		solicit
 		about
+
+get the footer to float to the bootom of the leftmenu
+	like in the index.php page, i know how to do this, i think.
+
+include edit links in template, if cookie'ed and permitted
+
 
 specials, in addition to the stuff in the text boxin:
 	home page: list of all the summaries!
@@ -33,8 +39,6 @@ ok, now abstract all this out somehow
 	functions for each //// item
 	possibly a dispatcher
 
-
-include edit links in template, if cookie'ed and permitted
 
 
 		

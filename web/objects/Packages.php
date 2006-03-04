@@ -35,7 +35,8 @@ class Packages extends CoopDBDO
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
 	var $fb_textFields = array ('package_description');
-	var $fb_linkDisplayFields = array ('package_number', 
+	var $fb_linkDisplayFields = array ('package_type_id',
+                                       'package_number', 
                                        'package_title',
 									   'package_description');
 	var $fb_enumFields = array ('item_type', 'package_type', 'display_publicly');
@@ -120,7 +121,7 @@ var $fb_currencyFields = array(
                         f["%s"].value = Math.ceil(self.value / %d);
                         f["%s"].value = Math.ceil(self.value / %d);
                 }',
-                $form->_attributes['name'],
+                $form->_attributes['id'],
                 $form->CoopForm->prependTable('starting_bid'),
                 COOP_DEFAULT_STARTING_BID_DIVISOR,
                 $form->CoopForm->prependTable('bid_increment'),
@@ -162,7 +163,7 @@ var $fb_currencyFields = array(
             
             if($co->isPermittedField(null, true, true) >=  ACCESS_EDIT){
                 $res .= $co->page->selfURL(
-                    array('value' => 'Change Sort Order',
+                    array('value' => 'Change Permament Sort Order',
                           'inside' => array('action' => 'view',
                                             'table' => 'package_types',
                                             'push' => $co->table)));

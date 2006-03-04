@@ -5,9 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <link rel="stylesheet" href="main.css" title="main" 
           tal:attributes="href string:${page/uri_path}/main.css" />
-    <div tal:replace="structure page/extra_header_stuff"></div>
-
     <title tal:content="page/title"></title>
+    <div tal:replace="structure page/extra_header_stuff"></div>
   </head>
   <body>
     <!--[if gte IE 5.5000]> 
@@ -23,8 +22,7 @@
          tal:content="sponsor/name">sponsor name</a>
     </li>
       
-    
-    
+        
     <div class="container">
       <div class="titleblock">
         <img style="float: left" 
@@ -50,7 +48,7 @@
         <div tal:repeat="level page/sponsors">
           <p>${repeat/level/key} Contributors<br />
           <span class="small" 
-                tal:comment="XXX the $$$ won't work, need space" >
+                tal:comment="the #036 is a hack around a bug in PHPTAL" >
           (&#036;${level/price} and above)</span></p>
           <ul>
             <li tal:repeat="sponsor level/names" 
