@@ -89,7 +89,7 @@ class Ads extends CoopDBDO
 /// by the caller in whatever CSS or javascript way is needed
 function public_ads(&$co, $sy)
 {
-	$res = "<p><b>Our advertisers:</b></p>";
+    $res = '<div class="sponsor"><p><b>Our advertisers:</b></p>';
 
     $ads = $this->public_ads_structure(&$co);
     
@@ -103,7 +103,8 @@ function public_ads(&$co, $sy)
                      $ad['name']);
         
     }
-	$res .= "</ul>";
+    $res .= "</ul></div><!-- end advertiser div -->";
+
 
 	return $res;
 }

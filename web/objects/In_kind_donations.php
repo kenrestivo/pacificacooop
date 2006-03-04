@@ -74,7 +74,7 @@ class In_kind_donations extends CoopDBDO
             $co->chosenSchoolYear = $sy; ///XXX nasty hack
 
 
-            $res .= '<div class="sponsor">';
+            $res = '<div class="sponsor">';
             $res .= "<p><b>And Our Donors:</b></p>";
             $res .= "<ul>";
 
