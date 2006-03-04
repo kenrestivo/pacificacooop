@@ -51,7 +51,7 @@
           <p>${repeat/level/key} Contributors<br />
           <span class="small" 
                 tal:comment="XXX the $$$ won't work, need space" >
-          ($$ ${level/price} and above)</span></p>
+          (&#036;${level/price} and above)</span></p>
           <ul>
             <li tal:repeat="sponsor level/names" 
                 metal:use-macro="iterate_sponsors"></li>
@@ -63,7 +63,6 @@
         <ul>
           <li tal:repeat="sponsor page/ads"
               metal:use-macro="iterate_sponsors"></li>
-
         </ul>
         
         <p>And Our Donors</p>
