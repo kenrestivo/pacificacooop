@@ -1005,6 +1005,17 @@ prefix varchar(3)
 );
 
 
+create table springfest_microsite(
+springfest_microsite_id int(32) primary key not null unique auto_increment,
+url_fragment varchar(50),
+name varchar(255),
+content_summary longtext,
+_cache_content_summary varchar(255),
+content_continued longtext,
+_cache_content_continued varchar(255),
+school_year varchar(50) default NULL
+);
+
 
 
 -- EOF

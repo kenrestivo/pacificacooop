@@ -47,7 +47,7 @@ $sp =& new CoopView(&$cp, 'sponsorships', &$none);
 print $sp->obj->public_sponsors(&$sp, $sy);
 
 $ad =& new CoopView(&$cp, 'ads', &$none);
-print $ad->obj->public_ads(&$cp, $sy);
+print $ad->obj->public_ads(&$ad, $sy);
 
 
 $inkind =& new CoopView(&$cp, 'in_kind_donations', &$none);

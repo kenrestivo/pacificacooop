@@ -281,6 +281,8 @@ order by package_types.sort_order, cast(packages.package_number as signed), pack
 } // end public packages
 
 
+
+
 // bump all package numbers ahead of the current one
 function incrementPackages()
         {
@@ -324,6 +326,10 @@ and package_type_id = %d and school_year = "%s"',
                     $this->school_year));
         }
 
+
+
+//XXX all functions below are potentially racey in a multi-user environment
+//i should probably do some transaction commit/rollback here
 
 function update()
         {

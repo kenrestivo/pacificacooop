@@ -87,14 +87,14 @@ class Ads extends CoopDBDO
 /// it does not use the proper format for inclusion here in the dataobject
 /// it needs to also return a hashtable(array) which can then be formatted
 /// by the caller in whatever CSS or javascript way is needed
-function public_ads(&$cp, $sy)
+function public_ads(&$co, $sy)
 {
-	$res .= '<div class="sponsor">';
 	$res .= "<p><b>Our advertisers:</b></p>";
 
     $ads = $this->public_ads_structure(&$co);
     
     foreach($ads as $ad){
+        $res = "<ul>";
         $res .= $ad['url'] 
             ? sprintf('<li><a href="%s">%s</a></li>', 
                       $ad['url'],
@@ -103,7 +103,7 @@ function public_ads(&$cp, $sy)
                      $ad['name']);
         
     }
-	$res .= "</ul></div><!-- end ad div -->";
+	$res .= "</ul>";
 
 	return $res;
 }

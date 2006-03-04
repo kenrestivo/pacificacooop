@@ -74,11 +74,12 @@
 
       <div class="centerCol" >
         <div class="short_summary" 
-             tal:content="structure short_summary">Short summary</div>
+             tal:content="structure content_summary">Short summary</div>
         <!-- TODO: "more" link -->
         <div class="long_content" 
-             tal:content="structure long_content">Long Content</div>
+             tal:content="structure content_continued">Long Content</div>
         <div class="extra_stuff" 
+             tal:comment="XXX shouldn't this be a dynamic METAL macro?"
              tal:content="structure extra_stuff">Extra programattic stuff</div>
 
       </div>

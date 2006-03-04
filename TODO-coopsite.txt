@@ -17,14 +17,18 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 
-
+BUGS
+	ups store SHOULD be a sponsor! they donated $375 fo rchrissakes!
+		and sogo too
+		GO FIX! the update isn't getting called for some reason!
+	
 ??PHP
 bid sheets and gift certs
-	fix left/right margins
-	china's border? should i try that?
+	left margin is wider than right? try one.
+	try to actually print a page or two, on a couple different printers
 	blank bid sheet, second page
 		sb easy. just junk array, repeat more
-	try to actually print a page or two
+	china's border? should i try that?
 
 	
 			
@@ -38,7 +42,7 @@ that report for michelle: showing all the items and compoennts
 ??PHP/SQL
 parent ed (parented.txt)
 	that margolis form: right join basiclally
-	make-up stuff -- wacky sql joins, i fear it.
+	meeting make-up stuff -- wacky sql joins, i fear it.
 	nag-only (i.e. enhancement hack)
 
 	
@@ -6867,3 +6871,5 @@ use phptal for this beast
 
 place for the briery, band, etc, info--- where??!
 	freeform, in event, dammit.
+get the footer to float to the bootom of the leftmenu
+	like in the index.php page, i know how to do this, i think.
