@@ -364,6 +364,31 @@ having cash_donations >= 150
 order by company_name;
 
 
+
+--- nasty leads sponsorsips
+select leads.lead_id, 
+(coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0)) as payment_amount 
+from leads 
+left join 
+    (select lead_id, sum(payment_amount) as total 
+        from leads_income_join as linj 
+            left join income on linj.income_id = income.income_id 
+        where income.school_year = '2005-2006' 
+        group by linj.lead_id) as inc 
+   on leads.lead_id = inc.lead_id 
+left join 
+    (select lead_id, sum(payment_amount) as total 
+        from tickets 
+            left join income on tickets.income_id = income.income_id 
+        where income.school_year = '2005-2006' 
+        group by tickets.lead_id) as tic 
+    on tic.lead_id = leads.lead_id 
+group by leads.lead_id 
+having payment_amount > 0 
+order by payment_amount desc
+;
+
+
 -- show auction totals for SOLICIT AND for family auctions.
 select families.name, sum(auction_donation_items.item_value) as item_value
     from auction
@@ -2229,27 +2254,33 @@ where (label_printed is null or label_printed < "1000-01-01")
 
 
 -- sponsors, sorted and formatted
-select if(companies.listing is not null, 
-        companies.listing,
-        if(coalesce(companies.company_name, leads.company) is not null,
+
+select 
+    if(companies.listing is not null and companies.listing > "", 
+        companies.listing, 
+        if(coalesce(companies.company_name, leads.company) is not null 
+            and coalesce(companies.company_name, leads.company) > "", 
             coalesce(companies.company_name, leads.company), 
-            concat_ws(' ', coalesce(leads.first_name, companies.first_name),
-                    coalesce(leads.last_name, companies.last_name)))) 
-        as sponsor_formatted,
-    companies.url,
-    sponsorship_types.sponsorship_name, sponsorship_types.sponsorship_price
-from sponsorships
-left join sponsorship_types 
-    on sponsorship_types.sponsorship_type_id = sponsorships.sponsorship_type_id
-left join companies on companies.company_id = sponsorships.company_id
-left join leads on leads.lead_id = sponsorships.lead_id
-where sponsorships.school_year = '2005-2006'
+            concat_ws(" ", coalesce(leads.first_name, companies.first_name), 
+        coalesce(leads.last_name, companies.last_name)))) 
+      as sponsor_formatted, 
+sponsorship_types.sponsorship_price 
+from sponsorships 
+    left join sponsorship_types 
+        on sponsorship_types.sponsorship_type_id = 
+            sponsorships.sponsorship_type_id 
+    left join companies on companies.company_id = sponsorships.company_id 
+    left join leads on leads.lead_id = sponsorships.lead_id 
+where sponsorships.school_year = "2005-2006" 
 order by sponsorship_price desc, 
-if(companies.listing is not null, companies.listing, 
-    if(coalesce(companies.company_name, leads.company) is not null, 
-    coalesce(companies.company_name, leads.company),
-    coalesce(leads.last_name, companies.last_name))) asc
+    if(companies.listing is not null and companies.listing > "", 
+        companies.listing, 
+        if(coalesce(companies.company_name, leads.company) is not null
+            and coalesce(companies.company_name, leads.company) > "", 
+            coalesce(companies.company_name, leads.company), 
+        coalesce(leads.last_name, companies.last_name))) asc
 ;
+
 
 
 --- EOF

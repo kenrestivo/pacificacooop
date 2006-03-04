@@ -21,6 +21,11 @@ BUGS
 	ups store SHOULD be a sponsor! they donated $375 fo rchrissakes!
 		and sogo too
 		GO FIX! the update isn't getting called for some reason!
+			well, it seems OK now
+	last one is getting whacked, i.e. waxman in friends
+		no, waxman is explicitly getting whacked. wtf?
+			they are in sponsorships goddammit!!
+			the query is fucked.
 	
 ??PHP
 bid sheets and gift certs
@@ -30,7 +35,13 @@ bid sheets and gift certs
 		sb easy. just junk array, repeat more
 	china's border? should i try that?
 
-	
+
+???PHP/SQL
+create a "plug holes" method for packages
+	which will go through each package type in sequence, and find/fix holes
+		i.e. if someone creates 200, and max is 112, change 200-201 to 113-114
+			or in the middle. it can happen.
+		
 			
 ???PHP/CSS (day)
 that report for michelle: showing all the items and compoennts
