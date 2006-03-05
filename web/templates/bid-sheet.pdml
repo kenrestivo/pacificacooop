@@ -32,7 +32,7 @@
           <br />
         </font>
 
-        <multicell align="left"  inter="24pt"
+        <multicell align="left"  width="6.5in" inter="24pt"
                    tal:content="php: strip_tags(unHTML(${package/package_description}))">Description</multicell>
         
         <br />
@@ -67,19 +67,13 @@
 
 
       <footer>    
-        <img border="0" left="7.5in" top="10in" height="48pt" 
+        <img border="0" left="7in" top="9.5in" height="48pt" 
              src="../images/round-small-logo.png" />
-        <cell align="right" width="6.3in"  top="10.5in">Sunset Surf</cell>        
+        <cell align="right" width="6in"  top="10in">Sunset Surf</cell>        
       </footer>
 
     </div>      
-    
 
 
-    
-
-
-
-    
   </body>
 </pdml>

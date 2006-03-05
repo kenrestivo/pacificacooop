@@ -16,20 +16,13 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
-
-BUGS
-	ups store SHOULD be a sponsor! they donated $375 fo rchrissakes!
-		and sogo too
-		GO FIX! the update isn't getting called for some reason!
-			well, it seems OK now
-	last one is getting whacked, i.e. waxman in friends
-		no, waxman is explicitly getting whacked. wtf?
-			they are in sponsorships goddammit!!
-			the query is fucked.
-	
+ 	
 ??PHP
 bid sheets and gift certs
 	left margin is wider than right? try one.
+		nope, it's fine, but it's running off the side.
+		constrain size of description multicell! make it same as table below
+		also more margin at bottom for footy
 	try to actually print a page or two, on a couple different printers
 	blank bid sheet, second page
 		sb easy. just junk array, repeat more
@@ -616,6 +609,13 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP
+fix the generously donated by!
+	generate the generously donated by, using the database! with links!
+		in the public section. maybe put it in packaging section too
+	whack all sentences beginning with "generously donated by"
+	then whack the generously donated by field too. it's a useless hack
 
 	these dvd/movie/game things are a bitch
 		they are Fx, dammit. fix that. or do i need to? shouldn't
@@ -3509,7 +3509,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-		this is ridiculous. there has to be a better way to get wrapped text
+	ups store SHOULD be a sponsor! they donated $375 fo rchrissakes!
+		and sogo too
+		GO FIX! the update isn't getting called for some reason!
+			well, it seems OK now
+
+					this is ridiculous. there has to be a better way to get wrapped text
 			look at their sample code again
 		aha! you wrap text in a font, and it can have divs. structure, cool.
 			bold still doesn't work tho
@@ -6884,3 +6889,7 @@ place for the briery, band, etc, info--- where??!
 	freeform, in event, dammit.
 get the footer to float to the bootom of the leftmenu
 	like in the index.php page, i know how to do this, i think.
+	last one is getting whacked, i.e. waxman in friends
+		no, waxman is explicitly getting whacked. wtf?
+			they are in sponsorships goddammit!!
+			the query is fucked. fixed

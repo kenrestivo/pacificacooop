@@ -1,0 +1,9 @@
+<div metal:define-macro="footer">
+  
+<!--   XXX BROKEN! for some reason, pdml HATES when you do this in metal -->
+<footer>    
+  <img border="0" left="7.5in" top="10in" height="48pt" 
+       src="../images/round-small-logo.png" />
+  <cell align="right" width="6.3in"  top="10in">Sunset Surf</cell>        
+</footer>
+</div>
