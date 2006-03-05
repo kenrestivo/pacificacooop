@@ -75,5 +75,45 @@
     </div>      
 
 
+    <page tal:comment="second additional bidsheet" />
+    
+    <column count="1">
+      
+      <font size="24pt">
+        <multicell align="center" >
+          <i >Additional Bid Sheet for _______</i>
+        </multicell>
+        <br />
+      </font>
+        
+      
+        <table border="1">
+          <tr header="header">
+            <td align="center" width="50%">Bidder Number</td>
+            <td align="center" width="50%">Amount</td>
+          </tr>
+          <tr tal:repeat="line blanklines">
+            <td></td>
+            <td></td>
+          </tr> 
+          <tr tal:repeat="line blanklines">
+            <td></td>
+            <td></td>
+          </tr>
+          
+        </table>
+        
+    </column>
+    
+    
+    <footer>    
+      <img border="0" left="7in" top="9.5in" height="48pt" 
+           src="../images/round-small-logo.png" />
+      <cell align="right" width="6in"  top="10in">Sunset Surf</cell>        
+    </footer>
+    
+    
+    
+    
   </body>
 </pdml>

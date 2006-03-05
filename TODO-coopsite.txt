@@ -19,21 +19,9 @@ coop web database
  	
 ??PHP
 bid sheets and gift certs
-	left margin is wider than right? try one.
-		nope, it's fine, but it's running off the side.
-		constrain size of description multicell! make it same as table below
-		also more margin at bottom for footy
-	try to actually print a page or two, on a couple different printers
 	blank bid sheet, second page
 		sb easy. just junk array, repeat more
-	china's border? should i try that?
 
-
-???PHP/SQL
-create a "plug holes" method for packages
-	which will go through each package type in sequence, and find/fix holes
-		i.e. if someone creates 200, and max is 112, change 200-201 to 113-114
-			or in the middle. it can happen.
 		
 			
 ???PHP/CSS (day)
@@ -591,6 +579,13 @@ WATCH OUT! the popup link constraints needs to check the parent's allyears!!
 
 move teh family fees to the database! they're hard coded, taht is stupid
 
+??PHP
+fix the generously donated by!
+	generate the generously donated by, using the database! with links!
+		in the public section. maybe put it in packaging section too
+	whack all sentences beginning with "generously donated by"
+	then whack the generously donated by field too. it's a useless hack
+
 
 ??? PHP 
 income clusterfuck
@@ -610,17 +605,20 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
-??PHP
-fix the generously donated by!
-	generate the generously donated by, using the database! with links!
-		in the public section. maybe put it in packaging section too
-	whack all sentences beginning with "generously donated by"
-	then whack the generously donated by field too. it's a useless hack
+
 
 	these dvd/movie/game things are a bitch
 		they are Fx, dammit. fix that. or do i need to? shouldn't
 
-	
+
+		
+???PHP/SQL
+create a "plug holes" method for packages
+	which will go through each package type in sequence, and find/fix holes
+		i.e. if someone creates 200, and max is 112, change 200-201 to 113-114
+			or in the middle. it can happen.
+
+				
 csv or quark xtags format too, probably, if possible, should be with iterator or toarray
 
 ??PHP
@@ -3509,7 +3507,9 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	ups store SHOULD be a sponsor! they donated $375 fo rchrissakes!
+	china's border? should i try that?
+
+		ups store SHOULD be a sponsor! they donated $375 fo rchrissakes!
 		and sogo too
 		GO FIX! the update isn't getting called for some reason!
 			well, it seems OK now
@@ -6893,3 +6893,8 @@ get the footer to float to the bootom of the leftmenu
 		no, waxman is explicitly getting whacked. wtf?
 			they are in sponsorships goddammit!!
 			the query is fucked. fixed
+	left margin is wider than right? try one.
+		nope, it's fine, but it's running off the side.
+		constrain size of description multicell! make it same as table below DONE
+		also more margin at bottom for footy DONE
+	try to actually print a page or two, on a couple different printers
