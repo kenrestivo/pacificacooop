@@ -49,6 +49,7 @@ function viewHack(&$atd)
         $ptype =& new CoopObject(&$atd->page, 'package_types', &$atd);
         $ptype->obj->find();
         while($ptype->obj->fetch()) {   
+            print "Renumbering {$ptype->obj->package_type_short}...<br />";
             $pack =& new CoopObject(&$atd->page, 'packages', &$atd);
             $pack->obj->query('set @num=0'); // makes me nervous
             $pack->obj->query(
@@ -61,7 +62,7 @@ ORDER BY package_number',
                     $pack->getChosenSchoolYear()));
         }
 
-        print 'Packages renumbered!';
+        print '<br /><p>Packages renumbered!</p>';
         print $atd->page->selfURL(
             array('value' => 'Back to Packages',
                   'base' => '../generic.php',
