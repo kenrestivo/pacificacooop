@@ -167,6 +167,16 @@ var $fb_currencyFields = array(
                           'inside' => array('action' => 'view',
                                             'table' => 'package_types',
                                             'push' => $co->table)));
+
+                $res .= $co->page->selfURL(
+                    array('value' => 'Renumber All Packages',
+                          'base' => 'maint/renumber-packages.php',
+                          'tags' => array('title' => 
+                                          'Fixes holes in package number sequence'),
+                          'inside' => array('action' => 'view',
+                                            'table' => 'package_types')));
+
+
             }
 
 

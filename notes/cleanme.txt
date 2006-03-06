@@ -7,8 +7,8 @@ smaller damned font
 
 
 send_email needs a rework
-	use TAL to template it: an HTML version and a non-html version
-	or optionally remove html tags
+	use TAL with omit-tag to template it: an HTML version and a non-html version
+	or optionally use the html unformatting tool i have to translate tags
 
 	save the diff's, NOT the entire whooha
 		if that's possible in text/diff mode
@@ -23,10 +23,6 @@ go through the joinpaths in standard linkconstraints!
 	i bet i can blow off tons of wacko custom linkconstraints this way!
 
 
-shitcan flexac completely
-
-remove mergesessionvars function!!! is it even used anywhere?
-	i hope it doesn't break anything!
 
     remove crufty files
     	cvs remove the whole list of crufty files: foundold-clean.txt
@@ -38,7 +34,7 @@ remove mergesessionvars function!!! is it even used anywhere?
 
 
 ???PHP
-do NOT dick with request in coopview!
+do NOT dick with request in coopview:getAndSaveDefault()
 	instead, find some way to extend my merging code in dispatcher
 	so that it will include things like search/sort variables from view!
 	look at syform. quickform has its own ways of dealing with saved vars

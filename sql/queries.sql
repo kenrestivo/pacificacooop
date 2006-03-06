@@ -2282,5 +2282,10 @@ order by sponsorship_price desc,
 ;
 
 
+set @num=0;
+update packages set package_number=(@num:=@num+1) 
+where package_type_id = 2 and school_year = "2005-2006"
+ORDER BY package_number
+;
 
 --- EOF

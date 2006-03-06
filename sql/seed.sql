@@ -830,7 +830,15 @@ values
 ('invitations', 'add', 'Every family must provide the names of people who should be invited to attend or donate to Springfest. These can be family, friends, business associates, etc. They will be sent formal invitations on behalf of the School. Only those names you invite (plus alumni) will be invited this year. The people you invite will not be invited ever again, unless you return to the school and re-invite them. First try the search feature below, if the name is already in the database it helps to keep it clean without duplicates. If the name is not already in there, then click "Add New Contact>>" to enter it. Also try to invite family and friends; alumni will be automatically invited anyway.');
 
 
-
-
-
+---  microsite stuff
+insert into springfest_microsite
+(display_order, url_fragment, name, school_year)
+values 
+(1, 'home', 'Overview', '2005-2006'),
+(2, 'event', 'Event', '2005-2006'),
+(3, 'sponsorship', 'Sponsorship', '2005-2006'),
+(4, 'auction', 'Auction', '2005-2006'),
+(5, 'raffle', 'Raffle', '2005-2006'),
+(6, 'about', 'About Us', '2005-2006')
+;
 -- EOF

@@ -1007,6 +1007,7 @@ prefix varchar(3)
 
 create table springfest_microsite(
 springfest_microsite_id int(32) primary key not null unique auto_increment,
+display_order int(4),
 url_fragment varchar(50),
 name varchar(255),
 content_summary longtext,

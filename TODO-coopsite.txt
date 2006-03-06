@@ -2,8 +2,8 @@ coop web database
 
  MY agenda! dammit, mine! for a change....
 	springfest microsite (microsite.txt)
-	sortable/searchable/pagable views (searchfeature.txt)
  	import the 20-year roster (20yearroster.txt)
+	sortable/searchable/pagable views (searchfeature.txt)
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
 	json, REST, xmlrpc (jsonselect.txt)
@@ -12,43 +12,45 @@ coop web database
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
 	graphs and charts (graphs.txt)
-	json services (templates.txt)
+	json services (templates.txt-- anything left to do?)
 	labels/export -- python cgi on nfsn, formatting, etc.
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
- 	
-??PHP
-bid sheets and gift certs
-	blank bid sheet, second page
-		sb easy. just junk array, repeat more
 
-		
-			
-???PHP/CSS (day)
-that report for michelle: showing all the items and compoennts
-	subiterators, tricky? but i need to tackle this
-	where are my notes on this?
+???PHP/SQL
+create a "plug holes" method for packages
+	which will go through each package type in sequence, and find/fix holes
+		i.e. if someone creates 200, and max is 112, change 200-201 to 113-114
+			or in the middle. it can happen.
+	if previous is not this -1.. FOR WHATEVER REASON, make this one prev +1
+
+BUG
+	62 martial arts
+		fill by highest number to the first
+	i can duplicate it! by renaming 64 to 65, i create duplicate 61's!???!
+	OK
+		there were 2 63's
+		i changed 63(old) to 64(new)
+			decrement changed the CURRENT 63 to 62... doh
+
+	AHA! moving them UP creates a hole! it's not doing what it's supposed to do
+		moving them BACK creates no hole. stupid ass no-testing guy...
+			build a unit test for chrissakes!
+	I CANNOT GET IT TO FAIL ANYMORE!!! WTF????!
 
 
+	
+	
 				
 ??PHP/SQL
 parent ed (parented.txt)
 	that margolis form: right join basiclally
-	meeting make-up stuff -- wacky sql joins, i fear it.
+		come on, just PLAY with it! it'll be fun. try it.
+	meeting make-up stuff -- wacky sql joins
 	nag-only (i.e. enhancement hack)
 
 	
-??PHP/SQL
-de-dupe and/or alumni hack2
-	ugly linktable to glue actual alumni to the alumni list
-	let the user choose
 
-	
-??PHP/SQL
-remember paddles will be SPLIT
-	members and non-members separate
-
-	
 ??PHP
 ticket/rsvp fixes
 	bring back the auto-parent-generating thing, and run it
@@ -56,6 +58,7 @@ ticket/rsvp fixes
 	if it's paid for, dammit, then insist on payment!	
 
 
+	
 ???PHP, nasty				
 export button for tickets/paddles
 	well, just generalise view, really
@@ -75,7 +78,12 @@ export button for tickets/paddles
 		or, hack simpletable so it doesn't run if spreasdheet-- EVIL
 				
 
-				
+	
+??PHP/SQL
+remember paddles will be SPLIT
+	members and non-members separate
+
+	
 BUGS
 	fix that ad insertion anomaly in the report
 		solicitation ad inserton != grand total ad insertion. why?
@@ -605,6 +613,16 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+??PHP/SQL
+de-dupe and/or alumni hack2
+	ugly linktable to glue actual alumni to the alumni list
+	let the user choose
+
+
+???PHP/CSS (day)
+that report for michelle: showing all the items and compoennts
+	subiterators, tricky? but i need to tackle this
+	where are my notes on this?
 
 
 	these dvd/movie/game things are a bitch
@@ -612,11 +630,6 @@ BELOW THE LINE
 
 
 		
-???PHP/SQL
-create a "plug holes" method for packages
-	which will go through each package type in sequence, and find/fix holes
-		i.e. if someone creates 200, and max is 112, change 200-201 to 113-114
-			or in the middle. it can happen.
 
 				
 csv or quark xtags format too, probably, if possible, should be with iterator or toarray
@@ -6898,3 +6911,10 @@ get the footer to float to the bootom of the leftmenu
 		constrain size of description multicell! make it same as table below DONE
 		also more margin at bottom for footy DONE
 	try to actually print a page or two, on a couple different printers
+??PHP
+bid sheets and gift certs
+	blank bid sheet, second page
+		sb easy. just junk array, repeat more
+shitcan flexac completely
+remove mergesessionvars function!!! is it even used anywhere?
+	i hope it doesn't break anything!
