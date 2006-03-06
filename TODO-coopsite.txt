@@ -17,30 +17,17 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 
-???PHP/SQL
-create a "plug holes" method for packages
-	which will go through each package type in sequence, and find/fix holes
-		i.e. if someone creates 200, and max is 112, change 200-201 to 113-114
-			or in the middle. it can happen.
-	if previous is not this -1.. FOR WHATEVER REASON, make this one prev +1
 
-BUG
-	62 martial arts
-		fill by highest number to the first
-	i can duplicate it! by renaming 64 to 65, i create duplicate 61's!???!
-	OK
-		there were 2 63's
-		i changed 63(old) to 64(new)
-			decrement changed the CURRENT 63 to 62... doh
+??PHP
+create a test suite for renumbering packages
+	either php, or python
+	test all the possible permutations, the ones that break!
+		delete (last, first, middle)
+		add (first, last, middle)
+		update (forward 1, forward a bunch, backwards 1, backwards a bunch,
+			and first and last also)
 
-	AHA! moving them UP creates a hole! it's not doing what it's supposed to do
-		moving them BACK creates no hole. stupid ass no-testing guy...
-			build a unit test for chrissakes!
-	I CANNOT GET IT TO FAIL ANYMORE!!! WTF????!
-
-
-	
-	
+		
 				
 ??PHP/SQL
 parent ed (parented.txt)
@@ -6918,3 +6905,24 @@ bid sheets and gift certs
 shitcan flexac completely
 remove mergesessionvars function!!! is it even used anywhere?
 	i hope it doesn't break anything!
+
+???PHP/SQL
+create a "plug holes" method for packages
+	which will go through each package type in sequence, and find/fix holes
+		i.e. if someone creates 200, and max is 112, change 200-201 to 113-114
+			or in the middle. it can happen.
+	if previous is not this -1.. FOR WHATEVER REASON, make this one prev +1
+
+BUG
+	62 martial arts
+		fill by highest number to the first
+	i can duplicate it! by renaming 64 to 65, i create duplicate 61's!???!
+	OK
+		there were 2 63's
+		i changed 63(old) to 64(new)
+			decrement changed the CURRENT 63 to 62... doh
+
+	AHA! moving them UP creates a hole! it's not doing what it's supposed to do
+		moving them BACK creates no hole. stupid ass no-testing guy...
+			build a unit test for chrissakes!
+	I CANNOT GET IT TO FAIL ANYMORE!!! WTF????!

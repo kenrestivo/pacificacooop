@@ -1071,7 +1071,7 @@ class PDML extends FPDF {
         break;
       case "TD":
         $this->_enforceState(54,53);
-        $colspan = max(intval($this->table['tr'][$this->table['rows']][$this->table['current_col']]['attr']['COLSPAN']),1);
+        $colspan = max(intval(@$this->table['tr'][$this->table['rows']][$this->table['current_col']]['attr']['COLSPAN']),1);
 
         for($jj=0;$jj<$colspan-1;$jj++) {
           $this->table['current_col']++;
@@ -1408,7 +1408,7 @@ class PDML extends FPDF {
                   $cell['text'],
                   $table['attr']['BORDER'],
                   0,
-                  strtoupper($cell['attr']['ALIGN']{0}),
+                  strtoupper(@$cell['attr']['ALIGN']{0}),
                   0,
                   '',
                   $cell['stringAttrs']);
