@@ -41,7 +41,7 @@ print $cp->stackPath();
 print "\n<hr /></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div class="centerCol">';
 
-print '<h1>renumber packages</h1>';
+print '<h3>Renumbering packages</h3>';
 
 
 function viewHack(&$atd)
@@ -60,7 +60,14 @@ ORDER BY package_number',
                     $ptype->obj->package_type_id,
                     $pack->getChosenSchoolYear()));
         }
-	 
+
+        print 'Packages renumbered!';
+        print $atd->page->selfURL(
+            array('value' => 'Back to Packages',
+                  'base' => '../generic.php',
+                  'inside' => array('action' => 'view',
+                                    'table' => 'packages')));
+
 }
 
 // cheap dispatcher
