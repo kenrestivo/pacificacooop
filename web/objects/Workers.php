@@ -34,13 +34,6 @@ class Workers extends CoopDBDO
                                  'am_pm_session' => 'Session',
                                  'worker_for_donation' => 'Worker For Donation?',
                                  'school_year' => 'School Year');
-	var $fb_fieldsToRender = array('worker_id',
-                                   'parent_id' ,
-                                   'workday' ,
-                                   'epod' ,
-                                   'am_pm_session', 
-                                   'worker_for_donation', 
-                                   'school_year' );
 								   
     var $fb_requiredFields = array('parent_id', 'workday', 'epod', 
                                    'am_pm_session', 'school_year');
@@ -85,6 +78,7 @@ class Workers extends CoopDBDO
             $this->fb_formHeaderText = 'Workday Summary';
             $this->fb_recordActions = array();
             $this->fb_forceNoChooser = 1;
+            $this->preDefOrder = array('workday', 'AM', 'PM');
             $this->fb_fieldLabels = array(
                 'workday' => 'Work Day',
                 'AM' => 'Total AM',
@@ -124,7 +118,7 @@ order by  workday',
             $co2->obj->fb_formHeaderText = 'EPOD Summary';
             $co2->obj->fb_recordActions = array();
             $co2->obj->fb_forceNoChooser = 1;
-            $co2->obj->fb_fieldsToRender = array('epod', 'AM', 'PM');
+            $co2->obj->preDefOrder = array('epod', 'AM', 'PM');
             $co2->obj->fb_fieldLabels = array(
                 'epod' => 'EPOD',
                 'AM' => 'Total AM',
