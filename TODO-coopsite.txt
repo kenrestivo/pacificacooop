@@ -1,4 +1,4 @@
-coop web database
+bmitbois et mcoop web database
 
  MY agenda! dammit, mine! for a change....
 	springfest microsite (microsite.txt)
@@ -7,7 +7,7 @@ coop web database
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
 	json, REST, xmlrpc (jsonselect.txt)
-	fix money: make it INVOICES and income (invoicing.txt) SQL
+	fix money: make it INVOICES  bi and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
@@ -16,6 +16,11 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
+
+BUGS
+	cookbooks. duplicate packages getting not shown?
+	my renumber package maint thing is broken, ONLY on live site
+		do nfsn logging thing
 
 
 ??PHP

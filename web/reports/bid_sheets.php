@@ -39,7 +39,7 @@ class BidSheetReport extends CoopPDF
             $bidsheets =& new CoopView(&$this, 'packages', &$nothing);
             $pt =& new CoopView(&$this, 'package_types', &$bidsheets);
             $bidsheets->protectedJoin($pt);
-            $bidsheets->obj->whereAdd('package_type_short = "Silent"');
+            $bidsheets->obj->whereAdd('(package_type_short = "Silent" or package_type_short = "Live")');
             // tal needs this to decide whether to print the increment
             array_push($bidsheets->obj->fb_preDefOrder, 'package_type_short');
             $bidsheets->obj->fb_fieldLabels['package_type_short'] = 'Package Type';

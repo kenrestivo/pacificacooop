@@ -370,7 +370,11 @@ class Runner:
 ###### MAIN ######
 
 def main():
-    Runner().ManyVisitHack('http://www/coop-live')
+    try:
+        Runner().ManyVisitHack('http://www/coop-live')
+    except (KeyboardInterrupt,SystemExit),e:
+        return e
+
 
     
 ## do this. it's good.
