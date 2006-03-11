@@ -25,16 +25,8 @@
 -- group_level = -1 WHERE table_permissions.table_permissions_id = 54;
 
 
--- run the python script to convert the package numbers!!!!
-
-alter table packages change column package_number package_number int(5) default NULL;
-alter table package_types add column prefix varchar(3);
-
-update package_types set prefix = 'L' where package_type_id = 1;
-update package_types set prefix = 'S' where package_type_id = 2;
-update package_types set prefix = 'D' where package_type_id = 3;
-update package_types set prefix = 'B' where package_type_id = 4;
-update package_types set prefix = 'F' where package_type_id = 5;
-update package_types set prefix = 'U' where package_type_id = 6;
-
--- update package instructions: about renumbering
+CREATE TABLE sent_audits (
+  sent_audit_id int(32) primary key NOT NULL unique auto_increment,
+  user_id int(32) default NULL,
+  audit_trail_id int(32) NOT NULL unique auto_increment
+) ;
