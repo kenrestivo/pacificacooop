@@ -206,9 +206,15 @@ class Auction_donation_items extends CoopDBDO
 						$prefix . 'donated_by_text' => $donatedby,
 						$prefix . 'package_value' => $this->item_value,
 						$prefix . 'bid_increment' => 
-						ceil($this->item_value / COOP_DEFAULT_BID_INCREMENT_DIVISOR),
-						$prefix . 'starting_bid' => ceil(
-                            $this->item_value / COOP_DEFAULT_STARTING_BID_DIVISOR),
+						round(ceil($this->item_value / 
+                                   COOP_DEFAULT_BID_INCREMENT_DIVISOR) / 
+                              COOP_DEFAULT_BID_INCREMENT_CLAMP) 
+                        * COOP_DEFAULT_BID_INCREMENT_CLAMP,
+						$prefix . 'starting_bid' => 
+                        round(ceil($this->item_value / 
+                                   COOP_DEFAULT_STARTING_BID_DIVISOR) / 
+                              COOP_DEFAULT_STARTING_BID_CLAMP) 
+                        * COOP_DEFAULT_STARTING_BID_CLAMP,
 						$prefix . 'school_year' => $this->school_year,
 						$prefix . 'auction_donation_item_id[]' => 
 						$this->auction_donation_item_id,

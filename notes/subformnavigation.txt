@@ -2,6 +2,11 @@ notes on subform navigation, flipping between screens
 
 iframe? this is a botch
 
+or, i can use tal, templates, and javascript for subforms
+	i.e., each CoopForm generates not html, but json
+		the json gets added to any parent forms at "add new" or "edit" time
+		everything gets processed all at once, at "save" time
+
 
 ??? PHP/JS
 attempt to implement subform.. as an ajax

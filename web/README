@@ -20,6 +20,7 @@ CoopNewDispatcher: for navigating states, the 'action' GET/POST var
 					callbacks in this will 'dispatch' to views, forms, etc
 
 
+this is a Big Pig of an app. if you do development on it, you'll want to change the .htaccess periodically to bump the "php_value memory_limit" and possibly max_execution_time too.
 
 essential vars that the system uses:
 (they go in the DataObjects (in objects directory)

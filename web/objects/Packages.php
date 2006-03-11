@@ -118,14 +118,18 @@ var $fb_currencyFields = array(
             $js = sprintf(
                 'setPackageDefaults = function(self){
                         var f = document.getElementById("%s");
-                        f["%s"].value = Math.ceil(self.value / %d);
-                        f["%s"].value = Math.ceil(self.value / %d);
+                        f["%s"].value = Math.round(Math.ceil(self.value / %d) / %d) * %d;
+                        f["%s"].value = Math.round(Math.ceil(self.value / %d) / %d) * %d;
                 }',
                 $form->_attributes['id'],
                 $form->CoopForm->prependTable('starting_bid'),
                 COOP_DEFAULT_STARTING_BID_DIVISOR,
+                COOP_DEFAULT_STARTING_BID_CLAMP, 
+                COOP_DEFAULT_STARTING_BID_CLAMP,
                 $form->CoopForm->prependTable('bid_increment'),
-                COOP_DEFAULT_BID_INCREMENT_DIVISOR);
+                COOP_DEFAULT_BID_INCREMENT_DIVISOR,
+                COOP_DEFAULT_BID_INCREMENT_CLAMP,
+                COOP_DEFAULT_BID_INCREMENT_CLAMP);
 
             $form->addElement('static', 
                               'setPackageDefaults_script', '',

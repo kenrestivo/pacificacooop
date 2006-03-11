@@ -1,6 +1,9 @@
 template engine notes
 
-subtable iterator
+subtable iterator subtables/linktables
+	fisch them out of forwardlinks/backlinks
+	if they're already not linked, link them, like details view does
+	return iterator of them
 	a function to go grab a particular table
 		through forward or backlinks as applicable
 			maybe use extradetails?
@@ -19,10 +22,6 @@ wow, i can do forms as TAL templates!!
 	using that table-less thing i've got in bidsheets
 
 		
-subtables/linktables
-	fisch them out of forwardlinks/backlinks
-	if they're already not linked, link them, like details view does
-	return iterator of them
 	
 	
 things which suck, a lot, about simpletable

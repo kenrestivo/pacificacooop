@@ -518,3 +518,4 @@ map(tuplesplit, w.location.search.slice(1).split('&'));
 
 'fooa'.slice(1)
  
+int foo = 43.2;

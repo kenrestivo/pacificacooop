@@ -2,10 +2,15 @@ a cool nifty SEARCH BOX in all generic views!!
 
 sortable views!
 	use mochikit sortable_tables example, it rules
+		integrate somehow into coopview and/or tal
+		ok, first try integrating a *regular* coopview into tal!
+			IIRC, there were "issues"... templates.txt? parented?
 	ajax/json version of coopview, subclass, my ajax thingus
 		json response is
 			'columns' : coopview::header(),
 			rows: coopView::toarray()- iterated
+		perms? for edit?
+	STUCK: his mini-TAL has a structure? or not?
 
 
 put paging in simpletable!!
