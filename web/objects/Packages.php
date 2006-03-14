@@ -253,7 +253,7 @@ function public_packages(&$cp, $sy)
 				 'bgcolor=#aabbff align=left', 'TH');
 
     // leading zeroes
-	$q = sprintf('select concat(package_types.prefix, lpad(package_number,2,0)),
+	$q = sprintf('select concat(package_types.prefix, package_number),
        package_title, package_description,
         package_value
         from packages
