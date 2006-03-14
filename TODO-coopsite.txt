@@ -17,22 +17,12 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 
-
-BUGS
-	send email is fucked again. goddammit.
-		what changed between 2/20 and 3/5?
-		ok, the dupes are annoying. create a table of sent mails
-			and note them as they are sent
-	cookbooks. duplicate packages getting not shown?
-	my renumber package maint thing is broken, ONLY on live site
-		do nfsn logging thing
-
 	
 ??PHP
 a briip to publish live  all the packages
 	use tal and form/checkbox?
 		PROCESSING the form is a fucking question though.
-		you have to do it special-like
+		you have to do it all special-like
 			i need this for margolisreport anyway, let's do it			
 		or, use some custom QF thing, it's UGLY
 	go look up tal/ajax stuff.
@@ -49,6 +39,7 @@ create a test suite for renumbering packages
 		add (first, last, middle)
 		update (forward 1, forward a bunch, backwards 1, backwards a bunch,
 			and first and last also)
+	then use my new code, not this silly shit i have in there now
 
 		
 				
@@ -622,6 +613,16 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+
+???PHP
+calendar stuttering is confusing
+	rip the summary out of the calendar view
+
+
+???PHP
+bulletin board should show in alpha order
+
 
 ??PHP/SQL
 de-dupe and/or alumni hack2
@@ -7090,3 +7091,13 @@ easy ones i need to deal with
 	
 	[solicit_company.php] => 11
 	[flyer_company.php] => 23
+update audit_trail set email_sent = 1 where audit_trail_id = 8369;
+BUGS
+	send email is fucked again. goddammit.
+		what changed between 2/20 and 3/5?
+		ok, the dupes are annoying. create a table of sent mails
+			and note them as they are sent
+	cookbooks. duplicate packages getting not shown?
+	my renumber package maint thing is broken, ONLY on live site
+		do nfsn logging thing
+	AHA! must use mail.php from local pear, not system pear

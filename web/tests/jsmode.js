@@ -518,4 +518,4 @@ map(tuplesplit, w.location.search.slice(1).split('&'));
 
 'fooa'.slice(1)
  
-int foo = 43.2;
+Math.round(Math.ceil(40/10)/ 5) * 5

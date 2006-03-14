@@ -4,9 +4,12 @@
 
 // unit test for my vitally required includes. return an error if
 // the shit has hit the fan
+
+$debug = 4;
+
 chdir('../');
-require_once('Mail.php');
 require_once('CoopPage.php');
+require_once('Mail.php');
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
 
