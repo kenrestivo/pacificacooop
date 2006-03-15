@@ -18,13 +18,14 @@
     <div tal:omit-tag="" tal:repeat="packages packagetypes">
       <h3 tal:content="string: ${repeat/packages/key} Auction Items">Type</h3>
       <table>
-        <div tal:omit-tag="" tal:repeat="package packages">
-          <tr class="packagetitle">
+        <div tal:omit-tag="" tal:repeat="package packages" 
+			 tal:condition="package/package_description">
+          <tr class="packagetitle" >
             <td tal:content="package/package_number"></td>
             <td tal:content="package/package_title"></td>
             <td tal:content="string: Value ${package/package_value}"></td>
           </tr>
-          <tr>
+          <tr >
             <td></td>
             <td colspan="2" 
                 tal:content="structure package/package_description"></td>
