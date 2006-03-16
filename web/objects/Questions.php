@@ -22,4 +22,21 @@ class Questions extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+	var $fb_linkDisplayFields = array('question');
+
+	var $fb_fieldLabels = array(
+        'question' => 'Question Text',
+        'school_year' => 'School Year'
+		);
+
+	var $fb_formHeaderText =  'Poll Questions';
+	var $fb_requiredFields = array('question',
+								   'school_year',  
+                                   );
+
+    var $fb_shortHeader = 'Questions';
+    var $fb_sizes = array('question' => 50);
+
+
 }

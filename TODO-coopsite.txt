@@ -16,12 +16,12 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
-	
+BUGS
+	what's up with 1 not -1 for ignore!??
+		
 
 ???PHP/SQL
 poll question
-	elections realm
-		board needs to have permission to add/remove/etc
 	simple form with popup or radio
 		i think this is the VOTE table
 			constrain answer_id to those answers to this question only
@@ -29,9 +29,10 @@ poll question
 	make them only vote once!
 		yank edit from options
 		change "enter new" to "vote"
-	in view, show only how you voted
-		unless you are board member, then show TOTALS for each
-		including who voted and who didn't?
+		only show questions they haven't already answered!
+	in view, show only TOTALS for all! NOT how you voted!
+		for board members, show who voted and who didn't?
+	gotta fix perms... do NOT want them answering etc
 	
 			
 
@@ -7141,3 +7142,5 @@ BUGS
 		answers
 			answertext
 			question_id
+	elections realm
+		board needs to have permission to add/remove/etc

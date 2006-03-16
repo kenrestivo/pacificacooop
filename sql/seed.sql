@@ -841,4 +841,21 @@ values
 (5, 'raffle', 'Raffle', '2005-2006'),
 (6, 'about', 'About Us', '2005-2006')
 ;
+
+insert into questions
+(question_id, question, school_year)
+values
+(1, 'Should there be a 5% tuition increase for the 2006-2007 school year?', 
+'2005-2006');
+
+
+
+insert into answers
+(answer_id, answer, question_id)
+values
+(1, 'Yes', 1),
+(2, 'No', 1)
+;
+
+
 -- EOF

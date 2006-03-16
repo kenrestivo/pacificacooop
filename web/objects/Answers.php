@@ -22,4 +22,19 @@ class Answers extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+	var $fb_linkDisplayFields = array('answer');
+
+	var $fb_fieldLabels = array(
+        'question_id' => 'Question',
+        'answer' => 'Answer'
+		);
+
+	var $fb_formHeaderText =  'Poll Answers';
+	var $fb_requiredFields = array('question_id',
+								   'answer'
+                                   );
+    var $fb_shortHeader = 'Answer';
+
+
 }

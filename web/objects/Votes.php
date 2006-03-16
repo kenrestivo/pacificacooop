@@ -24,4 +24,25 @@ class Votes extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+	var $fb_linkDisplayFields = array('question_id, answer_id');
+
+	var $fb_fieldLabels = array(
+        'family_id' => 'Co-Op Family',
+        'question_id' => 'Question',
+        'answer_id' => 'Answer',
+        'school_year' => 'School Year'
+		);
+
+	var $fb_formHeaderText =  'Poll Votes';
+	var $fb_requiredFields = array('family_id',
+                                   'question_id',
+                                   'answer_id',
+								   'school_year',  
+                                   );
+    var $fb_shortHeader = 'Votes';
+    var $fb_dupeIgnore = array('answer_id');
+
+
+
 }
