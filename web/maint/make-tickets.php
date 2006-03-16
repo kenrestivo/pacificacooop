@@ -50,12 +50,12 @@ if(!checkAuthLevel($cp->auth, 0, 'tickets', ACCESS_EDIT,
 }
 
 
-print $cp->selfURL('Make Family Tickets', 
-				   array('action' => 'makefamilytickets'));
-print $cp->selfURL('Make Paddles for all tickets', 
-				   array('action' => 'makepaddles'));
-print $cp->selfURL('Make Blank Paddles', 
-				   array('action' => 'makeblanklines'));
+print $cp->selfURL(array('value'=> 'Make Family Tickets', 
+                         'inside' => array('action' => 'makefamilytickets')));
+print $cp->selfURL(array('value' => 'Make Paddles for all tickets', 
+                         'inside' => array('action' => 'makepaddles')));
+print $cp->selfURL(array('value' => 'Make Blank Paddles', 
+                         'inside' => array('action' => 'makeblanklines')));
 
 // cheap dispatcher
 //confessArray($_REQUEST,'req');
@@ -65,55 +65,37 @@ switch($_REQUEST['action']){
  case 'makefamilytickets':
 	 $fam =& new CoopObject(&$cp, 'families', &$none);
 	 // note: account_number = 2 is quilt/food fee. you get a ticket if you drop.
-	 $fam->obj->query("
- select families.* 
-from families
-    left join kids on families.family_id = kids.family_id 
-    left join enrollment on kids.kid_id = enrollment.kid_id
-    left join families_income_join 
-        on families_income_join.family_id = families.family_id
-    left join income on 
-        families_income_join.income_id = income.income_id
-where enrollment.school_year = '$sy'
-    and ((enrollment.dropout_date < '2000-01-01'
-            or enrollment.dropout_date is null)
-        or (account_number = 2 and payment_amount > 0 
-            and income.school_year = '$sy'))
-group by families.family_id
-order by families.name;
-			");
+	 $fam->obj->query(sprintf('
+select distinct *
+                    from families
+                        left join kids on families.family_id = kids.family_id 
+                        left join enrollment on kids.kid_id = enrollment.kid_id 
+                    where enrollment.school_year = "%s"
+                    and (enrollment.dropout_date < "1900-01-01"
+                       or enrollment.dropout_date > now()
+                        or enrollment.dropout_date is null)
+                    group by families.family_id
+                    order by families.name',
+                              $sy));
 	 //$fam->obj->debugLevel(2);
 
 	 //look for tickets entry this year. none there? add 2 tickets.
 	 while($fam->obj->fetch()){
-		 $tic =& new CoopObject(&$cp, 'tickets', &$none);
-		 $tic->obj->{$fam->pk} = $fam->obj->{$fam->pk};	// THIS fam
-		 $sav = $tic->obj;
-		 if($tic->obj->find() < 1){
-			 // check for fee paid!!
-			 $finj = new CoopObject(&$cp, 'families_income_join', &$top);
-			 $finj->obj->{$fam->pk} = $fam->obj->{$fam->pk};	// THIS fam
-			 $inc = new CoopObject(&$cp, 'income', &$finj);
-			 $inc->obj->account_number = 2; // food-quilt fee
-			 $inc->obj->school_year = $sy;
-			 $inc->obj->joinAdd($finj->obj);
-			 $found = $inc->obj->find();
-			 if(!$found){
-				 //  now check for indulgences... damn this is fucked up
-				 $ind = new CoopObject(&$cp, 'nag_indulgences', &$top);
-				 $ind->obj->{$fam->pk} = $fam->obj->{$fam->pk};	// THIS fam
-				 $ind->obj->school_year = $sy;
-				 $ind->obj->whereAdd('indulgence_type = "Everything"  or
-						indulgence_type = "Quilt Fee"');
-				 $found = $ind->obj->find();
-			 }
-			 $tq = $found > 0 ? 2 : 1;
-			 $sav->ticket_quantity = $tq;
-			 $sav->ticket_type_id = 3; // member ticket
-			 $sav->school_year = $sy;
+ 		 $tic =& new CoopObject(&$cp, 'tickets', &$none);
+		 $tic->obj->whereAdd(sprintf('%s = %d and school_year = "%s"',
+                                     $fam->pk,
+                                     $fam->obj->{$fam->pk},
+                                     $sy));	// THIS fam
+         $tic->obj->find();
+		 if($tic->obj->N < 1){
+             $sav =& new CoopForm(&$cp, 'tickets', &$none);
+             $sav->obj->{$fam->pk} = $fam->obj->{$fam->pk};	// THIS fam
+			 $sav->obj->ticket_quantity = 2;
+			 $sav->obj->ticket_type_id = 3; // member ticket
+			 $sav->obj->school_year = $sy;
 			 //XXX if i move this to the object, yank the printf!
 			 printf("<br>Inserting %d tickets for %s family...", 
-					$tq, $fam->obj->name);
+					$sav->obj->ticket_quantity, $fam->obj->name);
 			 $sav->insert();
 			 $added++;
 		 }
@@ -126,11 +108,14 @@ order by families.name;
 
 //////MAKE PADDLES
  case  'makepaddles':
-	 $atd->obj->school_year = $sy;
+     /// XX broken. step thorugh the tickets first!
+     $atd =& new CoopObject(&$cp, 'tickets', &$none);
+	 $atd->obj->whereAdd(sprintf('school_year = "%s", $sy'));
 	 $atd->obj->find();
 	 while($atd->obj->fetch()){
 		 //confessObj($atd->obj, 'atd');
-		 $atd->obj->updatePaddles(&$cp);
+         $atd->id = $atd->obj->{$atd->pk}; // XXX hack!
+		 $atd->obj->updatePaddles(&$atd);
 	 }
 	 break;
 
