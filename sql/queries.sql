@@ -1804,6 +1804,7 @@ ORDER BY school_year desc , families.name
 
 
 -- ugly worker's query
+--- NOTE!!! this is the enrolled subquery. use it *everywhere*... stored proc?
 select  distinct
 workday, sum(if(workers.am_pm_session = "AM" and enrolled.family_id is not null, 1,0 )) as AM, 
 sum(if(workers.am_pm_session = "PM" and enrolled.family_id is not null, 1,0 )) as PM
@@ -2297,5 +2298,16 @@ group by school_year
 order by school_year
 ;
 
+-- USELESS
+select ticket_type.description as Ticket_Type, paddle_number,
+    springfest_attendee_id as Total, springfest_attendees.school_year
+from springfest_attendees 
+    left join tickets 
+        on springfest_attendees.ticket_id = tickets.ticket_id
+    left join ticket_type 
+        on tickets.ticket_type_id = ticket_type.ticket_type_id
+where springfest_attendees.school_year = '2005-2006'
+order by  springfest_attendees.paddle_number
+;
 
 --- EOF

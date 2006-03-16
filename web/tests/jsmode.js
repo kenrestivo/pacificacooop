@@ -519,3 +519,15 @@ map(tuplesplit, w.location.search.slice(1).split('&'));
 'fooa'.slice(1)
  
 Math.round(Math.ceil(40/10)/ 5) * 5
+
+
+
+for(cell in w.document.getElementsByTagName('TD')){
+    for(child in cells.childNodes){
+            if(child.nodeName=="P") { 
+                //trim here 
+                child.innerHTML = 'foo!';
+            } 
+    } 
+}
+

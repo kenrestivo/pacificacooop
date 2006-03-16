@@ -288,34 +288,33 @@ order by total desc',
 		);
 
 
-	$res .= showRawQuery("Total Event Reservations (Paddles)", 
-		   "select if(tickets.income_id > 0, 'Paid', 
-				if(tickets.family_id > 0, 'Members', 'Freebies')) 
-						as Payment_Type,
-				count(springfest_attendee_id) as Total
+	$res .= showRawQuery(
+        "Total Event Reservations (Paddles)", 
+        "select ticket_type.description as Ticket_Type, 
+            count(springfest_attendee_id) as Total
 			from springfest_attendees 
 				left join tickets 
 						on springfest_attendees.ticket_id = tickets.ticket_id
+                left join ticket_type 
+                    on tickets.ticket_type_id = ticket_type.ticket_type_id
 				where springfest_attendees.school_year = '$schoolyear'
-				group by Payment_Type
-				order by Payment_Type
-"
-					 		);
+				group by tickets.ticket_type_id
+				order by ticket_type.description"
+        );
 
 
 	$res .= showRawQuery("Attendee Count (who actually attended)", 
-		   "select if(tickets.income_id > 0, 'Paid', 
-				if(tickets.family_id > 0, 'Members', 'Freebies')) 
-						as Payment_Type,
+		   "select ticket_type.description as Ticket_Type, 
 				count(springfest_attendee_id) as Total
 			from springfest_attendees 
 				left join tickets 
 						on springfest_attendees.ticket_id = tickets.ticket_id
+                left join ticket_type 
+                    on tickets.ticket_type_id = ticket_type.ticket_type_id
 				where springfest_attendees.school_year = '$schoolyear'
                      and attended = 'Yes'
-				group by Payment_Type
-				order by Payment_Type
-"
+				group by tickets.ticket_type_id
+				order by ticket_type.description"
 					 		);
 
 
