@@ -18,6 +18,12 @@ AddCharset utf-8 .php .inc .html
   Deny from all
 </Files>
 
+
+RewriteEngine on
+RewriteRule ^vote$ vote.php
+
+
+
 # just for testing
 #RewriteEngine on
 #RewriteRule ^RSVP$ tests/sane-donate.php
