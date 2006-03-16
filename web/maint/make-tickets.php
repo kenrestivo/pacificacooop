@@ -93,6 +93,19 @@ select distinct *
 			 $sav->obj->ticket_quantity = 2;
 			 $sav->obj->ticket_type_id = 3; // member ticket
 			 $sav->obj->school_year = $sy;
+
+             // now link in the fee they paid
+             $inc =& new CoopObject(&$cp, 'income', &$none);
+             $inc->obj->query(
+                 sprintf('select * from income left join families_income_join on income.income_id = families_income_join.income_id where family_id = %d and school_year = "%s" and account_number = %d',
+                         $fam->obj->{$fam->pk},
+                         $sy,
+                     COOP_FOOD_FEE));
+             if($inc->obj->N > 0){
+                 $inc->obj->fetch();
+                 $sav->obj->{$inc->pk} = $inc->obj->{$inc->pk};
+             }
+
 			 //XXX if i move this to the object, yank the printf!
 			 printf("<br>Inserting %d tickets for %s family...", 
 					$sav->obj->ticket_quantity, $fam->obj->name);
