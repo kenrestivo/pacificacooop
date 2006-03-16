@@ -19,10 +19,19 @@
 //$Id$
 
 require_once('CoopTALPage.php');
+require_once('CoopForm.php');
+require_once('lib/dbdo_iterator.php');  // NASTY!
 
 class Vote extends CoopTALPage
 {
     var $template_file = 'vote.xhtml';
+
+    function makeForm()
+        {
+
+        }
+
+
 
     // specific to this page. when i dispatch with REST, i'll need several
     function build()
@@ -30,19 +39,54 @@ class Vote extends CoopTALPage
 
             $this->title = 'Vote';
 
-            $quest =& new CoopView(&$this, 'questions', 
-                                 &$none);
-            $quest->fullText = 1; // making their lives easier
-            $quest->obj->whereAdd('question_id = 1');
-            $quest->obj->find();
-            $this->template->setRef('questions', $quest);
+            $question_id = 1;
 
+
+
+            $form = new HTML_QuickForm('vote', false, false, false, 
+                                       array('id' => 'vote'), true);
+            $form->removeAttribute('name'); // make XTHML happy
+
+
+
+            $quest =& new CoopObject(&$this, 'questions', &$none);
+            $quest->fullText = 1; // making their lives easier
+            $quest->obj->whereAdd("question_id = $question_id");
+            $quest->obj->find(true);
+            $form->addElement('header', null, $quest->obj->question);
             
-            $ans =& new CoopView(&$this, 'answers', &$none);
-            $ans->obj->whereAdd('question_id = 1');
+            $sel =& $form->addElement('select', 'answer_id', '', 
+                                        $nothing);
+            $sel->addOption('VOTE', '0');
+
+            $ans =& new CoopObject(&$this, 'answers', &$none);
+            $ans->obj->whereAdd("question_id = $question_id");
             $ans->fullText = 1; // making their lives easier
             $ans->obj->find();
-            $this->template->setRef('answers', $ans);
+            $sel->loadDbResult($ans->obj->getDatabaseResult(), 
+                               'answer', 'answer_id');
+
+            if($sid = thruAuthCore($this->auth)){
+                $form->addElement('hidden', 'coop', $sid); 
+            }
+
+            $form->addElement('submit', null, 'Vote');
+
+            // Define filters and validation rules
+            $form->addRule('answer_id', 'Please choose something', 
+                           'required', null, 'client');
+
+
+            if ($form->validate()) {
+                // save it!
+            } else {
+                $f = $form->toHTML();
+            }
+
+
+
+            $this->template->setRef('form', $f);
+            
 
         }
 }

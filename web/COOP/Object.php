@@ -1100,6 +1100,8 @@ function triggerNotices($audit_id)
 
     function getNewIterator()
         {
+            //XXX EVIL HACK! i should be using coopiterator instead
+            // but, in votes/polls, i need to bypass the permissions system!
             $this->page->printDebug("CoopObject::getNewIterator({$this->table})", 
                                     2);
             return new DB_DataObjectIterator(&$this->obj);

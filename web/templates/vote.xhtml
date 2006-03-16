@@ -4,12 +4,8 @@
   
   <div tal:omit-tag="" metal:fill-slot="inner_content">
 
-    <p tal:repeat="question questions" tal:content="question/question"></p>
-
-   <form method="post">
-     <p tal:repeat="answer answers" tal:content="answer/answer"></p>
-
-   </form>
+        
+    <div tal:replace="structure form"></div>
     
 
   </div>

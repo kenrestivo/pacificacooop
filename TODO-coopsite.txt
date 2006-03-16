@@ -31,6 +31,20 @@ poll question
 			what about PROCESSING!! SAVING!!
 			this stuff can't show up in audit trail either, remember!
 		try tal *and* a quickform
+
+
+	no. do it REALLY STUPIDLY. a bare quickform.
+		just this question and its answers.
+			even stupider: NO quickform!
+		save it.
+	if you get something, then save it!
+		if there is no value, then REPORT ERRORS
+	if there is no vote for this familyid/schoolyear/question:
+		show the question
+		hidden with questionid, familyid
+		select or radio with vote
+	else
+		show votes to date
 			
 
 	
