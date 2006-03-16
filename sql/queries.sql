@@ -2288,4 +2288,14 @@ where package_type_id = 2 and school_year = "2005-2006"
 ORDER BY package_number
 ;
 
+
+--- the count. blah! blah!
+select school_year, count(springfest_attendee_id) as count 
+from springfest_attendees 
+where attended = 'Yes'  
+group by school_year 
+order by school_year
+;
+
+
 --- EOF

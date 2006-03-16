@@ -1019,4 +1019,28 @@ school_year varchar(50) default NULL
 
 
 
+create table votes(
+vote_id int(32) primary key not null unique auto_increment,
+family_id int(32),
+question_id int(32),
+answer_id int(32),
+school_year varchar(50) default NULL
+);
+
+
+create table answers(
+answer_id int(32) primary key not null unique auto_increment,
+question_id int(32),
+answer varchar(255)
+);
+
+
+
+create table questions(
+question_id int(32) primary key not null unique auto_increment,
+question varchar(255),
+school_year varchar(50) default NULL
+);
+
+
 -- EOF

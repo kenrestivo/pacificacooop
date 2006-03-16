@@ -16,32 +16,38 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
+	
+
+???PHP/SQL
+poll question
+	elections realm
+		board needs to have permission to add/remove/etc
+	simple form with popup or radio
+		i think this is the VOTE table
+			constrain answer_id to those answers to this question only
+			and/or use a radiobutton, really.
+	make them only vote once!
+		yank edit from options
+		change "enter new" to "vote"
+	in view, show only how you voted
+		unless you are board member, then show TOTALS for each
+		including who voted and who didn't?
+	
+			
 
 	
-??PHP
-a briip to publish live  all the packages
-	use tal and form/checkbox?
-		PROCESSING the form is a fucking question though.
-		you have to do it all special-like
-			i need this for margolisreport anyway, let's do it			
-		or, use some custom QF thing, it's UGLY
-	go look up tal/ajax stuff.
-		maybe subclass coopform, or make coopform a subclass of it?
-			i need the insert/update code, dupecheck, etc
-		dealing with required fields?
+??TAL/CSS
+line up the auction items at the top in the livesite
+	ah, some css. p's inside of tables, don't move below
 
-			
-??PHP
-create a test suite for renumbering packages
-	either php, or python
-	test all the possible permutations, the ones that break!
-		delete (last, first, middle)
-		add (first, last, middle)
-		update (forward 1, forward a bunch, backwards 1, backwards a bunch,
-			and first and last also)
-	then use my new code, not this silly shit i have in there now
 
-		
+
+??PHP/SQL
+enter last year's goddamned attendees!
+	hairy: need to add user if not present, add ticket, then paddlen
+add count of them, to report, for chrissakes!
+
+	
 				
 ??PHP/SQL
 parent ed (parented.txt)
@@ -613,6 +619,29 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP
+create a test suite for renumbering packages
+	either php, or python
+	test all the possible permutations, the ones that break!
+		delete (last, first, middle)
+		add (first, last, middle)
+		update (forward 1, forward a bunch, backwards 1, backwards a bunch,
+			and first and last also)
+	then use my new code, not this silly shit i have in there now
+
+
+??PHP
+a briip to publish live  all the packages
+	use tal and form/checkbox?
+		PROCESSING the form is a fucking question though.
+		you have to do it all special-like
+			i need this for margolisreport anyway, let's do it			
+		or, use some custom QF thing, it's UGLY
+	go look up tal/ajax stuff.
+		maybe subclass coopform, or make coopform a subclass of it?
+			i need the insert/update code, dupecheck, etc
+		dealing with required fields?
 
 
 ???PHP
@@ -7101,3 +7130,14 @@ BUGS
 	my renumber package maint thing is broken, ONLY on live site
 		do nfsn logging thing
 	AHA! must use mail.php from local pear, not system pear
+	tables
+		votes
+			family_id
+			question_id
+			answer_id
+			school_year
+		questions
+			questiontext
+		answers
+			answertext
+			question_id

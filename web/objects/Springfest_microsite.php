@@ -11,6 +11,7 @@ class Springfest_microsite extends CoopDBDO
 
     var $__table = 'springfest_microsite';            // table name
     var $springfest_microsite_id;         // int(32)  not_null primary_key unique_key auto_increment
+    var $display_order;                   // int(4)  
     var $url_fragment;                    // string(50)  
     var $name;                            // string(255)  
     var $content_summary;                 // blob(16777215)  blob
