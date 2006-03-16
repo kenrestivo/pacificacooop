@@ -18,14 +18,39 @@
 
 //$Id$
 
-require_once('CoopTALPage.php');
+require_once('CoopPage.php');
+require_once('CoopView.php');
 require_once('CoopForm.php');
-require_once('lib/dbdo_iterator.php');  // NASTY!
+require_once('HTML/Table.php');
 
-class Vote extends CoopTALPage
+
+//MAIN
+//$_SESSION['toptable'] 
+
+//DB_DataObject::debugLevel(2);
+
+$cp = new coopPage( $debug);
+print $cp->pageTop();
+
+
+
+print $cp->topNavigation();
+print $cp->stackPath();
+
+print "\n<hr /></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
+print '<div class="centerCol">';
+
+
+class Vote 
 {
-    var $template_file = 'vote.xhtml';
+    var $page;
     var $question_id; /// XXX HACK
+
+
+    function Vote(&$page)
+        {
+            $this->page =& $page;
+        }
 
     function makeForm($question_id)
         {
@@ -37,7 +62,7 @@ class Vote extends CoopTALPage
 
 
 
-            $quest =& new CoopObject(&$this, 'questions', &$none);
+            $quest =& new CoopObject(&$this->page, 'questions', &$none);
             $quest->fullText = 1; // making their lives easier
             $quest->obj->whereAdd("question_id = $question_id");
             $quest->obj->find(true);
@@ -47,14 +72,14 @@ class Vote extends CoopTALPage
                                         $nothing);
             $sel->addOption('-- CHOOSE ONE --', '0');
 
-            $ans =& new CoopObject(&$this, 'answers', &$none);
+            $ans =& new CoopObject(&$this->page, 'answers', &$none);
             $ans->obj->whereAdd("question_id = $question_id");
             $ans->fullText = 1; // making their lives easier
             $ans->obj->find();
             $sel->loadDbResult($ans->obj->getDatabaseResult(), 
                                'answer', 'answer_id');
 
-            if($sid = thruAuthCore($this->auth)){
+            if($sid = thruAuthCore($this->page->auth)){
                 $form->addElement('hidden', 'coop', $sid); 
             }
 
@@ -76,10 +101,10 @@ class Vote extends CoopTALPage
 
             if ($form->validate()) {
                 // save it!
-                $votes =& new CoopObject(&$this, 'votes', &$none);
-                $votes->obj->family_id = $this->userStruct['family_id'];
+                $votes =& new CoopObject(&$this->page, 'votes', &$none);
+                $votes->obj->family_id = $this->page->userStruct['family_id'];
                 $votes->obj->question_id = $this->question_id;
-                $votes->obj->school_year =   $this->currentSchoolYear;
+                $votes->obj->school_year =   $this->page->currentSchoolYear;
                 $vals = $form->exportValues();
                 $votes->obj->answer_id = $vals['answer_id'];
                 $votes->obj->insert();
@@ -87,12 +112,10 @@ class Vote extends CoopTALPage
                 $this->status = 'Thanks! Your vote has been counted.';
                 
             } else {
-                $f = $form->toHTML();
+                $this->formtext = $form->toHTML();
             }
 
 
-
-            $this->template->setRef('form', $f);
 
         }
 
@@ -101,41 +124,57 @@ class Vote extends CoopTALPage
     // specific to this page. when i dispatch with REST, i'll need several
     function build()
         {
-
-            //XXX HACK
-            $this->userStruct =  getUser($this->auth['uid']);
-
-            $this->title = 'Membership Vote';
+            $this->page->title = 'Membership Vote';
             $this->status = 'Please vote below on this important issue:';
 
             $this->question_id = 1; // XXX hack, make more flexible
 
-            $votes =& new CoopObject(&$this, 'votes', &$none);
+            $votes =& new CoopObject(&$this->page, 'votes', &$none);
             $votes->obj->whereAdd(
                 sprintf('family_id = %d and question_id = %d and school_year = "%s"',
-                        $this->userStruct['family_id'],
+                        $this->page->userStruct['family_id'],
                         $this->question_id,
-                        $this->currentSchoolYear));
+                        $this->page->currentSchoolYear));
             $votes->obj->find();
             if($votes->obj->N > 0){
                 $this->status = 'You have already voted.';
                 // XXX ANSTY
-                $this->template->setRef('form', $nothing);
+                $this->formtext = "";
             } else {
                 $this->makeForm();
             }
 
 
-            $this->template->setRef('status', $this->status);
-
             // TODO: show count of how many families have voted so far
                 
+        }
+
+
+    function run()
+        {
+            $this->build();
+            print '<div>'.$this->status. '</div>';
+            print '<div>'.$this->formtext. '</div>';
         }
 }
 
 
-$r =& new Vote($debug);
+
+
+$r =& new Vote(&$cp);
 $r->run();
 
 
+
+
+
+
+done ();
+
+////KEEP EVERTHANG BELOW
+
 ?>
+
+
+<!-- END VOTE -->
+
