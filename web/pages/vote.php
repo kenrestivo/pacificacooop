@@ -25,23 +25,11 @@ require_once('lib/dbdo_iterator.php');  // NASTY!
 class Vote extends CoopTALPage
 {
     var $template_file = 'vote.xhtml';
+    var $question_id; /// XXX HACK
 
-    function makeForm()
+    function makeForm($question_id)
         {
-
-        }
-
-
-
-    // specific to this page. when i dispatch with REST, i'll need several
-    function build()
-        {
-
-            $this->title = 'Vote';
-
-            $question_id = 1;
-
-
+            $question_id = $this->question_id;
 
             $form = new HTML_QuickForm('vote', false, false, false, 
                                        array('id' => 'vote'), true);
@@ -79,6 +67,16 @@ class Vote extends CoopTALPage
 
             if ($form->validate()) {
                 // save it!
+                $votes =& new CoopObject(&$this, 'votes', &$none);
+                $votes->obj->family_id = $this->userStruct['family_id'];
+                $votes->obj->question_id = $this->question_id;
+                $votes->obj->school_year =   $this->currentSchoolYear;
+                $vals = $form->exportValues();
+                $votes->obj->answer_id = $vals['answer_id'];
+                $votes->obj->insert();
+                //XXX need *some* audit trail!
+                $this->status = 'Thanks! Your vote has been counted.';
+                
             } else {
                 $f = $form->toHTML();
             }
@@ -86,8 +84,41 @@ class Vote extends CoopTALPage
 
 
             $this->template->setRef('form', $f);
-            
 
+        }
+
+
+
+    // specific to this page. when i dispatch with REST, i'll need several
+    function build()
+        {
+
+            //XXX HACK
+            $this->userStruct =  getUser($this->auth['uid']);
+
+            $this->title = 'Vote';
+            $this->status = 'Please vote below on this important issue:';
+
+            $this->question_id = 1;
+
+            $votes =& new CoopObject(&$this, 'votes', &$none);
+            $votes->obj->whereAdd(
+                sprintf('family_id = %d and question_id = %d and school_year = "%s"',
+                        $this->userStruct['family_id'],
+                        $this->question_id,
+                        $this->currentSchoolYear));
+            $votes->obj->find();
+            if($votes->obj->N > 0){
+                // XXX ANSTY
+                $this->template->setRef('form', $nothing);
+                $this->status = 'You have already voted.';
+            } else {
+                $this->makeForm();
+            }
+
+
+            $this->template->setRef('status', $this->status);
+                
         }
 }
 
