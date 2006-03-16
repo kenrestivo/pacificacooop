@@ -1116,7 +1116,7 @@ left join
 ) as ticket_summary 
     on ticket_summary.ticket_id = springfest_attendees.ticket_id
 left join income on ticket_summary.income_id = income.income_id
-where springfest_attendees.school_year = '2004-2005'
+where springfest_attendees.school_year = '2005-2006'
 order by 
 empty_hack desc,
 coalesce(leads.last_name, companies.last_name, parents.last_name, ticket_summary.last),
