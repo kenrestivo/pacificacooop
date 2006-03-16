@@ -45,7 +45,7 @@ class Vote extends CoopTALPage
             
             $sel =& $form->addElement('select', 'answer_id', '', 
                                         $nothing);
-            $sel->addOption('VOTE', '0');
+            $sel->addOption('-- CHOOSE ONE --', '0');
 
             $ans =& new CoopObject(&$this, 'answers', &$none);
             $ans->obj->whereAdd("question_id = $question_id");
@@ -60,7 +60,16 @@ class Vote extends CoopTALPage
 
             $form->addElement('submit', null, 'Vote');
 
-            // Define filters and validation rules
+            
+            $form->addRule('answer_id', 'Please choose something', 
+                                 'CustomRequired', NULL, 'client');
+
+
+            $form->registerRule('customrequired', NULL, 
+                                'CustomRequired', 
+                                'lib/customrequired.php');
+            
+
             $form->addRule('answer_id', 'Please choose something', 
                            'required', null, 'client');
 
@@ -96,10 +105,10 @@ class Vote extends CoopTALPage
             //XXX HACK
             $this->userStruct =  getUser($this->auth['uid']);
 
-            $this->title = 'Vote';
+            $this->title = 'Membership Vote';
             $this->status = 'Please vote below on this important issue:';
 
-            $this->question_id = 1;
+            $this->question_id = 1; // XXX hack, make more flexible
 
             $votes =& new CoopObject(&$this, 'votes', &$none);
             $votes->obj->whereAdd(
@@ -109,15 +118,17 @@ class Vote extends CoopTALPage
                         $this->currentSchoolYear));
             $votes->obj->find();
             if($votes->obj->N > 0){
+                $this->status = 'You have already voted.';
                 // XXX ANSTY
                 $this->template->setRef('form', $nothing);
-                $this->status = 'You have already voted.';
             } else {
                 $this->makeForm();
             }
 
 
             $this->template->setRef('status', $this->status);
+
+            // TODO: show count of how many families have voted so far
                 
         }
 }

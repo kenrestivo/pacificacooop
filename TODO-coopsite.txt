@@ -22,28 +22,9 @@ BUGS
 
 ???PHP/SQL
 poll question
-	simple quickform with popup or radio
-		i think this is the VOTE table
-			constrain answer_id to those answers to this question only
-			and/or use a radiobutton, really.
-		maybe actually use TAL this time around?
-			the question, the results
-			what about PROCESSING!! SAVING!!
-			this stuff can't show up in audit trail either, remember!
-		try tal *and* a quickform
-
-
-	no. do it REALLY STUPIDLY. a bare quickform.
-		just this question and its answers.
-			even stupider: NO quickform!
-		save it.
 	if you get something, then save it!
 		if there is no value, then REPORT ERRORS
-	if there is no vote for this familyid/schoolyear/question:
-		show the question
-		hidden with questionid, familyid
-		select or radio with vote
-	else
+		custom filter: insist on a value > 0!
 		show votes to date
 			
 
@@ -3572,7 +3553,18 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	what have i got here
+	simple quickform with popup or radio
+		i think this is the VOTE table
+			constrain answer_id to those answers to this question only
+			and/or use a radiobutton, really.
+		maybe actually use TAL this time around?
+			the question, the results
+			what about PROCESSING!! SAVING!!
+			this stuff can't show up in audit trail either, remember!
+		try tal *and* a quickform
+
+
+			what have i got here
 	a common field: lead_id is the only one
 	fields i need to determine which table to use: ticket quantity, amount
 		if tickets * price > amount, it's not a ticket, it's a donation!
@@ -7155,3 +7147,13 @@ BUGS
 			question_id
 	elections realm
 		board needs to have permission to add/remove/etc
+
+	no. do it REALLY STUPIDLY. a bare quickform.
+		just this question and its answers.
+			even stupider: NO quickform!
+		save it.
+	if there is no vote for this familyid/schoolyear/question:
+		show the question
+		hidden with questionid, familyid
+		select or radio with vote
+	else
