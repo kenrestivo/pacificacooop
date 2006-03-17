@@ -17,6 +17,16 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 
+??PHP
+ticket/rsvp fixes
+	why no edit/delete link
+	add select for members/nonmembers/etc
+	why parents not showing up?
+		only some, most are. pang is, margolis is, stangeland is not. wtf?
+		shitcan that report, use tal instead?
+
+
+
 ???PHP/SQL
 poll question
 	show the results
@@ -24,15 +34,6 @@ poll question
 		hook to edit somehow, quickform, pregenerate, etc
 
 	
-??PHP
-ticket/rsvp fixes
-	add families
-		glue in the springfest fees if any
-	what's with the blanks? too many of them
-		ah, my botch, deleting tickets from sql without cascade of paddles
-	why parents not showing up?
-		only some, most are. pang is, margolis is, stangeland is not. wtf?
-		shitcan that report, use tal instead?
 
 
 	
@@ -7177,3 +7178,7 @@ BUGS
 		PARENT! i don't have that in there for some reason?
 			it shoudl be in tehre, make paddles
 		they're there. just not showing up.
+	add families
+		glue in the springfest fees if any
+	what's with the blanks? too many of them
+		ah, my botch, deleting tickets from sql without cascade of paddles

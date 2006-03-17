@@ -227,7 +227,8 @@ coalesce(leads.phone, companies.phone, families.phone) as phone,
 coalesce(leads.email_address, companies.email_address, families.email) as email_address,
 ticket_summary.ticket_purchaser,
 truncate(income.payment_amount / ticket_summary.ticket_quantity,2) as payment_amount,
-springfest_attendees.attended
+springfest_attendees.attended, 
+coalesce(parents.family_id, ticket_summary.family_id, companies.family_id) as family_id, springfest_attendees.school_year
 from springfest_attendees
 left join leads on springfest_attendees.lead_id = leads.lead_id
 left join companies on springfest_attendees.company_id = companies.company_id
@@ -250,7 +251,7 @@ left join
         as ticket_purchaser,
     coalesce(leads.first_name, companies.first_name) as first,
     coalesce(leads.last_name, companies.last_name, 
-        concat(families.name, ' Family')) as last
+        concat(families.name, ' Family')) as last, tickets.family_id
     from tickets
     left join leads on tickets.lead_id = leads.lead_id
     left join companies on tickets.company_id = companies.company_id
@@ -275,7 +276,6 @@ coalesce(leads.first_name, companies.first_name, parents.first_name, ticket_summ
                 );
 
             $co->obj->fb_fieldLabels= array('paddle_number' => 'Paddle Number', 
-                                            'payment_amount' => 'Total Paid',
                                             'first_name' => "First Name",
                                             'last_name' => "Last Name",  
                                             'company_name' =>"Company",
@@ -287,6 +287,7 @@ coalesce(leads.first_name, companies.first_name, parents.first_name, ticket_summ
                                             'phone' => "Phone", 
                                             'attended' => "Attended",
                                             'vip_flag' => "VIP?",
+                                            'payment_amount' => 'Paid (per person)',
                                             'ticket_purchaser' => 
                                             'Reservation Purchased By (or granted to)'
                 );
