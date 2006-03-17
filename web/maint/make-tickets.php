@@ -41,6 +41,9 @@ $menu =& new CoopMenu();
 $menu->page =& $cp;				// XXX hack!
 print $menu->topNavigation();
 
+print $cp->stackPath();
+
+
 print "<p>Springfest Family Tickets</p>";
 
 if(!checkAuthLevel($cp->auth, 0, 'tickets', ACCESS_EDIT, 
