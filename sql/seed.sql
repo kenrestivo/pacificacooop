@@ -766,7 +766,6 @@ group_level = 0,
 user_level = 200,
 realm_id = 9; 
 
-
 insert into user_privileges set
 group_id = 2,
 group_level = 100,
@@ -841,6 +840,7 @@ values
 (5, 'raffle', 'Raffle', '2005-2006'),
 (6, 'about', 'About Us', '2005-2006')
 ;
+
 
 insert into questions
 (question_id, question, school_year)

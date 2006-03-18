@@ -19,11 +19,13 @@ coop web database
 
 ??PHP
 ticket/rsvp fixes
-	why no edit/delete link
-	add select for members/nonmembers/etc
 	why parents not showing up?
-		only some, most are. pang is, margolis is, stangeland is not. wtf?
+		only some, most are. pang is, margolis is, kevin cooke/stangeland is not
+	add select for members/nonmembers/etc
+		this is simple cut and paste
 		shitcan that report, use tal instead?
+		or does it have anything to do with it?
+	maybe links to the maint page from the tickets/paddles if access_edit
 
 
 
@@ -7182,3 +7184,4 @@ BUGS
 		glue in the springfest fees if any
 	what's with the blanks? too many of them
 		ah, my botch, deleting tickets from sql without cascade of paddles
+	why no edit/delete link: duh, schoolyear

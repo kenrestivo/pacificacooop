@@ -154,8 +154,8 @@ class Tickets extends CoopDBDO
 					}
 					while($par->obj->fetch()){
 						$clone->parent_id = $par->obj->parent_id;
-						$found = $clone->find();
-						if(!$found){
+						$clone->find();
+						if($clone->N < 1){
 							$pado->obj->parent_id = $par->obj->parent_id;
 						}
 					}
