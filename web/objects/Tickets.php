@@ -139,8 +139,8 @@ class Tickets extends CoopDBDO
 			// add tickets
 			$toadd = $this->ticket_quantity - ($man + $auto);
 			while($toadd-- > 0){
-				$pado = new CoopObject(&$co->page, 'springfest_attendees', &$top);
-				$clone = $pado->obj->__clone();
+				$pado = new CoopObject(&$co->page, 'springfest_attendees',
+                                       &$top);
 				$pado->obj->ticket_id = $co->id;
 				$pado->obj->entry_type  = 'Automatic';
 				$pado->obj->school_year = $this->school_year;
@@ -149,22 +149,33 @@ class Tickets extends CoopDBDO
 					// check for parents, tag them otherwise
 					$par = new CoopObject(&$co->page, 'parents', &$top);
 					$par->obj->family_id = $this->family_id;
-					if($par->obj->find() < 1){
+                    $par->obj->find();
+					if($par->obj->N  < 1){
 						PEAR::raiseError("no parents for familyid $this->family_id ??", 447);
 					}
 					while($par->obj->fetch()){
-						$clone->parent_id = $par->obj->parent_id;
-						$clone->find();
-						if($clone->N < 1){
+                        $clone =& new CoopObject(&$co->page, 
+                                                 'springfest_attendees',
+                                                 &$top);
+						$clone->obj->whereAdd(sprintf('parent_id = %d and school_year = "%s"',
+                                                      $par->obj->parent_id,
+                                                      $this->school_year));
+						$clone->obj->find();
+						if($clone->obj->N < 1){
 							$pado->obj->parent_id = $par->obj->parent_id;
 						}
 					}
 				}
 				if($this->lead_id > 0){
 					// make sure at least one has this leadid
-					$clone->lead_id = $this->lead_id;
-					$found = $clone->find();
-					if(!$found){
+                    $clone =& new CoopObject(&$co->page, 
+                                             'springfest_attendees',
+                                             &$top);
+					$clone->obj->whereAdd(sprintf('lead_id = %d and school_year = "%s"',
+                                                  $this->lead_id, 
+                                                  $this->school_year));
+					$clone->obj->find();
+					if($clone->obj->N < 1){
 						$pado->obj->lead_id = $this->lead_id;
 					}
 				}
@@ -172,9 +183,14 @@ class Tickets extends CoopDBDO
 
 				if($this->company_id > 0){
 					// make sure at least one has this leadid
-					$clone->company_id = $this->company_id;
-					$found = $clone->find();
-					if(!$found){
+                    $clone =& new CoopObject(&$co->page, 
+                                             'springfest_attendees',
+                                             &$top);
+					$clone->obj->whereAdd(sprintf('company_id = %d and school_year = "%s"',
+                                                  $this->company_id,
+                                                  $this->school_year));
+					$clone->obj->find();
+					if($clone->obj->N < 1){
 						$pado->obj->company_id = $this->company_id;
 					}
 				}
