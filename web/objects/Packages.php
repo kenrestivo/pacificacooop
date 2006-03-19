@@ -250,7 +250,7 @@ function public_packages(&$cp, $sy)
 					   'Item Name',
 					   'Description',
 					   'Value'), 
-				 'bgcolor=#aabbff align=left', 'TH');
+				 array('class' =>'tableheaders'), 'TH');
 
     // leading zeroes
 	$q = sprintf('select concat(package_types.prefix, package_number),
