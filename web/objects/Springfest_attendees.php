@@ -210,6 +210,52 @@ class Springfest_attendees extends CoopDBDO
         {
             $co->schoolYearChooser();
             $sy = $co->getChosenSchoolYear();
+
+            //// ADD SHOW BUTTONS
+            $whereadd = array();
+            foreach (
+                array(
+                    'members' => array('title' => 'Members (parents)',
+                                       'key' => 'family_id'), 
+                    'solicitation' => array('title' => 'Solicitation Contacts',
+                                            'key' => 'company_id'), 
+                    'invitees' => array('title' => 'Invitation Contacts',
+                                        'key' => 'lead_id')
+                    ) as $show => $details)
+            {
+                $button =& $co->searchForm->addElement(
+                    'advcheckbox', 
+                    'show_'.$show, 
+                    $show == 'members'?'Show':NULL,
+                    $details['title']);
+                
+                
+                $co->searchForm->setDefaults(
+                    // NOTE! isset not empty! preserve nulls!
+                    array('show_'.$show => 
+                          isset($co->page->vars['last']['show_'.$show]) ? $co->page->vars['last']['show_'.$show] : 1));
+            
+            
+                $showresults[$show] = $button->getValue();
+                $co->page->vars['last']['show_'.$show] = $showresults[$show];
+
+
+                // not the DBDO style of whereadd, my own weird hybrid
+                if($co->page->vars['last']['show_'.$show] > 0){
+                    $whereadd[] = sprintf('ticket_summary.%s > 0',
+                                          $details['key']);
+                }
+            }
+            $where = '1 = 0';
+            if(count($whereadd) > 0 ){
+                $where = implode(' or ', $whereadd);
+            }
+
+            $co->showChooser = 1;
+            $co->searchForm->addElement('submit', 'savebutton', 'Change');
+            
+            
+
             $co->obj->query(
                 "
 select springfest_attendees.springfest_attendee_id, 
@@ -251,7 +297,7 @@ left join
         as ticket_purchaser,
     coalesce(leads.first_name, companies.first_name) as first,
     coalesce(leads.last_name, companies.last_name, 
-        concat(families.name, ' Family')) as last, tickets.family_id
+        concat(families.name, ' Family')) as last, tickets.family_id, tickets.company_id, tickets.lead_id
     from tickets
     left join leads on tickets.lead_id = leads.lead_id
     left join companies on tickets.company_id = companies.company_id
@@ -259,12 +305,13 @@ left join
 ) as ticket_summary 
     on ticket_summary.ticket_id = springfest_attendees.ticket_id
 left join income on ticket_summary.income_id = income.income_id
-where springfest_attendees.school_year = '$sy'
+where springfest_attendees.school_year = '$sy' and ($where)
 order by 
 coalesce(leads.last_name, companies.last_name, parents.last_name, ticket_summary.last),
 coalesce(leads.first_name, companies.first_name, parents.first_name, ticket_summary.first)
 ");
 
+            // i only want these
             $co->obj->fb_fieldsToRender= array('paddle_number', 
                                                'ticket_purchaser',
                                                'first_name',
