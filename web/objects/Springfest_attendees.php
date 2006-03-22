@@ -276,8 +276,10 @@ coalesce(leads.first_name, companies.first_name, parents.first_name, ticket_summ
                 );
 
             $co->obj->fb_fieldLabels= array('paddle_number' => 'Paddle Number', 
-                                            'first_name' => "First Name",
                                             'last_name' => "Last Name",  
+                                            'first_name' => "First Name",
+                                            'ticket_purchaser' => 
+                                            'Reservation Purchased By (or granted to)',
                                             'company_name' =>"Company",
                                             'address1' => "Address", 
                                             'address2' => "Address2",
@@ -287,9 +289,7 @@ coalesce(leads.first_name, companies.first_name, parents.first_name, ticket_summ
                                             'phone' => "Phone", 
                                             'attended' => "Attended",
                                             'vip_flag' => "VIP?",
-                                            'payment_amount' => 'Paid (per person)',
-                                            'ticket_purchaser' => 
-                                            'Reservation Purchased By (or granted to)'
+                                            'payment_amount' => 'Paid (per person)'
                 );
 
             return $co->simpleTable(false, true);
