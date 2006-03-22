@@ -283,6 +283,7 @@ order by total desc',
 		where tickets.lead_id is not null 
 			and tickets.ticket_quantity > 0
 				and tickets.school_year = \"$schoolyear\"
+                  and (tickets.family_id is null or tickets.family_id < 1)
 		group by invitations.relation
 		order by total desc" 
 		);
