@@ -78,7 +78,7 @@ their race, color, religion, nationality, ethnic origin or sexual orientation. <
     	<a href="admissionrequirements.html">admission requirements</a>.</p>
     	<p>See notes about admissions <a href="admissions.html">here</a>.</p>
     	<p>Download an application to get on the waiting list
-    	<a href="./documents/Wait_list_application_2003.doc">here</a>.</p>
+    	<a href="./documents/Wait_list_application_current.pdf">here</a>.</p>
     	
     	<hr size="5" width="600" color="red" align="left">
     	
