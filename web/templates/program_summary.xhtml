@@ -22,7 +22,7 @@
 			 tal:condition="package/package_description">
           <tr class="packagetitle" >
             <td tal:content="package/package_number"></td>
-            <td tal:content="package/package_title"></td>
+            <td tal:content="structure package/package_title"></td>
             <td tal:content="string: Value ${package/package_value}"></td>
           </tr>
           <tr >
