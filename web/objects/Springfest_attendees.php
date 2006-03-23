@@ -216,12 +216,14 @@ class Springfest_attendees extends CoopDBDO
             foreach (
                 array(
                     'members' => array('title' => 'Members (parents)',
-                                       'key' => 'family_id'), 
+                                       'whereadd' => 'ticket_summary.family_id > 0'), 
                     'solicitation' => array('title' => 'Solicitation Contacts',
-                                            'key' => 'company_id'), 
+                                            'whereadd' => 'ticket_summary.company_id > 0'), 
                     'invitees' => array('title' => 'Invitation Contacts',
-                                        'key' => 'lead_id')
-                    ) as $show => $details)
+                                        'whereadd' => 'ticket_summary.lead_id > 0'),
+                    'blanks' => array('title' => 'Blanks (for purchasing tickets at the door)',
+                                      'whereadd' => 'ticket_summary.ticket_id is null')) 
+                as $show => $details)
             {
                 $button =& $co->searchForm->addElement(
                     'advcheckbox', 
@@ -242,14 +244,17 @@ class Springfest_attendees extends CoopDBDO
 
                 // not the DBDO style of whereadd, my own weird hybrid
                 if($co->page->vars['last']['show_'.$show] > 0){
-                    $whereadd[] = sprintf('ticket_summary.%s > 0',
-                                          $details['key']);
+                    $whereadd[] = $details['whereadd'];
                 }
             }
             $where = '1 = 0';
             if(count($whereadd) > 0 ){
                 $where = implode(' or ', $whereadd);
             }
+
+
+                
+
 
             $co->showChooser = 1;
             $co->searchForm->addElement('submit', 'savebutton', 'Change');
