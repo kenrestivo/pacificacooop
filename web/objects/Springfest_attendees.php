@@ -215,14 +215,22 @@ class Springfest_attendees extends CoopDBDO
             $whereadd = array();
             foreach (
                 array(
-                    'members' => array('title' => 'Members (parents)',
-                                       'whereadd' => 'ticket_summary.family_id > 0'), 
-                    'solicitation' => array('title' => 'Solicitation Contacts',
-                                            'whereadd' => 'ticket_summary.company_id > 0'), 
-                    'invitees' => array('title' => 'Invitation Contacts',
-                                        'whereadd' => 'ticket_summary.lead_id > 0'),
-                    'blanks' => array('title' => 'Blanks (for purchasing tickets at the door)',
-                                      'whereadd' => 'ticket_summary.ticket_id is null')) 
+                    'members' => array(
+                        'title' => 'Members (parents)',
+                        'whereadd' => 'ticket_summary.family_id > 0',
+                        'default' => 1), 
+                    'solicitation' => array(
+                        'title' => 'Solicitation Contacts',
+                        'whereadd' => 'ticket_summary.company_id > 0',
+                        'default' => 1), 
+                    'invitees' => array(
+                        'title' => 'Invitation Contacts',
+                        'whereadd' => 'ticket_summary.lead_id > 0',
+                        'default' => 1),
+                    'blanks' => array(
+                        'title' => 'Blanks (for purchasing tickets at the door)',
+                        'whereadd' => 'ticket_summary.ticket_id is null',
+                        'default' => 0)) 
                 as $show => $details)
             {
                 $button =& $co->searchForm->addElement(
@@ -235,7 +243,7 @@ class Springfest_attendees extends CoopDBDO
                 $co->searchForm->setDefaults(
                     // NOTE! isset not empty! preserve nulls!
                     array('show_'.$show => 
-                          isset($co->page->vars['last']['show_'.$show]) ? $co->page->vars['last']['show_'.$show] : 1));
+                          isset($co->page->vars['last']['show_'.$show]) ? $co->page->vars['last']['show_'.$show] : $details['default']));
             
             
                 $showresults[$show] = $button->getValue();
