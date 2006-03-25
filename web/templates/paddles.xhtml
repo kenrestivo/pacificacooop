@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<div tal:omit-tag="" metal:use-macro="outershell-templ.xhtml/main_page">
+
+  <div tal:omit-tag="" metal:fill-slot="extra_header_stuff">
+    <style  type="text/css">
+    </style>
+  </div>
+
+
+  <div tal:omit-tag="" metal:fill-slot="inner_content">
+
+    <table>
+      <tr tal:repeat="paddle paddles">
+        <td tal:content="paddle/paddle_number"></td>
+        <td tal:content="structure paddle/last_name"></td>
+        <td tal:content="structure paddle/first_name"></td>
+        <td tal:content="structure paddle/ticket_purchaser"></td>
+        <td tal:content="paddle/phone"></td>
+        <td tal:content="paddle/vip_flag"></td>
+      </tr> 
+    </table>
+
+  </div>
+
+
+</div>

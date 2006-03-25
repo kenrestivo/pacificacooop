@@ -17,6 +17,16 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 
+??PHP
+bring the auction purchases back to life!
+
+
+??PHP/SQL
+enter last year's goddamned attendees!
+	hairy: need to add user if not present, add ticket, then paddlen
+	add count of them, to report, for chrissakes!
+	
+	
 
 ??SQL/PHP
 report of kid/hours for michelle and shirley
@@ -38,44 +48,13 @@ poll question
 	cut off date! automatic, put it in the question, optionally		
 	
 
-
-	
-???PHP, nasty				
-export button for tickets/paddles
-	well, just generalise view, really
-	i'll need all the schoolyearchooser shit though, to honour it in export
-		no pager though, that's the only thing to leave out
-		basically, everything in view except for the simpletable. fuck.
-			yes. this is stupid: presentation and logic stuck together!
-	fb_export()? or a subclass of coopview or cooppage?
-		like i have with pdf
-	things i'll need that are specific to exporting
-		spreadsheetname
-		worksheet name
-		landscape/portrait
-		any special notes
-	could change display_view to be everything EXCEPT calling simpletable
-		almost all do exactly that, and end with true,true
-		or, hack simpletable so it doesn't run if spreasdheet-- EVIL
 				
-
-	
 
 BUGS
 	what's up with 1 not -1 for ignore!??
 		
 
-	
-??TAL/CSS
-line up the auction items at the top in the livesite
-	ah, some css. or js? p's inside of tables, don't move below
 
-
-
-??PHP/SQL
-enter last year's goddamned attendees!
-	hairy: need to add user if not present, add ticket, then paddlen
-add count of them, to report, for chrissakes!
 
 	
 				
@@ -3584,7 +3563,32 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	shitcan that report, use tal instead?
+
+
+??TAL/CSS
+line up the auction items at the top in the livesite
+	ah, some css. or js? p's inside of tables, don't move below
+
+
+	???aPHP, nasty				
+export button for tickets/paddles
+	well, just generalise view, really
+	i'll need all the schoolyearchooser shit though, to honour it in export
+		no pager though, that's the only thing to leave out
+		basically, everything in view except for the simpletable. fuck.
+			yes. this is stupid: presentation and logic stuck together!
+	fb_export()? or a subclass of coopview or cooppage?
+		like i have with pdf
+	things i'll need that are specific to exporting
+		spreadsheetname
+		worksheet name
+		landscape/portrait
+		any special notes
+	could change display_view to be everything EXCEPT calling simpletable
+		almost all do exactly that, and end with true,true
+		or, hack simpletable so it doesn't run if spreasdheet-- EVIL
+
+			shitcan that report, use tal instead?
 		erin's comments?
 
 				if it's paid for, dammit, then insist on payment!	
