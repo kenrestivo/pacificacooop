@@ -170,10 +170,10 @@ class Adder:
 
     def _get(self, query):
         """utility used by get() methods of subclasses"""
-        c.execute(query)
-        self.r=c.fetchall()
-        if c.rowcount < 1: raise NoneFound
-        if c.rowcount > 1: raise TooManyFound
+        self.c.execute(query)
+        self.r=self.c.fetchall()
+        if self.c.rowcount < 1: raise NoneFound
+        if self.c.rowcount > 1: raise TooManyFound
         return self.r[0][self.pk]
 
     def choose(self):
@@ -218,26 +218,26 @@ class Family(Adder):
         """simple insert wrapper"""
         n=raw_input("insert new family %s (y/n)? " % (self.rec['Last Name']))
         if n == 'y':
-            c.execute("""insert into families set name = %s, phone = %s,
+            self.c.execute("""insert into families set name = %s, phone = %s,
                     address1 = %s, email = %s""",
                   (self.rec['Last Name'], self.rec['Phone'],
                    self.rec['Address'], self.rec['Email']))
-        self.id=c.lastrowid
+        self.id=self.c.lastrowid
         return self.id
 
     def update(self, pid):
         """keepin' it real, y'know what i'm sayin'?"""
         try:
             new=[self.rec['Phone'], self.rec['Address'], self.rec['Email']]
-            c.execute("""select * from families where family_id = %s""", (pid))
-            f=c.fetchall()[0]  #assume only 1? XXX exept IndexError if wrong!
+            self.c.execute("""select * from families where family_id = %s""", (pid))
+            f=self.c.fetchall()[0]  #assume only 1? XXX exept IndexError if wrong!
             old=[str(x) for x in [f['phone'], f['address1'], f['email']]]
             if new != old:
                 print 'data changed for %s...' % (self.rec['Last Name'])
                 n=raw_input('OLD [%s]\n NEW [%s]\n use new? y/n ' %
                             (','.join(old), ','.join(new)))
                 if n == 'y':
-                    c.execute("""update families set phone = %s,
+                    self.c.execute("""update families set phone = %s,
                     address1 = %s, email = %s where family_id = %s""",
                               (self.rec['Phone'],
                                self.rec['Address'], self.rec['Email'],
@@ -267,11 +267,11 @@ class Kid(Adder):
         n=raw_input("insert new kid %s %s (y/n)? " % (self.rec['Child'],
                                            self.rec['Last Name']))
         if n == 'y':
-            c.execute("""insert into kids set last_name = %s, first_name = %s,
+            self.c.execute("""insert into kids set last_name = %s, first_name = %s,
             family_id = %s, date_of_birth = %s""",
                       (self.rec['Last Name'], self.rec['Child'],
                        int(self.family_id), self._human_to_dt(self.rec['DOB'])))
-        self.id=c.lastrowid
+        self.id=self.c.lastrowid
         return self.id
 
 
@@ -287,8 +287,8 @@ class Kid(Adder):
     def update(self, pid):
         """keepin' it real, y'know what i'm sayin'?"""
         new=[self.rec['DOB']]
-        c.execute("""select * from kids where kid_id = %s""", (pid))
-        f=c.fetchall()[0]  #assume only 1? XXX exept IndexError if wrong!
+        self.c.execute("""select * from kids where kid_id = %s""", (pid))
+        f=self.c.fetchall()[0]  #assume only 1? XXX exept IndexError if wrong!
         try:
             d=f['date_of_birth']
             oldshort=['/'.join(map(str,[d.month,d.day,d.strftime('%y')]))]
@@ -302,7 +302,7 @@ class Kid(Adder):
             n=raw_input('OLD [%s]\n NEW [%s]\n use new? y/n ' %
                         (','.join(oldshort), ','.join(new)))
             if n == 'y':
-                c.execute("""update kids set date_of_birth = %s
+                self.c.execute("""update kids set date_of_birth = %s
                  where kid_id = %s""",
                           (self._human_to_dt(self.rec['DOB']),
                            pid))
@@ -314,10 +314,10 @@ class Kid(Adder):
             allergy=self.rec['Allergies']
         except KeyError:
             allergy=self.rec['Notes']
-        c.execute("""update kids set doctor_id = %s, allergies = %s
+        self.c.execute("""update kids set doctor_id = %s, allergies = %s
         where kid_id = %s""",
                   (dr_id, allergy, self.id))
-        return c.lastrowid
+        return self.c.lastrowid
 
 
 
@@ -340,7 +340,7 @@ class Enrollment(Adder):
                     (self.rec['Child'], self.rec['Last Name'],
                      self.rec['session']))
         if n == 'y':
-            c.execute("""insert into enrollment set 
+            self.c.execute("""insert into enrollment set 
             kid_id = %s, school_year = %s, am_pm_session = %s,
             start_date = %s , monday = %s, tuesday = %s,
             wednesday = %s, thursday = %s, friday = %s""",
@@ -348,7 +348,7 @@ class Enrollment(Adder):
                              first_day_of_school] +
                             [self.rec[i] is not '' for i in
                              ['M','Tu', 'W','Th','F']]))
-        self.id=c.lastrowid
+        self.id=self.c.lastrowid
         return self.id
 
 
@@ -375,11 +375,11 @@ class Parent(Adder):
                     (self.rec[self.type+'_first'],
                      self.rec[self.type+'_last']))
         if n == 'y':
-            c.execute("""insert into parents set last_name = %s, first_name = %s,
+            self.c.execute("""insert into parents set last_name = %s, first_name = %s,
                     family_id = %s, type = %s""",
                   (self.rec[self.type+'_last'], self.rec[self.type+'_first'],
                    int(self.family_id), self.type))
-        self.id=c.lastrowid
+        self.id=self.c.lastrowid
         return self.id
 
 
@@ -405,7 +405,7 @@ class Worker(Adder):
         n=raw_input("insert new worker %s %s (y/n)? " %
                     (self.rec['Last Name'], self.rec['session']))
         if n == 'y':
-            c.execute("""insert into workers set 
+            self.c.execute("""insert into workers set 
                         parent_id = %s, school_year = %s, am_pm_session = %s,
                         workday = %s, epod = %s""" ,
                   (self.parent_id, school_year, self.rec['session'],
@@ -414,7 +414,7 @@ class Worker(Adder):
                                          self.rec.items())][0],
                    [self.days[j[0]] for j in filter(lambda i: i[1] == 'E',
                                          self.rec.items())][0]))
-        self.id=c.lastrowid
+        self.id=self.c.lastrowid
         return self.id
 
 
@@ -433,11 +433,11 @@ class User(Adder):
 
     def add(self):
         print "inserting new user for %s" % (self.rec['Last Name'])
-        c.execute("""insert into users set 
+        self.c.execute("""insert into users set 
                         family_id = %s, name = %s""",
                   (self.family_id, self.rec['Last Name']+ ' Family'))
-        uid=c.lastrowid
-        c.execute("""insert into users_groups_join set
+        uid=self.c.lastrowid
+        self.c.execute("""insert into users_groups_join set
         user_id = %s, group_id = 1""",
                   (uid))
         return uid
@@ -479,10 +479,10 @@ class Doctor(Adder):
                 num=self.rec['Doctors Number']
             except KeyError:
                 num=self.rec['Doctors Phone']
-            c.execute("""insert into leads set last_name = %s, first_name = %s,
+            self.c.execute("""insert into leads set last_name = %s, first_name = %s,
                     phone  = %s""",
                   (self.dr_last, self.dr_first[0], num))
-        self.id=c.lastrowid
+        self.id=self.c.lastrowid
         return self.id
 
 

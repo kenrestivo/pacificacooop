@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdml>
+  <head>
+  </head>
+
+  <body>
+
+    <table border="1">
+      <tr tal:repeat="paddle paddles">
+        <td tal:content="paddle/paddle_number"></td>
+        <td tal:content="paddle/last_name"></td>
+        <td tal:content="paddle/first_name"></td>
+        <td tal:content="paddle/ticket_purchaser"></td>
+        <td tal:content="paddle/phone"></td>
+        <td tal:content="paddle/vip_flag"></td>
+      </tr> 
+    </table>
+
+    
+  </body>
+</pdml>

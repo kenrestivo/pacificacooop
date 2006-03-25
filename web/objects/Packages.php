@@ -167,7 +167,7 @@ var $fb_currencyFields = array(
             
             if($co->isPermittedField(null, true, true) >=  ACCESS_EDIT){
                 $res .= $co->page->selfURL(
-                    array('value' => 'Change Permament Sort Order',
+                    array('value' => 'Change Permament Sort Order or Package Types',
                           'inside' => array('action' => 'view',
                                             'table' => 'package_types',
                                             'push' => $co->table)));

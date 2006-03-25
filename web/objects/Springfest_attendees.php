@@ -206,7 +206,8 @@ class Springfest_attendees extends CoopDBDO
             return true; 				// copacetic
         }
 
-    function fb_display_view(&$co)
+
+function prepare_view(&$co)
         {
             $co->schoolYearChooser();
             $sy = $co->getChosenSchoolYear();
@@ -331,8 +332,9 @@ coalesce(leads.first_name, companies.first_name, parents.first_name, ticket_summ
                                                'last_name', 'company_name',
                                                'address1', 'address2',
                                                'city', 'state','zip', 
-                                               'phone', 'email_address', 'vip_flag',
-                                               'payment_amount', 'attended'
+                                               'phone', 'email_address', 
+                                               'vip_flag',
+                                               'attended', 'payment_amount'
                 );
 
             $co->obj->fb_fieldLabels= array('paddle_number' => 'Paddle Number', 
@@ -352,6 +354,12 @@ coalesce(leads.first_name, companies.first_name, parents.first_name, ticket_summ
                                             'payment_amount' => 'Paid (per person)'
                 );
 
+        }
+
+
+    function fb_display_view(&$co)
+        {
+            $this->prepare_view(&$co);
             return $co->simpleTable(false, true);
 
         }

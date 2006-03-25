@@ -2310,4 +2310,99 @@ where springfest_attendees.school_year = '2005-2006'
 order by  springfest_attendees.paddle_number
 ;
 
+--- TEMP paddle test with criteria
+select springfest_attendees.springfest_attendee_id,
+springfest_attendees.paddle_number, ticket_summary.vip_flag, coalesce(leads.first_name, companies.first_name, parents.first_name) as first_name, 
+coalesce(leads.last_name, companies.last_name, parents.last_name) as last_name, 
+coalesce(leads.company, companies.company_name) as company_name, 
+coalesce(leads.address1, companies.address1, families.address1) as address1, 
+coalesce(leads.address2, companies.address2) as address2, 
+coalesce(leads.city, companies.city) as city, 
+coalesce(leads.state, companies.state) as state, 
+coalesce(leads.zip, companies.zip) as zip, 
+coalesce(leads.phone, companies.phone, families.phone) as phone, 
+coalesce(leads.email_address, companies.email_address, families.email) as email_address, 
+ticket_summary.ticket_purchaser, 
+truncate (income.payment_amount / ticket_summary.ticket_quantity,2) as payment_amount, 
+springfest_attendees.attended, 
+coalesce(parents.family_id, ticket_summary.family_id, companies.family_id) as family_id, 
+springfest_attendees.school_year 
+from springfest_attendees 
+left join leads on springfest_attendees.lead_id = leads.lead_id 
+left join companies on springfest_attendees.company_id = companies.company_id 
+left join parents on springfest_attendees.parent_id = parents.parent_id 
+left join families on parents.family_id = families.family_id 
+left join 
+    (select tickets.ticket_id, tickets.vip_flag, tickets.income_id, 
+        tickets.school_year, tickets.ticket_quantity, 
+        concat_ws(' ', coalesce(leads.first_name, companies.first_name) , 
+        coalesce(leads.last_name, companies.last_name, 
+                concat(families.name, ' Family')), 
+        coalesce(leads.company, companies.company_name), 
+        coalesce(leads.address1, companies.address1, families.address1), 
+        coalesce(leads.address2, companies.address2), 
+        coalesce(leads.city, companies.city), 
+        coalesce(leads.state, companies.state), 
+        coalesce(leads.zip, companies.zip), 
+        coalesce(leads.phone, companies.phone, families.phone), 
+        coalesce(leads.email_address, companies.email_address, families.email)) as ticket_purchaser, 
+        coalesce(leads.first_name, companies.first_name) as first, 
+        coalesce(leads.last_name, companies.last_name, 
+            concat(families.name, ' Family')) as last, 
+        tickets.family_id
+    from tickets 
+        left join leads on tickets.lead_id = leads.lead_id 
+        left join companies on tickets.company_id = companies.company_id 
+        left join families on tickets.family_id = families.family_id ) as ticket_summary on ticket_summary.ticket_id = springfest_attendees.ticket_id 
+        left join income on ticket_summary.income_id = income.income_id 
+where springfest_attendees.school_year = '2005-2006' and 
+    (springfest_attendees.parent_id > 0 
+        or springfest_attendees.company_id > 0 
+        or springfest_attendees.lead_id > 0) 
+order by coalesce(leads.last_name, companies.last_name, parents.last_name, 
+            ticket_summary.last), 
+        coalesce(leads.first_name, companies.first_name, parents.first_name, 
+                ticket_summary.first) 
+\G
+
+
+--- TEMP paddle test1
+select springfest_attendees.*
+from springfest_attendees 
+left join leads on springfest_attendees.lead_id = leads.lead_id 
+left join companies on springfest_attendees.company_id = companies.company_id 
+left join parents on springfest_attendees.parent_id = parents.parent_id 
+left join families on parents.family_id = families.family_id 
+left join 
+    (select tickets.ticket_id, tickets.vip_flag, tickets.income_id, 
+        tickets.school_year, tickets.ticket_quantity, 
+        concat_ws(' ', coalesce(leads.first_name, companies.first_name) , 
+        coalesce(leads.last_name, companies.last_name, 
+                concat(families.name, ' Family')), 
+        coalesce(leads.company, companies.company_name), 
+        coalesce(leads.address1, companies.address1, families.address1), 
+        coalesce(leads.address2, companies.address2), 
+        coalesce(leads.city, companies.city), 
+        coalesce(leads.state, companies.state), 
+        coalesce(leads.zip, companies.zip), 
+        coalesce(leads.phone, companies.phone, families.phone), 
+        coalesce(leads.email_address, companies.email_address, families.email)) as ticket_purchaser, 
+        coalesce(leads.first_name, companies.first_name) as first, 
+        coalesce(leads.last_name, companies.last_name, 
+            concat(families.name, ' Family')) as last, 
+        tickets.family_id, tickets.company_id, tickets.lead_id
+    from tickets 
+        left join leads on tickets.lead_id = leads.lead_id 
+        left join companies on tickets.company_id = companies.company_id 
+        left join families on tickets.family_id = families.family_id ) as ticket_summary on ticket_summary.ticket_id = springfest_attendees.ticket_id 
+        left join income on ticket_summary.income_id = income.income_id 
+where springfest_attendees.school_year = '2005-2006' and 
+    (springfest_attendees.parent_id > 0 )
+order by coalesce(leads.last_name, companies.last_name, parents.last_name, 
+            ticket_summary.last), 
+        coalesce(leads.first_name, companies.first_name, parents.first_name, 
+                ticket_summary.first) 
+\G
+
+
 --- EOF

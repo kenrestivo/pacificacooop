@@ -7,7 +7,7 @@ coop web database
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
 	json, REST, xmlrpc (jsonselect.txt)
-	fix money: make it INVOICES  bi and income (invoicing.txt) SQL
+	fix money: make it INVOICES  billing and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
 	insurance, dammit
@@ -17,31 +17,31 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 
-??PHP
-ticket/rsvp fixes
-	why parents not showing up?
-		only some, most are. pang is, margolis is, kevin cooke/stangeland is not
-	add select for members/nonmembers/etc
-		this is simple cut and paste
-		shitcan that report, use tal instead?
-		or does it have anything to do with it?
-	maybe links to the maint page from the tickets/paddles if access_edit
+
+??SQL/PHP
+report of kid/hours for michelle and shirley
+	basically, enrollment summarised by families. this can't be hard
+
+BUGS
+	l01, edit
+	invitation income calculation is wrong: with food/quilt they don't concur
+		have to join tickets in there and yank the familyid in tickets
 
 
+	
 
 ???PHP/SQL
 poll question
 	show the results
-	do NOT let people edit after voting has started
-		hook to edit somehow, quickform, pregenerate, etc
-
+		summary of votes for question
+		column of voted/not voted
+	cut off date! automatic, put it in the question, optionally		
 	
 
 
 	
 ???PHP, nasty				
 export button for tickets/paddles
-	show phone number
 	well, just generalise view, really
 	i'll need all the schoolyearchooser shit though, to honour it in export
 		no pager though, that's the only thing to leave out
@@ -117,6 +117,11 @@ BUGS
 		constrain it in ENTERING the same way i constrian it for VIEWING
 		otherwise they can paint themselves into a corner
 
+	nasty disappearing sponsorships for leads!
+		where/when did it disappear??!
+			quick python script
+				for an array of leads, do a query
+					generate a matrix of leads, dates, and present/not
 
 	
 
@@ -623,6 +628,21 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP/SQL
+paddles don't alphabetise if there is no first/last in solicitation contact
+	a condition?
+
+??PHP/SQL
+make auction donations and in-kind donations the same thing
+	to make it easier to move items from one to the other
+	just the link should be different
+
+
+??PHP
+ticket/rsvp 
+	maybe links to the maint page from the tickets/paddles if access_edit
+		would be nice, actually
 
 ??PHP
 create a test suite for renumbering packages
@@ -1379,7 +1399,7 @@ table/field select
 the thing i don't like about hard-coding the join paths is what if i NORMALIZE!
 	if i change the db structure, i'm fucked.
 
-heh. the leads for other families are showing up as BLANK LINES!
+
 
 this is interesting. in the details menu, i should only show the enter new
 	IFF there is a PATH to a familyd and i chase it, and have edit perms on it.
@@ -3564,7 +3584,10 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-		if it's paid for, dammit, then insist on payment!	
+	shitcan that report, use tal instead?
+		erin's comments?
+
+				if it's paid for, dammit, then insist on payment!	
 
 			update it to note PAID FOR for the ticket, go grab from food/raffle fee
 		for those who actually paid!
@@ -7185,3 +7208,18 @@ BUGS
 	what's with the blanks? too many of them
 		ah, my botch, deleting tickets from sql without cascade of paddles
 	why no edit/delete link: duh, schoolyear
+	why parents not showing up?
+		only some, most are. pang is, margolis is, kevin cooke/stangeland is not
+
+BUGS
+	print preview in firefox?
+	show phone number
+
+??PHP/SQL
+fix the RSVp count in the carrie report to remove member TICKETS
+	i.e. those with family id > 0
+	add select for members/nonmembers/etc
+		this is simple cut and paste from packages
+	structure for titles in export report
+	alphabetise those weird solicitation items
+heh. the leads for other families are showing up as BLANK LINES!	ah, year

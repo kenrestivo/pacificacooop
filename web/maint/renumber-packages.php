@@ -36,7 +36,9 @@ print $cp->pageTop();
 $atd = new CoopView(&$cp, 'packages', $none);
 
 print $cp->topNavigation();
-print $cp->stackPath();
+//XXX BROKEN! path! print $cp->stackPath();
+
+//TODO: force back to main menu
 
 print "\n<hr /></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
 print '<div class="centerCol">';
