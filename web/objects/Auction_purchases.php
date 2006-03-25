@@ -44,13 +44,11 @@ class Auction_purchases extends CoopDBDO
     function fb_display_view(&$co)
         {
 
-            //XXXX concat the new package_types.prefix too!
-
-            //TODO: school year chooser!
-
+            $co->schoolYearChooser();            
+            
             $this->query(sprintf("
 select distinct
-packages.package_number,
+concat(package_types.prefix, package_number) as package_number,
 packages.package_title,
 packages.package_value,
 auction_purchases.package_sale_price,
@@ -58,10 +56,11 @@ auction_purchases.package_sale_price,
 from packages
 left join  auction_purchases on auction_purchases.package_id = 
       packages.package_id
-where packages.school_year = '%s' 
+        left join package_types on packages.package_type_id = package_types.package_type_id
+where packages.school_year = '%s'
+and auction_purchases.package_id is not null
 order by variance desc",
-                                 findSchoolYear()		  
-                             ));
+                                 $co->getChosenSchoolYear()));
 
             $this->preDefOrder = array('package_number', 
                                              'package_title', 
@@ -69,8 +68,14 @@ order by variance desc",
                                              'variance',
                                              'package_sale_price'
                 );
-            $this->fb_fieldLabels['variance'] = 'Variance (over asking price)';
-            $this->fb_fieldLabels['package_sale_price'] = 'Actual Sale Price';
+
+            $this->fb_fieldLabels = array(
+                "package_number" => 'Package Number',
+                "package_title" => "Package Title (short)" ,
+                "package_value" => 'Estimated Value ($)' ,
+                'variance' => 'Variance (over asking price)',
+                'package_sale_price' => 'Actual Sale Price');
+
             array_push($this->fb_currencyFields, 'variance');
             return $co->simpleTable(false, true);
 
