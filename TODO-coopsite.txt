@@ -1,7 +1,6 @@
 coop web database
 
  MY agenda! dammit, mine! for a change....
-	springfest microsite (microsite.txt)
  	import the 20-year roster (20yearroster.txt)
 	sortable/searchable/pagable views (searchfeature.txt)
 	cleanups and code fixes (cleanme.txt)
@@ -14,6 +13,7 @@ coop web database
 	graphs and charts (graphs.txt)
 	json services (templates.txt-- anything left to do?)
 	labels/export -- python cgi on nfsn, formatting, etc.
+	springfest microsite (microsite.txt)
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 
@@ -29,7 +29,7 @@ BUGS
 
 
 	
-
+ 
 ???PHP/SQL
 poll question
 	show the results
