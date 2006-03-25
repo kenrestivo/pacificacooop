@@ -41,6 +41,61 @@ class Auction_purchases extends CoopDBDO
     var $fb_shortHeader = 'Purchases';
 
 
+    function preGenerateForm(&$form)
+        {
+
+            /// I ONLY WANT THE PACKAGE NUMBER REALLY
+            $el =& $form->createElement(
+                'customselect', 
+                $form->CoopForm->prependTable('package_id'), false);
+            $pkg =& new CoopObject(&$form->CoopForm->page, 'packages', 
+                                   &$form->CoopForm);
+
+            $pkg->obj->query(
+                sprintf(
+                    'select package_id, 
+concat(package_types.prefix, package_number) as package_number,
+packages.package_title from packages 
+left join package_types on packages.package_type_id = package_types.package_type_id where packages.school_year = "%s"
+order by package_types.sort_order, cast(packages.package_number as signed), packages.package_title, packages.package_description
+',
+                    $form->CoopForm->getChosenSchoolYear()));
+            $el->setValue($this->package_id);
+            
+            
+            $el->_parentForm =& $form;
+            $el->prepare(&$pkg);
+
+            $this->fb_preDefElements['package_id'] =& $el;
+
+
+            /// I ONLY WANT THE PADDLE NUMBER REALLY
+            $el =& $form->createElement(
+                'customselect', 
+                $form->CoopForm->prependTable('springfest_attendee_id'), false);
+            $pad =& new CoopObject(&$form->CoopForm->page, 'springfest_attendees', 
+                                   &$form->CoopForm);
+
+            $pad->obj->query(
+                sprintf(
+'select * from springfest_attendees
+where springfest_attendees.school_year = "%s"
+order by springfest_attendees.paddle_number
+',
+                    $form->CoopForm->getChosenSchoolYear()));
+            $el->setValue($this->springfest_attendee_id);
+            
+            
+            $el->_parentForm =& $form;
+            $el->prepare(&$pad);
+
+            $this->fb_preDefElements['springfest_attendee_id'] =& $el;
+
+
+
+
+        }
+
     function fb_display_view(&$co)
         {
 
@@ -56,7 +111,7 @@ auction_purchases.package_sale_price,
 from packages
 left join  auction_purchases on auction_purchases.package_id = 
       packages.package_id
-        left join package_types on packages.package_type_id = package_types.package_type_id
+left join package_types on packages.package_type_id = package_types.package_type_id
 where packages.school_year = '%s'
 and auction_purchases.package_id is not null
 order by variance desc",
