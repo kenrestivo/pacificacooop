@@ -78,6 +78,11 @@ insert into chart_of_accounts set
             join_to_table = "auction_purchases",
             description = "SpringFest Auction Package Purchases";
 
+insert into chart_of_accounts set
+            account_number = 12,
+            join_to_table = "auction_purchases",
+            description = "SpringFest Drink Tickets";
+
 -- groups
 insert into groups set
             groupid = 1,
