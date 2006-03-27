@@ -69,6 +69,15 @@ function viewHack(&$cp)
     list($schoolyear, $chooser) = schoolYearChooser(&$cp, 'income');
 
 
+    /// i need this for the totals
+    $ev =& new CoopObject(&$cp, 'calendar_events', &$none);
+    $ev->obj->query(sprintf('select date_format(event_date, "%%Y-%%m-%%d") as formatted_springfest from calendar_events where school_year = "%s" and event_id = %d',
+                            $schoolyear, COOP_SPRINGFEST_EVENT_DATE
+                            ));
+    $ev->obj->fetch();
+    $eventdate = $ev->obj->formatted_springfest;
+    $ev->page->printDebug($eventdate,  1);
+
 
     $res .= $chooser; // hack
 
@@ -85,13 +94,21 @@ function viewHack(&$cp)
 
 	$res .= showRawQuery("Total ALL income from ALL sources", 
 					   "select chart_of_accounts.description as Description, 
-	   sum(payment_amount)  as Total 
-		from income 
-						   left join chart_of_accounts 
-						on income.account_number = 
-								chart_of_accounts.account_number 
-   where income.school_year = \"$schoolyear\"
-		group by income.account_number order by total desc", 1
+       sum(if(date_format(income.check_date, '%Y-%m-%d') not like '$eventdate' ,
+                income.payment_amount,0)) 
+            as Before_After_Event ,
+       sum(if(date_format(income.check_date, '%Y-%m-%d') like '$eventdate' ,
+                income.payment_amount,0)) 
+            as Day_Of_Event ,
+       sum(payment_amount)  as Total 
+        from income 
+                           left join chart_of_accounts 
+                        on income.account_number = 
+                                chart_of_accounts.account_number 
+   where income.school_year = '$schoolyear'
+        group by income.account_number order by total desc
+
+", 1
 		);
 
 
@@ -195,37 +212,40 @@ group by school_year
 
 
 	$res .= "<h2>Invitations</h2>";
-	$res .= showRawQuery("Invitation Income by Type", 
-"
-select coa.description as Description,
-        sum(coalesce(tic.total,0) + coalesce(inc.total,0)) as Total
-from chart_of_accounts as coa
-left join 
-    (select account_number, sum(payment_amount) as total
-     from leads_income_join as linj
-     left join income 
-              on linj.income_id = 
-                income.income_id
-        where income.school_year = '$schoolyear'
-        group by income.account_number) 
-    as inc
-        on inc.account_number = coa.account_number
-left join 
-    (select account_number, sum(payment_amount) as total
-     from tickets
-     left join income 
-              on tickets.income_id = 
-                income.income_id
-        where income.school_year = '$schoolyear'
-        group by income.account_number) 
-    as tic
-        on tic.account_number = coa.account_number
-group by coa.account_number
-having Total > 0
-order by Total desc
 
-"					   
-					   , 1);
+// XXX broken because it includes the MEMBER tickets.
+// 	TODO: find a way to show only invitation income, not member stuff
+// 	$res .= showRawQuery("Invitation Income by Type", 
+// "
+// select coa.description as Description,
+//         sum(coalesce(tic.total,0) + coalesce(inc.total,0)) as Total
+// from chart_of_accounts as coa
+// left join 
+//     (select account_number, sum(payment_amount) as total
+//      from leads_income_join as linj
+//      left join income 
+//               on linj.income_id = 
+//                 income.income_id
+//         where income.school_year = '$schoolyear'
+//         group by income.account_number) 
+//     as inc
+//         on inc.account_number = coa.account_number
+// left join 
+//     (select account_number, sum(payment_amount) as total
+//      from tickets
+//      left join income 
+//               on tickets.income_id = 
+//                 income.income_id
+//         where income.school_year = '$schoolyear'
+//         group by income.account_number) 
+//     as tic
+//         on tic.account_number = coa.account_number
+// group by coa.account_number
+// having Total > 0
+// order by Total desc
+
+// "					   
+// 					   , 1);
 
 
     $res .= showRawQuery('Invitation Income by Contact Type/Source',
