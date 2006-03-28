@@ -121,8 +121,10 @@ left join companies_income_join on springfest_attendees.company_id = companies_i
 left join invitations on springfest_attendees.lead_id = invitations.lead_id
 where packages.school_year = '%s'
 and auction_purchases.package_id is not null
+group by auction_purchases.auction_purchase_id
 order by variance desc, auction_purchases.package_sale_price desc, 
-packages.package_type_id, packages.package_number",
+packages.package_type_id, packages.package_number
+",
                                  $co->getChosenSchoolYear()));
 
             $this->preDefOrder = array('package_number', 

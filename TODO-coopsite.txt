@@ -17,20 +17,19 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 	
+BUGS
+	edit/details for purchases? why is it not there??!
+	
 
-???DATA ENTRY
-springfest close-out
-	enter all the tickets at the door!
-		the comp tickets! there were a few
-		enter the remaining paddles (invites should all be there now!)
-		bah, some of the fucking tickets are showing up with just (1) or (2)
-			find out why
-	find which balloons did NOT sell, mark all others as sold
-	the fucking dilbeck family and shiokari and mcalexander family..
-			TOO MANY DUPLICATES!
-	then i am done!!
+??PHP/TAL
+summary of who purchased each package REPORT
+	do NOT get stuck at the sub-query tal loops.
+	just generate an array via the PHP, and TAL can loop through that
+	show people who HAVE NOT YET PAID for their items!
+		incomeid is null
+		nag list?
 
-
+				
 ??PHP
 bring thank yous back to life
 	first bring the exact old thing back, and push it live.
@@ -47,11 +46,6 @@ bring thank yous back to life
 	umm... people who bought things of of a HUGE cash box might get thankyous
 		gotta suppress those somehow. gah!
 
-
-??PHP/TAL
-summary of who purchased each package REPORT
-	do NOT get stuck at the sub-query tal loops.
-	just generate an array via the PHP, and TAL can loop through that
 
 
 ??PHP
@@ -192,6 +186,11 @@ BURNT (when too burnt out to do actual work)
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
+
+???DATA ENTRY
+springfest close-out
+	find which balloons did NOT sell, mark all others as sold
+		GET THIS FROM MICHELLE! she walked off with them
 
 
 ??PHP
@@ -7340,3 +7339,10 @@ a quick "who attended" count. they really would like that, I expect
 		override the ticket insert/update
 			maybe a checkbox: make new paddles
 		go back and figure out which tickets were cash... or does it say?
+	enter all the tickets at the door!
+		the comp tickets! there were a few
+		enter the remaining paddles (invites should all be there now!)
+		bah, some of the fucking tickets are showing up with just (1) or (2)
+			find out why
+			ah, dbdo clobbering. selectAdd() fixes it	the fucking dilbeck family and shiokari and mcalexander family..
+			TOO MANY DUPLICATES!
