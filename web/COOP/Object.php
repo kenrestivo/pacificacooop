@@ -376,9 +376,10 @@ group by user_id,table_name,field_name";
 
 
 
-            if($key != 'family_id' && ($forceuser || 
-               (!empty($this->obj->family_id) && 
-                $this->page->userStruct['family_id'] == $this->obj->family_id)))
+            if($key != 'family_id' && 
+               ($forceuser ||
+                (!empty($this->obj->family_id) && 
+                 $this->page->userStruct['family_id'] == $this->obj->family_id)))
             {
             	$this->page->printDebug(
                     "ispermitted($this->table : $key) MINE, using max of group/user", 
