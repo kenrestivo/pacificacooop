@@ -365,8 +365,8 @@ coalesce(leads.first_name, companies.first_name, parents.first_name, ticket_summ
                                             'state' => "State",
                                             'zip' => "Zip Code", 
                                             'phone' => "Phone", 
-                                            'attended' => "Attended",
                                             'vip_flag' => "VIP?",
+                                            'attended' => "Attended",
                                             'payment_amount' => 'Paid (per person)'
                 );
 
