@@ -71,7 +71,8 @@ class Tickets extends CoopDBDO
     function fb_linkConstraints(&$co)
 		{
 
-
+            $co->obj->selectAdd();
+            $co->obj->selectAdd(sprintf('%s.*', $co->table));
 
             $leads =& new CoopObject(&$co->page, 'leads', &$co);
             $inv =& new CoopObject(&$co->page, 'invitations', &$co);
@@ -268,7 +269,8 @@ class Tickets extends CoopDBDO
 
             $count = 0;
             foreach(array($vars['tickets-lead_id'],
-                          $vars['tickets-company_id']) 
+                          $vars['tickets-company_id'],
+                          $vars['tickets-family_id']) 
                     as $val)
             {
                 if($val > 0){
@@ -306,9 +308,14 @@ class Tickets extends CoopDBDO
                 'Make Paddles Automatically?',
                 '(You always want this on except when entering tickets purchased at the door)') ; 
             
-            $form->setDefaults(
-                // NOTE! isset not empty! preserve nulls!
-                array('make_paddles' => 1));
+
+                $form->setDefaults(
+                    // NOTE! isset not empty! preserve nulls!
+                    array(
+                        'make_paddles' => 
+                        isset($form->CoopForm->page->vars['last']['make_paddles']) ? 
+                        $form->CoopForm->page->vars['last']['make_paddles'] : 1));
+                
             
             
             $this->fb_preDefElements['make_paddles'] = $el;
