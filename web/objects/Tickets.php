@@ -295,6 +295,9 @@ class Tickets extends CoopDBDO
 
     function preGenerateForm(&$form)
         {
+            /// I thought of including this checkbox only for privileged
+            /// users, but then, again, only privileged users can enter/edit
+            /// tickets anyway!
             $el =& $form->addElement(
                 'advcheckbox', 
                 'make_paddles', 
