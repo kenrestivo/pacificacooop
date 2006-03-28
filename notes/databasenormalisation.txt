@@ -1,11 +1,27 @@
 notes on the database normalisation project
 
+12 hours PHP/SQL
+companies as a linktable. just do it
+	my guile script. any other things needed?
+	companies are now a linktable. full stop.
+	update tables that use it
+		auction join
+		income join
+		contacts (nags)
+		flyers
+		ads
+		in-kind
+		attendees
+		tickets
+	and.... just about every. single. thing. in. springfest.
+		just imagine what that's gonna do to my thankyou notes!
+			heh. it'll simplify it
+	aha! my companies are already duplicated in leads!
+		there are 245 companies in leads already i did it!
+		i just need to make the gui deal with that now
 
-aha! my companies are already duplicated in leads!
-	there are 245 companies in leads already i did it!
-	i just need to make the gui deal with that now
 
-
+		
 	finally drop hte duplicates fields:
 		first/last: 
 			parents, leads, companycontacts, ins, lic, 
@@ -22,21 +38,7 @@ aha! my companies are already duplicated in leads!
 
 
 
-companies as a linktable. just do it
-	my guile script. any other things needed?
-	companies are now a linktable. full stop.
-	update tables that use it
-		auction join
-		income join
-		contacts (nags)
-		flyers
-		ads
-		in-kind
-		attendees
-	and.... just about every. single. thing. in. springfest.
-		just imagine what that's gonna do to my thankyou notes!
-			heh. it'll simplify it
-
+			
 DB CHANGES!
 	consolidate companies and leads! and then adjust
 		note company_name vs company. auugh.

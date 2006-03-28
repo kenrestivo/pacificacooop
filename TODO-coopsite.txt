@@ -21,20 +21,38 @@ coop web database
 ???DATA ENTRY
 springfest close-out
 	enter all the tickets at the door!
-		can't edit tickets at door, because NO FAMILY ID
+		the comp tickets! there were a few
+		enter the remaining paddles (invites should all be there now!)
+		bah, some of the fucking tickets are showing up with just (1) or (2)
+			find out why
 	find which balloons did NOT sell, mark all others as sold
+	the fucking dilbeck family and shiokari and mcalexander family..
+			TOO MANY DUPLICATES!
 	then i am done!!
 
 
 ??PHP
 bring thank yous back to life
-	pdml it! like we did with the bid sheets
+	first bring the exact old thing back, and push it live.
+		just so that it is DONE and nobody is crawling all over me
 	let them edit the template
-		my hokey thing for now, but ultimately add to tiny_mce
+		my hokey [::] for now, but ultimately add to TAL and tiny_mce
+	pdml it! like we did with the bid sheets
+	label printing too
+	new ui model
+		custom details shows the note in text format. "preview/edit?"
+			and gives them edit links to each item
+		checkboxes for which to print
+		checkboxes for which to mark as printed?? or do i need that?
+	umm... people who bought things of of a HUGE cash box might get thankyous
+		gotta suppress those somehow. gah!
 
 
 ??PHP/TAL
 summary of who purchased each package REPORT
+	do NOT get stuck at the sub-query tal loops.
+	just generate an array via the PHP, and TAL can loop through that
+
 
 ??PHP
 put in details recordbuttons for on auction purchases report
@@ -75,11 +93,16 @@ enter last year's goddamned attendees!
 BUGS
 	springfest attendees, edit: schoolyear is present but NOT SHOWING UP
 		it's just not getting added. why? where else does this bug show up?
+		tickets too: can't edit some tickets. FUCKED UP.
+		aha. DBDO clobbering keys
+			in protectedjoin or somewhere, ALWAYS force the keys in linkfields
+				to be those in the LOCAL table
+			or, force a selectAdd(); selectAdd('thistable.*');
 	l01, edit
 	invitation income calculation is wrong: with food/quilt they don't concur
 		have to join tickets in there and yank the familyid in tickets
 	why is income not constrainingschoolyear?
-
+	escaping of text fields in details
 
 	
  
@@ -650,6 +673,17 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP/SQL
+book database!
+	make server-side stuff to decode the barcodes
+		if it is a number, use it. otherwise, decode it from cuecat
+		do it all as ajax
+	
+
+??PHP/TAL
+report to print out all of the job descriptions
+
 
 ???PHP/SQL
 make the fucking searchselect ajax thing drill down into linked tables
@@ -7305,3 +7339,4 @@ a quick "who attended" count. they really would like that, I expect
 	deposit the cash and czechs!!
 		override the ticket insert/update
 			maybe a checkbox: make new paddles
+		go back and figure out which tickets were cash... or does it say?

@@ -112,21 +112,6 @@ function viewHack(&$cp)
 		);
 
 
-	$res .= showRawQuery("Total ALL income by reconciliation status", 
-				 "select chart_of_accounts.description, 
-	   sum(if(income.cleared_date>0,0,income.payment_amount)) 
-			as not_cleared_yet ,
-	   sum(if(income.cleared_date>0,income.payment_amount,0)) 
-			as cleared ,
-	   sum(payment_amount)  as total 
-		from income 
-			   left join chart_of_accounts 
-						on income.account_number = 
-								chart_of_accounts.account_number 
-				where income.school_year = \"$schoolyear\"
-		group by income.account_number order by total desc", 1
-		);
-
 
 
 	$res .= showRawQuery("Income By Date",

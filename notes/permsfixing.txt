@@ -1,23 +1,30 @@
  notes on teh permissions redesign
 
-rights
-	view
-	have in menu
-	edit
-	add
-	delete
-	post to public site
-	adminiser perms
+24 hours PHP/SQL
+	new perms tables in database, to the new model
+        rights
+        	view
+        	have in menu
+        	edit
+        	add
+        	delete
+        	post to public site
+        	adminiser perms
+        	
+        on (range?)
+        	mine
+        	other peoples
+        	other years
+        
+        to
+        	user
+        	group
+	change ispermittedfield and getperms to use new model
+	go through and change all the ispermittedfield() > ACCESS_FOO
+		to instead do... what? a bit test?
+			or make a new permtest() that checks against a bitmap
 	
-on (range?)
-	mine
-	other peoples
-	other years
-
-to
-	user
-	group
-
+        
 
 -----------
 

@@ -1,7 +1,8 @@
 create a  proper springfest microsite
 
-
+???PHP
 database-ize this!
+	didn't i already do this?
 	pages table-- one for each page:
 		shorturl fragment
 		menu short name-- display
@@ -19,6 +20,10 @@ database-ize this!
 		solicit
 		about
 
+???PHP
+handle "thank you" or some message when springfest is over
+	just stick it in there if today > springfesteventdate
+		
 specials, in addition to the stuff in the text boxin:
 	home page: list of all the summaries!
 		crap. might have to use METAL here for this one

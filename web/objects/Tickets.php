@@ -71,6 +71,10 @@ class Tickets extends CoopDBDO
     function fb_linkConstraints(&$co)
 		{
 
+            // XXX this selectadd hack needed to keep nulls from clobbering
+            // my foreign keys for use in linkdisplay
+            // TODO: find a more general way to FORCE the keys to be
+            // the ones in the main table
             $co->obj->selectAdd();
             $co->obj->selectAdd(sprintf('%s.*', $co->table));
 

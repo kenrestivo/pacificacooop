@@ -1,6 +1,6 @@
 the 20 year roster!!
 
-
+4 hours PYTHON/SQL
 ok, try some db stuff, see how it goes.
 	STUCK: finally the hard one: job assignments
 		have to either look up job description, or foreign key it

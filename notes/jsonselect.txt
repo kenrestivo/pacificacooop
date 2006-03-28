@@ -15,6 +15,7 @@ de-dupe interface
 		and merge them in
 	need levenshtien
 
+	
 at insert time too?
 	guess. then use it instead of inserting?
 	this is a bigger problem in ANY record, if i insert a dupe or near dupe
