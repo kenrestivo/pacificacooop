@@ -36,8 +36,6 @@ class Auction_purchases extends CoopDBDO
 	var $fb_formHeaderText =  'Springfest Auction Purchases';
 	var $fb_currencyFields = array('package_sale_price');
 
-    var $fb_recordActions = array();
-    var $fb_viewActions = array();
     var $fb_shortHeader = 'Purchases';
 
 
@@ -103,18 +101,28 @@ order by springfest_attendees.paddle_number
             
             $this->query(sprintf("
 select distinct
+auction_purchases.auction_purchase_id,
 concat(package_types.prefix, package_number) as package_number,
 packages.package_title,
 packages.package_value,
 auction_purchases.package_sale_price,
-(auction_purchases.package_sale_price - packages.package_value) as variance
+(auction_purchases.package_sale_price - packages.package_value) as variance,
+coalesce(companies_income_join.family_id, invitations.family_id, 
+        parents.family_id) as family_id,
+packages.school_year
 from packages
 left join  auction_purchases on auction_purchases.package_id = 
       packages.package_id
 left join package_types on packages.package_type_id = package_types.package_type_id
+left join springfest_attendees 
+     on auction_purchases.springfest_attendee_id = springfest_attendees.springfest_attendee_id
+left join parents on springfest_attendees.parent_id = parents.parent_id
+left join companies_income_join on springfest_attendees.company_id = companies_income_join.company_id
+left join invitations on springfest_attendees.lead_id = invitations.lead_id
 where packages.school_year = '%s'
 and auction_purchases.package_id is not null
-order by variance desc",
+order by variance desc, auction_purchases.package_sale_price desc, 
+packages.package_type_id, packages.package_number",
                                  $co->getChosenSchoolYear()));
 
             $this->preDefOrder = array('package_number', 
