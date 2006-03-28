@@ -98,8 +98,57 @@ order by springfest_attendees.paddle_number
         {
 
             $co->schoolYearChooser();            
+
+            // NASTY paid/unpaid package chooser
+            $paidEl =& $co->searchForm->addElement(
+                'select', 
+                'paid', 
+                'Paid/Unpaid?',
+                array('both' => 'ALL',
+                      'yes' => 'Paid For',
+                      'no' => 'Unclaimed/Unpaid'),
+                array('onchange' =>
+                      'this.form.submit()'));
             
-            $this->query(sprintf("
+            
+                $co->searchForm->setDefaults(
+                    // NOTE! isset not empty! preserve nulls!e
+                    array('paid' => 
+                          isset($co->page->vars['last']['paid']) ? $co->page->vars['last']['paid'] : 'both'));
+                
+                $bar = $paidEl->getValue();
+                $paid = $bar[0];
+                $co->page->vars['last']['paid'] = $paid;
+                
+                switch($paid){
+                case 'yes':
+                    $whereadd = sprintf(
+                        '(%s.income_id is not null and %s.income_id > 0)', 
+                        $co->table, $co->table);
+                    break;
+                case 'no':
+                    // nothing. only the nulls
+                    $whereadd = sprintf(
+                        '(%s.income_id is null or %s.income_id < 1)',
+                        $co->table, $co->table);
+                    break;
+                case 'both':
+                default:
+                    // there is a valid (i hope) date in there, show it
+                    // don't constrain at all 
+                    break;
+                }
+                
+                $co->showChooser = 1;
+                
+                
+                // FINALLY crap for my choosers
+                // by default, no change button!
+                $co->searchForm->addElement('submit', 'savebutton', 'Change');
+
+
+            
+            $this->query(sprintf('
 select distinct
 auction_purchases.auction_purchase_id,
 concat(package_types.prefix, package_number) as package_number,
@@ -119,13 +168,15 @@ left join springfest_attendees
 left join parents on springfest_attendees.parent_id = parents.parent_id
 left join companies_income_join on springfest_attendees.company_id = companies_income_join.company_id
 left join invitations on springfest_attendees.lead_id = invitations.lead_id
-where packages.school_year = '%s'
+where packages.school_year = "%s"
 and auction_purchases.package_id is not null
+%s
 group by auction_purchases.auction_purchase_id
 order by variance desc, auction_purchases.package_sale_price desc, 
 packages.package_type_id, packages.package_number
-",
-                                 $co->getChosenSchoolYear()));
+',
+                                 $co->getChosenSchoolYear(),
+                                 $whereadd ? 'and '. $whereadd : ''));
 
             $this->preDefOrder = array('package_number', 
                                              'package_title', 
