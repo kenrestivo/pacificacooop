@@ -228,13 +228,22 @@ class Tickets extends CoopDBDO
    function afterInsert(&$co)
         {
             $this->_updateSponsors(&$co);
-            $this->updatePaddles(&$co);
+            $co->page->confessArray($co->form->exportValues(), 'values', 2);
+            if($co->form->elementExists('make_paddles') && 
+               $co->form->exportValue('make_paddles') > 0)
+            {
+                $this->updatePaddles(&$co);
+            }
         }
     
     function afterUpdate(&$co)
         {
             $this->_updateSponsors(&$co);
-            $this->updatePaddles(&$co);
+            if($co->form->elementExists('make_paddles') &&  
+               $co->form->exportValue('make_paddles') > 0)
+            {
+                $this->updatePaddles(&$co);
+            }
         }
     
     function _updateSponsors(&$co)
@@ -283,6 +292,24 @@ class Tickets extends CoopDBDO
             
             return true; 				// copacetic
         }
+
+    function preGenerateForm(&$form)
+        {
+            $el =& $form->addElement(
+                'advcheckbox', 
+                'make_paddles', 
+                'Make Paddles Automatically?',
+                '(You always want this on except when entering tickets purchased at the door)') ; 
+            
+            $form->setDefaults(
+                // NOTE! isset not empty! preserve nulls!
+                array('make_paddles' => 1));
+            
+            
+            $this->fb_preDefElements['make_paddles'] = $el;
+            
+        }
+
     
     function postGenerateForm(&$form)
         {
