@@ -32,7 +32,8 @@ class Springfest_attendees extends CoopDBDO
 
 	// AACK! there is no sane way to linkdisplay this! until i merge people
 	// really, this could be a lead, a parent, a ticket, a company. bah.
-	var $fb_linkDisplayFields = array('paddle_number');	
+	var $fb_linkDisplayFields = array('paddle_number', 'lead_id', 
+                                      'company_id', 'parent_id');	
 	var $fb_fieldLabels = array (
         'springfest_attendee_id' => 'Attendee ID (system internal only)',
 		'paddle_number' => 'Paddle Number',
