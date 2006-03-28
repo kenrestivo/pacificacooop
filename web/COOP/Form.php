@@ -223,9 +223,11 @@ class coopForm extends CoopObject
                     // damn do i hate this
                     $sub  =& $this->findLinkOptions($key);
 
+                    //XXX this whole forcecustomselect is a NASTY ASS HACK!
                      $el =& $this->form->addElement(
-                        $sub->obj->N > COOP_MAX_SELECT_COUNT ?
-                        'searchselect' : 'customselect',
+                        ($sub->obj->N < COOP_MAX_SELECT_COUNT ||
+                         $sub->obj->fb_forceCustomSelect > 0) ?
+                        'customselect' : 'searchselect',
                          $fullkey, false);
 
                     $el->setValue($val); // duplicate of bleow, but need it here

@@ -16,26 +16,69 @@ coop web database
 	springfest microsite (microsite.txt)
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
+	
+
+???DATA ENTRY
+springfest close-out
+	enter all the tickets at the door!
+		can't edit tickets at door, because NO FAMILY ID
+	find which balloons did NOT sell, mark all others as sold
+	then i am done!!
+
 
 ??PHP
-bring the auction purchases back to life!
+bring thank yous back to life
+	pdml it! like we did with the bid sheets
+	let them edit the template
+		my hokey thing for now, but ultimately add to tiny_mce
 
 
-??PHP/SQL
-enter last year's goddamned attendees!
-	hairy: need to add user if not present, add ticket, then paddlen
-	add count of them, to report, for chrissakes!
+??PHP/TAL
+summary of who purchased each package REPORT
+
+??PHP
+put in details recordbuttons for on auction purchases report
+	regular, or packages. regular would be best
+
+
+??PHP
+cleaner link to paddle number for purchased items
+	i.e. instead of linking to details
 	
-	
-
 ??SQL/PHP
 report of kid/hours for michelle and shirley
 	basically, enrollment summarised by families. this can't be hard
 
+
+??PHP/SQL
+add another stupid select criteria to the paddles
+	a popup: attended, didn't attend, both				
+	
+
+??PHP/SQL
+enter last year's goddamned attendees!
+	hairy: need to add user if not present, add ticket, then paddlen
+		add income, if any
+		add ticket WITHOUT adding a paddle for it!!
+			make_paddles = 0
+			search out the invitation and/or solicitation contact and/or parent
+				fuzzy dice of some kind, this is UGLAY
+					this is the part that needs manual doing.
+		locate the paddle
+			attach the ticket to it			
+	add count of them, to report, for chrissakes!
+	
+
+		
+
+	
 BUGS
+	springfest attendees, edit: schoolyear is present but NOT SHOWING UP
+		it's just not getting added. why? where else does this bug show up?
 	l01, edit
 	invitation income calculation is wrong: with food/quilt they don't concur
 		have to join tickets in there and yank the familyid in tickets
+	why is income not constrainingschoolyear?
 
 
 	
@@ -607,6 +650,12 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+???PHP/SQL
+make the fucking searchselect ajax thing drill down into linked tables
+	i.e. it does text searches, great. but what if it's all links?
+		i.e. tickets!
+
 
 ??PHP/SQL
 paddles don't alphabetise if there is no first/last in solicitation contact
@@ -3564,6 +3613,8 @@ i do however WANT to be able to copy the insurance info in!
 ----------------
 NOWHERE
 
+	finish deposit!
+		find that FUCKING KEY! and go deposit this stuff!
 
 ??TAL/CSS
 line up the auction items at the top in the livesite
@@ -7227,3 +7278,30 @@ fix the RSVp count in the carrie report to remove member TICKETS
 	structure for titles in export report
 	alphabetise those weird solicitation items
 heh. the leads for other families are showing up as BLANK LINES!	ah, year
+??PHP
+bring the auction purchases back to life!
+	enter the blocked-out cash
+		balloons
+		bar
+		surboard
+		combine all the cash
+			total it out
+			sanity czech with my cash-out sheet. OK i'm $37 short, i'll live
+	finish my box
+	enter the auction purchases
+		enter the checks, cash, credit card
+		then each auction item sale that relates to it
+		total out all the czechs
+			make sure paddle number is on each czech!!
+		scan all the czechs
+
+??SQL/PHP
+separate out grand totals by "before event" and "day of event"
+	should be easy, actually, in income! DONE!
+
+??SQL
+a quick "who attended" count. they really would like that, I expect
+	just an SQL query. an "in" list.
+	deposit the cash and czechs!!
+		override the ticket insert/update
+			maybe a checkbox: make new paddles

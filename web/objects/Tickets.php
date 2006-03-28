@@ -55,11 +55,13 @@ class Tickets extends CoopDBDO
 
     var $fb_joinPaths = array('family_id' => array('leads:invitations',
                                                    'families'));
-
     var $fb_defaults = array('family_id' => '',
                              'ticket_type_id' => COOP_TICKET_TYPE_PAID,
                              'vip_flag' => 'No'
                              );
+
+    var $fb_forceCustomSelect = 1;
+
 
 //     WILL NOT WORK!! because i'm concating multiple fields
 //     var $fb_pager =array('method' => 'alpha',

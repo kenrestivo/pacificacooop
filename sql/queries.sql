@@ -2405,4 +2405,31 @@ order by coalesce(leads.last_name, companies.last_name, parents.last_name,
 \G
 
 
+ 
+-- day of stuff
+                       select chart_of_accounts.description as Description, 
+       sum(if(date_format(income.check_date, '%Y-%m-%d') not like '2006-03-25' ,
+                income.payment_amount,0)) 
+            as Before_After_Event ,
+       sum(if(date_format(income.check_date, '%Y-%m-%d') like '2006-03-25' ,
+                income.payment_amount,0)) 
+            as Day_Of_Event ,
+       sum(payment_amount)  as Total 
+        from income 
+                           left join chart_of_accounts 
+                        on income.account_number = 
+                                chart_of_accounts.account_number 
+   where income.school_year = '2005-2006'
+        group by income.account_number order by total desc
+;
+
+
+-- quick and dirty "attended" thing.
+-- make into either an interactive, or a checkbox, goddammit.
+update springfest_attendees set attended = 'Yes' where
+school_year = '2005-2006' and
+paddle_number in
+(213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 99, 98, 100, 101, 133, 102, 103, 105, 106, 107, 109, 108, 110, 111, 112, 116, 117, 119, 118, 120, 121, 123, 122, 127, 126, 128, 120, 130, 174, 132, 134, 135, 137, 136, 141, 143, 142, 145, 147, 149, 148, 150, 151, 131, 152, 153, 162, 163, 165, 164, 166, 173, 172, 177, 178, 179, 181, 182, 183, 184, 185, 186, 187, 125, 113, 189, 188, 190, 159, 193, 192, 195, 197, 198, 354, 355, 320, 321, 74, 75, 358, 10, 324, 325, 318, 319, 66, 67, 322, 323, 13, 78, 79, 24, 25, 83, 22, 337, 56, 57, 292, 293, 11, 12, 26, 27, 49, 48, 72, 73, 338, 60, 61, 70, 71, 316, 317, 1, 2, 50, 51, 68, 69, 326, 327, 84, 85, 86, 87, 80, 81, 250, 251, 88, 89, 52, 53, 255, 256, 257, 76, 77, 329, 330, 252, 255, 350, 351, 64, 65, 356, 357, 3, 4, 181, 182, 183, 185, 116, 159, 106, 107, 112, 120, 121, 132, 152, 153, 157, 156, 158, 166, 165);
+
+
 --- EOF

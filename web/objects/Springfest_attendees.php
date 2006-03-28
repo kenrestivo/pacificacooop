@@ -66,6 +66,9 @@ class Springfest_attendees extends CoopDBDO
 
     var $fb_defaults = array('entry_type' => 'Manual');
 
+    var $fb_forceCustomSelect = 1;
+
+
     function fb_linkConstraints(&$co)
 		{
 
@@ -155,6 +158,18 @@ class Springfest_attendees extends CoopDBDO
 
         }
 
+    function preGenerateForm(&$form)
+        {
+
+            // XXX XXX nasty hack around some stupid bug in coopform
+            //$form->CoopForm->page->confessArray($this, 'wtf', 2);
+
+            if($this->lead_id < 1 && $this->company_id < 1 
+               && $this->parent_id < 1)
+            {
+                $this->school_year = $form->CoopForm->getChosenSchoolYear();
+            }
+        }
 
     function postGenerateForm(&$form)
         {

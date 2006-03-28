@@ -46,6 +46,8 @@ fb_extraDetails = array('path:to:other:details', 'path:to:more:details')
     // basically, backlinked tables i want to display. kind of a hack.
 fb_allYears = 0/1 // show all years by default in schoolyearchooser
 fb_forceNoChooser = 0/1 a HACK! for summaries which share one schoolyearchooser
+fb_forceCustomSelect = 0/1 A NASTY HACK! because my searchselect doesn't go deep
+    into links. some tables are ALL links, i need to force them to be popups
 
 
 callbacks...  also in the DataObjects (in objects directory):
