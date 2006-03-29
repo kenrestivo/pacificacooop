@@ -89,9 +89,6 @@ order by springfest_attendees.paddle_number
 
             $this->fb_preDefElements['springfest_attendee_id'] =& $el;
 
-
-
-
         }
 
     function fb_display_view(&$co)

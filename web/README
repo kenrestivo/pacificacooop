@@ -4,7 +4,11 @@ $Id$
 
 this uses PEAR, particualrly HTML::QuickForm and DB::DataObject
 i tried to make it backwards-compatible to DB_DataObjects_FormBuilder ("FB")
-fields i added to the dataobject, which are *not* in FormBuilder
+    i document below the fields i added to the dataobject, 
+        which are *not* in FormBuilder
+    note: FB compatibility has been abandoned as a design goal.
+        the app has grown well beyond the bounds of FB.
+
 
 the core of the application is basically a few files/classes:
 
@@ -14,13 +18,15 @@ CoopObject: base class. wrapper around DB_DataObject, app-specific db stuff
 	CoopForm: for editing and saving data. wraps HTML_QuickForm 
 
 CoopPage: "globals" for the application, and app-wide utility functions
-	does most of the stack handling too
+	does some of the stack handling too
+    CoopTALPage: subclass of CoopPage for template-based rendering
+    CoopPDF: subclass for rendering as a PDF using PDML and FPDF libraries
 
 CoopNewDispatcher: for navigating states, the 'action' GET/POST var
 					callbacks in this will 'dispatch' to views, forms, etc
 
 
-this is a Big Pig of an app. if you do development on it, you'll want to change the .htaccess periodically to bump the "php_value memory_limit" and possibly max_execution_time too.
+this is a Big Pig of an app from a memory and CPU standpoint. if you do development on it, you'll want to change the .htaccess periodically to bump the "php_value memory_limit" and possibly max_execution_time too.
 
 essential vars that the system uses:
 (they go in the DataObjects (in objects directory)

@@ -17,9 +17,29 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 	
-BUGS
-	edit/details for purchases? why is it not there??!
-	
+					
+??PHP
+bring thank yous back to life
+	first bring the exact old thing back, and push it live.
+		just so that it is DONE and nobody is crawling all over me
+		shall i put it in new display_view format? i think i should.
+	let them edit the template
+		my hokey [::] for now, but ultimately add to TAL and tiny_mce
+		new thing
+	pdml it! like we did with the bid sheets
+		at very least for one-off printing, using the old method
+	label printing too
+	new ui model
+		custom details shows the note in text format. "preview/edit?"
+			and gives them edit links to each item
+		view with checkboxes for which to print
+			checkboxes for which to mark as printed?? or do i need that?
+	umm... people who bought things of of a HUGE cash box might get thankyous
+		gotta suppress those somehow. gah!
+	schuman permissions
+	coords view previous year perms
+	have a look at what happens when you "detail" into an old thankyounote!
+
 
 ??PHP/TAL
 summary of who purchased each package REPORT
@@ -29,29 +49,16 @@ summary of who purchased each package REPORT
 		incomeid is null
 		nag list?
 
-				
-??PHP
-bring thank yous back to life
-	first bring the exact old thing back, and push it live.
-		just so that it is DONE and nobody is crawling all over me
-	let them edit the template
-		my hokey [::] for now, but ultimately add to TAL and tiny_mce
-	pdml it! like we did with the bid sheets
-	label printing too
-	new ui model
-		custom details shows the note in text format. "preview/edit?"
-			and gives them edit links to each item
-		checkboxes for which to print
-		checkboxes for which to mark as printed?? or do i need that?
-	umm... people who bought things of of a HUGE cash box might get thankyous
-		gotta suppress those somehow. gah!
-
-
-
+		
 ??PHP
 put in details recordbuttons for on auction purchases report
 	regular, or packages. regular would be best
 
+
+4 hours PHP/UNIX
+start tracking this stuff in mantis!
+	install mantis
+	
 
 ??PHP
 cleaner link to paddle number for purchased items
@@ -97,6 +104,12 @@ BUGS
 		have to join tickets in there and yank the familyid in tickets
 	why is income not constrainingschoolyear?
 	escaping of text fields in details
+	the fucking escaping of characters is WRONG AGAIN
+		the horiztable is all fucked up. why?
+		hmm, it's the linkdisplay that is broken. i need to rethink.
+			is it broken EVERYWHERE linkdisplays happen? or only in horiz?
+			what's different, actually?
+				minutes and packages are fine. i dunno what's up.	
 
 	
  
@@ -672,6 +685,11 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??PHP/SQL
+buildconstraintsfromjoinpaths
+	see notes in CoopObject. it's not that difficult, it means building a tree
+	with branches
 
 ??PHP/SQL
 book database!
@@ -3645,7 +3663,7 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-
+			look at minutes. i hope i didn't break those!
 	finish deposit!
 		find that FUCKING KEY! and go deposit this stuff!
 
@@ -7346,3 +7364,5 @@ a quick "who attended" count. they really would like that, I expect
 			find out why
 			ah, dbdo clobbering. selectAdd() fixes it	the fucking dilbeck family and shiokari and mcalexander family..
 			TOO MANY DUPLICATES!
+	edit/details for purchases? why is it not there??!
+		ah, i'd forced it out with viewactions/recordacionts

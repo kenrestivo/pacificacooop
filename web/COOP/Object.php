@@ -1126,6 +1126,15 @@ function triggerNotices($audit_id)
           return $res;
         }
 
+
+    function buildConstraintsFromJoinPaths()
+        {
+            // TODO: step through everything in joinpaths
+            // build a branching tree of links
+            // do the coalescing necessary to make a sensible join happen
+        }
+
+
 } // END COOP OBJECT CLASS
 
 
