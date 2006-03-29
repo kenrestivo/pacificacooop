@@ -22,6 +22,8 @@ packages = Packages.select(AND(Packages.q.packageTypeID == 4,
 for p in packages:
     print "adding purchase for <%s> in amount of <%0.02f>..." % (
         p.packageTitle, p.packageValue)
-    pur=AuctionPurchases(packageID = p.packageID, incomeID=717, springfestAttendeeID = 792,
-                     packageSalePrice = p.packageValue)
+    pur=AuctionPurchases(packageID = p.packageID,
+                         incomeID=717,
+                         springfestAttendeeID = 792,
+                         packageSalePrice = p.packageValue)
 
