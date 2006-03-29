@@ -23,7 +23,7 @@ class Thank_you extends CoopDBDO
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Thank_you',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-    ###END_AUTOCODE
+###END_AUTOCODE
 
 	var $fb_linkDisplayFields = array('date_sent', 'method');
 	var $fb_fieldLabels = array (
@@ -33,20 +33,52 @@ class Thank_you extends CoopDBDO
 		'method' => 'Sent Via',
 		'family_id' => 'Printed/Sent By'
 		);
+
 	var $fb_formHeaderText =  'Springfest Thank-You Notes';
 
 
-var $fb_usePage = 'thank_you_notes.php';
+    var $fb_shortHeader = 'Thank-You Notes';
 
-var $fb_shortHeader = 'Thank-You Notes';
+    var $fb_dupeIgnore = array(
+        'method'
+        );
 
-var $fb_dupeIgnore = array(
-   'method'
-);
+    var $fb_requiredFields = array(
+        'method'
+        );
 
-var $fb_requiredFields = array(
-   'method'
-);
+    var $fb_joinPaths = array('school_year' => 
+                              array('auction_donation_items',
+                                    'in_kind_donations',
+                                    'income'));
+                                    
+    
 
+//     function fb_linkConstraints(&$co)
+// 		{
+//             $co->buildConstraintsFromJoinPaths();
+            
+//         }
+
+
+
+    function fb_display_view(&$co)
+        {
+            $co->schoolYearChooser();
+            $co->obj->query(
+                sprintf(
+                    'select thank_you.* ,
+coalesce(auction_donation_items.school_year, in_kind_donations.school_year, income.school_year) as school_year
+from thank_you
+left join auction_donation_items on thank_you.thank_you_id = auction_donation_items.thank_you_id
+left join income on thank_you.thank_you_id = income.thank_you_id
+left join in_kind_donations on thank_you.thank_you_id = in_kind_donations.thank_you_id
+where coalesce(auction_donation_items.school_year, in_kind_donations.school_year, income.school_year) = "%s"
+
+',
+                                    $co->getChosenSchoolYear()));
+            return $co->simpleTable(false,true);
+
+        }
 
 }
