@@ -19,19 +19,26 @@ coop web database
 	
 ??PHP
 pre-thank-you report
-	jeez, i can just use the hackreport!
-	but i have to build a damned array, no subiterator yet!
-		ok, like program summary!
-	YAY! now, make sure mr/mrs/etc is there
-	
+	format it nicely-like
+	the fucking MASSIVE CASH DUMP!
+		for each ticket,
+			get old income payee (cash box etc)
+			create a new income
+				ticket quantity * price, and old income payee
+		store the old income payee(s), then shitcan them
+			whatever the difference is, make it a "misc/unknown" for the night
 		
 					
 ??PHP
 bring thank yous back to life
+	shitcan enter new... for now
+	let them edit the template
+		my hokey [::] for now, but ultimately add to TAL and tiny_mce
+		new thing
+	nifty ajax tal'ing
+		a button for each in preview, which will apply to template USING JS!
+		not hard using minital, or some similar
 	first bring the exact old thing back, and push it live.
-		order by
-			join to the company and lead, and coalesce like paddles
-				i feel like doing it this way.
 		deal with the HTML escaping in thankYou class? where?
 		recoverexisting appears to be the key. can i do that in sql?
 			sum of all income (companies/leads/tickets)
@@ -40,9 +47,6 @@ bring thank yous back to life
 			salesperson (coalesce parent id? guessparents?)
 			name summary (like paddle coalescing: through everything)
 				order by namesum too
-	let them edit the template
-		my hokey [::] for now, but ultimately add to TAL and tiny_mce
-		new thing
 	pdml it! like we did with the bid sheets
 		at very least for one-off printing, using the old method
 		i think the letter might be an ajax, or a popup, or both
@@ -710,6 +714,15 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+??SQL/PYTHON
+fix the massive cash dump
+		for each auction
+			get old income payee (cash box etc)
+			create a new income
+				sale price, and old income payee
+
+
 
 ???PHP
 schoolyearchooser should match up in details with the year in horiztable
@@ -7417,3 +7430,10 @@ schuman and pang permissions:
 	+ auction: edit
 	+ add to solicit group
 	and email with notes!
+	jeez, i can just use the hackreport!
+	but i have to build a damned array, no subiterator yet!
+		ok, like program summary!
+	YAY! now, make sure mr/mrs/etc is there
+		order by
+			join to the company and lead, and coalesce like paddles
+				i feel like doing it this way.

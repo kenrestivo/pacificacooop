@@ -2,12 +2,41 @@
 <div tal:omit-tag="" metal:use-macro="outershell-templ.xhtml/main_page">
 
   <div tal:omit-tag="" metal:fill-slot="extra_header_stuff">
-    
+    <style  type="text/css">
+      td{vertical-align: top}
+    </style>
   </div>
 
   <div tal:omit-tag="" metal:fill-slot="inner_content">
 
-
+    <table>
+      <tr>
+        <th>Address on Envelope and Letter</th>
+        <th>Dear:</th>
+        <th>Thank you for your kind donation of:</th>
+        <th>In exchange for your contribution, we gave you:</th>
+        <th>Sincerely,</th>
+      </tr>
+      <tr tal:repeat="ty thanks">
+        <td>
+          <div tal:content="ty/name"></div>
+          <div tal:repeat="address ty/address_array" 
+               tal:content="address"></div>
+        </td>
+        <td tal:content="ty/dear"></td>
+        <td>
+          <ul tal:condition="ty/items_array/length">
+            <li tal:repeat="item ty/items_array" tal:content="item"></li>
+          </ul>
+        </td>
+        <td>
+          <ul tal:condition="ty/value_received_array/length">
+            <li tal:repeat="val ty/value_received_array" tal:content="val"></li>
+          </ul>
+        </td>
+        <td tal:content="ty/from"></td>
+      </tr>
+    </table>
     
 
 

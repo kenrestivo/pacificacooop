@@ -38,6 +38,7 @@ class ThankYou
 	/// list of fields:
 	var $date ; // DATE: date of letter
 	var $name; // NAME: address of who it gets sent to
+	var $dear; // the DEAR: name
 	var $address_array; // ADDRESS: multiple line array, the address
 	var $items_array; // ITEMS: multiple line array, list of things they donated
 	var $value_received_array; 	// value of things received
@@ -62,7 +63,7 @@ class ThankYou
 [:NAME:]
 [:ADDRESS:]
 
-Dear [:NAME:],
+Dear [:DEAR:],
 
 As our school year draws to a close, we would like to be sure to thank you for your kind donation of [:ITEMS:]. 
 
@@ -221,6 +222,7 @@ Tax ID # 94-1527749
 	function varsToArray()
 		{
 			$subst['DATE']  = $this->date ; 
+			$subst['DEAR'] =  $this->dear; 
 			$subst['NAME'] =  $this->name; 
 			$subst['ITERATION'] = $this->iteration; 
 			$subst['ORDINAL'] = $this->ordinal; 
@@ -402,8 +404,14 @@ Tax ID # 94-1527749
 
 			// format company
 			if($co->obj->first_name || $co->obj->last_name){
-				$this->name = sprintf('%s %s', $co->obj->first_name, 
-									  $co->obj->last_name);
+				$this->name = implode(' ', array($co->obj->salutation,
+                                                 $co->obj->first_name, 
+                                                 $co->obj->last_name));
+                $this->dear = implode(' ', 
+                                      array($co->obj->salutation? 
+                                            $co->obj->salutation : 
+                                            $co->obj->first_name,
+                                            $co->obj->last_name));
 			}
 
 			foreach(array('company_name', 'address1', 'address2') as $var){
@@ -569,6 +577,12 @@ Tax ID # 94-1527749
 									  $co->obj->salutation, 
 									  $co->obj->first_name, 
 									  $co->obj->last_name));
+                $this->dear = implode(' ', 
+                                      array($co->obj->salutation? 
+                                            $co->obj->salutation : 
+                                            $co->obj->first_name,
+                                            $co->obj->last_name));
+
 			}
 
 			foreach(array('company', 'address1', 'address2') as $var){
@@ -941,10 +955,12 @@ Tax ID # 94-1527749
 			}
 			// afterwards, in case they did multiple ticket purchases
 			if($found){
-				$valuereceived = $found * 25; // XXX HARDCODED TICKETPRICE!
+				$valuereceived = $found * COOP_SPRINGFEST_TICKET_PRICE; // XXX 
 				$this->value_received_array[] = sprintf(
-					"%s tickets to the Springfest event valued altogether at $%01.02f",
-					$found, $valuereceived);
+					"%s ticket%s to the Springfest event valued altogether at $%01.02f",
+					$found, 
+                    $found > 1 ? 's': '',
+                    $valuereceived);
 
 			}
 			return $valuereceived;

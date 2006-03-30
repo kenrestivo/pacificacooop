@@ -216,7 +216,7 @@ order by Company;
                 {
                     $current[$field] = $top->obj->{$field};
                 }
-                foreach(array('name', 'address_array', 'items_array', 
+                foreach(array('dear', 'name', 'address_array', 'items_array', 
                               'value_received_array', 'from')
                         as $field)
                 {
@@ -226,7 +226,7 @@ order by Company;
                 $res[] = $current; // last thing before looping
             }
             
-            $co->page->confessArray($res, 'the total result', 4);
+            $co->page->confessArray($res, 'the total result', 7);
             return $res;
         }
 

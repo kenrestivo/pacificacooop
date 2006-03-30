@@ -51,6 +51,8 @@ define('COOP_PACKAGE_TYPE_LIVE', 1);
 define('COOP_PACKAGE_TYPE_SILENT', 2);
 
 define('COOP_TICKET_TYPE_PAID', 1);
+// XXX this should NOT be a global! needs to be different each year!
+define('COOP_SPRINGFEST_TICKET_PRICE', 30);
 
 
 define('COOP_MAX_SELECT_COUNT', 150);
