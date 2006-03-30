@@ -78,15 +78,17 @@ from thank_you
 left join auction_donation_items on thank_you.thank_you_id = auction_donation_items.thank_you_id
 left join income on thank_you.thank_you_id = income.thank_you_id
 left join in_kind_donations on thank_you.thank_you_id = in_kind_donations.thank_you_id
+left join companies_income_join on companies_income_join.income_id = income.income_id
+left join companies on companies_income_join.company_id = companies.company_id
+left join leads_income_join on leads_income_join.income_id = income.income_id
+left join leads on leads.lead_id = leads_income_join.lead_id
 where coalesce(auction_donation_items.school_year, in_kind_donations.school_year, income.school_year) = "%s"
+order by concat(coalesce(leads.last_name, companies.last_name), coalesce(leads.first_name, companies.first_name), coalesce(leads.company, companies.company_name))
 ',
                     $co->getChosenSchoolYear()));
 
 // TODO: join to everyone, and grab the recipient, items, salesperson
-// left join companies_income_join on companies_income_join.income_id = income.income_id
-// left join companies on companies_income_join.company_id = companies.company_id
-// left join leads_income_join on leads_income_join
-//order by concat(coalesce(), coalesce(), coalesce())
+//
 
 
             //before i go to crazy here, let's fix any orphans
