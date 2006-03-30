@@ -275,7 +275,7 @@ order by Company;
                 $res[] = $current; // last thing before looping
             }
             
-            $co->page->confessArray($res, 'the total result', 7);
+            //$co->page->confessArray($res, 'the total result', 7);
             return $res;
         }
 
