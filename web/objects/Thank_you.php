@@ -100,4 +100,135 @@ order by concat(coalesce(leads.last_name, companies.last_name), coalesce(leads.f
 
         }
 
+
+
+function thanksNeededSummary($co)
+        {
+
+            $sy= $co->getChosenSchoolYear();
+
+            $top = new CoopView(&$co->page, 'companies', $nothing);
+            
+            $top->obj->query("
+select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
+    as Company, 
+        companies.company_id as id, 'company_id' as id_name,
+        coalesce(sum(inc.payment_amount),0) +
+        coalesce(sum(pur.payment_amount),0) + 
+        coalesce(sum(auct.item_value),0) + 
+        coalesce(sum(iks.item_value),0) 
+        as Total
+from companies
+left join 
+    (select  sum(item_value) as item_value, company_id
+     from companies_auction_join  as caj
+     left join auction_donation_items  as adi
+              on caj.auction_donation_item_id = 
+                adi.auction_donation_item_id
+        where school_year = '$sy' 
+        and adi.date_received > '2000-01-01'
+        and adi.thank_you_id is null
+        group by caj.company_id) 
+    as auct
+        on auct.company_id = companies.company_id
+left join 
+    (select  sum(item_value) as item_value, company_id
+     from companies_in_kind_join as cikj
+     left join in_kind_donations as ikd
+              on cikj.in_kind_donation_id = 
+                ikd.in_kind_donation_id
+        where school_year = '$sy'
+        and ikd.date_received > '2000-01-01'
+        and ikd.thank_you_id is null
+        group by cikj.company_id) 
+    as iks
+        on iks.company_id = companies.company_id
+left join 
+    (select  sum(payment_amount) as payment_amount, company_id
+     from companies_income_join as cinj
+     left join income 
+              on cinj.income_id = 
+                income.income_id
+        where school_year = '$sy'  $cy
+        and income.thank_you_id is null
+        group by cinj.company_id) 
+    as inc
+        on inc.company_id = companies.company_id
+left join 
+    (select  payment_amount, company_id
+     from springfest_attendees as atd
+    left join auction_purchases  as ap
+            on ap.springfest_attendee_id = 
+                atd.springfest_attendee_id
+     left join income 
+              on ap.income_id = 
+                income.income_id
+        where income.school_year = '$sy'  $cy
+        and income.thank_you_id is null
+        group by atd.company_id) 
+    as pur
+        on pur.company_id = companies.company_id
+group by companies.company_id
+having Total > 0
+UNION DISTINCT
+select concat_ws(' - ', concat_ws(' ', first_name, last_name), company ) 
+    as Company, 
+        leads.lead_id as id, 'lead_id' as id_name,
+        coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0) as Total
+from leads
+left join 
+    (select lead_id, sum(payment_amount) as total
+     from leads_income_join as linj
+     left join income 
+              on linj.income_id = 
+                income.income_id
+        where income.school_year = '$sy' $cy
+        and income.thank_you_id is null
+        group by linj.lead_id) 
+    as inc
+        on leads.lead_id = inc.lead_id
+left join 
+    (select lead_id, sum(payment_amount) as total
+     from tickets
+     left join income 
+              on tickets.income_id = 
+                income.income_id
+        where income.school_year = '$sy' $cy
+        and income.thank_you_id is null
+        group by tickets.lead_id) 
+    as tic 
+        on tic.lead_id = leads.lead_id
+group by leads.lead_id
+having Total > 0
+order by Company;
+");
+
+            $res = array() ;
+            while($top->obj->fetch()){
+                $current = array(); // reset at each
+                $ty =& new ThankYou(&$co->page);
+                if(!$ty->findThanksNeeded($top->obj->id_name, $top->obj->id)){
+                    //skip the ones in the query that don't cut it in here
+                    continue;
+                }
+                foreach(array('id', 'id_name', 'item_value', 
+                              'Company', 'Total') as $field)
+                {
+                    $current[$field] = $top->obj->{$field};
+                }
+                foreach(array('name', 'address_array', 'items_array', 
+                              'value_received_array', 'from')
+                        as $field)
+                {
+                    $current[$field] = $ty->{$field};
+                }
+
+                $res[] = $current; // last thing before looping
+            }
+            
+            $co->page->confessArray($res, 'the total result', 4);
+            return $res;
+        }
+
+
 }

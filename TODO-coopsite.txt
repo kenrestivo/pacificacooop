@@ -16,6 +16,14 @@ coop web database
 	springfest microsite (microsite.txt)
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
+	
+??PHP
+pre-thank-you report
+	jeez, i can just use the hackreport!
+	but i have to build a damned array, no subiterator yet!
+		ok, like program summary!
+	YAY! now, make sure mr/mrs/etc is there
+	
 		
 					
 ??PHP
@@ -23,6 +31,7 @@ bring thank yous back to life
 	first bring the exact old thing back, and push it live.
 		order by
 			join to the company and lead, and coalesce like paddles
+				i feel like doing it this way.
 		deal with the HTML escaping in thankYou class? where?
 		recoverexisting appears to be the key. can i do that in sql?
 			sum of all income (companies/leads/tickets)
@@ -45,7 +54,6 @@ bring thank yous back to life
 			checkboxes for which to mark as printed?? or do i need that?
 	umm... people who bought things of of a HUGE cash box might get thankyous
 		gotta suppress those somehow. gah!
-	schuman and pang permissions
 	coords view previous year perms
 	have a look at what happens when you "detail" into an old thankyounote!
 	note the search interface for thankyounote in income, etc, is pretty useless
@@ -168,6 +176,8 @@ remember paddles will be SPLIT
 
 	
 BUGS
+	goddammit! PERMS SHOWING UP AS NO! INSTEAD OF IGNORE! HEYYY!
+		JUST DO WHAT I FUCKING TELL YOU!!! I TELL YOU IGNORE THEN IGNORE!
 	fix that ad insertion anomaly in the report
 		solicitation ad inserton != grand total ad insertion. why?
 	counts are not in sync between carrie and nag report
@@ -7400,3 +7410,10 @@ springfest close-out
 	find which balloons did NOT sell, mark all others as sold
 		GET THIS FROM MICHELLE! she walked off with them. ah, they all sold. yayl
 		shall i put it in new display_view format? i think i should.
+
+schuman and pang permissions:
+	+ invites same as lee: edit/edit on people
+	+ view rsvps: look at stangeland, use those
+	+ auction: edit
+	+ add to solicit group
+	and email with notes!
