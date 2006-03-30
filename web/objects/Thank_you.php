@@ -25,6 +25,8 @@ class Thank_you extends CoopDBDO
     /* the code above is auto generated do not remove the tag below */
 ###END_AUTOCODE
 
+
+
 	var $fb_linkDisplayFields = array('date_sent', 'method');
 	var $fb_fieldLabels = array (
 		'thank_you_id' => 'Thank You Note',
@@ -62,8 +64,11 @@ class Thank_you extends CoopDBDO
 
 
 
+
     function fb_display_view(&$co)
         {
+            require_once('ThankYou.php');
+    
             $co->schoolYearChooser();
             $co->obj->query(
                 sprintf(
@@ -74,9 +79,21 @@ left join auction_donation_items on thank_you.thank_you_id = auction_donation_it
 left join income on thank_you.thank_you_id = income.thank_you_id
 left join in_kind_donations on thank_you.thank_you_id = in_kind_donations.thank_you_id
 where coalesce(auction_donation_items.school_year, in_kind_donations.school_year, income.school_year) = "%s"
-
 ',
-                                    $co->getChosenSchoolYear()));
+                    $co->getChosenSchoolYear()));
+
+// TODO: join to everyone, and grab the recipient, items, salesperson
+// left join companies_income_join on companies_income_join.income_id = income.income_id
+// left join companies on companies_income_join.company_id = companies.company_id
+// left join leads_income_join on leads_income_join
+//order by concat(coalesce(), coalesce(), coalesce())
+
+
+            //before i go to crazy here, let's fix any orphans
+            $ty = new ThankYou(&$co->page);
+            $ty->repairOrphaned();
+
+
             return $co->simpleTable(false,true);
 
         }

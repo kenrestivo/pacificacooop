@@ -16,18 +16,27 @@ coop web database
 	springfest microsite (microsite.txt)
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
-	
+		
 					
 ??PHP
 bring thank yous back to life
 	first bring the exact old thing back, and push it live.
-		just so that it is DONE and nobody is crawling all over me
-		shall i put it in new display_view format? i think i should.
+		order by
+			join to the company and lead, and coalesce like paddles
+		deal with the HTML escaping in thankYou class? where?
+		recoverexisting appears to be the key. can i do that in sql?
+			sum of all income (companies/leads/tickets)
+			list of all auction, description and amount concat_ws('\n'?)
+			list of all in-kind, description and amount concat_ws('\n'?)
+			salesperson (coalesce parent id? guessparents?)
+			name summary (like paddle coalescing: through everything)
+				order by namesum too
 	let them edit the template
 		my hokey [::] for now, but ultimately add to TAL and tiny_mce
 		new thing
 	pdml it! like we did with the bid sheets
 		at very least for one-off printing, using the old method
+		i think the letter might be an ajax, or a popup, or both
 	label printing too
 	new ui model
 		custom details shows the note in text format. "preview/edit?"
@@ -36,10 +45,11 @@ bring thank yous back to life
 			checkboxes for which to mark as printed?? or do i need that?
 	umm... people who bought things of of a HUGE cash box might get thankyous
 		gotta suppress those somehow. gah!
-	schuman permissions
+	schuman and pang permissions
 	coords view previous year perms
 	have a look at what happens when you "detail" into an old thankyounote!
-
+	note the search interface for thankyounote in income, etc, is pretty useless
+	
 
 ??PHP/TAL
 summary of who purchased each package REPORT
@@ -88,7 +98,18 @@ enter last year's goddamned attendees!
 	add count of them, to report, for chrissakes!
 	
 
-		
+??PHP/HTML		
+	escaping of text fields in details
+		create a test harness, make sure no ?'s or &amp/&nbsp's:
+			simpletable
+			details (horiztable)
+			pop-ups
+			my custom add/remove thing
+			link in simpletable and/or horiztable
+			kenflex ajax stuff
+		ALL of the above must WORK PROPERLY GODDAMMIT!
+	test with some fields being non-html varchars, others being longtext
+		also test with summary text too
 
 	
 BUGS
@@ -103,7 +124,6 @@ BUGS
 	invitation income calculation is wrong: with food/quilt they don't concur
 		have to join tickets in there and yank the familyid in tickets
 	why is income not constrainingschoolyear?
-	escaping of text fields in details
 	the fucking escaping of characters is WRONG AGAIN
 		the horiztable is all fucked up. why?
 		hmm, it's the linkdisplay that is broken. i need to rethink.
@@ -199,11 +219,6 @@ BURNT (when too burnt out to do actual work)
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
-
-???DATA ENTRY
-springfest close-out
-	find which balloons did NOT sell, mark all others as sold
-		GET THIS FROM MICHELLE! she walked off with them
 
 
 ??PHP
@@ -685,6 +700,11 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+???PHP
+schoolyearchooser should match up in details with the year in horiztable
+	force it?
+
 
 ??PHP/SQL
 buildconstraintsfromjoinpaths
@@ -3663,6 +3683,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+		just so that it is DONE and nobody is crawling all over me
+			too late. they already are :-(
+
+??MANUAL
+s52 minimum bid?
+
 			look at minutes. i hope i didn't break those!
 	finish deposit!
 		find that FUCKING KEY! and go deposit this stuff!
@@ -7366,3 +7392,11 @@ a quick "who attended" count. they really would like that, I expect
 			TOO MANY DUPLICATES!
 	edit/details for purchases? why is it not there??!
 		ah, i'd forced it out with viewactions/recordacionts
+??PHP/SQL
+balloon 361
+
+???DATA ENTRY
+springfest close-out
+	find which balloons did NOT sell, mark all others as sold
+		GET THIS FROM MICHELLE! she walked off with them. ah, they all sold. yayl
+		shall i put it in new display_view format? i think i should.
