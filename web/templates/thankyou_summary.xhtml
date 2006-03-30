@@ -16,6 +16,7 @@
         <th>Thank you for your kind donation of:</th>
         <th>In exchange for your contribution, we gave you:</th>
         <th>Sincerely,</th>
+        <th>Actions</th>
       </tr>
       <tr tal:repeat="ty thanks">
         <td>
@@ -35,6 +36,7 @@
           </ul>
         </td>
         <td tal:content="ty/from"></td>
+        <td tal:content="structure ty/details"></td>
       </tr>
     </table>
     

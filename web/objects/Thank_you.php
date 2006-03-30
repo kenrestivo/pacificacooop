@@ -53,7 +53,10 @@ class Thank_you extends CoopDBDO
                               array('auction_donation_items',
                                     'in_kind_donations',
                                     'income'));
-                                    
+                             
+
+    // manually whack 'add'. 'enter new' is NOT appropriate for this
+    var $viewActions = array('view'=> ACCESS_VIEW);     
     
 
 //     function fb_linkConstraints(&$co)
@@ -70,6 +73,34 @@ class Thank_you extends CoopDBDO
             require_once('ThankYou.php');
     
             $co->schoolYearChooser();
+
+            $tab = new HTML_Table();	
+                $tab->addRow(
+                    array(
+                        'Address on Envelope and Letter',
+                        'Dear:',
+                        'Thank you for your kind donation of:',
+                        'In exchange for your contribution, we gave you:',
+                        'Sincerely,',
+                        'Actions'),
+                    'class="tableheaders"', 'TH');
+
+            foreach($this->thanksNeededSummary(&$co) as $ty){
+                // XXX note, this is not valid xhtml: li's are not closed
+                $tab->addRow(
+                    array($ty['name'] . '<br />'. 
+                          implode('<br />', $ty['address_array']),
+                          $ty['dear'],
+                          implode('<br />', $ty['items_array']),
+                          implode('<br />', $ty['value_received_array']),
+                          $ty['from'],
+                          $ty['details'],
+                          ));
+            }
+
+            $tab->altRowAttributes(1, 'class="altrow1"', 
+                                   'class="altrow2"');
+
             $co->obj->query(
                 sprintf(
                     'select thank_you.* ,
@@ -96,7 +127,10 @@ order by concat(coalesce(leads.last_name, companies.last_name), coalesce(leads.f
             $ty->repairOrphaned();
 
 
-            return $co->simpleTable(false,true);
+            return '<h3>The following thank you notes need to be sent:</h3>'.
+                $tab->toHTML() .  
+                '<h3>Thank you notes below have already been sent:<h3>'.
+                $co->simpleTable(false,true);
 
         }
 
@@ -222,6 +256,21 @@ order by Company;
                 {
                     $current[$field] = $ty->{$field};
                 }
+
+                $tmptab = $top->obj->id_name == 'company_id' ?
+                    'companies': 'leads';
+
+                // XXX cheap subset of CoopView::recordButtons()
+                // TODO: do it right and instantiate or fake recordButtons()
+                $current['details'] = $top->page->selfURL(
+                    array('value' => 'Details',
+                          'base' => 'generic.php',
+                          'inside' => array('table' => $tmptab,
+                                            $tmptab . '-' . 
+                                            $top->obj->id_name => $top->obj->id,
+                                            'action' => 'details',
+                                            'push' => 'thank_you'),
+                          'par' => false));
 
                 $res[] = $current; // last thing before looping
             }
