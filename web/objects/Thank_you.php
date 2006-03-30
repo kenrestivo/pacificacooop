@@ -129,7 +129,7 @@ order by concat(coalesce(leads.last_name, companies.last_name), coalesce(leads.f
 
             return '<h3>The following thank you notes need to be sent:</h3>'.
                 $tab->toHTML() .  
-                '<h3>Thank you notes below have already been sent:<h3>'.
+                '<h3>Thank you notes below have already been sent:</h3>'.
                 $co->simpleTable(false,true);
 
         }
