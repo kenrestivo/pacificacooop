@@ -210,7 +210,7 @@ class coopPage
 				
 	}
 
- 
+    // legacy non-TAL version, used everywhere still
 	function pageTop()
 		{
 			ob_start();
@@ -223,6 +223,7 @@ class coopPage
 			if($this->auth['state'] == 'loggedin'){
 				// pretty sure i need this here, in case i'm not using legacy
 			 	$this->userStruct =  getUser($this->auth['uid']);
+                $this->auth['loginflag'] = 1;
                 $this->confessArray($this->userStruct, 'CoopPage->userStruct',
                                     4);
 			} else{
@@ -245,11 +246,16 @@ class coopPage
 
 			$this->auth = logIn($_REQUEST);
 
+			$this->confessArray($this->auth, 'auth -- post login');
+
 			$output = ob_get_clean();
 			$output && ob_end_flush();
 
 			if($this->auth['state'] == 'loggedin'){
+			 	$this->userStruct =  getUser($this->auth['uid']);
                 $this->auth['loginflag'] = 1;
+                $this->confessArray($this->userStruct, 'CoopPage->userStruct',
+                                    4);
             }
 
 			return $output;

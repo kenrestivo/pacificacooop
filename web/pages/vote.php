@@ -18,43 +18,19 @@
 
 //$Id$
 
-require_once('CoopPage.php');
+require_once('CoopTALPage.php');
 require_once('CoopView.php');
 require_once('CoopForm.php');
-require_once('HTML/Table.php');
 
 
-//MAIN
-//$_SESSION['toptable'] 
-
-//DB_DataObject::debugLevel(2);
-
-$cp = new coopPage( $debug);
-print $cp->pageTop();
-
-
-
-print $cp->topNavigation();
-print $cp->stackPath();
-
-print "\n<hr /></div><!-- end header div -->\n"; //ok, we're logged in. show the rest of the page
-print '<div class="centerCol">';
-
-
-class Vote 
+class Vote extends CoopTALPage
 {
-    var $page;
     var $question_id; /// XXX HACK
+    var $template_file = 'vote.xhtml';
 
 
-    function Vote(&$page)
+    function makeForm()
         {
-            $this->page =& $page;
-        }
-
-    function makeForm($question_id)
-        {
-            $question_id = $this->question_id;
 
             $form = new HTML_QuickForm('vote', false, false, false, 
                                        array('id' => 'vote'), true);
@@ -62,9 +38,10 @@ class Vote
 
 
 
-            $quest =& new CoopObject(&$this->page, 'questions', &$none);
+            $quest =& new CoopObject(&$this, 'questions', &$none);
             $quest->fullText = 1; // making their lives easier
-            $quest->obj->whereAdd("question_id = $question_id");
+            $quest->obj->whereAdd(sprintf('question_id = %d',
+                                          $this->question_id));
             $quest->obj->find(true);
             $form->addElement('header', null, $quest->obj->question);
             
@@ -72,14 +49,15 @@ class Vote
                                         $nothing);
             $sel->addOption('-- CHOOSE ONE --', '0');
 
-            $ans =& new CoopObject(&$this->page, 'answers', &$none);
-            $ans->obj->whereAdd("question_id = $question_id");
+            $ans =& new CoopObject(&$this, 'answers', &$none);
+            $ans->obj->whereAdd(sprintf('question_id = %d', 
+                                        $this->question_id));
             $ans->fullText = 1; // making their lives easier
             $ans->obj->find();
             $sel->loadDbResult($ans->obj->getDatabaseResult(), 
                                'answer', 'answer_id');
 
-            if($sid = thruAuthCore($this->page->auth)){
+            if($sid = thruAuthCore($this->auth)){
                 $form->addElement('hidden', 'coop', $sid); 
             }
 
@@ -101,15 +79,16 @@ class Vote
 
             if ($form->validate()) {
                 // save it!
-                $votes =& new CoopObject(&$this->page, 'votes', &$none);
-                $votes->obj->family_id = $this->page->userStruct['family_id'];
+                $votes =& new CoopObject(&$this, 'votes', &$none);
+                $votes->obj->family_id = $this->userStruct['family_id'];
                 $votes->obj->question_id = $this->question_id;
-                $votes->obj->school_year =   $this->page->currentSchoolYear;
+                $votes->obj->school_year =   $this->currentSchoolYear;
                 $vals = $form->exportValues();
                 $votes->obj->answer_id = $vals['answer_id'];
                 $votes->obj->insert();
                 //XXX need *some* audit trail!
                 $this->status = 'Thanks! Your vote has been counted.';
+                $this->formtext = "";
                 
             } else {
                 $this->formtext = $form->toHTML();
@@ -124,21 +103,21 @@ class Vote
     // specific to this page. when i dispatch with REST, i'll need several
     function build()
         {
-            $this->page->title = 'Membership Vote';
+            $this->title = 'Membership Vote';
             $this->status = 'Please vote below on this important issue:';
 
             $this->question_id = 1; // XXX hack, make more flexible
 
-            $votes =& new CoopObject(&$this->page, 'votes', &$none);
+            $votes =& new CoopObject(&$this, 'votes', &$none);
             $votes->obj->whereAdd(
                 sprintf('family_id = %d and question_id = %d and school_year = "%s"',
-                        $this->page->userStruct['family_id'],
+                        $this->userStruct['family_id'],
                         $this->question_id,
-                        $this->page->currentSchoolYear));
+                        $this->currentSchoolYear));
             $votes->obj->find();
             if($votes->obj->N > 0){
                 $this->status = 'You have already voted.';
-                // XXX ANSTY
+                // XXX NASTY
                 $this->formtext = "";
             } else {
                 $this->makeForm();
@@ -150,28 +129,15 @@ class Vote
         }
 
 
-    function run()
-        {
-            $this->build();
-            print '<div>'.$this->status. '</div>';
-            print '<div>'.$this->formtext. '</div>';
-        }
 }
 
 
 
 
-$r =& new Vote(&$cp);
+$r =& new Vote($debug);
 $r->run();
 
 
-
-
-
-
-done ();
-
-////KEEP EVERTHANG BELOW
 
 ?>
 
