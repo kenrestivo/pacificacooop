@@ -59,7 +59,8 @@ class CoopTALPage extends coopPage
             $this->loginchooser = $this->logIn();
 
             $this->prepare();
-            
+
+            // obviously, we're not going to DO anything unless we're logged in!
             if($this->auth['loginflag']){
                 $this->build();
             }

@@ -88,8 +88,6 @@ class Vote extends CoopTALPage
                 $votes->obj->insert();
                 //XXX need *some* audit trail!
                 $this->status = 'Thanks! Your vote has been counted.';
-                $this->formtext = "";
-                
             } else {
                 $this->formtext = $form->toHTML();
             }
@@ -123,8 +121,7 @@ class Vote extends CoopTALPage
                 $this->makeForm();
             }
 
-
-            // TODO: show count of how many families have voted so far
+            // TODO: show vote counts
                 
         }
 
