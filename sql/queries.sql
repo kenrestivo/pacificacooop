@@ -1301,21 +1301,21 @@ order by parents.last_name, parents.first_name, school_year);
 
 ---blog, updated to show max
 select blog_entry.*,
-date_format(audits.updated, '%a %m/%d/%Y %l:%i%p') as update_human,
+date_format(audits.updated, "%a %m/%d/%Y %l:%i%p") as update_human,
 users.name
 from (select * from audit_trail as aud1,
     (select table_name, index_id, max(updated) as updated
         from audit_trail
         group by table_name, index_id) as audmax
-    where aud1.table_name = 'blog_entry'
+    where aud1.table_name = "blog_entry"
           and audmax.table_name = aud1.table_name 
           and audmax.index_id = aud1.index_id
           and aud1.updated = audmax.updated) as audits
 left join blog_entry
 on audits.index_id = blog_entry.blog_entry_id  
-and audits.table_name = 'blog_entry'
+and audits.table_name = "blog_entry"
 left join users on audits.audit_user_id = users.user_id
-where show_on_members_page = 'yes'
+where show_on_members_page = "yes"
  group by blog_entry_id
 order by updated desc
 limit 4
