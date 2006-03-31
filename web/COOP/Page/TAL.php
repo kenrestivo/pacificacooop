@@ -56,11 +56,13 @@ class CoopTALPage extends coopPage
     function run()
         {
             // got to login before anything makes sense
-            $this->logIn();
+            $this->loginchooser = $this->logIn();
 
             $this->prepare();
-
-            $this->build();
+            
+            if($this->auth['loginflag']){
+                $this->build();
+            }
 
             // NOTE: if this ref is unavailable,
             // the whole page fails except done()

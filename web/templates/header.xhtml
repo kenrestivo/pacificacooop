@@ -7,13 +7,14 @@
 
 <!--  XXX this is supposed to show the login if they're not logged in, 
      but it doesn't -->
-      <div tal:content="structure page/logIn"></div>
+      <div tal:content="structure page/loginchooser"></div>
 
       <div tal:comment="must not allow top nav unless htey're logged in"
-           tal:condition="page/auth/uid" 
+           tal:condition="page/auth/loginflag" 
            tal:content="structure page/topNavigation">Top Navigation</div>
-      <div tal:condition="page/auth/uid" 
+      <div tal:condition="page/auth/loginflag" 
            tal:content="structure page/stackPath">Stack</div>
-      <h3 tal:content="page/title" tal:on-error="">Table Description</h3>
+      <h3 tal:condition="page/auth/loginflag" 
+          tal:content="page/title" tal:on-error="">Table Description</h3>
       <hr />
 </div>

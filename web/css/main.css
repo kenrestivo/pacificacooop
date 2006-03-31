@@ -141,6 +141,12 @@ input[type="submit"] {
   cursor: hand;
 }
 
+/*  XXX does this work?
+ input[type="submit"]:hover {
+        color: #bb33dd;
+}
+*/
+
 
 table { 
   margin-top: .5em;

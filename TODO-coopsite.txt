@@ -17,17 +17,14 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 	
-??PHP
-pre-thank-you report
-	the fucking MASSIVE CASH DUMP!
-		find old income payee (cash box etc)
-			foreach ticket with that id (811, let's make it easy)
-			create a new income
-				ticket quantity * price, and old income payee
-		store the old income payee(s), then shitcan them
-			whatever the difference is, make it a "misc/unknown" for the night
-	fix 2ticket people from door, goddammit
+
 		
+???PHP/SQL
+poll question
+	show the results
+		summary of votes for question
+		column of voted/not voted
+	cut off date! automatic, put it in the question, optionally		
 
 						
 ??PHP
@@ -125,13 +122,6 @@ enter last year's goddamned attendees!
 	add count of them, to report, for chrissakes!
 	
 
-
-???PHP/SQL
-poll question
-	show the results
-		summary of votes for question
-		column of voted/not voted
-	cut off date! automatic, put it in the question, optionally		
 
 	
 ??PHP/HTML		
@@ -7459,4 +7449,22 @@ schuman and pang permissions:
 				i feel like doing it this way.
 	shitcan enter new... for now
 		format it nicely-lik
-			first bring the exact old thing back, and push it live.
+			first bring the exact old thing back, and push it live.	the fucking MASSIVE CASH DUMP!
+		find old income payee (cash box etc)
+			foreach ticket with that id (811, let's make it easy)
+			create a new income
+				ticket quantity * price, and old income payee
+		store the old income payee(s), then shitcan them
+			whatever the difference is, make it a "misc/unknown" for the night
+	run my $601 fix on the live site (after backup!)
+??PHP
+pre-thank-you report
+	fix 2ticket people from door, goddammit
+		who? 
+
+	how to SCRAM if no login?
+		have to scram the template AND the actual page-generating code, both
+		a center div which scrams if no auth! duh. that's easy
+			a conditaional fill-slot???!
+				no login, no SLOT
+			don't run build() if no login, duh

@@ -248,6 +248,10 @@ class coopPage
 			$output = ob_get_clean();
 			$output && ob_end_flush();
 
+			if($this->auth['state'] == 'loggedin'){
+                $this->auth['loginflag'] = 1;
+            }
+
 			return $output;
 		}
 

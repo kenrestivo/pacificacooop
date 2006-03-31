@@ -80,12 +80,6 @@ make attendance test use wholephptal model now!
 			nice! you can fill slots conditionally!
 
 
-	how to SCRAM if no login?
-		have to scram the template AND the actual page-generating code, both
-		a center div which scrams if no auth! duh. that's easy
-			a conditaional fill-slot???!
-				no login, no SLOT
-
 	get details working
 		the problem is the STACK. it needs to push
 			and it needs to know how to get back from there

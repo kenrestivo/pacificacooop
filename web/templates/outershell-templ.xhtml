@@ -25,7 +25,7 @@
 
       <div class="centerCol" 
            tal:comment="this ID is used for css. keep it here." >
-        <div tal:condition="page/auth/uid" 
+        <div tal:condition="page/auth/loginflag" 
              metal:define-slot="inner_content">The Content of the Page</div>
       </div>
       
