@@ -2446,6 +2446,15 @@ set springfest_attendee_id = 792, income_id = 717, package_sale_price = <whateve
 
 
 
+--- votecounts
+select questions.question, answers.answer, 
+         count(votes.answer_id) as votecount 
+from votes
+left join answers on votes.answer_id = answers.answer_id
+left join questions on questions.question_id = votes.question_id 
+group by answers.answer_id
+order by questions.school_year asc, questions.question asc, votecount desc
+;
 
 
 

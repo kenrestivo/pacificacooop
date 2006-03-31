@@ -22,11 +22,13 @@ coop web database
 ???PHP/SQL
 poll question
 	show the results
-		summary of votes for each question
-		column of voted/not voted
+		for each question
+			answer and total votes
+			list of voted families
 	cut off date! automatic, put it in the question, optionally		
 
-						
+
+							
 ??PHP
 bring thank yous back to life
 	let them edit the template

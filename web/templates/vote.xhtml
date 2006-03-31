@@ -9,5 +9,13 @@
     <div tal:on-error=""
          tal:replace="structure page/formtext"></div>
 
+    <table>
+      <tr tal:repeat="vote page/votes">
+        <td tal:content="vote/question"></td>
+        <td tal:content="vote/answer"></td> 
+        <td tal:content="vote/votecount"></td> 
+      </tr>
+    </table>
+
   </div>
 </div>

@@ -56,6 +56,8 @@ class CoopTALPage extends coopPage
     function run()
         {
             // got to login before anything makes sense
+            //i save the output here instead of in login
+            //because most uses of login don't care about the output anyway
             $this->loginchooser = $this->logIn();
 
             $this->prepare();

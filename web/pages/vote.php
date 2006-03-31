@@ -96,6 +96,23 @@ class Vote extends CoopTALPage
 
         }
 
+    function buildVoteSummary()
+        {
+            //XXX temporary hacque
+            //this will ultimately just be a simpletable of votes
+            //since votes *are* summaries
+            
+            $votes =& new CoopObject(&$this, 'votes', &$none);
+            $votes->obj->query(
+'select questions.question, answers.answer, 
+         count(votes.answer_id) as votecount 
+from votes
+left join answers on votes.answer_id = answers.answer_id
+left join questions on questions.question_id = votes.question_id 
+group by answers.answer_id
+order by questions.school_year asc, questions.question asc, votecount desc');
+            $this->votes =& $votes;
+        }
 
 
     // specific to this page. when i dispatch with REST, i'll need several
@@ -120,8 +137,9 @@ class Vote extends CoopTALPage
             } else {
                 $this->makeForm();
             }
-
-            // TODO: show vote counts
+            
+            //TODO: test for permissions, only board group should
+            $this->buildVoteSummary();
                 
         }
 
