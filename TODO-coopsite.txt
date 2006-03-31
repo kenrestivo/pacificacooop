@@ -21,10 +21,6 @@ coop web database
 		
 ???PHP/SQL
 poll question
-	show the results
-		for each question
-			answer and total votes
-			list of voted families
 	cut off date! automatic, put it in the question, optionally		
 
 
@@ -7469,4 +7465,7 @@ pre-thank-you report
 		a center div which scrams if no auth! duh. that's easy
 			a conditaional fill-slot???!
 				no login, no SLOT
-			don't run build() if no login, duh
+			don't run build() if no login, duh	show the results
+		for each question
+			answer and total votes
+			list of voted families

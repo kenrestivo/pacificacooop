@@ -2457,5 +2457,22 @@ order by questions.school_year asc, questions.question asc, votecount desc
 ;
 
 
+-- non-voting families
+select enrolled.*, this_question.question_id from
+(select distinct  families.*
+   from families
+       left join kids on families.family_id = kids.family_id 
+       left join enrollment on kids.kid_id = enrollment.kid_id 
+   where enrollment.school_year = '2005-2006'
+   and ((enrollment.dropout_date < '1900-01-01'
+       or enrollment.dropout_date is null)
+       or enrollment.dropout_date > now())
+   group by families.family_id
+   order by families.name) as enrolled
+left join  
+(select * from votes where question_id = 1) as this_question
+on this_question.family_id = enrolled.family_id
+where this_question.question_id is null
+\G
 
 --- EOF

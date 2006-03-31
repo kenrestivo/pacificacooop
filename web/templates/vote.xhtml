@@ -27,7 +27,8 @@
         </tr>
         
         <tr class="altrow2" tal:condition="question/families">
-          <td colspan="3">Voters:</td>
+          <td colspan="2" tal:content="string:Not Yet Voted:"></td>
+          <td tal:content="string: ${question/families/count} families"></td>
         </tr>
         <tr  tal:condition="question/families"
             tal:repeat="family question/families" >

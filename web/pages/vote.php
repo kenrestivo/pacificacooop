@@ -136,7 +136,23 @@ order by votes.school_year asc,  votecount desc',
                     $res[$q->obj->{$q->pk}]['families'] = array();
                     $fams =& new CoopObject(&$this, 'families', &$none);
                     $fams->obj->query(
-                        sprintf('select families.*, votes.question_id from families left join votes on votes.family_id = families.family_id where votes.question_id = %d order by families.name',
+                        sprintf('
+select enrolled.*, this_question.question_id from
+(select distinct  families.*
+   from families
+       left join kids on families.family_id = kids.family_id 
+       left join enrollment on kids.kid_id = enrollment.kid_id 
+   where enrollment.school_year = "%s"
+   and ((enrollment.dropout_date < "1900-01-01"
+       or enrollment.dropout_date is null)
+       or enrollment.dropout_date > now())
+   group by families.family_id
+   order by families.name) as enrolled
+left join  
+(select * from votes where question_id = %d) as this_question
+on this_question.family_id = enrolled.family_id
+where this_question.question_id is null',
+                                $q->getChosenSchoolYear(),
                                 $q->obj->question_id));
                     while($fams->obj->fetch()){
                         $res[$q->obj->{$q->pk}]['families'][$fams->obj->{$fams->pk}] = $fams->obj->toArray();
