@@ -93,6 +93,20 @@ insert into groups set
             name = "Teachers";
 
 
+insert into groups set
+            groupid = 3,
+            name = "Board Members";
+
+
+insert into groups set
+            groupid = 4,
+            name = "Springfest Chairs";
+
+
+insert into groups set
+            groupid = 5,
+            name = "Springfest Solicitation Committee";
+
 --- realms
 INSERT INTO `realms` 
 (realm_id, realm, meta_realm_id, short_description)

@@ -10,11 +10,27 @@
          tal:replace="structure page/formtext"></div>
 
     <table>
-      <tr tal:repeat="vote page/votes">
-        <td tal:content="vote/question"></td>
-        <td tal:content="vote/answer"></td> 
-        <td tal:content="vote/votecount"></td> 
-      </tr>
+      <div tal:omit-tag=""  tal:condition="page/results"
+           tal:repeat="question page/results" >
+        <tr><td colspan="2" tal:content="question/question"></td></tr>
+
+        <tr><td colspan="2">Results:</td></tr>
+        <tr tal:repeat="vote question/votes">
+          <td> </td>
+          <td tal:content="vote/answer"></td> 
+          <td tal:content="vote/votecount"></td> 
+        </tr>
+        
+        <tr tal:condition="question/families">
+          <td colspan="2">Voters:</td>
+        </tr>
+        <tr  tal:condition="question/families"
+            tal:repeat="family question/families" >
+          <td> </td>
+          <td tal:content="family/name"></td> 
+          <td tal:content="family/phone"></td> 
+        </tr>
+      </div>
     </table>
 
   </div>

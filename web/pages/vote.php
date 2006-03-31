@@ -88,6 +88,7 @@ class Vote extends CoopTALPage
                 $votes->obj->insert();
                 //XXX need *some* audit trail!
                 $this->status = 'Thanks! Your vote has been counted.';
+                $this->buildVoteSummary();
             } else {
                 $this->formtext = $form->toHTML();
             }
@@ -101,17 +102,52 @@ class Vote extends CoopTALPage
             //XXX temporary hacque
             //this will ultimately just be a simpletable of votes
             //since votes *are* summaries
-            
-            $votes =& new CoopObject(&$this, 'votes', &$none);
-            $votes->obj->query(
-'select questions.question, answers.answer, 
+            $res = array();
+
+            $q =& new CoopObject(&$this, 'questions', &$none);
+            $q->obj->find();
+            while($q->obj->fetch()){
+                $res[$q->obj->{$q->pk}] = array();
+                $res[$q->obj->{$q->pk}]['question'] = $q->obj->question;
+                $res[$q->obj->{$q->pk}]['votes'] = array();
+                $votes =& new CoopObject(&$this, 'votes', &$none);
+                $votes->obj->query(
+                    sprintf('select answers.answer, answers.answer_id,
          count(votes.answer_id) as votecount 
-from votes
-left join answers on votes.answer_id = answers.answer_id
-left join questions on questions.question_id = votes.question_id 
+from answers
+left join votes on votes.answer_id = answers.answer_id
+where answers.question_id = %d
 group by answers.answer_id
-order by questions.school_year asc, questions.question asc, votecount desc');
-            $this->votes =& $votes;
+order by votes.school_year asc,  votecount desc',
+                            $q->obj->question_id));
+                while($votes->obj->fetch()){
+                    $res[$q->obj->{$q->pk}]['votes'][$votes->obj->answer_id] = 
+                        array('answer' => $votes->obj->answer, 
+                              'votecount' => $votes->obj->votecount);
+                }
+
+                //XXX nasty hack, until i fix perms: only if bored member
+                $ug =& new CoopObject(&$this, 'users_groups_join', &$none);
+                $ug->obj->whereAdd(sprintf('group_id = %d and user_id = %d',
+                                      //XXX HARDCODE!
+                                      3, $this->auth['uid']));
+                $ug->obj->find(true);
+                if($ug->obj->N > 0){
+                    $res[$q->obj->{$q->pk}]['families'] = array();
+                    $fams =& new CoopObject(&$this, 'families', &$none);
+                    $fams->obj->query(
+                        sprintf('select families.*, votes.question_id from families left join votes on votes.family_id = families.family_id where votes.question_id = %d order by families.name',
+                                $q->obj->question_id));
+                    while($fams->obj->fetch()){
+                        $res[$q->obj->{$q->pk}]['families'][$fams->obj->{$fams->pk}] = $fams->obj->toArray();
+                    
+                    }
+                }
+            }
+            
+            $this->confessArray($res, 'results', 4);
+            $this->results = $res;
+            
         }
 
 
@@ -132,14 +168,11 @@ order by questions.school_year asc, questions.question asc, votecount desc');
             $votes->obj->find();
             if($votes->obj->N > 0){
                 $this->status = 'You have already voted.';
-                // XXX NASTY
-                $this->formtext = "";
+                $this->buildVoteSummary();
             } else {
                 $this->makeForm();
             }
             
-            //TODO: test for permissions, only board group should
-            $this->buildVoteSummary();
                 
         }
 
