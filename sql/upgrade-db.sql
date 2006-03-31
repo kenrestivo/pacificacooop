@@ -40,5 +40,9 @@ user_level , group_level , realm_id , year_level , menu_level ) VALUES
 
 
 
+-- thankyou's
+-- thankyoutemplate table (definition.sql)
+-- seed the templates (seed.sql)
 
--- seed the questions and answers (seed.sql)
+
+

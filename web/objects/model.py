@@ -100,6 +100,20 @@ class AuctionPurchases(SQLObject):
 
 
 
+class Tickets(SQLObject):
+       class sqlmeta:
+              fromDatabase = True
+              idName='ticket_id'
+              uglyName='ticketID'
+
+
+class Income(SQLObject):
+       class sqlmeta:
+              fromDatabase = True
+              idName='income_id'
+              uglyName='incomeID'
+
+
 ## XXX ugly hack required to deal with leading column names in packages, alas
 for i in Packages.sqlmeta.columnList:
     if i.dbName == 'cache_package_description':

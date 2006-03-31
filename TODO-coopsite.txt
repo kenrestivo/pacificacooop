@@ -19,27 +19,23 @@ coop web database
 	
 ??PHP
 pre-thank-you report
-	format it nicely-like
 	the fucking MASSIVE CASH DUMP!
-		for each ticket,
-			get old income payee (cash box etc)
+		find old income payee (cash box etc)
+			foreach ticket with that id (811, let's make it easy)
 			create a new income
 				ticket quantity * price, and old income payee
 		store the old income payee(s), then shitcan them
 			whatever the difference is, make it a "misc/unknown" for the night
+	fix 2ticket people from door, goddammit
 		
-					
+
+						
 ??PHP
 bring thank yous back to life
-	shitcan enter new... for now
 	let them edit the template
 		my hokey [::] for now, but ultimately add to TAL and tiny_mce
-		new thing
-	nifty ajax tal'ing
-		a button for each in preview, which will apply to template USING JS!
-		not hard using minital, or some similar
-	first bring the exact old thing back, and push it live.
-		deal with the HTML escaping in thankYou class? where?
+		do the seeds for 2004-2005, 2005-2006, and 2003-2004 if i can find
+	bring view existing thankyous back to life
 		recoverexisting appears to be the key. can i do that in sql?
 			sum of all income (companies/leads/tickets)
 			list of all auction, description and amount concat_ws('\n'?)
@@ -47,10 +43,23 @@ bring thank yous back to life
 			salesperson (coalesce parent id? guessparents?)
 			name summary (like paddle coalescing: through everything)
 				order by namesum too
-	pdml it! like we did with the bid sheets
+	fake form for print buttons
+		don't use quickform. i can't imagine making that work
+		lots of checkboxes. print-table-pk-id
+		also mark-as-sent: sent-table-pk-id
+		form simply sumbits them
+		a js function to check/uncheck all
+			mochikit. surf through the table, find all of type checkbox
+			check/uncheck them
+	pdml the thankyou! like we did with the bid sheets
 		at very least for one-off printing, using the old method
 		i think the letter might be an ajax, or a popup, or both
-	label printing too
+	label printing too!
+		i can pdml these now, IIRC.
+		or just export them like i did with invites
+	nifty ajax tal'ing
+		a button for each in preview, which will apply to template USING JS!
+		not hard using minital, or some similar
 	new ui model
 		custom details shows the note in text format. "preview/edit?"
 			and gives them edit links to each item
@@ -60,9 +69,15 @@ bring thank yous back to life
 		gotta suppress those somehow. gah!
 	coords view previous year perms
 	have a look at what happens when you "detail" into an old thankyounote!
+		why would that be a problem at all, at all?
 	note the search interface for thankyounote in income, etc, is pretty useless
-	
+	deal with the HTML escaping in thankYou class? where?	
+	alpha pager, goddammit! takes too long to load this damned thing
+		it'd have to be REALLY custom! can't guess alpha letters
+			without a gnarly join
 
+
+	
 ??PHP/TAL
 summary of who purchased each package REPORT
 	do NOT get stuck at the sub-query tal loops.
@@ -110,6 +125,15 @@ enter last year's goddamned attendees!
 	add count of them, to report, for chrissakes!
 	
 
+
+???PHP/SQL
+poll question
+	show the results
+		summary of votes for question
+		column of voted/not voted
+	cut off date! automatic, put it in the question, optionally		
+
+	
 ??PHP/HTML		
 	escaping of text fields in details
 		create a test harness, make sure no ?'s or &amp/&nbsp's:
@@ -145,12 +169,6 @@ BUGS
 
 	
  
-???PHP/SQL
-poll question
-	show the results
-		summary of votes for question
-		column of voted/not voted
-	cut off date! automatic, put it in the question, optionally		
 	
 
 				
@@ -182,6 +200,7 @@ remember paddles will be SPLIT
 BUGS
 	goddammit! PERMS SHOWING UP AS NO! INSTEAD OF IGNORE! HEYYY!
 		JUST DO WHAT I FUCKING TELL YOU!!! I TELL YOU IGNORE THEN IGNORE!
+		it's showing up as "Object" in the changelog. THAT IS FUCKED UP!
 	fix that ad insertion anomaly in the report
 		solicitation ad inserton != grand total ad insertion. why?
 	counts are not in sync between carrie and nag report
@@ -7429,6 +7448,7 @@ schuman and pang permissions:
 	+ view rsvps: look at stangeland, use those
 	+ auction: edit
 	+ add to solicit group
+	+ thank you note perms
 	and email with notes!
 	jeez, i can just use the hackreport!
 	but i have to build a damned array, no subiterator yet!
@@ -7437,3 +7457,6 @@ schuman and pang permissions:
 		order by
 			join to the company and lead, and coalesce like paddles
 				i feel like doing it this way.
+	shitcan enter new... for now
+		format it nicely-lik
+			first bring the exact old thing back, and push it live.

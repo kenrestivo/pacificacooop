@@ -1043,4 +1043,17 @@ school_year varchar(50) default NULL
 );
 
 
+
+create table thank_you_templates(
+thank_you_template_id int(32) primary key not null unique auto_increment,
+cash varchar(255),
+ticket varchar(255),
+ad varchar(255),
+main_body longtext,
+_cache_main_body varchar(255),
+school_year varchar(50) default NULL
+);
+
+
+
 -- EOF
