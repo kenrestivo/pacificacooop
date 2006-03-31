@@ -64,19 +64,25 @@ class Blog_entry extends CoopDBDO
                 $clause = 'public'; 
             }
 
-            $this->query(sprintf("select distinct blog_entry.*,
-                date_format(max(audit_trail.updated), '%%a %%m/%%d/%%Y %%l:%%i%%p') 
-                        as update_human,
-            users.name
-			from blog_entry 
-			left join audit_trail 
-                   on audit_trail.index_id = blog_entry.blog_entry_id  
-                        and audit_trail.table_name = 'blog_entry'
-            left join users on audit_trail.audit_user_id = users.user_id
-            where show_on_%s_page = 'yes'
-             group by blog_entry_id
-			order by updated desc
-			limit 4", 
+            $this->query(sprintf('select blog_entry.*,
+date_format(audits.updated, "%%a %%m/%%d/%%Y %%l:%%i%%p") as update_human,
+users.name
+from (select * from audit_trail as aud1,
+    (select table_name, index_id, max(updated) as updated
+        from audit_trail
+        group by table_name, index_id) as audmax
+    where aud1.table_name = "blog_entry"
+          and audmax.table_name = aud1.table_name 
+          and audmax.index_id = aud1.index_id
+          and aud1.updated = audmax.updated) as audits
+left join blog_entry
+on audits.index_id = blog_entry.blog_entry_id  
+and audits.table_name = "blog_entry"
+left join users on audits.audit_user_id = users.user_id
+where show_on_%s_page = "yes"
+ group by blog_entry_id
+order by updated desc
+limit 4', 
                                  $clause));
             while($this->fetch()){
                 $res .= sprintf("<div><b>%s</b>&nbsp;%s</div><div class=\"actions\">%s</div><p class=\"small\">Posted %s by %s</p><br />\n\n", 
