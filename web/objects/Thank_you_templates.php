@@ -50,7 +50,7 @@ class Thank_you_templates extends CoopDBDO
 
 	var $fb_formHeaderText =  'Springfest Thank You Templates';
 
-    var $fb_shortHeader = 'Template';
+    var $fb_shortHeader = 'Templates';
 
     // everything except school year! clunky, but it works: only one per year
     var $fb_dupeIgnore = array('cash' , 'ticket' , 'value_received' , 
@@ -72,7 +72,8 @@ class Thank_you_templates extends CoopDBDO
         'no_value' => "For tax purposes, no goods or services were provided in exchange for your contribution",
         'cash' => 'cash for our Springfest fundraiser',
         'ad' => 'ad valued at',
-        'ticket' => 'to the Springfest event valued altogether at'
+        'ticket' => 'to the Springfest event valued altogether at',
+        'main_body' =>  '[:DATE:]<br /> <br /> [:NAME:]<br /> [:ADDRESS:]<br /> <br /> Dear [:DEAR:],<br /> <br /> Thank you for your kind donation of [:ITEMS:] to our [:ITERATION:]<sup>[:ORDINAL:]</sup> Annual Springfest [:YEAR:] Wine Tasting and Auction. <br /> <br /> [:VALUERECEIVED:].<br /> <br /> Because of the support of our community this year, we were able to raise the amount of money needed to make the necessary repairs and improvements to our nursery school.&nbsp; For [:YEARS:] years, the Pacifica Co-op Nursery School has provided an enriching experience for both children and parents of our community. <br /> <br /> The Pacifica Co-op Nursery School is a non-profit, parent participation program.&nbsp; We rely on the assistance of the community in conjunction with friends and family to meet our ever-increasing costs.&nbsp; Again, we thank you for considering the Pacifica Co-op Nursery School a deserving place to offer your community support.<br /> <br /> <div style="text-align: center"><em><strong>&quot;An investment in our children is an investment in our community.&quot;</strong></em><br />   </div>  <br /> Sincerely,<br /> <br /> [:FROM:]<br /> <br /> Pacifica Co-op Nursery School <br /> Incorporated as &quot;Pacifica Nursery School, Inc.&quot;<br /> A 501(c)(3) non-profit organization<br /> Tax ID # 94-1527749 <br />'
         );
     
 
