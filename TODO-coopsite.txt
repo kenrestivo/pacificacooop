@@ -21,10 +21,7 @@ coop web database
 ??PHP
 bring thank yous back to life
 	let them edit the template
-		my hokey [::] for now, but ultimately add to TAL and tiny_mce
-		do the seeds for 2004-2005, 2005-2006, and 2003-2004 if i can find
-		go ahead and MAKE THE FUCKING TABLE GODDAMMIT!
-		then make the thankyou use it... will slow it down even more :-(
+		put the instructions/explanations into the INSTRUCTIONS
 	bring view existing thankyous back to life
 		recoverexisting appears to be the key. can i do that in sql?
 			sum of all income (companies/leads/tickets)
@@ -32,7 +29,7 @@ bring thank yous back to life
 			list of all in-kind, description and amount concat_ws('\n'?)
 			salesperson (coalesce parent id? guessparents?)
 			name summary (like paddle coalescing: through everything)
-				order by namesum too
+				order by namesum too.  hah, "ad namesum"
 	fake form for print buttons
 		don't use quickform. i can't imagine making that work
 		lots of checkboxes. print-table-pk-id
@@ -143,6 +140,7 @@ BUGS
 			in protectedjoin or somewhere, ALWAYS force the keys in linkfields
 				to be those in the LOCAL table
 			or, force a selectAdd(); selectAdd('thistable.*');
+	send_email needs to be reformatted: changes > 80 chars on SEPARATE LINES
 	l01, edit
 	invitation income calculation is wrong: with food/quilt they don't concur
 		have to join tickets in there and yank the familyid in tickets
@@ -3712,6 +3710,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+			what's with this substitute() function? never called??!
+				it's called, but just when necessary
 		just so that it is DONE and nobody is crawling all over me
 			too late. they already are :-(
 
@@ -7468,3 +7468,13 @@ pre-thank-you report
 		for each question
 			answer and total votes
 			list of voted families
+		my hokey [::] for now, but ultimately add to TAL and tiny_mce
+		do the seeds for 2004-2005, 2005-2006, and 2003-2004 if i can find
+		go ahead and MAKE THE FUCKING TABLE GODDAMMIT!
+		then make the thankyou use it... will slow it down even more :-(
+		dupeignore everything except schoolyear
+manually add the green family thingus
+insert into votes set family_id = 25, question_id = 1, answer_id = 1, school_year = '2005-2006';	
+		go get the template and toarray it at every thankyou instantiation
+			varstoarray needs it, so does findthanksneeded
+			fuck that, do it at instantiation

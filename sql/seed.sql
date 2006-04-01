@@ -877,4 +877,43 @@ values
 ;
 
 
+-- thank you templates
+insert into thank_you_templates set
+thank_you_template_id = 1,
+                 cash= 'cash for our Springfest fundraiser',
+               ticket=' to the Springfest event valued altogether at',
+       value_received= 'In exchange for your contribution, we gave you',
+             no_value= 'For tax purposes, no goods or services were provided in exchange for your contribution',
+                   ad= 'ad valued at',
+            main_body= '[:DATE:]<br /> <br /> [:NAME:]<br /> [:ADDRESS:]<br /> <br /> Dear [:DEAR:],<br /> <br /> Thank you for your kind donation of [:ITEMS:] to our [:ITERATION:]<sup>[:ORDINAL:]</sup> Annual Springfest [:YEAR:] Wine Tasting and Auction. <br /> <br /> [:VALUERECEIVED:].<br /> <br /> Because of the support of our community this year, we were able to raise the amount of money needed to make the necessary repairs and improvements to our nursery school.&nbsp; For [:YEARS:] years, the Pacifica Co-op Nursery School has provided an enriching experience for both children and parents of <br />our community. <br /> <br /> The Pacifica Co-op Nursery School is a non-profit, parent participation program.&nbsp; We rely on the assistance of the community in conjunction with friends and family to meet our ever-increasing budget.&nbsp; Again, we thank you for considering the Pacifica Co-op Nursery School a deserving place to offer your community support.<br /> <br /> <div style="text-align: center"><em> &quot;An investment in our children is an investment in our community.&quot;</em><br /> </div>  &lt;<br />br /&gt; <br /> Sincerely,<br /> <br /> [:FROM:]<br /> <br /> Pacifica Co-op Nursery School <br /> Incorporated as &quot;Pacifica Nursery School, Inc.&quot;<br /> A 501(c)(3) non-profit organization<br /> Tax ID # 94-1527749 <br />',
+     _cache_main_body= '[:DATE:]  [:NAME:] [:ADDRESS:]  Dear [:DEAR:],  As our school year draws to a close, we would like to be sure to thank you for your kind donation of [:ITEMS:].   [:VALUERECEIVED:].  Because of the sup',
+          school_year = '2003-2004'
+;
+
+
+insert into thank_you_templates set
+thank_you_template_id = 2,
+                 cash= 'cash for our Springfest fundraiser',
+               ticket=' to the Springfest event valued altogether at',
+       value_received= 'In exchange for your contribution, we gave you',
+             no_value= 'For tax purposes, no goods or services were provided in exchange for your contribution',
+                   ad= 'ad valued at',
+            main_body= '[:DATE:]<br /> <br /> [:NAME:]<br /> [:ADDRESS:]<br /> <br /> Dear [:DEAR:],<br /> <br /> As our school year draws to a close, we would like to be sure to thank you for your kind donation of [:ITEMS:]. <br /> <br /> [:VALUERECEIVED:].<br /> <br /> Because of the support of our community this year, we were able to raise the amount of money needed to make the necessary repairs and improvements to our nursery school.&nbsp; For [:YEARS:] years, the Pacifica Co-op Nursery School has provided an enriching experience for both children and parents of our community. <br /> <br /> The Pacifica Co-op Nursery School is a non-profit, parent participation program.&nbsp; We rely on the assistance of the community in conjunction with friends and family to meet our ever-increasing budget.&nbsp; Again, we thank you for considering the Pacifica Co-op Nursery School a deserving place to offer your community support.<br /> <br /> <div style="text-align: center"><em> &quot;An investment in our children is an investment in our community.&quot;</em><br /> </div>  <br /> <br /> Sincerely,<br /> <br /> [:FROM:]<br /> <br /> Pacifica Co-op Nursery School <br /> Incorporated as &quot;Pacifica Nursery School, Inc.&quot;<br /> A 501(c)(3) non-profit organization<br /> Tax ID # 94-1527749 <br />',
+     _cache_main_body= '[:DATE:]  [:NAME:] [:ADDRESS:]  Dear [:DEAR:],  As our school year draws to a close, we would like to be sure to thank you for your kind donation of [:ITEMS:].   [:VALUERECEIVED:].  Because of the sup',
+          school_year = '2004-2005'
+;
+
+insert into thank_you_templates set
+thank_you_template_id = 3,
+                 cash= 'cash for our Springfest fundraiser',
+               ticket=' to the Springfest event valued altogether at',
+       value_received= 'In exchange for your contribution, we gave you',
+             no_value= 'For tax purposes, no goods or services were provided in exchange for your contribution',
+                   ad= 'ad valued at',
+            main_body= '[:DATE:]<br /> <br /> [:NAME:]<br /> [:ADDRESS:]<br /> <br /> Dear [:DEAR:],<br /> <br /> Thank you for your kind donation of [:ITEMS:] to our [:ITERATION:]<sup>[:ORDINAL:]</sup> Annual Springfest [:YEAR:] Wine Tasting and Auction. <br /> <br /> [:VALUERECEIVED:].<br /> <br /> Because of the support of our community this year, we were able to raise the amount of money needed to make the necessary repairs and improvements to our nursery school.&nbsp; For [:YEARS:] years, the Pacifica Co-op Nursery School has provided an enriching experience for both children and parents of <br />our community. <br /> <br /> The Pacifica Co-op Nursery School is a non-profit, parent participation program.&nbsp; We rely on the assistance of the community in conjunction with friends and family to meet our ever-increasing budget.&nbsp; Again, we thank you for considering the Pacifica Co-op Nursery School a deserving place to offer your community support.<br /> <br /> <div style="text-align: center"><em> &quot;An investment in our children is an investment in our community.&quot;</em><br /> </div>  &lt;<br />br /&gt; <br /> Sincerely,<br /> <br /> [:FROM:]<br /> <br /> Pacifica Co-op Nursery School <br /> Incorporated as &quot;Pacifica Nursery School, Inc.&quot;<br /> A 501(c)(3) non-profit organization<br /> Tax ID # 94-1527749 <br />',
+     _cache_main_body= '[:DATE:]  [:NAME:] [:ADDRESS:]  Dear [:DEAR:],  As our school year draws to a close, we would like to be sure to thank you for your kind donation of [:ITEMS:].   [:VALUERECEIVED:].  Because of the sup',
+          school_year = '2005-2006'
+;
+
+
 -- EOF

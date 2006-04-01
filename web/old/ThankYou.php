@@ -46,45 +46,16 @@ class ThankYou
 					// system calculates this for you.
 	var $ordinal; // ORDINAL: st/nd/rd, etc. system calculates this.
 	var $year; // YEAR: the year of this springfest. system calclates this
-	var $years; // YEARS: how many springfests so far
+	var $years; // YEARS: how many years since the school was founded
 	var $from; // FROM: who sent the letter. will get filled in with
 			   // name of solicitor
 	var $email; // EMAIL: email address
 	var $thank_you_id; // cache of the unique id for this thankyounote
 	var $entityHack; // cache of array of entity and id
 	var $check_reconcile;  // stupid flag to avoid checking reconciliation
-
-	//TODO: put this in a file, and fopen it, or in a DB blob!
-	// if i put in in a db, schoolyearify them, and grab this years or latest
-	// so they can override it in the future
-	var $template = 
-	"[:DATE:]
-
-[:NAME:]
-[:ADDRESS:]
-
-Dear [:DEAR:],
-
-As our school year draws to a close, we would like to be sure to thank you for your kind donation of [:ITEMS:]. 
-
-[:VALUERECEIVED:].
-
-Because of the support of our community this year, we were able to raise the amount of money needed to make the necessary repairs and improvements to our nursery school.  For [:YEARS:] years, the Pacifica Co-op Nursery School has provided an enriching experience for both children and parents of our community. 
-
-The Pacifica Co-op Nursery School is a non-profit, parent participation program.  We rely on the assistance of the community in conjunction with friends and family to meet our ever-increasing budget.  Again, we thank you for considering the Pacifica Co-op Nursery School a deserving place to offer your community support.
-
-\"An investment in our children is an investment in our community.\"
+	var $template = array(); // get that this out of the db
 
 
-Sincerely,
-
-[:FROM:]
-
-Pacifica Co-op Nursery School 
-Incorporated as \"Pacifica Nursery School, Inc.\"
-A 501(c)(3) non-profit organization
-Tax ID # 94-1527749 
-";
 
 	function ThankYou(&$cp)
 		{
@@ -94,11 +65,22 @@ Tax ID # 94-1527749
 			$this->cp = $cp;
 		}
 
+
+    function fetchTemplate()
+        {
+            $t = new CoopObject(&$this->cp, 
+                                 'thank_you_templates', &$nothing);
+            $t->obj->whereAdd(sprintf('school_year = "%s"', findSchoolYear()));
+            $t->obj->find(true);
+            $this->template = $t->obj->toArray();
+        }
+
+
 	// a factory method
 	function substitute()
 		{
 		
-			
+			// XXX broken. this needs to use chosenschoolyear instead
 			$sy = findSchoolYear();
 
 			// set defaults if empty: date, schoolyear, etc
@@ -209,7 +191,7 @@ Tax ID # 94-1527749
 			$to = array_values($subst);
 
 		
-			$text .= str_replace($from, $to, $this->template);
+			$text .= str_replace($from, $to, $this->template['main_body']);
 		
 			
 			//TODO: hack for the "tagline" at the bottom. preg_match?
@@ -236,25 +218,26 @@ Tax ID # 94-1527749
 											', ' : ' and ', 
 											$this->items_array);
 			if(count($this->value_received_array)){
-				$subst['VALUERECEIVED'] = "In exchange for your contribution, we gave you ";
+				$subst['VALUERECEIVED'] = $this->template['value_received'];
 				$subst['VALUERECEIVED'] .= implode(
 					count($this->value_received_array) > 2 ?
 					', ' : " and ", 
 					$this->value_received_array);
 			} else {
-				$subst['VALUERECEIVED'] = "For tax purposes, no goods or services were provided in exchange for your contribution";
+				$subst['VALUERECEIVED'] = $this->template['no_value'];
 			}
 
-			/// DEAR IN THE HEADLIGHTS HACK!
-			user_error(sprintf("[%s] is name", $this->name), E_USER_NOTICE);
-			if(!trim($this->name)){
-				user_error("$this->name is not name. yanking dear", 
-						   E_USER_NOTICE);
- 				//yank the line beginning with 'Dear'
-				// remove it from the template!
-				$this->template = preg_replace('/\nDear.+?\n/', "\n\n", 
-											   $this->template);
-			}
+			/// XXX DEAR IN THE HEADLIGHTS HACK!
+			/// i hate this so much, i removed it from the codebase
+//			user_error(sprintf("[%s] is name", $this->name), E_USER_NOTICE);
+// 			if(!trim($this->name)){
+// 				user_error("$this->name is not name. yanking dear", 
+// 						   E_USER_NOTICE);
+//  				//yank the line beginning with 'Dear'
+// 				// remove it from the template!
+// 				$this->template = preg_replace('/\nDear.+?\n/', "\n\n", 
+// 											   $this->template);
+// 			}
 
 			return $subst;
 		}
@@ -341,6 +324,8 @@ Tax ID # 94-1527749
 			// returns true when it saves and/or finds
 	  function findThanksNeeded($pk, $id, $save = false)
 		{
+            $this->fetchTemplate();
+
 			switch($pk){
 			case 'lead_id':
 				return $this->_findLeadThanksNeeded($pk, $id, $save);
@@ -450,8 +435,7 @@ Tax ID # 94-1527749
 			}
 			if($found){
 				$this->items_array[] = sprintf(
-					"$%01.02f cash for our Springfest fundraiser", 
-					$cashtotal);
+					'$%01.02f %s', $cashtotal, $this->template['cash']);
 			}
 				
 
@@ -647,8 +631,7 @@ Tax ID # 94-1527749
 
 			if($found){
 				$this->items_array[] = sprintf(
-					"$%01.02f cash for our Springfest fundraiser", 
-					$cashtotal);
+					'$%01.02f %s', $cashtotal, $this->template['cash']);
 			}
 					
 
@@ -929,8 +912,9 @@ Tax ID # 94-1527749
 
 			while($real->obj->fetch()){
 				$this->value_received_array[] = sprintf(
-					"a %s ad valued at $%01.02f",
+					"one %s %s $%01.02f",
 					$real->obj->ad_size_description,
+                    $this->template['ad'],
 					$real->obj->ad_price);
 			}
 
@@ -957,9 +941,10 @@ Tax ID # 94-1527749
 			if($found){
 				$valuereceived = $found * COOP_SPRINGFEST_TICKET_PRICE; // XXX 
 				$this->value_received_array[] = sprintf(
-					"%s ticket%s to the Springfest event valued altogether at $%01.02f",
+					"%s ticket%s %s $%01.02f",
 					$found, 
                     $found > 1 ? 's': '',
+                    $this->template['tickets'],
                     $valuereceived);
 
 			}
