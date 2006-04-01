@@ -67,13 +67,31 @@ class Thank_you extends CoopDBDO
 
 
 
-
-    function fb_display_view(&$co)
+// silly utility function this is really format-specific
+function _detailsLink(&$co, $current)
         {
-            require_once('ThankYou.php');
-    
-            $co->schoolYearChooser();
+                $tmptab = $current['id_name'] == 'company_id' ?
+                    'companies': 'leads';
 
+                // XXX cheap subset of CoopView::recordButtons()
+                // TODO: do it right and instantiate or fake recordButtons()
+                return $co->page->selfURL(
+                    array('value' => 'Details',
+                          'base' => 'generic.php',
+                          'inside' => array('table' => $tmptab,
+                                            $tmptab . '-' . 
+                                            $current['id_name'] => $current['id'],
+                                            'action' => 'details',
+                                            'push' => 'thank_you'),
+                          'par' => false));
+
+        }
+
+
+function thanksNeededPickList(&$co)
+        {
+
+            // this is pseudo-templating, using htmltable
             $tab = new HTML_Table();	
                 $tab->addRow(
                     array(
@@ -94,12 +112,26 @@ class Thank_you extends CoopDBDO
                           implode('<br />', $ty['items_array']),
                           implode('<br />', $ty['value_received_array']),
                           $ty['from'],
-                          $ty['details'],
+                          $this->_detailsLink(&$co, $ty)
                           ));
             }
 
             $tab->altRowAttributes(1, 'class="altrow1"', 
                                    'class="altrow2"');
+
+            return $tab->toHTML();
+        }
+
+
+
+
+
+    function fb_display_view(&$co)
+        {
+            require_once('ThankYou.php');
+    
+            $co->schoolYearChooser();
+
 
             $co->obj->query(
                 sprintf(
@@ -128,7 +160,7 @@ order by concat(coalesce(leads.last_name, companies.last_name), coalesce(leads.f
 
 
             return '<h3>The following thank you notes need to be sent:</h3>'.
-                $tab->toHTML() .  
+                $this->thanksNeededPickList(&$co) . 
                 '<h3>Thank you notes below have already been sent:</h3>'.
                 $co->simpleTable(false,true);
 
@@ -249,27 +281,13 @@ order by Company;
                 $current= array_merge($top->obj->toArray(), 
                                                get_object_vars($ty));
 
-                $tmptab = $top->obj->id_name == 'company_id' ?
-                    'companies': 'leads';
-
-                // XXX cheap subset of CoopView::recordButtons()
-                // TODO: do it right and instantiate or fake recordButtons()
-                $current['details'] = $top->page->selfURL(
-                    array('value' => 'Details',
-                          'base' => 'generic.php',
-                          'inside' => array('table' => $tmptab,
-                                            $tmptab . '-' . 
-                                            $top->obj->id_name => $top->obj->id,
-                                            'action' => 'details',
-                                            'push' => 'thank_you'),
-                          'par' => false));
-
                 $res[] = $current; // last thing before looping
             }
             
             //$co->page->confessArray($res, 'the total result', 7);
             return $res;
         }
+
 
 
 }

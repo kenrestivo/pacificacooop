@@ -17,10 +17,23 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 	
 
-BUG: tickets	
 							
 ??PHP
 bring thank yous back to life
+	fake form for print buttons
+		don't use quickform. i can't imagine making that work
+		lots of checkboxes. print-table-pk-id
+			also mark-as-sent: sent-table-pk-id
+		form  sumbits them to printpopup or whatever
+		goodies
+			a js function to check/uncheck all
+				mochikit. surf through the table, find all of type checkbox
+				check/uncheck them
+	printpopup
+		takes list of print-table-pk's or print-thankyouid's
+		gets them in the appropriate way (recover or findneeded)
+		dumps into a res array
+		feeds that to pdml! like bidsheets
 	pdml the thankyou! like we did with the bid sheets
 		at very least for one-off printing, using the old method
 		i think the letter might be an ajax, or a popup, or both
@@ -28,14 +41,6 @@ bring thank yous back to life
 	label printing too!
 		i can pdml these now, IIRC.
 		or just export them like i did with invites
-	fake form for print buttons
-		don't use quickform. i can't imagine making that work
-		lots of checkboxes. print-table-pk-id
-		also mark-as-sent: sent-table-pk-id
-		form simply sumbits them
-		a js function to check/uncheck all
-			mochikit. surf through the table, find all of type checkbox
-			check/uncheck them
 	bring view existing thankyous back to life
 		recoverexisting appears to be the key. can i do that in sql?
 			sum of all income (companies/leads/tickets)
@@ -7486,3 +7491,6 @@ insert into votes set family_id = 25, question_id = 1, answer_id = 1, school_yea
 push the template stuff live
 	upgrade.sql stuff first
 	then upload-live
+
+did hinton really show up as a couple? oh well.
+	look at paddles and figure out wtf is goign on
