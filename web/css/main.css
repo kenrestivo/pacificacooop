@@ -144,7 +144,6 @@ input[type="submit"] {
 
 input[type="button"]:hover,input[type="submit"]:hover {
    background-color: #bb33dd;  
-  expression(this.type=="button" ? #bb33dd : #dddddd );
 }
 
 
