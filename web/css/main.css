@@ -142,10 +142,16 @@ input[type="submit"] {
 }
 
 
-input:hover {
-   background-color: #bb33dd;
+input[type="button"]:hover,input[type="submit"]:hover {
+   background-color: #bb33dd;  
+  expression(this.type=="button" ? #bb33dd : #dddddd );
 }
 
+
+/* IE sucks */
+input:hover{  
+  expression(this.type=="button" ? #bb33dd : #dddddd );
+}
 
 
 table { 
