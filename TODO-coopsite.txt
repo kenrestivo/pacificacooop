@@ -16,13 +16,6 @@ coop web database
 	springfest microsite (microsite.txt)
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
-	
-
-		
-???PHP/SQL
-poll question
-	cut off date! automatic, put it in the question, optionally		
-
 
 							
 ??PHP
@@ -30,6 +23,8 @@ bring thank yous back to life
 	let them edit the template
 		my hokey [::] for now, but ultimately add to TAL and tiny_mce
 		do the seeds for 2004-2005, 2005-2006, and 2003-2004 if i can find
+		go ahead and MAKE THE FUCKING TABLE GODDAMMIT!
+		then make the thankyou use it... will slow it down even more :-(
 	bring view existing thankyous back to life
 		recoverexisting appears to be the key. can i do that in sql?
 			sum of all income (companies/leads/tickets)
@@ -72,7 +67,11 @@ bring thank yous back to life
 			without a gnarly join
 
 
-	
+???PHP/SQL
+poll question
+	cut off date! automatic, put it in the question, optionally		
+
+		
 ??PHP/TAL
 summary of who purchased each package REPORT
 	do NOT get stuck at the sub-query tal loops.

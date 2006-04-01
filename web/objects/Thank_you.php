@@ -23,7 +23,7 @@ class Thank_you extends CoopDBDO
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Thank_you',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-###END_AUTOCODE
+    ###END_AUTOCODE
 
 
 
