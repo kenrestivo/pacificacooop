@@ -20,16 +20,6 @@ coop web database
 							
 ??PHP
 bring thank yous back to life
-	let them edit the template
-		put the instructions/explanations into the INSTRUCTIONS
-	bring view existing thankyous back to life
-		recoverexisting appears to be the key. can i do that in sql?
-			sum of all income (companies/leads/tickets)
-			list of all auction, description and amount concat_ws('\n'?)
-			list of all in-kind, description and amount concat_ws('\n'?)
-			salesperson (coalesce parent id? guessparents?)
-			name summary (like paddle coalescing: through everything)
-				order by namesum too.  hah, "ad namesum"
 	fake form for print buttons
 		don't use quickform. i can't imagine making that work
 		lots of checkboxes. print-table-pk-id
@@ -44,6 +34,14 @@ bring thank yous back to life
 	label printing too!
 		i can pdml these now, IIRC.
 		or just export them like i did with invites
+	bring view existing thankyous back to life
+		recoverexisting appears to be the key. can i do that in sql?
+			sum of all income (companies/leads/tickets)
+			list of all auction, description and amount concat_ws('\n'?)
+			list of all in-kind, description and amount concat_ws('\n'?)
+			salesperson (coalesce parent id? guessparents?)
+			name summary (like paddle coalescing: through everything)
+				order by namesum too.  hah, "ad namesum"
 	nifty ajax tal'ing
 		a button for each in preview, which will apply to template USING JS!
 		not hard using minital, or some similar
@@ -64,6 +62,7 @@ bring thank yous back to life
 			without a gnarly join
 
 
+			
 ???PHP/SQL
 poll question
 	cut off date! automatic, put it in the question, optionally		
@@ -7478,3 +7477,5 @@ insert into votes set family_id = 25, question_id = 1, answer_id = 1, school_yea
 		go get the template and toarray it at every thankyou instantiation
 			varstoarray needs it, so does findthanksneeded
 			fuck that, do it at instantiation
+	let them edit the template
+		put the instructions/explanations into the INSTRUCTIONS

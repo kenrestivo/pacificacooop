@@ -45,5 +45,16 @@ user_level , group_level , realm_id , year_level , menu_level ) VALUES
 -- add template to admin stuff
 -- seed the templates for prev years, right or wrong (seed.sql)
 
+insert into instructions set
+        table_name= 'thank_you_templates',
+            action= 'Edit',
+       instruction= "<p>Note that the main body of the letter includes these weird bits of text. They are very necessary. Here is what they represent and what gets substituted into them:</p><p><br />[:DATE:]  = The date the letter is printed</p><p>[:DEAR:] =  The donor's name, formatted as &quot;Ms. Somebody&quot;</p><p>[:NAME:] =  The donor's name, formatted as &quot;Ms. Firstname Lastname&quot;</p><p>[:ADDRESS:] = The complete formatted address of the donor</p><p>[:ITEMS:] = The items donated, formatted using other fields</p><p>[:VALUERECEIVED:] =  What the donor received. We must declare this for tax purposes.</p><p>[:FROM:] = The Solicitation salesperson who collected the donation </p><p>[:ITERATION:] = The number of years this Springfest is</p><p>[:ORDINAL:] = The nd/rd/th which goes with the number</p><p>[:YEAR:] =  The year of this Springfest</p><p>[:YEARS:] = The number of years the School has been in operation</p><p>[:EMAIL:] = The donor's email address (not really used right now)</p>",
+_cache_instruction = 'Note that the main body of the letter includes these weird bits of text. They are very necessary. Here is what they represent and what gets substituted into them:[:DATE:]  = The date the letter is pri'
+;
 
-
+insert into instructions set
+        table_name= 'thank_you_templates',
+            action= 'Add',
+       instruction= "<p>Note that the main body of the letter includes these weird bits of text. They are very necessary. Here is what they represent and what gets substituted into them:</p><p><br />[:DATE:]  = The date the letter is printed</p><p>[:DEAR:] =  The donor's name, formatted as &quot;Ms. Somebody&quot;</p><p>[:NAME:] =  The donor's name, formatted as &quot;Ms. Firstname Lastname&quot;</p><p>[:ADDRESS:] = The complete formatted address of the donor</p><p>[:ITEMS:] = The items donated, formatted using other fields</p><p>[:VALUERECEIVED:] =  What the donor received. We must declare this for tax purposes.</p><p>[:FROM:] = The Solicitation salesperson who collected the donation </p><p>[:ITERATION:] = The number of years this Springfest is</p><p>[:ORDINAL:] = The nd/rd/th which goes with the number</p><p>[:YEAR:] =  The year of this Springfest</p><p>[:YEARS:] = The number of years the School has been in operation</p><p>[:EMAIL:] = The donor's email address (not really used right now)</p>",
+_cache_instruction = 'Note that the main body of the letter includes these weird bits of text. They are very necessary. Here is what they represent and what gets substituted into them:[:DATE:]  = The date the letter is pri'
+;

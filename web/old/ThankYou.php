@@ -211,7 +211,7 @@ class ThankYou
 			$subst['YEAR'] =  $this->year; 
 			$subst['YEARS'] = $this->years; 
 			$subst['FROM'] = $this->from;
-			$subct['EMAIL'] = $this->email; 
+			$subst['EMAIL'] = $this->email; 
 			// i use the text default for these, html will override them anyway
 			$subst['ADDRESS'] = implode("\n", $this->address_array);
 			$subst['ITEMS'] = implode(count($this->items_array) > 2 ? 
