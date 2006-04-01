@@ -787,8 +787,9 @@ class ThankYou
 				}
 			}
 			if($found){
-				$this->items_array[] = sprintf("$%01.02f cash for our Springfest fundraiser", 
-											   $cashtotal);
+				$this->items_array[] = sprintf(
+                    "$%01.02f %s", 
+                    $cashtotal, $this->template['cash']);
 			}
 				
 
@@ -943,7 +944,7 @@ class ThankYou
 					"%s ticket%s %s $%01.02f",
 					$found, 
                     $found > 1 ? 's': '',
-                    $this->template['tickets'],
+                    $this->template['ticket'],
                     $valuereceived);
 
 			}

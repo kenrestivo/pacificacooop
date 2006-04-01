@@ -15,10 +15,9 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 	springfest microsite (microsite.txt)
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
+	
 
-	
-push the template stuff live?
-	
+BUG: tickets	
 							
 ??PHP
 bring thank yous back to life
@@ -7482,3 +7481,8 @@ insert into votes set family_id = 25, question_id = 1, answer_id = 1, school_yea
 			fuck that, do it at instantiation
 	let them edit the template
 		put the instructions/explanations into the INSTRUCTIONS
+	backup live
+	commit changes
+push the template stuff live
+	upgrade.sql stuff first
+	then upload-live
