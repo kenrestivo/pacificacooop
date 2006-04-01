@@ -130,7 +130,6 @@ class ThankYou
 											', ' : " and ", 
 									  $this->items_array);
 			$subst['FROM'] = sprintf('<br /><br /><br />%s', $this->from);
-			$subst['ORDINAL'] = sprintf('<sup>%s</sup>', $this->ordinal);
 
 
 	  			//confessObj($this, 'this');

@@ -16,10 +16,19 @@ coop web database
 	springfest microsite (microsite.txt)
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
-
+	
+push the template stuff live?
+	
 							
 ??PHP
 bring thank yous back to life
+	pdml the thankyou! like we did with the bid sheets
+		at very least for one-off printing, using the old method
+		i think the letter might be an ajax, or a popup, or both
+		have a look at what i did
+	label printing too!
+		i can pdml these now, IIRC.
+		or just export them like i did with invites
 	fake form for print buttons
 		don't use quickform. i can't imagine making that work
 		lots of checkboxes. print-table-pk-id
@@ -28,12 +37,6 @@ bring thank yous back to life
 		a js function to check/uncheck all
 			mochikit. surf through the table, find all of type checkbox
 			check/uncheck them
-	pdml the thankyou! like we did with the bid sheets
-		at very least for one-off printing, using the old method
-		i think the letter might be an ajax, or a popup, or both
-	label printing too!
-		i can pdml these now, IIRC.
-		or just export them like i did with invites
 	bring view existing thankyous back to life
 		recoverexisting appears to be the key. can i do that in sql?
 			sum of all income (companies/leads/tickets)
