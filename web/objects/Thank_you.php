@@ -237,25 +237,17 @@ having Total > 0
 order by Company;
 ");
 
+            //TODO: abstract this out, will need it in several places
             $res = array() ;
             while($top->obj->fetch()){
-                $current = array(); // reset at each
                 $ty =& new ThankYou(&$co->page);
                 if(!$ty->findThanksNeeded($top->obj->id_name, $top->obj->id)){
                     //skip the ones in the query that don't cut it in here
                     continue;
                 }
-                foreach(array('id', 'id_name', 'item_value', 
-                              'Company', 'Total') as $field)
-                {
-                    $current[$field] = $top->obj->{$field};
-                }
-                foreach(array('dear', 'name', 'address_array', 'items_array', 
-                              'value_received_array', 'from')
-                        as $field)
-                {
-                    $current[$field] = $ty->{$field};
-                }
+
+                $current= array_merge($top->obj->toArray(), 
+                                               get_object_vars($ty));
 
                 $tmptab = $top->obj->id_name == 'company_id' ?
                     'companies': 'leads';
