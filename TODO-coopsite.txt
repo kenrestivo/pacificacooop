@@ -16,15 +16,12 @@ coop web database
 	springfest microsite (microsite.txt)
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 	
-
-BUGS
-	pdml 50/51 crap. fix this once and for all.
-	ah! div inside of multicell, is the problem
-		addoutputfilter!! i can make a filter that changes html to pdml!
 	
 							
 ??PHP
 bring thank yous back to life
+	gah! it crashes when doing the whole list. why?
+		extend limits, see how we do
 	actions:
 		mark them as sent!
 			target is NOT printpopup, it's self, a massive insert.
@@ -38,20 +35,10 @@ bring thank yous back to life
 			salesperson (coalesce parent id? guessparents?)
 			name summary (like paddle coalescing: through everything)
 				order by namesum too.  hah, "ad namesum"
-	nifty ajax tal'ing
-		a button for each in preview, which will apply to template USING JS!
-		not hard using minital, or some similar
-	new ui model
-		custom details shows the note in text format. "preview/edit?"
-			and gives them edit links to each item
-		view with checkboxes for which to print
-			checkboxes for which to mark as printed?? or do i need that?
-	umm... people who bought things of of a HUGE cash box might get thankyous
-		gotta suppress those somehow. gah!
-	coords view previous year perms
+	note the link search  for thankyounote in income, etc, is pretty useless
+		yank that, perhaps? or a really hairy linkconstraints?
 	have a look at what happens when you "detail" into an old thankyounote!
 		why would that be a problem at all, at all?
-	note the search interface for thankyounote in income, etc, is pretty useless
 	deal with the HTML escaping in thankYou class? where?	
 	alpha pager, goddammit! takes too long to load this damned thing
 		it'd have to be REALLY custom! can't guess alpha letters
@@ -3709,6 +3696,20 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	new ui model
+		custom details shows the note in text format. "preview/edit?"
+			and gives them edit links to each item
+		view with checkboxes for which to print
+			checkboxes for which to mark as printed?? or do i need that?
+	umm... people who bought things of of a HUGE cash box might get thankyous
+		gotta suppress those somehow. gah!
+	coords view previous year perms
+	nifty ajax tal'ing
+		a button for each in preview, which will apply to template USING JS!
+		not hard using minital, or some similar
+	nifty ajax tal'ing
+		a button for each in preview, which will apply to template USING JS!
+		not hard using minital, or some similar
 	label printing too!
 		i can pdml these now, IIRC.
 		or just export them like i did with invites
@@ -7513,3 +7514,8 @@ did hinton really show up as a couple? oh well.
 		at very least for one-off printing, using the old method
 		i think the letter might be an ajax, or a popup, or both
 		have a look at what i did
+
+BUGS
+	pdml 50/51 crap. fix this once and for all.
+	ah! div inside of multicell, is the problem
+		addoutputfilter!! i can make a filter that changes html to pdml!

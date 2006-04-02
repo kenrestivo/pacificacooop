@@ -280,9 +280,8 @@ left join
         on tic.lead_id = leads.lead_id
 group by leads.lead_id
 having Total > 0
-order by Company;
+order by Company
 ");
-
             //TODO: abstract this out, will need it in several places
             $res = array() ;
             while($top->obj->fetch()){
@@ -295,19 +294,18 @@ order by Company;
                     //TODO: email too
                 case 'pdml':
                     $ty->substitute(); // only need this for formatted stuff
-                    $current = $ty->toHTML();
+                    $res[] =  $ty->toHTML();
                     break;
                 case 'array':
                 default:
-                    $current= array_merge($top->obj->toArray(), 
-                                          get_object_vars($ty));
+                    $res[] = array_merge($top->obj->toArray(), 
+                                         get_object_vars($ty));
                     break;
                 }
 
-                $res[] = $current; // last thing before looping
             }
             
-            //$co->page->confessArray($res, 'the total result', 7);
+            //$co->page->confessArray($res, 'the total result', 4);
             return $res;
         }
 
