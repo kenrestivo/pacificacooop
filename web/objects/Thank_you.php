@@ -148,7 +148,7 @@ function thanksNeededPickList(&$co)
 											'set' => 'needed'),
                           'title' => 'Prints all letters which have not yet been sent',
 						  'popup' => true,
-						  'par' => false)) . 'NOTE: may take several minutes to run<br />'.
+						  'par' => false)) . '&nbsp;(NOTE: may take several minutes to run)<br />'.
                 $tab->toHTML() ;
         }
 
