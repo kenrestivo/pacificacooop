@@ -207,7 +207,7 @@ class ThankYou
 											$this->items_array);
 			if(count($this->value_received_array)){
 				$subst['VALUERECEIVED'] = $this->template['value_received'];
-				$subst['VALUERECEIVED'] .= implode(
+				$subst['VALUERECEIVED'] .= ' ' . implode(
 					count($this->value_received_array) > 2 ?
 					', ' : " and ", 
 					$this->value_received_array);

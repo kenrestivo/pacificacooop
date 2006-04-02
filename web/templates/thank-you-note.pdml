@@ -5,20 +5,25 @@
 
   <body>
 
-      <header>    
-        <img border="0" src="../images/round-small-logo.png" />
-      </header>
+    <header>    
+      <img left="3.5in" border="0" src="../images/round-small-logo.png" />
+    </header>
     
-      <div tal:omit-tag="" 
-           tal:repeat="maintext page/thank_you_notes" 
-           tal:condition="maintext">
-        
-        
-        <cell align="left"  width="6.5in" inter="18pt"
-                   tal:content="structure maintext">Description</cell>
-        
-        
-        
+    <div tal:omit-tag="" 
+         tal:repeat="maintext page/thank_you_notes" 
+         tal:condition="maintext">
+
+      
+      <page />
+
+      <br height="2in"
+          tal:comment="the height of the header: pdml lets you overlap" />
+
+      <column count="1">
+        <multicell align="left"  width="6.5in" inter="15pt"
+                   tal:content="structure maintext">letter body</multicell>
+      </column>
+      
     </div>      
 
     

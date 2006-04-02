@@ -31,6 +31,7 @@ class ThankYouNote extends CoopPDF
     function build()
         {
             // TODO: use that nice funky font?
+            $this->fpdf->font_face = array('Times');
 
             switch($_REQUEST['set']){
             case 'printed':
