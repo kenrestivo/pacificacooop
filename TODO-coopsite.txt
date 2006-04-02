@@ -21,7 +21,7 @@ coop web database
 ??PHP
 bring thank yous back to life
 	deal with nbsp
-		this isn't easy
+		this isn't easy, goddammit
 	gah! it dies when doing the whole list. why?
 		extend limits, see how we do. gah, i dunno what's up.
 			look at top?

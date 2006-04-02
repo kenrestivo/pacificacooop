@@ -142,12 +142,13 @@ function thanksNeededPickList(&$co)
 				$co->page->selfURL(
 					array('value' => 
 						  '<img style="border:0"  src="/images/printer.png" 
-								alt="Print Letters">&nbsp;Print All Un-Sent Letters',
+								alt="Print Letters">&nbsp;Print All',
 						  'base' =>'print_popup.php', 
 						  'inside' => array('thing' => 'letters',
 											'set' => 'needed'),
+                          'title' => 'Prints all letters which have not yet been sent',
 						  'popup' => true,
-						  'par' => false)) .
+						  'par' => false)) . 'NOTE: may take several minutes to run<br />'.
                 $tab->toHTML() ;
         }
 
