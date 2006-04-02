@@ -57,7 +57,8 @@ class Thank_you extends CoopDBDO
 
     // manually whack 'add'. 'enter new' is NOT appropriate for this
     var $viewActions = array('view'=> ACCESS_VIEW);     
-    
+
+
 
 //     function fb_linkConstraints(&$co)
 // 		{
@@ -85,6 +86,20 @@ function _detailsLink(&$co, $current)
                                         $current['id_name'] => $current['id'],
                                         'action' => 'details',
                                         'push' => 'thank_you')));
+
+
+            $res .= $co->page->selfURL(
+					array('value' => 
+						  'Print/Preview',
+						  'base' =>'print_popup.php', 
+						  'inside' => array(
+                              'thing' => 'letters',
+                              'set' => 'one',
+                              'pk' => $current['id_name'],
+                              'id' => $current['id']),
+						  'popup' => true,
+						  'par' => false)) ;
+
 
             return $res;
 
@@ -127,7 +142,7 @@ function thanksNeededPickList(&$co)
 				$co->page->selfURL(
 					array('value' => 
 						  '<img style="border:0"  src="/images/printer.png" 
-								alt="Print Letters">&nbsp;Print Letters',
+								alt="Print Letters">&nbsp;Print All Un-Sent Letters',
 						  'base' =>'print_popup.php', 
 						  'inside' => array('thing' => 'letters',
 											'set' => 'needed'),
@@ -145,6 +160,9 @@ function thanksNeededPickList(&$co)
             require_once('ThankYou.php');
     
             $co->schoolYearChooser();
+
+            $co->actionnames['confirmdelete'] = 'Un-Send';
+            $co->actionnames['delete'] = 'Un-Send';
 
 
             $co->obj->query(
@@ -188,6 +206,11 @@ function thanksNeededSummary($co, $format = 'array')
             $sy= $co->getChosenSchoolYear();
 
             $top = new CoopView(&$co->page, 'companies', $nothing);
+
+            // XXX hack for testing
+            if(devSite()){
+                $limit = 'limit 20';
+            }
             
             $top->obj->query("
 select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
@@ -281,15 +304,15 @@ left join
 group by leads.lead_id
 having Total > 0
 order by Company
-limit 20
+$limit
 ");
             //TODO: abstract this out, will need it in several places
             $res = array() ;
             $total = $top->obj->N;
             while($top->obj->fetch()){
                 $count++;
-                user_error("thanksNeededSummary($format) $count of $total", 
-                           E_USER_NOTICE);
+                $co->page->printDebug("thanksNeededSummary($format) $count of $total", 
+                           4);
                 $ty =& new ThankYou(&$co->page);
                 if(!$ty->findThanksNeeded($top->obj->id_name, $top->obj->id)){
                     //skip the ones in the query that don't cut it in here

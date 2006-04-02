@@ -20,14 +20,13 @@ coop web database
 							
 ??PHP
 bring thank yous back to life
-	gah! it crashes when doing the whole list. why?
-		extend limits, see how we do
-	one off print/preview link
-	actions:
-		mark them as sent!
-			target is NOT printpopup, it's self, a massive insert.
-		yank "enter new"
-		export the labels (exportxl.php, basically)
+	deal with nbsp
+		this isn't easy
+	gah! it dies when doing the whole list. why?
+		extend limits, see how we do. gah, i dunno what's up.
+			look at top?
+	the em and strong are just useless. why? how do i do italic?
+		look in pdml docs
 	bring view existing thankyous back to life
 		recoverexisting appears to be the key. can i do that in sql?
 			sum of all income (companies/leads/tickets)
@@ -36,11 +35,16 @@ bring thank yous back to life
 			salesperson (coalesce parent id? guessparents?)
 			name summary (like paddle coalescing: through everything)
 				order by namesum too.  hah, "ad namesum"
+	actions:
+		mark them as sent!
+			target is NOT printpopup, it's self, a massive insert.
+			no, it's an ajax call. could be just one, maybe
+			also a "unsend" link which basically deletes
+	export the labels (exportxl.php, basically)
 	note the link search  for thankyounote in income, etc, is pretty useless
 		yank that, perhaps? or a really hairy linkconstraints?
 	have a look at what happens when you "detail" into an old thankyounote!
 		why would that be a problem at all, at all?
-	deal with the HTML escaping in thankYou class? where?	
 	alpha pager, goddammit! takes too long to load this damned thing
 		it'd have to be REALLY custom! can't guess alpha letters
 			without a gnarly join
@@ -7520,3 +7524,6 @@ BUGS
 	pdml 50/51 crap. fix this once and for all.
 	ah! div inside of multicell, is the problem
 		addoutputfilter!! i can make a filter that changes html to pdml!
+	one off print/preview link
+		yank "enter new"
+	deal with the HTML escaping in thankYou class? where?	

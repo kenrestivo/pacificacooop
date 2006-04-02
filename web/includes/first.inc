@@ -4,7 +4,7 @@
 	<!-- $Id$ -->
 	the vital setup stuff that ALL files MUST have
 
-  Copyright (C) 2003,2004  ken restivo <ken@restivo.org>
+  Copyright (C) 2003-2006  ken restivo <ken@restivo.org>
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
