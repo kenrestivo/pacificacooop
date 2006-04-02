@@ -41,6 +41,7 @@ class XHTML_to_PDML extends PHPTAL_Filter
     {
          // make it valid html, not xml
         $patterns = array('/<div.*?>(.*?)<.*?>/sm' => '$1',
+                          '/>\s*(.*?)\s*</sm' => '>$1<',
                           '/(<.*?)\/>/sm' => '$1 >',
                           '/.*?<\!DOCTYPE/sm' => '<!DOCTYPE');
 
