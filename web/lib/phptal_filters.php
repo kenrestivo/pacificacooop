@@ -24,9 +24,9 @@ class XML_to_HTML extends PHPTAL_Filter
     function filter(&$tpl, $data, $mode)
     {
          // make it valid html, not xml
-        $patterns = array('/(<\?xml.*?>)/sm' => '',
-                          '/(<.*?)\/>/sm' => '$1 >',
-                          '/.*?<\!DOCTYPE/sm' => '<!DOCTYPE');
+        $patterns = array('/(<\?xml.*?>)/sm' => '', // xml declaration
+                          '/(<.*?)\/>/sm' => '$1 >', // self-closing /> tags
+                          '/.*?<\!DOCTYPE/sm' => '<!DOCTYPE'); // leading space
 
         return preg_replace(array_keys($patterns), 
                             array_values($patterns), 
@@ -40,8 +40,14 @@ class XHTML_to_PDML extends PHPTAL_Filter
     function filter(&$tpl, $data, $mode)
     {
          // make it valid html, not xml
-        $patterns = array('/<div.*?>(.*?)<.*?>/sm' => '$1',
-                          '/>\s*(.*?)\s*</sm' => '/>$1<');
+        $patterns = array(
+            // XXX pdml doesn't support div's inside of cells
+            '/<div.*?>(.*?)<.*?>/sm' => '$1',
+            // XXX tiny_mce inserts spaces that cause pdml to freak out
+            '/\s*(<br.*?>)\s*/sm' => '$1' 
+            // this one doesn't really work: '/>\s*(.*?)\s*</sm' => '/>$1<'
+
+            ); 
 
 
         return preg_replace(array_keys($patterns), 
