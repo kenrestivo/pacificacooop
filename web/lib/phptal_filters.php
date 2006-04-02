@@ -18,7 +18,7 @@
 	 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
+/// GENERIC CONVERSION
 class XML_to_HTML extends PHPTAL_Filter
 {
     function filter(&$tpl, $data, $mode)
@@ -34,16 +34,15 @@ class XML_to_HTML extends PHPTAL_Filter
     }
 }
 
-
+/// FOR PDML ONLY!!!
 class XHTML_to_PDML extends PHPTAL_Filter
 {
     function filter(&$tpl, $data, $mode)
     {
          // make it valid html, not xml
         $patterns = array('/<div.*?>(.*?)<.*?>/sm' => '$1',
-                          '/>\s*(.*?)\s*</sm' => '>$1<',
-                          '/(<.*?)\/>/sm' => '$1 >',
-                          '/.*?<\!DOCTYPE/sm' => '<!DOCTYPE');
+                          '/>\s*(.*?)\s*</sm' => '/>$1<');
+
 
         return preg_replace(array_keys($patterns), 
                             array_values($patterns), 
