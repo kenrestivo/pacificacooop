@@ -887,7 +887,7 @@ class PDML extends FPDF {
     }
 
     function CloseTag($tag) {
-        $this->coopPage->printDebug("PDML:CloseTag($tag, $attr)", 4);
+        $this->coopPage->printDebug("PDML:CloseTag($tag)", 4);
         switch ($tag) {
             case "PDML":
                 $this->_enforceState(1,0);

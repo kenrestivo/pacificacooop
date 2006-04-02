@@ -334,6 +334,7 @@ class ThankYou
 			// clear out some items in case i re-use objects
 			$this->address_array = array(); 
 			$this->items_array = array(); 
+            $cashtotal = 0;
 
 			// if i'm going to save objects, don't createlegacy them.
 			// save MY view objects, not the DBDO objects,
@@ -500,6 +501,8 @@ class ThankYou
 			// clear out some items in case i re-use objects
 			$this->address_array = array(); 
 			$this->items_array = array(); 
+            $cashtotal = 0;
+            $found = 0;
 
 			// if i'm going to save objects, don't createlegacy them.
 			// save MY view objects, not the DBDO objects,
@@ -583,7 +586,9 @@ class ThankYou
 			//format income
 			while($real->obj->fetch()){
 				$cashtotal += $real->obj->payment_amount;
-				$soliciting_families[]= $real->obj->family_id;
+                if(isset($real->obj->family_id)){
+                    $soliciting_families[]= $real->obj->family_id;
+                }
 				if($save){
 					$tmp = $real->obj;
 					$real->obj->thank_you_id = $this->thank_you_id;
@@ -885,6 +890,9 @@ class ThankYou
 
 	function getValueReceived($pk, $id, $sy = NULL)
 		{
+            $valuereceived = "";
+            $found = 0;
+
 			$sy || $sy = findSchoolYear();
 			$this->value_received_array = array(); // clear it! save!
 

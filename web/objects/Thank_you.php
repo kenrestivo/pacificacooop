@@ -281,10 +281,15 @@ left join
 group by leads.lead_id
 having Total > 0
 order by Company
+limit 20
 ");
             //TODO: abstract this out, will need it in several places
             $res = array() ;
+            $total = $top->obj->N;
             while($top->obj->fetch()){
+                $count++;
+                user_error("thanksNeededSummary($format) $count of $total", 
+                           E_USER_NOTICE);
                 $ty =& new ThankYou(&$co->page);
                 if(!$ty->findThanksNeeded($top->obj->id_name, $top->obj->id)){
                     //skip the ones in the query that don't cut it in here
