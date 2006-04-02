@@ -42,6 +42,8 @@ class CoopPDF extends CoopTALPage
 
     function output()
         {
+            $this->template->addOutputFilter(new XHTML_to_PDML());
+
             $pdml = $this->template->execute();
 
             //TODO: if debuglevel > something, dump the tal'ed pdml first!

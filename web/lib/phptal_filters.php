@@ -34,4 +34,21 @@ class XML_to_HTML extends PHPTAL_Filter
     }
 }
 
+
+class XHTML_to_PDML extends PHPTAL_Filter
+{
+    function filter(&$tpl, $data, $mode)
+    {
+         // make it valid html, not xml
+        $patterns = array('/<div.*?>(.*?)<.*?>/sm' => '$1',
+                          '/(<.*?)\/>/sm' => '$1 >',
+                          '/.*?<\!DOCTYPE/sm' => '<!DOCTYPE');
+
+        return preg_replace(array_keys($patterns), 
+                            array_values($patterns), 
+                            $data);
+    }
+}
+
+
 ?>

@@ -348,7 +348,7 @@ class PDML extends FPDF {
     }
 
     function ProcessText($text) {
-        $this->coopPage->printDebug("PDML:ProcessText($text, {$this->parserState}", 
+        $this->coopPage->printDebug("PDML:ProcessText([$text], {$this->parserState})", 
                                     4);
         switch ($this->parserState) {
         case 0:

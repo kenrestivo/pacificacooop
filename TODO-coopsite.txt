@@ -19,8 +19,8 @@ coop web database
 
 BUGS
 	pdml 50/51 crap. fix this once and for all.
-		addoutputfilter!! i can make a filter that changes html to pdml!
 	ah! div inside of multicell, is the problem
+		addoutputfilter!! i can make a filter that changes html to pdml!
 	
 							
 ??PHP
