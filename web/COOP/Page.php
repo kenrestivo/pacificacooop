@@ -409,14 +409,16 @@ class coopPage
             }
             
             
-            if(!$popup){
-				 $res .= $this->formatURLVars($base, $inside);
+            if($popup){
+				$res .= 'javascript:void();';
+			} else {
+				$res .= $this->formatURLVars($base, $inside);
             }
             
             if($value){
                 $res .= '" ';
                 if($popup){
-					 $res .= sprintf('onclick="popUp(\'%s\')"',
+					 $res .= sprintf('onclick="popUp(\'%s\');return false;"',
 									 $this->formatURLVars($base, $inside));
                 }
                 

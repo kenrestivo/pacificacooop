@@ -17,30 +17,18 @@ coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 	
 
+BUGS
+	pdml 50/51 crap. fix this once and for all.
+		maybe a cheap xslt, i dunno. but do something fast
+	
 							
 ??PHP
 bring thank yous back to life
-	fake form for print buttons
-		don't use quickform. i can't imagine making that work
-		lots of checkboxes. print-table-pk-id
-			also mark-as-sent: sent-table-pk-id
-		form  sumbits them to printpopup or whatever
-		goodies
-			a js function to check/uncheck all
-				mochikit. surf through the table, find all of type checkbox
-				check/uncheck them
-	printpopup
-		takes list of print-table-pk's or print-thankyouid's
-		gets them in the appropriate way (recover or findneeded)
-		dumps into a res array
-		feeds that to pdml! like bidsheets
-	pdml the thankyou! like we did with the bid sheets
-		at very least for one-off printing, using the old method
-		i think the letter might be an ajax, or a popup, or both
-		have a look at what i did
-	label printing too!
-		i can pdml these now, IIRC.
-		or just export them like i did with invites
+	actions:
+		mark them as sent!
+			target is NOT printpopup, it's self, a massive insert.
+		yank "enter new"
+		export the labels (exportxl.php, basically)
 	bring view existing thankyous back to life
 		recoverexisting appears to be the key. can i do that in sql?
 			sum of all income (companies/leads/tickets)
@@ -3716,7 +3704,15 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-			what's with this substitute() function? never called??!
+	label printing too!
+		i can pdml these now, IIRC.
+		or just export them like i did with invites
+		PDML SUCKS TOO MUCH!
+		
+				takes list of print-table-pk's or print-thankyouid's
+		gets them in the appropriate way (recover or findneeded)
+
+					what's with this substitute() function? never called??!
 				it's called, but just when necessary
 		just so that it is DONE and nobody is crawling all over me
 			too late. they already are :-(
@@ -7494,3 +7490,21 @@ push the template stuff live
 
 did hinton really show up as a couple? oh well.
 	look at paddles and figure out wtf is goign on
+		don't use quickform. i can't imagine making that work
+		lots of checkboxes. print-table-pk-id
+			also mark-as-sent: sent-table-pk-id
+		form  sumbits them to printpopup or whatever
+	fake form for print buttons
+		goodies
+			a js function to check/uncheck all
+				mochikit. surf through the table, find all of type checkbox
+				check/uncheck them
+		print notes
+	printpopup
+		if action is print
+			dumps into a res array
+			feeds that to pdml! like bidsheets
+	pdml the thankyou! like we did with the bid sheets
+		at very least for one-off printing, using the old method
+		i think the letter might be an ajax, or a popup, or both
+		have a look at what i did

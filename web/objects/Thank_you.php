@@ -70,20 +70,23 @@ class Thank_you extends CoopDBDO
 // silly utility function this is really format-specific
 function _detailsLink(&$co, $current)
         {
-                $tmptab = $current['id_name'] == 'company_id' ?
-                    'companies': 'leads';
+            $res = "";
+            $tmptab = $current['id_name'] == 'company_id' ?
+                'companies': 'leads';
 
-                // XXX cheap subset of CoopView::recordButtons()
-                // TODO: do it right and instantiate or fake recordButtons()
-                return $co->page->selfURL(
-                    array('value' => 'Details',
-                          'base' => 'generic.php',
-                          'inside' => array('table' => $tmptab,
-                                            $tmptab . '-' . 
-                                            $current['id_name'] => $current['id'],
-                                            'action' => 'details',
-                                            'push' => 'thank_you'),
-                          'par' => false));
+
+            // XXX cheap subset of CoopView::recordButtons()
+            // TODO: do it right and instantiate or fake recordButtons()
+            $res .= $co->page->selfURL(
+                array('value' => 'Details',
+                      'base' => 'generic.php',
+                      'inside' => array('table' => $tmptab,
+                                        $tmptab . '-' . 
+                                        $current['id_name'] => $current['id'],
+                                        'action' => 'details',
+                                        'push' => 'thank_you')));
+
+            return $res;
 
         }
 
@@ -119,7 +122,18 @@ function thanksNeededPickList(&$co)
             $tab->altRowAttributes(1, 'class="altrow1"', 
                                    'class="altrow2"');
 
-            return $tab->toHTML();
+			//TODO: mark as sent! i'll need this for invitations too
+            return javaPopup() .
+				$co->page->selfURL(
+					array('value' => 
+						  '<img style="border:0"  src="/images/printer.png" 
+								alt="Print Letters">&nbsp;Print Letters',
+						  'base' =>'print_popup.php', 
+						  'inside' => array('thing' => 'letters',
+											'set' => 'needed'),
+						  'popup' => true,
+						  'par' => false)) .
+                $tab->toHTML() ;
         }
 
 
@@ -168,7 +182,7 @@ order by concat(coalesce(leads.last_name, companies.last_name), coalesce(leads.f
 
 
 
-function thanksNeededSummary($co)
+function thanksNeededSummary($co, $format = 'array')
         {
 
             $sy= $co->getChosenSchoolYear();
@@ -277,9 +291,18 @@ order by Company;
                     //skip the ones in the query that don't cut it in here
                     continue;
                 }
-
-                $current= array_merge($top->obj->toArray(), 
-                                               get_object_vars($ty));
+                switch($format){
+                    //TODO: email too
+                case 'pdml':
+                    $ty->substitute(); // only need this for formatted stuff
+                    $current = $ty->toHTML();
+                    break;
+                case 'array':
+                default:
+                    $current= array_merge($top->obj->toArray(), 
+                                          get_object_vars($ty));
+                    break;
+                }
 
                 $res[] = $current; // last thing before looping
             }

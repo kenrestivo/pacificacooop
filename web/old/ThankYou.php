@@ -138,20 +138,9 @@ class ThankYou
 			}
 			$to = array_values($subst);
 
-			$text .= '<div id="toplogo"><img src="/round-small-logo.gif"  alt="Logo" /></div>';
-	
-			$text .= '<div id="mainletter"><p class="letter">';
-			$text .= str_replace($from, $to, 
-								 nl2br(htmlentities($this->template)));
-			$text .= '</p></div>';
+			return strip_tags(str_replace($from, $to, 
+                                          $this->template['main_body']));
 
-			//hack for the "tagline" at the bottom. 
-			// if it starts with a " and ends with a ",  bolditalic
-			$text = preg_replace('/&quot;(.+?)&quot;/', 
-								 '<strong><i>&quot;$1&quot;</i></strong>', 
-								 $text);
-			
-			return $text;
 		}
 
 	//returns just the ordinal part
