@@ -35,6 +35,7 @@ class PDML extends FPDF {
   var $a_table = array();          // stack of tables
   var $table;          // current working table
   var $orientation;
+    var $coopPage; // cache
 
   function PDML($orientation,$unit,$papersize)
   {
@@ -347,6 +348,8 @@ class PDML extends FPDF {
     }
 
     function ProcessText($text) {
+        $this->coopPage->printDebug("PDML:ProcessText($text, {$this->parserState}", 
+                                    4);
         switch ($this->parserState) {
         case 0:
         case 1:
@@ -407,6 +410,7 @@ class PDML extends FPDF {
     }
 
     function OpenTag($tag, $attr) {
+        $this->coopPage->confessArray($attr,"PDML:OpenTag($tag)", 4);
         switch ($tag) {
             case "PDML":
                 $this->_enforceState(0,1);
@@ -883,6 +887,7 @@ class PDML extends FPDF {
     }
 
     function CloseTag($tag) {
+        $this->coopPage->printDebug("PDML:CloseTag($tag, $attr)", 4);
         switch ($tag) {
             case "PDML":
                 $this->_enforceState(1,0);
@@ -1086,6 +1091,7 @@ class PDML extends FPDF {
 
     function _enforceState($from, $to) {
         if ($this->parserState!=$from) {
+            //confessObj($this, 'ok, go look');
             PEAR::raiseError("unexpected tag (from $from to $to, but state=".$this->parserState.")", 999);
         //$this->Write("[unexpected tag (from $from to $to)]");
         }

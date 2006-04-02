@@ -19,7 +19,8 @@ coop web database
 
 BUGS
 	pdml 50/51 crap. fix this once and for all.
-		maybe a cheap xslt, i dunno. but do something fast
+		addoutputfilter!! i can make a filter that changes html to pdml!
+	ah! div inside of multicell, is the problem
 	
 							
 ??PHP
@@ -712,6 +713,10 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+
+??PHP/JS
+verification rule for leads/companies: if last name is present, require mr/mrs.
 
 ??SQL/PYTHON
 fix the massive cash dump

@@ -32,6 +32,7 @@ class CoopPDF extends CoopTALPage
         {
             parent::prepare();
             $this->fpdf = new PDML('P','pt','Letter'); 
+            $this->fpdf->coopPage =& $this; // cache needed later, utils
             // margins are in points. yes they have to be in an array
             $this->fpdf->left_margin = array(72);
             $this->fpdf->right_margin = array(72);

@@ -138,8 +138,8 @@ class ThankYou
 			}
 			$to = array_values($subst);
 
-			return strip_tags(str_replace($from, $to, 
-                                          $this->template['main_body']));
+			return str_replace($from, $to, 
+                                          $this->template['main_body']);
 
 		}
 

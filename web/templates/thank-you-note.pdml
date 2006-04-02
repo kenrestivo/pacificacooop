@@ -4,29 +4,21 @@
   </head>
 
   <body>
-    
-    <div tal:omit-tag="" 
-         tal:repeat="maintext page/thank_you_notes" 
-         tal:condition="maintext">
-      
-      <page />
 
       <header>    
         <img border="0" src="../images/round-small-logo.png" />
       </header>
-
-      <column count="1">
-
-                    
-        <font size="14pt">
-          <multicell align="left"  width="6.5in" inter="18pt"
-                     tal:content="structure maintext">Description</multicell>
-        </font>
-
+    
+      <div tal:omit-tag="" 
+           tal:repeat="maintext page/thank_you_notes" 
+           tal:condition="maintext">
         
-      </column>
-
-
+        
+        <cell align="left"  width="6.5in" inter="18pt"
+                   tal:content="structure maintext">Description</cell>
+        
+        
+        
     </div>      
 
     
