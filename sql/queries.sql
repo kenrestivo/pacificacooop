@@ -2482,7 +2482,8 @@ coalesce(auction_donation_items.school_year, in_kind_donations.school_year,
     income.school_year) as school_year,
 concat_ws('\n', coalesce(leads.company, companies.company_name), 
     concat_ws(' ', coalesce(leads.first_name, companies.first_name),
-        coalesce(leads.last_name, companies.last_name))) as Company
+        coalesce(leads.last_name, companies.last_name))) as recipient,
+concat_ws(' ', working_parents.first_name, working_parents.last_name) as salesperson
 from thank_you
 left join auction_donation_items 
     on thank_you.thank_you_id = auction_donation_items.thank_you_id
@@ -2504,6 +2505,12 @@ left join companies
 left join leads_income_join on leads_income_join.income_id = income.income_id
 left join tickets on tickets.income_id = income.income_id
 left join leads on coalesce(leads_income_join.lead_id, tickets.lead_id) = leads.lead_id
+left join (select parents.* from parents 
+            left join workers on parents.parent_id = workers.parent_id
+            where workers.parent_id is not null) as working_parents
+        on working_parents.family_id = 
+        coalesce(companies_income_join.family_id, 
+                companies_auction_join.family_id)
 where (auction_donation_items.school_year = "2004-2005" 
     or in_kind_donations.school_year = "2004-2005" 
     or income.school_year = "2004-2005") 
