@@ -2528,14 +2528,21 @@ order by concat(coalesce(leads.last_name, companies.last_name),
 
 
 ----- so, let's grab just the auction stuff, for fun.
-select group_concat(short_description, '\n') as auction_item, company_id
+select distinct thank_you.*, auction_summary.auction_item
+from thank_you
+left join
+(select group_concat(short_description, '\n') as auction_item,
+auction_donation_items.thank_you_id, companies_auction_join.company_id,
+companies_auction_join.family_id
 from auction_donation_items
 left join companies_auction_join 
     on companies_auction_join.auction_donation_item_id = 
         auction_donation_items.auction_donation_item_id
 where companies_auction_join.company_id = 27
 and auction_donation_items.school_year = "2004-2005"
-group by companies_auction_join.company_id
+group by companies_auction_join.company_id) as auction_summary
+on thank_you.thank_you_id = auction_summary.thank_you_id
+where thank_you.thank_you_id = 5
 \G
 
 
