@@ -923,8 +923,10 @@ select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name))
         coalesce(sum(auct.item_value),0) + 
         coalesce(sum(iks.item_value),0) 
         as Total,
-   concat_ws('\n', auct.auction_items, iks.in_kind_items) as items,
-   coalesce(sum(inc.payment_amount),0) as cash_total,
+   concat_ws('\n', 
+        if(coalesce(sum(inc.payment_amount),0) > 0,
+            concat('$', coalesce(sum(inc.payment_amount),0), ' cash'), null),
+auct.auction_items, iks.in_kind_items) as items,
 concat_ws(' ', 
     if(companies.salutation is not null and companies.salutation > "",
             companies.salutation, companies.first_name), 
@@ -1001,9 +1003,10 @@ UNION DISTINCT
 select concat_ws(' - ', concat_ws(' ', first_name, last_name), company ) 
     as Company, 
         leads.lead_id as id, 'lead_id' as id_name,
-        coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0) as Total,
-    '' as items,
-    coalesce(sum(inc.total),sum(tic.total),0) as cash_total,
+        coalesce(sum(tic.payment_amount),0) + 
+                coalesce(sum(inc.payment_amount),0) as Total,
+        if(coalesce(sum(inc.payment_amount),0) > 0,
+            concat('$', coalesce(sum(inc.payment_amount),0), ' cash'), null) as items,
 concat_ws(' ', if(leads.salutation is not null and leads.salutation > "",
             leads.salutation, leads.first_name), 
             leads.last_name) as dear,
@@ -1019,7 +1022,7 @@ concat_ws(',', inc.income_ids, tic.income_ids) as income_ids,
 "" as auction_donation_item_ids, "" as in_kind_donation_ids
 from leads
 left join 
-    (select lead_id, sum(payment_amount) as total,
+    (select lead_id, sum(payment_amount) as payment_amount,
         group_concat(income.income_id) as income_ids
      from leads_income_join as linj 
      left join income 
@@ -1031,7 +1034,7 @@ left join
     as inc
         on leads.lead_id = inc.lead_id
 left join 
-    (select lead_id, sum(payment_amount) as total,
+    (select lead_id, sum(payment_amount) as payment_amount,
     group_concat(income.income_id) as income_ids
      from tickets
      left join income 
