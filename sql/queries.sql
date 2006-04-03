@@ -922,10 +922,14 @@ select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name))
         coalesce(sum(pur.payment_amount),0) + 
         coalesce(sum(auct.item_value),0) + 
         coalesce(sum(iks.item_value),0) 
-        as Total
+        as Total,
+   concat_ws('\n', auct.auction_items, iks.in_kind_items) as items,
+   coalesce(sum(inc.payment_amount),0) as cash_total
 from companies
 left join 
-    (select  sum(item_value) as item_value, company_id
+    (select  sum(item_value) as item_value, company_id,
+    group_concat(adi.short_description, '\n') 
+        as auction_items
      from companies_auction_join  as caj
      left join auction_donation_items  as adi
               on caj.auction_donation_item_id = 
@@ -937,7 +941,9 @@ left join
     as auct
         on auct.company_id = companies.company_id
 left join 
-    (select  sum(item_value) as item_value, company_id
+    (select  sum(item_value) as item_value, company_id,
+    group_concat(ikd.item_description, '\n') 
+        as in_kind_items
      from companies_in_kind_join as cikj
      left join in_kind_donations as ikd
               on cikj.in_kind_donation_id = 
@@ -979,7 +985,9 @@ UNION DISTINCT
 select concat_ws(' - ', concat_ws(' ', first_name, last_name), company ) 
     as Company, 
         leads.lead_id as id, 'lead_id' as id_name,
-        coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0) as Total
+        coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0) as Total,
+    '' as items,
+    coalesce(sum(inc.total),sum(tic.total),0) as cash_total
 from leads
 left join 
     (select lead_id, sum(payment_amount) as total
@@ -1006,7 +1014,7 @@ left join
 group by leads.lead_id
 having Total > 0
 order by Company
-
+\G
 
 -- show ticket families
 select families.* 
