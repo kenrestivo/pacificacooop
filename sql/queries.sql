@@ -2534,9 +2534,11 @@ left join (select parents.* from parents
 where (auction_summary.school_year = "2004-2005" 
     or in_kind_summary.school_year = "2004-2005" 
     or income_summary.school_year = "2004-2005") 
-order by coalesce(leads.company, companies.company_name), 
-    coalesce(leads.last_name, companies.last_name),
-     coalesce(leads.first_name, companies.first_name)
+order by if(coalesce(companies.company_name, leads.company) is not null
+            and coalesce(companies.company_name, leads.company) > "", 
+            coalesce(companies.company_name, leads.company), 
+        concat(coalesce(leads.last_name, companies.last_name),
+                coalesce(leads.last_name, companies.last_name)))
 \G
 -- for testing: and (companies.company_id  = 49 or companies.company_id = 127 or companies.company_id  = 27 or thank_you.thank_you_id = 64)
  
