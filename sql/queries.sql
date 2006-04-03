@@ -2477,6 +2477,7 @@ where this_question.question_id is null
 
 --- narsty recoverexisting query
 --- as bad as this is, though, it's MUCH faster than doing it in PHP!
+--- and about 1/2 the lines of code!
 select distinct thank_you.*,
 coalesce(auction_summary.school_year, in_kind_summary.school_year, 
     income_summary.school_year) as school_year,
@@ -2486,25 +2487,32 @@ concat_ws("\n", coalesce(leads.company, companies.company_name),
 concat_ws(" ", working_parents.first_name, working_parents.last_name) 
     as salesperson,
 concat_ws("\n", concat("$", income_summary.total_payment, " cash"),
-            auction_summary.short_description, 
-            in_kind_summary.item_description) as items
+            auction_summary.short_descriptions, 
+            in_kind_summary.item_descriptions) as items
 from thank_you
-left join (select auction_donation_items.*, 
+left join (select group_concat(auction_donation_items.short_description, "\n")
+                    as short_descriptions, 
+                auction_donation_items.thank_you_id,
+                auction_donation_items.school_year,
                 companies_auction_join.family_id, 
                 companies_auction_join.company_id
             from auction_donation_items 
                 left join companies_auction_join 
                     on companies_auction_join.auction_donation_item_id = 
-                        auction_donation_items.auction_donation_item_id)
-            as auction_summary
+                        auction_donation_items.auction_donation_item_id
+            group by auction_donation_items.thank_you_id) as auction_summary
        on thank_you.thank_you_id = auction_summary.thank_you_id
-left join (select in_kind_donations.*,
+left join (select group_concat(in_kind_donations.item_description, "\n")
+                    as item_descriptions,
+                in_kind_donations.thank_you_id,
+                in_kind_donations.school_year,
                 companies_in_kind_join.family_id, 
                 companies_in_kind_join.company_id
             from in_kind_donations
             left join companies_in_kind_join 
                 on companies_in_kind_join.in_kind_donation_id = 
-                    in_kind_donations.in_kind_donation_id) as in_kind_summary 
+                    in_kind_donations.in_kind_donation_id
+            group by in_kind_donations.thank_you_id) as in_kind_summary 
     on thank_you.thank_you_id = in_kind_summary.thank_you_id
 left join (select sum(income.payment_amount) as total_payment,
             income.thank_you_id, income.school_year,
