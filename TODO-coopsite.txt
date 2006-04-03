@@ -21,16 +21,18 @@ coop web database
 ??PHP
 bring thank yous back to life
 	bring view existing thankyous back to life
-		do it the sucker way: use thankyou->recoverexisting()?
-		build an html table and wrap it in choosers, etc from simpletable()
-		or... do it all as an sql query?
-			list of all income, amounts
-			list of all auction, description and amount concat_ws('\n'?)
-			list of all in-kind, description and amount concat_ws('\n'?)
-	blow off thankyou class? and just have fb_displayCallbacks?
-		do some of them in sql too:
-		DATE_FORMAT(thank_you.date_sent,"%W, %M %e, %Y") as date_sent_fmt,
-	the em and strong are just useless. why? how do i do italic?
+		format for display in browser
+		blow off thankyou class? and just have fb_displayCallbacks?
+			do some of them in sql too:
+			DATE_FORMAT(thank_you.date_sent,"%W, %M %e, %Y") as date_sent_fmt,
+		jeebus, how to format for PRINTING? remember, i need them all back!
+			for now, tump into thankyouclass? NO that's stupid.
+	blow off the ThankYou class for my to-send ones too!
+		have to store group_concats of inkindid, auctionid, incomeid
+			a new savethankyou() function creates a new note,
+				then explodes() those id's and update() them with thankyouid
+			ooh, could do this in an insert()/update() command!
+		the em and strong are just useless. why? how do i do italic?
 		there is no em or strong in pdml. asshole.
 		i have to add them
 	actions:
@@ -704,6 +706,11 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+SQL/PHP
+move these massive thankyou queries to a separate SQL file
+	and "include" it by fopening it.
+	dealing with include paths is not fun, but this just should happen
 
 SQL/PHP
 thank you's without all that instantiation?
@@ -3704,7 +3711,8 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	gah! it dies when doing the whole list. why?
+		do it the sucker way: use thankyou->recoverexisting()?
+		gah! it dies when doing the whole list. why?
 		well, i have to fix the performance problems
 			could be a massive change to ThankYou class!
 	 	profile it, ok now
@@ -7542,3 +7550,8 @@ BUGS
 			ahck, i hacked around with <br>			salesperson (coalesce parent id? guessparents?)
 			name summary (like paddle coalescing: through everything)
 				order by namesum too.  hah, "ad namesum"
+		or... do it all as an sql query?
+			list of all income, amounts
+			list of all auction, description and amount concat_ws('\n'?)
+			list of all in-kind, description and amount concat_ws('\n'?)
+		build an html table and wrap it in choosers, etc from simpletable()

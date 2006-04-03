@@ -58,6 +58,7 @@ class Thank_you extends CoopDBDO
     // manually whack 'add'. 'enter new' is NOT appropriate for this
     var $viewActions = array('view'=> ACCESS_VIEW);     
 
+    var $fb_displayCallbacks = array('items' => 'webFormatGroupConcat');
 
 
 //     function fb_linkConstraints(&$co)
@@ -166,31 +167,98 @@ function thanksNeededPickList(&$co)
             $co->actionnames['delete'] = 'Un-Send';
 
 
-            $co->obj->query(
-                sprintf(
-                    'select thank_you.* ,
-DATE_FORMAT(thank_you.date_sent,"%%W, %%M %%e, %%Y") as date_sent_fmt,
-coalesce(auction_donation_items.school_year, in_kind_donations.school_year, income.school_year) as school_year
-from thank_you
-left join auction_donation_items on thank_you.thank_you_id = auction_donation_items.thank_you_id
-left join income on thank_you.thank_you_id = income.thank_you_id
-left join in_kind_donations on thank_you.thank_you_id = in_kind_donations.thank_you_id
-left join companies_income_join on companies_income_join.income_id = income.income_id
-left join companies on companies_income_join.company_id = companies.company_id
-left join leads_income_join on leads_income_join.income_id = income.income_id
-left join leads on leads.lead_id = leads_income_join.lead_id
-where coalesce(auction_donation_items.school_year, in_kind_donations.school_year, income.school_year) = "%s"
-order by concat(coalesce(leads.last_name, companies.last_name), coalesce(leads.first_name, companies.first_name), coalesce(leads.company, companies.company_name))
-',
-                    $co->getChosenSchoolYear()));
-
-// TODO: join to everyone, and grab the recipient, items, salesperson
-//
-
-
             //before i go to crazy here, let's fix any orphans
             $ty = new ThankYou(&$co->page);
             $ty->repairOrphaned();
+
+            //TODO: move this massive query to an include file
+            // a .sql file so it looks reasonable in emacs
+
+            $co->obj->query(
+                sprintf(
+'select distinct thank_you.*,
+coalesce(auction_summary.school_year, in_kind_summary.school_year, 
+    income_summary.school_year) as school_year,
+concat_ws("\n", coalesce(leads.company, companies.company_name), 
+    concat_ws(" ", coalesce(leads.first_name, companies.first_name),
+        coalesce(leads.last_name, companies.last_name))) as recipient,
+concat_ws(" ", working_parents.first_name, working_parents.last_name) 
+    as salesperson,
+concat_ws("\n", concat("$", income_summary.total_payment, " cash"),
+            auction_summary.short_descriptions, 
+            in_kind_summary.item_descriptions) as items
+from thank_you
+left join (select group_concat(auction_donation_items.short_description, "\n")
+                    as short_descriptions, 
+                auction_donation_items.thank_you_id,
+                auction_donation_items.school_year,
+                companies_auction_join.family_id, 
+                companies_auction_join.company_id
+            from auction_donation_items 
+                left join companies_auction_join 
+                    on companies_auction_join.auction_donation_item_id = 
+                        auction_donation_items.auction_donation_item_id
+            group by auction_donation_items.thank_you_id) as auction_summary
+       on thank_you.thank_you_id = auction_summary.thank_you_id
+left join (select group_concat(in_kind_donations.item_description, "\n")
+                    as item_descriptions,
+                in_kind_donations.thank_you_id,
+                in_kind_donations.school_year,
+                companies_in_kind_join.family_id, 
+                companies_in_kind_join.company_id
+            from in_kind_donations
+            left join companies_in_kind_join 
+                on companies_in_kind_join.in_kind_donation_id = 
+                    in_kind_donations.in_kind_donation_id
+            group by in_kind_donations.thank_you_id) as in_kind_summary 
+    on thank_you.thank_you_id = in_kind_summary.thank_you_id
+left join (select sum(income.payment_amount) as total_payment,
+            income.thank_you_id, income.school_year,
+             coalesce(leads_income_join.lead_id, tickets.lead_id) as lead_id,
+            companies_income_join.company_id, companies_income_join.family_id
+            from income 
+              left join companies_income_join 
+                  on companies_income_join.income_id = income.income_id
+              left join leads_income_join 
+                    on leads_income_join.income_id = income.income_id
+            left join tickets on tickets.income_id = income.income_id
+            group by income.thank_you_id)
+            as income_summary
+    on thank_you.thank_you_id = income_summary.thank_you_id
+left join companies 
+    on coalesce(income_summary.company_id, 
+        auction_summary.company_id, in_kind_summary.company_id) 
+            = companies.company_id
+left join leads 
+    on income_summary.lead_id = leads.lead_id
+left join (select parents.* from parents 
+            left join workers on parents.parent_id = workers.parent_id
+            where workers.parent_id is not null
+            group by parents.family_id) as working_parents
+        on working_parents.family_id = 
+        coalesce(income_summary.family_id, 
+                auction_summary.family_id)
+where (auction_summary.school_year = "%s" 
+    or in_kind_summary.school_year = "%s" 
+    or income_summary.school_year = "%s") 
+order by if(coalesce(companies.company_name, leads.company) is not null
+            and coalesce(companies.company_name, leads.company) > "", 
+            coalesce(companies.company_name, leads.company), 
+        concat(coalesce(leads.last_name, companies.last_name),
+                coalesce(leads.last_name, companies.last_name)))
+',
+                    $co->getChosenSchoolYear(),
+                 $co->getChosenSchoolYear(),
+                 $co->getChosenSchoolYear()));
+
+            $this->fb_fieldLabels = array_merge(
+                $this->fb_fieldLabels,
+                array('items' => 'Items',
+                      'recipient' => 'Recipient',
+                      'salesperson' => 'Salesperson'));
+
+            $this->preDefOrder = array( 'recipient', 'items', 'salesperson',
+                                       'date_sent', 'method', 'family_id');
 
 
             return '<h3>The following thank you notes need to be sent:</h3>'.
@@ -213,6 +281,11 @@ function thanksNeededSummary($co, $format = 'array')
             if(devSite()){
                 //$limit = 'limit 20';
             }
+
+
+            //TODO: move this massive query to an include file
+            // a .sql file so it looks reasonable in emacs
+
             
             $top->obj->query("
 select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
@@ -340,5 +413,11 @@ $limit
         }
 
 
+    function webFormatGroupConcat(&$co, $val, $key)
+        {
+            // takes a field with items delimited by \n and by a leading ,
+            // and makes them pretty for the web with a chr(183) delimiter
+            return  preg_replace("/\n,/",'<br>'.chr(183),$val); 
+        }
 
 }
