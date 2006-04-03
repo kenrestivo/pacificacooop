@@ -2535,7 +2535,8 @@ left join leads
     on income_summary.lead_id = leads.lead_id
 left join (select parents.* from parents 
             left join workers on parents.parent_id = workers.parent_id
-            where workers.parent_id is not null) as working_parents
+            where workers.parent_id is not null
+            group by parents.family_id) as working_parents
         on working_parents.family_id = 
         coalesce(income_summary.family_id, 
                 auction_summary.family_id)
