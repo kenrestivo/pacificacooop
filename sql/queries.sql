@@ -2480,7 +2480,9 @@ select distinct thank_you.*,
 DATE_FORMAT(thank_you.date_sent,"%W, %M %e, %Y") as date_sent_fmt,
 coalesce(auction_donation_items.school_year, in_kind_donations.school_year, 
     income.school_year) as school_year,
-concat_ws('\n', companies.company_name, concat_ws(' ', companies.last_name, companies.first_name)) as Company
+concat_ws('\n', coalesce(leads.company, companies.company_name), 
+    concat_ws(' ', coalesce(leads.first_name, companies.first_name),
+        coalesce(leads.last_name, companies.last_name))) as Company
 from thank_you
 left join auction_donation_items 
     on thank_you.thank_you_id = auction_donation_items.thank_you_id
