@@ -937,8 +937,8 @@ concat_ws("\n"
 ,if(length(companies.company_name)>0, companies.company_name, null)
 ,if(length(companies.address1)>0, companies.address1, null)
 ,if(length(companies.address2)>0, companies.address2, null)
-,concat_ws(" ", concat(companies.city, ", ", companies.state), companies.zip, if(companies.country != "USA", companies.country, ""))
-) as address_label,
+,concat_ws(" ", concat(companies.city, ", ", companies.state), companies.zip, 
+    if(companies.country != "USA", companies.country, ""))) as address_label,
 inc.income_ids, auct.auction_donation_item_ids, iks.in_kind_donation_ids
 from companies
 left join 
@@ -1011,13 +1011,14 @@ concat_ws(' ', if(leads.salutation is not null and leads.salutation > "",
             leads.salutation, leads.first_name), 
             leads.last_name) as dear,
 concat_ws("\n"
-,concat_ws(" " , if(leads.salutation > "", leads.salutation, null), leads.first_name, leads.last_name)
+,concat_ws(" " , if(leads.salutation > "", leads.salutation, null), 
+    leads.first_name, leads.last_name)
 ,if(length(leads.title)>0, leads.title, null)
 ,if(length(leads.company)>0, leads.company, null)
 ,if(length(leads.address1)>0, leads.address1, null)
 ,if(length(leads.address2)>0, leads.address2, null)
-,concat_ws(" ", concat(leads.city, ", ", leads.state), leads.zip, if(leads.country != "USA", leads.country, ""))
-) as address_label,
+,concat_ws(" ", concat(leads.city, ", ", leads.state), leads.zip, 
+    if(leads.country != "USA", leads.country, ""))) as address_label,
 concat_ws(',', inc.income_ids, tic.income_ids) as income_ids,
 "" as auction_donation_item_ids, "" as in_kind_donation_ids
 from leads
