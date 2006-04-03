@@ -20,23 +20,25 @@ coop web database
 							
 ??PHP
 bring thank yous back to life
-	the em and strong are just useless. why? how do i do italic?
-		look in pdml docs
-	gah! it dies when doing the whole list. why?
-		well, i have to fix the performance problems
 	bring view existing thankyous back to life
-		recoverexisting appears to be the key. can i do that in sql?
-			sum of all income (companies/leads/tickets)
+		do it the sucker way: use thankyou->recoverexisting()?
+		build an html table and wrap it in choosers, etc from simpletable()
+		or... do it all as an sql query?
+			list of all income, amounts
 			list of all auction, description and amount concat_ws('\n'?)
 			list of all in-kind, description and amount concat_ws('\n'?)
-			salesperson (coalesce parent id? guessparents?)
-			name summary (like paddle coalescing: through everything)
-				order by namesum too.  hah, "ad namesum"
+	blow off thankyou class? and just have fb_displayCallbacks?
+		do some of them in sql too:
+		DATE_FORMAT(thank_you.date_sent,"%W, %M %e, %Y") as date_sent_fmt,
+	the em and strong are just useless. why? how do i do italic?
+		there is no em or strong in pdml. asshole.
+		i have to add them
 	actions:
 		mark them as sent!
 			target is NOT printpopup, it's self, a massive insert.
 			no, it's an ajax call. could be just one, maybe
 			also a "unsend" link which basically deletes
+	performance issues! try to combine some queries, subselects
 	export the labels (exportxl.php, basically)
 	note the link search  for thankyounote in income, etc, is pretty useless
 		yank that, perhaps? or a really hairy linkconstraints?
@@ -702,6 +704,10 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+SQL/PHP
+thank you's without all that instantiation?
+		recoverexisting appears to be the key. can i do that in sql?
 
 
 ??PHP/JS
@@ -3698,6 +3704,10 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	gah! it dies when doing the whole list. why?
+		well, i have to fix the performance problems
+			could be a massive change to ThankYou class!
+	 	profile it, ok now
 		extend limits, see how we do. gah, i dunno what's up.
 			no way
 	new ui model
@@ -7529,4 +7539,6 @@ BUGS
 	deal with spaces in a saner way
 		allow spaces if they are inside of a text block
 			jeebus, how to tell?
-			ahck, i hacked around with <br>
+			ahck, i hacked around with <br>			salesperson (coalesce parent id? guessparents?)
+			name summary (like paddle coalescing: through everything)
+				order by namesum too.  hah, "ad namesum"

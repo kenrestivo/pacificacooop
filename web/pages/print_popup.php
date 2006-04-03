@@ -18,6 +18,8 @@
 
 //$Id$
 
+//$debug = 4;
+
 require_once('CoopPDF.php');
 require_once('ThankYou.php');
 
@@ -30,8 +32,11 @@ class ThankYouNote extends CoopPDF
 
     function build()
         {
-            // TODO: use that nice funky font?
-            $this->fpdf->font_face = array('Times');
+            // TODO: phish this font out of the database!
+            // i.e. "use springfest font for this year!"
+            $this->fpdf->AddFont('bernhard-modern');
+            $this->fpdf->font_face = array('bernhard-modern');
+
 
             switch($_REQUEST['set']){
             case 'printed':

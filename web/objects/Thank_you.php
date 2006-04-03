@@ -169,6 +169,7 @@ function thanksNeededPickList(&$co)
             $co->obj->query(
                 sprintf(
                     'select thank_you.* ,
+DATE_FORMAT(thank_you.date_sent,"%%W, %%M %%e, %%Y") as date_sent_fmt,
 coalesce(auction_donation_items.school_year, in_kind_donations.school_year, income.school_year) as school_year
 from thank_you
 left join auction_donation_items on thank_you.thank_you_id = auction_donation_items.thank_you_id
@@ -210,7 +211,7 @@ function thanksNeededSummary($co, $format = 'array')
 
             // XXX hack for testing
             if(devSite()){
-                $limit = 'limit 20';
+                //$limit = 'limit 20';
             }
             
             $top->obj->query("
