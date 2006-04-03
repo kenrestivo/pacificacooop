@@ -924,12 +924,26 @@ select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name))
         coalesce(sum(iks.item_value),0) 
         as Total,
    concat_ws('\n', auct.auction_items, iks.in_kind_items) as items,
-   coalesce(sum(inc.payment_amount),0) as cash_total
+   coalesce(sum(inc.payment_amount),0) as cash_total,
+concat_ws(' ', 
+    if(companies.salutation is not null and companies.salutation > "",
+            companies.salutation, companies.first_name), 
+            companies.last_name) as dear,
+concat_ws("\n"
+,concat_ws(" " , if(companies.salutation > "", companies.salutation, null), companies.first_name, companies.last_name)
+,if(length(companies.title)>0, companies.title, null)
+,if(length(companies.company_name)>0, companies.company_name, null)
+,if(length(companies.address1)>0, companies.address1, null)
+,if(length(companies.address2)>0, companies.address2, null)
+,concat_ws(" ", concat(companies.city, ", ", companies.state), companies.zip, if(companies.country != "USA", companies.country, ""))
+) as address_label,
+inc.income_ids, auct.auction_donation_item_ids, iks.in_kind_donation_ids
 from companies
 left join 
     (select  sum(item_value) as item_value, company_id,
     group_concat(adi.short_description, '\n') 
-        as auction_items
+        as auction_items,
+    group_concat(adi.auction_donation_item_id) as auction_donation_item_ids
      from companies_auction_join  as caj
      left join auction_donation_items  as adi
               on caj.auction_donation_item_id = 
@@ -943,7 +957,8 @@ left join
 left join 
     (select  sum(item_value) as item_value, company_id,
     group_concat(ikd.item_description, '\n') 
-        as in_kind_items
+        as in_kind_items,
+    group_concat(ikd.in_kind_donation_id) as in_kind_donation_ids
      from companies_in_kind_join as cikj
      left join in_kind_donations as ikd
               on cikj.in_kind_donation_id = 
@@ -955,7 +970,8 @@ left join
     as iks
         on iks.company_id = companies.company_id
 left join 
-    (select  sum(payment_amount) as payment_amount, company_id
+    (select  sum(payment_amount) as payment_amount, company_id,
+        group_concat(income.income_id) as income_ids
      from companies_income_join as cinj
      left join income 
               on cinj.income_id = 
@@ -987,11 +1003,25 @@ select concat_ws(' - ', concat_ws(' ', first_name, last_name), company )
         leads.lead_id as id, 'lead_id' as id_name,
         coalesce(sum(tic.total),0) + coalesce(sum(inc.total),0) as Total,
     '' as items,
-    coalesce(sum(inc.total),sum(tic.total),0) as cash_total
+    coalesce(sum(inc.total),sum(tic.total),0) as cash_total,
+concat_ws(' ', if(leads.salutation is not null and leads.salutation > "",
+            leads.salutation, leads.first_name), 
+            leads.last_name) as dear,
+concat_ws("\n"
+,concat_ws(" " , if(leads.salutation > "", leads.salutation, null), leads.first_name, leads.last_name)
+,if(length(leads.title)>0, leads.title, null)
+,if(length(leads.company)>0, leads.company, null)
+,if(length(leads.address1)>0, leads.address1, null)
+,if(length(leads.address2)>0, leads.address2, null)
+,concat_ws(" ", concat(leads.city, ", ", leads.state), leads.zip, if(leads.country != "USA", leads.country, ""))
+) as address_label,
+concat_ws(',', inc.income_ids, tic.income_ids) as income_ids,
+"" as auction_donation_item_ids, "" as in_kind_donation_ids
 from leads
 left join 
-    (select lead_id, sum(payment_amount) as total
-     from leads_income_join as linj
+    (select lead_id, sum(payment_amount) as total,
+        group_concat(income.income_id) as income_ids
+     from leads_income_join as linj 
      left join income 
               on linj.income_id = 
                 income.income_id
@@ -1001,7 +1031,8 @@ left join
     as inc
         on leads.lead_id = inc.lead_id
 left join 
-    (select lead_id, sum(payment_amount) as total
+    (select lead_id, sum(payment_amount) as total,
+    group_concat(income.income_id) as income_ids
      from tickets
      left join income 
               on tickets.income_id = 
@@ -2487,6 +2518,7 @@ where this_question.question_id is null
 --- as bad as this is, though, it's MUCH faster than doing it in PHP!
 --- and about 1/2 the lines of code!
 select distinct thank_you.*,
+DATE_FORMAT(thank_you.date_sent,"%W, %M %e, %Y") as date_sent_fmt,
 coalesce(auction_summary.school_year, in_kind_summary.school_year,
     income_summary.school_year) as school_year,
 concat_ws("\n", coalesce(leads.company, companies.company_name), 
