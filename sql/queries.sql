@@ -2476,6 +2476,7 @@ where this_question.question_id is null
 \G
 
 --- narsty recoverexisting query
+--- as bad as this is, though, it's MUCH faster than doing it in PHP!
 select distinct thank_you.*,
 coalesce(auction_summary.school_year, in_kind_summary.school_year, 
     income_summary.school_year) as school_year,
@@ -2484,8 +2485,9 @@ concat_ws("\n", coalesce(leads.company, companies.company_name),
         coalesce(leads.last_name, companies.last_name))) as recipient,
 concat_ws(" ", working_parents.first_name, working_parents.last_name) 
     as salesperson,
-concat_ws('\n', auction_summary.short_description, 
-        income_summary.total_payment) as items
+concat_ws("\n", concat("$", income_summary.total_payment, " cash"),
+            auction_summary.short_description, 
+            in_kind_summary.item_description) as items
 from thank_you
 left join (select auction_donation_items.*, 
                 companies_auction_join.family_id, 
@@ -2532,12 +2534,11 @@ left join (select parents.* from parents
 where (auction_summary.school_year = "2004-2005" 
     or in_kind_summary.school_year = "2004-2005" 
     or income_summary.school_year = "2004-2005") 
-and (companies.company_id  = 49 or companies.company_id = 127 or companies.company_id  = 27 or thank_you.thank_you_id = 64)
 order by coalesce(leads.company, companies.company_name), 
     coalesce(leads.last_name, companies.last_name),
      coalesce(leads.first_name, companies.first_name)
-        
 \G
+-- for testing: and (companies.company_id  = 49 or companies.company_id = 127 or companies.company_id  = 27 or thank_you.thank_you_id = 64)
  
 
 
