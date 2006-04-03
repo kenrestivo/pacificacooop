@@ -2480,14 +2480,14 @@ where this_question.question_id is null
 select distinct thank_you.*,
 coalesce(auction_donation_items.school_year, in_kind_donations.school_year, 
     income.school_year) as school_year,
-concat_ws('\n', coalesce(leads.company, companies.company_name), 
-    concat_ws(' ', coalesce(leads.first_name, companies.first_name),
+concat_ws("\n", coalesce(leads.company, companies.company_name), 
+    concat_ws(" ", coalesce(leads.first_name, companies.first_name),
         coalesce(leads.last_name, companies.last_name))) as recipient,
-concat_ws(' ', working_parents.first_name, working_parents.last_name) 
+concat_ws(" ", working_parents.first_name, working_parents.last_name) 
     as salesperson,
+sum(if(income.income_id is null, 0, income.payment_amount)) as money,
 group_concat(coalesce(auction_donation_items.short_description,
-            concat('$', income.payment_amount, ' cash'), 
-            in_kind_donations.item_description), '\n') as items
+            in_kind_donations.item_description), "\n") as items
 from thank_you
 left join auction_donation_items 
     on thank_you.thank_you_id = auction_donation_items.thank_you_id
@@ -2519,10 +2519,12 @@ left join (select parents.* from parents
 where (auction_donation_items.school_year = "2004-2005" 
     or in_kind_donations.school_year = "2004-2005" 
     or income.school_year = "2004-2005") 
+and companies.company_id  = 49
 group by thank_you.thank_you_id
-order by concat(coalesce(leads.last_name, companies.last_name), 
-        coalesce(leads.first_name, companies.first_name), 
-        coalesce(leads.company, companies.company_name))
+order by coalesce(leads.company, companies.company_name), 
+    coalesce(leads.last_name, companies.last_name),
+     coalesce(leads.first_name, companies.first_name)
+        
 \G
  
 
