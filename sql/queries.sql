@@ -2504,7 +2504,8 @@ left join companies
             = companies.company_id
 left join leads_income_join on leads_income_join.income_id = income.income_id
 left join tickets on tickets.income_id = income.income_id
-left join leads on coalesce(leads_income_join.lead_id, tickets.lead_id) = leads.lead_id
+left join leads 
+    on coalesce(leads_income_join.lead_id, tickets.lead_id) = leads.lead_id
 left join (select parents.* from parents 
             left join workers on parents.parent_id = workers.parent_id
             where workers.parent_id is not null) as working_parents
