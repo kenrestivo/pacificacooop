@@ -2486,7 +2486,7 @@ concat_ws('\n', coalesce(leads.company, companies.company_name),
 concat_ws(' ', working_parents.first_name, working_parents.last_name) 
     as salesperson,
 group_concat(coalesce(auction_donation_items.short_description,
-            income.payment_amount, 
+            concat('$', income.payment_amount, ' cash'), 
             in_kind_donations.item_description), '\n') as items
 from thank_you
 left join auction_donation_items 
@@ -2519,7 +2519,6 @@ left join (select parents.* from parents
 where (auction_donation_items.school_year = "2004-2005" 
     or in_kind_donations.school_year = "2004-2005" 
     or income.school_year = "2004-2005") 
-and companies.company_id = 27
 group by thank_you.thank_you_id
 order by concat(coalesce(leads.last_name, companies.last_name), 
         coalesce(leads.first_name, companies.first_name), 
@@ -2527,24 +2526,6 @@ order by concat(coalesce(leads.last_name, companies.last_name),
 \G
  
 
-
------ so, let's grab just the auction stuff, for fun.
-select distinct thank_you.*, auction_summary.auction_item
-from thank_you
-left join
-(select group_concat(short_description, '\n') as auction_item,
-auction_donation_items.thank_you_id, companies_auction_join.company_id,
-companies_auction_join.family_id
-from auction_donation_items
-left join companies_auction_join 
-    on companies_auction_join.auction_donation_item_id = 
-        auction_donation_items.auction_donation_item_id
-where companies_auction_join.company_id = 27
-and auction_donation_items.school_year = "2004-2005"
-group by auction_donation_items.thank_you_id) as auction_summary
-on thank_you.thank_you_id = auction_summary.thank_you_id
-where thank_you.thank_you_id = 5
-\G
 
 
 --- EOF
