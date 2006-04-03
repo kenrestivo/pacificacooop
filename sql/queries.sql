@@ -2477,13 +2477,13 @@ where this_question.question_id is null
 
 --- narsty recoverexisting query
 select distinct thank_you.*,
-DATE_FORMAT(thank_you.date_sent,"%W, %M %e, %Y") as date_sent_fmt,
 coalesce(auction_donation_items.school_year, in_kind_donations.school_year, 
     income.school_year) as school_year,
 concat_ws('\n', coalesce(leads.company, companies.company_name), 
     concat_ws(' ', coalesce(leads.first_name, companies.first_name),
         coalesce(leads.last_name, companies.last_name))) as recipient,
-concat_ws(' ', working_parents.first_name, working_parents.last_name) as salesperson
+concat_ws(' ', working_parents.first_name, working_parents.last_name) 
+    as salesperson
 from thank_you
 left join auction_donation_items 
     on thank_you.thank_you_id = auction_donation_items.thank_you_id
