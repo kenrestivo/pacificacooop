@@ -914,7 +914,7 @@ group by leads.lead_id
 having Total > 0
 order by Company;
 
--- attemted massive thankyouhackreport
+--  massive thankyou needed report
 select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
     as Company, 
         companies.company_id as id, 'company_id' as id_name,
@@ -930,7 +930,7 @@ left join
      left join auction_donation_items  as adi
               on caj.auction_donation_item_id = 
                 adi.auction_donation_item_id
-        where school_year = '2004-2005' 
+        where school_year = '2005-2006' 
         and adi.date_received > '2000-01-01'
         and adi.thank_you_id is null
         group by caj.company_id) 
@@ -942,7 +942,7 @@ left join
      left join in_kind_donations as ikd
               on cikj.in_kind_donation_id = 
                 ikd.in_kind_donation_id
-        where school_year = '2004-2005'
+        where school_year = '2005-2006'
         and ikd.date_received > '2000-01-01'
         and ikd.thank_you_id is null
         group by cikj.company_id) 
@@ -954,7 +954,7 @@ left join
      left join income 
               on cinj.income_id = 
                 income.income_id
-        where school_year = '2004-2005' 
+        where school_year = '2005-2006'  
         and income.thank_you_id is null
         group by cinj.company_id) 
     as inc
@@ -968,7 +968,7 @@ left join
      left join income 
               on ap.income_id = 
                 income.income_id
-        where income.school_year = '2004-2005' 
+        where income.school_year = '2005-2006'  
         and income.thank_you_id is null
         group by atd.company_id) 
     as pur
@@ -987,7 +987,7 @@ left join
      left join income 
               on linj.income_id = 
                 income.income_id
-        where income.school_year = '2004-2005'
+        where income.school_year = '2005-2006' 
         and income.thank_you_id is null
         group by linj.lead_id) 
     as inc
@@ -998,14 +998,14 @@ left join
      left join income 
               on tickets.income_id = 
                 income.income_id
-        where income.school_year = '2004-2005'
+        where income.school_year = '2005-2006' 
         and income.thank_you_id is null
         group by tickets.lead_id) 
     as tic 
         on tic.lead_id = leads.lead_id
 group by leads.lead_id
 having Total > 0
-order by Company;
+order by Company
 
 
 -- show ticket families
