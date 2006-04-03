@@ -2475,4 +2475,26 @@ on this_question.family_id = enrolled.family_id
 where this_question.question_id is null
 \G
 
+--- narsty recoverexisting query
+select thank_you.* ,
+DATE_FORMAT(thank_you.date_sent,"%W, %M %e, %Y") as date_sent_fmt,
+coalesce(auction_donation_items.school_year, in_kind_donations.school_year, income.school_year) as school_year
+from thank_you
+left join auction_donation_items on thank_you.thank_you_id = auction_donation_items.thank_you_id
+left join income on thank_you.thank_you_id = income.thank_you_id
+left join in_kind_donations on thank_you.thank_you_id = in_kind_donations.thank_you_id
+left join companies_income_join on companies_income_join.income_id = income.income_id
+left join companies_auction_join on companies_auction_join.auction_donation_item_id = auction_donation_items.auction_donation_item_id
+left join companies_in_kind_join on companies_in_kind_join.in_kind_donation_id = in_kind_donations.in_kind_donation_id
+left join companies on coalesce(companies_income_join.company_id, companies_auction_join.company_id, companies_in_kind_join.company_id )= companies.company_id
+left join leads_income_join on leads_income_join.income_id = income.income_id
+left join leads on leads.lead_id = leads_income_join.lead_id
+where (auction_donation_items.school_year = "2005-2006" or in_kind_donations.school_year = "2005-2006" or income.school_year = "2005-2006") 
+and companies.company_id = 27
+order by concat(coalesce(leads.last_name, companies.last_name), coalesce(leads.first_name, companies.first_name), coalesce(leads.company, companies.company_name))
+\G
+ 
+
+
+
 --- EOF
