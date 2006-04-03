@@ -2475,25 +2475,26 @@ on this_question.family_id = enrolled.family_id
 where this_question.question_id is null
 \G
 
-
 --- narsty recoverexisting query
 select distinct thank_you.*,
-coalesce(auction_donation_items.school_year, in_kind_donations.school_year, 
+coalesce(auction_summary.school_year, in_kind_donations.school_year, 
     income.school_year) as school_year,
 concat_ws("\n", coalesce(leads.company, companies.company_name), 
     concat_ws(" ", coalesce(leads.first_name, companies.first_name),
         coalesce(leads.last_name, companies.last_name))) as recipient,
 concat_ws(" ", working_parents.first_name, working_parents.last_name) 
     as salesperson,
-group_concat(coalesce(concat('$', income.payment_amount, ' cash'), 
-    auction_donation_items.short_description,
-            in_kind_donations.item_description), "\n") as items
+concat_ws('\n', auction_summary.short_description) as items
 from thank_you
-left join auction_donation_items 
-    on thank_you.thank_you_id = auction_donation_items.thank_you_id
-left join companies_auction_join 
-    on companies_auction_join.auction_donation_item_id = 
-        auction_donation_items.auction_donation_item_id
+left join (select auction_donation_items.*, 
+                companies_auction_join.family_id, 
+                companies_auction_join.company_id
+            from auction_donation_items 
+                left join companies_auction_join 
+                    on companies_auction_join.auction_donation_item_id = 
+                        auction_donation_items.auction_donation_item_id)
+            as auction_summary
+       on thank_you.thank_you_id = auction_summary.thank_you_id
 left join in_kind_donations 
     on thank_you.thank_you_id = in_kind_donations.thank_you_id
 left join companies_in_kind_join 
@@ -2504,7 +2505,7 @@ left join companies_income_join
     on companies_income_join.income_id = income.income_id
 left join companies 
     on coalesce(companies_income_join.company_id, 
-        companies_auction_join.company_id, companies_in_kind_join.company_id) 
+        auction_summary.company_id, companies_in_kind_join.company_id) 
             = companies.company_id
 left join leads_income_join on leads_income_join.income_id = income.income_id
 left join tickets on tickets.income_id = income.income_id
@@ -2515,8 +2516,8 @@ left join (select parents.* from parents
             where workers.parent_id is not null) as working_parents
         on working_parents.family_id = 
         coalesce(companies_income_join.family_id, 
-                companies_auction_join.family_id)
-where (auction_donation_items.school_year = "2004-2005" 
+                auction_summary.family_id)
+where (auction_summary.school_year = "2004-2005" 
     or in_kind_donations.school_year = "2004-2005" 
     or income.school_year = "2004-2005") 
 and (companies.company_id  = 49 or companies.company_id = 127 or companies.company_id  = 27)
