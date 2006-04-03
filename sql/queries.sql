@@ -2479,7 +2479,7 @@ where this_question.question_id is null
 --- as bad as this is, though, it's MUCH faster than doing it in PHP!
 --- and about 1/2 the lines of code!
 select distinct thank_you.*,
-coalesce(auction_summary.school_year, in_kind_summary.school_year, 
+coalesce(auction_summary.school_year, in_kind_summary.school_year,
     income_summary.school_year) as school_year,
 concat_ws("\n", coalesce(leads.company, companies.company_name), 
     concat_ws(" ", coalesce(leads.first_name, companies.first_name),
