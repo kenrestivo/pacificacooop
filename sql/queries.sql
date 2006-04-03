@@ -2476,10 +2476,11 @@ where this_question.question_id is null
 \G
 
 --- narsty recoverexisting query
-select distinct thank_you.* ,
+select distinct thank_you.*,
 DATE_FORMAT(thank_you.date_sent,"%W, %M %e, %Y") as date_sent_fmt,
 coalesce(auction_donation_items.school_year, in_kind_donations.school_year, 
-    income.school_year) as school_year
+    income.school_year) as school_year,
+concat_ws('\n', companies.company_name, concat_ws(' ', companies.last_name, companies.first_name)) as Company
 from thank_you
 left join auction_donation_items 
     on thank_you.thank_you_id = auction_donation_items.thank_you_id
@@ -2499,7 +2500,8 @@ left join companies
         companies_auction_join.company_id, companies_in_kind_join.company_id) 
             = companies.company_id
 left join leads_income_join on leads_income_join.income_id = income.income_id
-left join leads on leads.lead_id = leads_income_join.lead_id
+left join tickets on tickets.income_id = income.income_id
+left join leads on coalesce(leads_income_join.lead_id, tickets.lead_id) = leads.lead_id
 where (auction_donation_items.school_year = "2004-2005" 
     or in_kind_donations.school_year = "2004-2005" 
     or income.school_year = "2004-2005") 
