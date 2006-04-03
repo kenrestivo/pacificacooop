@@ -2487,14 +2487,14 @@ concat_ws(' ', working_parents.first_name, working_parents.last_name)
 from thank_you
 left join auction_donation_items 
     on thank_you.thank_you_id = auction_donation_items.thank_you_id
+left join companies_auction_join 
+    on companies_auction_join.auction_donation_item_id = 
+        auction_donation_items.auction_donation_item_id
 left join income on thank_you.thank_you_id = income.thank_you_id
 left join in_kind_donations 
     on thank_you.thank_you_id = in_kind_donations.thank_you_id
 left join companies_income_join 
     on companies_income_join.income_id = income.income_id
-left join companies_auction_join 
-    on companies_auction_join.auction_donation_item_id = 
-        auction_donation_items.auction_donation_item_id
 left join companies_in_kind_join 
     on companies_in_kind_join.in_kind_donation_id = 
         in_kind_donations.in_kind_donation_id
@@ -2522,6 +2522,17 @@ order by concat(coalesce(leads.last_name, companies.last_name),
 \G
  
 
+
+----- so, let's grab just the auction stuff, for fun.
+select group_concat(short_description, '\n') as auction_item, company_id
+from auction_donation_items
+left join companies_auction_join 
+    on companies_auction_join.auction_donation_item_id = 
+        auction_donation_items.auction_donation_item_id
+where companies_auction_join.company_id = 27
+and auction_donation_items.school_year = "2004-2005"
+group by companies_auction_join.company_id
+\G
 
 
 --- EOF
