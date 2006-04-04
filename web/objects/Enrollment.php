@@ -91,7 +91,7 @@ class Enrollment extends CoopDBDO
 
  		}
 
-
+    // HEY, whack this and use extradetails instead?!
     function fb_display_details(&$co)
         {
 
@@ -186,6 +186,7 @@ class Enrollment extends CoopDBDO
             $chosen = $co->getChosenSchoolYear();
 
             // TODO: do not show dropped enrollment!
+            //TODO: also use my new CoopOBject::ueryfromfile() function
 
             $rastaquery = 
                 'select  enrollment.enrollment_id, kids.last_name as kid_last, 

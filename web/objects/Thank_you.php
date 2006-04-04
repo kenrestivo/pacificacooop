@@ -29,6 +29,12 @@ class Thank_you extends CoopDBDO
 
 	var $fb_linkDisplayFields = array('date_sent', 'method');
 	var $fb_fieldLabels = array (
+        'items' => 'Thank you for your kind donation of:',
+        'recipient' => 'Recipient',
+        'salesperson' => 'Sincerely,',
+        'address' => 'Address on Envelope and Letter',
+        'dear' => 'Dear:',
+        'value_received' => 'In exchange for your contribution, we gave you:',
 		'thank_you_id' => 'Thank You Note',
 		'date_printed' => 'Date Printed',
 		'date_sent' => 'Date Sent',
@@ -109,20 +115,15 @@ function _detailsLink(&$co, $current)
         }
 
 
-function thanksNeededPickList(&$co)
+function OLDCRUFTYthanksNeededPickList(&$co)
         {
 
             return ""; //XXX TEMP!
 
             // this is pseudo-templating, using htmltable
-            $tab = new HTML_Table();	
+
                 $tab->addRow(
                     array(
-                        'Address on Envelope and Letter',
-                        'Dear:',
-                        'Thank you for your kind donation of:',
-                        'In exchange for your contribution, we gave you:',
-                        'Sincerely,',
                         'Actions'),
                     'class="tableheaders"', 'TH');
 
@@ -143,7 +144,22 @@ function thanksNeededPickList(&$co)
                 $co2->simpleTable(false, true) ;
         }
 
+function &findThanksNeeded(&$co)
+        {
+            $co2 =& new CoopView(&$co->page, $co->table, &$co);
+            $co2->schoolYearChooser(); // to get the values
+            $co2->obj->fb_forceNoChooser = 1;
 
+            $co2->obj->fetchTemplate(&$co2);
+
+            $co2->queryFromFile('thankyouneeded.sql');
+
+            $co2->obj->preDefOrder = array('address' , 'dear' ,
+                                          'recipient', 'items', 
+                                          'value_received',
+                                          'salesperson');
+            return $co2;
+        }
 
 
 
@@ -157,6 +173,7 @@ function thanksNeededPickList(&$co)
             $co->actionnames['delete'] = 'Un-Send';
 
 
+
 //             //before i go to crazy here, let's fix any orphans
 //             $ty = new ThankYou(&$co->page);
 //             $ty->repairOrphaned();
@@ -164,23 +181,20 @@ function thanksNeededPickList(&$co)
             $this->fetchTemplate(&$co);
 
             $co->queryFromFile('recover_thank_yous.sql');
-
-            $this->fb_fieldLabels = array_merge(
-                $this->fb_fieldLabels,
-                array('items' => 'Items',
-                      'recipient' => 'Recipient',
-                      'salesperson' => 'Salesperson'));
-
-            $this->preDefOrder = array( 'recipient', 'items', 'salesperson',
+            
+            $co->obj->preDefOrder = array( 'recipient', 'items', 'salesperson',
                                        'date_sent', 'method', 'family_id');
 
+            $co2 =& $this->findThanksNeeded(&$co);
 
-            return '<h3>The following thank you notes need to be sent:</h3>'.
-                $this->thanksNeededPickList(&$co) . 
+            return  
+                '<h3>The following thank you notes need to be sent:</h3>'.
+                $co2->simpleTable(false, true) .
                 '<h3>Thank you notes below have already been sent:</h3>'.
                 $co->simpleTable(false,true);
 
         }
+
 
 
 function fetchTemplate(&$co)

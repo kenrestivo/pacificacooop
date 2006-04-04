@@ -33,7 +33,7 @@ class coopView extends CoopObject
 
 	var $legacyCallbacks;			// hack for old callbacks
 	var $legacyPerms; 			// cache of OLD-style permissions ($p)
-	var $extraRecordButtons;  // HACK for non-standard actions, i.e. thankyous
+	var $extraRecordButtons = array();  // for non-standard actions, i.e. thankyous
     var $fullText;             // NASTY hack to avoid truncating text on details
     var $recordActions = array('edit'=> ACCESS_EDIT, 
                                'confirmdelete' => ACCESS_DELETE, 
@@ -158,11 +158,6 @@ class coopView extends CoopObject
 			while($this->obj->fetch()){
                 $tab->addCol($this->toArray($header['keys']), 
                              'class="altrow1"');
-			}
-
-            /// legacy only used by thankyounotes, iirc
-			if($this->extraRecordButtons){
-				$tab->addRow(array("", $this->extraRecordButtons));
 			}
 
 			return $this->tableTitle($tab->toHTML());
@@ -621,6 +616,9 @@ class coopView extends CoopObject
                     $par || $res .= '&nbsp;';
                 }
 			}
+
+            //XXX what about extrarecordbuttons??!
+
             if($res && $wrap && is_array($wrap)){
                 return $wrap[0] . $res . $wrap[1];
             }

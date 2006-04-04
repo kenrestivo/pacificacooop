@@ -11,7 +11,7 @@ select concat_ws(' - ', company_name,
         as Total,
    concat_ws('\n', 
         if(coalesce(sum(inc.payment_amount),0) > 0,
-            concat('$', coalesce(sum(inc.payment_amount),0), ' cash'), null),
+            concat('$', coalesce(sum(inc.payment_amount),0), ' ', @cash_text), null),
 auct.auction_items, iks.in_kind_items) as items,
 concat_ws(' ', 
     if(companies.salutation is not null and companies.salutation > "",
@@ -24,7 +24,7 @@ concat_ws("\n"
 ,if(length(companies.address1)>0, companies.address1, null)
 ,if(length(companies.address2)>0, companies.address2, null)
 ,concat_ws(" ", concat(companies.city, ", ", companies.state), companies.zip, 
-    if(companies.country != "USA", companies.country, ""))) as address_label,
+    if(companies.country != "USA", companies.country, ""))) as address,
 inc.income_ids, auct.auction_donation_item_ids, iks.in_kind_donation_ids,
 concat_ws('\n', ads_received.ad_values,
     concat(tic.attended_count, ' ticket', if(tic.attended_count > 1, 's', ''),
@@ -116,7 +116,7 @@ select concat_ws(' - ', concat_ws(' ', first_name, last_name), company )
         coalesce(sum(tic.payment_amount),0) + 
                 coalesce(sum(inc.payment_amount),0) as Total,
         if(coalesce(sum(inc.payment_amount),0) > 0,
-            concat('$', coalesce(sum(inc.payment_amount),0), ' cash'), 
+            concat('$', coalesce(sum(inc.payment_amount),0), ' ', @cash_text), 
                 null) as items,
     concat_ws(' ', if(leads.salutation is not null and leads.salutation > "",
             leads.salutation, leads.first_name), 
@@ -129,7 +129,7 @@ concat_ws("\n"
 ,if(length(leads.address1)>0, leads.address1, null)
 ,if(length(leads.address2)>0, leads.address2, null)
 ,concat_ws(" ", concat(leads.city, ", ", leads.state), leads.zip, 
-    if(leads.country != "USA", leads.country, ""))) as address_label,
+    if(leads.country != "USA", leads.country, ""))) as address,
 concat_ws(',', inc.income_ids, tic.income_ids) as income_ids,
 "" as auction_donation_item_ids, "" as in_kind_donation_ids,
 concat(tic.attended_count, ' ticket', if(tic.attended_count > 1, 's', ''),

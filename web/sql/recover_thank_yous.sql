@@ -14,7 +14,7 @@ concat_ws("\n", coalesce(leads.company, companies.company_name),
         coalesce(leads.last_name, companies.last_name))) as recipient,
 concat_ws(" ", working_parents.first_name, working_parents.last_name) 
     as salesperson,
-concat_ws("\n", concat("$", income_summary.total_payment, @cash_text),
+concat_ws("\n", concat("$", income_summary.total_payment, ' ', @cash_text),
             auction_summary.short_descriptions, 
             in_kind_summary.item_descriptions) as items
 from thank_you
