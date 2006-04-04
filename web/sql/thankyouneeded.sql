@@ -5,7 +5,6 @@ select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name))
     as Company, 
         companies.company_id as id, 'company_id' as id_name,
         coalesce(sum(inc.payment_amount),0) +
-        coalesce(sum(tic.payment_amount),0) + 
         coalesce(sum(auct.item_value),0) + 
         coalesce(sum(iks.item_value),0) 
         as Total,
@@ -25,7 +24,8 @@ concat_ws("\n"
 ,if(length(companies.address2)>0, companies.address2, null)
 ,concat_ws(" ", concat(companies.city, ", ", companies.state), companies.zip, 
     if(companies.country != "USA", companies.country, ""))) as address_label,
-inc.income_ids, auct.auction_donation_item_ids, iks.in_kind_donation_ids
+inc.income_ids, auct.auction_donation_item_ids, iks.in_kind_donation_ids,
+concat_ws('\n', ads_received.ad_values) as value_received
 from companies
 left join 
     (select  sum(item_value) as item_value, company_id,
@@ -34,8 +34,7 @@ left join
     group_concat(adi.auction_donation_item_id) as auction_donation_item_ids
      from companies_auction_join  as caj
      left join auction_donation_items  as adi
-              on caj.auction_donation_item_id = 
-                adi.auction_donation_item_id
+              on caj.auction_donation_item_id = adi.auction_donation_item_id
         where school_year = '2005-2006' 
         and adi.date_received > '2000-01-01'
         and adi.thank_you_id is null
@@ -49,8 +48,7 @@ left join
     group_concat(ikd.in_kind_donation_id) as in_kind_donation_ids
      from companies_in_kind_join as cikj
      left join in_kind_donations as ikd
-              on cikj.in_kind_donation_id = 
-                ikd.in_kind_donation_id
+              on cikj.in_kind_donation_id = ikd.in_kind_donation_id
         where school_year = '2005-2006'
         and ikd.date_received > '2000-01-01'
         and ikd.thank_you_id is null
@@ -62,12 +60,22 @@ left join
         group_concat(income.income_id) as income_ids
      from companies_income_join as cinj
      left join income 
-              on cinj.income_id = 
-                income.income_id
+              on cinj.income_id = income.income_id
         where school_year = '2005-2006'  
         and income.thank_you_id is null
         group by cinj.company_id) 
     as inc
+        on inc.company_id = companies.company_id
+left join 
+    (select group_concat(concat('one ', ad_size_description, 
+            ' ad valued at $', ad_price)) as ad_values, 
+            company_id
+     from ads
+     left join ad_sizes 
+              on ad_sizes.ad_size_id = ads.ad_size_id
+        where ads.school_year = '2005-2006'  
+        group by ads.company_id) 
+    as ads_received
         on inc.company_id = companies.company_id
 group by companies.company_id
 having Total > 0
@@ -92,7 +100,8 @@ concat_ws("\n"
 ,concat_ws(" ", concat(leads.city, ", ", leads.state), leads.zip, 
     if(leads.country != "USA", leads.country, ""))) as address_label,
 concat_ws(',', inc.income_ids, tic.income_ids) as income_ids,
-"" as auction_donation_item_ids, "" as in_kind_donation_ids
+"" as auction_donation_item_ids, "" as in_kind_donation_ids,
+"" as value_received
 from leads
 left join 
     (select lead_id, sum(payment_amount) as payment_amount,
