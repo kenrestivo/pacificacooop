@@ -27,8 +27,8 @@ concat_ws("\n"
 inc.income_ids, auct.auction_donation_item_ids, iks.in_kind_donation_ids,
 concat_ws('\n', ads_received.ad_values,
     concat(tic.attended_count, ' ticket', if(tic.attended_count > 1, 's', ''),
-        ' valued at $', tic.attended_count * 30)) as value_received,
-coalesce(tic.attended_count * 30,0) + coalesce(ads_received.ad_total,0) 
+        ' valued at $', tic.attended_count * @ticket_price)) as value_received,
+coalesce(tic.attended_count * @ticket_price,0) + coalesce(ads_received.ad_total,0) 
     as Total_Received
 from companies
 left join 
@@ -39,7 +39,7 @@ left join
      from companies_auction_join  as caj
      left join auction_donation_items  as adi
               on caj.auction_donation_item_id = adi.auction_donation_item_id
-        where school_year = '2005-2006' 
+        where school_year = @school_year 
         and adi.date_received > '2000-01-01'
         and adi.thank_you_id is null
         group by caj.company_id) 
@@ -53,7 +53,7 @@ left join
      from companies_in_kind_join as cikj
      left join in_kind_donations as ikd
               on cikj.in_kind_donation_id = ikd.in_kind_donation_id
-        where school_year = '2005-2006'
+        where school_year = @school_year
         and ikd.date_received > '2000-01-01'
         and ikd.thank_you_id is null
         group by cikj.company_id) 
@@ -65,7 +65,7 @@ left join
      from companies_income_join as cinj
      left join income 
               on cinj.income_id = income.income_id
-        where school_year = '2005-2006'  
+        where school_year = @school_year  
         and income.thank_you_id is null
         group by cinj.company_id) 
     as inc
@@ -77,7 +77,7 @@ left join
      from ads
      left join ad_sizes 
               on ad_sizes.ad_size_id = ads.ad_size_id
-        where ads.school_year = '2005-2006'  
+        where ads.school_year = @school_year  
         group by ads.company_id) 
     as ads_received
         on inc.company_id = companies.company_id
@@ -88,11 +88,11 @@ left join
      left join 
         (select count(springfest_attendee_id) as attended_count, ticket_id
             from springfest_attendees
-            where springfest_attendees.school_year = '2005-2006' 
+            where springfest_attendees.school_year = @school_year 
             and springfest_attendees.attended = 'Yes'
             group by ticket_id) as attended
         on tickets.ticket_id = attended.ticket_id
-    where tickets.school_year = '2005-2006' 
+    where tickets.school_year = @school_year 
     group by tickets.company_id) as tic 
         on tic.company_id = companies.company_id
 group by companies.company_id
@@ -121,8 +121,8 @@ concat_ws("\n"
 concat_ws(',', inc.income_ids, tic.income_ids) as income_ids,
 "" as auction_donation_item_ids, "" as in_kind_donation_ids,
 concat(tic.attended_count, ' ticket', if(tic.attended_count > 1, 's', ''),
-        ' valued at $', tic.attended_count * 30) as value_received,
-sum(tic.attended_count * 30) as Total_Received
+        ' valued at $', tic.attended_count * @ticket_price) as value_received,
+sum(tic.attended_count * @ticket_price) as Total_Received
 from leads
 left join 
     (select lead_id, sum(payment_amount) as payment_amount,
@@ -131,7 +131,7 @@ left join
      left join income 
               on linj.income_id = 
                 income.income_id
-        where income.school_year = '2005-2006' 
+        where income.school_year = @school_year 
         and income.thank_you_id is null
         group by linj.lead_id) 
     as inc
@@ -146,12 +146,12 @@ left join
      left join 
         (select count(springfest_attendee_id) as attended_count, ticket_id
             from springfest_attendees
-            where springfest_attendees.school_year = '2005-2006' 
+            where springfest_attendees.school_year = @school_year 
             and springfest_attendees.attended = 'Yes'
             group by ticket_id) as attended
         on tickets.ticket_id = attended.ticket_id
-    where income.school_year = '2005-2006'  
-        and tickets.school_year = '2005-2006'
+    where income.school_year = @school_year  
+        and tickets.school_year = @school_year
         and income.thank_you_id is null
     group by tickets.lead_id) as tic 
         on tic.lead_id = leads.lead_id
