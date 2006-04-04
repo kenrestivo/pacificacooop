@@ -1,7 +1,8 @@
 -- $Id$
 --  massive thankyou needed report
 
-select concat_ws(' - ', company_name, concat_ws(' ', first_name, last_name)) 
+select concat_ws(' - ', company_name, 
+            concat_ws(' ', companies.first_name, companies.last_name)) 
     as Company, 
         companies.company_id as id, 'company_id' as id_name,
         coalesce(sum(inc.payment_amount),0) +
@@ -29,13 +30,16 @@ concat_ws('\n', ads_received.ad_values,
     concat(tic.attended_count, ' ticket', if(tic.attended_count > 1, 's', ''),
         ' ', @ticket_text, ' $', tic.attended_count * @ticket_price)) 
         as value_received,
-coalesce(tic.attended_count * @ticket_price,0) + coalesce(ads_received.ad_total,0) 
-    as Total_Received
+coalesce(tic.attended_count * @ticket_price,0) + 
+    coalesce(ads_received.ad_total,0) 
+    as Total_Received,
+concat_ws(" ", working_parents.first_name, working_parents.last_name) 
+    as salesperson
 from companies
 left join 
     (select  sum(item_value) as item_value, company_id,
     group_concat(adi.short_description, '\n') 
-        as auction_items,
+        as auction_items, caj.family_id,
     group_concat(adi.auction_donation_item_id) as auction_donation_item_ids
      from companies_auction_join  as caj
      left join auction_donation_items  as adi
@@ -49,7 +53,7 @@ left join
 left join 
     (select  sum(item_value) as item_value, company_id,
     group_concat(ikd.item_description, '\n') 
-        as in_kind_items,
+        as in_kind_items, cikj.family_id,
     group_concat(ikd.in_kind_donation_id) as in_kind_donation_ids
      from companies_in_kind_join as cikj
      left join in_kind_donations as ikd
@@ -62,7 +66,7 @@ left join
         on iks.company_id = companies.company_id
 left join 
     (select  sum(payment_amount) as payment_amount, company_id,
-        group_concat(income.income_id) as income_ids
+        group_concat(income.income_id) as income_ids, cinj.family_id
      from companies_income_join as cinj
      left join income 
               on cinj.income_id = income.income_id
@@ -96,6 +100,13 @@ left join
     where tickets.school_year = @school_year 
     group by tickets.company_id) as tic 
         on tic.company_id = companies.company_id
+left join 
+    (select parents.* from parents 
+            left join workers on parents.parent_id = workers.parent_id
+            where workers.parent_id is not null
+            group by parents.family_id) as working_parents
+        on working_parents.family_id = 
+        coalesce(inc.family_id, auct.family_id, iks.family_id)
 group by companies.company_id
 having Total > 0
 UNION DISTINCT
@@ -124,7 +135,8 @@ concat_ws(',', inc.income_ids, tic.income_ids) as income_ids,
 concat(tic.attended_count, ' ticket', if(tic.attended_count > 1, 's', ''),
         ' ', @ticket_text, ' $', tic.attended_count * @ticket_price) 
             as value_received,
-sum(tic.attended_count * @ticket_price) as Total_Received
+sum(tic.attended_count * @ticket_price) as Total_Received,
+"" as salesperson
 from leads
 left join 
     (select lead_id, sum(payment_amount) as payment_amount,
