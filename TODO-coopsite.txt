@@ -20,8 +20,6 @@ y the bbbbbbow thueacoop web database
 4 hours PHP
 bring thank yous back to life
 	blow off the ThankYou class for my to-send ones too!
-		umm, the cash numbers are crazy and make no sense in thankneeded. sum?
-			but only in solicit.
 		ok, the formatting now!!
 			try with simpletable
 				figure out what to do with that detailslink
@@ -46,8 +44,6 @@ bring thank yous back to life
 
 
 			
-
-		
 ??PHP/TAL
 summary of who purchased each package REPORT
 	do NOT get stuck at the sub-query tal loops.
@@ -7609,3 +7605,6 @@ BUGS
 		use to decide HAVING				calculate TOTAL value received too:
 		grab the guess-parent stuff from the other query
 				look at how i did am/pm roster, frinstance
+		umm, the cash numbers are crazy and make no sense in thankneeded. sum?
+			but only in solicit. cool: sums were redundant
+		yank the edit stuff

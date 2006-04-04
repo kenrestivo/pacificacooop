@@ -55,7 +55,6 @@ fb_forceNoChooser = 0/1 a HACK! for summaries which share one schoolyearchooser
 fb_forceCustomSelect = 0/1 A NASTY HACK! because my searchselect doesn't go deep
     into links. some tables are ALL links, i need to force them to be popups
 
-
 callbacks...  also in the DataObjects (in objects directory):
 ----------------
 fb_linkConstraints() = called by CoopObject::linkconstraints()
@@ -73,6 +72,9 @@ beforeForm() = this is called by dispatcher, BEFORE the form is rendered
 postGenerateForm() compatibility with FB. called after the $form->build()
 preGenerateForm() compatibility with FB. called before the $form->build()
 afterInsert() = called, um, after insert. things that need to know the ID/key
+recordButtons(&$CoopView, $paragraph, $wrap) = 
+    a callback to generate custom recordbuttons.  
+    call CoopView::innerRecordButtons() to get the defaults
 
 
 

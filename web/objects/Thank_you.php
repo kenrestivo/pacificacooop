@@ -78,10 +78,10 @@ class Thank_you extends CoopDBDO
 
 
 // silly utility function this is really format-specific
-function _detailsLink(&$co, $current)
+function recordButtons(&$co, $par, $wrap)
         {
             $res = "";
-            $tmptab = $current['id_name'] == 'company_id' ?
+            $tmptab = $co->obj->id_name == 'company_id' ?
                 'companies': 'leads';
 
 
@@ -92,9 +92,10 @@ function _detailsLink(&$co, $current)
                       'base' => 'generic.php',
                       'inside' => array('table' => $tmptab,
                                         $tmptab . '-' . 
-                                        $current['id_name'] => $current['id'],
+                                        $co->obj->id_name => $co->obj->id,
                                         'action' => 'details',
-                                        'push' => 'thank_you')));
+                                        'push' => 'thank_you'),
+                      'par' => $par));
 
 
             $res .= $co->page->selfURL(
@@ -104,10 +105,10 @@ function _detailsLink(&$co, $current)
 						  'inside' => array(
                               'thing' => 'letters',
                               'set' => 'one',
-                              'pk' => $current['id_name'],
-                              'id' => $current['id']),
+                              'pk' => $co->obj->id_name,
+                              'id' => $co->obj->id),
 						  'popup' => true,
-						  'par' => false)) ;
+						  'par' => $par)) ;
 
 
             return $res;
@@ -158,6 +159,9 @@ function &findThanksNeeded(&$co)
                                           'recipient', 'items', 
                                           'value_received',
                                           'salesperson');
+
+            $co2->obj->fb_recordActions = array();// clear them out!
+            
             return $co2;
         }
 

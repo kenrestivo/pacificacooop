@@ -33,7 +33,7 @@ class coopView extends CoopObject
 
 	var $legacyCallbacks;			// hack for old callbacks
 	var $legacyPerms; 			// cache of OLD-style permissions ($p)
-	var $extraRecordButtons = array();  // for non-standard actions, i.e. thankyous
+
     var $fullText;             // NASTY hack to avoid truncating text on details
     var $recordActions = array('edit'=> ACCESS_EDIT, 
                                'confirmdelete' => ACCESS_DELETE, 
@@ -587,6 +587,25 @@ class coopView extends CoopObject
 								 "");
 			}
 
+            //override innerRecordButtons, if required
+            if(is_callable(array(&$this->obj, 'recordButtons'))){
+                $res .= $this->obj->recordButtons(&$this, $par, $wrap);
+            } else {
+                $res .= $this->innerRecordButtons($par, $wrap);
+            }
+
+            
+            if($res && $wrap && is_array($wrap)){
+                return $wrap[0] . $res . $wrap[1];
+            }
+            return $res;
+		}
+
+
+function innerRecordButtons($par, $wrap)
+        {
+            $res = "";
+
             //checking here for a WHOLE ROW, familyid been inserted toarray
             $permitted = $this->isPermittedField();
 
@@ -616,15 +635,8 @@ class coopView extends CoopObject
                     $par || $res .= '&nbsp;';
                 }
 			}
-
-            //XXX what about extrarecordbuttons??!
-
-            if($res && $wrap && is_array($wrap)){
-                return $wrap[0] . $res . $wrap[1];
-            }
             return $res;
-		}
-
+        }
 
 
     // TODO: showview is a legacy. when i whack legacy, remove showview
