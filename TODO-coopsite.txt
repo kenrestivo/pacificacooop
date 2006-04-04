@@ -1,4 +1,4 @@
-coop web database
+y the bbbbbbow thueacoop web database
 
  MY agenda! dammit, mine! for a change....
  	import the 20-year roster (20yearroster.txt)
@@ -15,40 +15,31 @@ coop web database
 	labels/export -- python cgi on nfsn, formatting, etc.
 	springfest microsite (microsite.txt)
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
-	
-	
-							
-??PHP
+
+									
+4 hours PHP
 bring thank yous back to life
-	bring view existing thankyous back to life
-		format for display in browser
-		blow off thankyou class? and just have fb_displayCallbacks?
-			do some of them in sql too:
-			DATE_FORMAT(thank_you.date_sent,"%W, %M %e, %Y") as date_sent_fmt,
-		jeebus, how to format for PRINTING? remember, i need them all back!
-			for now, tump into thankyouclass? NO that's stupid.
 	blow off the ThankYou class for my to-send ones too!
-		have to store group_concats of inkindid, auctionid, incomeid
-			a new savethankyou() function creates a new note,
+		ok, the formatting now!!
+			i can't just dump this in can i?
+			for web maybe, but not for letter, alas
+			TRY it
+		a new savethankyou() function creates a new note,
 				then explodes() those id's and update() them with thankyouid
 			ooh, could do this in an insert()/update() command!
-		the em and strong are just useless. why? how do i do italic?
-		there is no em or strong in pdml. asshole.
-		i have to add them
+		do i want to thank everyone? even those who received total >= donation?
+	view existing thankyous print button!
+		grab the value_received stuff from the to_send
+			 i need to go get this FOR PREVIOUSLY-SENT THANKYOUS too!
+			 might be difficult: first i have to recover the company/lead id
+			 	naw, it's just a fairly huge subselect.
+		add the extra_buttons
 	actions:
 		mark them as sent!
 			target is NOT printpopup, it's self, a massive insert.
+				an override of insert, basically.
 			no, it's an ajax call. could be just one, maybe
 			also a "unsend" link which basically deletes
-	performance issues! try to combine some queries, subselects
-	export the labels (exportxl.php, basically)
-	note the link search  for thankyounote in income, etc, is pretty useless
-		yank that, perhaps? or a really hairy linkconstraints?
-	have a look at what happens when you "detail" into an old thankyounote!
-		why would that be a problem at all, at all?
-	alpha pager, goddammit! takes too long to load this damned thing
-		it'd have to be REALLY custom! can't guess alpha letters
-			without a gnarly join
 
 
 			
@@ -121,6 +112,11 @@ enter last year's goddamned attendees!
 
 	
 BUGS
+	really, make the bulletin board linkconstraints sort by audit,
+		see my display code
+	click view not on homepage dude!
+	something is whacking the fucking leads-based donors from sponsorships!!
+		STOP THAT!
 	springfest attendees, edit: schoolyear is present but NOT SHOWING UP
 		it's just not getting added. why? where else does this bug show up?
 		tickets too: can't edit some tickets. FUCKED UP.
@@ -707,6 +703,29 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+
+12 hours PHP/PDML
+thank you note formatting fixen
+		the em and strong are just useless. why? how do i do italic?
+		there is no em or strong in pdml. asshole.
+			i have to add them
+	note the link search  for thankyounote in income, etc, is pretty useless
+		yank that, perhaps? or a really hairy linkconstraints?
+	have a look at what happens when you "detail" into an old thankyounote!
+		why would that be a problem at all, at all?
+	alpha pager, goddammit! takes too long to load this damned thing
+		it'd have to be REALLY custom! can't guess alpha letters
+			without a gnarly join
+	export the thankyounote labels (exportxl.php, basically)
+	i should also calculate any auction purchase > estimated value!
+		it'll never happen in the wild, but i shoudl be ready
+
+??PHP thankyou
+		the value_received. s/b easy subquerys
+			can i whack the ticket people somehow?
+				i.e. those who only bought tickets?
+
+			
 SQL/PHP
 move these massive thankyou queries to a separate SQL file
 	and "include" it by fopening it.
@@ -3711,7 +3730,9 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-		do it the sucker way: use thankyou->recoverexisting()?
+			only thank those where total > total received
+
+					do it the sucker way: use thankyou->recoverexisting()?
 		gah! it dies when doing the whole list. why?
 		well, i have to fix the performance problems
 			could be a massive change to ThankYou class!
@@ -7555,3 +7576,22 @@ BUGS
 			list of all auction, description and amount concat_ws('\n'?)
 			list of all in-kind, description and amount concat_ws('\n'?)
 		build an html table and wrap it in choosers, etc from simpletable()
+				the group_concat stuff
+				the "dear" concat'ing
+				the address and name concats (separately? no, together)
+		format for display in browser
+			easy add to existing:
+				put the payment into the concat_ws for items!
+		blow off thankyou class? and just have fb_displayCallbacks?
+			do some of them in sql too:
+		find some doubles, make sure i got it right!
+			income looks good!
+		have to store group_concats of inkindid, auctionid, incomeid
+		put the cash into the list, somehow
+	performance issues! try to combine some queries, subselects
+			ads and paddles, basically. nuthin' fancy
+				heh, paddles are already there, at least for companies
+				i just need total value, really
+			i also need TICKET join for companies as well
+		use to decide HAVING				calculate TOTAL value received too:
+		grab the guess-parent stuff from the other query
