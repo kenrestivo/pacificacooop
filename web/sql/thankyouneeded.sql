@@ -27,7 +27,9 @@ concat_ws("\n"
 inc.income_ids, auct.auction_donation_item_ids, iks.in_kind_donation_ids,
 concat_ws('\n', ads_received.ad_values,
     concat(tic.attended_count, ' ticket', if(tic.attended_count > 1, 's', ''),
-        ' valued at $', tic.attended_count * 30)) as value_received
+        ' valued at $', tic.attended_count * 30)) as value_received,
+coalesce(tic.attended_count * 30,0) + coalesce(ads_received.ad_total,0) 
+    as Total_Received
 from companies
 left join 
     (select  sum(item_value) as item_value, company_id,
@@ -71,7 +73,7 @@ left join
 left join 
     (select group_concat(concat('one ', ad_size_description, 
             ' ad valued at $', ad_price)) as ad_values, 
-            company_id
+            company_id, sum(ad_price) as ad_total
      from ads
      left join ad_sizes 
               on ad_sizes.ad_size_id = ads.ad_size_id
@@ -119,7 +121,8 @@ concat_ws("\n"
 concat_ws(',', inc.income_ids, tic.income_ids) as income_ids,
 "" as auction_donation_item_ids, "" as in_kind_donation_ids,
 concat(tic.attended_count, ' ticket', if(tic.attended_count > 1, 's', ''),
-        ' valued at $', tic.attended_count * 30) as value_received
+        ' valued at $', tic.attended_count * 30) as value_received,
+sum(tic.attended_count * 30) as Total_Received
 from leads
 left join 
     (select lead_id, sum(payment_amount) as payment_amount,
