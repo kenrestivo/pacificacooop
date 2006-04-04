@@ -156,14 +156,19 @@ function thanksNeededPickList(&$co)
             $co->actionnames['delete'] = 'Un-Send';
 
 
-            //before i go to crazy here, let's fix any orphans
-            $ty = new ThankYou(&$co->page);
-            $ty->repairOrphaned();
+//             //before i go to crazy here, let's fix any orphans
+//             $ty = new ThankYou(&$co->page);
+//             $ty->repairOrphaned();
 
-            //TODO: move this massive query to an include file
-            // a .sql file so it looks reasonable in emacs
 
-            $co->obj->query('');
+
+            
+            $co->obj->query(
+                fopen(implode('/', 
+                              array(COOP_ABSOLUTE_FILE_PATH, 'sql', 
+                                    'recover_thank_yous.sql'))));
+
+
 
             $this->fb_fieldLabels = array_merge(
                 $this->fb_fieldLabels,
