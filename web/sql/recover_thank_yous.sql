@@ -14,7 +14,7 @@ concat_ws("\n", coalesce(leads.company, companies.company_name),
         coalesce(leads.last_name, companies.last_name))) as recipient,
 concat_ws(" ", working_parents.first_name, working_parents.last_name) 
     as salesperson,
-concat_ws("\n", concat("$", income_summary.total_payment, " cash"),
+concat_ws("\n", concat("$", income_summary.total_payment, @cash_text),
             auction_summary.short_descriptions, 
             in_kind_summary.item_descriptions) as items
 from thank_you
@@ -67,10 +67,11 @@ left join (select parents.* from parents
             group by parents.family_id) as working_parents
         on working_parents.family_id = 
         coalesce(income_summary.family_id, 
-                auction_summary.family_id)
-where (auction_summary.school_year = "2004-2005" 
-    or in_kind_summary.school_year = "2004-2005" 
-    or income_summary.school_year = "2004-2005") 
+                auction_summary.family_id, 
+                in_kind_summary.family_id)
+where (auction_summary.school_year = @school_year 
+    or in_kind_summary.school_year = @school_year 
+    or income_summary.school_year = @school_year) 
 order by if(coalesce(companies.company_name, leads.company) is not null
             and coalesce(companies.company_name, leads.company) > "", 
             coalesce(companies.company_name, leads.company), 
