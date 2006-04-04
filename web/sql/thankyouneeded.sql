@@ -25,7 +25,9 @@ concat_ws("\n"
 ,concat_ws(" ", concat(companies.city, ", ", companies.state), companies.zip, 
     if(companies.country != "USA", companies.country, ""))) as address_label,
 inc.income_ids, auct.auction_donation_item_ids, iks.in_kind_donation_ids,
-concat_ws('\n', ads_received.ad_values) as value_received
+concat_ws('\n', ads_received.ad_values,
+    concat(tic.attended_count, ' ticket', if(tic.attended_count > 1, 's', ''),
+        ' valued at $', tic.attended_count * 30)) as value_received
 from companies
 left join 
     (select  sum(item_value) as item_value, company_id,
@@ -77,6 +79,20 @@ left join
         group by ads.company_id) 
     as ads_received
         on inc.company_id = companies.company_id
+left join 
+    (select company_id,
+        sum(attended.attended_count) as attended_count
+     from tickets
+     left join 
+        (select count(springfest_attendee_id) as attended_count, ticket_id
+            from springfest_attendees
+            where springfest_attendees.school_year = '2005-2006' 
+            and springfest_attendees.attended = 'Yes'
+            group by ticket_id) as attended
+        on tickets.ticket_id = attended.ticket_id
+    where tickets.school_year = '2005-2006' 
+    group by tickets.company_id) as tic 
+        on tic.company_id = companies.company_id
 group by companies.company_id
 having Total > 0
 UNION DISTINCT
@@ -131,7 +147,8 @@ left join
             and springfest_attendees.attended = 'Yes'
             group by ticket_id) as attended
         on tickets.ticket_id = attended.ticket_id
-    where income.school_year = '2005-2006' 
+    where income.school_year = '2005-2006'  
+        and tickets.school_year = '2005-2006'
         and income.thank_you_id is null
     group by tickets.lead_id) as tic 
         on tic.lead_id = leads.lead_id
