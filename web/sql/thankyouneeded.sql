@@ -86,8 +86,9 @@ select concat_ws(' - ', concat_ws(' ', first_name, last_name), company )
         coalesce(sum(tic.payment_amount),0) + 
                 coalesce(sum(inc.payment_amount),0) as Total,
         if(coalesce(sum(inc.payment_amount),0) > 0,
-            concat('$', coalesce(sum(inc.payment_amount),0), ' cash'), null) as items,
-concat_ws(' ', if(leads.salutation is not null and leads.salutation > "",
+            concat('$', coalesce(sum(inc.payment_amount),0), ' cash'), 
+                null) as items,
+    concat_ws(' ', if(leads.salutation is not null and leads.salutation > "",
             leads.salutation, leads.first_name), 
             leads.last_name) as dear,
 concat_ws("\n"
@@ -101,7 +102,8 @@ concat_ws("\n"
     if(leads.country != "USA", leads.country, ""))) as address_label,
 concat_ws(',', inc.income_ids, tic.income_ids) as income_ids,
 "" as auction_donation_item_ids, "" as in_kind_donation_ids,
-"" as value_received
+concat(tic.attended_count, ' ticket', if(tic.attended_count > 1, 's', ''),
+        ' valued at $', tic.attended_count * 30) as value_received
 from leads
 left join 
     (select lead_id, sum(payment_amount) as payment_amount,
@@ -117,15 +119,21 @@ left join
         on leads.lead_id = inc.lead_id
 left join 
     (select lead_id, sum(payment_amount) as payment_amount,
-    group_concat(income.income_id) as income_ids
+        group_concat(income.income_id) as income_ids,
+        sum(attended.attended_count) as attended_count
      from tickets
      left join income 
-              on tickets.income_id = 
-                income.income_id
-        where income.school_year = '2005-2006' 
+              on tickets.income_id = income.income_id
+     left join 
+        (select count(springfest_attendee_id) as attended_count, ticket_id
+            from springfest_attendees
+            where springfest_attendees.school_year = '2005-2006' 
+            and springfest_attendees.attended = 'Yes'
+            group by ticket_id) as attended
+        on tickets.ticket_id = attended.ticket_id
+    where income.school_year = '2005-2006' 
         and income.thank_you_id is null
-        group by tickets.lead_id) 
-    as tic 
+    group by tickets.lead_id) as tic 
         on tic.lead_id = leads.lead_id
 group by leads.lead_id
 having Total > 0
