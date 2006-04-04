@@ -159,16 +159,10 @@ function thanksNeededPickList(&$co)
 //             //before i go to crazy here, let's fix any orphans
 //             $ty = new ThankYou(&$co->page);
 //             $ty->repairOrphaned();
-
-
-
             
-            $co->obj->query(
-                fopen(implode('/', 
-                              array(COOP_ABSOLUTE_FILE_PATH, 'sql', 
-                                    'recover_thank_yous.sql'))));
+            $this->fetchTemplate(&$co);
 
-
+            $co->queryFromFile('recover_thank_yous.sql');
 
             $this->fb_fieldLabels = array_merge(
                 $this->fb_fieldLabels,
@@ -199,17 +193,18 @@ function fetchTemplate(&$co)
 
             $co->obj->query(
                 sprintf(
-                    'set @school_year := "%s";
-set @ticket_price := %d;
-set @ad_text := "%s";
-set @ticket_text := "%s";
-set @cash_text := "%s";
+                    'set @school_year := "%s",
+@ticket_price := %d,
+@ad_text := "%s",
+@ticket_text := "%s",
+@cash_text := "%s"
 ',
+                    $co->getChosenSchoolYear(),
                     COOP_SPRINGFEST_TICKET_PRICE, //XXX NOT GLOBAL!
                     $this->_thank_you_template->obj->ad,
                     $this->_thank_you_template->obj->ticket,
-                    $this->_thank_you_template->obj->cash,
-                    $co->getChosenSchoolYear()));
+                    $this->_thank_you_template->obj->cash
+                    ));
 
         }
 

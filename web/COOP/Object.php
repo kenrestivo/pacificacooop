@@ -101,9 +101,9 @@ group by user_id,table_name,field_name";
  			$this->obj = CoopDBDO::factory($this->table); // & instead?
   			if (PEAR::isError($this->obj)){
 				$this->page->kensPEARErrorHandler(&$this->obj);
-				 user_error("coopObject::constructor: " . 
-							$this->obj->getMessage(),
-							E_USER_ERROR);
+                user_error("coopObject::constructor: " . 
+                           $this->obj->getMessage(),
+                           E_USER_ERROR);
 			}
 
             $this->obj->CoopObject =& $this;  //used by funcs in dbdo
@@ -132,7 +132,7 @@ group by user_id,table_name,field_name";
 			$keys = $this->obj->keys();
 			$this->pk = $keys[0];
 			return $this->pk;
-	}
+        }
 
 	// different from the object's getlinks! this one gets my backlinks
 	// it's totally different, so i can ignore problems with DBDO::getLinks
@@ -204,22 +204,22 @@ group by user_id,table_name,field_name";
 			}
 
 			// don't bother with blanks either
-			if(!$this->obj->$key){
-				return false;
-			}
+        if(!$this->obj->$key){
+            return false;
+        }
 
 
-            //XXX ok. this is stupid. i'm instantiating the sub and getting
-            // what i should be doing is using the DBDO's getLink()
-            // but i *can't* do that because i need methods like concatlinkfield
-            // the right way to do this would be to add my linkfield methods
-            // to the CoopDBDO subclass of DBDO. it is just plain wrong now.
-            list($subtable, $subkey) = explode(':', $this->forwardLinks[$key]);
-			$sub =& new CoopView(&$this->page, $subtable, &$this);
-            $sub->obj->get($subkey, $this->obj->$key);
+        //XXX ok. this is stupid. i'm instantiating the sub and getting
+                                             // what i should be doing is using the DBDO's getLink()
+                                 // but i *can't* do that because i need methods like concatlinkfield
+                                             // the right way to do this would be to add my linkfield methods
+                                             // to the CoopDBDO subclass of DBDO. it is just plain wrong now.
+                                             list($subtable, $subkey) = explode(':', $this->forwardLinks[$key]);
+                                             $sub =& new CoopView(&$this->page, $subtable, &$this);
+                                             $sub->obj->get($subkey, $this->obj->$key);
             
 
-			return $sub;
+                                             return $sub;
 		}
 
 
@@ -227,7 +227,7 @@ group by user_id,table_name,field_name";
     // to get my coopobject objects. duh.
     // returns either an object reference OR a string, or nothing
     // if it's a linkfield then you can do interesting things with the object
-	function concatLinkFields($separator = false)
+        function concatLinkFields($separator = false)
 		{
 			$ldfs = $this->obj->fb_linkDisplayFields;
 			if(!$ldfs){
@@ -240,15 +240,15 @@ group by user_id,table_name,field_name";
 			$val = false; 		// gotta reset it here.
 			foreach($ldfs as $linkfield){
 				// trying to YAGNI here. i don't need 2-level links yet
-				// so, i'm not coding that recursion in here now. sorry charlie.
+        // so, i'm not coding that recursion in here now. sorry charlie.
 				if($this->obj->$linkfield){
 					// this is where i'd recursively czech these.
-					// also, building an array and then imploding it
-					// might be more readable
-                    // TODO: make sure i don't show the - if nothing there
+                // also, building an array and then imploding it
+                // might be more readable
+                // TODO: make sure i don't show the - if nothing there
                     // ALSO TODO: do the formatting i.e. coopview toArray!!
                     $sub = $this->checkLinkField($linkfield, 
-                                          $this->obj->$linkfield);
+                                                 $this->obj->$linkfield);
 					$val .= sprintf(
                         "%s%s", 
                         $val ? " $separator " : "", 
@@ -296,40 +296,40 @@ group by user_id,table_name,field_name";
 	function saveAudit($insert = true)
 		{
 			// don't save audits for joins dude
-			if(ereg("_join", $this->table)){
-				return;
-			}
+                if(ereg("_join", $this->table)){
+                    return;
+                }
 			
-			// the audit trail dude
-			// TODO copy/paste this later into my framework
-			$aud =& new CoopObject(&$this->page, 'audit_trail', &$top);
-			$aud->obj->table_name = $this->table;
+                // the audit trail dude
+                // TODO copy/paste this later into my framework
+                $aud =& new CoopObject(&$this->page, 'audit_trail', &$top);
+                $aud->obj->table_name = $this->table;
 
 
-            // NOTE. the coopform insert palready populated $this->id
-            $aud->obj->index_id = $this->id;
+                // NOTE. the coopform insert palready populated $this->id
+                $aud->obj->index_id = $this->id;
 
 			
-			// one more sanity czech
-			if(!$aud->obj->index_id){
-				PEAR::raiseError('NULL audit trail attempt', 666);
-			}
+                // one more sanity czech
+                if(!$aud->obj->index_id){
+                    PEAR::raiseError('NULL audit trail attempt', 666);
+                }
 
-            // serialise and save the details!
-            // NOTE i have to un/serialize here manually,
-            // unlike in dealing with $_SESSION where php does it for me
-            if(count($this->changes)){
-                $aud->obj->details = serialize($this->changes);
-            }
+                // serialise and save the details!
+                // NOTE i have to un/serialize here manually,
+                // unlike in dealing with $_SESSION where php does it for me
+                if(count($this->changes)){
+                    $aud->obj->details = serialize($this->changes);
+                }
 
-            $aud->obj->updated = date('Y-m-d H:i:s');
+                $aud->obj->updated = date('Y-m-d H:i:s');
 
-			$aud->obj->audit_user_id = $this->page->auth['uid'];
+                $aud->obj->audit_user_id = $this->page->auth['uid'];
 
-            //$aud->debugWrap(2);
-			$aud->obj->insert();
+                //$aud->debugWrap(2);
+                $aud->obj->insert();
             
-            $this->triggerNotices($this->lastInsertID());
+                $this->triggerNotices($this->lastInsertID());
 
 		}
     
@@ -337,8 +337,8 @@ group by user_id,table_name,field_name";
     //forceuser means assume the record belongs to this user even if it does not (useful in menus, or where you want a best case situation)
     // forceyear is to assume that the record is this year's-- best case, i.e. in menus
 // when checking group perms 
-	function isPermittedField($key = NULL, $forceuser = false, 
-                              $forceyear = false)
+function isPermittedField($key = NULL, $forceuser = false, 
+                          $forceyear = false)
 		{
 
 			// if it's a key, and we don't show them, then no
@@ -347,82 +347,82 @@ group by user_id,table_name,field_name";
 				return false;
 			}
 			//we don't show if not in fieldstorender
-			//NOTE: it could not be in the db itself,
-			//but if it's in fieldstorender, then we show it anyway
-			if(!empty($this->obj->fb_fieldsToRender) && $key &&
-			   !in_array($key, $this->obj->fb_fieldsToRender))
-            {
-				$this->page->printDebug(
-                    "ispermitted($this->table : $key) NOT in fieldstorender", 
-                    4);
-				return false;
-			}
+    //NOTE: it could not be in the db itself,
+    //but if it's in fieldstorender, then we show it anyway
+                                                                      if(!empty($this->obj->fb_fieldsToRender) && $key &&
+                                                                         !in_array($key, $this->obj->fb_fieldsToRender))
+                                                                      {
+                                                                          $this->page->printDebug(
+                                                                              "ispermitted($this->table : $key) NOT in fieldstorender", 
+                                                                              4);
+                                                                          return false;
+                                                                      }
             
 
-            if(!empty($this->obj->fb_fieldsToUnRender)  &&
-			   in_array($key, $this->obj->fb_fieldsToUnRender))
-            {
-            	$this->page->printDebug(
-                    "ispermitted($this->table : $key) is in UNrender, so blocking", 
-                    4);
-			    return false;  // i am very, very sorry for this
-            }
+                                                                      if(!empty($this->obj->fb_fieldsToUnRender)  &&
+                                                                         in_array($key, $this->obj->fb_fieldsToUnRender))
+                                                                      {
+                                                                          $this->page->printDebug(
+                                                                              "ispermitted($this->table : $key) is in UNrender, so blocking", 
+                                                                              4);
+                                                                          return false;  // i am very, very sorry for this
+                                                                      }
 
 
-            // i'm looking in perms calc. choose what to use now.
-            // remember! the db needs to give separate perms for fields/tables
-            $usethese = isset($this->perms[$key]) ? 
-                $this->perms[$key] : $this->perms[NULL];
+                                                                      // i'm looking in perms calc. choose what to use now.
+    // remember! the db needs to give separate perms for fields/tables
+    $usethese = isset($this->perms[$key]) ? 
+    $this->perms[$key] : $this->perms[NULL];
 
 
 
-            if($key != 'family_id' && 
-               ($forceuser ||
-                (!empty($this->obj->family_id) && 
-                 $this->page->userStruct['family_id'] == $this->obj->family_id)))
-            {
-            	$this->page->printDebug(
-                    "ispermitted($this->table : $key) MINE, using max of group/user", 
-                    4);
-                $res =  max($usethese['user'], 
-                           $usethese['group']);
-            } else {
-                $res = $usethese['group'];
-            }
+    if($key != 'family_id' && 
+       ($forceuser ||
+        (!empty($this->obj->family_id) && 
+         $this->page->userStruct['family_id'] == $this->obj->family_id)))
+    {
+        $this->page->printDebug(
+            "ispermitted($this->table : $key) MINE, using max of group/user", 
+            4);
+        $res =  max($usethese['user'], 
+                    $usethese['group']);
+    } else {
+        $res = $usethese['group'];
+    }
 
-            /// decide if this is ANOTHER year
-            if(!$forceyear &&  
-               (($this->inObject('school_year') &&
-                 $this->page->currentSchoolYear != $this->obj->school_year))
-               || $key == 'school_year')
-            {
+    /// decide if this is ANOTHER year
+    if(!$forceyear &&  
+       (($this->inObject('school_year') &&
+         $this->page->currentSchoolYear != $this->obj->school_year))
+       || $key == 'school_year')
+    {
                 
-            	$this->page->printDebug(
-                    "ispermitted($this->table : $key) {$this->obj->school_year} is NOT {$this->page->currentSchoolYear}, or the key is schoolyear, or forceyear is set $forceyear, so limiting for permcheck", 
-                    4);
-                //PEAR::raiseError('foobar', 111);
-                    //MIN! limit them.
-                $res = min($res, $usethese['year']);
-            }
+        $this->page->printDebug(
+            "ispermitted($this->table : $key) {$this->obj->school_year} is NOT {$this->page->currentSchoolYear}, or the key is schoolyear, or forceyear is set $forceyear, so limiting for permcheck", 
+            4);
+        //PEAR::raiseError('foobar', 111);
+        //MIN! limit them.
+        $res = min($res, $usethese['year']);
+    }
 
-            // finally, if this is a PK, NEVER EVER let anyone edit it
-            if($key == $this->pk && $res > ACCESS_VIEW){
-                $res =  ACCESS_VIEW;
-            }
+    // finally, if this is a PK, NEVER EVER let anyone edit it
+    if($key == $this->pk && $res > ACCESS_VIEW){
+        $res =  ACCESS_VIEW;
+    }
 
 
-            $this->page->printDebug(
-                sprintf('ispermitted(%s : %s%s) RETURNING for pk %d, OBJ famid [%s] , my famid [%d], force user [%s] force year [%s] perms [%s]', 
-                        $this->table, $key,
-                        $key == $this->pk ? ' [forcing view for PK!]' : '',
-                        $this->obj->{$this->pk},
-                        empty($this->obj->family_id) ? 
-                        'NO FAMILY ID IN OBJECT' : $this->obj->family_id, 
-                        $this->page->userStruct['family_id'], 
-                        $forceuser, $forceyear, $res),
-                4);
+    $this->page->printDebug(
+        sprintf('ispermitted(%s : %s%s) RETURNING for pk %d, OBJ famid [%s] , my famid [%d], force user [%s] force year [%s] perms [%s]', 
+                $this->table, $key,
+                $key == $this->pk ? ' [forcing view for PK!]' : '',
+                $this->obj->{$this->pk},
+                empty($this->obj->family_id) ? 
+                'NO FAMILY ID IN OBJECT' : $this->obj->family_id, 
+                $this->page->userStruct['family_id'], 
+                $forceuser, $forceyear, $res),
+        4);
              
-            return $res;
+    return $res;
 
 		}
 
@@ -535,7 +535,7 @@ group by user_id,table_name,field_name";
                 $this->page->printDebug("CoopObject::constrainSchoolYear({$this->table}) final path is $last", 2);
             } else if($this->inObject('school_year')){
                 // use local schoolyear, unless it's not there
-                $last = $this->table;
+                                                                          $last = $this->table;
             }            
             
             //this code ought to be taken out and shot.
@@ -602,23 +602,23 @@ group by user_id,table_name,field_name";
                 // and learn functional programming, then attempt to use
                 // these constructs in a shitty langauge like PHP.
                 // don't try this at home.
-                if(is_array($last)){
-                    $this->obj->whereAdd(
-                        sprintf(
-                            'coalesce(%s) = %d',
-                            implode(',', 
-                                    array_map(
-                                        create_function(
-                                            '$i',
-                                            'return($i . ".family_id");'),
-                                    $last)),
-                        $this->page->userStruct['family_id']));
-                } else {
-                    $this->obj->whereAdd(
-                        sprintf('%sfamily_id = %d',
-                                $last ? $last . '.' : '',
-                                $this->page->userStruct['family_id']));
-                }
+ if(is_array($last)){
+     $this->obj->whereAdd(
+         sprintf(
+             'coalesce(%s) = %d',
+             implode(',', 
+                     array_map(
+                         create_function(
+                             '$i',
+                             'return($i . ".family_id");'),
+                         $last)),
+             $this->page->userStruct['family_id']));
+ } else {
+     $this->obj->whereAdd(
+         sprintf('%sfamily_id = %d',
+                 $last ? $last . '.' : '',
+                 $this->page->userStruct['family_id']));
+ }
             }
             
         }
@@ -657,8 +657,8 @@ group by user_id,table_name,field_name";
 						$clobber) 
 					{
 						$this->page->printDebug(
-							 "$this->table $fbkey being set to $value", 
-							 4);
+                            "$this->table $fbkey being set to $value", 
+                            4);
 						$this->obj->$fbkey = $value;
 					}
 				}
@@ -670,27 +670,27 @@ group by user_id,table_name,field_name";
     function getPerms()
         {
             //it's REALLY annoying to see that shit here.
-            $this->debugWrap(7);
-            $this->obj->query(sprintf($this->permsQuery,
-                                      $this->page->auth['uid'],
-                                      $this->page->auth['uid'],
-                                      $this->page->auth['uid'],
-                                      $this->page->auth['uid'],
-                                      $this->table));
-            $res = $this->obj->getDatabaseResult();
-            while ($row =& $res->fetchRow(DB_FETCHMODE_ASSOC)) {
-                // chasing bthe heisenbug
-               $this->page->confessArray(
-                   $row, "getPERMS({$this->table}) db outfreakage", 5);
-                $this->perms[$row['field_name']] = 
-                    array('user'=>$row['cooked_user'],
-                          'group' =>$row['cooked_group'],
-                          'menu' =>$row['cooked_menu'],
-                          'year' =>$row['cooked_year']);
-            }
+    $this->debugWrap(7);
+    $this->obj->query(sprintf($this->permsQuery,
+                              $this->page->auth['uid'],
+                              $this->page->auth['uid'],
+                              $this->page->auth['uid'],
+                              $this->page->auth['uid'],
+                              $this->table));
+    $res = $this->obj->getDatabaseResult();
+    while ($row =& $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+        // chasing bthe heisenbug
+        $this->page->confessArray(
+            $row, "getPERMS({$this->table}) db outfreakage", 5);
+        $this->perms[$row['field_name']] = 
+    array('user'=>$row['cooked_user'],
+          'group' =>$row['cooked_group'],
+          'menu' =>$row['cooked_menu'],
+          'year' =>$row['cooked_year']);
+    }
 
-            $this->page->confessArray($this->perms, 
-                                      "getPerms({$this->table}) foun in db", 2);
+    $this->page->confessArray($this->perms, 
+                              "getPerms({$this->table}) foun in db", 2);
 
 
         }
@@ -730,15 +730,15 @@ group by user_id,table_name,field_name";
             }
   
             $res =in_array($key, 
-                            array_keys(call_user_func("get_{$type}_vars",
-                                                      $this->obj)));
+                           array_keys(call_user_func("get_{$type}_vars",
+                                                     $this->obj)));
 
             // i get OBJECT vars here, not class vars. if i've set it
-            $this->page->confessArray(array_keys(get_object_vars($this->obj)), 
-                         "inobject($key, $type, $isset) in $this->table = $res", 
-                                      4);
-            //shows whether this thing is part of this object!
-             return $res;
+ $this->page->confessArray(array_keys(get_object_vars($this->obj)), 
+                           "inobject($key, $type, $isset) in $this->table = $res", 
+                           4);
+ //shows whether this thing is part of this object!
+ return $res;
         }
 
     function doJoins()
@@ -768,27 +768,27 @@ group by user_id,table_name,field_name";
             // predeforder is the RIGHT way to do it!
             // but, i did it the wrong way years ago. 
             // so, if it's not present, use fbfieldlabels instead
-            if(empty($this->obj->preDefOrder)){
-                if(!empty($this->obj->fb_fieldLabels)){
-                    $this->obj->preDefOrder = array_keys(
-                        $this->obj->fb_fieldLabels);
-                }
-            }
+    if(empty($this->obj->preDefOrder)){
+        if(!empty($this->obj->fb_fieldLabels)){
+            $this->obj->preDefOrder = array_keys(
+                $this->obj->fb_fieldLabels);
+        }
+    }
          
-            // if it is STILL empty
-            if(empty($this->obj->preDefOrder) ||
-                count($this->obj->preDefOrder) < 1)
-            {
-                return $things;
-            }
+    // if it is STILL empty
+    if(empty($this->obj->preDefOrder) ||
+       count($this->obj->preDefOrder) < 1)
+    {
+        return $things;
+    }
             
-            $sorted = array();
-            foreach($this->obj->preDefOrder as $key){
-                if(isset($things[$key])){
-                    $sorted[$key] = $things[$key];
-                }
-            }
-            return $sorted;
+    $sorted = array();
+    foreach($this->obj->preDefOrder as $key){
+        if(isset($things[$key])){
+            $sorted[$key] = $things[$key];
+        }
+    }
+    return $sorted;
         }
 
 
@@ -831,7 +831,7 @@ group by user_id,table_name,field_name";
 
  
             // array_push($options, array_combine($years, $years)) 
-                //is only in PHP5. doy.
+            //is only in PHP5. doy.
             foreach($years as $year){
                 $options[$year] = $year;
             }
@@ -890,7 +890,7 @@ group by user_id,table_name,field_name";
         }
 
 
-function triggerNotices($audit_id)
+    function triggerNotices($audit_id)
         {
             //XXX fix this path!
             $parth = parse_url($_SERVER['PHP_SELF']);
@@ -919,13 +919,13 @@ function triggerNotices($audit_id)
                 $top =& $this->findTop();
             }
             //XXX HACK! can't compare objects. so instead compare table name!
-          return $top->table == $this->table;
+ return $top->table == $this->table;
         }
 
     // joinobj is a  ccopobject object! 
     // you'll need this to make linkconstraints coexist with extradetails
-    // XXX it checks interal DBDO variables like _join. DANGEROUS!
-    function protectedJoin(&$joinco, $jointype = 'left')
+            // XXX it checks interal DBDO variables like _join. DANGEROUS!
+            function protectedJoin(&$joinco, $jointype = 'left')
         {
             // gah! notice the spaces here are significant!
             // otherwise it false matches anything with the string IN it
@@ -1090,7 +1090,7 @@ function triggerNotices($audit_id)
 
             // a condom. vitally necessary
             if(isset($this->obj->{$this->pk}) && 
-                     is_null($this->obj->{$this->pk}))
+               is_null($this->obj->{$this->pk}))
             {
                 PEAR::raiseError("CoopObject:recoverSafePK({$this->table}): your record has an empty primary key {$this->pk}. your linkconstraints or query is broken: always need a primary key!", 666);
             }
@@ -1127,7 +1127,7 @@ function triggerNotices($audit_id)
             $this->page->confessArray($res,
                                       "parent tree for {$this->table}",
                                       3);
-          return $res;
+            return $res;
         }
 
 
@@ -1138,8 +1138,30 @@ function triggerNotices($audit_id)
             // do the coalescing necessary to make a sensible join happen
         }
 
+    // supply the short filename
+    //TODO: move this to coopdbdo?? so i can use it from non COOPOBJECT?
+    function queryFromFile($filename)
+        {
+            $queryfix = array('/^--.*/m' => '', // whack comment lines
+                              '/\\\\G/' => '' // NASTY elisp-like escaping
+                );
+            // yeah, i like to hack in LISP. you got a problem with that?
+            $this->obj->query(
+                preg_replace(
+                    array_keys($queryfix),
+                    array_values($queryfix),
+                    implode('',
+                            file(
+                                implode('/', 
+                                        array(
+                                            COOP_ABSOLUTE_FILE_PATH, 'sql', 
+                                            $filename))))));
+            
+        }
 
-} // END COOP OBJECT CLASS
+
+
+    } // END COOP OBJECT CLASS
 
 
 ////KEEP EVERTHANG BELOW
