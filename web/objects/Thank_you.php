@@ -126,6 +126,7 @@ function thanksNeededPickList(&$co)
                         'Actions'),
                     'class="tableheaders"', 'TH');
 
+                //$co->queryFromFile('recover_thank_yous.sql');
 
 			//TODO: mark as sent! i'll need this for invitations too
             return javaPopup() .
@@ -191,14 +192,11 @@ function fetchTemplate(&$co)
                         $co->getChosenSchoolYear()));
             $this->_thank_you_template->obj->find(true);
 
+            //NOTE! i sneak the schoolyear in here too!
             $co->obj->query(
                 sprintf(
-                    'set @school_year := "%s",
-@ticket_price := %d,
-@ad_text := "%s",
-@ticket_text := "%s",
-@cash_text := "%s"
-',
+                    'set @school_year := "%s", @ticket_price := %d, 
+@ad_text := "%s", @ticket_text := "%s", @cash_text := "%s" ',
                     $co->getChosenSchoolYear(),
                     COOP_SPRINGFEST_TICKET_PRICE, //XXX NOT GLOBAL!
                     $this->_thank_you_template->obj->ad,
@@ -210,54 +208,6 @@ function fetchTemplate(&$co)
 
 
 
-function thanksNeededSummary($co, $format = 'array')
-        {
-
-            $sy= $co->getChosenSchoolYear();
-
-            $top = new CoopView(&$co->page, 'companies', $nothing);
-
-            // XXX hack for testing
-            if(devSite()){
-                //$limit = 'limit 20';
-            }
-
-
-            //TODO: move this massive query to an include file
-            // a .sql file so it looks reasonable in emacs
-
-            
-
-            //TODO: abstract this out, will need it in several places
-            $res = array() ;
-            $total = $top->obj->N;
-            while($top->obj->fetch()){
-                $count++;
-                $co->page->printDebug("thanksNeededSummary($format) $count of $total", 
-                           4);
-                $ty =& new ThankYou(&$co->page);
-                if(!$ty->findThanksNeeded($top->obj->id_name, $top->obj->id)){
-                    //skip the ones in the query that don't cut it in here
-                    continue;
-                }
-                switch($format){
-                    //TODO: email too
-                case 'pdml':
-                    $ty->substitute(); // only need this for formatted stuff
-                    $res[] =  $ty->toHTML();
-                    break;
-                case 'array':
-                default:
-                    $res[] = array_merge($top->obj->toArray(), 
-                                         get_object_vars($ty));
-                    break;
-                }
-
-            }
-            
-            //$co->page->confessArray($res, 'the total result', 4);
-            return $res;
-        }
 
 
     function webFormatGroupConcat(&$co, $val, $key)
