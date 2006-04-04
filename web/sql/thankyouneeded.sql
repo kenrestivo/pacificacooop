@@ -5,13 +5,13 @@ select concat_ws(' - ', company_name,
             concat_ws(' ', companies.first_name, companies.last_name)) 
     as Company, 
         companies.company_id as id, 'company_id' as id_name,
-        coalesce(sum(inc.payment_amount),0) +
-        coalesce(sum(auct.item_value),0) + 
-        coalesce(sum(iks.item_value),0) 
+        coalesce(inc.payment_amount,0) +
+        coalesce(auct.item_value,0) + 
+        coalesce(iks.item_value,0) 
         as Total,
    concat_ws('\n', 
-        if(coalesce(sum(inc.payment_amount),0) > 0,
-            concat('$', coalesce(sum(inc.payment_amount),0), ' ', @cash_text), null),
+        if(coalesce(inc.payment_amount,0) > 0,
+            concat('$', coalesce(inc.payment_amount,0), ' ', @cash_text), null),
 auct.auction_items, iks.in_kind_items) as items,
 concat_ws(' ', 
     if(companies.salutation is not null and companies.salutation > "",
@@ -113,10 +113,10 @@ UNION DISTINCT
 select concat_ws(' - ', concat_ws(' ', first_name, last_name), company ) 
     as Company, 
         leads.lead_id as id, 'lead_id' as id_name,
-        coalesce(sum(tic.payment_amount),0) + 
-                coalesce(sum(inc.payment_amount),0) as Total,
-        if(coalesce(sum(inc.payment_amount),0) > 0,
-            concat('$', coalesce(sum(inc.payment_amount),0), ' ', @cash_text), 
+        coalesce(tic.payment_amount,0) + 
+                coalesce(inc.payment_amount,0) as Total,
+        if(coalesce(inc.payment_amount,0) > 0,
+            concat('$', coalesce(inc.payment_amount,0), ' ', @cash_text), 
                 null) as items,
     concat_ws(' ', if(leads.salutation is not null and leads.salutation > "",
             leads.salutation, leads.first_name), 
