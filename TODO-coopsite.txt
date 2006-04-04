@@ -1,4 +1,4 @@
-y the bbbbbbow thueacoop web database
+the coop web database
 
  MY agenda! dammit, mine! for a change....
  	import the 20-year roster (20yearroster.txt)
@@ -20,12 +20,9 @@ y the bbbbbbow thueacoop web database
 4 hours PHP
 bring thank yous back to life
 	blow off the ThankYou class for my to-send ones too!
-		ok, the formatting now!!
-			try with simpletable
-				figure out what to do with that detailslink
-					extrabuttons?
+		how to incorporate this massive query into print_popup?!
+			first the print all, i can whack one-off's for now!
 			the substitute() function needs a home
-			finally, the column headings
 		a new savethankyou() function creates a new note,
 				then explodes() those id's and update() them with thankyouid
 			ooh, could do this in an insert()/update() command!
@@ -7608,3 +7605,9 @@ BUGS
 		umm, the cash numbers are crazy and make no sense in thankneeded. sum?
 			but only in solicit. cool: sums were redundant
 		yank the edit stuff
+					extrabuttons?
+		ok, the formatting now!!
+			try with simpletable
+				figure out what to do with that detailslink
+					different for id vs not id. done
+			finally, the column headings

@@ -77,26 +77,43 @@ class Thank_you extends CoopDBDO
 
 
 
-// silly utility function this is really format-specific
+// the calllback
 function recordButtons(&$co, $par, $wrap)
         {
             $res = "";
-            $tmptab = $co->obj->id_name == 'company_id' ?
-                'companies': 'leads';
 
+            if($co->obj->{$co->pk} > 0){
+                // we have an existing thank you to recover
+                $res .= $co->page->selfURL(
+					array('value' => 
+						  'Reprint/View',
+						  'base' =>'print_popup.php', 
+						  'inside' => array(
+                              'thing' => 'letters',
+                              'set' => 'printed',
+                              $co->prependTable($co->pk) => 
+                              $co->obj->{$co->pk}),
+						  'popup' => true,
+						  'par' => $par)) ;
 
-            // XXX cheap subset of CoopView::recordButtons()
-            // TODO: do it right and instantiate or fake recordButtons()
-            $res .= $co->page->selfURL(
-                array('value' => 'Details',
-                      'base' => 'generic.php',
-                      'inside' => array('table' => $tmptab,
-                                        $tmptab . '-' . 
-                                        $co->obj->id_name => $co->obj->id,
-                                        'action' => 'details',
-                                        'push' => 'thank_you'),
-                      'par' => $par));
+                $res .= $co->innerRecordButtons($par, $wrap);
+            } else {
+                // we have new thank you's, not yet sent
 
+                $tmptab = $co->obj->id_name == 'company_id' ?
+                    'companies': 'leads';
+
+                // XXX cheap subset of CoopView::recordButtons()
+                // TODO: do it right and instantiate or fake recordButtons()
+                $res .= $co->page->selfURL(
+                    array('value' => 'Details',
+                          'base' => 'generic.php',
+                          'inside' => array('table' => $tmptab,
+                                            $tmptab . '-' . 
+                                            $co->obj->id_name => $co->obj->id,
+                                            'action' => 'details',
+                                            'push' => 'thank_you'),
+                          'par' => $par));
 
             $res .= $co->page->selfURL(
 					array('value' => 
@@ -111,6 +128,8 @@ function recordButtons(&$co, $par, $wrap)
 						  'par' => $par)) ;
 
 
+            }
+            
             return $res;
 
         }
