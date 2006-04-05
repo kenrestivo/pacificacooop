@@ -103,7 +103,7 @@ order by springfest_attendees.paddle_number
                 'Paid/Unpaid?',
                 array('both' => 'ALL',
                       'yes' => 'Paid For',
-                      'no' => 'Unclaimed/Unpaid'),
+                      'no' => 'Unpaid'),
                 array('onchange' =>
                       'this.form.submit()'));
             
