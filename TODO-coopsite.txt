@@ -17,11 +17,13 @@ the coop web database
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
 									
-4 hours PHP
+12 hours PHP
 bring thank yous back to life
 	blow off the ThankYou class for my to-send ones too!
 		how to incorporate this massive query into print_popup?!
 			first the print all, i can whack one-off's for now!
+				can i tal:replace a metal tag? that'd rule!
+			items format/delim flag: use <br> yes?
 			the substitute() function needs a home
 		a new savethankyou() function creates a new note,
 				then explodes() those id's and update() them with thankyouid
@@ -49,7 +51,12 @@ summary of who purchased each package REPORT
 		incomeid is null
 		nag list?
 
+??PHP
+make the edit boxes bigger
+	i.e. job descriptions
+	the growable one in wordpress is pretty fucken cool too
 		
+				
 ??PHP
 put in details recordbuttons for on auction purchases report
 	regular, or packages. regular would be best
@@ -7611,3 +7618,10 @@ BUGS
 				figure out what to do with that detailslink
 					different for id vs not id. done
 			finally, the column headings
+			ah! body displaycallback!
+				i could turn [:FOO:] back into <tal:replace="body/foo">
+					need a matrix
+					i HAVE TO do it that way! because TAL needs to do subst
+						remember, the others' webformatgroupconcat
+							might not be done!
+				naw, just fish it out here for now

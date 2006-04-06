@@ -9,9 +9,15 @@
       <img left="3.5in" border="0" src="../images/round-small-logo.png" />
     </header>
     
+    
+    <div metal:define-macro="main_body_macro"
+         tal:content="page/thank_you_notes/obj/main_body"></div>
+
+
+
     <div tal:omit-tag="" 
-         tal:repeat="maintext page/thank_you_notes" 
-         tal:condition="maintext">
+         tal:repeat="note page/thank_you_notes" 
+         tal:condition="note">
 
       
       <page />
@@ -19,9 +25,11 @@
       <br height="2in"
           tal:comment="the height of the header: pdml lets you overlap" />
 
+
       <column count="1">
-        <multicell align="left"  width="6.5in" inter="15pt"
-                   tal:content="structure maintext">letter body</multicell>
+        <multicell align="left"  width="6.5in" inter="15pt">
+          <div metal:use-macro="main_body_macro"></div>
+        </multicell>
       </column>
       
     </div>      

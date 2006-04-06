@@ -48,7 +48,6 @@ class ThankYouNote extends CoopPDF
                 break;
             case 'one':
                 $ty =& new ThankYou(&$this);
-
                 if(!$ty->findThanksNeeded($_REQUEST['pk'], $_REQUEST['id'])){
                     $this->thank_you_notes = array(
                         'This thank-you has already been entered. 
@@ -62,9 +61,13 @@ class ThankYouNote extends CoopPDF
                 break;
             case 'needed':
             default:
-                $ty =& new CoopObject(&$this , 'thank_you', &$none);
-                $this->thank_you_notes = $ty->obj->thanksNeededSummary(&$ty, 
-                                                                       'pdml');
+                $tn =& new CoopView(&$this, 'thank_you', &$none);  
+                
+                $tn->obj->findThanksNeeded(&$tn);
+                
+                $this->thank_you_notes =& $tn;
+                
+                confessObj($this->thank_you_notes, 'wtf');
 
                 break;
             }

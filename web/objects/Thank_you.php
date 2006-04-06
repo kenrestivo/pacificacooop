@@ -39,8 +39,8 @@ class Thank_you extends CoopDBDO
 		'date_printed' => 'Date Printed',
 		'date_sent' => 'Date Sent',
 		'method' => 'Sent Via',
-		'family_id' => 'Printed/Sent By'
-		);
+		'family_id' => 'Printed/Sent By');
+
 
 	var $fb_formHeaderText =  'Springfest Thank-You Notes';
 
@@ -68,6 +68,7 @@ class Thank_you extends CoopDBDO
         'items' => 'webFormatGroupConcat',
         'value_received' => 'webFormatGroupConcat');
 
+    var $fb_bodyFormat = 'html';
 
 //     function fb_linkConstraints(&$co)
 // 		{
@@ -75,6 +76,22 @@ class Thank_you extends CoopDBDO
             
 //         }
 
+    var $fb_substitutionVars = array(
+        'DATE' => 'date',
+        'DEAR' => 'dear',
+        'NAME' => 'name',
+        'ITERATION' => 'iteration',
+        'ORDINAL' => 'ordinal',
+        'YEAR' => 'year',
+        'YEARS' => 'years',
+        'FROM' => 'from',
+        'EMAIL' => 'email',
+        'ADDRESS' => 'address',
+        'ITEMS' => 'items',
+        'VALUERECEIVED' => 'value_received');
+
+    // well, this sucks
+    var $main_body = 'fetchTemplate() or buildBody() are broken';
 
 
 // the calllback
@@ -160,28 +177,27 @@ function OLDCRUFTYthanksNeededPickList(&$co)
 											'set' => 'needed'),
                           'title' => 'Prints all letters which have not yet been sent',
 						  'popup' => true,
-						  'par' => false)) . '&nbsp;(NOTE: may take several minutes to run)<br />'.
+						  'par' => false)) . 
+                '&nbsp;(NOTE: may take several minutes to run)<br />'.
                 $co2->simpleTable(false, true) ;
         }
 
-function &findThanksNeeded(&$co)
+function findThanksNeeded(&$co)
         {
-            $co2 =& new CoopView(&$co->page, $co->table, &$co);
-            $co2->schoolYearChooser(); // to get the values
-            $co2->obj->fb_forceNoChooser = 1;
+            $co->schoolYearChooser(); // to get the values
+            $co->obj->fb_forceNoChooser = 1;
 
-            $co2->obj->fetchTemplate(&$co2);
+            $co->obj->fetchTemplate(&$co);
 
-            $co2->queryFromFile('thankyouneeded.sql');
+            $co->queryFromFile('thankyouneeded.sql');
 
-            $co2->obj->preDefOrder = array('address' , 'dear' ,
+            $co->obj->preDefOrder = array('address' , 'dear' ,
                                           'recipient', 'items', 
                                           'value_received',
                                           'salesperson');
 
-            $co2->obj->fb_recordActions = array();// clear them out!
+            $co->obj->fb_recordActions = array();// clear them out!
             
-            return $co2;
         }
 
 
@@ -208,7 +224,8 @@ function &findThanksNeeded(&$co)
             $co->obj->preDefOrder = array( 'recipient', 'items', 'salesperson',
                                        'date_sent', 'method', 'family_id');
 
-            $co2 =& $this->findThanksNeeded(&$co);
+            $co2 =& new CoopView(&$co->page, $co->table, &$co);
+            $co2->obj->findThanksNeeded(&$co2);
 
             return  
                 '<h3>The following thank you notes need to be sent:</h3>'.
@@ -222,13 +239,18 @@ function &findThanksNeeded(&$co)
 
 function fetchTemplate(&$co)
         {
-            $this->_thank_you_template = new CoopObject(&$co->page, 
+            $co->obj->_thank_you_template = new CoopObject(&$co->page, 
                                  'thank_you_templates', &$co);
-            $this->_thank_you_template->obj->whereAdd(
+            $co->obj->_thank_you_template->obj->whereAdd(
                 sprintf('school_year = "%s"', 
                         $co->getChosenSchoolYear()));
-            $this->_thank_you_template->obj->find(true);
+            $co->obj->_thank_you_template->obj->find(true);
 
+            // some are not specific to each record
+            $co->obj->globalBodyVars(&$co);
+
+            $co->obj->buildBody(&$co);
+            
             //NOTE! i sneak the schoolyear in here too!
             $co->obj->query(
                 sprintf(
@@ -236,13 +258,50 @@ function fetchTemplate(&$co)
 @ad_text := "%s", @ticket_text := "%s", @cash_text := "%s" ',
                     $co->getChosenSchoolYear(),
                     COOP_SPRINGFEST_TICKET_PRICE, //XXX NOT GLOBAL!
-                    $this->_thank_you_template->obj->ad,
-                    $this->_thank_you_template->obj->ticket,
-                    $this->_thank_you_template->obj->cash
+                    $co->obj->_thank_you_template->obj->ad,
+                    $co->obj->_thank_you_template->obj->ticket,
+                    $co->obj->_thank_you_template->obj->cash
                     ));
+        }
+    
+    // we will PUMP, you up!
+    // converts the template body into TAL format, and inserts it into the obj
+    // NOTE: i'm really marrying myself to TAL here. that might bite later
+    function buildBody(&$co)
+        {
+            foreach($co->obj->fb_substitutionVars as $templatekey => $objkey){
+				$subst[sprintf('[:%s:]', $templatekey)] = 
+                    sprintf(
+                        '<div tal:replace="structure maintext/%s"></div>', 
+                        $objkey);
+            }
 
+            $co->obj->main_body = 
+                str_replace(
+                    array_keys($subst), 
+                    array_values($subst), 
+                    $co->obj->_thank_you_template->obj->main_body);
+
+            //confessObj($co->obj, 'wtf');
         }
 
+
+    // the body vars which are generic to all records for this template
+    function globalBodyVars(&$co)
+        {
+			// set defaults if empty: date, schoolyear, etc
+            $tmp = explode('-', $co->getChosenSchoolYear());
+            $co->obj->year = $tmp[1];
+
+            $co->obj->years = $co->obj->year - COOP_FOUNDED;
+			
+            $co->obj->iteration = $co->obj->year - COOP_FIRST_SPRINGFEST;
+            
+            $co->obj->ordinal = makeOrdinal($co->obj->iteration);
+
+            $co->obj->date = date('l, F j, Y');
+
+        }
 
 
 

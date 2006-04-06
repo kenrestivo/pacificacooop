@@ -26,9 +26,6 @@ require_once('Mail.php');
 require_once('object-config.php');
 require_once('DB/DataObject/Cast.php');
 
-define('COOP_FOUNDED', 1962);
-define('FIRST_SPRINGFEST', 1972);
-
 
 //////////////////////////////////////////
 /////////////////////// THANKYOU CLASS

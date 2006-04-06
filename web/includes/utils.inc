@@ -692,5 +692,28 @@ nagOnlyButton($showall, $things, $moreinside = false, $print = true)
 } /* END NAGONLYBUTTON */
 
 
+function makeOrdinal($number)
+{
+    $lastdigit = substr($number, -1);
+    switch ($lastdigit){
+    case 1: 
+        return "st";
+        break;
+				
+    case 2: 
+        return "nd";
+        break;
+				
+    case 3: 
+        return "rd";
+        break;
+				
+    default:
+        return "th";
+        break;
+    }
+}
+
+
 //EOF!!!  DON'T DELETE PAST HERE, I NEED THAT STUFF
 ?>

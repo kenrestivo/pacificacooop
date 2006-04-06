@@ -65,5 +65,8 @@ define('COOP_MAX_PAGER', 50);
 define('PHPTAL_CACHE_DIR', 'cache/');
 define('PHPTAL_REPOSITORY', 'templates');
 
+define('COOP_FOUNDED', 1962);
+define('COOP_FIRST_SPRINGFEST', 1972);
+
 
 ?>
