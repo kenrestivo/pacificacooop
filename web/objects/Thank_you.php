@@ -264,6 +264,7 @@ function fetchTemplate(&$co)
                     ));
         }
     
+
     // we will PUMP, you up!
     // converts the template body into TAL format, and inserts it into the obj
     // NOTE: i'm really marrying myself to TAL here. that might bite later
@@ -272,7 +273,7 @@ function fetchTemplate(&$co)
             foreach($co->obj->fb_substitutionVars as $templatekey => $objkey){
 				$subst[sprintf('[:%s:]', $templatekey)] = 
                     sprintf(
-                        '<div tal:replace="structure note/%s"></div>', 
+                        '<span tal:content="structure note/%s"></span>', 
                         $objkey);
             }
 

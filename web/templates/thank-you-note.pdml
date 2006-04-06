@@ -6,7 +6,8 @@
   <body>
 
     <div metal:define-macro="main_body_macro"
-         tal:content="structure page/thank_you_notes/obj/main_body"></div>
+         tal:content="structure page/thank_you_notes/obj/main_body">
+    </div>
 
 
     <header>    

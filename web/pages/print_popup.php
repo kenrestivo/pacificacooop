@@ -67,7 +67,7 @@ class ThankYouNote extends CoopPDF
                 
                 $this->thank_you_notes =& $tn;
                 
-                confessObj($this->thank_you_notes, 'wtf');
+                //confessObj($this->thank_you_notes, 'wtf');
 
                 break;
             }

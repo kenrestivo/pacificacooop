@@ -324,11 +324,9 @@ class coopView extends CoopObject
             $this->recoverSafePK();
 
 
-
 			$table = $this->obj->table();
 			$row = $this->reorder($this->obj->toArray());
 			foreach($row as $key => $val){
-
 
 				// this is where the fun begins.
 
