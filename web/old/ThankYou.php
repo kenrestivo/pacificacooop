@@ -123,9 +123,7 @@ class ThankYou
 			// and format them html-like
 			//confessArray($this->address_array, 'addr');
 			$subst['ADDRESS'] = implode('<br />', $this->address_array);
-			$subst['ITEMS'] = implode(count($this->items_array) > 2 ?
-											', ' : " and ", 
-									  $this->items_array);
+			$subst['ITEMS'] = $this->formatArray($this->items_array);
 			$subst['FROM'] = sprintf('<br /><br /><br />%s', $this->from);
 
 
@@ -185,6 +183,22 @@ class ThankYou
 			return $text;
 		}
 
+
+    function formatArray($res)
+        {
+            // for web formatting, maybe in already-sent letters?
+            //return implode('<br>', $res);
+
+            // for thankyouletter
+            if(count($res) > 1){
+                $res[count($res) - 1 ] = 'and ' . $res[count($res) - 1];
+            }
+
+            return implode(count($res) > 2 ? ', ': ' ', $res);
+        }
+
+
+
 	// this renderd EMAIL/TXT format by default! override these to do html
 	function varsToArray()
 		{
@@ -199,15 +213,10 @@ class ThankYou
 			$subst['EMAIL'] = $this->email; 
 			// i use the text default for these, html will override them anyway
 			$subst['ADDRESS'] = implode("\n", $this->address_array);
-			$subst['ITEMS'] = implode(count($this->items_array) > 2 ? 
-											', ' : ' and ', 
-											$this->items_array);
+			$subst['ITEMS'] = $this->formatArray($this->items_array);
 			if(count($this->value_received_array)){
 				$subst['VALUERECEIVED'] = $this->template['value_received'];
-				$subst['VALUERECEIVED'] .= ' ' . implode(
-					count($this->value_received_array) > 2 ?
-					', ' : " and ", 
-					$this->value_received_array);
+				$subst['VALUERECEIVED'] .= $this->formatArray($this->value_received_array);
 			} else {
 				$subst['VALUERECEIVED'] = $this->template['no_value'];
 			}
