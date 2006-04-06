@@ -5,16 +5,15 @@
 
   <body>
 
+    <div metal:define-macro="main_body_macro"
+         tal:content="structure page/thank_you_notes/obj/main_body"></div>
+
+
     <header>    
       <img left="3.5in" border="0" src="../images/round-small-logo.png" />
     </header>
+
     
-    
-    <div metal:define-macro="main_body_macro"
-         tal:content="page/thank_you_notes/obj/main_body"></div>
-
-
-
     <div tal:omit-tag="" 
          tal:repeat="note page/thank_you_notes" 
          tal:condition="note">

@@ -38,6 +38,8 @@ $dbhost =  "localhost";
 // this is the local PEAR installer, NOT MY CVS TWEEKED VERSIONS!
 // these are run via a local PEAR instance, using their installer
 define(COOP_LOCAL_PEAR_PATH, '/mnt/kens/ki/is/php/local_pear');
+
+// XXX THIS BREAKS MY WEB/LIVE THING AT HOME! do something in CVS to fix
 define(COOP_ABSOLUTE_FILE_PATH, '/mnt/kens/ki/proj/coop/web');
 define(COOP_ABSOLUTE_URL_PATH, '/coop-dev');
 

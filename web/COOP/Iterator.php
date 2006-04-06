@@ -84,7 +84,7 @@ class CoopIterator extends Iterator
         //not the coopobject's obj, which is a DB_DataObject. gah.
         $this->_src->obj->fetch();
         $this->_value = $this->_src->toArrayWithKeys();
-        //$this->_src->page->confessArray($this->_value, 'the value', 1);
+        $this->_src->page->confessArray($this->_value, 'the value', 1);
         return $this->_value;
     }
     

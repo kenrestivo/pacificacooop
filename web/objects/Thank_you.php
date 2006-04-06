@@ -65,8 +65,8 @@ class Thank_you extends CoopDBDO
     var $viewActions = array('view'=> ACCESS_VIEW);     
 
     var $fb_displayCallbacks = array(
-        'items' => 'webFormatGroupConcat',
-        'value_received' => 'webFormatGroupConcat');
+        'items' => 'formatGroupConcat',
+        'value_received' => 'formatGroupConcat');
 
     var $fb_bodyFormat = 'html';
 
@@ -272,7 +272,7 @@ function fetchTemplate(&$co)
             foreach($co->obj->fb_substitutionVars as $templatekey => $objkey){
 				$subst[sprintf('[:%s:]', $templatekey)] = 
                     sprintf(
-                        '<div tal:replace="structure maintext/%s"></div>', 
+                        '<div tal:replace="structure note/%s"></div>', 
                         $objkey);
             }
 
@@ -306,11 +306,27 @@ function fetchTemplate(&$co)
 
 
 
-    function webFormatGroupConcat(&$co, $val, $key)
+    function formatGroupConcat(&$co, $val, $key)
         {
             // takes a field with items delimited by \n and by a leading ,
             // and makes them pretty for the web with a chr(183) delimiter
-            return  preg_replace("/\n,/",'<br>',$val); 
+            $res = array();
+            // note "" not '' for \n in PHP. bah.
+            foreach(explode("\n", $val) as $item){
+                if ($item > ""){
+                    $res[] = preg_replace("/^,/",'',$item); 
+                }
+            }
+            
+            // for web formatting, maybe in already-sent letters?
+            //return implode('<br>', $res);
+
+            // for thankyouletter
+            if(count($res) > 1){
+                $res[count($res) - 1 ] = 'and ' . $res[count($res) - 1];
+            }
+
+            return implode(count($res) > 2 ? ', ': ' ', $res);
         }
 
 }
