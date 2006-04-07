@@ -227,7 +227,7 @@ function findThanksNeeded(&$co)
             $co2 =& new CoopView(&$co->page, $co->table, &$co);
             $co2->obj->findThanksNeeded(&$co2);
 
-            return  
+            return  javaPopup() .
                 '<h3>The following thank you notes need to be sent:</h3>'.
                 $co2->simpleTable(false, true) .
                 '<h3>Thank you notes below have already been sent:</h3>'.

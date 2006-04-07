@@ -346,35 +346,36 @@ function isPermittedField($key = NULL, $forceuser = false,
 				$this->page->printDebug("$this->table : $key is a pk", 4);
 				return false;
 			}
-			//we don't show if not in fieldstorender
+	 //we don't show if not in fieldstorender
     //NOTE: it could not be in the db itself,
     //but if it's in fieldstorender, then we show it anyway
-                                                                      if(!empty($this->obj->fb_fieldsToRender) && $key &&
-                                                                         !in_array($key, $this->obj->fb_fieldsToRender))
-                                                                      {
-                                                                          $this->page->printDebug(
-                                                                              "ispermitted($this->table : $key) NOT in fieldstorender", 
-                                                                              4);
-                                                                          return false;
-                                                                      }
-            
+                                                                      
+    if(!empty($this->obj->fb_fieldsToRender) && $key &&
+       !in_array($key, $this->obj->fb_fieldsToRender))
+    {
+        $this->page->printDebug(
+            "ispermitted($this->table : $key) NOT in fieldstorender", 
+            4);
+        return false;
+    }
+    
+    
+    if(!empty($this->obj->fb_fieldsToUnRender)  &&
+       in_array($key, $this->obj->fb_fieldsToUnRender))
+    {
+        $this->page->printDebug(
+         "ispermitted($this->table : $key) is in UNrender, so blocking", 
+         4);
+        return false;  // i am very, very sorry for this
+    }
+    
 
-                                                                      if(!empty($this->obj->fb_fieldsToUnRender)  &&
-                                                                         in_array($key, $this->obj->fb_fieldsToUnRender))
-                                                                      {
-                                                                          $this->page->printDebug(
-                                                                              "ispermitted($this->table : $key) is in UNrender, so blocking", 
-                                                                              4);
-                                                                          return false;  // i am very, very sorry for this
-                                                                      }
-
-
-                                                                      // i'm looking in perms calc. choose what to use now.
+    // i'm looking in perms calc. choose what to use now.
     // remember! the db needs to give separate perms for fields/tables
     $usethese = isset($this->perms[$key]) ? 
     $this->perms[$key] : $this->perms[NULL];
-
-
+    
+    
 
     if($key != 'family_id' && 
        ($forceuser ||

@@ -19,10 +19,15 @@ the coop web database
 									
 12 hours PHP
 bring thank yous back to life
+	FUCK TAL!!
+		callback for main_body
+		duplicate toarray, mostly
+
 	blow off the ThankYou class for my to-send ones too!
 		how to incorporate this massive query into print_popup?!
 			first the print all, i can whack one-off's for now!
 				can i tal:replace a metal tag? that'd rule!
+				THIS IS FUCKED. 
 			items format/delim flag: use <br> yes?
 			the substitute() function needs a home
 		a new savethankyou() function creates a new note,

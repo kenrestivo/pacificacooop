@@ -22,7 +22,7 @@
 
 require_once('CoopPDF.php');
 require_once('ThankYou.php');
-
+require_once('lib/TALobjtemplater.php');
 
 class ThankYouNote extends CoopPDF
 {
@@ -36,6 +36,10 @@ class ThankYouNote extends CoopPDF
             // i.e. "use springfest font for this year!"
             $this->fpdf->AddFont('bernhard-modern');
             $this->fpdf->font_face = array('bernhard-modern');
+
+            // i need this to go fetch macros from database
+            $resolver =& new ObjResolver(&$this);
+            $this->template->addSourceResolver(&$resolver);
 
 
             switch($_REQUEST['set']){
@@ -62,7 +66,7 @@ class ThankYouNote extends CoopPDF
             case 'needed':
             default:
                 $tn =& new CoopView(&$this, 'thank_you', &$none);  
-                
+
                 $tn->obj->findThanksNeeded(&$tn);
                 
                 $this->thank_you_notes =& $tn;

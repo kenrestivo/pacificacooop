@@ -427,7 +427,7 @@ class coopView extends CoopObject
 			// the Simple Version. useful for debuggin'
 			//return array_values($this->obj->toArray());
 
-			//$this->page->confessArray($res, "toArray() array");
+			//$this->page->confessArray($res, "CoopView::toArray()", 4);
 			return $res;
 		}
 

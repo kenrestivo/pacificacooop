@@ -590,6 +590,7 @@ class coopPage
             $this->finalDebug();
             print $this->flushBuffer();
             done(); // the legacy utils.inc version
+            user_error('CoopPage::done()-- finished page', E_USER_NOTICE);
             dump('all done' , true);
         }
 
