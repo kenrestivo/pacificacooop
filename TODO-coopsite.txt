@@ -20,16 +20,22 @@ the coop web database
 12 hours PHP
 bring thank yous back to life
 	blow off the ThankYou class for my to-send ones too!
-		the year/iterator/etc still not happenin'
-		the <br> separator for address pleaze!
+
+		either whack the preview, or figure out how to make it work
+	
+		feh, 'thursday' leading space?
+	
+		
 		a new savethankyou() function creates a new note,
 				then explodes() those id's and update() them with thankyouid
 			ooh, could do this in an insert()/update() command!
+			
 	view existing thankyous print button!
 		grab the value_received stuff from the to_send
 			 i need to go get this FOR PREVIOUSLY-SENT THANKYOUS too!
 			 might be difficult: first i have to recover the company/lead id
 			 	naw, it's just a fairly huge subselect.
+					which duplicates a chunk of thankyouneeded, dammit
 		add the extra_buttons
 	actions:
 		mark them as sent!
@@ -7632,3 +7638,8 @@ BUGS
 						remember, the others' webformatgroupconcat
 							might not be done!
 				naw, just fish it out here for now
+			the year/iterator/etc still not happenin'
+		the <br> separator for address pleaze!
+		the dears, substitute a sir or madam
+			eventually add that into the DB
+			naw, just leave it off completely. dear in headlights!

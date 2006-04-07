@@ -67,7 +67,8 @@ class Thank_you extends CoopDBDO
     var $fb_displayCallbacks = array(
         'address' => 'formatBR',
         'items' => 'formatGroupConcat',
-        'value_received' => 'valueReceivedOrNot');
+        'value_received' => 'valueReceivedOrNot',
+        'dear' => 'dearInHeadlights');
 
     var $fb_bodyFormat = 'html';
 
@@ -259,12 +260,14 @@ function fetchTemplate(&$co)
             $co->obj->query(
                 sprintf(
                     'set @school_year := "%s", @ticket_price := %d, 
-@ad_text := "%s", @ticket_text := "%s", @cash_text := "%s" ',
+@ad_text := "%s", @ticket_text := "%s", @cash_text := "%s", 
+@sir_or_madam = "Sir or Madam" ',
                     $co->getChosenSchoolYear(),
                     COOP_SPRINGFEST_TICKET_PRICE, //XXX NOT GLOBAL!
                     $co->obj->_thank_you_template->obj->ad,
                     $co->obj->_thank_you_template->obj->ticket,
                     $co->obj->_thank_you_template->obj->cash
+                    ///TODO: add sir or madam in here!
                     ));
         }
     
@@ -278,7 +281,7 @@ function fetchTemplate(&$co)
                     $templatekey => $objkey){
 				$subst[sprintf('[:%s:]', $templatekey)] = 
                     sprintf(
-                        '<span tal:content="structure %s"></span>', 
+                        '<span tal:replace="structure %s"></span>', 
                         $objkey);
             }
 
@@ -347,6 +350,16 @@ function fetchTemplate(&$co)
 
             $res = $this->explodeAndUncomma($val);
             return $this->letterFormat($res);
+        }
+
+
+    function dearInHeadlights(&$co, $val, $key)
+        {
+            if($val > ""){
+                //TODO: grab the dear and ',' from the database. yes.
+                return "Dear $val,";
+            }
+            return "";
         }
 
 
