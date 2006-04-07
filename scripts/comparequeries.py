@@ -32,6 +32,8 @@ c.execute("""set @school_year := '2005-2006', @ticket_price := 30,
 
 f=open('/mnt/kens/ki/proj/coop/web/sql/thankyouneeded.sql')
 
-query = ''.join([fix(line) for line in f.readlines()])
+c.execute(''.join([fix(line) for line in f.readlines()]))
 
 
+for o in c.fetchall():
+    print '%4d      %s' % (o['id'], o['id_name'])
