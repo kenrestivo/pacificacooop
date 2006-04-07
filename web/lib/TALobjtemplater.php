@@ -1,7 +1,7 @@
 <?php
 
 /*
-  Copyright © 2004-2006  ken restivo <ken@restivo.org>
+  Copyright © 2006  ken restivo <ken@restivo.org>
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -41,21 +41,23 @@ class ObjLocator
 
     function lastModified()
     {
-        // XXX ALWAYS regenerate this thing. in the future, grab the mod date
+        // XXX ALWAYS regenerate this thing.
+        // TODO:  grab the mod date from the audit trail
         return time();
     }
 
     function data()
     {
         ///XXX HACK FOR THANKYOU NOTES!
+        ///the div and metal stuff is required, i dunno why
         return '<div metal:define-macro="main_body">'. 
             $this->page->thank_you_notes->obj->main_body .
             '</div>';
 
         // basically, everything after the obj://
-        // XXX this is stupid, PHPTAL has its own way of resolving paths
-        return $this->page->template->{str_replace('/', '->', 
-                                                   substr($this->path, 6))};
+        // XXX this is stupid, use PHPTAL's own way of resolving paths instead
+//         return $this->page->template->{str_replace('/', '->', 
+//                                                    substr($this->path, 6))};
   
     }
 }
@@ -79,7 +81,6 @@ class ObjResolver extends PHPTAL_SourceResolver
     {
         $this->path = $path; // this seems like the right place, no?
 
-        // DBResolver can resolver only db:// based pathes
         if (!substr($path, 0, 6) == 'obj://') {
             return false;
         }

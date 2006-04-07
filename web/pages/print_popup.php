@@ -68,7 +68,7 @@ class ThankYouNote extends CoopPDF
                 $tn =& new CoopView(&$this, 'thank_you', &$none);  
 
                 $tn->obj->findThanksNeeded(&$tn);
-                
+
                 $this->thank_you_notes =& $tn;
                 
                 //confessObj($this->thank_you_notes, 'wtf');

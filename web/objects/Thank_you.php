@@ -65,8 +65,9 @@ class Thank_you extends CoopDBDO
     var $viewActions = array('view'=> ACCESS_VIEW);     
 
     var $fb_displayCallbacks = array(
+        'address' => 'formatBR',
         'items' => 'formatGroupConcat',
-        'value_received' => 'formatGroupConcat');
+        'value_received' => 'valueReceivedOrNot');
 
     var $fb_bodyFormat = 'html';
 
@@ -76,19 +77,22 @@ class Thank_you extends CoopDBDO
             
 //         }
 
-    var $fb_substitutionVars = array(
-        'DATE' => 'date',
-        'DEAR' => 'dear',
-        'NAME' => 'name',
-        'ITERATION' => 'iteration',
-        'ORDINAL' => 'ordinal',
-        'YEAR' => 'year',
-        'YEARS' => 'years',
-        'FROM' => 'from',
-        'EMAIL' => 'email',
-        'ADDRESS' => 'address',
-        'ITEMS' => 'items',
-        'VALUERECEIVED' => 'value_received');
+    // these are used by TAL to do the substitution
+    //  "note" is a repeat of page/thank_you_notes iterator in the template
+    //  some of these variables come out of the iterator, some from the object
+    var $fb_substitutionTALPaths = array(
+        'DATE' => 'page/thank_you_notes/obj/date',
+        'DEAR' => 'note/dear',
+        'NAME' => 'note/name',
+        'ITERATION' => 'page/thank_you_notes/obj/iteration',
+        'ORDINAL' => 'page/thank_you_notes/obj/ordinal',
+        'YEAR' => 'page/thank_you_notes/obj/year',
+        'YEARS' => 'page/thank_you_notes/obj/years',
+        'FROM' => 'note/salesperson',
+        'EMAIL' => 'note/email',
+        'ADDRESS' => 'note/address',
+        'ITEMS' => 'note/items',
+        'VALUERECEIVED' => 'note/value_received');
 
     // well, this sucks
     var $main_body = 'fetchTemplate() or buildBody() are broken';
@@ -270,10 +274,11 @@ function fetchTemplate(&$co)
     // NOTE: i'm really marrying myself to TAL here. that might bite later
     function buildBody(&$co)
         {
-            foreach($co->obj->fb_substitutionVars as $templatekey => $objkey){
+            foreach($co->obj->fb_substitutionTALPaths as 
+                    $templatekey => $objkey){
 				$subst[sprintf('[:%s:]', $templatekey)] = 
                     sprintf(
-                        '<span tal:content="structure note/%s"></span>', 
+                        '<span tal:content="structure %s"></span>', 
                         $objkey);
             }
 
@@ -304,13 +309,12 @@ function fetchTemplate(&$co)
 
         }
 
-
-
-
-    function formatGroupConcat(&$co, $val, $key)
+    
+    // turns that ugly "\n," crap from MYSQL's GROUP_CONCAT function
+    // into a usable PHP array
+    // this really belongs in utils.inc or coopobject or something
+    function explodeAndUncomma($val)
         {
-            // takes a field with items delimited by \n and by a leading ,
-            // and makes them pretty for the web with a chr(183) delimiter
             $res = array();
             // note "" not '' for \n in PHP. bah.
             foreach(explode("\n", $val) as $item){
@@ -318,16 +322,43 @@ function fetchTemplate(&$co)
                     $res[] = preg_replace("/^,/",'',$item); 
                 }
             }
-            
-            // for web formatting, maybe in already-sent letters?
-            //return implode('<br>', $res);
+            return $res;
+        }
 
+    function letterFormat($res)
+        {
             // for thankyouletter
             if(count($res) > 1){
                 $res[count($res) - 1 ] = 'and ' . $res[count($res) - 1];
             }
 
             return implode(count($res) > 2 ? ', ': ' ', $res);
+        }
+
+
+    function formatBR(&$co, $val, $key)
+        {
+            return implode('<br />', $this->explodeAndUncomma($val));
+            
+        }
+
+    function formatGroupConcat(&$co, $val, $key)
+        {
+
+            $res = $this->explodeAndUncomma($val);
+            return $this->letterFormat($res);
+        }
+
+
+    function valueReceivedOrNot(&$co, $val, $key)
+        {
+            $res = $this->explodeAndUncomma($val);
+            if(count($res) > 0){
+                return $co->obj->_thank_you_template->obj->value_received . 
+                    $this->letterFormat($res);
+            }
+            
+            return $co->obj->_thank_you_template->obj->no_value;
         }
 
 }
