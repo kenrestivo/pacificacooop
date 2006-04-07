@@ -534,7 +534,7 @@ def load(am_file, pm_file):
 ###### MAIN
 if __name__ == '__main__':
     conn=MySQLdb.connect(user='input', passwd='test', db='coop',
-                         host='127.0.0.1', port=2299,
+                         host='127.0.0.1', port=3306,
                          cursorclass=MySQLdb.cursors.DictCursor) 
     c=conn.cursor()
     

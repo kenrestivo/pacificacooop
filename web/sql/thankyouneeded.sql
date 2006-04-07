@@ -135,7 +135,7 @@ concat_ws(',', inc.income_ids, tic.income_ids) as income_ids,
 concat(tic.attended_count, ' ticket', if(tic.attended_count > 1, 's', ''),
         ' ', @ticket_text, ' $', tic.attended_count * @ticket_price) 
             as value_received,
-sum(tic.attended_count * @ticket_price) as Total_Received,
+coalesce(tic.attended_count * @ticket_price,0) as Total_Received,
 "" as salesperson
 from leads
 left join 
@@ -170,6 +170,6 @@ left join
     group by tickets.lead_id) as tic 
         on tic.lead_id = leads.lead_id
 group by leads.lead_id
-having Total > 0
+having Total > Total_received
 order by Company
 \G

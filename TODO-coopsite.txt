@@ -16,21 +16,26 @@ the coop web database
 	springfest microsite (microsite.txt)
 	re-do the whole site-- front page to bottom-- in XOOPS or some such
 
-									
+
+BUGS
+	malatesta and oudkerk pool: nothing in items_array!??!
+		look at actual sql query
+		aha! NULL in items, goddammit
+			why? how?
+	fucking connoly family both were there. go fix.
+
+										
 12 hours PHP
 bring thank yous back to life
 	blow off the ThankYou class for my to-send ones too!
-
-		put the print all button back in!
-
-		either whack the preview, or figure out how to make it work
 	
-		feh, 'thursday' leading space?
-	
+		feh, 'thursday' leading space? what changed?
 		
 		a new savethankyou() function creates a new note,
 				then explodes() those id's and update() them with thankyouid
 			ooh, could do this in an insert()/update() command!
+
+	bring the print preview back
 			
 	view existing thankyous print button!
 		grab the value_received stuff from the to_send
@@ -709,6 +714,9 @@ my enrollment date links and summaries are all fucked up
 BELOW THE LINE
 
 
+??PHP/SQL
+add DEAR and , to the template
+	and fetch it in the thank_you::dearinheadlights() callback
 
 ???PHP/SQL
 poll question
@@ -7645,3 +7653,11 @@ BUGS
 		the dears, substitute a sir or madam
 			eventually add that into the DB
 			naw, just leave it off completely. dear in headlights!
+		either whack the preview, or figure out how to make it work
+	
+		put the print all button back in!
+	filter out the ticket-onlies, cuts me down from 277 to to 183!
+		it should bs 276. WHA THTE FUCK?
+		find a missing one, see what's different!
+		do this in python.
+			the solicits! too many people got tooo many freebies!

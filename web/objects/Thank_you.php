@@ -242,8 +242,7 @@ function fetchTemplate(&$co)
             $co->obj->query(
                 sprintf(
                     'set @school_year := "%s", @ticket_price := %d, 
-@ad_text := "%s", @ticket_text := "%s", @cash_text := "%s", 
-@sir_or_madam = "Sir or Madam" ',
+@ad_text := "%s", @ticket_text := "%s", @cash_text := "%s" ',
                     $co->getChosenSchoolYear(),
                     COOP_SPRINGFEST_TICKET_PRICE, //XXX NOT GLOBAL!
                     $co->obj->_thank_you_template->obj->ad,
@@ -350,10 +349,10 @@ function fetchTemplate(&$co)
             $res = $this->explodeAndUncomma($val);
             if(count($res) > 0){
                 return $co->obj->_thank_you_template->obj->value_received . 
-                    $this->letterFormat($res);
+                    ' ' . $this->letterFormat($res) . '.';
             }
             
-            return $co->obj->_thank_you_template->obj->no_value;
+            return $co->obj->_thank_you_template->obj->no_value . '.';
         }
 
 }
