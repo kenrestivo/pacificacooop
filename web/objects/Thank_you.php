@@ -33,7 +33,7 @@ class Thank_you extends CoopDBDO
         'recipient' => 'Recipient',
         'salesperson' => 'Sincerely,',
         'address' => 'Address on Envelope and Letter',
-        'dear' => 'Dear:',
+        'dear' => 'Greeting',
         'value_received' => 'In exchange for your contribution, we gave you:',
 		'thank_you_id' => 'Thank You Note',
 		'date_printed' => 'Date Printed',
@@ -137,17 +137,17 @@ function recordButtons(&$co, $par, $wrap)
                                             'push' => 'thank_you'),
                           'par' => $par));
 
-            $res .= $co->page->selfURL(
-					array('value' => 
-						  'Print/Preview',
-						  'base' =>'print_popup.php', 
-						  'inside' => array(
-                              'thing' => 'letters',
-                              'set' => 'one',
-                              'pk' => $co->obj->id_name,
-                              'id' => $co->obj->id),
-						  'popup' => true,
-						  'par' => $par)) ;
+//             $res .= $co->page->selfURL(
+// 					array('value' => 
+// 						  'Print/Preview',
+// 						  'base' =>'print_popup.php', 
+// 						  'inside' => array(
+//                               'thing' => 'letters',
+//                               'set' => 'one',
+//                               'pk' => $co->obj->id_name,
+//                               'id' => $co->obj->id),
+// 						  'popup' => true,
+// 						  'par' => $par)) ;
 
 
             }
@@ -157,35 +157,6 @@ function recordButtons(&$co, $par, $wrap)
         }
 
 
-function OLDCRUFTYthanksNeededPickList(&$co)
-        {
-
-            return ""; //XXX TEMP!
-
-            // this is pseudo-templating, using htmltable
-
-                $tab->addRow(
-                    array(
-                        'Actions'),
-                    'class="tableheaders"', 'TH');
-
-                //$co->queryFromFile('recover_thank_yous.sql');
-
-			//TODO: mark as sent! i'll need this for invitations too
-            return javaPopup() .
-				$co2->page->selfURL(
-					array('value' => 
-						  '<img style="border:0"  src="/images/printer.png" 
-								alt="Print Letters">&nbsp;Print All',
-						  'base' =>'print_popup.php', 
-						  'inside' => array('thing' => 'letters',
-											'set' => 'needed'),
-                          'title' => 'Prints all letters which have not yet been sent',
-						  'popup' => true,
-						  'par' => false)) . 
-                '&nbsp;(NOTE: may take several minutes to run)<br />'.
-                $co2->simpleTable(false, true) ;
-        }
 
 function findThanksNeeded(&$co)
         {
@@ -234,6 +205,17 @@ function findThanksNeeded(&$co)
 
             return  javaPopup() .
                 '<h3>The following thank you notes need to be sent:</h3>'.
+				$co2->page->selfURL(
+					array('value' => 
+						  '<img style="border:0"  src="/images/printer.png" 
+								alt="Print Letters">&nbsp;Print All',
+						  'base' =>'print_popup.php', 
+						  'inside' => array('thing' => 'letters',
+											'set' => 'needed'),
+                          'title' => 'Prints all letters which have not yet been sent',
+						  'popup' => true,
+						  'par' => false)) . 
+                '&nbsp;(NOTE: may take several minutes to run)<br />'.
                 $co2->simpleTable(false, true) .
                 '<h3>Thank you notes below have already been sent:</h3>'.
                 $co->simpleTable(false,true);

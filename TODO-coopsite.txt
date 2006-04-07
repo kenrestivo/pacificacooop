@@ -21,6 +21,8 @@ the coop web database
 bring thank yous back to life
 	blow off the ThankYou class for my to-send ones too!
 
+		put the print all button back in!
+
 		either whack the preview, or figure out how to make it work
 	
 		feh, 'thursday' leading space?
