@@ -115,8 +115,9 @@ select concat_ws(' - ', concat_ws(' ', first_name, last_name), company )
         leads.lead_id as id, 'lead_id' as id_name,
         coalesce(tic.payment_amount,0) + 
                 coalesce(inc.payment_amount,0) as Total,
-        if(coalesce(inc.payment_amount,0) > 0,
-            concat('$', coalesce(inc.payment_amount,0), ' ', @cash_text), 
+        if(coalesce(inc.payment_amount,0) + coalesce(tic.payment_amount, 0) > 0,
+            concat('$', coalesce(inc.payment_amount,0) + 
+                        coalesce(tic.payment_amount, 0), ' ', @cash_text), 
                 null) as items,
     concat_ws(' ', if(leads.salutation is not null and leads.salutation > "",
             leads.salutation, leads.first_name), 
