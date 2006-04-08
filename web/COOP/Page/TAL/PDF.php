@@ -47,7 +47,7 @@ class CoopPDF extends CoopTALPage
             $pdml = $this->template->execute();
 
             //TODO: if debuglevel > something, dump the tal'ed pdml first!
-            //$this->printDebug($pdml, 7);
+            //$this->printDebug($pdml, 4);
 
             $this->fpdf->ParsePDML($pdml);
 

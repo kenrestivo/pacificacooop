@@ -40,6 +40,3 @@ user_level , group_level , realm_id , year_level , menu_level ) VALUES
 
 
 
--- yank the NAME from template, and use DEAR alone too
-
--- fix instructions too: no NAME!

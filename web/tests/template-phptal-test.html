@@ -6,9 +6,9 @@
     </title>
   </head>
   <body>
-    <p tal:content="realpath">real page</p>
-    <h1 tal:content="title">sample title</h1>
-    <table>
+	<div metal:use-macro="templ/testmacro"
+         tal:comment="where 'templ' is a ref in the phptal template"></div>
+	<table>
       <tr>
         <td>name</td>
         <td>phone</td>

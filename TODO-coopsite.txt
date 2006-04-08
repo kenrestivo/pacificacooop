@@ -18,18 +18,15 @@ the coop web database
 
 
 BUGS
-	malatesta and oudkerk pool: nothing in items_array!??!
-		look at actual sql query
-		aha! NULL in items, goddammit
-			why? how?
-	fucking connoly family both were there. go fix.
+	feh, 'thursday' leading space? what changed?
+	OBJECT showign up in audit trail. AUUGH! it's supposed to linkdisplay!
+		i need to totally revisit this
 
 										
 12 hours PHP
 bring thank yous back to life
 	blow off the ThankYou class for my to-send ones too!
 	
-		feh, 'thursday' leading space? what changed?
 		
 		a new savethankyou() function creates a new note,
 				then explodes() those id's and update() them with thankyouid
@@ -7660,4 +7657,8 @@ BUGS
 		it should bs 276. WHA THTE FUCK?
 		find a missing one, see what's different!
 		do this in python.
-			the solicits! too many people got tooo many freebies!
+			the solicits! too many people got tooo many freebies!	malatesta and oudkerk pool: nothing in items_array!??!
+		look at actual sql query
+		aha! NULL in items, goddammit
+			why? how? AH. tic.payment_amount too!
+	fucking connoly family both were there. go fix.

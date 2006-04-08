@@ -1,12 +1,17 @@
 <?php
 
-chdir('../');
-require_once('first.inc');                                                         
 require_once "HTML/Template/PHPTAL.php";
 
 
-// create a new template object
-$template = new PHPTAL("tests/template-phptal-test.html");
+class Template
+{
+    // assume this macro is coming out of a database,
+    // for illustration purposes i hard-code it here
+    var $testmacro = '<p tal:content="realpath">real page</p>
+                     <h1 tal:content="title">sample title</h1>';
+}
+
+
 
 // the Person class
 class Person
@@ -20,6 +25,12 @@ class Person
     }
 };
 
+
+// create a new template object
+$template = new PHPTAL("template-phptal-test.html");
+
+$template->set('realpath', $template->realPath());
+
 // let's create an array of objects for test purpose
 $result = array();
 $result[] = new Person("foo", "01-344-121-021");
@@ -31,7 +42,11 @@ $result[] = new Person("buz", "05-321-378-654");
 $template->set("title", "the title value");
 $template->set("result", $result);
 
-$template->set('realpath', $template->realPath());
+$tmpl = new Template();
+$template->set("templ", $tmpl);
+
+
+
 // execute template
 $res = $template->execute();
 // result may be an error

@@ -22,8 +22,8 @@
 
 
       <column count="1">
-        <multicell align="left"  width="6.5in" inter="15pt">
-          <div metal:use-macro="obj://page/thank_you_notes/obj/main_body"></div>
+        <multicell align="left"  width="6.5in" inter="15pt"
+                   tal:comment="leading spaces are still broken"><div metal:use-macro="obj://page/thank_you_notes/obj/main_body"></div>
         </multicell>
       </column>
       
