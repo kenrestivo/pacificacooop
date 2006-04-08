@@ -85,7 +85,7 @@ left join
         where ads.school_year = @school_year  
         group by ads.company_id) 
     as ads_received
-        on inc.company_id = companies.company_id
+        on ads_received.company_id = companies.company_id
 left join 
     (select company_id,
         sum(attended.attended_count) as attended_count
