@@ -17,8 +17,7 @@
       
       <page />
 
-      <br height="2in"
-          tal:comment="the height of the header: pdml lets you overlap" />
+      <br tal:comment="just for good luck" />
 
 
       <column count="1">
