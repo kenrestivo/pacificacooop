@@ -17,7 +17,7 @@
       
       <page />
 
-      <br tal:comment="just for good luck" />
+      <br height="1.5in" tal:comment="just for good luck" />
 
 
       <column count="1">
