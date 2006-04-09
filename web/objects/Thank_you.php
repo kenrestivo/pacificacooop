@@ -349,10 +349,10 @@ function fetchTemplate(&$co)
             $res = $this->explodeAndUncomma($val);
             if(count($res) > 0){
                 return $co->obj->_thank_you_template->obj->value_received . 
-                    ' ' . $this->letterFormat($res) . '.';
+                    ' ' . $this->letterFormat($res);
             }
             
-            return $co->obj->_thank_you_template->obj->no_value . '.';
+            return $co->obj->_thank_you_template->obj->no_value ;
         }
 
 }
