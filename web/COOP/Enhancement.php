@@ -133,7 +133,7 @@ class Enhancement
             //fall cutoff
             $co = new CoopObject(&$this->cp, 'calendar_events', &$top);
             $co->obj->school_year = $this->schoolYear;
-            $co->obj->event_id = 5; // hard coded fall cutoff
+            $co->obj->event_id = COOP_FALL_CUTOFF_DATE; 
             $co->obj->selectAdd(
                 "date_format(event_date, '%Y-%m-%d') as date_formatted");
             $co->obj->find(true);
@@ -142,7 +142,7 @@ class Enhancement
             //spring cutoff
             $co = new CoopObject(&$this->cp, 'calendar_events', &$top);
             $co->obj->school_year = $this->schoolYear;
-            $co->obj->event_id = 6; // hard coded spring cutoff
+            $co->obj->event_id = COOP_SPRING_CUTOFF_DATE; 
             $co->obj->selectAdd(
                 "date_format(event_date, '%Y-%m-%d') as date_formatted");
             $co->obj->find(true);
