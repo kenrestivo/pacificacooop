@@ -54,7 +54,7 @@ class Parent_ed_attendance extends CoopDBDO
             // please rectify... or shitcan this whole thing anyway
             $calev = $this->factory('calendar_events');
             $calev->school_year = $form->CoopForm->page->currentSchoolYear;
-			$calev->whereAdd('event_id = 2'); // parent ed meeting
+			$calev->whereAdd(sprintf('event_id = %d', COOP_PARENT_ED_EVENT)); 
             $calev->orderBy('event_date asc');
             $calev->selectAdd('date_format(event_date, "%a %b %D, %Y") as human_date');
 			$calev->find();
