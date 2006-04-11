@@ -70,6 +70,8 @@ define('COOP_FOUNDED', 1962);
 define('COOP_FIRST_SPRINGFEST', 1972);
 
 define('COOP_PARENT_ED_EVENT', 2);
+define('COOP_FALL_CUTOFF_DATE', 5);
+define('COOP_SPRING_CUTOFF_DATE', 6);
 
 
 ?>
