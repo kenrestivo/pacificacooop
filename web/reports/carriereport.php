@@ -324,6 +324,7 @@ order by total desc',
                 left join ticket_type 
                     on tickets.ticket_type_id = ticket_type.ticket_type_id
                 left join invitations on invitations.lead_id = tickets.lead_id
+                and invitations.school_year = '$schoolyear'
                 where springfest_attendees.school_year = '$schoolyear'
                      and attended = 'Yes'
                 group by tickets.ticket_type_id
