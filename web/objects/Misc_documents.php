@@ -34,18 +34,17 @@ class Misc_documents extends CoopDBDO
         'school_year' => 'School Year'
         );
 
+    var $fb_requiredFields = array('body', 'title', 'school_year');
+
 	var $fb_formHeaderText =  'Miscellaneous Documents';
 
     var $fb_shortHeader = 'Misc';
 
     var $fb_textFields = array('body');
 
-    var $fb_sizes = array('body' => 100);
+    var $fb_sizes = array('body' => 100, 'title' => 50);
+    var $fb_textHeight = array('body' => 100);
 
-//     function preGenerateForm(&$form)
-//         {
-            //TODO: use my own custom widget?
-//         }
-
+    var $fb_mceInitFile = 'tinymce_hack.js'; // XXX nasty hack
 
 }

@@ -55,6 +55,7 @@ fb_allYears = 0/1 // show all years by default in schoolyearchooser
 fb_forceNoChooser = 0/1 a HACK! for summaries which share one schoolyearchooser
 fb_forceCustomSelect = 0/1 A NASTY HACK! because my searchselect doesn't go deep
     into links. some tables are ALL links, i need to force them to be popups
+fb_mceInitFile = a NASTY hack.. alternate tinymce init file if needed. bah.
 
 callbacks...  also in the DataObjects (in objects directory):
 ----------------

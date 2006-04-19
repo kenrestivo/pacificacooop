@@ -27,7 +27,7 @@ class HTML_QuickForm_mcetextarea extends HTML_QuickForm_textarea
                 'COOP_TINYMCE_INCLUDE');
 
             $res .= $this->_parentForm->CoopForm->page->jsRequireOnce(
-                'lib/tinymceinit.js', 
+                empty($this->_parentForm->CoopForm->obj->fb_mceInitFile)? 'lib/tinymceinit.js' : 'lib/' .$this->_parentForm->CoopForm->obj->fb_mceInitFile, 
                 'HTML_QUICKFORM_MCETEXTAREA_EXISTS');
            
             $res .= "<noscript><h1>NOTICE! Some features on this page require Javascript. You will need to enable Javascript in your browser to use them.</h1></noscript>";
