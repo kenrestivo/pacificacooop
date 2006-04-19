@@ -310,18 +310,25 @@ order by total desc',
 
 
 	$res .= showRawQuery("Attendee Count (who actually attended)", 
-		   "select ticket_type.description as Ticket_Type, 
-				count(springfest_attendee_id) as Total
-			from springfest_attendees 
-				left join tickets 
-						on springfest_attendees.ticket_id = tickets.ticket_id
+"select ticket_type.description as Ticket_Type, 
+    sum(if(invitations.relation = 'Friend', 1, 0)) as Friend,
+    sum(if(invitations.relation = 'Relative', 1, 0)) as Relative,
+    sum(if(invitations.relation = 'Alumni', 1, 0)) as Alumni,
+    sum(if(invitations.relation = 'Coworker', 1, 0)) as Coworker,
+    sum(if(invitations.relation = 'Other', 1, 0)) as Other,
+    sum(if(tickets.company_id > 0, 1, 0)) as Solicitation,
+                count(springfest_attendee_id) as Total
+            from springfest_attendees 
+                left join tickets 
+                        on springfest_attendees.ticket_id = tickets.ticket_id
                 left join ticket_type 
                     on tickets.ticket_type_id = ticket_type.ticket_type_id
-				where springfest_attendees.school_year = '$schoolyear'
+                left join invitations on invitations.lead_id = tickets.lead_id
+                where springfest_attendees.school_year = '$schoolyear'
                      and attended = 'Yes'
-				group by tickets.ticket_type_id
-				order by ticket_type.description"
-					 		);
+                group by tickets.ticket_type_id
+                order by ticket_type.description
+"					 		);
 
 
 	return $res;
