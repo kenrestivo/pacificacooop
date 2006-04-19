@@ -2390,4 +2390,26 @@ set @ad_text := 'ad valued at';
 set @ticket_text := 'to Springfest valued at';
 set @cash_text := 'cash';
 
+---updated attendee query
+select ticket_type.description as Ticket_Type, 
+    sum(if(invitations.relation = 'Friend', 1, 0)) as Friend,
+    sum(if(invitations.relation = 'Relative', 1, 0)) as Relative,
+    sum(if(invitations.relation = 'Alumni', 1, 0)) as Alumni,
+    sum(if(invitations.relation = 'Coworker', 1, 0)) as Coworker,
+    sum(if(invitations.relation = 'Other', 1, 0)) as Other,
+    sum(if(tickets.company_id > 0, 1, 0)) as Solicitation,
+                count(springfest_attendee_id) as Total
+            from springfest_attendees 
+                left join tickets 
+                        on springfest_attendees.ticket_id = tickets.ticket_id
+                left join ticket_type 
+                    on tickets.ticket_type_id = ticket_type.ticket_type_id
+                left join invitations on invitations.lead_id = tickets.lead_id
+                and invitations.school_year = '2005-2006'
+                where springfest_attendees.school_year = '2005-2006'
+                     and attended = 'Yes'
+                group by tickets.ticket_type_id
+                order by ticket_type.description
+\G
+
 --- EOF

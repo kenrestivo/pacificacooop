@@ -812,6 +812,7 @@ class coopPage
 
     function getBrowserData()
         {
+            //TODO: replace this with get_browser() in PHP!
             if(empty($this->browserData)){
                 $this->browserData = SniffBrowser();
             }

@@ -1,5 +1,15 @@
 the 20 year roster!!
 
+import
+	flip through each line
+	search family, if it's not there, i'm golden
+		ask about possible dupes.. the only one i have to ask about!!!
+	store (or capture) the family
+		using my importer technique: it caches in the importer object
+	then each other item in there: kids, enrollment, parents, jobs
+	
+
+
 4 hours PYTHON/SQL
 ok, try some db stuff, see how it goes.
 	STUCK: finally the hard one: job assignments
@@ -19,6 +29,7 @@ ok, try some db stuff, see how it goes.
 
 first tweek the PHP pager, so that i can force current family NOT to page
 	should be easy, just whack it in displayview
+		or, change the cutoff number
 
 
 do very simple rasta importer copy/paste or subclass

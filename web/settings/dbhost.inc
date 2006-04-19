@@ -35,13 +35,10 @@ $dbpwd = "92xPi9";
 $dbhost =  "localhost";
 
 
-// this is the local PEAR installer, NOT MY CVS TWEEKED VERSIONS!
-// these are run via a local PEAR instance, using their installer
-define(COOP_LOCAL_PEAR_PATH, '/mnt/kens/ki/is/php/local_pear');
+// for paths that i don't want in CVS:
+// COOP_ABSOLUTE_FILE_PATH, and COOP_ABSOLUTE_URL_PATH, COOP_LOCAL_PEAR_PATH
 
-// XXX THIS BREAKS MY WEB/LIVE THING AT HOME! do something in CVS to fix
-define(COOP_ABSOLUTE_FILE_PATH, '/mnt/kens/ki/proj/coop/web');
-define(COOP_ABSOLUTE_URL_PATH, '/coop-dev');
+require_once('no_cvs.inc');
 
 //ONLY ON BC!!! don't push this live or you'll be in a world of shit.
 if($debug < 0) {

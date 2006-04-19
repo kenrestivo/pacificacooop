@@ -39,4 +39,6 @@ user_level , group_level , realm_id , year_level , menu_level ) VALUES
 ( 0 , 1 , 600 , 0 , 25 , 200 , -1 );
 
 
-
+--- documents
+-- add document definition (definitions.sql)
+-- add permissions for documents

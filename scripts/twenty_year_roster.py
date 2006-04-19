@@ -214,7 +214,8 @@ c.execute()!
 
 ############# MAIN ##################
 if __name__ == '__main__':
-    """filter out lines with no birthday, which are invalid xrefs"""
+    """runs the thing"""
+    #filter out lines with no birthday, which are invalid xrefs
     rasta=[i for i in import_to_dict('/mnt/kens/ki/proj/coop/imports/AlumniRoster.csv') if i['Birthday'] != '']
     first_pass(rasta)
     fix_attended(rasta)
@@ -224,22 +225,25 @@ if __name__ == '__main__':
     exit()
 
     
-######now the importation
+######TODO: now the importation
     from model import *
 
-    families = Importer(Families, ['name', 'address', 'phone'], None)
-    kids = Importer(Kids, ['firstName', 'lastName'], families)
-    enrollment = Importer(Enrollment, ['schoolYear'], kids)
-    parents = Importer(Parents, ['firstName', 'lastName'], families)
-    jobs = Importer(JobAssignments, ['schoolYear'], families)
+    family_importers = Importer(Families, ['name', 'address', 'phone'], None)
+    kid_importer = Importer(Kids, ['firstName', 'lastName'], family_importer)
+    enrollment_importer = Importer(Enrollment, ['schoolYear'], kids_importer)
+    parent_importer = Importer(Parents, ['firstName', 'lastName'],
+                                family_importer)
+    job_importer = Importer(JobAssignments, ['schoolYear'], family_importer)
     
     
     for l in rasta:
-        for i in [families,kids,enrollment,parents,jobs]:
+        for i in [family_importer, kid_importer, enrollment_importer,
+                  parent_importer, job_importer]:
             i.insert(l)
 
 
 """
+#proto-unit-tests
 ########
 [[i['Last Name'], i['Child(ren)'], i['fixed_attended']] for i in rasta]
 

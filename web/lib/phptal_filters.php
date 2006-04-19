@@ -42,11 +42,11 @@ class XHTML_to_PDML extends PHPTAL_Filter
          // make it valid html, not xml
         $patterns = array(
             // XXX pdml doesn't support div's inside of cells
-            '/<div.*?>(.*?)<.*?>/sm' => '$1',
+            '/<div.*?>(.*?)<.*?>/sm' => '$1<br>',
             // XXX tiny_mce inserts spaces that cause pdml to freak out
-            '/\s*(<br.*?>)\s*/sm' => '$1' 
+            '/\s*(<br.*?>)\s*/sm' => '$1' ,
+            '/<\/p>/' => '<br></p>' // PDML doesn't linefeed after a P
             // this one doesn't really work: '/>\s*(.*?)\s*</sm' => '/>$1<'
-
             ); 
 
 

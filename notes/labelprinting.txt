@@ -1,6 +1,9 @@
 ??PYTHON (yeah baybee!)
 nifty label printing library reportlab!!
 
+umm... do it with fpdf/html2pdf in php instead?
+
+
 	big showstopper: sqlobject not being found by sys.path on nfsn
 
 	play with styling in reg'lar text	

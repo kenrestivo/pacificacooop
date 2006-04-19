@@ -1,7 +1,9 @@
-the coop web database
+out the coop web database
 
  MY agenda! dammit, mine! for a change....
+ 	pick a couple things off of the to-do-before-handing-off list
  	import the 20-year roster (20yearroster.txt)
+	gui/usability fixes, from mike margolis
 	sortable/searchable/pagable views (searchfeature.txt)
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
@@ -13,51 +15,40 @@ the coop web database
 	graphs and charts (graphs.txt)
 	json services (templates.txt-- anything left to do?)
 	labels/export -- python cgi on nfsn, formatting, etc.
-	springfest microsite (microsite.txt)
-	re-do the whole site-- front page to bottom-- in XOOPS or some such
+	springfest microsite (microsite.txt)	
+	re-do the whole site-- front page to bottom-- in XOOPS or Drupal, etc
 
 
-BUGS
-	feh, 'thursday' leading space? what changed?
-	OBJECT showign up in audit trail. AUUGH! it's supposed to linkdisplay!
-		i need to totally revisit this
+??PHP/SQL
+order the damned meeting minutes
 
-										
-12 hours PHP
-bring thank yous back to life
-	blow off the ThankYou class for my to-send ones too!
+
+SQL
+put back the calculation of SOURCE (family/non-family) of income
+	auction purchases
+		link through paddles
+			any parent_id > 0
+			any companies owned by member
+	companies_income
+		look for family_id > 0
+	tickets
+		watch out for double-counting income!
 	
-		
-		a new savethankyou() function creates a new note,
-				then explodes() those id's and update() them with thankyouid
-			ooh, could do this in an insert()/update() command!
 
-	bring the print preview back
-			
-	view existing thankyous print button!
-		grab the value_received stuff from the to_send
-			 i need to go get this FOR PREVIOUSLY-SENT THANKYOUS too!
-			 might be difficult: first i have to recover the company/lead id
-			 	naw, it's just a fairly huge subselect.
-					which duplicates a chunk of thankyouneeded, dammit
-		add the extra_buttons
-	actions:
-		mark them as sent!
-			target is NOT printpopup, it's self, a massive insert.
-				an override of insert, basically.
-			no, it's an ajax call. could be just one, maybe
-			also a "unsend" link which basically deletes
-
+??PHP/SQL
+mark the thank you's as sent. she did them all.
 
 			
 ??PHP/TAL
 summary of who purchased each package REPORT
 	do NOT get stuck at the sub-query tal loops.
+		then again, why not? could be fun.
 	just generate an array via the PHP, and TAL can loop through that
 	show people who HAVE NOT YET PAID for their items!
 		incomeid is null
 		nag list?
 
+		
 ??PHP
 make the edit boxes bigger
 	i.e. job descriptions
@@ -119,6 +110,9 @@ enter last year's goddamned attendees!
 
 	
 BUGS
+	the fucking tiny_mce is whacking my generic.php. why??!
+	OBJECT showign up in audit trail. AUUGH! it's supposed to linkdisplay!
+		i need to totally revisit this
 	really, make the bulletin board linkconstraints sort by audit,
 		see my display code
 	click view not on homepage dude!
@@ -228,6 +222,32 @@ BURNT (when too burnt out to do actual work)
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
+
+										
+12 hours PHP
+bring thank yous back to life
+	blow off the ThankYou class for my to-send ones too!
+		
+		a new savethankyou() function creates a new note,
+				then explodes() those id's and update() them with thankyouid
+			ooh, could do this in an insert()/update() command!
+
+	bring the print preview back
+			
+	view existing thankyous print button!
+		grab the value_received stuff from the to_send
+			 i need to go get this FOR PREVIOUSLY-SENT THANKYOUS too!
+			 might be difficult: first i have to recover the company/lead id
+			 	naw, it's just a fairly huge subselect.
+					which duplicates a chunk of thankyouneeded, dammit
+		add the extra_buttons
+	actions:
+		mark them as sent!
+			target is NOT printpopup, it's self, a massive insert.
+				an override of insert, basically.
+			no, it's an ajax call. could be just one, maybe
+			also a "unsend" link which basically deletes
+
 
 
 ??PHP
@@ -709,6 +729,12 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+
+??PHP
+shitcan pdml and use html2fpdf instead
+	but, it sucks, it CANNOT DO FONTS!
+		it's version 1.53. massive backportage required
 
 
 ??PHP/SQL
@@ -3331,7 +3357,7 @@ thank you and tax-receipt screen
 	this may be a problem. i may have to do ugly merges to get it right.
 			
 
-pdflib for gift certificates
+pdlib for gift certificates
 	fpdf lib
 	add tag on PACKAGE page (auction too?) for gift cert or "real" thing
 	check it
@@ -3750,6 +3776,14 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+	the auth system has to be totally changed
+		login page removed completely from homepage
+		or more likely some new auth method
+			distributing usernames/passwords to new users?
+		what about the concept of group/mine?
+
+
 		FUCK TAL!!
 		callback for main_body
 		duplicate toarray, mostly
@@ -7662,3 +7696,6 @@ BUGS
 		aha! NULL in items, goddammit
 			why? how? AH. tic.payment_amount too!
 	fucking connoly family both were there. go fix.
+	feh, 'thursday' leading space? what changed? ah.. space before tag
+	HOLY SHIT! ads not showing up in tax purposes shit!!
+		danlelson AUUGH! ouch... i was joining to the wrong subquery. 

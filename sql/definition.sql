@@ -1057,5 +1057,11 @@ school_year varchar(50) default NULL
 );
 
 
+create table misc_documents(
+misc_documents_id int(32) primary key not null unique auto_increment,
+body longtext,
+_cache_body varchar(255)
+);
+
 
 -- EOF

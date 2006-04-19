@@ -1,0 +1,34 @@
+redo the whole site in drupal or xoops or something
+
+
+differences between my app and drupal?
+	auth the concept of group-level privs:
+			being able to do x/y/z to OTHER people's data
+		i think i saw this somethere
+	linkconcat and popup and searchselect
+	the wide variety of tables
+
+
+open questions
+	does it use templates? how can i use templates?
+	can i set a popup/pulldown to be items from another node type??
+	can i have user names with spaces in them?
+	password recovery.. make sure it handles this
+	how can i glue between my old application and the new one?
+		i.e. mix drupal nodes and coop stuff
+		figure out how to integrate this massive app base already present
+		look at civic-crm? a big beast in and of itself
+		each table is a node? i.e. custom content type?
+			i.e. subscription? calendar?
+	integrating menu, how?
+		shouldn't be that difficult: custom menu basically
+		already has its own heirarchal stuff
+	linking auth with family name/id
+		familyid is *everywhere* in this app... s/b userid?
+			i.e. more than one user per family?
+			teachers!!?
+
+
+plan for new site:
+	new users get EMAILED their password and login name!!
+		none of this pop-up-menu crapola!
