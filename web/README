@@ -39,7 +39,8 @@ fb_joinPaths  array(table -> path:tghrough:links or array(path:through, more:thr
 fb_usePage    "" (old page)
 fb_shortHeader = used in menu, and in table popps 
 fb_dupeIgnore array(fieldn...)
-fb_sizes  = array(field => size), this is WIDTH for inputfields, LINES for textarea!
+fb_sizes  = array(field => size), this is WIDTH for inputfields
+fb_textHeight  = array(field => size), this is HEIGHT in LINES for textarea!
 fb_fieldsToUnRender (always hide these! annoying, but needed.)
 preDefOrder= array(), compatible with FB, order the fields in this sequence
     remember, fieldlabels is NOT ordered, php assoc arrays aren't ordered!

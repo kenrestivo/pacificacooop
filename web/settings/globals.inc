@@ -61,6 +61,9 @@ define('COOP_MAX_LONGTEXT_DISPLAY', 60);
 define('COOP_MAX_AUDIT_SUMMARY_DISPLAY', 300);
 
 define('COOP_MAX_PAGER', 50);
+define('COOP_DEFAULT_TEXT_FIELD_WIDTH', 70);
+define('COOP_DEFAULT_TEXT_FIELD_HEIGHT', 25);
+
 
 /// defaults for phptal. relative to the root dir
 define('PHPTAL_CACHE_DIR', 'cache/');
@@ -72,6 +75,8 @@ define('COOP_FIRST_SPRINGFEST', 1972);
 define('COOP_PARENT_ED_EVENT', 2);
 define('COOP_FALL_CUTOFF_DATE', 5);
 define('COOP_SPRING_CUTOFF_DATE', 6);
+
+
 
 
 ?>

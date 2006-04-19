@@ -36,7 +36,11 @@ class Misc_documents extends CoopDBDO
 
 	var $fb_formHeaderText =  'Miscellaneous Documents';
 
-    var $fb_shortHeader = 'Documents';
+    var $fb_shortHeader = 'Misc';
+
+    var $fb_textFields = array('body');
+
+    var $fb_sizes = array('body' => 100);
 
 //     function preGenerateForm(&$form)
 //         {

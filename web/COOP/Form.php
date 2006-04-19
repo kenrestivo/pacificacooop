@@ -239,12 +239,13 @@ class coopForm extends CoopObject
 				} else if(!empty($this->obj->fb_textFields) &&
 						  in_array($key, $this->obj->fb_textFields))
 				{
-                    $cols = !empty($this->obj->fb_sizes[$key]) ?
-                        $this->obj->fb_sizes[$key] : 40;
-					$el =& $this->form->addElement('mcetextarea', 
-                                                   $fullkey, false, 
-                                                   array('rows' => 10,  //??
-                                                         'cols' => $cols));
+					$el =& $this->form->addElement(
+                        'mcetextarea', 
+                        $fullkey, false, 
+                        array('rows' => !empty($this->obj->fb_textHeight[$key]) ?
+                              $this->obj->fb_textHeight[$key] : COOP_DEFAULT_TEXT_FIELD_HEIGHT,
+                              'cols' => !empty($this->obj->fb_sizes[$key]) ?
+                              $this->obj->fb_sizes[$key] : COOP_DEFAULT_TEXT_FIELD_WIDTH));
                     $el->_parentForm =& $this->form;
 				} else if(!empty($this->obj->fb_enumFields) &&
 						  in_array($key, $this->obj->fb_enumFields))
