@@ -14,6 +14,7 @@ class Misc_documents extends CoopDBDO
     var $title;                           // string(255)  
     var $body;                            // blob(16777215)  blob
     var $_cache_body;                     // string(255)  
+    var $school_year;                     // string(50)  
 
     /* ZE2 compatibility trick*/
     function __clone() { return $this;}
@@ -25,11 +26,12 @@ class Misc_documents extends CoopDBDO
     ###END_AUTOCODE
 
 
-	var $fb_linkDisplayFields = array('_cache_body');
+	var $fb_linkDisplayFields = array('title');
 
 	var $fb_fieldLabels = array (
         'title' => 'Document Title',
-        'body' => 'Body of document'
+        'body' => 'Body of document',
+        'school_year' => 'School Year'
         );
 
 	var $fb_formHeaderText =  'Miscellaneous Documents';

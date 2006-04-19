@@ -41,4 +41,5 @@ user_level , group_level , realm_id , year_level , menu_level ) VALUES
 
 --- documents
 -- add document definition (definitions.sql)
--- add permissions for documents
+-- add realm and permissions for documents
+-- all members add/edit all current, only board can delete, and only current
