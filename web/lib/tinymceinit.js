@@ -3,7 +3,7 @@
 tinyMCE.init({
     mode : "textareas",
         theme: "advanced",
-        theme_advanced_disable: "image,anchor,newdocument,visualaid,code", 
+        theme_advanced_disable: "image,anchor,newdocument,visualaid", 
         theme_advanced_buttons2_add: "separator,tablecontrols",
         theme_advanced_buttons3_add: "cut,copy,pasteword,pastetext,selectall,preview,fullscreen,print",
         inline_styles: true,
