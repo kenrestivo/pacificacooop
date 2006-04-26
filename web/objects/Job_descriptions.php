@@ -81,8 +81,6 @@ class Job_descriptions extends CoopDBDO
     
             $ass = new CoopObject(&$co->page, 'job_assignments', &$co);
 
-
-
             $co->protectedJoin($ass);
 
             // i apologise for this.
