@@ -81,7 +81,21 @@ class Job_descriptions extends CoopDBDO
     
             $ass = new CoopObject(&$co->page, 'job_assignments', &$co);
 
+
+
             $co->protectedJoin($ass);
+
+            // i apologise for this.
+            // XXX NASTY HACK to force school year and family if no assignment.
+            $co->obj->selectAdd(
+                sprintf('if(job_assignments.family_id > 0, job_assignments.family_id, %d) as family_id',
+                        $co->page->userStruct['family_id']));
+
+            // this too
+            $co->obj->selectAdd(
+                sprintf('if(job_assignments.school_year > 0, job_assignments.school_year, "%s") as school_year',
+                        $co->getChosenSchoolYear()));
+
 
             $co->constrainFamily();
             $co->constrainSchoolYear();
