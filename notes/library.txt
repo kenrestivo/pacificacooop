@@ -1,0 +1,38 @@
+isbndb
+	login is ken@pacificacoop.org
+	password is kidslibrary
+	https://isbndb.com/account/
+	key XAZ5L8UZ
+	example: http://isbndb.com/api/books.xml?access_key=XAZ5L8UZ&index1=isbn&value1=0000000'
+
+amazon.com
+	ken@pacificacoop.org
+	password librarydatabase
+
+	
+
+QUESTIONS:
+	is X legal?  yes
+
+STEPS:
+	remove illegal chars from the isbn number, i.e. only 0-9X
+	go fetch (easy, URL above)
+	parse xml
+		the document.implementation.createDocument().load() way?
+		or XMLHttpRequest.contentXML
+	do the cuecat decoding
+		cuedecode? seems simpler than kittycode
+		have to guess whether what i've got is a cuecat or an isbn
+		i have to fuck with the code, like i did in my perl thing
+			the UPC is *not* the ISBN, goddammit
+			it's in index.html, sorta. but it doesn't fucken work
+		gah, and it fucking crashes the goddamned browser
+			capture keystrokes, see what's breaking the damned thing
+			joy, javascript hacking on a fucked-up machine
+			well, just capture any non-ascii characters, and block them
+				look at kenflex.js, i did this already
+			i have to deal with EAN codes somehow7
+		AHA! cc.html does this already?
+		
+	
+
