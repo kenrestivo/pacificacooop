@@ -76,7 +76,7 @@ define('COOP_PARENT_ED_EVENT', 2);
 define('COOP_FALL_CUTOFF_DATE', 5);
 define('COOP_SPRING_CUTOFF_DATE', 6);
 
-
-
+// you may need to change this eventually
+define('COOP_AMAZON_ACCESS_KEY', '0F1YJJRT1KE6VF2DVQ02');
 
 ?>

@@ -55,6 +55,18 @@ class Books extends CoopDBDO
         'authors' => 50
         );
 
+    function preGenerateForm(&$form)
+        {
+            require_once('lib/isbninput.php');
+
+            $el =& $form->createElement('isbninput', 
+                                        $form->CoopForm->prependTable('isbn'),
+                                        $this->fb_fieldLabels['isbn']);
+            
+            $el->prepare(&$form);
+            $this->fb_preDefElements['isbn'] =& $el;
+
+        }
 
 
 }
