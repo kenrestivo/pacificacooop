@@ -44,3 +44,6 @@ user_level , group_level , realm_id , year_level , menu_level ) VALUES
 
 
 -- books and secondary category tables (defiition.sql)
+-- table perms: library realm, books, primary, secondary, colors
+-- user perms: let everyone edit the goddamned thing
+

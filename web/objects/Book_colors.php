@@ -22,4 +22,26 @@ class Book_colors extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+	var $fb_linkDisplayFields = array('name');
+
+	var $fb_fieldLabels = array(
+        'name' => 'Color Name',
+        'hex_value' => 'Color Hex Value (not yet used)'
+		);
+
+	var $fb_formHeaderText =  'Library Book Colors';
+
+	var $fb_requiredFields = array('name');
+
+
+    var $fb_shortHeader = 'Colors';
+
+    
+    var $fb_dupeIgnore = array('hex_value');
+
+
+
+
+
 }

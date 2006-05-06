@@ -21,4 +21,19 @@ class Secondary_book_categories extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+
+	var $fb_linkDisplayFields = array('name');
+
+	var $fb_fieldLabels = array(
+        'name' => 'Category Name'	
+        );
+
+	var $fb_formHeaderText =  'Library Book Secondary Categories';
+
+	var $fb_requiredFields = array('name');
+
+
+    var $fb_shortHeader = 'Secondary';
+
 }
