@@ -24,11 +24,10 @@ class HTML_QuickForm_isbninput extends HTML_QuickForm_input
                 "bookLookup('%s', '%s', '%s')", 
                 $this->getName(), $this->base_url, $this->access_key);           
 
-
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
                 array('onchange' => $this->lookup_func_name . '; return false;'));
-            
+                        
         }
 
 
@@ -51,7 +50,6 @@ class HTML_QuickForm_isbninput extends HTML_QuickForm_input
                 return $this->getFrozenHTML();
             } else {
 
-                $parent = parent::toHTML(); // the actual {element}!
 
                 /// FINALLY, build the result
                 $res = "";
@@ -59,8 +57,10 @@ class HTML_QuickForm_isbninput extends HTML_QuickForm_input
                     '&nbsp;<input type="button" value="Lookup" onclick="%s; return false;">&nbsp;<p class="inline" id="status-%s"></p>', 
                     $this->lookup_func_name,
                     $this->getName());
-           
-                
+
+
+                $parent = parent::toHTML(); // the actual {element}!
+
                 return $this->_getJs() . $parent . $res;
 
             }
