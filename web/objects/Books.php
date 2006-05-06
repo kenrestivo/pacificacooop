@@ -26,4 +26,35 @@ class Books extends CoopDBDO
 
     /* the code above is auto generated do not remove the tag below */
     ###END_AUTOCODE
+
+	var $fb_linkDisplayFields = array('title', 'authors');
+
+	var $fb_fieldLabels = array(
+        'isbn' => 'ISBN Number',
+        'title' => 'Book Title',
+        'authors' => 'Authors',
+        'book_color_id' => 'Color Code',
+        'primary_book_category_id' => 'Primary Category',
+        'secondary_book_category_id' => 'Secondary Category'
+		);
+
+	var $fb_formHeaderText =  'Library Books';
+
+	var $fb_requiredFields = array('isbn',
+                                   'title',
+								   'authors');
+
+    var $fb_shortHeader = 'Books';
+
+    
+    var $fb_dupeIgnore = array('title' , 'authors');
+
+
+    var $fb_sizes = array(
+        'title' => 100,
+        'authors' => 50
+        );
+
+
+
 }
