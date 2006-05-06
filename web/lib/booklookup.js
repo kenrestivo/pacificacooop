@@ -5,6 +5,12 @@
 
 function bookLookup(isbn_name, baseurl, access_key){
     isbn = document.getElementsByName(isbn_name).item(0);
+
+    // first pre-process any cuecat input
+    if(isbn.value.match(/\./) != null){
+        isbn.value = translate(isbn.value);
+    }
+
     isbn.value = isbn.value.replace(/[^0-9X]/g,'');
     status = document.getElementById('status-books-isbn');
     status.innerHTML = 'Searching...';

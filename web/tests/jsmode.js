@@ -559,6 +559,6 @@ title = r.getElementsByTagName('Title')[0].textContent;
 '0-393-28935-222-X2224'.replace(/[^0-9X]/g,'');
 
 
-
+'foo-bar-baz'.match('\.')
 
 

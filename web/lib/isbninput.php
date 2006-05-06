@@ -40,6 +40,8 @@ class HTML_QuickForm_isbninput extends HTML_QuickForm_input
                                           'INCLUDE_MOCHIKIT');
             $res .= $this->cf->page->jsRequireOnce('lib/eventutils.js' , 
                                                 'INCLUDE_EVENTUTILS');
+            $res .= $this->cf->page->jsRequireOnce('lib/uncuecat.js',
+                                          'INCLUDE_UNCUECAT');
             $res .= $this->cf->page->jsRequireOnce('lib/booklookup.js',
                                           'INCLUDE_BOOKLOOKUP');
 
