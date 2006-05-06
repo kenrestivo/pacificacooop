@@ -12,7 +12,7 @@ class HTML_QuickForm_isbninput extends HTML_QuickForm_input
     var $access_key; //cache of key
     var $base_url; //cache of baseurl
     var $long_fieldname; //cache of longfieldname
-    var $lookup_func_name; //cache of function name
+    var $lookup_func_js; //cache of function name
 
     function prepare(&$parentForm)
         {
@@ -20,13 +20,13 @@ class HTML_QuickForm_isbninput extends HTML_QuickForm_input
             $this->cf =& $this->_parentForm->CoopForm; // save typing
             $this->access_key = COOP_AMAZON_ACCESS_KEY;
             $this->base_url = COOP_ABSOLUTE_URL_PATH;
-            $this->lookup_func_name = sprintf(
+            $this->lookup_func_js = sprintf(
                 "bookLookup('%s', '%s', '%s')", 
                 $this->getName(), $this->base_url, $this->access_key);           
 
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
-                array('onchange' => $this->lookup_func_name . '; return false;'));
+                array('onchange' => $this->lookup_func_js . '; return false;'));
                         
         }
 
@@ -55,7 +55,7 @@ class HTML_QuickForm_isbninput extends HTML_QuickForm_input
                 $res = "";
                 $res .= sprintf(
                     '&nbsp;<input type="button" value="Lookup" onclick="%s; return false;">&nbsp;<p class="inline" id="status-%s"></p>', 
-                    $this->lookup_func_name,
+                    $this->lookup_func_js,
                     $this->getName());
 
 
