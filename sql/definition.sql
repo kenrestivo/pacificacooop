@@ -1072,9 +1072,20 @@ books_id int(32) primary key not null unique auto_increment,
 isbn varchar(10),
 title varchar(255),
 authors varchar(255),
-color enum('Red', 'Blue', 'Green', 'Yellow', 'Pink', 'White', 'Black'),
-primary_book_category enum('Unknown', 'Unknown2', 'Unknown3'),
+book_color_id int(32),
+primary_book_category_id int(32),
 secondary_book_category_id int(32)
+);
+
+create table book_colors(
+book_color_id int(32) primary key not null unique auto_increment,
+name varchar(255),
+hex_value varchar(8)
+);
+
+create table primary_book_categories(
+primary_book_category_id int(32) primary key not null unique auto_increment,
+name varchar(255)
 );
 
 
