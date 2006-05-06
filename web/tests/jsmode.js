@@ -531,3 +531,28 @@ for(cell in w.document.getElementsByTagName('TD')){
     } 
 }
 
+///// the stuff for my library thing
+
+addScript('http://www/coop-dev/lib/MochiKit/MochiKit.js')
+
+d=doSimpleXMLHttpRequest('http://www/coop-dev/amazon-hack.php', 
+    {'Service':'AWSECommerceService',
+     'AWSAccessKeyId': '0F1YJJRT1KE6VF2DVQ02',
+     'Operation': 'ItemLookup',
+     'IdType': 'ASIN',
+     'ItemId': '0596000081',
+     'ResponseGroup': 'Small'})
+
+r=d.results[0].responseXML.documentElement
+
+// textContent doesn't work with for iterations, have to do [i]
+a = [];
+i=0;
+while(i < r.getElementsByTagName('Author').length){
+    a.push(r.getElementsByTagName('Author')[i].textContent);
+    i++;
+}
+authors = a.join(', ');
+title = r.getElementsByTagName('Title')[0].textContent;
+
+
