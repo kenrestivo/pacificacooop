@@ -65,6 +65,7 @@ function Evt(evt) {
 	this._y 	 = (evt.pageY) ? evt.pageY : 
 				   (docEl.scrollTop) ? (docEl.scrollTop + evt.clientY) :
 				   (body.scrollTop) ? (body.scrollTop + evt.clientY) : evt.clientY;
+    this._type   = evt.type;
 }
 
 /** @returns number */
@@ -81,6 +82,11 @@ Evt.prototype.getY = function () {
 Evt.prototype.getSource = function () {
 	return this._source;
 };
+
+Evt.prototype.getType = function () {
+	return this._type;
+};
+
 
 /** 
  *	@returns void

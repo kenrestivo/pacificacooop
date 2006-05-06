@@ -51,4 +51,45 @@ function startBookListener(isbn_name, base_url, access_key)
         isbn, 'change', 
         function(ev){ return bookLookup(isbn_name, base_url, access_key) }, 
         true);
+
+    EventUtils.addEventListener(
+        isbn, 'keyup', 
+        function(ev){ return trapKey(ev,isbn_name, base_url, access_key) }, 
+        true);
+
+
+    EventUtils.addEventListener(
+        isbn, 'keydown', 
+        function(ev){ return trapKey(ev,isbn_name, base_url, access_key) }, 
+        true);
+
+
+    EventUtils.addEventListener(
+        isbn, 'keypress', 
+        function(ev){ return trapKey(ev,isbn_name, base_url, access_key) }, 
+        true);
+
+
 }
+
+
+   function trapKey(ev, isbn_name, base_url, access_key){
+        var evt = new Evt(ev);
+        
+        switch(ev.keyCode)
+        {
+            // trap these keys
+            case 13:
+            case 39:
+                evt.consume();
+                if(evt.getType() == 'keydown'){
+                    bookLookup(isbn_name, base_url, access_key)
+                    }
+            return false;
+            break;
+            default:
+            break;
+        }
+        return true;
+    }
+

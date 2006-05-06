@@ -49,8 +49,10 @@ function Combobox (searchBoxName, selectBoxName, linkTableName)
             // trap these keys
             case 13:
             case 39: 
-            evt.consume();
-            this.fetchData();
+                evt.consume();
+                if(evt.getType() == 'keydown'){
+                    this.fetchData();
+                }
             return false;
             break;
             default:
