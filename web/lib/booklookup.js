@@ -2,7 +2,6 @@
 
 */
 
-//TODO: a status area! like in kenflex status-books-isbn
 
 function bookLookup(isbn_name, baseurl, access_key){
     isbn = document.getElementsByName(isbn_name).item(0);
@@ -41,4 +40,15 @@ function bookLookup(isbn_name, baseurl, access_key){
         function(data){
         status.innerHTML = 'ERROR: Could not find ISBN. Did you mistype it?';
          });
+}
+
+
+function startBookListener(isbn_name, base_url, access_key)
+{
+    isbn = document.getElementsByName(isbn_name).item(0);
+
+    EventUtils.addEventListener(
+        isbn, 'change', 
+        function(ev){ return bookLookup(isbn_name, base_url, access_key) }, 
+        true);
 }

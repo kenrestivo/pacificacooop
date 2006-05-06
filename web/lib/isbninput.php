@@ -37,11 +37,25 @@ class HTML_QuickForm_isbninput extends HTML_QuickForm_input
             $res = "";
             $res .= $this->cf->page->jsRequireOnce('lib/MochiKit/MochiKit.js',
                                           'INCLUDE_MOCHIKIT');
+            $res .= $this->cf->page->jsRequireOnce('lib/eventutils.js' , 
+                                                'INCLUDE_EVENTUTILS');
             $res .= $this->cf->page->jsRequireOnce('lib/booklookup.js',
                                           'INCLUDE_BOOKLOOKUP');
+
+
             return $res;
         }
 
+function _postJS()
+        {
+
+          return wrapJS(sprintf("startBookListener('%s','%s','%s')",
+                                   $this->getName(),
+                                   $this->base_url,
+                                   $this->access_key), 
+                                   'START_BOOKLOOKUP_LISTENER');
+
+        }
 
 
     function toHtml()
@@ -59,6 +73,7 @@ class HTML_QuickForm_isbninput extends HTML_QuickForm_input
                     $this->lookup_func_js,
                     $this->getName());
 
+                $res .= $this->_postJS();
 
                 $parent = parent::toHTML(); // the actual {element}!
 
