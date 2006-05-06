@@ -26,7 +26,8 @@ class HTML_QuickForm_isbninput extends HTML_QuickForm_input
 
             $this->_parentForm->updateElementAttr(
                 $this->getName(), 
-                array('onchange' => $this->lookup_func_js . '; return false;'));
+                array('onchange' => $this->lookup_func_js));
+
                         
         }
 
