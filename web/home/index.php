@@ -68,7 +68,7 @@ their race, color, religion, nationality, ethnic origin or sexual orientation. <
 
     	<p>You can learn much more by reading the <a href="documents/current-handbook.pdf">Co-Op 
     	Handbook</a>. (requires Adobe Acrobat Reader, available <a href="http://www.adobe.com/products/acrobat/readstep2.html">here</a> for 
-	free.) Also available are the Co-Op <a href="documents/CoopByLaws.pdf">By-laws</a>.</p>
+	free.) Also available are the Co-Op <a href="documents/current-bylaws.pdf">By-laws</a>.</p>
     	
     	<hr size="5" width="600" color="red" align="left">
     	
