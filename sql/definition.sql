@@ -1066,4 +1066,22 @@ school_year varchar(50) default NULL
 );
 
 
+
+create table books(
+books_id int(32) primary key not null unique auto_increment,
+isbn varchar(10),
+title varchar(255),
+authors varchar(255),
+color enum('Red', 'Blue', 'Green', 'Yellow', 'Pink', 'White', 'Black'),
+primary_book_category enum('Unknown', 'Unknown2', 'Unknown3'),
+secondary_book_category_id int(32)
+);
+
+
+create table secondary_book_categories(
+secondary_book_category_id int(32) primary key not null unique auto_increment,
+name varchar(255)
+);
+
+
 -- EOF

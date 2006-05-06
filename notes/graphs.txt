@@ -9,3 +9,5 @@ statistics and graphs
 		enrollment, family hours am/pm, workers, etc.
 	package average/median/stddev for price
 		by category: live, silent, etc
+
+try PEAR::Image_Graph! it's a handy wrapper around gd

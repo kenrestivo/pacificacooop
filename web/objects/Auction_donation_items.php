@@ -99,6 +99,7 @@ class Auction_donation_items extends CoopDBDO
                                                    'companies_auction_join'));
 
     var $fb_extraDetails = array('auction_packages_join:packages');
+
 	function fb_linkConstraints(&$co)
 		{
             $auc =& new CoopObject(&$co->page, 'auction_items_families_join', 

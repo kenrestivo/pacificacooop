@@ -56,6 +56,9 @@ class Blog_entry extends CoopDBDO
 //             $this->orderBy('updated desc');
 //         }
 
+
+
+
     function homepage_summary(&$co, $publiconly = false)
         {
             if($co->page->auth['token'] && !$publiconly){

@@ -39,7 +39,8 @@ user_level , group_level , realm_id , year_level , menu_level ) VALUES
 ( 0 , 1 , 600 , 0 , 25 , 200 , -1 );
 
 
---- documents
--- add document definition (definitions.sql)
--- add realm and permissions for documents
--- all members add/edit all current, only board can delete, and only current
+-- GO FIX! some of these documents  will need to edit from previous years
+-- so, perms to view history
+
+
+-- books and secondary category tables (defiition.sql)

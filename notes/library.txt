@@ -8,18 +8,23 @@ isbndb
 amazon.com
 	ken@pacificacoop.org
 	password librarydatabase
-
+	key: 0F1YJJRT1KE6VF2DVQ02
+	example: http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=0F1YJJRT1KE6VF2DVQ02&Operation=ItemLookup&IdType=ASIN&ItemId=0596000081&ResponseGroup=Small,OfferSummary
 	
 
-QUESTIONS:
-	is X legal?  yes
 
 STEPS:
-	remove illegal chars from the isbn number, i.e. only 0-9X
-	go fetch (easy, URL above)
-	parse xml
-		the document.implementation.createDocument().load() way?
-		or XMLHttpRequest.contentXML
+	make the special input subclass! with capturing chars or onchange
+		capture return key like kenflex!
+	must this be a subclass? or can i hack it as a predefelement?
+		an input. a button. an onclick and onchange
+	the qf dbdo stuff
+		postgenerateform
+			remove illegal chars from the isbn number, i.e. only 0-9X
+		 	filter like floatonly, 0-9Xx
+			insist on only 10 characters too!
+	do the permissions shit
+	
 	do the cuecat decoding
 		cuedecode? seems simpler than kittycode
 		have to guess whether what i've got is a cuecat or an isbn
@@ -32,7 +37,15 @@ STEPS:
 			well, just capture any non-ascii characters, and block them
 				look at kenflex.js, i did this already
 			i have to deal with EAN codes somehow7
-		AHA! cc.html does this already?
+		AHA! cc.html does this already
+		well, grab the data, parse isbn, and dump it in!
+		any way to beep! tests/beeptest.html
 		
 	
+---------------
+STUCK:
 
+	res.setContentType("text/xml");
+
+
+	lower case x is ok

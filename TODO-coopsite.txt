@@ -1,58 +1,41 @@
-out the coop web database
+ out the coop web database
 
  MY agenda! dammit, mine! for a change....
  	pick a couple things off of the to-do-before-handing-off list
  	import the 20-year roster (20yearroster.txt)
-	gui/usability fixes, from mike margolis
-	sortable/searchable/pagable views (searchfeature.txt)
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
-	json, REST, xmlrpc (jsonselect.txt)
-	fix money: make it INVOICES  billing and income (invoicing.txt) SQL
-	normalise and clean up permissions (permsfixing.txt) SQL
-	normalise people/companies/parents/families (databasenormalisation.txt) SQL
-	insurance, dammit
-	graphs and charts (graphs.txt)
-	json services (templates.txt-- anything left to do?)
-	labels/export -- python cgi on nfsn, formatting, etc.
-	springfest microsite (microsite.txt)	
-	re-do the whole site-- front page to bottom-- in XOOPS or Drupal, etc
+
+	
+??PHP/JS/VID
+video posting, gah, cross-platform crap
+	
+
+??PHP/SQL
+fixes for terry: enrollment summary calculations
+	
+
+??PHP/SQL
+job description fixes
+	job assignments for NEXT YEAR. they need permissions for next year dammit
 
 
 ??PHP/SQL
+indulgence fixes	
+	
+??PHP/SQL
+	the library scanning thing: two categories
+
+
+	
+??PHP/SQL
 order the damned meeting minutes
-
-
-SQL
-put back the calculation of SOURCE (family/non-family) of income
-	auction purchases
-		link through paddles
-			any parent_id > 0
-			any companies owned by member
-	companies_income
-		look for family_id > 0
-	tickets
-		watch out for double-counting income!
+	simple linkconstraints
 	
 
 ??PHP/SQL
 mark the thank you's as sent. she did them all.
 
-			
-??PHP/TAL
-summary of who purchased each package REPORT
-	do NOT get stuck at the sub-query tal loops.
-		then again, why not? could be fun.
-	just generate an array via the PHP, and TAL can loop through that
-	show people who HAVE NOT YET PAID for their items!
-		incomeid is null
-		nag list?
-
-		
-??PHP
-make the edit boxes bigger
-	i.e. job descriptions
-	the growable one in wordpress is pretty fucken cool too
 		
 				
 ??PHP
@@ -68,7 +51,8 @@ start tracking this stuff in mantis!
 ??PHP
 cleaner link to paddle number for purchased items
 	i.e. instead of linking to details
-	
+
+		
 ??SQL/PHP
 report of kid/hours for michelle and shirley
 	basically, enrollment summarised by families. this can't be hard
@@ -78,23 +62,8 @@ report of kid/hours for michelle and shirley
 add another stupid select criteria to the paddles
 	a popup: attended, didn't attend, both				
 	
-
-??PHP/SQL
-enter last year's goddamned attendees!
-	hairy: need to add user if not present, add ticket, then paddlen
-		add income, if any
-		add ticket WITHOUT adding a paddle for it!!
-			make_paddles = 0
-			search out the invitation and/or solicitation contact and/or parent
-				fuzzy dice of some kind, this is UGLAY
-					this is the part that needs manual doing.
-		locate the paddle
-			attach the ticket to it			
-	add count of them, to report, for chrissakes!
 	
 
-
-	
 ??PHP/HTML		
 	escaping of text fields in details
 		create a test harness, make sure no ?'s or &amp/&nbsp's:
@@ -137,20 +106,11 @@ BUGS
 			what's different, actually?
 				minutes and packages are fine. i dunno what's up.	
 
-	
- 
-	
-
 				
-
 BUGS
 	what's up with 1 not -1 for ignore!??
-		
-
-
 
 	
-				
 ??PHP/SQL
 parent ed (parented.txt)
 	that margolis form: right join basiclally
@@ -222,6 +182,19 @@ BURNT (when too burnt out to do actual work)
 
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
+
+	gui/usability fixes, from mike margolis
+	sortable/searchable/pagable views (searchfeature.txt)
+	json, REST, xmlrpc (jsonselect.txt)
+	fix money: make it INVOICES  billing and income (invoicing.txt) SQL
+	normalise and clean up permissions (permsfixing.txt) SQL
+	normalise people/companies/parents/families (databasenormalisation.txt) SQL
+	insurance, dammit
+	graphs and charts (graphs.txt)
+	json services (templates.txt-- anything left to do?)
+	labels/export -- python cgi on nfsn, formatting, etc.
+	springfest microsite (microsite.txt)	
+	re-do the whole site-- front page to bottom-- in XOOPS or Drupal, etc
 
 										
 12 hours PHP
@@ -730,11 +703,37 @@ my enrollment date links and summaries are all fucked up
 ----------------
 BELOW THE LINE
 
+??PHP/JS
+growable edit boxes
+	i.e. wordpress?
+	
+
+???SQL
+put back the calculation of SOURCE (family/non-family) of income
+	auction purchases
+		link through paddles
+			any parent_id > 0
+			any companies owned by member
+	companies_income
+		look for family_id > 0
+	tickets
+		watch out for double-counting income!
+
+
+??PHP/TAL
+summary of who purchased each package REPORT
+	do NOT get stuck at the sub-query tal loops.
+		then again, why not? could be fun.
+	just generate an array via the PHP, and TAL can loop through that
+	show people who HAVE NOT YET PAID for their items!
+		incomeid is null
+		nag list?
+
 
 ??PHP
 shitcan pdml and use html2fpdf instead
 	but, it sucks, it CANNOT DO FONTS!
-		it's version 1.53. massive backportage required
+
 
 
 ??PHP/SQL
@@ -3776,6 +3775,19 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+
+??PHP/SQL
+enter last year's goddamned attendees!
+	hairy: need to add user if not present, add ticket, then paddlen
+		add income, if any
+		add ticket WITHOUT adding a paddle for it!!
+			make_paddles = 0
+			search out the invitation and/or solicitation contact and/or parent
+				fuzzy dice of some kind, this is UGLAY
+					this is the part that needs manual doing.
+		locate the paddle
+			attach the ticket to it			
+	add count of them, to report, for chrissakes!
 
 	the auth system has to be totally changed
 		login page removed completely from homepage
@@ -7699,3 +7711,27 @@ BUGS
 	feh, 'thursday' leading space? what changed? ah.. space before tag
 	HOLY SHIT! ads not showing up in tax purposes shit!!
 		danlelson AUUGH! ouch... i was joining to the wrong subquery. 
+		it's version 1.53. massive backportage required
+??PHP
+make the edit boxes bigger
+	i.e. job descriptions
+	the growable one in wordpress is pretty fucken cool too
+	if the familyid for permissions reasons (in linkconstraints?)
+		i.e. if no familyid (not assigned), then use... what?
+			use current user's id? let just anybody edit it?
+		doesn't constrainfamily already do this?
+			no, that's a whereadd. i need similar for (as familyid)
+		ah, just hack around fuckup in db, select as familyid and schoolyear works
+Finance analysis
+http://www.pacificacoop.org/members/generic.php?action=details&table=misc_documents&push=misc_documents&misc_documents-misc_documents_id=2
+
+Q&A
+http://www.pacificacoop.org/members/generic.php?action=details&table=misc_documents&push=misc_documents&misc_documents-misc_documents_id=4
+		go fetch (easy, URL above, amazon or other)
+	parse xml
+		the document.implementation.createDocument().load() way?
+		or XMLHttpRequest.contentXML? responseXML (which is MSFT approved
+			js
+	build the damned tables and basic plumbing
+		books
+		categories

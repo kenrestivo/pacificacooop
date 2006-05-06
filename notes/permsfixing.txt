@@ -1,5 +1,7 @@
  notes on teh permissions redesign
 
+openid auth? to be used in drupal in the futchum?
+ 
 24 hours PHP/SQL
 	new perms tables in database, to the new model
         rights

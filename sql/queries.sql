@@ -2390,6 +2390,7 @@ set @ad_text := 'ad valued at';
 set @ticket_text := 'to Springfest valued at';
 set @cash_text := 'cash';
 
+
 ---updated attendee query
 select ticket_type.description as Ticket_Type, 
     sum(if(invitations.relation = 'Friend', 1, 0)) as Friend,

@@ -13,10 +13,6 @@ var buildPlayers = "onClick";  // set to "onClick" or "onLoad"
 // if you want this script to only take action on links that have rel=enclosure, set requireRelEnclosure = true, otherwise leave it at false and the script will give a player to all supported media links.
 var requireRelEnclosure = false;
 
-// Choose when the script should build out the players.
-//   buildPlayers = "onClick";   will build out a player when the user clicks a link to the media file.  
-//   buildPlayers = "onLoad";   will build out a player for all media links as the page loads. (Note you should set autoStart = false if you use this option)
-var buildPlayers = "onClick";  // set to "onClick" or "onLoad"
 
 // to size the player based on the size of the still image set the next line to true.  To always set players to a specific size set it to false
  var useImageSize = true;
