@@ -24,9 +24,10 @@ class HTML_QuickForm_isbninput extends HTML_QuickForm_input
                 "bookLookup('%s', '%s', '%s')", 
                 $this->getName(), $this->base_url, $this->access_key);           
 
-            $this->_parentForm->updateElementAttr(
-                $this->getName(), 
-                array('onchange' => $this->lookup_func_js));
+/// BORKEN! dunno why
+//             $this->_parentForm->updateElementAttr(
+//                 $this->getName(), 
+//                 array('onchange' => $this->lookup_func_js));
 
                         
         }

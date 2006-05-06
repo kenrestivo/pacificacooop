@@ -66,10 +66,6 @@ class Books extends CoopDBDO
             $el->prepare(&$form);
             $this->fb_preDefElements['isbn'] =& $el;
 
-            $form->updateElementAttr(
-                $form->CoopForm->prependTable('isbn'),
-                array('onchange' => $el->lookup_func_js . '; return false;'));
-
 
         }
 
