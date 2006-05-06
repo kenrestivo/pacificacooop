@@ -1,6 +1,6 @@
 /* $Id$
 
-from isbn
+from isbntools.com
 
 */
 
@@ -44,29 +44,37 @@ decode_table[0]["7"] = 8;
 decode_table[0]["6"] = 9;
 
 var isbn="";
+// most of the below vars can be local to translate()
+var checkdigit = 0;
+var translated = 0;
+var numberonly = 0;
+var tokenized = 0;
+var checkdigit = 0; // useless
+
 
 function translate( raw )
 {
         var sections = new Array();
         sections = raw.split(".");
         
-        if ( validateBarcode( translateCueCatInput( sections[3] ) ) )
-                document.forms[0].checkdigit.value = "Valid";
-        else
-                document.forms[0].checkdigit.value = "Invalid";
+        if ( validateBarcode( translateCueCatInput( sections[3] ) ) ){
+            checkdigit = 1;
+        } else {
+            checkdigit = 0;
+        }
         
-        document.forms[0].translated.value = translateCueCatInput( raw );
-        document.forms[0].numberonly.value = translateCueCatInput( sections[3] );
-        document.forms[0].tokenized.value = tokenizeCueCatInput( raw );
+        translated = translateCueCatInput( raw );
+        numberonly = translateCueCatInput( sections[3] );
+        tokenized = tokenizeCueCatInput( raw );
 	var isbntemp= translateCueCatInput( sections[3] );
 
 	isbn="";	
 	for (i=3;i<13;i++) isbn+=isbntemp.charAt(i).toString(); 
 
-	//document.forms[0].book.value=isbn;
+	//bookvalue=isbn;
 	var cdisbn=isbnDigit(isbn);
-        document.forms[0].book2.value=cdisbn;
-	document.forms[0].book.value=isbn+cdisbn;
+    checkdigit =cdisbn;
+	return isbn+cdisbn;
 
 }
 

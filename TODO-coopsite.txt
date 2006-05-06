@@ -1,4 +1,4 @@
- out the coop web database
+ the coop web database
 
  MY agenda! dammit, mine! for a change....
  	pick a couple things off of the to-do-before-handing-off list
@@ -6,22 +6,22 @@
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
 
+
 	
-??PHP/JS/VID
-video posting, gah, cross-platform crap
+??PHP/SQL
+job description fixes
+	job assignments for NEXT YEAR. they need permissions for next year dammit
+	
 	
 
 ??PHP/SQL
 fixes for terry: enrollment summary calculations
 	
 
-??PHP/SQL
-job description fixes
-	job assignments for NEXT YEAR. they need permissions for next year dammit
-
 
 ??PHP/SQL
 indulgence fixes	
+
 	
 ??PHP/SQL
 	the library scanning thing: two categories
@@ -3775,6 +3775,25 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+		cuedecode? seems simpler than kittycode
+		i have to fuck with the code, like i did in my perl thing
+			the UPC is *not* the ISBN, goddammit
+			it's in index.html, sorta. but it doesn't fucken work
+			i have to deal with EAN codes somehow
+
+				gah, and it fucking crashes the goddamned browser
+			capture keystrokes, see what's breaking the damned thing
+			joy, javascript hacking on a fucked-up machine
+			well, just capture any non-ascii characters, and block them
+				look at kenflex.js, i did this already
+
+
+		postgenerateform
+			remove illegal chars from the isbn number, i.e. only 0-9X
+				not needed, my lookup does that
+		 	filter like floatonly, 0-9Xx
+			insist on only 10 characters too!
+				not needed. gotta lookup
 
 ??PHP/SQL
 enter last year's goddamned attendees!
@@ -7735,3 +7754,11 @@ http://www.pacificacoop.org/members/generic.php?action=details&table=misc_docume
 	build the damned tables and basic plumbing
 		books
 		categories
+	make the special input subclass! with capturing chars or onchange
+		capture return key like kenflex!
+
+			do the permissions shit
+	the qf dbdo stuff
+
+??PHP/JS/VID
+video posting, gah, cross-platform crap
