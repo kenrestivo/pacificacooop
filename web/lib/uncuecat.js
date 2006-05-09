@@ -44,28 +44,25 @@ decode_table[0]["7"] = 8;
 decode_table[0]["6"] = 9;
 
 var isbn="";
-// most of the below vars can be local to translate()
-var checkdigit = 0;
-var translated = 0;
-var numberonly = 0;
-var tokenized = 0;
-var checkdigit = 0; // useless
-
 
 function translate( raw )
 {
-        var sections = new Array();
-        sections = raw.split(".");
-        
-        if ( validateBarcode( translateCueCatInput( sections[3] ) ) ){
-            checkdigit = 1;
-        } else {
-            checkdigit = 0;
-        }
-        
-        translated = translateCueCatInput( raw );
-        numberonly = translateCueCatInput( sections[3] );
-        tokenized = tokenizeCueCatInput( raw );
+    var checkdigit = 0;
+    var translated = 0;
+    var numberonly = 0;
+    var tokenized = 0;
+    var sections = new Array();
+    sections = raw.split(".");
+    
+    if ( validateBarcode( translateCueCatInput( sections[3] ) ) ){
+        checkdigit = 1;
+    } else {
+        checkdigit = 0;
+    }
+    
+    translated = translateCueCatInput( raw );
+    numberonly = translateCueCatInput( sections[3] );
+    tokenized = tokenizeCueCatInput( raw );
 	var isbntemp= translateCueCatInput( sections[3] );
 
 	isbn="";	
