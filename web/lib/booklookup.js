@@ -2,9 +2,12 @@
 
 */
 
-
+// goes to get the book info from amazon, based on the isbn
 function bookLookup(isbn_name, baseurl, access_key){
-    isbn = document.getElementsByName(isbn_name).item(0);
+    var isbn = document.getElementsByName(isbn_name).item(0);
+
+    // convention "table-field" must be followed!
+    var table = isbn_name.split('-')[0];
 
     // first pre-process any cuecat input
     if(isbn.value.match(/\./) != null){
@@ -12,7 +15,7 @@ function bookLookup(isbn_name, baseurl, access_key){
     }
 
     isbn.value = isbn.value.replace(/[^0-9X]/g,'');
-    status = document.getElementById('status-books-isbn');
+    status = document.getElementById('status-'+ isbn_name);
     status.innerHTML = 'Searching...';
 
     d=doSimpleXMLHttpRequest(baseurl + '/amazon-hack.php', 
@@ -33,10 +36,10 @@ function bookLookup(isbn_name, baseurl, access_key){
                 a.push(r.getElementsByTagName('Author')[i].textContent);
                 i++;
             }
-            isbn.form['books-authors'].value = a.join(', ');
-            isbn.form['books-title'].value = ''; // clear out first
-            isbn.form['books-title'].value = r.getElementsByTagName('Title').item(0).textContent;
-            if(isbn.form['books-title'].value != ''){
+            isbn.form[table + '-authors'].value = a.join(', ');
+            isbn.form[table + '-title'].value = ''; // clear out first
+            isbn.form[table + '-title'].value = r.getElementsByTagName('Title').item(0).textContent;
+            if(isbn.form[table + '-title'].value != ''){
                 status.innerHTML = 'Found it!';
             } else {
                 status.innerHTML = 'Try again: No such ISBN number';
@@ -48,7 +51,9 @@ function bookLookup(isbn_name, baseurl, access_key){
          });
 }
 
-
+// to add the event listeners.
+// doing it as onchange/onkeyup/onkeydown via attributes doesn't work
+// so i'm explicitly addeventlisterer'ing here instead.
 function startBookListener(isbn_name, base_url, access_key)
 {
     isbn = document.getElementsByName(isbn_name).item(0);
@@ -79,23 +84,24 @@ function startBookListener(isbn_name, base_url, access_key)
 }
 
 
-   function trapKey(ev, isbn_name, base_url, access_key){
-        var evt = new Evt(ev);
-        
-        switch(ev.keyCode)
-        {
-            // trap these keys
-            case 13:
-            case 39:
-                evt.consume();
-                if(evt.getType() == 'keydown'){
-                    bookLookup(isbn_name, base_url, access_key)
-                    }
-            return false;
-            break;
-            default:
-            break;
-        }
-        return true;
+/// from kenflex. keeps the return key from submitting the form
+function trapKey(ev, isbn_name, base_url, access_key){
+    var evt = new Evt(ev);
+    
+    switch(ev.keyCode)
+    {
+        // trap these keys
+    case 13:
+    case 39:
+        evt.consume();
+        if(evt.getType() == 'keydown'){
+            bookLookup(isbn_name, base_url, access_key)
+                }
+        return false;
+        break;
+    default:
+        break;
     }
+    return true;
+}
 
