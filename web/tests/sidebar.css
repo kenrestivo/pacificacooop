@@ -1,5 +1,6 @@
 .sidebar  {
   display:block;
+  white-space: wrap;
   top: 0;
   float:left;
   position: relative;
@@ -9,15 +10,12 @@
   color:#000; 
   border: 1px solid #808;
 }
-div.sidebar:first-line {
-  font-weight:bold; 
-  font-size:1.2em;
-}
-select {  
+
+.lookupbox { 
+  display: block;
+ }
+
+.lookupbox select {  
   float:left;
-  width: 40em;
+  width: 20em;
 }
-
-br.clear { clear:left  }
-
-.lookupbox { display: block }

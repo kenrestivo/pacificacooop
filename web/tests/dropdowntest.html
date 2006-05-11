@@ -24,14 +24,17 @@ title <input name="books-title">
 <input type="button" value="Search" onclick="lookupTitle('books-title', 'http://www/coop-dev', '0F1YJJRT1KE6VF2DVQ02')">
 <div class="inline" id="status-books-title"></div><br>
 
-<div class="hidden" id="lookup-books-title">
-<label for="select-books-title">Choose a Title below:</label>
-<select id="select-books-title" size="10" name="select-books-title"
-  onchange="showDetails('books-title')" >
-</select>
-<div class="sidebar" id="sidebar-books-title"></div>
-<br class="clear">
-</div>
+<table class="hidden" id="lookup-books-title">
+	<tr><td>Choose a Title below:</td></tr>
+	  <tr>
+	  	<td>
+			<select id="select-books-title" size="10" name="select-books-title"
+				  onchange="showDetails('books-title')" >
+			</select>
+		</td>
+		<td class="sidebar" id="sidebar-books-title"></td>
+	</tr>
+</table>
 
 authors <input name="books-authors"><br>
 
@@ -44,5 +47,5 @@ authors <input name="books-authors"><br>
 <hr>
 
 <address></address>
-<!-- hhmts start -->Last modified: Thu May 11 09:47:31 PDT 2006 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Thu May 11 14:14:19 PDT 2006 <!-- hhmts end -->
 </body> </html>

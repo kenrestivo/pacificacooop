@@ -17,16 +17,23 @@ amazon.com
 
 
 lookup title
+	on click, show the details, and insert the isbn
+
+
 	what about paging?! apparently there may be >1 page
+		i.e. searching for "ugly" or something really popular
 		how long is a page? 
 			looks like 10 to a page
 		how do i get subsequent pages?
-		i.e. searching for "ugly" or something really popular
-		read docs
+			read docs
+				ah, page=x duh.
 		bah! how to page around the fucking scrollbox!! geeh!
 			i think i may have solved this with my ncurses library years ago?
+			calculate the position in the scrollbox, divided by number of lines?
+				if last visible line  > 10 
+					get page for top visible line
+						scrollTop in ie and moz
 
-	on click, show the details, and insert the isbn
 
 	
 scan the colours page, split them up, and assign them as appropriate

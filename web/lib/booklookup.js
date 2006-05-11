@@ -190,6 +190,7 @@ function showDetails(fieldname)
 
     
     //TODO: go lookup the detailed stuff, parse it, and put it in here!
+    //can i use innerhtml, or must i use swapdom?
     sidebar.innerHTML = selectbox.options[selectbox.selectedIndex].text;
 
 
