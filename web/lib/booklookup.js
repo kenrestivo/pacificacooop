@@ -183,11 +183,15 @@ function showDetails(fieldname)
 {
     var selectbox = document.getElementById("select-" + fieldname);
     var sidebar = document.getElementById("sidebar-" + fieldname);
+    var isbn = document.getElementsByName(fieldname.split('-')[0] + '-isbn')[0];
+
+    // put the ISBN of it into the ISBN box, remember, the whole point!
+    isbn.value = selectbox.value;
+
     
     //TODO: go lookup the detailed stuff, parse it, and put it in here!
     sidebar.innerHTML = selectbox.options[selectbox.selectedIndex].text;
 
-    // also put the ISBN of it into the ISBN box, remember
 
 }
 
