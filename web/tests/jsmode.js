@@ -559,6 +559,22 @@ title = r.getElementsByTagName('Title')[0].textContent;
 '0-393-28935-222-X2224'.replace(/[^0-9X]/g,'');
 
 
-'foo-bar.7baz'.match(/\./)
+'foo-bar. baz'.match(/\./)
 
+'foo-bar'.split('-')[0]
+
+baseurl='http://www/coop-dev/';
+d=doSimpleXMLHttpRequest(baseurl + '/amazon-hack.php', 
+    {'Service':'AWSECommerceService',
+     'AWSAccessKeyId': '0F1YJJRT1KE6VF2DVQ02',
+     'Operation': 'ItemSearch',
+     'SearchIndex' : 'Books',
+     'Title': 'linux device drivers',
+     'Sort': 'titlerank',
+     'ResponseGroup': 'Small'})
+r=d.results[0].responseXML.documentElement
+found = r.getElementsByTagName('Item'); 
+i=0;
+isbn = found[i].getElementsByTagName('ASIN')[0].textContent; 
+title = found[i].getElementsByTagName('Title')[0].textContent; 
 

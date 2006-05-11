@@ -31,7 +31,7 @@ function bookLookup(isbn_name, baseurl, access_key){
     }
 
     isbn.value = isbn.value.replace(/[^0-9X]/g,'');
-    status = document.getElementById('status-'+ isbn_name);
+    var status = document.getElementById('status-'+ isbn_name);
     status.innerHTML = 'Searching...';
 
     d=doSimpleXMLHttpRequest(baseurl + '/amazon-hack.php', 
@@ -44,12 +44,13 @@ function bookLookup(isbn_name, baseurl, access_key){
 
     d.addCallback(
         function(data){
-            r=d.results[0].responseXML.documentElement
+            r=d.results[0].responseXML.documentElement;
             // textContent doesn't work with for iterations, have to do [i]
-            a = [];
-            i=0;
-            while(i < r.getElementsByTagName('Author').length){
-                a.push(r.getElementsByTagName('Author')[i].textContent);
+            var a = [];
+            var i=0;
+            var found = r.getElementsByTagName('Author'); 
+            while(i < found.length){
+                a.push(found[i].textContent);
                 i++;
             }
             isbn.form[table + '-authors'].value = a.join(', ');
@@ -121,3 +122,67 @@ function trapKey(ev, isbn_name, base_url, access_key){
     return true;
 }
 
+
+function lookupTitle(fieldname, baseurl,access_key)
+{
+   var lbox = document.getElementById("lookup-" + fieldname);
+   lbox.className = 'lookupbox'; // SHOW it
+   var title = document.getElementsByName(fieldname).item(0);
+
+   var status = document.getElementById('status-'+ fieldname);
+   status.innerHTML = 'Searching...';
+
+   d=doSimpleXMLHttpRequest(baseurl + '/amazon-hack.php', 
+        {'Service':'AWSECommerceService',
+         'AWSAccessKeyId': access_key,
+         'Operation': 'ItemSearch',
+         'SearchIndex' : 'Books',
+         'Title': title.value,
+         'Sort': 'titlerank',
+         'ResponseGroup': 'Small'})
+
+    d.addCallback(
+        function(data){
+            r=d.results[0].responseXML.documentElement;
+
+            var selbox = document.getElementById('select-'+ fieldname);
+            
+            // iterate through the items, put them into the options
+            var found = r.getElementsByTagName('Item'); 
+            var i=0;
+            while(i < found.length){
+                o=new Option(
+                    found[i].getElementsByTagName('Title')[0].textContent, 
+                    found[i].getElementsByTagName('ASIN')[0].textContent);
+                selbox.options.add(o);
+                i++;
+            }
+
+            if(found.length > 0){
+                status.innerHTML = 'Found it!';
+            } else {
+                status.innerHTML = 'Try again: No such title';
+            }
+
+        });
+    d.addErrback(
+        function(data){
+        status.innerHTML = 'ERROR: Could not find title.';
+         });
+
+
+}
+
+
+
+function showDetails(fieldname)
+{
+    var selectbox = document.getElementById("select-" + fieldname);
+    var sidebar = document.getElementById("sidebar-" + fieldname);
+    
+    //TODO: go lookup the detailed stuff, parse it, and put it in here!
+    sidebar.innerHTML = selectbox.options[selectbox.selectedIndex].text;
+
+    // also put the ISBN of it into the ISBN box, remember
+
+}

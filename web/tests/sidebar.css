@@ -1,0 +1,23 @@
+.sidebar  {
+  display:block;
+  top: 0;
+  float:left;
+  position: relative;
+  padding: 0.25em;
+  text-align:left;
+  background-color:#eee;
+  color:#000; 
+  border: 1px solid #808;
+}
+div.sidebar:first-line {
+  font-weight:bold; 
+  font-size:1.2em;
+}
+select {  
+  float:left;
+  width: 40em;
+}
+
+br.clear { clear:left  }
+
+.lookupbox { display: block }

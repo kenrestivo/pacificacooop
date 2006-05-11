@@ -73,18 +73,18 @@ img {
 	padding: 0;
 }
 
- ul li {
+.menu ul li {
 	margin: 0;
 	padding: 1em 0 0 0;
 
 }
 
- ul li ul li {
+.menu  ul li ul li {
 	margin: 0 0 0 0;
 	padding: .5em 0 0  1em;
 }
 
- ul li ul li ul li {
+.menu  ul li ul li ul li {
 	margin: 0 0 0 0;
 	padding: 0 0 0  1em;
 }
@@ -369,6 +369,7 @@ a.navcurrent {
   text-decoration:none; 
   background-color: #aa99ff;
   color:#FFFFFF;}
+
 
 
 
