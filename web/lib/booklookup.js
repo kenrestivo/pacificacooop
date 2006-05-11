@@ -78,6 +78,8 @@ function bookLookup(isbn_name, baseurl, access_key){
 function startBookListener(isbn_name, base_url, access_key)
 {
     isbn = document.getElementsByName(isbn_name).item(0);
+    
+    focusOnLoad(isbn); // make default
 
     EventUtils.addEventListener(
         isbn, 'change', 
@@ -179,7 +181,7 @@ function lookupTitle(fieldname, baseurl,access_key)
 
 
 
-function showDetails(fieldname)
+function showDetails(fieldname, baseurl, access_key)
 {
     var selectbox = document.getElementById("select-" + fieldname);
     var sidebar = document.getElementById("sidebar-" + fieldname);
@@ -187,11 +189,52 @@ function showDetails(fieldname)
 
     // put the ISBN of it into the ISBN box, remember, the whole point!
     isbn.value = selectbox.value;
+    
+    sidebar.innerHTML = 'Fetching details...';
 
     
-    //TODO: go lookup the detailed stuff, parse it, and put it in here!
-    //can i use innerhtml, or must i use swapdom?
-    sidebar.innerHTML = selectbox.options[selectbox.selectedIndex].text;
+    //go lookup the detailed stuff, parse it, and put it in here!
+
+    d=doSimpleXMLHttpRequest(baseurl + '/amazon-hack.php', 
+        {'Service':'AWSECommerceService',
+         'AWSAccessKeyId': access_key,
+         'Operation': 'ItemLookup',
+         'IdType': 'ASIN',
+         'ItemId': selectbox.value,
+         'ResponseGroup': 'Small'})
+
+    d.addCallback(
+        function(data){
+            r=d.results[0].responseXML.documentElement;
+            replaceChildNodes(sidebar,null); /// clear 'em out!
+
+/*             appendChildNodes(sidebar,  */
+/*                              IMG({'src': */
+/*                                r.getElementsByTagName('SmallImage').item(0).getElementsByTagName('URL').item(0)} */
+/*                 )); */
+
+            appendChildNodes(sidebar, 
+                             P({'style': 'font-weight: bold'},
+                               r.getElementsByTagName('Title').item(0).textContent));
+            var i=0;
+            var found = r.getElementsByTagName('Author'); 
+            var authors = UL({});
+            while(i < found.length){
+                appendChildNodes(authors, LI({}, found[i].textContent));
+                i++;
+            }
+            appendChildNodes(sidebar, authors);
+
+
+        });
+
+
+    d.addErrback(
+        function(data){
+        sidebar.innerHTML = 'ERROR: Could not find details for the selected item. This is a bug.';
+            });
+
+
 
 
 }
