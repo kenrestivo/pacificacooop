@@ -13,15 +13,18 @@ amazon.com
 	password librarydatabase
 	key: 0F1YJJRT1KE6VF2DVQ02
 	example: http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=0F1YJJRT1KE6VF2DVQ02&Operation=ItemLookup&IdType=ASIN&ItemId=0596000081&ResponseGroup=Small,OfferSummary
+ 	search example: http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=0F1YJJRT1KE6VF2DVQ02&Operation=ItemSearch&SearchIndex=Books&Title=linux+device+drivers&Sort=titlerank&ResponseGroup=Small
 
-	
+
 lookup title
-	on change/select, do like the edlink, but go get data
-		example: http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=0F1YJJRT1KE6VF2DVQ02&Operation=ItemSearch&SearchIndex=Books&Title=linux+device+drivers&Sort=titlerank&ResponseGroup=Small
-		
 	what about paging?! apparently there may be >1 page
-		how long is a page? how do i get subsequent pages?
-		read docs		
+		how long is a page? 
+			looks like 10 to a page
+		how do i get subsequent pages?
+		i.e. searching for "ugly" or something really popular
+		read docs
+		bah! how to page around the fucking scrollbox!! geeh!
+			i think i may have solved this with my ncurses library years ago?
 
 	on click, show the details, and insert the isbn
 

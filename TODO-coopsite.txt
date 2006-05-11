@@ -7,6 +7,10 @@
 	menu improvements and documentation (treemenu.txt)
 
 
+20 mins JS
+fix my swapdom, preserve all the attributes!!!
+	how? via mochikit?
+	
 		
 ??PHP/SQL
 fixes for terry: enrollment summary calculations
@@ -7783,3 +7787,4 @@ video posting, gah, cross-platform crap
 	make a test popup, using not hover but something else
 		a js button
 		go read docs! search!
+	on change/select, do like the edlink, but go get data

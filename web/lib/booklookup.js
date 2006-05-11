@@ -34,6 +34,7 @@ function bookLookup(isbn_name, baseurl, access_key){
     var status = document.getElementById('status-'+ isbn_name);
     status.innerHTML = 'Searching...';
 
+
     d=doSimpleXMLHttpRequest(baseurl + '/amazon-hack.php', 
         {'Service':'AWSECommerceService',
          'AWSAccessKeyId': access_key,
@@ -58,19 +59,22 @@ function bookLookup(isbn_name, baseurl, access_key){
             isbn.form[table + '-title'].value = r.getElementsByTagName('Title').item(0).textContent;
             if(isbn.form[table + '-title'].value != ''){
                 status.innerHTML = 'Found it!';
+
             } else {
-                status.innerHTML = 'Try again: No such ISBN number';
+                
+                status.innerHTML = 'Try again: No such ISBN number.';
             }
         });
     d.addErrback(
         function(data){
         status.innerHTML = 'ERROR: Could not find ISBN. Did you mistype it?';
-         });
+            });
 }
 
 // to add the event listeners.
 // doing it as onchange/onkeyup/onkeydown via attributes doesn't work
 // so i'm explicitly addeventlisterer'ing here instead.
+// XXX GAH! find a way to genericise this, passing the change func in
 function startBookListener(isbn_name, base_url, access_key)
 {
     isbn = document.getElementsByName(isbn_name).item(0);
@@ -126,7 +130,6 @@ function trapKey(ev, isbn_name, base_url, access_key){
 function lookupTitle(fieldname, baseurl,access_key)
 {
    var lbox = document.getElementById("lookup-" + fieldname);
-   lbox.className = 'lookupbox'; // SHOW it
    var title = document.getElementsByName(fieldname).item(0);
 
    var status = document.getElementById('status-'+ fieldname);
@@ -149,17 +152,18 @@ function lookupTitle(fieldname, baseurl,access_key)
             
             // iterate through the items, put them into the options
             var found = r.getElementsByTagName('Item'); 
-            var i=0;
-            while(i < found.length){
-                o=new Option(
-                    found[i].getElementsByTagName('Title')[0].textContent, 
-                    found[i].getElementsByTagName('ASIN')[0].textContent);
-                selbox.options.add(o);
-                i++;
-            }
-
             if(found.length > 0){
                 status.innerHTML = 'Found it!';
+                lbox.className = 'lookupbox'; // SHOW it
+
+                var i=0;
+                while(i < found.length){
+                    o=new Option(
+                        found[i].getElementsByTagName('Title')[0].textContent, 
+                        found[i].getElementsByTagName('ASIN')[0].textContent);
+                    selbox.options.add(o);
+                    i++;
+                }
             } else {
                 status.innerHTML = 'Try again: No such title';
             }
@@ -186,3 +190,6 @@ function showDetails(fieldname)
     // also put the ISBN of it into the ISBN box, remember
 
 }
+
+
+
