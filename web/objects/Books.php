@@ -60,6 +60,15 @@ class Books extends CoopDBDO
             require_once('lib/isbninput.php');
             require_once('lib/titlesearch.php');
 
+            $el =& $form->createElement('isbninput', 
+                                        $form->CoopForm->prependTable('isbn'),
+                                        $this->fb_fieldLabels['isbn']);
+            
+            $el->prepare(&$form);
+            $this->fb_preDefElements['isbn'] =& $el;
+
+
+
             $el =& $form->createElement('titlesearch', 
                                         $form->CoopForm->prependTable('title'),
                                         $this->fb_fieldLabels['title']);
