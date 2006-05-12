@@ -66,9 +66,18 @@ class Books extends CoopDBDO
             
             $el->prepare(&$form);
             $this->fb_preDefElements['title'] =& $el;
-
+            
 
         }
 
+    function postGenerateForm(&$form)
+        {
+            //XXX this is really ugly!
+            //the size attribute from $fb_sizes should be respected
+            //in cases where i have a predefelement, shouldn't it?
+            $form->updateElementAttr(
+                array($form->CoopForm->prependTable('title')),
+                array('size' => '70'));
+        }
 
 }
