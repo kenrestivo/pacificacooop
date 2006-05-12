@@ -201,17 +201,20 @@ function showDetails(fieldname, baseurl, access_key)
          'Operation': 'ItemLookup',
          'IdType': 'ASIN',
          'ItemId': selectbox.value,
-         'ResponseGroup': 'Small'})
+         'ResponseGroup': 'Large'})
 
     d.addCallback(
         function(data){
             r=d.results[0].responseXML.documentElement;
             replaceChildNodes(sidebar,null); /// clear 'em out!
 
-/*             appendChildNodes(sidebar,  */
-/*                              IMG({'src': */
-/*                                r.getElementsByTagName('SmallImage').item(0).getElementsByTagName('URL').item(0)} */
-/*                 )); */
+            var smallimage = r.getElementsByTagName('SmallImage');
+            if(smallimage.length > 0){
+                appendChildNodes(sidebar,
+                             IMG({'src':
+                                 smallimage.item(0).getElementsByTagName('URL').item(0).textContent}
+                                 ));
+            }
 
             appendChildNodes(sidebar, 
                              P({'style': 'font-weight: bold'},
@@ -231,7 +234,7 @@ function showDetails(fieldname, baseurl, access_key)
 
     d.addErrback(
         function(data){
-        sidebar.innerHTML = 'ERROR: Could not find details for the selected item. This is a bug.';
+        sidebar.innerHTML = 'ERROR: ' + data + ' This is a bug. ' + data;
             });
 
 
