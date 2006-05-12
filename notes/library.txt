@@ -17,10 +17,6 @@ amazon.com
 
 	
 
-push the cuecat stuff live
-	add/edit instructions about cuecat scanner as appropriate
-
-
 cancel the deferreds when you do another deferred, i.e. paging rapidly
 		
 custom detail view fetching from amazon

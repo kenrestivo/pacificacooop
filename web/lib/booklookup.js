@@ -34,6 +34,11 @@ function bookLookup(isbn_name, baseurl, access_key){
     var status = document.getElementById('status-'+ isbn_name);
     status.innerHTML = 'Searching...';
 
+    // hide the title lookupbox
+    try{
+        document.getElementById("lookup-" + table + '-title').className = 'hidden';
+        document.getElementById("status-" + table + '-title').innerHTML = '';
+    } catch (e){};
 
     d=doSimpleXMLHttpRequest(baseurl + '/amazon-hack.php', 
         {'Service':'AWSECommerceService',

@@ -7792,3 +7792,10 @@ video posting, gah, cross-platform crap
 		go read docs! search!
 	on change/select, do like the edlink, but go get data
 	on click, show the details, and insert the isbn
+
+integrate the title search
+	merge the css in. YAY!
+	put the title in on search
+
+push the cuecat stuff live
+	add/edit instructions about cuecat scanner as appropriate
