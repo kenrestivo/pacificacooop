@@ -183,13 +183,17 @@ function lookupTitle(fieldname, baseurl,access_key)
 
 function showDetails(fieldname, baseurl, access_key)
 {
+    var tablename = fieldname.split('-')[0];
     var selectbox = document.getElementById("select-" + fieldname);
     var sidebar = document.getElementById("sidebar-" + fieldname);
-    var isbn = document.getElementsByName(fieldname.split('-')[0] + '-isbn')[0];
+    var isbn = document.getElementsByName(tablename + '-isbn')[0];
+    var title = document.getElementsByName(tablename + '-title')[0];
+    var authorfield = document.getElementsByName(tablename + '-authors')[0];
 
     // put the ISBN of it into the ISBN box, remember, the whole point!
     isbn.value = selectbox.value;
-    
+    title.value = selectbox.options[selectbox.selectedIndex].text;
+
     sidebar.innerHTML = 'Fetching details...';
 
     
@@ -228,11 +232,12 @@ function showDetails(fieldname, baseurl, access_key)
                     i++;
                 }
                 appendChildNodes(sidebar, P({}, 'By ' + authors.join(', ')));
+                authorfield.value = authors.join(', ');
             }
             var otherstuff ={'Binding Type':'Binding', 
-                             'Published On' :'PublicationDate', 
+                             'Published' :'PublicationDate', 
                              'Publisher': 'Publisher', 
-                             'Length' : 'NumberOfPages'};
+                             'Pages' : 'NumberOfPages'};
             for(i in otherstuff) {
                 el =  r.getElementsByTagName(otherstuff[i]);
                 if(el.length > 0){

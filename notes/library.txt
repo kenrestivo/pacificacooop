@@ -15,15 +15,14 @@ amazon.com
 	example: http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=0F1YJJRT1KE6VF2DVQ02&Operation=ItemLookup&IdType=ASIN&ItemId=0596000081&ResponseGroup=Small,OfferSummary
  	search example: http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=0F1YJJRT1KE6VF2DVQ02&Operation=ItemSearch&SearchIndex=Books&Title=linux+device+drivers&Sort=titlerank&ResponseGroup=Small
 
-
-integrate the title search
-	merge the css in
 	
 
 push the cuecat stuff live
 	add/edit instructions about cuecat scanner as appropriate
 
-	
+
+cancel the deferreds when you do another deferred, i.e. paging rapidly
+		
 custom detail view fetching from amazon
 	use curl and parse xml using php
 	small or medium image
