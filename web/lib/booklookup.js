@@ -243,7 +243,7 @@ function showDetails(fieldname, baseurl, access_key)
             }
             var otherstuff ={'Binding Type':'Binding', 
                              'Published' :'PublicationDate', 
-                             'Edition' :'Editio', 
+                             'Edition' :'Edition', 
                              'Publisher': 'Publisher', 
                              'Pages' : 'NumberOfPages'};
             for(i in otherstuff) {
