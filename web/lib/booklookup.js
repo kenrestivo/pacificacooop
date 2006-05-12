@@ -217,17 +217,18 @@ function showDetails(fieldname, baseurl, access_key)
             }
 
             appendChildNodes(sidebar, 
-                             P({'style': 'font-weight: bold'},
+                             P({'style': 'font-size: 1.2em; font-weight: bold'},
                                r.getElementsByTagName('Title').item(0).textContent));
             var i=0;
             var found = r.getElementsByTagName('Author'); 
-            var authors = UL({});
-            while(i < found.length){
-                appendChildNodes(authors, LI({}, found[i].textContent));
-                i++;
+            if(found.length > 0){
+                var authors = [];
+                while(i < found.length){
+                    authors.push(found[i].textContent);
+                    i++;
+                }
+                appendChildNodes(sidebar, P({}, 'By ' + authors.join(', ')));
             }
-            appendChildNodes(sidebar, authors);
-
             var otherstuff ={'Binding Type':'Binding', 
                              'Published On' :'PublicationDate', 
                              'Publisher': 'Publisher', 

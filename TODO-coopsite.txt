@@ -6,18 +6,11 @@
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
 
-
-20 mins JS
-fix my swapdom, preserve all the attributes!!!
-	how? via mochikit?
 	
 		
 ??PHP/SQL
 fixes for terry: enrollment summary calculations
 	
-
-??PHP/HTML/JS
-the damned video is not showing up
 
 
 ??PHP/SQL
@@ -703,6 +696,11 @@ my enrollment date links and summaries are all fucked up
 
 ----------------
 BELOW THE LINE
+
+
+??PHP/HTML/JS
+the damned video is not showing up
+
 
 ??PHP/SQL
 job description fixes
@@ -3781,7 +3779,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	the last/first of author?
+
+20 mins JS
+fix my swapdom, preserve all the attributes!!!
+	how? via mochikit?
+
+		the last/first of author?
 		bah, not available from amazon in that format!!
 
 	must this be a subclass? or can i hack it as a predefelement?
@@ -7788,3 +7791,4 @@ video posting, gah, cross-platform crap
 		a js button
 		go read docs! search!
 	on change/select, do like the edlink, but go get data
+	on click, show the details, and insert the isbn

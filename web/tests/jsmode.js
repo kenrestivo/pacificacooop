@@ -589,7 +589,13 @@ foo={'Binding':'Binding',
               'Publication Date' :'PublicationDate', 
               'Publisher': 'Publisher', 
      'Length' : 'NumberOfPages'};
+
 for(i in foo){
     alert(foo[i]);
 }
+
+bar=['Binding', 'Publication Date', 'Publisher', 'Length' ];
+// hmm, this is an object. is there some way to get all the keys from it?
+
+bar.join(', ')
 

@@ -16,10 +16,23 @@ amazon.com
  	search example: http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=0F1YJJRT1KE6VF2DVQ02&Operation=ItemSearch&SearchIndex=Books&Title=linux+device+drivers&Sort=titlerank&ResponseGroup=Small
 
 
+integrate the title search
+	merge the css in
+	
+
+push the cuecat stuff live
+	add/edit instructions about cuecat scanner as appropriate
+
+	
+custom detail view fetching from amazon
+	use curl and parse xml using php
+	small or medium image
+	used and new price summary
+	short synopsis perhaps
+	link to amazon.com
+
+	
 lookup title
-	on click, show the details, and insert the isbn
-
-
 	what about paging?! apparently there may be >1 page
 		i.e. searching for "ugly" or something really popular
 		how long is a page? 
@@ -40,16 +53,8 @@ scan the colours page, split them up, and assign them as appropriate
 	move them to the primary category section
 	
 	
-custom detail view fetching from amazon
-	use curl and parse xml using php
-	small or medium image
-	used and new price summary
-	short synopsis perhaps
-	link to amazon.com
 
 	
-push the cuecat stuff live
-	add/edit instructions about cuecat scanner as appropriate
 
 EAN's as well as UPC's. read up on it; it's not easy
 
