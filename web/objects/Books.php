@@ -33,7 +33,6 @@ class Books extends CoopDBDO
         'isbn' => 'ISBN Number',
         'title' => 'Book Title',
         'authors' => 'Authors (separated by commas)',
-        'book_color_id' => 'Color Code',
         'primary_book_category_id' => 'Primary Category',
         'secondary_book_category_id' => 'Secondary Category'
 		);
