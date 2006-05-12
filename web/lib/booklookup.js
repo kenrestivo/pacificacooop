@@ -155,9 +155,10 @@ function lookupTitle(fieldname, baseurl,access_key)
             // iterate through the items, put them into the options
             var found = r.getElementsByTagName('Item'); 
             if(found.length > 0){
-                status.innerHTML = 'Found it!';
+                status.innerHTML = r.getElementsByTagName('TotalResults')[0].textContent + ' books found';
                 lbox.className = 'lookupbox'; // SHOW it
-
+                
+                cleanBox(selbox);
                 var i=0;
                 while(i < found.length){
                     o=new Option(
@@ -261,4 +262,20 @@ function showDetails(fieldname, baseurl, access_key)
 }
 
 
+cleanBox = function (selbox)
+        {
+            
+            try{
+                
+                for ( i=selbox.length; selbox.length> 0; i--) {
+                    selbox.remove(i);
+                }
+                
+                selbox.selectedIndex = 0;
+                
+            } catch(e){
+                //XXX do something dude!
+            }
+
+        }
 
