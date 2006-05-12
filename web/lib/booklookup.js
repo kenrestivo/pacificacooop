@@ -155,7 +155,7 @@ function lookupTitle(fieldname, baseurl,access_key)
             // iterate through the items, put them into the options
             var found = r.getElementsByTagName('Item'); 
             if(found.length > 0){
-                status.innerHTML = r.getElementsByTagName('TotalResults')[0].textContent + ' books found';
+                status.innerHTML = r.getElementsByTagName('TotalResults')[0].textContent + ' matches found!';
                 lbox.className = 'lookupbox'; // SHOW it
                 
                 cleanBox(selbox);
@@ -184,12 +184,13 @@ function lookupTitle(fieldname, baseurl,access_key)
 
 function showDetails(fieldname, baseurl, access_key)
 {
+    var title = document.getElementsByName(fieldname)[0];
     var tablename = fieldname.split('-')[0];
+    var isbn = title.form[tablename + '-isbn'];
+    var authorfield = title.form[tablename + '-authors'];
+
     var selectbox = document.getElementById("select-" + fieldname);
     var sidebar = document.getElementById("sidebar-" + fieldname);
-    var isbn = document.getElementsByName(tablename + '-isbn')[0];
-    var title = document.getElementsByName(tablename + '-title')[0];
-    var authorfield = document.getElementsByName(tablename + '-authors')[0];
 
     // put the ISBN of it into the ISBN box, remember, the whole point!
     isbn.value = selectbox.value;
@@ -237,6 +238,7 @@ function showDetails(fieldname, baseurl, access_key)
             }
             var otherstuff ={'Binding Type':'Binding', 
                              'Published' :'PublicationDate', 
+                             'Edition' :'Editio', 
                              'Publisher': 'Publisher', 
                              'Pages' : 'NumberOfPages'};
             for(i in otherstuff) {
