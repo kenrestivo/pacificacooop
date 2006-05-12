@@ -228,6 +228,18 @@ function showDetails(fieldname, baseurl, access_key)
             }
             appendChildNodes(sidebar, authors);
 
+            var otherstuff ={'Binding Type':'Binding', 
+                             'Published On' :'PublicationDate', 
+                             'Publisher': 'Publisher', 
+                             'Length' : 'NumberOfPages'};
+            for(i in otherstuff) {
+                el =  r.getElementsByTagName(otherstuff[i]);
+                if(el.length > 0){
+                    appendChildNodes(sidebar, 
+                                     P({},
+                                       i + ': ' + el.item(0).textContent));
+                }
+            }
 
         });
 

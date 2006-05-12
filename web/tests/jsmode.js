@@ -541,7 +541,7 @@ d=doSimpleXMLHttpRequest('http://www/coop-dev/amazon-hack.php',
      'Operation': 'ItemLookup',
      'IdType': 'ASIN',
      'ItemId': '0596000081',
-     'ResponseGroup': 'Small'})
+     'ResponseGroup': 'Large'})
 
 r=d.results[0].responseXML.documentElement
 
@@ -581,3 +581,15 @@ title = found[i].getElementsByTagName('Title')[0].textContent;
 
 
 w.document.getElementById('status-books-isbn')
+
+r.getElementsByTagName('SmallImage').item(0).getElementsByTagName('URL').item(0).textContent
+
+
+foo={'Binding':'Binding', 
+              'Publication Date' :'PublicationDate', 
+              'Publisher': 'Publisher', 
+     'Length' : 'NumberOfPages'};
+for(i in foo){
+    alert(foo[i]);
+}
+
