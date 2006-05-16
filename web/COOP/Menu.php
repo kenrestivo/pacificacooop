@@ -35,7 +35,8 @@ class CoopMenu
     var $menustruct; // for compatibility with old html menu
     var $tmenu; // ref of TreeMenu object
     var $menustack = array();
-    var $icon = '';
+    var $icon = 'folder.gif'; // folder.gif? or a better one?
+    var $expandedIcon = 'folder-expanded.gif'; //  or a better one?
 
 
 
@@ -248,7 +249,8 @@ group by report_permissions.realm_id',
                     $subnode =& new HTML_TreeNode(
                         array('text' => $subitem['title'],
                               'link' => empty($subitem['url']) ? '' : $subitem['url'],
-                              'icon' => $this->icon));
+                              'icon' => $this->icon,
+                              'expandedIcon' => $this->expandedIcon));
                     $this->menustack[count($this->menustack) - 1]->addItem($subnode);
                     $this->subcurse(&$subitem, &$subnode);
                 }
@@ -267,7 +269,8 @@ group by report_permissions.realm_id',
                 $node =& new HTML_TreeNode(
                     array('text' => $item['title'],
                           'link' => empty($item['url']) ? '' : $item['url'],
-                          'icon' => $this->icon));
+                          'icon' => $this->icon,
+                          'expandedIcon' => $this->expandedIcon));
                 $this->tmenu->addItem($node); // have to add the toplevels to the menu!
                 $this->subcurse(&$item, &$node);
             }
