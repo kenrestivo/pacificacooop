@@ -1,6 +1,5 @@
 tree menu
 
-
 an open all and close all button!
 	hmm. how to do that?
 	read docs?
@@ -19,7 +18,6 @@ debbie's and lisa's idea is excellent: pages for each subitem
 
 
 remember the help text
-		can i do title tags? how? i need them
 		ideally also provide links to various help texts too
 			create a "help" page, you can link to
 				which will have all the sub-items under this one!
@@ -28,3 +26,6 @@ remember the help text
 		
 other events are possible too, i.e. mouseovers. 
 		nice extra events like expand/contract too
+
+
+maybe stick the listbox at the top of the generic non-menu pages and reports?

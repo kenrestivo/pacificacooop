@@ -250,7 +250,8 @@ group by report_permissions.realm_id',
                         array('text' => $subitem['title'],
                               'link' => empty($subitem['url']) ? '' : $subitem['url'],
                               'icon' => $this->icon,
-                              'expandedIcon' => $this->expandedIcon));
+                              'expandedIcon' => $this->expandedIcon,
+                              'events' => array('title' => $subitem['help'])));
                     $this->menustack[count($this->menustack) - 1]->addItem($subnode);
                     $this->subcurse(&$subitem, &$subnode);
                 }
@@ -270,7 +271,8 @@ group by report_permissions.realm_id',
                     array('text' => $item['title'],
                           'link' => empty($item['url']) ? '' : $item['url'],
                           'icon' => $this->icon,
-                          'expandedIcon' => $this->expandedIcon));
+                          'expandedIcon' => $this->expandedIcon,
+                          'events' => array('title' => $item['help'])));
                 $this->tmenu->addItem($node); // have to add the toplevels to the menu!
                 $this->subcurse(&$item, &$node);
             }

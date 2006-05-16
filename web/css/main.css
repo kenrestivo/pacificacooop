@@ -376,6 +376,8 @@ a.navcurrent {
 }
 
 
+.treeMenuDefault { vertical-align: middle }
+
 @media print { 	
   #header { display:none }	
   #footer { display:none }	

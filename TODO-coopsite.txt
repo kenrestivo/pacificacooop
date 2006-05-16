@@ -4,9 +4,9 @@
  	import the 20-year roster (20yearroster.txt)
  	pick a couple things off of the to-do-before-handing-off list
 	cleanups and code fixes (cleanme.txt)
-	menu improvements and documentation (treemenu.txt)
+	re-read margolis UI notes, and implement if possible
 
-	
+		
 		
 ??PHP/SQL
 fixes for terry: enrollment summary calculations
@@ -40,6 +40,7 @@ put in details recordbuttons for on auction purchases report
 4 hours PHP/UNIX
 start tracking this stuff in mantis!
 	install mantis
+	or maybe subversion instead of cvs?!
 	
 
 ??PHP
@@ -177,7 +178,6 @@ BURNT (when too burnt out to do actual work)
 ----------------
 STUCK - behind things that are either prerequisites or MORE IMPORTANT
 
-	gui/usability fixes, from mike margolis
 	sortable/searchable/pagable views (searchfeature.txt)
 	json, REST, xmlrpc (jsonselect.txt)
 	fix money: make it INVOICES  billing and income (invoicing.txt) SQL
@@ -3779,7 +3779,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-		what about these extra little thingies?
+	
+a backup for no-javascript case!
+	basically, show the pulldown version, then whack it with js
+		sadly, no. can't do it
+
+			what about these extra little thingies?
 		what teh FUCK is an "extra little thingie"??!
 
 			look at how html_ajax does it
@@ -7830,3 +7835,5 @@ use html_treemenu, it works, it's nice
 	well, no, i have to figure out teh DATA stuff
 working example http://www.phpguru.org/static/treemenu.html
 	with all the proper JS includes
+		can i do title tags? how? i need them
+				ah. events, of all the stupid places for it

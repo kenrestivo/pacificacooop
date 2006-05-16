@@ -30,7 +30,12 @@ print '<div class="leftCol" id="leftCol">';
 print $menu->getDHTML();
 print '</div><!-- end leftcol div -->';
 
-print $menu->getListBox();
+
+
+//print $menu->getListBox();
+
+
+
 
 
 ?> 
