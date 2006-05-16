@@ -44,7 +44,7 @@ print $cp->topNavigation();
 $cp->createLegacy($cp->auth);
 
 $menu =& new CoopMenu(&$cp);
-$menu->getMenu();
+$menu->build();
 
 $u = $cp->userStruct; // cached by createlegacy
 
@@ -63,7 +63,7 @@ $cp->initStack();
 /// XXX AUUGH! for some reason this totaly breaks, only on the live site
 /// if you don't have id=leftCol. makes no sense, there is no id, it's a class
 print '<div class="leftCol" id="leftCol">';
-print $menu->kenRender();
+print $menu->getDHTML();
 print '</div><!-- end leftcol div -->';
 
 print '<div class="rightCol">';

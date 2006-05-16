@@ -35,7 +35,7 @@ class CoopMenu
     var $menustruct; // for compatibility with old html menu
     var $tmenu; // ref of TreeMenu object
     var $menustack = array();
-    var $icon = 'folder.gif';
+    var $icon = '';
 
 
 
@@ -54,48 +54,6 @@ class CoopMenu
                        E_USER_WARNING);
             return $this->page->topNavigation();
         }
-
-
-	function kenRender($type = 'sitemap')
-		{
-	
-			switch($type){
-			case 'sitemap':
-				$this->renderer =& new HTML_Menu_DirectTreeRenderer();
-				$this->renderer->setEntryTemplate(
-                    array(
-                        HTML_MENU_ENTRY_ACTIVE =>
-                        '<span title="{help}">{title}</span>',
-                        HTML_MENU_ENTRY_INACTIVE    => 
-                        '<a href="{url}" title="{help}">{title}</a>',
-                        HTML_MENU_ENTRY_ACTIVEPATH  => 
-                        '<a href="{url}" title="{help}">{title}</a>'));
-
-				$this->render($this->renderer, $type);
-				break;
-			case 'urhere':
-				$this->renderer =& new HTML_Menu_DirectRenderer();
-				$this->renderer->setMenuTemplate(
- 					'<table border="0">',
- 					'</table>');
-				//print "HEYY HEEYY";
-				$this->render($this->renderer, $type);
-				//	confessArray($this->getPath(), "apath");
- 				if(count($this->getPath()) < 2){
- 					return "";
- 				}
-
-			break;
-			default:
-				return "BROKEN TYPE $type";
-				break;
-			}
-			//confessObj($this , "menures");
-			$res .= '<div class="menu">';
-			$res .= $this->renderer->toHTML();
-			$res .= '</div><!-- end menu class -->';
-			return $res;
-		}
 
 
 
@@ -289,7 +247,7 @@ group by report_permissions.realm_id',
                 foreach($item['sub'] as $id => $subitem){
                     $subnode =& new HTML_TreeNode(
                         array('text' => $subitem['title'],
-                              'link' => $subitem['url'],
+                              'link' => empty($subitem['url']) ? '' : $subitem['url'],
                               'icon' => $this->icon));
                     $this->menustack[count($this->menustack) - 1]->addItem($subnode);
                     $this->subcurse(&$subitem, &$subnode);
@@ -306,9 +264,10 @@ group by report_permissions.realm_id',
             
             // toplevels are different. they just are.
             foreach($this->menustruct as $id => $item){
-                $node =& new HTML_TreeNode(array('text' => $item['title'],
-                                                 'link' => $item['url'],
-                                                 'icon' => $this->icon));
+                $node =& new HTML_TreeNode(
+                    array('text' => $item['title'],
+                          'link' => empty($item['url']) ? '' : $item['url'],
+                          'icon' => $this->icon));
                 $this->tmenu->addItem($node); // have to add the toplevels to the menu!
                 $this->subcurse(&$item, &$node);
             }
@@ -322,11 +281,18 @@ group by report_permissions.realm_id',
                 array('images' => 
                       COOP_ABSOLUTE_URL_PATH_PEAR_DATA . '/HTML_TreeMenu/images',
                       'defaultClass' => 'treeMenuDefault'));
-            return $this->page->jsRequireOnce(COOP_ABSOLUTE_URL_PATH_PEAR_DATA .
-                '/HTML_TreeMenu/TreeMenu.js', 'INCLUDE_TREEMENU_JS') . 
-                $treeMenu->toHTML();
 
+            // ok, finally show it!
+            $res = "";
+            $res .= $this->page->jsRequireOnce(
+                COOP_ABSOLUTE_URL_PATH_PEAR_DATA .
+                '/HTML_TreeMenu/TreeMenu.js', 'INCLUDE_TREEMENU_JS');
+            $res .= '<div class="menu">';
+            $res .= $treeMenu->toHTML() ;
+            $res .= '</div>';
+            return $res;
         }
+
 
     function getListBox()
         {
