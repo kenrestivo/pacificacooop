@@ -19,6 +19,9 @@ $cp =& new CoopPage($debug);
 $cp->logIn(); // gotta do that for testing
 
 print $cp->pageTop();
+print $cp->topNavigation();
+print "\n<hr /></div> <!-- end header div -->\n";
+
 
 $menu =& new CoopMenu(&$cp);
 $menu->build();
