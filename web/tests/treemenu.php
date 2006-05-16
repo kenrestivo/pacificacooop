@@ -1,32 +1,45 @@
 <?php
+
+chdir('..'); // for tests
+
+
+require_once("first.inc");
+require_once("auth.inc");
+
+require_once("CoopPage.php");
+require_once("CoopMenu.php");
+require_once("CoopView.php");
 require_once('HTML/TreeMenu.php');
-require_once('../no_cvs.inc');
+
 
 printf('<script src="%s/HTML_TreeMenu/TreeMenu.js" language="JavaScript" type="text/javascript"></script>', 
        COOP_ABSOLUTE_URL_PATH_PEAR_DATA);
 
 $icon = 'folder.gif';
 
-$menu  = new HTML_TreeMenu();
+$menu  =& new HTML_TreeMenu();
 
 $topnode =& new HTML_TreeNode(array('text' => "First level",
                                  'link' => "/phpwork/environs.php",
                                  'icon' => $icon));
 $menu->addItem($topnode); // have to add the toplevels to the menu!
+$prev =& $topnode;
 
-$foo   = &$topnode->addItem(new HTML_TreeNode(array('text' => "Second level",
+$next   = &$prev->addItem(new HTML_TreeNode(array('text' => "Second level",
                                                   'link' => "",
                                                   'icon' => $icon)));
+$prev =& $next; // going down one level
 
-$bar   = &$foo->addItem(new HTML_TreeNode(array('text' => "Third level",
+$next   = &$prev->addItem(new HTML_TreeNode(array('text' => "Third level",
                                                 'link' => "/phpwork/environs.php",
                                                 'icon' => $icon)));
 
-$blaat = &$bar->addItem(new HTML_TreeNode(array('text' => "Fourth level",
+$next = &$prev->addItem(new HTML_TreeNode(array('text' => "Fourth level",
                                                 'link' => "/phpwork/environs.php",
                                                 'icon' => $icon)));
+$prev =& $next; // going down one level
 
-$blaat->addItem(new HTML_TreeNode(array('text' => "Fifth level",
+$next =& $prev->addItem(new HTML_TreeNode(array('text' => "Fifth level",
                                         'icon' => $icon,
                                         'cssClass' => 'treeMenuBold')));
 
@@ -58,6 +71,42 @@ $treeMenu->printMenu();
 // for the page top, quick nav?
 $listBox  = &new HTML_TreeMenu_Listbox($menu);
 $listBox->printMenu();
+
+
+/// let's try mine now
+$cp =& new CoopPage($debug);
+$cp->logIn(); // gotta do that for testing
+
+$menu =& new CoopMenu(&$cp);
+$menu->getMenu();
+
+$tmenu  =& new HTML_TreeMenu();
+$menustack = array();
+foreach($menu->vars['menu'] as $id => $item){
+   $node =& new HTML_TreeNode(array('text' => $item['title'],
+                                    'link' => $item['url'],
+                                    'icon' => $icon));
+   $tmenu->addItem($node); // have to add the toplevels to the menu!
+
+   if(!empty($item['sub'])){
+       array_push($menustack, &$node);
+       foreach($item['sub'] as $id => $subitem){
+           $subnode =& new HTML_TreeNode(array('text' => $subitem['title'],
+                                            'link' => $subitem['url'],
+                                            'icon' => $icon));
+           $menustack[count($menustack) - 1]->addItem($subnode);
+       }
+       array_pop($menustack);
+   }
+}
+
+// Create the presentation class for the side menu!
+$treeMenu =& new HTML_TreeMenu_DHTML(
+    $tmenu, 
+    array('images' => 
+          COOP_ABSOLUTE_URL_PATH_PEAR_DATA . '/HTML_TreeMenu/images',
+          'defaultClass' => 'treeMenuDefault'));
+$treeMenu->printMenu();
 
 
 ?> 
