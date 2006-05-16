@@ -1,36 +1,10 @@
 tree menu
 
-how to traverse the html_menu tree, and turn it into a treemenu?!
-	for all top nodes
-		make a node (with help/title/link if any)
-			insert it in the menuobject
-		if it has subs,
-			push onto stack
-			for each sub
-				make a node (as above)
-				insert the node into the last one on the stack
-			then pop back out of stack
-	recurse it now!!
-		break up into functions
-	remember the help text
-		ideally also provide links to various help texts too
-			create a "help" page, you can link to
-				which will have all the sub-items under this one!
-		maybe those nifty ajax popups? like in my book thing?
-			
-			
 
-
-2 hours PHP/UNIX
-open questions
-	STUCK: how to get the stuff in /usr/share/php/data to the browser?
-		look at how html_ajax does it
-			they just open it generateClient()
-		or just link or copy it, goddammit
-	can i do title tags? how? i need them
-	what about these extra little thingies?
-		what teh FUCK is an "extra little thingie"??!
-
+an open all and close all button!
+	hmm. how to do that?
+	read docs?
+	
 
 8 hours PHP		
 debbie's and lisa's idea is excellent: pages for each subitem
@@ -42,20 +16,15 @@ debbie's and lisa's idea is excellent: pages for each subitem
 	still leave that main menu thing on the front page though
 		and the listbox at the top of all other pages
 
-	
+
+
+remember the help text
+		can i do title tags? how? i need them
+		ideally also provide links to various help texts too
+			create a "help" page, you can link to
+				which will have all the sub-items under this one!
+		maybe those nifty ajax popups? like in my book thing?
+
 		
-
-
-use html_treemenu, it works, it's nice
-	well, no, i have to figure out teh DATA stuff
-	
-
-working example http://www.phpguru.org/static/treemenu.html
-	with all the proper JS includes
-
-
-
-
-notes
-	other events are possible too, i.e. mouseovers. 
+other events are possible too, i.e. mouseovers. 
 		nice extra events like expand/contract too

@@ -3779,6 +3779,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+		what about these extra little thingies?
+		what teh FUCK is an "extra little thingie"??!
+
+			look at how html_ajax does it
+			they just open it generateClient()
+				and i hate that!
 
 20 mins JS
 fix my swapdom, preserve all the attributes!!!
@@ -7799,6 +7805,28 @@ integrate the title search
 
 push the cuecat stuff live
 	add/edit instructions about cuecat scanner as appropriate
-
+	
+how to traverse the html_menu tree, and turn it into a treemenu?!
 treemenu.js. where?
 	aha. in data
+	for all top nodes
+		make a node (with help/title/link if any)
+			insert it in the menuobject
+		if it has subs,
+			push onto stack
+			for each sub
+				make a node (as above)
+				insert the node into the last one on the stack
+			then pop back out of stack
+	recurse it now!!
+		break up into functions
+
+2 hours PHP/UNIX
+open questions
+	STUCK: how to get the stuff in /usr/share/php/data to the browser?
+		fuck it, just use /data
+		or just link or copy it, goddammit
+use html_treemenu, it works, it's nice
+	well, no, i have to figure out teh DATA stuff
+working example http://www.phpguru.org/static/treemenu.html
+	with all the proper JS includes
