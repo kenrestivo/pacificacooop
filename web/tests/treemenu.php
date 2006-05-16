@@ -17,9 +17,11 @@ class Crap
     var $tmenu; // ref of TreeMenu object
     var $menustack = array();
     var $icon = 'folder.gif';
+    var $page; // *sigh* yet another cache of the coop page
 
-    function Crap()
+    function Crap(&$page)
         {
+            $this->page =& $page;
             $this->tmenu  =& new HTML_TreeMenu();
         }
 
@@ -29,9 +31,10 @@ class Crap
             if(!empty($item['sub'])){
                 array_push($this->menustack, &$parent);
                 foreach($item['sub'] as $id => $subitem){
-                    $subnode =& new HTML_TreeNode(array('text' => $subitem['title'],
-                                                        'link' => $subitem['url'],
-                                                        'icon' => $this->icon));
+                    $subnode =& new HTML_TreeNode(
+                        array('text' => $subitem['title'],
+                              'link' => $subitem['url'],
+                              'icon' => $this->icon));
                     $this->menustack[count($this->menustack) - 1]->addItem($subnode);
                     $this->subcurse(&$subitem, &$subnode);
                 }
@@ -61,25 +64,23 @@ class Crap
                 array('images' => 
                       COOP_ABSOLUTE_URL_PATH_PEAR_DATA . '/HTML_TreeMenu/images',
                       'defaultClass' => 'treeMenuDefault'));
-            return $treeMenu->toHTML();
+            return $this->page->jsRequireOnce(COOP_ABSOLUTE_URL_PATH_PEAR_DATA .
+                '/HTML_TreeMenu/TreeMenu.js', 'INCLUDE_TREEMENU_JS') . 
+                $treeMenu->toHTML();
 
         }
 
     function getListBox()
         {
             $listBox  = &new HTML_TreeMenu_Listbox($this->tmenu);
-            return $listBox->toHTML();
+            return $this->page->jsRequireOnce(COOP_ABSOLUTE_URL_PATH_PEAR_DATA .
+                '/HTML_TreeMenu/TreeMenu.js', 'INCLUDE_TREEMENU_JS') .
+                $listBox->toHTML();
 
         }
 
 
 } // end class
-
-
-
-printf('<script src="%s/HTML_TreeMenu/TreeMenu.js" language="JavaScript" type="text/javascript"></script>', 
-       COOP_ABSOLUTE_URL_PATH_PEAR_DATA);
-
 
 
 
@@ -91,7 +92,7 @@ $cp->logIn(); // gotta do that for testing
 $menu =& new CoopMenu(&$cp);
 $menu->getMenu();
 
-$crap =& new Crap();
+$crap =& new Crap(&$cp);
 $crap->traverse(&$menu->vars['menu']);
 print $crap->getDHTML();
 
