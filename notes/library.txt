@@ -15,7 +15,12 @@ amazon.com
 	example: http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=0F1YJJRT1KE6VF2DVQ02&Operation=ItemLookup&IdType=ASIN&ItemId=0596000081&ResponseGroup=Small,OfferSummary
  	search example: http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=0F1YJJRT1KE6VF2DVQ02&Operation=ItemSearch&SearchIndex=Books&Title=linux+device+drivers&Sort=titlerank&ResponseGroup=Small
 
-	
+
+shitcan that colour table!
+	yank it from the admin tables perms thingus
+	actually drop it from the db
+	cvs remove the color table objects files
+		
 
 cancel the deferreds when you do another deferred, i.e. paging rapidly
 		

@@ -1,8 +1,8 @@
  the coop web database
 
  MY agenda! dammit, mine! for a change....
- 	pick a couple things off of the to-do-before-handing-off list
  	import the 20-year roster (20yearroster.txt)
+ 	pick a couple things off of the to-do-before-handing-off list
 	cleanups and code fixes (cleanme.txt)
 	menu improvements and documentation (treemenu.txt)
 
@@ -14,11 +14,11 @@ fixes for terry: enrollment summary calculations
 
 
 ??PHP/SQL
-indulgence fixes	
+indulgence fixes: enhancement hours
 
 	
 ??PHP/SQL
-	the library scanning thing: two categories
+	the library scanning thing: categories
 
 
 	
@@ -7799,3 +7799,6 @@ integrate the title search
 
 push the cuecat stuff live
 	add/edit instructions about cuecat scanner as appropriate
+
+treemenu.js. where?
+	aha. in data

@@ -1,4 +1,4 @@
-audit trail niceties
+audit trail niceties and fixes needed
 
 	handle deletions! 
 		what if the record is deleted

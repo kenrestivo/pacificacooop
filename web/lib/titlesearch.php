@@ -59,7 +59,6 @@ function _postJS()
                 $res = "";
                 $res .= sprintf('<input type="button" value="Search" onclick="lookupTitle(%s)">
 <div class="inline" id="%s"></div><br>
-
 <table class="hidden" id="%s">
 	<tr><td>Choose a Title below:</td></tr>
 	  <tr>
