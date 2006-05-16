@@ -64,6 +64,7 @@ $cp->initStack();
 /// if you don't have id=leftCol. makes no sense, there is no id, it's a class
 print '<div class="leftCol" id="leftCol">';
 print $menu->getDHTML();
+print '<noscript>Alas, you must have a JavaScript-enabled browser in order to use this site. Sorry.</noscript>';
 print '</div><!-- end leftcol div -->';
 
 print '<div class="rightCol">';
