@@ -13,13 +13,19 @@ require_once('HTML/TreeMenu.php');
 
 
 
+
 /// let's try mine now
 $cp =& new CoopPage($debug);
 $cp->logIn(); // gotta do that for testing
 
+print $cp->pageTop();
+
 $menu =& new CoopMenu(&$cp);
 $menu->build();
+
+print '<div class="leftCol" id="leftCol">';
 print $menu->getDHTML();
+print '</div><!-- end leftcol div -->';
 
 print $menu->getListBox();
 
