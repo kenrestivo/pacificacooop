@@ -3,7 +3,7 @@
 //$Id$
 
 /*
-	Copyright (C) 2004-2005  ken restivo <ken@restivo.org>
+	Copyright (C) 2004-2006  ken restivo <ken@restivo.org>
 	 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,26 +21,29 @@
 */
 
 
-require_once 'HTML/Menu.php';
-require_once 'HTML/Menu/DirectTreeRenderer.php';
-require_once 'HTML/Menu/DirectRenderer.php';
-require_once 'HTML/Table.php';
 require_once 'CoopObject.php';
+require_once('HTML/TreeMenu.php');
 
 
-class CoopMenu extends HTML_Menu
+class CoopMenu 
 {
 	var $realms;
-	var $page;
+    var $page; // *sigh* yet another cache of the coop page
 	var $renderer;
     var $alertme = array(); // list of tables to check for alerts
     var $vars;
+    var $menustruct; // for compatibility with old html menu
+    var $tmenu; // ref of TreeMenu object
+    var $menustack = array();
+    var $icon = 'folder.gif';
+
+
 
     //constructior
     function CoopMenu(&$page)
         {
-            parent::HTML_Menu();
             $this->page =& $page;
+            $this->tmenu  =& new HTML_TreeMenu();
         }
 
     function topNavigation()
@@ -270,6 +273,70 @@ group by report_permissions.realm_id',
             $this->page->printDebug('CoopMenu::getMenu(): recalculating', 2);
             $this->createNew();
         }
+
+    // to mirror old html_menu api
+    function setMenu(&$res)
+        {
+            $this->menustruct =& $res;
+        }
+
+
+    function subcurse(&$item, &$parent)
+        {
+            // XXX whoops! need to recurse, dude!
+            if(!empty($item['sub'])){
+                array_push($this->menustack, &$parent);
+                foreach($item['sub'] as $id => $subitem){
+                    $subnode =& new HTML_TreeNode(
+                        array('text' => $subitem['title'],
+                              'link' => $subitem['url'],
+                              'icon' => $this->icon));
+                    $this->menustack[count($this->menustack) - 1]->addItem($subnode);
+                    $this->subcurse(&$subitem, &$subnode);
+                }
+                array_pop($this->menustack);
+            }
+            
+        }
+    
+    
+    function build()
+        {
+            $this->getMenu(); // first actually retrieve/build the struct
+            
+            // toplevels are different. they just are.
+            foreach($this->menustruct as $id => $item){
+                $node =& new HTML_TreeNode(array('text' => $item['title'],
+                                                 'link' => $item['url'],
+                                                 'icon' => $this->icon));
+                $this->tmenu->addItem($node); // have to add the toplevels to the menu!
+                $this->subcurse(&$item, &$node);
+            }
+        }
+     
+    function getDHTML()
+        {
+// Create the presentation class for the side menu!
+            $treeMenu =& new HTML_TreeMenu_DHTML(
+                $this->tmenu, 
+                array('images' => 
+                      COOP_ABSOLUTE_URL_PATH_PEAR_DATA . '/HTML_TreeMenu/images',
+                      'defaultClass' => 'treeMenuDefault'));
+            return $this->page->jsRequireOnce(COOP_ABSOLUTE_URL_PATH_PEAR_DATA .
+                '/HTML_TreeMenu/TreeMenu.js', 'INCLUDE_TREEMENU_JS') . 
+                $treeMenu->toHTML();
+
+        }
+
+    function getListBox()
+        {
+            $listBox  = &new HTML_TreeMenu_Listbox($this->tmenu);
+            return $this->page->jsRequireOnce(COOP_ABSOLUTE_URL_PATH_PEAR_DATA .
+                '/HTML_TreeMenu/TreeMenu.js', 'INCLUDE_TREEMENU_JS') .
+                $listBox->toHTML();
+
+        }
+
 
 
 } // END COOPMENU CLASSr
