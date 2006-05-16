@@ -9,12 +9,13 @@ $icon = 'folder.gif';
 
 $menu  = new HTML_TreeMenu();
 
-$node1 = new HTML_TreeNode(array('text' => "First level",
+$topnode =& new HTML_TreeNode(array('text' => "First level",
                                  'link' => "/phpwork/environs.php",
                                  'icon' => $icon));
+$menu->addItem($topnode); // have to add the toplevels to the menu!
 
-$foo   = &$node1->addItem(new HTML_TreeNode(array('text' => "Second level",
-                                                  'link' => "/phpwork/environs.php",
+$foo   = &$topnode->addItem(new HTML_TreeNode(array('text' => "Second level",
+                                                  'link' => "",
                                                   'icon' => $icon)));
 
 $bar   = &$foo->addItem(new HTML_TreeNode(array('text' => "Third level",
@@ -26,30 +27,36 @@ $blaat = &$bar->addItem(new HTML_TreeNode(array('text' => "Fourth level",
                                                 'icon' => $icon)));
 
 $blaat->addItem(new HTML_TreeNode(array('text' => "Fifth level",
-                                        'link' => "/phpwork/environs.php",
                                         'icon' => $icon,
                                         'cssClass' => 'treeMenuBold')));
 
-$node1->addItem(new HTML_TreeNode(array('text' => "Second level, item 2",
+$topnode->addItem(new HTML_TreeNode(array('text' => "Second level, item 2",
                                         'link' => "/phpwork/environs.php",
                                         'icon' => $icon)));
 
-$node1->addItem(new HTML_TreeNode(array('text' => "Second level, item 3",
+$topnode->addItem(new HTML_TreeNode(array('text' => "Second level, item 3",
                                         'link' => "/phpwork/environs.php",
                                         'icon' => $icon)));
 
-$menu->addItem($node1);
-$menu->addItem($node1);
+$topnode =& new HTML_TreeNode(array('text' => "Another First level",
+                                 'link' => "/phpwork/environs.php",
+                                 'icon' => $icon));
 
-// Create the presentation class
+$menu->addItem($topnode); // have to add the toplevels to the menu!
+
+
+// Create the presentation class for the side menu!
 $treeMenu = &new HTML_TreeMenu_DHTML(
     $menu, 
     array('images' => 
           COOP_ABSOLUTE_URL_PATH_PEAR_DATA . '/HTML_TreeMenu/images',
           'defaultClass' => 'treeMenuDefault'));
-$listBox  = &new HTML_TreeMenu_Listbox($menu);
-
 $treeMenu->printMenu();
+
+
+
+// for the page top, quick nav?
+$listBox  = &new HTML_TreeMenu_Listbox($menu);
 $listBox->printMenu();
 
 
