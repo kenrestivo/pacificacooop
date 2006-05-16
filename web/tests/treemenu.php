@@ -16,7 +16,7 @@ class Crap
 {
     var $tmenu; // ref of TreeMenu object
     var $menustack = array();
-
+    var $icon = 'folder.gif';
 
     function Crap()
         {
@@ -31,7 +31,7 @@ class Crap
                 foreach($item['sub'] as $id => $subitem){
                     $subnode =& new HTML_TreeNode(array('text' => $subitem['title'],
                                                         'link' => $subitem['url'],
-                                                        'icon' => $icon));
+                                                        'icon' => $this->icon));
                     $this->menustack[count($this->menustack) - 1]->addItem($subnode);
                     $this->subcurse(&$subitem, &$subnode);
                 }
@@ -43,15 +43,36 @@ class Crap
     
     function traverse(&$menustruct)
         {
+            // toplevels are different. they just are.
             foreach($menustruct as $id => $item){
                 $node =& new HTML_TreeNode(array('text' => $item['title'],
                                                  'link' => $item['url'],
-                                                 'icon' => $icon));
+                                                 'icon' => $this->icon));
                 $this->tmenu->addItem($node); // have to add the toplevels to the menu!
                 $this->subcurse(&$item, &$node);
             }
         }
      
+    function showDHTML()
+        {
+// Create the presentation class for the side menu!
+            $treeMenu =& new HTML_TreeMenu_DHTML(
+                $this->tmenu, 
+                array('images' => 
+                      COOP_ABSOLUTE_URL_PATH_PEAR_DATA . '/HTML_TreeMenu/images',
+                      'defaultClass' => 'treeMenuDefault'));
+            $treeMenu->printMenu();
+
+        }
+
+    function showListBox()
+        {
+            $listBox  = &new HTML_TreeMenu_Listbox($this->tmenu);
+            $listBox->printMenu();
+
+        }
+
+
 } // end class
 
 
@@ -59,7 +80,7 @@ class Crap
 printf('<script src="%s/HTML_TreeMenu/TreeMenu.js" language="JavaScript" type="text/javascript"></script>', 
        COOP_ABSOLUTE_URL_PATH_PEAR_DATA);
 
-$icon = 'folder.gif';
+
 
 
 
@@ -72,17 +93,8 @@ $menu->getMenu();
 
 $crap =& new Crap();
 $crap->traverse(&$menu->vars['menu']);
+$crap->showDHTML();
 
-// Create the presentation class for the side menu!
-$treeMenu =& new HTML_TreeMenu_DHTML(
-    $crap->tmenu, 
-    array('images' => 
-          COOP_ABSOLUTE_URL_PATH_PEAR_DATA . '/HTML_TreeMenu/images',
-          'defaultClass' => 'treeMenuDefault'));
-$treeMenu->printMenu();
-
-$listBox  = &new HTML_TreeMenu_Listbox($tmenu);
-$listBox->printMenu();
 
 
 ?> 
