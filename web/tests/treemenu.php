@@ -53,7 +53,7 @@ class Crap
             }
         }
      
-    function showDHTML()
+    function getDHTML()
         {
 // Create the presentation class for the side menu!
             $treeMenu =& new HTML_TreeMenu_DHTML(
@@ -61,14 +61,14 @@ class Crap
                 array('images' => 
                       COOP_ABSOLUTE_URL_PATH_PEAR_DATA . '/HTML_TreeMenu/images',
                       'defaultClass' => 'treeMenuDefault'));
-            $treeMenu->printMenu();
+            return $treeMenu->toHTML();
 
         }
 
-    function showListBox()
+    function getListBox()
         {
             $listBox  = &new HTML_TreeMenu_Listbox($this->tmenu);
-            $listBox->printMenu();
+            return $listBox->toHTML();
 
         }
 
@@ -93,8 +93,9 @@ $menu->getMenu();
 
 $crap =& new Crap();
 $crap->traverse(&$menu->vars['menu']);
-$crap->showDHTML();
+print $crap->getDHTML();
 
+print $crap->getListBox();
 
 
 ?> 
