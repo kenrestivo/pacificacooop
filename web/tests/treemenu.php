@@ -88,6 +88,7 @@ foreach($menu->vars['menu'] as $id => $item){
                                     'icon' => $icon));
    $tmenu->addItem($node); // have to add the toplevels to the menu!
 
+   // XXX whoops! need to recurse, dude!
    if(!empty($item['sub'])){
        array_push($menustack, &$node);
        foreach($item['sub'] as $id => $subitem){
