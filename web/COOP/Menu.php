@@ -35,7 +35,7 @@ class CoopMenu
     var $menustruct; // for compatibility with old html menu
     var $tmenu; // ref of TreeMenu object
     var $menustack = array();
-    var $icon = 'folder.gif'; // folder.gif? or a better one?
+    var $icon = 'folder.gif'; // or a better one?
     var $expandedIcon = 'folder-expanded.gif'; //  or a better one?
 
 
@@ -242,7 +242,7 @@ group by report_permissions.realm_id',
 
     function subcurse(&$item, &$parent)
         {
-            // XXX whoops! need to recurse, dude!
+            //  need to recurse, dude!
             if(!empty($item['sub'])){
                 array_push($this->menustack, &$parent);
                 foreach($item['sub'] as $id => $subitem){
@@ -280,7 +280,7 @@ group by report_permissions.realm_id',
      
     function getDHTML()
         {
-// Create the presentation class for the side menu!
+            // Create the presentation class for the side menu!
             $treeMenu =& new HTML_TreeMenu_DHTML(
                 $this->tmenu, 
                 array('images' => 
