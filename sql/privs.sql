@@ -34,4 +34,21 @@ update user set password = old_password('test') where User = 'input';
 update user set password = old_password('92xPi9') where User = 'springfest';
 flush privileges;
 
+----  for the new drupal stuff
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX,
+     ALTER, CREATE TEMPORARY TABLES, LOCK TABLES
+     ON coop_drupal.*
+     TO 'coopdrupal'@'%' IDENTIFIED BY '36a3e3ed44';
+
+ GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX,
+     ALTER, CREATE TEMPORARY TABLES, LOCK TABLES
+     ON coop_drupal.*
+     TO 'coopdrupal'@'localhost' IDENTIFIED BY '36a3e3ed44';
+
+use mysql;
+update user set password = old_password('36a3e3ed44') where User = 'coopdrupal';
+flush privileges;
+
+-- then of course load the drupal database schema from their distribution
+
 -- EOF
