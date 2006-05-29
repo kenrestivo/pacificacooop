@@ -1,8 +1,4 @@
 tree menu
-
-an open all and close all button!
-	hmm. how to do that?
-	read docs?
 	
 
 8 hours PHP		
@@ -23,7 +19,13 @@ remember the help text
 				which will have all the sub-items under this one!
 		maybe those nifty ajax popups? like in my book thing?
 
-		
+
+
+an open all and close all button!
+	hmm. how to do that?
+	read docs?
+
+				
 other events are possible too, i.e. mouseovers. 
 		nice extra events like expand/contract too
 

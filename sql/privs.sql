@@ -45,6 +45,15 @@ GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX,
      ON coop_drupal.*
      TO 'coopdrupal'@'localhost' IDENTIFIED BY '36a3e3ed44';
 
+GRANT SELECT, LOCK TABLES
+     ON coop_drupal.*
+     TO 'backup'@'%' IDENTIFIED BY '2a5e8deecfd';
+
+GRANT SELECT, LOCK TABLES
+     ON coop_drupal.*
+     TO 'backup'@'localhost' IDENTIFIED BY '2a5e8deecfd';
+
+
 use mysql;
 update user set password = old_password('36a3e3ed44') where User = 'coopdrupal';
 flush privileges;

@@ -54,7 +54,7 @@ blow off pagetop completely
 		buffer the entire page, no matter how fucking enormous
 			this also gets me a <title> that makes sense too
 			wouldn't take much to TAL the whole app, actually
-	i now have working tal templates, so this shouldn't be hard
+	i now have working tal templates, so this shouldn't be hard!
 
 
 ???PHP

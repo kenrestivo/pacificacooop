@@ -1,5 +1,51 @@
 redo the whole site in drupal or xoops or something
 
+first drop all the crufty crap cleanup stuff
+
+wow, i was able to get all the content in there!! cool!
+
+modules i'll want for the school
+	must have
+		civicrm, of course!
+		civimail (instead of bbs?)
+     	calendar/event, i.e. food site
+		minutes!
+		event repeat
+		tinymce
+		flexinode
+     	simplevote/mediumvote?
+     	amazon associate tools
+		gallery
+		print friendly
+	ooh!
+		activeselect: may be useful!
+		blockbar
+		mailhandler? for posting?
+		project!
+		javascripttools
+	hmm? research more
+		nice menus?
+		category?
+		contact list
+		img_assist?
+
+		
+use the files/foo stuff for andreas theme! make it all in drupal!
+		
+try to bridge it in
+	make my stuff a subset, replace dispatcher/generic.php
+	
+
+			
+
+find a choose widget for linked tables
+	
+step through every section of the site, and look at what's required
+	invitations: inviting versus names? pick list? tricky.
+	the tangle of membership, enhancement, etc
+		just add some of it as adjuncts to user information
+			or glue it in somehow
+	
 
 differences between my app and drupal?
 	auth the concept of group-level privs:
@@ -7,13 +53,12 @@ differences between my app and drupal?
 		i think i saw this somethere
 	linkconcat and popup and searchselect
 	the wide variety of tables
-
-
+	
 open questions
 	does it use templates? how can i use templates?
+		it uses its own fucked-up templating engine: PHPTemplate.
 	can i set a popup/pulldown to be items from another node type??
-	can i have user names with spaces in them?
-	password recovery.. make sure it handles this
+		probably not. but there's stuff in civicrm
 	how can i glue between my old application and the new one?
 		i.e. mix drupal nodes and coop stuff
 		figure out how to integrate this massive app base already present
@@ -23,12 +68,38 @@ open questions
 	integrating menu, how?
 		shouldn't be that difficult: custom menu basically
 		already has its own heirarchal stuff
+			read docs, yes.
 	linking auth with family name/id
 		familyid is *everywhere* in this app... s/b userid?
 			i.e. more than one user per family?
-			teachers!!?
+			teachers!!
+		look at member designation in civicrm
 
 
 plan for new site:
 	new users get EMAILED their password and login name!!
 		none of this pop-up-menu crapola!
+
+
+
+
+how to start, goddammit!?
+	have to move shit around in cvs, no?
+	try integrating it without that
+	wow, petition module integrates with civicrm really well!
+		others do too, i.e. vote module
+		
+-----------------
+DONE
+
+can i have user names with spaces in them?
+		yes
+	password recovery.. make sure it handles this
+		yes
+
+		install mods
+				book
+	     	forums
+
+drupal settings
+	do not let users auto-register

@@ -12,7 +12,6 @@
 fixes for terry: enrollment summary calculations
 	
 
-
 ??PHP/SQL
 indulgence fixes: enhancement hours
 
@@ -41,6 +40,12 @@ put in details recordbuttons for on auction purchases report
 start tracking this stuff in mantis!
 	install mantis
 	or maybe subversion instead of cvs?!
+
+
+???PHP/SQL
+poll question
+	cut off date! automatic, put it in the question, optionally
+	anonymity! just increment vote tallys for questions
 	
 
 ??PHP
@@ -183,12 +188,13 @@ STUCK - behind things that are either prerequisites or MORE IMPORTANT
 	fix money: make it INVOICES  billing and income (invoicing.txt) SQL
 	normalise and clean up permissions (permsfixing.txt) SQL
 	normalise people/companies/parents/families (databasenormalisation.txt) SQL
-	insurance, dammit
+	popups and help pages for the treemenu (treemenu.txt)
 	graphs and charts (graphs.txt)
 	json services (templates.txt-- anything left to do?)
 	labels/export -- python cgi on nfsn, formatting, etc.
 	springfest microsite (microsite.txt)	
 	re-do the whole site-- front page to bottom-- in XOOPS or Drupal, etc
+	insurance, dammit
 
 										
 12 hours PHP
@@ -743,11 +749,6 @@ shitcan pdml and use html2fpdf instead
 ??PHP/SQL
 add DEAR and , to the template
 	and fetch it in the thank_you::dearinheadlights() callback
-
-???PHP/SQL
-poll question
-	cut off date! automatic, put it in the question, optionally
-	anonymity! just increment vote tallys for questions
 
 
 	
@@ -3779,7 +3780,12 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	
+
+
+add a block for the bulletin board stuff from old site?
+	naw, integrate the new stuff.
+
+
 a backup for no-javascript case!
 	basically, show the pulldown version, then whack it with js
 		sadly, no. can't do it

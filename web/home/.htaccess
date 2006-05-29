@@ -1,0 +1,13 @@
+RewriteEngine on
+RewriteRule ^RSVP$ members/rsvp.php
+RewriteRule ^rsvp$ members/rsvp.php
+
+RewriteRule ^springfest$ members/public_auction.php
+
+#temporary hack
+RewriteRule ^sf/donate.php$ /
+#another temporary hack to cover a typo in leigh ann's post
+RewriteRule ^vote$ members/vote.php
+
+php_flag magic_quotes_runtime 0
+php_flag magic_quotes_gpc 0

@@ -42,6 +42,10 @@ stick reports into the stack, somehow
 		nag
 		solicitsumm
 		attendance (new)
+		programsummary
+		bid sheets
+		gift certificates
+		any other TALpage or cooPDF's?
 	
 
 now, it might not need to be this complicated!
