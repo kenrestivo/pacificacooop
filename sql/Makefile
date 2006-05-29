@@ -102,7 +102,7 @@ restore:
 	../scripts/reset.py
 
 
-backup-drupal-local::
+backup-drupal::
 	$(MAKE) backup  DB="coop_drupal" BKUSER"=backup" BKPW="2a5e8deecfd"
 
 

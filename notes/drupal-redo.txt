@@ -1,22 +1,29 @@
 redo the whole site in drupal or xoops or something
 
-first drop all the crufty crap cleanup stuff
 
-wow, i was able to get all the content in there!! cool!
+import the users!!
+	write an export script using csv python
+		civicrm file: family info, familyid, and userid
+			parse out if possible
+		drupal file: name, email, password, familyid, userid
+			some way to hack the password md5: bring it in raw!
+	FIRST import them as civicrm contacts!
+		get the family id's correct!
+ 	then do the drupal user import of same data; it should match up
+
 
 modules i'll want for the school
 	must have
-		civicrm, of course!
-		civimail (instead of bbs?)
      	calendar/event, i.e. food site
 		minutes!
 		event repeat
 		tinymce
 		flexinode
-     	simplevote/mediumvote?
-     	amazon associate tools
 		gallery
 		print friendly
+	i can wait
+     	simplevote/mediumvote? or is "poll" OK?
+     	amazon associate tools
 	ooh!
 		activeselect: may be useful!
 		blockbar
@@ -29,16 +36,53 @@ modules i'll want for the school
 		contact list
 		img_assist?
 
-		
+				
+try to bridge it in
+	update my include path to obviate the need for chdir() shit!
+		include the /members
+	make my stuff a module, replace dispatcher/generic.php
+		will work for everything except the PDF shit
+			should be a way around that, actually!
+	make my shitty coopmenu a block, only for registered users
+
+
+update the "welcome" email, to tell them,
+	if they don't like their username, change it!
+
+	
+do the dance of the CVS
+	
+then push the fucker live!
+
+goodies
+		civicrm, of course!
+			have a look at the towncenter one for comparison
+			maybe custom data for wait list application?!!
+			add the profiles and custom fields to the thankyou page!
+
+
+find a way to link the leads to who invited them
+	and permission them, so only certain people see them
+
+more importation
+	do the 20-year alumni thing. it's time!
+	export the solicitation contacts (the most important ones!)
+	then the leads
+
+
+get the paypal SSL cert thing going			
+			
+drop all the crufty crap cleanup stuff (sep: cleanup.txt?)
+			
 use the files/foo stuff for andreas theme! make it all in drupal!
 		
-try to bridge it in
-	make my stuff a subset, replace dispatcher/generic.php
-	
+find a choose widget for linked tables??
+	or write your own?
 
-			
-
-find a choose widget for linked tables
+start converting stuff to flexinodes or custom modules
+	job descriptions
+	enrollment?
+	enhancement?
 	
 step through every section of the site, and look at what's required
 	invitations: inviting versus names? pick list? tricky.
@@ -59,6 +103,7 @@ open questions
 		it uses its own fucked-up templating engine: PHPTemplate.
 	can i set a popup/pulldown to be items from another node type??
 		probably not. but there's stuff in civicrm
+			yeah, look in modules. you have to write ugly php to do it
 	how can i glue between my old application and the new one?
 		i.e. mix drupal nodes and coop stuff
 		figure out how to integrate this massive app base already present
@@ -103,3 +148,6 @@ can i have user names with spaces in them?
 
 drupal settings
 	do not let users auto-register
+
+wow, i was able to get all the content in there!! cool!
+			civimail (instead of bbs?)
