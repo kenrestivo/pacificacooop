@@ -19,13 +19,12 @@
 
 DBHOST=bc
 MASTERHOST=bc
-DBNAME=coop
+DB=coop
 TEMPFILE=/tmp/export.sql
 DATE=${shell date +%Y.%m.%d.%H.%M.%S}
-DATAFILE=backups/$(DBNAME)-$(DBHOST)-data.$(DATE)
-DEFFILE=backups/$(DBNAME)-$(DBHOST)-defs.$(DATE)
+DATAFILE=backups/$(DB)-$(DBHOST)-data.$(DATE)
+DEFFILE=backups/$(DB)-$(DBHOST)-defs.$(DATE)
 TABS=cooptabs$(DATE)
-DB=coop
 DBPORT=3306
 DBUSER=ken
 REALDB=pacsql.db
@@ -43,10 +42,10 @@ create::
 	mysql -u $(DBUSER) -p -h $(DBHOST) -P $(DBPORT) mysql < definition.sql
 
 dummy::
-	mysql -u $(DBUSER) -p -h $(DBHOST) -P $(DBPORT) $(DBNAME) < dummydata.sql
+	mysql -u $(DBUSER) -p -h $(DBHOST) -P $(DBPORT) $(DB) < dummydata.sql
 
 reports::
-	mysql -u $(DBUSER) -p -h $(DBHOST) -P $(DBPORT) $(DBNAME) < queries.sql
+	mysql -u $(DBUSER) -p -h $(DBHOST) -P $(DBPORT) $(DB) < queries.sql
 
 
 backup-defs::
@@ -71,7 +70,7 @@ backup-data:
 		--no-create-db \
 		--no-create-info \
 		--quick \
-		-h $(DBHOST) -P $(DBPORT) -u $(BKUSER) --password=$(PW) > $(DATAFILE)
+		-h $(DBHOST) -P $(DBPORT) -u $(BKUSER) --password=$(BKPW) > $(DATAFILE)
 	bzip2 -f $(DATAFILE)
 
 backup: backup-defs backup-data
@@ -94,13 +93,18 @@ diagram:
 	autodia.pl -l DBI -i "mysql:$(DB):$(DBHOST)" -U$(BKUSER) -P$(BKPW) -o schema.dia
 
 ksql-live:
-	ksql $(DBNAME) 127.0.0.1 $(BKUSER) $(FARPORT)
+	ksql $(DB) 127.0.0.1 $(BKUSER) $(FARPORT)
 
 mysql-live:
-	mysql -h  127.0.0.1 -u $(BKUSER) -P $(FARPORT) $(DBNAME)
+	mysql -h  127.0.0.1 -u $(BKUSER) -P $(FARPORT) $(DB)
 
 restore:
 	../scripts/reset.py
+
+
+backup-drupal-local::
+	$(MAKE) backup  DB="coop_drupal" BKUSER"=backup" BKPW="2a5e8deecfd"
+
 
 #EOF
 
