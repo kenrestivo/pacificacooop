@@ -32,6 +32,7 @@ r=Families.select()
 
 ##TODO: parse out the ",pacifica 94044" shit
 
+w.writerow(civicrmfields)
 for rec in r:
     w.writerow([getattr(rec, i) for i in civicrmfields])
 
