@@ -106,5 +106,9 @@ backup-drupal-local::
 	$(MAKE) backup  DB="coop_drupal" BKUSER"=backup" BKPW="2a5e8deecfd"
 
 
+backup-drupal-live::
+	$(MAKE) backup DB="coop_drupal"  BKUSER"=backup" DBHOST=127.0.0.1  DBPORT=$(FARPORT) BKPW="2a5e8deecfd" 
+
+
 #EOF
 
