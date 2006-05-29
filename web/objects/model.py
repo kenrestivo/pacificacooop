@@ -114,6 +114,15 @@ class Income(SQLObject):
               uglyName='incomeID'
 
 
+
+class Users(SQLObject):
+       class sqlmeta:
+              fromDatabase = True
+              idName='user_id'
+              uglyName='userID'
+
+
+
 ## XXX ugly hack required to deal with leading column names in packages, alas
 for i in Packages.sqlmeta.columnList:
     if i.dbName == 'cache_package_description':
