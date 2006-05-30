@@ -50,7 +50,7 @@ function bookLookup(isbn_name, baseurl, access_key){
 
     d.addCallback(
         function(data){
-            r=d.results[0].responseXML.documentElement;
+            r=d.results[0].responseXML;
             // textContent doesn't work with for iterations, have to do [i]
             var a = [];
             var i=0;
@@ -153,7 +153,7 @@ function lookupTitle(fieldname, baseurl,access_key)
 
     d.addCallback(
         function(data){
-            r=d.results[0].responseXML.documentElement;
+            r=d.results[0].responseXML;
 
             var selbox = document.getElementById('select-'+ fieldname);
             
@@ -216,7 +216,7 @@ function showDetails(fieldname, baseurl, access_key)
 
     d.addCallback(
         function(data){
-            r=d.results[0].responseXML.documentElement;
+            r=d.results[0].responseXML;
             replaceChildNodes(sidebar,null); /// clear 'em out!
 
             var smallimage = r.getElementsByTagName('SmallImage');
