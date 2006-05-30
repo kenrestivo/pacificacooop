@@ -3780,6 +3780,17 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+			some way to hack the password md5: bring it in raw!
+			user_save() looks like it does all the heavy lifting
+				write my own fucking module here.
+				role 2 == authenticated user
+				it's in user.module!
+					have to use that, so that the civicrm hooks get called :-(
+
+					    	simplevote/mediumvote? or is "poll" OK?
+
+		maybe that should be a custom activity in civicrm!??
+			no, not enough detail
 
 
 add a block for the bulletin board stuff from old site?

@@ -1,4 +1,8 @@
 <?php
+
+// $Id$
+// modified by (c) 2006 ken restivo 
+
 /* +-------------------------------------------------------------------+
  * | This file is part of flexac                                       |
  * | Copyright (c) 2005 Claudio Cicali <claudio@cicali.org>            |
