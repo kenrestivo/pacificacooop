@@ -1,49 +1,62 @@
 redo the whole site in drupal or xoops or something
 
+shitcan my aborted ABSOLUTE_FILE_PATH crap!
 
-import the users!!
-	write an export script using csv python
-		civicrm file: family info, familyid, and userid
-			parse out if possible
-		drupal file: name, email, password, familyid, userid
-			some way to hack the password md5: bring it in raw!
-	FIRST import them as civicrm contacts!
-		get the family id's correct!
- 	then do the drupal user import of same data; it should match up
+drop all the crufty crap cleanup stuff (sep: cleanup.txt?)
+
+
+set up forums: member only should see it
+	perms? content types? what?		
 
 
 modules i'll want for the school
 	must have
-     	calendar/event, i.e. food site
-		minutes!
-		event repeat
 		tinymce
-		flexinode
-		gallery
+		gallery2? or image? or does tinyhtml do that anyway? ing_assist?
 		print friendly
 	i can wait
-     	simplevote/mediumvote? or is "poll" OK?
-     	amazon associate tools
+      	amazon associate tools
 	ooh!
 		activeselect: may be useful!
+		javascripttools! for my custom module things!
 		blockbar
 		mailhandler? for posting?
 		project!
-		javascripttools
 	hmm? research more
-		nice menus?
 		category?
 		contact list
 		img_assist?
+		nice menus? bah, doesn't help
+		
 
-				
-try to bridge it in
+
+import the users!!
+	write an export script using csv python
+		drupal file: name, email, password, familyid, userid
+			USE THE LIVE DATA! the passwords are bullshit on my home site!
+				this presumes pushing it live. am i ready?
+ 	then do the drupal user import of same data; it should match up
+		do i have to write something? or does it exist already?
+	finally write another quick python script to replace passwords
+		based on email address... scary but it's all i've got
+
+
+ok, how do i do auth now? i no longer link to the users table
+	this needs serious thought
+		
+						
+try to shoehorn it in
 	update my include path to obviate the need for chdir() shit!
-		include the /members
+		include the COOP_ABSOLUTE_FILE_PATH
+			i need DB_DataObject class_location, schema_loation too!
 	make my stuff a module, replace dispatcher/generic.php
 		will work for everything except the PDF shit
 			should be a way around that, actually!
 	make my shitty coopmenu a block, only for registered users
+	the include paths are going to be UGLAY!
+		because my coop app needs MY pear and local pear!
+			but civicrm has its own pear too... conflicts! DB, QF, Pager
+			i cannot break civicrm!
 
 
 update the "welcome" email, to tell them,
@@ -54,10 +67,19 @@ do the dance of the CVS
 	
 then push the fucker live!
 
+
+by default, set simple_access defaults so that ALL nodes are members only
+	only privileged users can un-do that
+	gah! not possible. have to hack
+
+
 goodies
 		civicrm, of course!
 			have a look at the towncenter one for comparison
 			maybe custom data for wait list application?!!
+				i'd have to write custom drupal to parse it out
+					i.e. to make contacts for parent/child/etc
+					easy with javascript kit, repeating forms, flexinode
 			add the profiles and custom fields to the thankyou page!
 
 
@@ -72,7 +94,6 @@ more importation
 
 get the paypal SSL cert thing going			
 			
-drop all the crufty crap cleanup stuff (sep: cleanup.txt?)
 			
 use the files/foo stuff for andreas theme! make it all in drupal!
 		
@@ -151,3 +172,13 @@ drupal settings
 
 wow, i was able to get all the content in there!! cool!
 			civimail (instead of bbs?)
+		civicrm file: family info, familyid, and userid
+			parse out if possible
+	FIRST import them as civicrm contacts!
+		get the family id's correct!
+		event repeat
+		flexinode
+		minutes!
+     	calendar/event, i.e. food site
+			hmm. permissions for events: some public, some not
+			simpleaccess!
