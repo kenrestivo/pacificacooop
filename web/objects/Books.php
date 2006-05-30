@@ -88,13 +88,5 @@ class Books extends CoopDBDO
                 array('size' => '70'));
         }
 
-    function beforeForm(&$co)
-        {
-            return '<!--[if IE]>
-<p class="error">NOTE! This currently WILL NOT work with Explorer. You need a standards-based browser. We recommend Firefox. <a href="http://www.getfirefox.com"><img  alt="Get Firefox!" title="Get Firefox!" src="http://sfx-images.mozilla.org/affiliates/Buttons/110x32/get.gif"/></a></p>
-<![endif]-->
-    ';
-
-        }
-
+ 
 }
