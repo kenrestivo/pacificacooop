@@ -15,7 +15,8 @@ path.append('/mnt/kens/ki/proj/coop/web/objects')
 civicrmfields=['families.family_id', 'users.name',
                'phone', 'address1', 'email', 'user_id']
 
-drupalfields=['families.family_id', 'users.name', 'email', 'user_id']
+drupalfields=['families.family_id', 'users.name', 'email',
+              'user_id', 'password']
 
 
 from model import *
@@ -44,6 +45,8 @@ for rec in c:
 f.close()
 
 
+#### REMEMBER TO EXPORT USING THE LIVE SITE!!!!!
+### pretty useless to have "tester" as the password, you know
 c.execute('select %s from families left join users using (family_id) where email is not null' % (','.join(drupalfields)))
 
 f=open('/mnt/kens/ki/proj/coop/imports/users-export.csv', 'w')
