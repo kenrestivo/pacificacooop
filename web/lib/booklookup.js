@@ -56,12 +56,12 @@ function bookLookup(isbn_name, baseurl, access_key){
             var i=0;
             var found = r.getElementsByTagName('Author'); 
             while(i < found.length){
-                a.push(found[i].textContent);
+                a.push(found[i].firstChild.nodeValue);
                 i++;
             }
             isbn.form[table + '-authors'].value = a.join(', ');
             isbn.form[table + '-title'].value = ''; // clear out first
-            isbn.form[table + '-title'].value = r.getElementsByTagName('Title').item(0).textContent;
+            isbn.form[table + '-title'].value = r.getElementsByTagName('Title').item(0).firstChild.nodeValue;
             if(isbn.form[table + '-title'].value != ''){
                 status.innerHTML = 'Found it!';
 
@@ -160,15 +160,15 @@ function lookupTitle(fieldname, baseurl,access_key)
             // iterate through the items, put them into the options
             var found = r.getElementsByTagName('Item'); 
             if(found.length > 0){
-                status.innerHTML = r.getElementsByTagName('TotalResults')[0].textContent + ' matches found!';
+                status.innerHTML = r.getElementsByTagName('TotalResults')[0].firstChild.nodeValue + ' matches found!';
                 lbox.className = 'lookupbox'; // SHOW it
                 
                 cleanBox(selbox);
                 var i=0;
                 while(i < found.length){
                     o=new Option(
-                        found[i].getElementsByTagName('Title')[0].textContent, 
-                        found[i].getElementsByTagName('ASIN')[0].textContent);
+                        found[i].getElementsByTagName('Title')[0].firstChild.nodeValue, 
+                        found[i].getElementsByTagName('ASIN')[0].firstChild.nodeValue);
                     selbox.options.add(o);
                     i++;
                 }
@@ -223,19 +223,19 @@ function showDetails(fieldname, baseurl, access_key)
             if(smallimage.length > 0){
                 appendChildNodes(sidebar,
                              IMG({'src':
-                                 smallimage.item(0).getElementsByTagName('URL').item(0).textContent}
+                                 smallimage.item(0).getElementsByTagName('URL').item(0).firstChild.nodeValue}
                                  ));
             }
 
             appendChildNodes(sidebar, 
                              P({'style': 'font-size: 1.2em; font-weight: bold'},
-                               r.getElementsByTagName('Title').item(0).textContent));
+                               r.getElementsByTagName('Title').item(0).firstChild.nodeValue));
             var i=0;
             var found = r.getElementsByTagName('Author'); 
             if(found.length > 0){
                 var authors = [];
                 while(i < found.length){
-                    authors.push(found[i].textContent);
+                    authors.push(found[i].firstChild.nodeValue);
                     i++;
                 }
                 appendChildNodes(sidebar, P({}, 'By ' + authors.join(', ')));
@@ -251,7 +251,7 @@ function showDetails(fieldname, baseurl, access_key)
                 if(el.length > 0){
                     appendChildNodes(sidebar, 
                                      P({},
-                                       i + ': ' + el.item(0).textContent));
+                                       i + ': ' + el.item(0).firstChild.nodeValue));
                 }
             }
 
