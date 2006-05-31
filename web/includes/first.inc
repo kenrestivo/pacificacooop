@@ -33,13 +33,17 @@ define('DB_DATAOBJECT_NO_OVERLOAD', true);
 require_once('settings/dbhost.inc');
 require_once('settings/globals.inc');
 
+
+/// THIS IS THE KEY TO THE WHOLE APPLICATION!
+/// if this one function doesn't happen, ain't nothing else happening!
 set_include_path(implode(PATH_SEPARATOR, 
-                         array(dirname(__FILE__),
+                         array(dirname(__FILE__), // hmm. instead of ABS_PATH?
                                'local_pear',
                                COOP_LOCAL_PEAR_PATH,
                                get_include_path())));
 
-require_once("session-init.php");
+
+require_once("includes/session-init.php");
 
 setupDB();
 setupErrors(); //*sigh* have to do this SECOND since it looks at dbhost :-/

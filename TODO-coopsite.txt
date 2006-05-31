@@ -7894,3 +7894,5 @@ is ThankYou.php used anymore?! can i cruft it out?
     		first awk/split it out
     		then run another qa, just to be sure!
 	includes (for utils.inc, etc?)
+	settings (for stuff like dbhost, globals.inc, etc?)
+	move session-init to includes

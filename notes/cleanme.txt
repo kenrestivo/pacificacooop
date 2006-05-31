@@ -1,8 +1,11 @@
 random things that really really need to get cleaned up
 
 new directory structure:
-	move session-init to includes
 	move all the DBDO.ini shit around too
+		start with coop-dbobj.ini, maybe?
+		re-read DBDO docs
+	find a better way to start this up, than dirname(__FILE__)!
+		i want to be able to move first.inc somewhere else, maybe?
 	COOP (all my CoopFoo.php classes). only classes go in here
 
 
