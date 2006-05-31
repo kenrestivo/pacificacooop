@@ -109,7 +109,7 @@ function recordButtons(&$co, $par, $wrap)
                 $res .= $co->page->selfURL(
 					array('value' => 
 						  'Reprint/View',
-						  'base' =>'print_popup.php', 
+						  'base' => COOP_ABSOLUTE_URL_PATH . '/pages/print_popup.php', 
 						  'inside' => array(
                               'thing' => 'letters',
                               'set' => 'printed',
@@ -140,7 +140,7 @@ function recordButtons(&$co, $par, $wrap)
 //             $res .= $co->page->selfURL(
 // 					array('value' => 
 // 						  'Print/Preview',
-// 						  'base' =>'print_popup.php', 
+// 						  'base' =>COOP_ABSOLUTE_URL_PATH . '/pages/print_popup.php', 
 // 						  'inside' => array(
 //                               'thing' => 'letters',
 //                               'set' => 'one',
