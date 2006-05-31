@@ -3,7 +3,7 @@
 //$Id$
 
 //chdir("../");                   // XXX only for "test" dir hack!
-require_once 'utils.inc';
+require_once 'includes/utils.inc';
 require_once 'PHPUnit.php';
 
 /// UTILS IS NOT OOP. if it was, i'd just add test_FOO into the class

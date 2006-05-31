@@ -8,7 +8,7 @@ require_once('CoopPage.php');
 require_once('CoopObject.php');
 require_once 'PHPUnit.php';
 require_once 'PHPUnit/GUI/HTML.php';
-require_once('utilstest.php');
+require_once('qa/utilstest.php');
 
 //TODO: write a function to include everything in this dir
 require_once('Table_permissions_test.php');

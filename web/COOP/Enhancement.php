@@ -23,7 +23,7 @@
 require_once('CoopObject.php');
 require_once('DB/DataObject.php');
 require_once('object-config.php');
-require_once('utils.inc'); //XXX superfluous?
+require_once('includes/utils.inc'); //XXX superfluous?
 
 
 //////////////////////////////////////////

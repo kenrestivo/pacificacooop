@@ -1,9 +1,9 @@
 random things that really really need to get cleaned up
 
 new directory structure:
-	COOP (all my CoopFoo.php classes). only classes go in here
-	settings (for stuff like dbhost, etc?)
+	settings (for stuff like dbhost, globals.inc, etc?)
 	includes (for utils.inc, etc?)
+	COOP (all my CoopFoo.php classes). only classes go in here
 
 
 stuff to deal with when moving all around
@@ -14,8 +14,6 @@ stuff to deal with when moving all around
 go through the joinpaths in standard linkconstraints!
 	i bet i can blow off tons of wacko custom linkconstraints this way!
 
-
-			
 
 
 

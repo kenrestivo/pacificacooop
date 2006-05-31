@@ -21,7 +21,7 @@
 */
 
 require_once("first.inc");
-require_once("auth.inc");
+require_once("includes/auth.inc");
 require_once('Mail.php');
 require_once 'HTML/Table.php';
 require_once 'lib/sniff.php';

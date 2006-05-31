@@ -21,7 +21,7 @@
 //$debug = -1;
 
 require_once("first.inc");
-require_once("auth.inc");
+require_once("includes/auth.inc");
 
 require_once("CoopPage.php");
 require_once("CoopMenu.php");
