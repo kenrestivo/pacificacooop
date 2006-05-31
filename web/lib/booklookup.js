@@ -40,7 +40,7 @@ function bookLookup(isbn_name, baseurl, access_key){
         document.getElementById("status-" + table + '-title').innerHTML = '';
     } catch (e){};
 
-    d=doSimpleXMLHttpRequest(baseurl + '/amazon-hack.php', 
+    d=doSimpleXMLHttpRequest(baseurl + '/services/amazon-hack.php', 
         {'Service':'AWSECommerceService',
          'AWSAccessKeyId': access_key,
          'Operation': 'ItemLookup',

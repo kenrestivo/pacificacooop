@@ -20,8 +20,8 @@ if (!isset($_GET["font"])){
     $font = $_GET["font"];
 }
 
-
-$fontpath = "../fonts/$font";
+/// XXX HACK! use ABSOLUTE URL here instead!
+$fontpath = "../../fonts/$font";
 
 
 // angle of the font in degrees

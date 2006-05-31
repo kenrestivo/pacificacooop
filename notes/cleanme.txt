@@ -1,27 +1,9 @@
 random things that really really need to get cleaned up
 
-is ThankYou.php used anymore?! can i cruft it out?
-
-
 new directory structure:
 	COOP (all my CoopFoo.php classes). only classes go in here
-	coop (for python libraries?) maybe make an init_py for it?
-	services
-		customfont, amazonhack, apiserver, checkjs, sendemail, ipn?
 	settings (for stuff like dbhost, etc?)
-	cache
-	lib
- 	sql
-	objects
-	templates
-	qa
-	maint
-	tests
-	css
-	local_pear
-	files?
-	images?
-	logs?
+	includes (for utils.inc, etc?)
 
 
 stuff to deal with when moving all around
@@ -33,11 +15,6 @@ go through the joinpaths in standard linkconstraints!
 	i bet i can blow off tons of wacko custom linkconstraints this way!
 
 
-
-    remove crufty files
-    	cvs remove the whole list of crufty files: foundold-clean.txt
-    		first awk/split it out
-    		then run another qa, just to be sure!
 			
 
 
@@ -127,4 +104,5 @@ blow off pagetop completely
 
 job descriptions
 	 'The virtual job description binder.';
+
 

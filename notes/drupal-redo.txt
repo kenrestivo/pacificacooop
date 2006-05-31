@@ -1,6 +1,7 @@
 redo the whole site in drupal or xoops or something
 
 all the crufty crap cleanup stuff (sep: cleanup.txt?)
+	this thing has GOT to survive in its own section
 
 import the users!!
 	write an export script using csv python
@@ -56,6 +57,8 @@ do the dance of the CVS
 then push the fucker live!
 
 
+heh, cool, label printing via fpdf included now!
+	angel bueno pardo post to civicrm list
 
 by default, set simple_access defaults so that ALL nodes are members only
 	only privileged users can un-do that

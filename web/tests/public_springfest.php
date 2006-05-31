@@ -98,7 +98,7 @@ class PublicSpringfest extends CoopTALPage
 
             // TITLE
             $this->formattedTitle = array(
-                'src'=> sprintf('%s/custom_font.php?text=%s&amp;size=18&amp;font=%s',
+                'src'=> sprintf('%s/services/custom_font.php?text=%s&amp;size=18&amp;font=%s',
                                 COOP_ABSOLUTE_URL_PATH, 
                                 urlencode($this->title), 
                                 $this->title,

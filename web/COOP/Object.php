@@ -893,11 +893,6 @@ function isPermittedField($key = NULL, $forceuser = false,
 
     function triggerNotices($audit_id)
         {
-            //XXX fix this path!
-            $parth = parse_url($_SERVER['PHP_SELF']);
-            $inner = pathinfo($parth['path']);
-//             $this->page->confessArray($parth, 'parth', 4);
-//             $this->page->confessArray($inner, 'inner', 4);
             $host = $_SERVER['SERVER_NAME'];
 
             $fp = fsockopen($host, 80, $errno, $errstr, 1);
@@ -907,7 +902,7 @@ function isPermittedField($key = NULL, $forceuser = false,
                                        "ERRNO $errno, ERRSTR $errstr");
             } else {
                 //TODO: use json, make this proper rpc
-                fputs ($fp, "GET {$inner['dirname']}/send_email.php?audit_id={$audit_id} HTTP/1.0\r\nHost: {$host}\r\n\r\n");
+                fputs ($fp, 'GET '. COOP_ABSOLUTE_URL_PATH . "/services/send_email.php?audit_id={$audit_id} HTTP/1.0\r\nHost: {$host}\r\n\r\n");
                 fclose ($fp);
             }
 

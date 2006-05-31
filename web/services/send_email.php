@@ -19,7 +19,7 @@
 	 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
+chdir('..'); // XXX HACK!!
 require_once('CoopPage.php');
 require_once('CoopView.php');
 require_once('lib/class.html2text.inc');

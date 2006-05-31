@@ -9,7 +9,7 @@ import jsonrpc
 uo=ClientCookie.urlopen('http://www/coop-dev?auth[uid]=8&auth[pwd]=tester')
 
 #the proxy
-sp=jsonrpc.ServiceProxy('http://www/coop-dev/api_server.php')
+sp=jsonrpc.ServiceProxy('http://www/coop-dev/services/api_server.php')
 
 sp.ping('foo')
 

@@ -30,7 +30,8 @@ sendEmailNotice = function(self,audit_id){
     }
 
     //TODO: send as a cookie header instead of passing this silly way
-    d=doSimpleXMLHttpRequest('send_email.php', 
+    /// XXX also need a proper path or base_url here!!
+    d=doSimpleXMLHttpRequest('services/send_email.php', 
         {'audit_id': audit_id,
         'coop' : cookie});
     d.addCallback(function(data){ 
