@@ -2,7 +2,6 @@ random things that really really need to get cleaned up
 
 new directory structure:
 	settings (for stuff like dbhost, globals.inc, etc?)
-	includes (for utils.inc, etc?)
 	COOP (all my CoopFoo.php classes). only classes go in here
 
 

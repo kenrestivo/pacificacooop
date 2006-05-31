@@ -34,8 +34,8 @@ require_once('dbhost.inc');
 require_once('settings/globals.inc');
 
 set_include_path(implode(PATH_SEPARATOR, 
-                         array('local_pear',
-                               dirname(__FILE),
+                         array(dirname(__FILE__),
+                               'local_pear',
                                COOP_LOCAL_PEAR_PATH,
                                get_include_path())));
 

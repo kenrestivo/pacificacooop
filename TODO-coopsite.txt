@@ -7893,3 +7893,4 @@ is ThankYou.php used anymore?! can i cruft it out?
     	cvs remove the whole list of crufty files: foundold-clean.txt
     		first awk/split it out
     		then run another qa, just to be sure!
+	includes (for utils.inc, etc?)

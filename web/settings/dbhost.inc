@@ -38,7 +38,7 @@ $dbhost =  "localhost";
 // for paths that i don't want in CVS:
 // COOP_ABSOLUTE_FILE_PATH, and COOP_ABSOLUTE_URL_PATH, COOP_LOCAL_PEAR_PATH
 
-require_once('no_cvs.inc');
+require_once('settings/no_cvs.inc');
 
 //ONLY ON BC!!! don't push this live or you'll be in a world of shit.
 if($debug < 0) {

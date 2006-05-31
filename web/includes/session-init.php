@@ -346,17 +346,13 @@ setupDB($urlonly = false)
 	#all kinds of spurious commits whenever i move it from one host to another
 	#for testing and such.
 
+    require_once('dbhost.inc');
 
-    // XXX AHA!! this is the bug! if i move the dir, i don't find this!
-    $dbfile ="dbhost.inc" ; //XXX makes moving stuff impossible w/o chdir(..)!
+    global $dbhost;
+    global $coop_sendto;
+    global $dbuser;
+    global $dbpwd;
 
-	if(is_file($dbfile)){
-		require_once($dbfile);
-		global $dbhost;
-		global $coop_sendto;
-		global $dbuser;
-		global $dbpwd;
-	}
 
 
 	$dbhost = $dbhost ? $dbhost : "bc";
