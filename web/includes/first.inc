@@ -35,6 +35,7 @@ require_once('globals.inc');
 
 set_include_path(implode(PATH_SEPARATOR, 
                          array('local_pear',
+                               dirname(__FILE),
                                COOP_LOCAL_PEAR_PATH,
                                get_include_path())));
 

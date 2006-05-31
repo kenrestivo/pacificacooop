@@ -1,12 +1,16 @@
 random things that really really need to get cleaned up
 
+is ThankYou.php used anymore?! can i cruft it out?
 
 
 new directory structure:
-	COOP (all my CoopFoo.php classes)
-	reports (new, make sure to adjust the report menu stuff)
+	COOP (all my CoopFoo.php classes). only classes go in here
+	coop (for python libraries?) maybe make an init_py for it?
 	services
-		ipn, customfont, amazonhack, apiserver, checkjs, sendemail
+		customfont, amazonhack, apiserver, checkjs, sendemail, ipn?
+	old (stuff i don't need, but want to keep around for reference)
+		paypal/ipn perhaps?
+	settings (for stuff like dbhost, etc?)
 	cache
 	lib
  	sql
@@ -22,9 +26,9 @@ new directory structure:
 	logs?
 
 
-	
-once i'm sure i don't need it anymore:
-	#cvs remove -f everything.inc shared.inc 
+stuff to deal with when moving all around
+	all require_once's, to COOP/Page.php, COOP/View.php, etc.
+	CoopDBDO... setting in object-config.php? coop-db.ini?		
 
 	
 go through the joinpaths in standard linkconstraints!
@@ -36,8 +40,7 @@ go through the joinpaths in standard linkconstraints!
     	cvs remove the whole list of crufty files: foundold-clean.txt
     		first awk/split it out
     		then run another qa, just to be sure!
-    	save tickets and thankyou's and paddles, dammit.
-    		deal with that clusterfuck over the holiday
+			
 
 
 
@@ -126,3 +129,8 @@ blow off pagetop completely
 
 job descriptions
 	 'The virtual job description binder.';
+
+once i'm sure i don't need it anymore:
+	#cvs remove -f everything.inc shared.inc
+	reports (new, make sure to adjust the report menu stuff)
+		attendance, carriereport, nag, solicit_summ, bid, gift, program_sum

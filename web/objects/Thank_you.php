@@ -180,7 +180,6 @@ function findThanksNeeded(&$co)
 
     function fb_display_view(&$co)
         {
-            require_once('ThankYou.php');
     
             $co->schoolYearChooser();
 
@@ -188,11 +187,6 @@ function findThanksNeeded(&$co)
             $co->actionnames['delete'] = 'Un-Send';
 
 
-
-//             //before i go to crazy here, let's fix any orphans
-//             $ty = new ThankYou(&$co->page);
-//             $ty->repairOrphaned();
-            
             $this->fetchTemplate(&$co);
 
             $co->queryFromFile('recover_thank_yous.sql');

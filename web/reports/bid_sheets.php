@@ -18,6 +18,9 @@
 
 //$Id$
 
+chdir('..'); ///XXX HACK!
+
+
 require_once('CoopPDF.php');
 
 

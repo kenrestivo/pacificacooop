@@ -21,8 +21,8 @@
 //$debug = 4;
 
 require_once('CoopPDF.php');
-require_once('ThankYou.php');
 require_once('lib/TALobjtemplater.php');
+// XXX dead file require_once('ThankYou.php');
 
 class ThankYouNote extends CoopPDF
 {
@@ -43,26 +43,26 @@ class ThankYouNote extends CoopPDF
 
 
             switch($_REQUEST['set']){
-            case 'printed':
-                $tid = $SOMETHING;
-                $ty =& new ThankYou(&$this);
-                $ty->recoverExisting($tid);
-                $ty->substitute();
-                print $ty->toHTML();
-                break;
+//             case 'printed':
+//                 $tid = $SOMETHING;
+//                 $ty =& new ThankYou(&$this);
+//                 $ty->recoverExisting($tid);
+//                 $ty->substitute();
+//                 print $ty->toHTML();
+//                 break;
             case 'one':
-                $ty =& new ThankYou(&$this);
-                if(!$ty->findThanksNeeded($_REQUEST['pk'], $_REQUEST['id'])){
-                    $this->thank_you_notes = array(
-                        'This thank-you has already been entered. 
-			Close this window and check &quot;View/Edit&quot; in the other window.');
-                    break;
-                }
-                $ty->findThanksNeeded($_REQUEST['pk'], $_REQUEST['id']);
-                $ty->substitute();
-                $this->thank_you_notes = array($ty->toHTML());
+//                 $ty =& new ThankYou(&$this);
+//                 if(!$ty->findThanksNeeded($_REQUEST['pk'], $_REQUEST['id'])){
+//                     $this->thank_you_notes = array(
+//                         'This thank-you has already been entered. 
+// 			Close this window and check &quot;View/Edit&quot; in the other window.');
+//                     break;
+//                 }
+//                 $ty->findThanksNeeded($_REQUEST['pk'], $_REQUEST['id']);
+//                 $ty->substitute();
+//                 $this->thank_you_notes = array($ty->toHTML());
 
-                break;
+//                 break;
             case 'needed':
             default:
                 $tn =& new CoopView(&$this, 'thank_you', &$none);  

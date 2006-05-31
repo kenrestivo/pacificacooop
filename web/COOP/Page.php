@@ -135,10 +135,11 @@ class coopPage
             printf('
 <meta http-equiv="Content-Type" 
  				content="%s" %s>
-<link rel="stylesheet" href="main.css" title="main" %s>
+<link rel="stylesheet" href="%s/main.css" title="main" %s>
 ', 
                    $this->content_type,
                    $this->content_type == 'application/xhtml+xml' ? '/' :'',
+                   COOP_ABSOLUTE_URL_PATH,
                    $this->content_type == 'application/xhtml+xml' ? '/' :'');
 
             // almost out of the woods now and into content-related stuff
@@ -608,7 +609,7 @@ class coopPage
             $res[] = $this->selfURL(
                 array('value'=>'Main Menu',
                       'par' => false,
-                      'base' => 'index.php',
+                      'base' => COOP_ABSOLUTE_URL_PATH . '/index.php',
                       'inside' => array(
                           'action' => 'menu')));
             

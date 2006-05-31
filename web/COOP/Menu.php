@@ -113,8 +113,9 @@ class CoopMenu
                                     'inside' => array('table' => 
                                                       $tab->obj->table_name,
                                                       'realm' => $tab->obj->realm_id),
-                                    'base' => $co->obj->fb_usePage ? 
-                                    $co->obj->fb_usePage : 'generic.php')); 
+                                    'base' =>  $co->obj->fb_usePage ? 
+                                    COOP_ABSOLUTE_URL_PATH . '/' . $co->obj->fb_usePage : 
+                                    COOP_ABSOLUTE_URL_PATH . '/generic.php')); 
                     }
                 } // END TABLES
                 // NOW GO RECURSE
@@ -146,7 +147,7 @@ class CoopMenu
                                     array('table' => 
                                           $tab->obj->table_name,
                                           'realm' => $tab->obj->realm_id),
-                                    'base' =>$tab->obj->page)); 
+                                    'base' => 'reports/'. $tab->obj->page)); 
           
           }
                 } // END REPORTS

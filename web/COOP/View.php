@@ -627,8 +627,8 @@ function innerRecordButtons($par, $wrap)
                                 $this->prependTable($this->pk) => 
                                 $this->obj->{$this->pk}),
                             'base' =>!empty($this->obj->fb_usePage) ? 
-                            $this->obj->fb_usePage :
-                            'generic.php', 
+                            COOP_ABSOLUTE_URL_PATH . '/'. $this->obj->fb_usePage :
+                            COOP_ABSOLUTE_URL_PATH . '/generic.php', 
                             'par' => $par)); 
                     $par || $res .= '&nbsp;';
                 }

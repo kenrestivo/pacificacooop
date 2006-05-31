@@ -42,21 +42,9 @@ modules i'll want for the school
 
 
 ok, how do i do auth now? i no longer link to the users table
-	this needs serious thought
+	this needs serious thought. integrate with old app
 		
 						
-try to shoehorn it in
-	update my include path to obviate the need for chdir() shit!
-		include the COOP_ABSOLUTE_FILE_PATH
-			i need DB_DataObject class_location, schema_loation too!
-	make my stuff a module, replace dispatcher/generic.php
-		will work for everything except the PDF shit
-			should be a way around that, actually!
-	make my shitty coopmenu a block, only for registered users
-	the include paths are going to be UGLAY!
-		because my coop app needs MY pear and local pear!
-			but civicrm has its own pear too... conflicts! DB, QF, Pager
-			i cannot break civicrm!
 
 
 update the "welcome" email, to tell them,
@@ -68,20 +56,15 @@ do the dance of the CVS
 then push the fucker live!
 
 
+
 by default, set simple_access defaults so that ALL nodes are members only
 	only privileged users can un-do that
 	gah! not possible. have to hack
 
 
-goodies
-		civicrm, of course!
-			have a look at the towncenter one for comparison
-			maybe custom data for wait list application?!!
-				i'd have to write custom drupal to parse it out
-					i.e. to make contacts for parent/child/etc
-					easy with javascript kit, repeating forms, flexinode
-			add the profiles and custom fields to the thankyou page!
-
+import the solicitation contacts!
+	and territories too. custom civicrm stuff!
+	
 
 find a way to link the leads to who invited them
 	and permission them, so only certain people see them
@@ -154,7 +137,37 @@ how to start, goddammit!?
 	try integrating it without that
 	wow, petition module integrates with civicrm really well!
 		others do too, i.e. vote module
-		
+
+
+----------------
+BELOW THE LINE
+
+
+			have a look at the towncenter one for comparison
+			maybe custom data for wait list application?!!
+				i'd have to write custom drupal to parse it out
+					i.e. to make contacts for parent/child/etc
+					easy with javascript kit, repeating forms, flexinode
+			add the profiles and custom fields to the thankyou page!
+
+
+
+try to shoehorn it in
+	update my include path to obviate the need for chdir() shit!
+		include the COOP_ABSOLUTE_FILE_PATH
+			i need DB_DataObject class_location, schema_loation too!
+	make my stuff a module, replace dispatcher/generic.php
+		will work for everything except the PDF shit
+			should be a way around that, actually!
+	make my shitty coopmenu a block, only for registered users
+	the include paths are going to be UGLAY!
+		because my coop app needs MY pear and local pear!
+			but civicrm has its own pear too... conflicts! DB, QF, Pager
+			i cannot break civicrm!
+
+
+
+				
 -----------------
 DONE
 
