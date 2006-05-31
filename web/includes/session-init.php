@@ -345,7 +345,10 @@ setupDB($urlonly = false)
 	#this is a separate file so that i can CVS this code without having 
 	#all kinds of spurious commits whenever i move it from one host to another
 	#for testing and such.
-	$dbfile ="dbhost.inc" ;
+
+
+    // XXX AHA!! this is the bug! if i move the dir, i don't find this!
+    $dbfile ="dbhost.inc" ; //XXX makes moving stuff impossible w/o chdir(..)!
 
 	if(is_file($dbfile)){
 		require_once($dbfile);

@@ -31,7 +31,7 @@ define('DB_DATAOBJECT_NO_OVERLOAD', true);
 // NOTE! i want the ISP's version of PEAR to override my local beta crap
 
 require_once('dbhost.inc');
-require_once('globals.inc');
+require_once('settings/globals.inc');
 
 set_include_path(implode(PATH_SEPARATOR, 
                          array('local_pear',
