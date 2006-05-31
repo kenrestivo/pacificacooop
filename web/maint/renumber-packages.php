@@ -67,7 +67,7 @@ ORDER BY package_number',
         print '<br /><p>Packages renumbered!</p>';
         print $atd->page->selfURL(
             array('value' => 'Back to Packages',
-                  'base' => '../generic.php',
+                  'base' => COOP_ABSOLUTE_URL_PATH . '/pages/generic.php',
                   'inside' => array('action' => 'view',
                                     'table' => 'packages')));
 

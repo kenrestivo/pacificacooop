@@ -1,4 +1,4 @@
-redo the whole site in drupal or xoops or something
+redo the whole site in drupal or xoops or joomla or something
 
 all the crufty crap cleanup stuff (sep: cleanup.txt?)
 	this thing has GOT to survive in its own section
@@ -44,6 +44,8 @@ modules i'll want for the school
 
 ok, how do i do auth now? i no longer link to the users table
 	this needs serious thought. integrate with old app
+	i think i need to be a module, at least to add the perms in!
+		big, massive matrix of perms, too!
 		
 						
 

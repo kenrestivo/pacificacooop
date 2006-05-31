@@ -547,8 +547,9 @@ class coopView extends CoopObject
 							'table' => $this->table,
 							$this->prependTable($this->pk) => 
 							$this->obj->{$this->pk}),
-                            'base' => $this->obj->fb_usePage ? $this->obj->fb_usePage :
-                        'generic.php')); 
+                            'base' => $this->obj->fb_usePage ? 
+                            COOP_ABSOLUTE_URL_PATH . '/' . $this->obj->fb_usePage :
+                            COOP_ABSOLUTE_URL_PATH . '/pages/generic.php')); 
 				}
 
 				$tab->addRow(array($meat,
@@ -628,7 +629,7 @@ function innerRecordButtons($par, $wrap)
                                 $this->obj->{$this->pk}),
                             'base' =>!empty($this->obj->fb_usePage) ? 
                             COOP_ABSOLUTE_URL_PATH . '/'. $this->obj->fb_usePage :
-                            COOP_ABSOLUTE_URL_PATH . '/generic.php', 
+                            COOP_ABSOLUTE_URL_PATH . '/pages/generic.php', 
                             'par' => $par)); 
                     $par || $res .= '&nbsp;';
                 }
@@ -703,7 +704,8 @@ function innerRecordButtons($par, $wrap)
                         'value' =>$this->actionnames[$action], 
                         'inside' => $in,
                         'base' => empty($this->obj->fb_usePage) ? 
-                        'generic.php' : $this->obj->fb_usePage));
+                        COOP_ABSOLUTE_URL_PATH . '/pages/generic.php' : 
+                        COOP_ABSOLUTE_URL_PATH . '/'. $this->obj->fb_usePage));
                 //                     confessObj($this->obj, 'this obj');
 //                     confessObj($this->obj, 'parent obj');
                 

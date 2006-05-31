@@ -129,7 +129,7 @@ function recordButtons(&$co, $par, $wrap)
                 // TODO: do it right and instantiate or fake recordButtons()
                 $res .= $co->page->selfURL(
                     array('value' => 'Details',
-                          'base' => 'generic.php',
+                          'base' => COOP_ABSOLUTE_URL_PATH. '/pages/generic.php',
                           'inside' => array('table' => $tmptab,
                                             $tmptab . '-' . 
                                             $co->obj->id_name => $co->obj->id,

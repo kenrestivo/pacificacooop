@@ -9,6 +9,8 @@ new directory structure:
 		i want to be able to move first.inc somewhere else, maybe?
 
 
+force the menu to refresh, the tree doesn't seem to be doing so
+		
 
 stuff to deal with when moving all around
 	all require_once's, to COOP/Page.php, COOP/View.php, etc.

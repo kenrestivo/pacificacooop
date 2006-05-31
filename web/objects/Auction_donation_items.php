@@ -168,7 +168,7 @@ class Auction_donation_items extends CoopDBDO
 	function newPackageForm(&$co)
 		{
 			$form =& new HTML_QuickForm('newpackageform', 'post', 
-                                        'generic.php');
+                                        COOP_ABSOLUTE_URL_PATH . '/pages/generic.php');
             $form->removeAttribute('name');
 
 
