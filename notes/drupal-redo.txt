@@ -1,9 +1,6 @@
 redo the whole site in drupal or xoops or something
 
-shitcan my aborted ABSOLUTE_FILE_PATH crap!
-
-drop all the crufty crap cleanup stuff (sep: cleanup.txt?)
-
+all the crufty crap cleanup stuff (sep: cleanup.txt?)
 
 import the users!!
 	write an export script using csv python

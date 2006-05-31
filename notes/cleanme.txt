@@ -1,24 +1,5 @@
 random things that really really need to get cleaned up
 
-
-smaller damned font
-	how does this look in exploiter? font-size: 101%
-	http://www.nedbatchelder.com/code/modules/coverage.html
-
-
-send_email needs a rework
-	use TAL with omit-tag to template it: an HTML version and a non-html version
-	or optionally use the html unformatting tool i have to translate tags
-
-	save the diff's, NOT the entire whooha
-		if that's possible in text/diff mode
-			maybe only the textfields
-		but how to format that for email??
-
-
-handle changing user logins
-	wipe out the menu cache at login if login is different from last?
-
 	
 go through the joinpaths in standard linkconstraints!
 	i bet i can blow off tons of wacko custom linkconstraints this way!
@@ -42,20 +23,6 @@ do NOT dick with request in coopview:getAndSaveDefault()
 		find out whatever i do in coopform, and do it in syform too
 
 
-??PHP
-blow off pagetop completely
-	and use LOGIN like my template-friendly version
-	fix the CSS issues in exploiter too
-	separate out APP logic from PRESENTATION
-		the APP logic must occur in a certain order
-			the presentation logic is in a TOTALLY different order
-			shouldn't have anything to do with each other!
-	construct the <HEAD> *last*, after the whole body is done
-		buffer the entire page, no matter how fucking enormous
-			this also gets me a <title> that makes sense too
-			wouldn't take much to TAL the whole app, actually
-	i now have working tal templates, so this shouldn't be hard!
-
 
 ???PHP
 clean up my inclusion order in proparation h for phptal
@@ -75,9 +42,6 @@ add to instructions
 auctionpurchases
  	 'This is the "Jane Report": the actual purchases of Springfest Packages, along with their final bid price, and the variance between what they sold for and their estimated value. The most popular packages (those that sold for at or above their estimated value) are listed first.';
 
-job descriptions
-	 'The virtual job description binder.';
-
 
 coop_sendto
 	move to dbhost
@@ -89,3 +53,50 @@ gah. can't delete a family if they have a user, but they have one AUTOMATICALLY 
 	have to perhaps override perms, or something. 
 	fb_display_delete? a callback that goes and whacks all user/group data?
 		will suck for audit
+
+
+-----------------------
+UNNECESSARY DUE TO DRUPAL
+
+
+send_email needs a rework
+	use TAL with omit-tag to template it: an HTML version and a non-html version
+	or optionally use the html unformatting tool i have to translate tags
+
+
+
+smaller damned font
+	how does this look in exploiter? font-size: 101%
+	http://www.nedbatchelder.com/code/modules/coverage.html
+
+
+
+	save the diff's, NOT the entire whooha
+		if that's possible in text/diff mode
+			maybe only the textfields
+		but how to format that for email??
+
+
+
+handle changing user logins
+	wipe out the menu cache at login if login is different from last?
+
+	
+??PHP
+blow off pagetop completely
+	and use LOGIN like my template-friendly version
+	fix the CSS issues in exploiter too
+	separate out APP logic from PRESENTATION
+		the APP logic must occur in a certain order
+			the presentation logic is in a TOTALLY different order
+			shouldn't have anything to do with each other!
+
+ construct the <HEAD> *last*, after the whole body is done
+		buffer the entire page, no matter how fucking enormous
+			this also gets me a <title> that makes sense too
+			wouldn't take much to TAL the whole app, actually
+	i now have working tal templates, so this shouldn't be hard!
+
+
+job descriptions
+	 'The virtual job description binder.';

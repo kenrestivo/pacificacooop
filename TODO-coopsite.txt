@@ -7854,3 +7854,5 @@ working example http://www.phpguru.org/static/treemenu.html
 	with all the proper JS includes
 		can i do title tags? how? i need them
 				ah. events, of all the stupid places for it
+
+				shitcan my aborted ABSOLUTE_FILE_PATH crap!
