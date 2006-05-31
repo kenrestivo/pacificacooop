@@ -24,7 +24,7 @@ new directory structure:
 
 	
 once i'm sure i don't need it anymore:
-	#cvs remove -f everything.inc states.inc shared.inc states_core.inc
+	#cvs remove -f everything.inc shared.inc 
 
 	
 go through the joinpaths in standard linkconstraints!
