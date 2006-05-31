@@ -22,9 +22,7 @@
 
 require_once('CoopPage.php');
 require_once('CoopObject.php');
-require_once('DB/DataObject.php');
 require_once 'HTML/QuickForm.php';
-require_once('object-config.php');
 require_once('DB/DataObject/Cast.php');
 require_once('lib/advmultselect.php');
 require_once('lib/customselect.php');
