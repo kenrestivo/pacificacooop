@@ -1,5 +1,10 @@
 redo the whole site in drupal or xoops or joomla or something
 
+write a sample drupal module, with civicrm hooks
+	use petition as an example/template?
+	or do the tutorial
+	
+
 all the crufty crap cleanup stuff (sep: cleanup.txt?)
 	this thing has GOT to survive in its own section
 

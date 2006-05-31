@@ -17,8 +17,7 @@
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-chdir('..');
-require_once("first.inc");
+require_once("../first.inc");
 require_once("CoopView.php");
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);

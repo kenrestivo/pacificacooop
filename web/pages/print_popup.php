@@ -20,7 +20,8 @@
 
 //$debug = 4;
 
-chdir('..'); // XXX hack
+
+require_once('../first.inc');
 require_once('CoopPDF.php');
 require_once('lib/TALobjtemplater.php');
 // XXX dead file require_once('ThankYou.php');

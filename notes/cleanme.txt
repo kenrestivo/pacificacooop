@@ -10,7 +10,14 @@ new directory structure:
 
 
 force the menu to refresh, the tree doesn't seem to be doing so
-		
+
+
+generic.php CANNOT BE HARD CODED!
+	i need it to either be a define, or var, or something
+	because in a module, i do NOT want generic.php
+	i need my module as a url instead
+		look at civicrm, how it does it
+				
 
 stuff to deal with when moving all around
 	all require_once's, to COOP/Page.php, COOP/View.php, etc.
