@@ -49,7 +49,7 @@ function hackDBURL()
 
 }
 
-parseIniFile('coop-dbobj.ini');
+parseIniFile('settings/coop-dbobj.ini');
 require_once("includes/session-init.php");
 setupDB(1);
 hackDBURL();

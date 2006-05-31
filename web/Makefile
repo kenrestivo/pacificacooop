@@ -118,7 +118,7 @@ tags:
 
 update-dbobject::
 	echo "DO NOT RUN THIS on fred or vaio. ONLY run it on bc! or trouble!"
-	(cd $(PLAYGROUND); php /usr/share/php/DB/DataObject/createTables.php coop-dbobj.ini)
+	(cd $(PLAYGROUND); php /usr/share/php/DB/DataObject/createTables.php settings/coop-dbobj.ini)
 	(cd $(PLAYGROUND)/objects; cvs add *php)
 
 guarantee-pear::
