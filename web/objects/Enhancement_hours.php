@@ -3,7 +3,6 @@
  * Table Definition for enhancement_hours
  */
 require_once 'DB/DataObject.php';
-require_once 'Enhancement.php';
 
 class Enhancement_hours extends CoopDBDO 
 {
@@ -85,6 +84,8 @@ class Enhancement_hours extends CoopDBDO
                   return; // give up, it's a teacher
             }
 
+            require_once 'COOP/Enhancement.php';
+
             $en =& new Enhancement(&$co->page, $fid);
             $total = $en->realHoursDone();
             $sem = $en->guessSemester();
@@ -125,6 +126,8 @@ class Enhancement_hours extends CoopDBDO
             if(!$fid){
                 return; // give up, it's a teacher
             }
+
+            require_once 'COOP/Enhancement.php';
 
             $en =& new Enhancement(&$co->page, $fid);
             $total = $en->realHoursDone();

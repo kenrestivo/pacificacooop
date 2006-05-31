@@ -24,7 +24,7 @@ require_once("first.inc");
 require_once("includes/auth.inc");
 
 require_once("CoopPage.php");
-require_once("CoopMenu.php");
+require_once("COOP/Menu.php");
 require_once("CoopView.php");
 
 

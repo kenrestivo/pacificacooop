@@ -22,7 +22,7 @@ require_once('CoopPage.php');
 require_once('CoopView.php');
 require_once "HTML/Template/PHPTAL.php";
 require_once "lib/phptal_filters.php";
-require_once('CoopIterator.php');  // XXX hack, around problems on nfsn
+require_once('COOP/Iterator.php');  // only include it when i really need it
 
 
 class CoopTALPage extends coopPage

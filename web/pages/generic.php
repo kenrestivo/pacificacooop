@@ -6,8 +6,8 @@
 
 
 require_once('CoopPage.php');
-require_once('CoopMenu.php');
-require_once('CoopNewDispatcher.php');
+require_once('COOP/Menu.php');
+require_once('COOP/NewDispatcher.php');
 
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);

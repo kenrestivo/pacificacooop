@@ -1,13 +1,11 @@
 random things that really really need to get cleaned up
 
 new directory structure:
-	move all the DBDO.ini shit around too
-		start with coop-dbobj.ini, maybe?
-		re-read DBDO docs
+	COOP (all my CoopFoo.php classes). only classes go in here
 	find a better way to start this up, than dirname(__FILE__)!
 		i want to be able to move first.inc somewhere else, maybe?
-	COOP (all my CoopFoo.php classes). only classes go in here
-
+	clean up maint folder, move crap to old folder instead!
+	check that advertising missing block in program export report!
 
 stuff to deal with when moving all around
 	all require_once's, to COOP/Page.php, COOP/View.php, etc.

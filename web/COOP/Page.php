@@ -135,7 +135,7 @@ class coopPage
             printf('
 <meta http-equiv="Content-Type" 
  				content="%s" %s>
-<link rel="stylesheet" href="%s/main.css" title="main" %s>
+<link rel="stylesheet" href="%s/css/main.css" title="main" %s>
 ', 
                    $this->content_type,
                    $this->content_type == 'application/xhtml+xml' ? '/' :'',

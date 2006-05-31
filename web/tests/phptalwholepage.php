@@ -21,7 +21,7 @@
 chdir('../'); // FOR TEST 
 
 require_once('CoopPage.php');
-require_once('CoopNewDispatcher.php');
+require_once('COOP/NewDispatcher.php');
 require_once "HTML/Template/PHPTAL.php";
 require_once "lib/phptal_filters.php";
 

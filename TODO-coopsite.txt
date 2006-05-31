@@ -107,7 +107,8 @@ BUGS
 			is it broken EVERYWHERE linkdisplays happen? or only in horiz?
 			what's different, actually?
 				minutes and packages are fine. i dunno what's up.	
-
+	gah, i have ISSUES with the program export: ads aren't showing up
+		why? may have something to do with my moving stuff around?
 				
 BUGS
 	what's up with 1 not -1 for ignore!??
@@ -7896,3 +7897,6 @@ is ThankYou.php used anymore?! can i cruft it out?
 	includes (for utils.inc, etc?)
 	settings (for stuff like dbhost, globals.inc, etc?)
 	move session-init to includes
+	move all the DBDO.ini shit around too
+		start with coop-dbobj.ini, maybe?
+		re-read DBDO docs
