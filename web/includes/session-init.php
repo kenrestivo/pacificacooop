@@ -346,7 +346,7 @@ setupDB($urlonly = false)
 	#all kinds of spurious commits whenever i move it from one host to another
 	#for testing and such.
 
-    require_once('dbhost.inc');
+    require_once('settings/dbhost.inc');
 
     global $dbhost;
     global $coop_sendto;
