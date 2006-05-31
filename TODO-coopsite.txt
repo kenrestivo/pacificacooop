@@ -7900,3 +7900,8 @@ is ThankYou.php used anymore?! can i cruft it out?
 	move all the DBDO.ini shit around too
 		start with coop-dbobj.ini, maybe?
 		re-read DBDO docs
+			and, the init is VERY upset about ../first.inc
+				IF it has to go get objects.. i.e. vote.php
+
+check that advertising missing block in program export report!
+	aha! was a path coopdbdo issue

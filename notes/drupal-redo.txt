@@ -53,6 +53,8 @@ update the "welcome" email, to tell them,
 
 	
 do the dance of the CVS
+	should be easy, compared to the clusterfuck i've been dealing with lately
+	
 	
 then push the fucker live!
 

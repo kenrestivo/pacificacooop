@@ -31,7 +31,7 @@ function parseIniFile($filename)
 		$options = &PEAR::getStaticProperty($class,'options');
 		$options = $values;
 	}
-	// to hack around dbobject trashing my settings
+	// to hack around dbobject trashing settings
 	global $_DB_DATAOBJECT_FORMBUILDER;
 	$_DB_DATAOBJECT_FORMBUILDER['CONFIG'] = 
 		$config['DB_DataObject_FormBuilder'];
@@ -46,7 +46,10 @@ function hackDBURL()
 	global $dburl;
 	$options = &PEAR::getStaticProperty('DB_DataObject','options');
 	$options['database'] = $dburl;
-
+	$options['schema_location'] = COOP_ABSOLUTE_FILE_PATH . 
+        DIRECTORY_SEPARATOR . 	'schema';
+	$options['class_location'] = COOP_ABSOLUTE_FILE_PATH . 
+        DIRECTORY_SEPARATOR . 	'objects';
 }
 
 parseIniFile('settings/coop-dbobj.ini');

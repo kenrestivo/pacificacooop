@@ -66,8 +66,8 @@ define('COOP_DEFAULT_TEXT_FIELD_HEIGHT', 25);
 
 
 /// defaults for phptal. relative to the root dir
-define('PHPTAL_CACHE_DIR', 'cache/');
-define('PHPTAL_REPOSITORY', 'templates');
+define('PHPTAL_CACHE_DIR', COOP_ABSOLUTE_FILE_PATH . DIRECTORY_SEPARATOR . 'cache');
+define('PHPTAL_REPOSITORY', COOP_ABSOLUTE_FILE_PATH . DIRECTORY_SEPARATOR .  'templates');
 
 define('COOP_FOUNDED', 1962);
 define('COOP_FIRST_SPRINGFEST', 1972);

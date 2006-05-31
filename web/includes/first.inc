@@ -30,8 +30,6 @@ define('DB_DATAOBJECT_NO_OVERLOAD', true);
 
 // NOTE! i want the ISP's version of PEAR to override my local beta crap
 
-require_once('settings/dbhost.inc');
-require_once('settings/globals.inc');
 
 
 /// THIS IS THE KEY TO THE WHOLE APPLICATION!
@@ -43,7 +41,11 @@ set_include_path(implode(PATH_SEPARATOR,
                                get_include_path())));
 
 
+require_once('settings/dbhost.inc');
+require_once('settings/no_cvs.inc'); /// do this before globals, it uses these
+require_once('settings/globals.inc');
 require_once("includes/session-init.php");
+
 
 setupDB();
 setupErrors(); //*sigh* have to do this SECOND since it looks at dbhost :-/

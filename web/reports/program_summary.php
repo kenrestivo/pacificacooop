@@ -18,7 +18,8 @@
 
 //$Id$
 
-chdir('..'); // XXX HACK!
+
+require_once('../first.inc');
 require_once('CoopTALPage.php');
 
 class ProgramSummary extends CoopTALPage

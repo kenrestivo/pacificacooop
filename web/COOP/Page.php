@@ -50,7 +50,7 @@ function dump($data, $close = false)
     //XXX DAMMIT!  NFSN does *not* like me doing this
 	// the getcwd is kind of redundant
 	$fname = sprintf("%s/logs/%s-debug.html", 
-					 getcwd(), date("Ymdhis"));
+					 COOP_ABSOLUTE_FILE_PATH, date("Ymdhis"));
 	static $fp;
 	if(!$fp){
 		$fp = fopen($fname, 'w');
