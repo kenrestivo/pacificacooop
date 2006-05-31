@@ -20,7 +20,7 @@ AddCharset utf-8 .php .inc .html
 
 
 RewriteEngine on
-RewriteRule ^vote$ vote.php
+RewriteRule ^vote$ pages/vote.php
 
 
 
