@@ -4,9 +4,7 @@ new directory structure:
 	COOP (all my CoopFoo.php classes). only classes go in here
 		CoopDBDO... setting in object-config.php? coop-db.ini?
 		
-	find a better way to start this up, than dirname(__FILE__)!
-		dammit! this SAFE_MODE shit will kill me on nfsn. wtf?
-		i want to be able to move first.inc somewhere else, maybe?
+	dammit! this SAFE_MODE shit will kill me on nfsn. wtf?
 
 
 force the menu to refresh, the tree doesn't seem to be doing so

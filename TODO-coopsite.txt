@@ -3790,7 +3790,9 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	hmm, looks like auth uses it
+	find a better way to start this up, than dirname(__FILE__)!
+
+		hmm, looks like auth uses it
 
 			some way to hack the password md5: bring it in raw!
 			user_save() looks like it does all the heavy lifting
@@ -7905,3 +7907,4 @@ is ThankYou.php used anymore?! can i cruft it out?
 
 check that advertising missing block in program export report!
 	aha! was a path coopdbdo issue
+		i want to be able to move first.inc somewhere else, maybe?
