@@ -111,7 +111,7 @@ class Session:
     
 
     def generate_key(self):
-        """this algorithm is from ilovejackdaniels.com. i'm not kidding
+        """this algorithm is from ilovejackdaniels.com. i'm not kidding!
         i like that it's so terse. how readable it is, remains to be seen """
         random.seed()
         rnd=random.randint(1,9)

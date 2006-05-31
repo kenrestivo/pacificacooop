@@ -79,4 +79,7 @@ define('COOP_SPRING_CUTOFF_DATE', 6);
 // you may need to change this eventually
 define('COOP_AMAZON_ACCESS_KEY', '0F1YJJRT1KE6VF2DVQ02');
 
+define('COOP_BOARD_MEMBER_GROUP_ID', 3);
+
+
 ?>

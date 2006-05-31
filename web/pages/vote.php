@@ -129,8 +129,8 @@ order by votes.school_year asc,  votecount desc',
                 //XXX nasty hack, until i fix perms: only if bored member
                 $ug =& new CoopObject(&$this, 'users_groups_join', &$none);
                 $ug->obj->whereAdd(sprintf('group_id = %d and user_id = %d',
-                                      //XXX HARDCODE!
-                                      3, $this->auth['uid']));
+                                           COOP_BOARD_MEMBER_GROUP_ID, 
+                                           $this->auth['uid']));
                 $ug->obj->find(true);
                 if($ug->obj->N > 0){
                     $res[$q->obj->{$q->pk}]['families'] = array();

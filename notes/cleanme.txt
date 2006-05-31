@@ -1,5 +1,31 @@
 random things that really really need to get cleaned up
 
+
+
+new directory structure:
+	COOP (all my CoopFoo.php classes)
+	reports (new, make sure to adjust the report menu stuff)
+	services
+		ipn, customfont, amazonhack, apiserver, checkjs, sendemail
+	cache
+	lib
+ 	sql
+	objects
+	templates
+	qa
+	maint
+	tests
+	css
+	local_pear
+	files?
+	images?
+	logs?
+
+
+	
+once i'm sure i don't need it anymore:
+	#cvs remove -f everything.inc states.inc shared.inc states_core.inc
+
 	
 go through the joinpaths in standard linkconstraints!
 	i bet i can blow off tons of wacko custom linkconstraints this way!

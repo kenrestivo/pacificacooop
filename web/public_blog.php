@@ -20,7 +20,6 @@
 
 
 require_once("first.inc");
-require_once("shared.inc");
 require_once("CoopView.php");
 require_once("HTML/Table.php");
 
