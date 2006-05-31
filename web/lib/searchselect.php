@@ -97,13 +97,12 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
 
        function getSearchSelectJs()
        {
-           $jspath = 'lib';
            $res = '';
            $js = "";
 
          $res .= $this->cf->page->jsRequireOnce(
                sprintf('%s/eventutils.js' , 
-                       $jspath),
+                       COOP_ABSOLUTE_URL_PATH ),
                'INCLUDE_EVENTUTILS');
          
          $res .= $this->cf->page->jsRequireOnce('lib/MochiKit/MochiKit.js',
@@ -111,7 +110,7 @@ class HTML_QuickForm_searchselect extends HTML_QuickForm_customselect
          
          $res .= $this->cf->page->jsRequireOnce(
                sprintf('%s/kenflex.js' , 
-                       $jspath),
+                       COOP_ABSOLUTE_URL_PATH),
                'INCLUDE_KENFLEX');
            
 
@@ -127,7 +126,7 @@ comboboxsettings.serverPage="%s/kenflex.php";
 combobox_%s = new Combobox(\'search-%s\', \'%s\', \'%s\');
 /* end javascript for THIS PARTICULAR HTML_QuickForm_searchselect */
                ',
-                              $jspath,
+                              COOP_ABSOLUTE_URL_PATH,
                           SID ? 'comboboxsettings.SID = "' . SID .'";' : '',
                           strtr($this->getName(), '-' , '_'),
                           $this->getName(),

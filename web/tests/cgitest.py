@@ -9,7 +9,7 @@ import sys
 
 #only for test and maint dirs
 os.chdir('../')
-sys.path.insert(0, os.getcwd())
+sys.path.insert(0, os.getcwd()+'/coop')
 
 #housebreaking wee-wee pads, needed bfore i import stuffi need
 sys.path.append(os.getcwd()+'/site-packages')

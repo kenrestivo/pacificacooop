@@ -8,8 +8,6 @@ new directory structure:
 	coop (for python libraries?) maybe make an init_py for it?
 	services
 		customfont, amazonhack, apiserver, checkjs, sendemail, ipn?
-	old (stuff i don't need, but want to keep around for reference)
-		paypal/ipn perhaps?
 	settings (for stuff like dbhost, etc?)
 	cache
 	lib
@@ -130,7 +128,3 @@ blow off pagetop completely
 job descriptions
 	 'The virtual job description binder.';
 
-once i'm sure i don't need it anymore:
-	#cvs remove -f everything.inc shared.inc
-	reports (new, make sure to adjust the report menu stuff)
-		attendance, carriereport, nag, solicit_summ, bid, gift, program_sum

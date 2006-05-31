@@ -29,12 +29,15 @@ class HTML_QuickForm_titlesearch extends HTML_QuickForm_input
     function _getJs()
         {
             $res = "";
-            $res .= $this->cf->page->jsRequireOnce('lib/MochiKit/MochiKit.js',
-                                          'INCLUDE_MOCHIKIT');
-            $res .= $this->cf->page->jsRequireOnce('lib/eventutils.js' , 
+            $res .= $this->cf->page->jsRequireOnce(
+                COOP_ABSOLUTE_URL_PATH . '/lib/MochiKit/MochiKit.js',
+                'INCLUDE_MOCHIKIT');
+            $res .= $this->cf->page->jsRequireOnce(
+                COOP_ABSOLUTE_URL_PATH . '/lib/eventutils.js' , 
                                                 'INCLUDE_EVENTUTILS');
-            $res .= $this->cf->page->jsRequireOnce('lib/booklookup.js',
-                                          'INCLUDE_BOOKLOOKUP');
+            $res .= $this->cf->page->jsRequireOnce(
+                COOP_ABSOLUTE_URL_PATH . '/lib/booklookup.js',
+                'INCLUDE_BOOKLOOKUP');
 
 
             return $res;

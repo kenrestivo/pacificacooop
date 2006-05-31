@@ -288,12 +288,14 @@ class Audit_trail extends CoopDBDO
             
             $res = "";
 
-            $res .= $co->page->jsRequireOnce('lib/MochiKit/MochiKit.js',
+            $res .= $co->page->jsRequireOnce(
+                COOP_ABSOLUTE_URL_PATH . '/lib/MochiKit/MochiKit.js',
                                      'INCLUDE_MOCHIKIT');
 
             
-            $res .= $co->page->jsRequireOnce('lib/send_email.js', 
-                                   'SENDEMAIL_EXISTS');
+            $res .= $co->page->jsRequireOnce(
+                COOP_ABSOLUTE_URL_PATH . '/lib/send_email.js', 
+                'SENDEMAIL_EXISTS');
 
             $res .= sprintf(
                 '<a href="" onclick="return sendEmailNotice(this,%d)">Send</a>', 

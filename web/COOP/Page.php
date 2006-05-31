@@ -147,11 +147,11 @@ class coopPage
 
             print '</head>';
             // because exploiter sucks
-            print '<body>
+            printf('<body>
 <!--[if gte IE 5.5000]>
-<script type="text/javascript" src="lib/pngfix.js"></script>
+<script type="text/javascript" src="%s/lib/pngfix.js"></script>
 <![endif]-->
-';
+', COOP_ABSOLUTE_URL_PATH);
             // definitely into the safety of our own content here
             print '<div id="header"';
 			

@@ -7860,3 +7860,9 @@ working example http://www.phpguru.org/static/treemenu.html
 				ah. events, of all the stupid places for it
 
 				shitcan my aborted ABSOLUTE_FILE_PATH crap!
+once i'm sure i don't need it anymore:
+	#cvs remove -f everything.inc shared.inc
+	reports (new, make sure to adjust the report menu stuff)
+		attendance, carriereport, nag, solicit_summ, bid, gift, program_sum
+	old (stuff i don't need, but want to keep around for reference)
+		paypal/ipn perhaps?

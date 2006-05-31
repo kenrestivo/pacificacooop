@@ -23,7 +23,7 @@ class HTML_QuickForm_mcetextarea extends HTML_QuickForm_textarea
                
             // change to tiny_mce_gzip.php, but it doesn't work
             $res .= $this->_parentForm->CoopForm->page->jsRequireOnce(
-                'lib/tiny_mce/tiny_mce_gzip.php', 
+                COOP_ABSOLUTE_URL_PATH . '/lib/tiny_mce/tiny_mce_gzip.php', 
                 'COOP_TINYMCE_INCLUDE');
 
             $res .= $this->_parentForm->CoopForm->page->jsRequireOnce(
