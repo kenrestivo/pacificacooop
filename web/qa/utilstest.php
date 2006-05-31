@@ -2,7 +2,6 @@
 
 //$Id$
 
-//chdir("../");                   // XXX only for "test" dir hack!
 require_once 'includes/utils.inc';
 require_once 'PHPUnit.php';
 

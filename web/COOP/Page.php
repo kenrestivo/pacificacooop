@@ -20,7 +20,7 @@
 	 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require_once("first.inc");
+require_once("includes/first.inc");
 require_once("includes/auth.inc");
 require_once('Mail.php');
 require_once 'HTML/Table.php';

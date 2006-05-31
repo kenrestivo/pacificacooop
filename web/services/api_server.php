@@ -3,6 +3,7 @@
 
 /// this one uses cooppage adn cookies
 
+require_once('../includes/first.inc');
 require_once('CoopPage.php');
 require_once('COOP/NewDispatcher.php');
 require_once('lib/jsonrpcserver.php');

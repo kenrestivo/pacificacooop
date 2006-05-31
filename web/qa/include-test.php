@@ -4,8 +4,8 @@
 
 // unit test for my vitally required includes. return an error if
 // something has gone horribly wrong
-chdir('../');
-require_once('first.inc');
+
+require_once('../includes/first.inc');
 require_once "HTML/QuickForm.php";
 require_once "HTML/QuickForm/group.php";
 require_once "HTML/Table.php";

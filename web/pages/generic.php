@@ -5,7 +5,7 @@
 //$debug = -1;
 
 
-require_once('../first.inc');
+require_once('../includes/first.inc');
 require_once('CoopPage.php');
 require_once('COOP/Menu.php');
 require_once('COOP/NewDispatcher.php');

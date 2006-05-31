@@ -19,7 +19,8 @@
 	 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-chdir('..'); // XXX HACK!!
+
+require_once('../includes/first.inc');
 require_once('CoopPage.php');
 require_once('CoopView.php');
 require_once('lib/class.html2text.inc');
@@ -166,7 +167,7 @@ class EmailChanges
             }
 
             // REMEMBER! i can't use selfurl here: it adds SID
-            $this->body .= sprintf('%sFor more details, visit here: http://%s/members/generic.php?action=details&table=%s&%s=%d',
+            $this->body .= sprintf('%sFor more details, visit here: http://%s/members/pages/generic.php?action=details&table=%s&%s=%d',
                                    "\n\n",
                                    $_SERVER['HTTP_HOST'],
                                    $this->audit_co->obj->table_name,
@@ -175,7 +176,7 @@ class EmailChanges
 
             
 
-            $this->body .= sprintf('%sYou have chosen to receive these updates via email. You may change or cancel this by visiting: http://%s/members/generic.php?table=subscriptions "',
+            $this->body .= sprintf('%sYou have chosen to receive these updates via email. You may change or cancel this by visiting: http://%s/members/pages/generic.php?table=subscriptions "',
                             "\n\n",
                                    $_SERVER['HTTP_HOST']
                                    );

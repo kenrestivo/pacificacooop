@@ -19,7 +19,7 @@
 //$Id$
 
 
-require_once('../first.inc');
+require_once('../includes/first.inc');
 require_once('CoopTALPage.php');
 
 class ProgramSummary extends CoopTALPage

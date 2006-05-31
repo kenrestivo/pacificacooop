@@ -4,7 +4,8 @@
 // to find last years' alumni and add them to the leads db.
 // I HATE THIS!!! people should be people, dammit.
 
-chdir("../");                   // XXX only for "test" dir hack!
+
+require_once('../includes/first.inc');
 require_once('CoopPage.php');
 require_once('CoopObject.php');
 

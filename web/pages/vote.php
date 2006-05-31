@@ -18,8 +18,7 @@
 
 //$Id$
 
-//chdir('..'); //XXX HACK!
-require_once('../first.inc');
+require_once('../includes/first.inc');
 require_once('CoopTALPage.php');
 require_once('CoopView.php');
 require_once('CoopForm.php');

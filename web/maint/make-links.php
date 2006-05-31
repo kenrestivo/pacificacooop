@@ -3,7 +3,6 @@
 //$Id$
 // to move a few auction items over to in-kind items.
 
-//chdir("../");                   // XXX only for "test" dir hack!
 
 require_once("includes/session-init.php");
 require_once('DB.php');

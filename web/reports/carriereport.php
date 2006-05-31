@@ -18,7 +18,8 @@
 
 //$Id$
 
-chdir('..'); // XXX hack
+
+require_once('../includes/first.inc');
 require_once('CoopPage.php');
 require_once('CoopView.php');
 require_once('HTML/Table.php');

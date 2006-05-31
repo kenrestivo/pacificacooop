@@ -34,11 +34,14 @@ define('DB_DATAOBJECT_NO_OVERLOAD', true);
 
 /// THIS IS THE KEY TO THE WHOLE APPLICATION!
 /// if this one function doesn't happen, ain't nothing else happening!
-set_include_path(implode(PATH_SEPARATOR, 
-                         array(dirname(__FILE__), // hmm. instead of ABS_PATH?
-                               'local_pear',
-                               COOP_LOCAL_PEAR_PATH,
-                               get_include_path())));
+set_include_path(
+    implode(
+        PATH_SEPARATOR, 
+        // hmm. instead of ABS_PATH? this is lame
+        array(dirname(__FILE__) . DIRECTORY_SEPARATOR . '/..', 
+              'local_pear',
+              COOP_LOCAL_PEAR_PATH,
+              get_include_path())));
 
 
 require_once('settings/dbhost.inc');

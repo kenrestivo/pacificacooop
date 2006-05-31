@@ -19,7 +19,7 @@
 //$debug = 4;
 
 
-require_once("first.inc");
+require_once("includes/first.inc");
 require_once("CoopView.php");
 require_once("HTML/Table.php");
 

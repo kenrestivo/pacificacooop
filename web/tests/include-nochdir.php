@@ -6,7 +6,7 @@
 // something has gone horribly wrong
 
 // so that it will presumably work from anywhere!
-require_once('../first.inc');
+require_once('../includes/first.inc');
 
 
 require_once "HTML/QuickForm.php";
