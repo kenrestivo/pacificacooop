@@ -20,7 +20,7 @@
 	 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require_once('CoopObject.php');
+require_once('COOP/Object.php');
 require_once('DB/DataObject/Cast.php');
 
 

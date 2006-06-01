@@ -7934,3 +7934,12 @@ TAL cache templates are in the wrong place
 
 all the crufty crap cleanup stuff (sep: cleanup.txt?)
 	this thing has GOT to survive in its own section
+move all the stuff in maint over to old, if it has bitrotted!
+
+generic.php CANNOT BE HARD CODED!
+	i need it to either be a define, or var, or something
+		make full path too, because it may be different
+		it's system-wide,put it in globals.inc
+	because in a module, i do NOT want generic.php
+	i need my module as a url instead
+		look at civicrm, how it does it

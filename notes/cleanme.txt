@@ -1,13 +1,5 @@
 random things that really really need to get cleaned up
 
-	
-move all the stuff in maint over to old, if it has bitrotted!
-
-generic.php CANNOT BE HARD CODED!
-	i need it to either be a define, or var, or something
-	because in a module, i do NOT want generic.php
-	i need my module as a url instead
-		look at civicrm, how it does it
 				
 
 	

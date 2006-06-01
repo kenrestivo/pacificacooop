@@ -115,7 +115,7 @@ class CoopMenu
                                                       'realm' => $tab->obj->realm_id),
                                     'base' =>  $co->obj->fb_usePage ? 
                                     COOP_ABSOLUTE_URL_PATH . '/' . $co->obj->fb_usePage : 
-                                    COOP_ABSOLUTE_URL_PATH . '/pages/generic.php')); 
+                                    COOP_GENERIC_TABLE_ENGINE_ABSOLUTE_URL_PATH)); 
                     }
                 } // END TABLES
                 // NOW GO RECURSE

@@ -167,18 +167,20 @@ class EmailChanges
             }
 
             // REMEMBER! i can't use selfurl here: it adds SID
-            $this->body .= sprintf('%sFor more details, visit here: http://%s/members/pages/generic.php?action=details&table=%s&%s=%d',
+            $this->body .= sprintf('%sFor more details, visit here: http://%s%s?action=details&table=%s&%s=%d',
                                    "\n\n",
                                    $_SERVER['HTTP_HOST'],
+                                   COOP_GENERIC_TABLE_ENGINE_ABSOLUTE_URL_PATH,
                                    $this->audit_co->obj->table_name,
                                    $rec->prependTable($rec->pk),
                                    $this->audit_co->obj->index_id);
 
             
 
-            $this->body .= sprintf('%sYou have chosen to receive these updates via email. You may change or cancel this by visiting: http://%s/members/pages/generic.php?table=subscriptions "',
+            $this->body .= sprintf('%sYou have chosen to receive these updates via email. You may change or cancel this by visiting: http://%s%s?table=subscriptions "',
                             "\n\n",
-                                   $_SERVER['HTTP_HOST']
+                                   $_SERVER['HTTP_HOST'],
+                                   COOP_GENERIC_TABLE_ENGINE_ABSOLUTE_URL_PATH
                                    );
             $this->body .= "\n\n";
         }

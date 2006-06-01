@@ -167,8 +167,9 @@ class Auction_donation_items extends CoopDBDO
 	// the internals of newcoopdispatcher variables. uglay!
 	function newPackageForm(&$co)
 		{
-			$form =& new HTML_QuickForm('newpackageform', 'post', 
-                                        COOP_ABSOLUTE_URL_PATH . '/pages/generic.php');
+			$form =& new HTML_QuickForm(
+                'newpackageform', 'post', 
+                COOP_GENERIC_TABLE_ENGINE_ABSOLUTE_URL_PATH);
             $form->removeAttribute('name');
 
 

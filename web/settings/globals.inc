@@ -84,5 +84,8 @@ define('COOP_AMAZON_ACCESS_KEY', '0F1YJJRT1KE6VF2DVQ02');
 
 define('COOP_BOARD_MEMBER_GROUP_ID', 3);
 
+// pretty critical. almost the whole app uses this
+define('COOP_GENERIC_TABLE_ENGINE_ABSOLUTE_URL_PATH', 
+       COOP_ABSOLUTE_URL_PATH . '/pages/generic.php');
 
 ?>

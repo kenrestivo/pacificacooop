@@ -45,6 +45,6 @@ class Misc_documents extends CoopDBDO
     var $fb_sizes = array('body' => 100, 'title' => 50);
     var $fb_textHeight = array('body' => 100);
 
-    var $fb_mceInitFile = 'tinymce_hack.js'; // XXX nasty hack
+    var $fb_mceInitFile = COOP_ABSOLUTE_URL_PATH . '/lib/tinymce_hack.js'; // XXX nasty hack
 
 }
