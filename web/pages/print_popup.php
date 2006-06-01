@@ -22,9 +22,13 @@
 
 
 require_once('../includes/first.inc');
-require_once('CoopPDF.php');
+require_once('COOP/Page/TAL/PDF.php');
 require_once('lib/TALobjtemplater.php');
 // XXX dead file require_once('ThankYou.php');
+
+
+//// TODO: this is kind of dumb here.
+//// shouldn't i move this to COOP/Page/TAL/PDF/ThankYou.php?
 
 class ThankYouNote extends CoopPDF
 {

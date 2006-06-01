@@ -255,7 +255,7 @@ class Tickets extends CoopDBDO
     
     function _updateSponsors(&$co)
         {
-            require_once('Sponsorship.php');
+            require_once('COOP/Sponsorship.php');
             $sp = new Sponsorship(&$co->page, $this->school_year);
             foreach(array('lead_id', 'company_id') as $idname){
                 if($this->{$idname} > 0){

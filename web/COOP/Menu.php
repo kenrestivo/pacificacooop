@@ -21,7 +21,7 @@
 */
 
 
-require_once 'CoopObject.php';
+require_once 'COOP/Object.php';
 require_once('HTML/TreeMenu.php');
 
 

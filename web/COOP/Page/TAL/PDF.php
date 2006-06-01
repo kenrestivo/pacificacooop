@@ -18,7 +18,7 @@
 
 //$Id$
 
-require_once('CoopTALPage.php');
+require_once('COOP/Page/TAL.php');
 require_once('lib/pdml.php');
 require_once('lib/fpdf.php');
 

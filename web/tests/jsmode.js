@@ -535,7 +535,7 @@ for(cell in w.document.getElementsByTagName('TD')){
 
 addScript('http://www/coop-dev/lib/MochiKit/MochiKit.js')
 
-d=doSimpleXMLHttpRequest('http://www/coop-dev/amazon-hack.php', 
+d=doSimpleXMLHttpRequest('http://www/coop-dev/services/amazon-hack.php', 
     {'Service':'AWSECommerceService',
      'AWSAccessKeyId': '0F1YJJRT1KE6VF2DVQ02',
      'Operation': 'ItemLookup',
@@ -599,3 +599,11 @@ bar=['Binding', 'Publication Date', 'Publisher', 'Length' ];
 
 bar.join(', ')
 
+foo=function()
+{
+    var blah = 3;
+    function incr(){
+        return blah++;
+    }
+}
+foo.incr();

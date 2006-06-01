@@ -3,8 +3,8 @@
 //$Id$
 
 require_once('../includes/first.inc');
-require_once('CoopPage.php');
-require_once('CoopObject.php');
+require_once('COOP/Page.php');
+require_once('COOP/Object.php');
 require_once 'PHPUnit.php';
 require_once 'PHPUnit/GUI/HTML.php';
 require_once('qa/utilstest.php');

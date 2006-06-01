@@ -20,7 +20,7 @@
 
 
 require_once('../includes/first.inc');
-require_once('CoopPDF.php');
+require_once('COOP/Page/TAL/PDF.php');
 
 // XXX PHP IS BROKEN? YOU CANNNOT CANNOT CANNOT HAVE LONG CLASS NAMES!?
 // i originally named his class GiftCertificateREport, but PHP puked on it

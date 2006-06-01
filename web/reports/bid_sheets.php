@@ -20,7 +20,7 @@
 
 
 require_once('../includes/first.inc');
-require_once('CoopPDF.php');
+require_once('COOP/Page/TAL/PDF.php');
 
 
 class BidSheetReport extends CoopPDF

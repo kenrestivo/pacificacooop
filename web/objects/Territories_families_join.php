@@ -2,7 +2,7 @@
 /**
  * Table Definition for territories_families_join
  */
-require_once 'CoopDBDO.php';
+require_once 'COOP/DBDO.php';
 
 class Territories_families_join extends CoopDBDO 
 {

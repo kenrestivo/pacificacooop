@@ -1,14 +1,5 @@
 random things that really really need to get cleaned up
 
-new directory structure:
-	COOP (all my CoopFoo.php classes). only classes go in here
-		CoopDBDO... setting in object-config.php? coop-db.ini?
-		
-	dammit! this SAFE_MODE shit will kill me on nfsn. wtf?
-
-
-force the menu to refresh, the tree doesn't seem to be doing so
-
 
 generic.php CANNOT BE HARD CODED!
 	i need it to either be a define, or var, or something
@@ -17,10 +8,8 @@ generic.php CANNOT BE HARD CODED!
 		look at civicrm, how it does it
 				
 
-stuff to deal with when moving all around
-	all require_once's, to COOP/Page.php, COOP/View.php, etc.
-
-
+move all the stuff in maint over to old, if it isn't gonna work!
+				
 	
 go through the joinpaths in standard linkconstraints!
 	i bet i can blow off tons of wacko custom linkconstraints this way!

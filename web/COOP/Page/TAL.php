@@ -18,8 +18,8 @@
 
 //$Id$
 
-require_once('CoopPage.php');
-require_once('CoopView.php');
+require_once('COOP/Page.php');
+require_once('COOP/View.php');
 require_once "HTML/Template/PHPTAL.php";
 require_once "lib/phptal_filters.php";
 require_once('COOP/Iterator.php');  // only include it when i really need it

@@ -23,9 +23,9 @@
 require_once("includes/first.inc");
 require_once("includes/auth.inc");
 
-require_once("CoopPage.php");
+require_once("COOP/Page.php");
 require_once("COOP/Menu.php");
-require_once("CoopView.php");
+require_once("COOP/View.php");
 
 
 //PEAR::setErrorHandling(PEAR_ERROR_PRINT); //  before page exists.

@@ -109,7 +109,7 @@ var $fb_dupeIgnore = array(
     // when inserting, the jointable will catch it and call updatesponsorship()
     function afterUpdate(&$co)
         {
-            require_once('Sponsorship.php');
+            require_once('COOP/Sponsorship.php');
             $sp = new Sponsorship(&$co->page, $this->school_year);
             // find all joinfields that have lead_id or company_id
             // this is some brutal, ugly, nasty, unmaintainable garbage.

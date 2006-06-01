@@ -1,8 +1,8 @@
 <?php
 
-chdir('../');
 
-require_once('CoopPDF.php');
+require_once('../includes/firest.inc');
+require_once('COOP/Page/TAL/PDF.php');
 
 
 

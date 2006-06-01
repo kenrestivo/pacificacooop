@@ -2,7 +2,7 @@
 /**
  * Table Definition for thank_you_templates
  */
-require_once 'CoopDBDO.php';
+require_once 'COOP/DBDO.php';
 
 class Thank_you_templates extends CoopDBDO 
 {

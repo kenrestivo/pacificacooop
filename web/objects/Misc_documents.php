@@ -2,7 +2,7 @@
 /**
  * Table Definition for misc_documents
  */
-require_once 'CoopDBDO.php';
+require_once 'COOP/DBDO.php';
 
 class Misc_documents extends CoopDBDO 
 {

@@ -2,7 +2,7 @@
 /**
  * Table Definition for primary_book_categories
  */
-require_once 'CoopDBDO.php';
+require_once 'COOP/DBDO.php';
 
 class Primary_book_categories extends CoopDBDO 
 {

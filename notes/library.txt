@@ -40,12 +40,15 @@ lookup title
 		how do i get subsequent pages?
 			read docs
 				ah, page=x duh.
+			um, no.
 		bah! how to page around the fucking scrollbox!! geeh!
 			i think i may have solved this with my ncurses library years ago?
 			calculate the position in the scrollbox, divided by number of lines?
 				if last visible line  > 10 
 					get page for top visible line
 						scrollTop in ie and moz
+		blow that off, it's crap. just keep adding stuff to the box
+			recurring chained deferreds
 
 
 	

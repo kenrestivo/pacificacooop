@@ -3790,7 +3790,10 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	find a better way to start this up, than dirname(__FILE__)!
+	dammit! this SAFE_MODE shit will kill me on nfsn. wtf?
+		shouldn't be an issue if you have all the files on same nfs drive
+
+			find a better way to start this up, than dirname(__FILE__)!
 
 		hmm, looks like auth uses it
 
@@ -7908,3 +7911,20 @@ is ThankYou.php used anymore?! can i cruft it out?
 check that advertising missing block in program export report!
 	aha! was a path coopdbdo issue
 		i want to be able to move first.inc somewhere else, maybe?
+force the menu to refresh, the tree doesn't seem to be doing so
+	duh, typo, no pages
+
+	
+new directory structure:
+	COOP (all my CoopFoo.php classes). only classes go in here
+		start with the big one CoopPage
+		coopform
+		coopobject
+		cooppdf
+		cooptal
+		coopview
+		sponsorship
+		CoopDBDO... setting in object-config.php? coop-db.ini?
+
+stuff to deal with when moving all around
+	all require_once's, to COOP/Page.php, COOP/View.php, etc.

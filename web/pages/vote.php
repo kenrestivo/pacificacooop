@@ -19,9 +19,9 @@
 //$Id$
 
 require_once('../includes/first.inc');
-require_once('CoopTALPage.php');
-require_once('CoopView.php');
-require_once('CoopForm.php');
+require_once('COOP/Page/TAL.php');
+require_once('COOP/View.php');
+require_once('COOP/Form.php');
 
 
 class Vote extends CoopTALPage

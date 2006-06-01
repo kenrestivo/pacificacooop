@@ -2,7 +2,7 @@
 /**
  * Table Definition for questions
  */
-require_once 'CoopDBDO.php';
+require_once 'COOP/DBDO.php';
 
 class Questions extends CoopDBDO 
 {

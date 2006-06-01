@@ -20,8 +20,8 @@
 	 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require_once('CoopPage.php');
-require_once('CoopDBDO.php');
+require_once('COOP/Page.php');
+require_once('COOP/DBDO.php');
 require_once("HTML/Table.php");
 require_once('includes/object-config.php');
 // BROKEN ON LIVESITE!  require_once('lib/dbdo_iterator.php'); 

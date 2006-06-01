@@ -11,14 +11,14 @@
 
 
 require_once('../includes/first.inc');
-require_once('CoopPage.php');
-require_once('CoopView.php');
-require_once('CoopForm.php');
+require_once('COOP/Page.php');
+require_once('COOP/View.php');
+require_once('COOP/Form.php');
 require_once('COOP/Menu.php');
 require_once('HTML/Table.php');
 require_once 'HTML/QuickForm.php';
 require_once('DB/DataObject/Cast.php');
-require_once('Sponsorship.php');
+require_once('COOP/Sponsorship.php');
 
 
 function testsave($vars){

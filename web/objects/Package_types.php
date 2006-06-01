@@ -2,7 +2,7 @@
 /**
  * Table Definition for package_types
  */
-require_once 'CoopDBDO.php';
+require_once 'COOP/DBDO.php';
 
 class Package_types extends CoopDBDO 
 {

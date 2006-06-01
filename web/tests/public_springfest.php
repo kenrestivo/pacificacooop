@@ -18,9 +18,10 @@
 
 //$Id$
 
-chdir('../');
 
-require_once('CoopTALPage.php');
+
+require_once('../includes/first.inc');
+require_once('COOP/Page/TAL.php');
 
 class PublicSpringfest extends CoopTALPage
 {

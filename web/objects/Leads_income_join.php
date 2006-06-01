@@ -105,7 +105,7 @@ class Leads_income_join extends CoopDBDO
     
     function _updateSponsors(&$co)
         {
-            require_once('Sponsorship.php');
+            require_once('COOP/Sponsorship.php');
             $sp = new Sponsorship(&$co->page, $this->school_year);
             $sp->updateSponsorships($this->lead_id, 'lead_id');
         }

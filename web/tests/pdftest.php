@@ -1,8 +1,9 @@
 <?php
 
-chdir('../');
 
-require_once('CoopPDF.php');
+
+require_once('../includes/first.inc');
+require_once('COOP/Page/PDF.php');
 
 class TestPDF extends FPDF
 {

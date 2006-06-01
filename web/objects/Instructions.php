@@ -2,7 +2,7 @@
 /**
  * Table Definition for instructions
  */
-require_once 'CoopDBDO.php';
+require_once 'COOP/DBDO.php';
 
 class Instructions extends CoopDBDO 
 {

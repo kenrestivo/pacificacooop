@@ -142,6 +142,9 @@ function lookupTitle(fieldname, baseurl,access_key)
    var status = document.getElementById('status-'+ fieldname);
    status.innerHTML = 'Searching...';
 
+   // TODO: cancel the deferred if one already exists: one at a time!
+   // so if they page through them quickly they don't freak out their browser
+
    d=doSimpleXMLHttpRequest(baseurl + '/services/amazon-hack.php', 
         {'Service':'AWSECommerceService',
          'AWSAccessKeyId': access_key,
@@ -159,11 +162,18 @@ function lookupTitle(fieldname, baseurl,access_key)
             
             // iterate through the items, put them into the options
             var found = r.getElementsByTagName('Item'); 
+
+            // TODO: keep coming back for more! if there are thousands!
+            // need to save the ORIGINAL title.value first;
+            // user may change it by clicking on the item in the selectbox
+            // need some way of cancelling it (jane, stop this crazy thing!)
+            // maybe if the user clicks the SEARCH button again, invoking this
+
             if(found.length > 0){
                 status.innerHTML = r.getElementsByTagName('TotalResults')[0].firstChild.nodeValue + ' matches found!';
                 lbox.className = 'lookupbox'; // SHOW it
                 
-                cleanBox(selbox);
+                cleanBox(selbox); // TODO: only if first page!
                 var i=0;
                 while(i < found.length){
                     o=new Option(

@@ -2,7 +2,7 @@
 /**
  * Table Definition for families
  */
-require_once 'CoopDBDO.php';
+require_once 'COOP/DBDO.php';
 
 class Families extends CoopDBDO
 {

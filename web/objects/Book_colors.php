@@ -2,7 +2,7 @@
 /**
  * Table Definition for book_colors
  */
-require_once 'CoopDBDO.php';
+require_once 'COOP/DBDO.php';
 
 class Book_colors extends CoopDBDO 
 {

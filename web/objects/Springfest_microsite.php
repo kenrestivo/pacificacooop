@@ -2,7 +2,7 @@
 /**
  * Table Definition for springfest_microsite
  */
-require_once 'CoopDBDO.php';
+require_once 'COOP/DBDO.php';
 
 class Springfest_microsite extends CoopDBDO 
 {
