@@ -142,7 +142,7 @@ function lookupTitle(fieldname, baseurl,access_key)
    var status = document.getElementById('status-'+ fieldname);
    status.innerHTML = 'Searching...';
 
-   d=doSimpleXMLHttpRequest(baseurl + '/amazon-hack.php', 
+   d=doSimpleXMLHttpRequest(baseurl + '/services/amazon-hack.php', 
         {'Service':'AWSECommerceService',
          'AWSAccessKeyId': access_key,
          'Operation': 'ItemSearch',
@@ -206,7 +206,7 @@ function showDetails(fieldname, baseurl, access_key)
     
     //go lookup the detailed stuff, parse it, and put it in here!
 
-    d=doSimpleXMLHttpRequest(baseurl + '/amazon-hack.php', 
+    d=doSimpleXMLHttpRequest(baseurl + '/services/amazon-hack.php', 
         {'Service':'AWSECommerceService',
          'AWSAccessKeyId': access_key,
          'Operation': 'ItemLookup',
