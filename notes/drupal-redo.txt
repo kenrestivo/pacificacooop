@@ -2,11 +2,8 @@ redo the whole site in drupal or xoops or joomla or something
 
 write a sample drupal module, with civicrm hooks
 	use petition as an example/template?
-	or do the tutorial
+	or do the tutorial. is there a 4.7.1 tutorial?
 	
-
-all the crufty crap cleanup stuff (sep: cleanup.txt?)
-	this thing has GOT to survive in its own section
 
 import the users!!
 	write an export script using csv python
@@ -18,6 +15,11 @@ import the users!!
 	finally write another quick python script to replace passwords
 		based on email address... scary but it's all i've got
 
+		
+modules i'll want for the school
+	must have
+		tinymce
+		print friendly
 
 set up forums: member only should see it
 	perms? content types? what?		
@@ -25,35 +27,12 @@ set up forums: member only should see it
 oh wow, event types! cool, i can filter by those
 	content types? where to set those up?
 	
-modules i'll want for the school
-	must have
-		tinymce
-		gallery2? or image? or does tinyhtml do that anyway? ing_assist?
-		print friendly
-	i can wait
-      	amazon associate tools
-	ooh!
-		activeselect: may be useful!
-		javascripttools! for my custom module things!
-		blockbar
-		mailhandler? for posting?
-		project!
-	hmm? research more
-		category?
-		contact list
-		img_assist?
-		nice menus? bah, doesn't help
-		
-
-
 
 ok, how do i do auth now? i no longer link to the users table
 	this needs serious thought. integrate with old app
 	i think i need to be a module, at least to add the perms in!
 		big, massive matrix of perms, too!
 		
-						
-
 
 update the "welcome" email, to tell them,
 	if they don't like their username, change it!
@@ -61,10 +40,23 @@ update the "welcome" email, to tell them,
 	
 do the dance of the CVS
 	should be easy, compared to the clusterfuck i've been dealing with lately
-	
+
+
+how do i hide certain custom fields?	
 	
 then push the fucker live!
 
+
+yank duplicate functionality
+	bulletin board
+	calendar
+	convert data to new format!		
+
+how would i join civicrm tables to coop tables??!!
+	i.e. for queries that check values in there?
+	do i make temporary tables?
+	
+			
 
 heh, cool, label printing via fpdf included now!
 	angel bueno pardo post to civicrm list
@@ -154,6 +146,20 @@ how to start, goddammit!?
 ----------------
 BELOW THE LINE
 
+	i can wait
+      	amazon associate tools
+	ooh!
+		gallery2? or image? or does tinyhtml do that anyway? ing_assist?
+		activeselect: may be useful!
+		javascripttools! for my custom module things!
+		blockbar
+		mailhandler? for posting?
+		project!
+	hmm? research more
+		category?
+		contact list
+		img_assist?
+		nice menus? bah, doesn't help
 
 			have a look at the towncenter one for comparison
 			maybe custom data for wait list application?!!

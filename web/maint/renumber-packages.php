@@ -18,6 +18,9 @@
 
 //$Id$
 
+// the package numbers can get all screwed up easily.
+// this script fixes that. it shouldnt' be necessary, but it is
+
 
 require_once('../includes/first.inc');
 require_once('COOP/Page.php');

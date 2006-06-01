@@ -7928,3 +7928,9 @@ new directory structure:
 
 stuff to deal with when moving all around
 	all require_once's, to COOP/Page.php, COOP/View.php, etc.
+
+TAL cache templates are in the wrong place
+	should be in cache folder. ah trailign slash
+
+all the crufty crap cleanup stuff (sep: cleanup.txt?)
+	this thing has GOT to survive in its own section

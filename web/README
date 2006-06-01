@@ -28,6 +28,8 @@ CoopNewDispatcher: for navigating states, the 'action' GET/POST var
 
 this is a Big Pig of an app from a memory and CPU standpoint. if you do development on it, you'll want to change the .htaccess periodically to bump the "php_value memory_limit" and possibly max_execution_time too.
 
+
+
 essential vars that the system uses:
 (they go in the DataObjects (in objects directory)
 -----------------
@@ -56,6 +58,8 @@ fb_forceNoChooser = 0/1 a HACK! for summaries which share one schoolyearchooser
 fb_forceCustomSelect = 0/1 A NASTY HACK! because my searchselect doesn't go deep
     into links. some tables are ALL links, i need to force them to be popups
 fb_mceInitFile = a NASTY hack.. alternate tinymce init file if needed. bah.
+
+
 
 callbacks...  also in the DataObjects (in objects directory):
 ----------------
@@ -89,6 +93,8 @@ linkdisplayfields is a SUPERset of fieldstorender, in simpletable at least
 in cooppage
 ------------
 (list vars here)
+
+
 
 unique app-specific tweaks:
 -----------------------
@@ -210,7 +216,7 @@ ugly stack hacks:
     
 
 ------------
-pre-PEAR AUTH permissions system which is still in use
+pre-PEAR AUTH permissions system to be subsumed by drupal
 auth
 	why are users not families??? why create a shadow abstraction?!
 		well, because users are NOT families! 
@@ -298,4 +304,5 @@ pdml/fpdf:
     the right way to do this would be with XSLT and XSL-FO, but we can't
         because it requires java and JSP, and our web host doesn't support that
 
-
+pdml/fpdf is crap. need to use html2pdf instead, but that requires mods
+    i.e. html2pdf does not handle custom fonts yet

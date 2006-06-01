@@ -1,5 +1,7 @@
 random things that really really need to get cleaned up
 
+	
+move all the stuff in maint over to old, if it has bitrotted!
 
 generic.php CANNOT BE HARD CODED!
 	i need it to either be a define, or var, or something
@@ -8,8 +10,6 @@ generic.php CANNOT BE HARD CODED!
 		look at civicrm, how it does it
 				
 
-move all the stuff in maint over to old, if it isn't gonna work!
-				
 	
 go through the joinpaths in standard linkconstraints!
 	i bet i can blow off tons of wacko custom linkconstraints this way!
