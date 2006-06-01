@@ -6,7 +6,7 @@ require_once 'COOP/DBDO.php';
 
 class Misc_documents extends CoopDBDO 
 {
-    ###START_AUTOCODE
+###START_AUTOCODE
     /* the code below is auto generated do not remove the above tag */
 
     var $__table = 'misc_documents';                  // table name
@@ -23,7 +23,7 @@ class Misc_documents extends CoopDBDO
     function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('Misc_documents',$k,$v); }
 
     /* the code above is auto generated do not remove the tag below */
-    ###END_AUTOCODE
+###END_AUTOCODE
 
 
 	var $fb_linkDisplayFields = array('title');
@@ -45,6 +45,6 @@ class Misc_documents extends CoopDBDO
     var $fb_sizes = array('body' => 100, 'title' => 50);
     var $fb_textHeight = array('body' => 100);
 
-    var $fb_mceInitFile = COOP_ABSOLUTE_URL_PATH . '/lib/tinymce_hack.js'; // XXX nasty hack
+    var $fb_mceInitFile = '/lib/tinymce_hack.js'; // XXX nasty hack
 
 }
