@@ -24,7 +24,6 @@ require_once("includes/first.inc");
 require_once("includes/auth.inc");
 require_once('Mail.php');
 require_once 'HTML/Table.php';
-require_once 'lib/sniff.php';
 
 
 function confessObj($obj, $text, $outofband = true)
@@ -81,7 +80,6 @@ class coopPage
     var $heading = 'Pacifica Co-Op Nursery School Data Entry'; // to display
     var $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';    // since tal can't escape it
     var $currentSchoolYear;   // cache so i'm not pounding findschoolyear
-    var $browserData;    /// cache of data found
     var $content_type = 'text/html;charset=utf-8';
     var $uri_path = COOP_ABSOLUTE_URL_PATH; // TAL and REST need this in a var
     
@@ -811,14 +809,6 @@ class coopPage
         }
 
 
-    function getBrowserData()
-        {
-            //TODO: replace this with get_browser() in PHP!
-            if(empty($this->browserData)){
-                $this->browserData = SniffBrowser();
-            }
-            return $this->browserData;
-        }
 
     // alias for OOP PHPTAL stuff
     // devSite needs to be a non-object function for now still

@@ -7943,3 +7943,9 @@ generic.php CANNOT BE HARD CODED!
 	because in a module, i do NOT want generic.php
 	i need my module as a url instead
 		look at civicrm, how it does it
+
+use get_browser() instead of that lib/sniff.php SniffBrowser() crap
+clean up maint folder, move crap to old folder instead!
+???PHP
+clean up my inclusion order in proparation h for phptal
+	remember the set names!!!

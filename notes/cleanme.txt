@@ -1,14 +1,8 @@
 random things that really really need to get cleaned up
 
-				
-
 	
 go through the joinpaths in standard linkconstraints!
 	i bet i can blow off tons of wacko custom linkconstraints this way!
-
-
-		
-clean up maint folder, move crap to old folder instead!
 
 
 ???PHP
@@ -18,31 +12,19 @@ do NOT dick with request in coopview:getAndSaveDefault()
 	look at syform. quickform has its own ways of dealing with saved vars
 		find out whatever i do in coopform, and do it in syform too
 
-
-
-???PHP
-clean up my inclusion order in proparation h for phptal
-	remember the set names!!!
-
+		
 	what about deletes? no audit trail on deletes... interesting
 
 
 	generic dispatcher
 		then use that for my fix-whateve
 
-
-use get_browser() instead of that lib/sniff.php SniffBrowser() crap
 		
 
 add to instructions
 auctionpurchases
  	 'This is the "Jane Report": the actual purchases of Springfest Packages, along with their final bid price, and the variance between what they sold for and their estimated value. The most popular packages (those that sold for at or above their estimated value) are listed first.';
 
-
-coop_sendto
-	move to dbhost
-	need to be global ebcause it's referenced in session-init 
-	but i have to move it into cooppage somewhere-- setting
 
 
 gah. can't delete a family if they have a user, but they have one AUTOMATICALLY when you careat ea family, and betsy can't delete it!!
@@ -54,6 +36,11 @@ gah. can't delete a family if they have a user, but they have one AUTOMATICALLY 
 -----------------------
 UNNECESSARY DUE TO DRUPAL
 
+
+coop_sendto
+	move to dbhost
+	need to be global ebcause it's referenced in session-init 
+	but i have to move it into cooppage somewhere-- setting
 
 send_email needs a rework
 	use TAL with omit-tag to template it: an HTML version and a non-html version

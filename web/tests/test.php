@@ -23,9 +23,7 @@ print $cp->pageTop();
 
 print $cp->selfURL(array('value' =>'refresh (for testing)'));
 
-require_once('lib/sniff.php');
-
-confessArray(SniffBrowser());
+confessArray(get_browser());
 
 
 $fam =& new CoopObject(&$cp, 'leads', &$nothing);

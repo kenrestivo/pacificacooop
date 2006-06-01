@@ -47,10 +47,37 @@ how do i hide certain custom fields?
 then push the fucker live!
 
 
-yank duplicate functionality
-	bulletin board
-	calendar
-	convert data to new format!		
+migration plan
+	immediately remove and convert data
+		bulletin board
+		files
+		documents
+		calendar
+		events
+		event types
+	port permissions system
+		users
+		groups
+		realms
+		logins
+	unknown
+		audit
+		instructions
+		invitations!? email blast/program instead?
+	integrate with civicrm somehow! plugin?
+		solicitation companies
+		territories
+		leads
+		families
+		parents
+		kids
+		flyer locations
+		auction donations
+		cash donations
+		ad purchases?
+		attendees?
+		auction purchases?
+
 
 how would i join civicrm tables to coop tables??!!
 	i.e. for queries that check values in there?
@@ -145,6 +172,8 @@ how to start, goddammit!?
 
 ----------------
 BELOW THE LINE
+
+coop_sendto should be integreated with drupal instead!
 
 	i can wait
       	amazon associate tools
