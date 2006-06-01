@@ -54,6 +54,10 @@ class Books extends CoopDBDO
         'authors' => 50
         );
 
+
+    var $fb_pager =array('method' => 'alpha',
+                         'keyname' => 'title');
+
     function preGenerateForm(&$form)
         {
             require_once('lib/isbninput.php');
