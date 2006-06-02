@@ -27,7 +27,6 @@ global $dbuser ;
 global $dbpwd ;
 global $dbhost ;
 global $debug;
-global $coop_root;
 
 // #let me overide
 $debug = isset($debug) ? $debug : 4;
