@@ -29,29 +29,46 @@ define('DB_DATAOBJECT_NO_OVERLOAD', true);
 
 
 
-// NOTE! i want the ISP's version of PEAR to override my local beta crap
 
-require_once(dirname(__FILE__)  . '/../settings/dbhost.inc');  // database and anything cvs'able
-require_once(dirname(__FILE__)  . '/../settings/no_cvs.inc'); /// for live/dev, these are NOT in CVS
-require_once(dirname(__FILE__)  . '/../settings/globals.inc'); // other globals, put AFTER above!
-require_once(dirname(__FILE__)  . '/session-init.php'); // include functions i need  below:
+global $coop_root;
+
+// NOTE! this must have a trailing slash! dirname gives me one
+if(!$coop_root){
+    // XXXX don't do ../, it's stupid.
+    // instead, explode the path, and grab all but last, and implode it
+    // PHP probably has some path management functions to do this too
+    $coop_root = dirname(__FILE__) . '/..';
+} 
+
+// database and anything cvs'able
+require_once($coop_root  . '/settings/dbhost.inc');  
+
+if(file_exists($coop_root  . '/settings/no_cvs.inc')){
+    /// optional, for live/dev, these are NOT in CVS
+    require_once($coop_root  . '/settings/no_cvs.inc'); 
+}
+
+// other globals, put AFTER above!
+require_once($coop_root  . '/settings/globals.inc'); 
+
+// include functions i need  below:
+require_once($coop_root  . '/includes/session-init.php'); 
 
 
 /// THIS IS THE KEY TO THE WHOLE APPLICATION!
 /// if this one function doesn't happen, ain't nothing else happening!
+
 set_include_path(
     implode(
         PATH_SEPARATOR, 
-        // XXXX don't do ../, it's stupid.
-        // instead, explode the path, and grab all but last, and implode it
-        // PHP probably has some path management functions to do this too
-        array(dirname(__FILE__)  . '/..', 
-              dirname(__FILE__) .  '/../local_pear',
+        array($coop_root,
+              $coop_root .  '/local_pear',
               COOP_LOCAL_PEAR_PATH,
               get_include_path())));
 
 
 
+//// finally, execute some function from session-init
 
 setupDB();
 setupErrors(); //*sigh* have to do this SECOND since it looks at dbhost :-/
