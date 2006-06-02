@@ -22,7 +22,7 @@
 
 
 require_once("HTML/Table.php");
-
+require_once('PEAR.php');
 
 ###############
 # TDARRAY
@@ -262,8 +262,8 @@ function
 human_to_sql_date($dt)
 {
 	if($dt && preg_match("/^(\d{4})-(\d{2})-(\d{2})$/", $dt, $cl) >0) {
-		user_error("human_to_sql_date($dt) is already a legal sql date",
-				   E_USER_NOTICE);
+// 		user_error("human_to_sql_date($dt) is already a legal sql date",
+// 				   E_USER_NOTICE);
 		return $dt;
 	}
 	if($dt && preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/", 
@@ -279,8 +279,8 @@ human_to_sql_date($dt)
 	//confessArray($cleaned, "human_to_sql_date($dt)");
 	$cleandate = sprintf("%04d-%02d-%02d",
 						 $cleaned[3], $cleaned[1], $cleaned[2]);
-	user_error("human_to_sql_date(): changed [$dt] to [$cleandate]",
-			   E_USER_NOTICE);
+// 	user_error("human_to_sql_date(): changed [$dt] to [$cleandate]",
+// 			   E_USER_NOTICE);
 	return $cleandate;
 } /* END HUMANSQLTODATE */
 
@@ -297,8 +297,8 @@ human_to_sql_timestamp($dt)
     // IS ALREADY LEGAL SQL (then skip)
 	if($dt && preg_match("/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}:d{2}(:\d{2})*)$/", 
                          $dt, $cl) >0) {
-		user_error("human_to_sql_time($dt) is already a legal sql date",
-				   E_USER_NOTICE);
+// 		user_error("human_to_sql_time($dt) is already a legal sql date",
+// 				   E_USER_NOTICE);
 		return $dt;
 	}
     // IS LEGAL HUMAN? (and is numan human?)
@@ -319,8 +319,8 @@ human_to_sql_timestamp($dt)
                               $cleaned[5]+12: $cleaned[5], 
                               $cleaned[6]);
     }
-	user_error("human_to_sql_time(): changed [$dt] to [$cleandate]",
-			   E_USER_NOTICE);
+// 	user_error("human_to_sql_time(): changed [$dt] to [$cleandate]",
+// 			   E_USER_NOTICE);
 	return $cleandate;
 } /* END HUMANSQLTODATE */
 
@@ -338,13 +338,13 @@ sql_to_human_date($dt)
     // NOTE: this pregmatch *MUST* match the one in human_to_sql_timestamp
 	if(preg_match("/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s*?((\d{1,2}):(\d{2})(:\d{1,2})*)*\s*(\w{2})*$/",
 				  $dt, $cleaned) > 0){
-		user_error("sql_to_human_date($dt) is already in human format",
-				   E_USER_NOTICE);
+// 		user_error("sql_to_human_date($dt) is already in human format",
+// 				   E_USER_NOTICE);
 		return $dt;
 	}
 	if($dt && preg_match("/^(\d{4})-(\d{2})-(\d{2})$/", $dt, $cl) < 1){
-		user_error("sql_to_human_date($dt) is not a legal sql date!!",
-				   E_USER_NOTICE);
+// 		user_error("sql_to_human_date($dt) is not a legal sql date!!",
+// 				   E_USER_NOTICE);
 	}
 
 	//capture sql 0000 date, which should be null
@@ -353,8 +353,8 @@ sql_to_human_date($dt)
 	}
 	$cleandate = sprintf("%02d/%02d/%04d",
 						 $cl[2], $cl[3], $cl[1]);
-	user_error("sql_to_human_date(): changed [$dt] to [$cleandate]",
-			   E_USER_NOTICE);
+// 	user_error("sql_to_human_date(): changed [$dt] to [$cleandate]",
+// 			   E_USER_NOTICE);
 	return $cleandate;
 } /* END SQLDAAETOHUMANDATE */
 
@@ -412,7 +412,7 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 	$i = 0;
 	$err = mysql_error();
 	if($err){
-		user_error("showrawquery($title): [$q]: $err", E_USER_ERROR);
+		PEAR::raiseError("showrawquery($title): [$q]: $err", 666);
 	}
 	while($row = mysql_fetch_assoc($listq)){
 		$tdrow = array();
@@ -441,7 +441,7 @@ showRawQuery($title, $q, $dollaz = 0, $dogt = 1)
 	}
 	$s = count($headers);
 	//confessArray($headers, "headers($s)");
-	user_error("showRawQuery([$q]): count $s", E_USER_NOTICE);
+// 	user_error("showRawQuery([$q]): count $s", E_USER_NOTICE);
 	if($dogt){
 		$grand[0] = 'GRAND TOTAL'; // always 0!
 		// go thru and format them if they are numbers
@@ -485,13 +485,13 @@ function
 miscQuery($query)
 {
 	//ok, let's do it
-	user_error("miscQuery)() doing [$query]", E_USER_NOTICE);
+// 	user_error("miscQuery)() doing [$query]", E_USER_NOTICE);
 	if(mysql_query($query)){
 		$rows = mysql_affected_rows();
 	}
 	$err = mysql_error();
 	if($err){
-		user_error("miscQuery(): [$query]: $err", E_USER_ERROR);
+		PEAR::raiseError("miscQuery(): [$query]: $err", 666);
 	}
 	return $rows;
 }/* END MISCQUERY */
@@ -510,15 +510,15 @@ findSchoolYear($date = 0, $guess = 1, $increment = 0)
 
 	if(!$date){
 		$date = date("Y-m-d");
-		user_error("findSchoolYear(): no date supplied, using [$date]",
-				   E_USER_NOTICE);
+// 		user_error("findSchoolYear(): no date supplied, using [$date]",
+// 				   E_USER_NOTICE);
 	}
 
 	// grab mdy
 	$tmp = preg_match("/^(\d{4})-(\d{2})-(\d{2})$/", $date, $mdy) ;
 	if($tmp < 1){
-		user_error("findSchoolYear(): [$date] is not yyyy-mm-dd",
-				   E_USER_ERROR);
+		PEAR::raiseError("findSchoolYear(): [$date] is not yyyy-mm-dd",
+				   666);
 	}
 
 	if($increment){
@@ -532,11 +532,11 @@ findSchoolYear($date = 0, $guess = 1, $increment = 0)
 
 	//ok, nothing there, so guess
 	if($guess){
-		user_error("findSchoolYear(): nothing in db for [$date], guessing...", 
-				   E_USER_NOTICE);
+// 		user_error("findSchoolYear(): nothing in db for [$date], guessing...", 
+// 				   E_USER_NOTICE);
 	} else {
 		//TODO: throw up an error on screen, with a link to the schoolyear setup
-		user_error("findSchoolYear(): nothing in db for [$date], and you don't want me to guess", E_USER_ERROR);
+		PEAR::raiseError("findSchoolYear(): nothing in db for [$date], and you don't want me to guess", 666);
 	}
 
 	$guessstart = 9; //assume sep1 is beginning of school year

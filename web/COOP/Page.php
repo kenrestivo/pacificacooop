@@ -192,7 +192,10 @@ class coopPage
 	function debugCrap()
 	{
 		$this->confessArray($_REQUEST, "test REQUEST");
-		$this->confessArray($GLOBALS['HTTP_RAW_POST_DATA'], "RAW HTTP POST");
+        if(!empty($GLOBALS['HTTP_RAW_POST_DATA'])){
+            $this->confessArray($GLOBALS['HTTP_RAW_POST_DATA'], 
+                                "RAW HTTP POST");
+        }
 		$this->confessArray($_SESSION, 
                             "test SESSION (prior to request being processed)");
 		$this->confessArray($_SERVER, "test SERVER", 4);
@@ -232,7 +235,8 @@ class coopPage
 			}
 
 			$output = ob_get_clean();
-			$output && ob_end_flush();
+            // TODO: how can i find out if the buffer is empty, before flushing?
+			$output && ob_end_flush(); 
 
 			return $output;
 

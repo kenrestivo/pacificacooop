@@ -77,8 +77,10 @@ setupErrors(); //*sigh* have to do this SECOND since it looks at dbhost :-/
 
 sessionSetup();
 
-user_error(sprintf("first.inc: session <%s> auth <%s> set-up",
-                   session_id(), $_SESSION['auth']['state']), E_USER_NOTICE);	
+user_error(sprintf("first.inc: session [%s] [%s] auth [%s] set-up",
+                   session_id(), session_name(),
+                   $_SESSION['auth']['state']), 
+           E_USER_NOTICE);	
 
 
 

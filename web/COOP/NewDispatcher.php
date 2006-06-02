@@ -47,7 +47,7 @@ class CoopNewDispatcher
             if(!empty($_REQUEST['table'])){
                 $atd =& new CoopView(&$this->page, $_REQUEST['table'], $none);
                 $formatted = array('table'=>$_REQUEST['table'], 
-                                   'action' =>$_REQUEST['action'] ? 
+                                   'action' => !empty($_REQUEST['action']) ? 
                                    $_REQUEST['action'] : 
                                    'view', 
                                    'pop' => @$_REQUEST['pop'], 

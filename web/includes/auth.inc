@@ -27,7 +27,11 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require_once("utils.inc");
+require_once("includes/utils.inc");
+
+if(!defined('COOP_DEBUG_AUTH')){
+    define('COOP_DEBUG_AUTH', 0);
+}
 
 define('MIN_PASS', 5);
 
@@ -124,13 +128,15 @@ getPass($uid)
 			//user_error("getPass(): got one for $uid", E_USER_NOTICE);
 			return($row['password']); //success!
 		} else {
-			user_error("getPass(): no password for uid $uid",E_USER_NOTICE);
+            COOP_DEBUG_AUTH && 
+                user_error("getPass(): no password for uid $uid",E_USER_NOTICE);
 			return 0; // no password entered yet for this uid
 		}
 	}
 
 
-	user_error("getPass(): no password for $uid", E_USER_NOTICE);
+	COOP_DEBUG_AUTH &&  
+        user_error("getPass(): no password for $uid", E_USER_NOTICE);
 	return 0;
 } /* END GETPASS */
 
@@ -331,9 +337,10 @@ getAuthLevel($auth, $targetrealm)
 		$result['group_level'] = $row['group_level'];
 	}
 	if(!is_array($result)){
-		user_error(sprintf("getAuthLevel: NO permissions for user %d in realm %s", 
-						   $auth['uid'],$targetrealm ),
-				   E_USER_NOTICE); 
+		COOP_DEBUG_AUTH && 
+            user_error(sprintf("getAuthLevel: NO permissions for user %d in realm %s", 
+                               $auth['uid'],$targetrealm ),
+                       E_USER_NOTICE); 
 	}
 
 	return $result;
@@ -673,8 +680,9 @@ logIn($vars)
 		$auth = sanityCheck($auth, $states);
 
 		$state = $auth['state']; // easier on the eyes!
-
-		user_error("logIn(): dispatching to $state", E_USER_NOTICE);
+        
+		COOP_DEBUG_AUTH && 
+            user_error("logIn(): dispatching to $state", E_USER_NOTICE);
 
 		/* confessArray($auth, sprintf("login() calling %s() with", 
 				$states[$state]['func'] )); 
@@ -705,7 +713,9 @@ sanityCheck($auth, $states)
 {
 	$state = $auth['state'];
 	if(!$states[$state]){
-			user_error("sanityCheck(): $state is an illegal state. Forcing unknown state", 
+        COOP_DEBUG_AUTH &&
+            user_error(
+                "sanityCheck(): $state is an illegal state. Forcing unknown state", 
 				E_USER_WARNING);
 			// NOTE! i do NOT use changeState() here
 			$auth['state'] = 'unknown'; // force it outta here
@@ -714,7 +724,8 @@ sanityCheck($auth, $states)
 		while (list($key, $val) = each($states[$state]['required'])){
 			if(!$auth[$val]){
 				//serious. potential security violation.
-				user_error("sanityCheck(): $val required for state $state. Forcing 'unknown' state.", E_USER_WARNING);
+				COOP_DEBUG_AUTH &&
+                    user_error("sanityCheck(): $val required for state $state. Forcing 'unknown' state.", E_USER_WARNING);
 				$auth['state'] = 'unknown'; // force it outta here
 			}
 		}
@@ -724,7 +735,7 @@ sanityCheck($auth, $states)
 
 	//check that uid is valid, if supplied
 	if($auth['uid'] && !getUser($auth['uid'])){
-		user_error(
+		COOP_DEBUG_AUTH && user_error(
 			sprintf("unknownState(): uid %d present, but user not in db", 
 				$auth['uid'])
 		, E_USER_NOTICE);
@@ -752,12 +763,16 @@ changeState($auth, $states, $newstate, $wanted = 0, $savedauth = NULL)
 	if($states[$newstate]['required']){
 		while (list($key, $val) = each($states[$newstate]['required'])){
 			if($savedauth && $savedauth[$val]){
-				user_error(sprintf("changeState(%s): keeping saved %s auth[%s] = %s", 
-					$newstate, "required", $val, $savedauth[$val]), 
+				COOP_DEBUG_AUTH && 
+                    user_error(
+                        sprintf("changeState(%s): keeping saved %s auth[%s] = %s", 
+                                $newstate, "required", $val, $savedauth[$val]), 
 						E_USER_NOTICE);
 				$newauth[$val] = $savedauth[$val];
 			} else if($auth[$val]){
-				user_error(sprintf("changeState(%s): keeping passed %s auth[%s] = %s", 
+				COOP_DEBUG_AUTH && 
+                    user_error(
+                        sprintf("changeState(%s): keeping passed %s auth[%s] = %s", 
 					$newstate, "required" , $val, $auth[$val]), 
 						E_USER_NOTICE);
 				$newauth[$val] = $auth[$val];
@@ -768,13 +783,17 @@ changeState($auth, $states, $newstate, $wanted = 0, $savedauth = NULL)
 	if($wanted && $states[$newstate]['wanted']){
 		while (list($key, $val) = each($states[$newstate]['wanted'])){
 			if($savedauth && $savedauth[$val]){
-				user_error(sprintf("changeState(%s): keeping saved %s auth[%s] = %s", 
-					$newstate, "wanted", $val, $savedauth[$val] ), 
+				COOP_DEBUG_AUTH && 
+                    user_error(
+                        sprintf("changeState(%s): keeping saved %s auth[%s] = %s", 
+                                $newstate, "wanted", $val, $savedauth[$val] ), 
 						E_USER_NOTICE);
 				$newauth[$val] = $savedauth[$val];
 			} else if($auth[$val]){
-				user_error(sprintf("changeState(%s): keeping passed %s auth[%s] = %s ", 
-					$newstate, "wanted", $val, $auth[$val]), 
+				COOP_DEBUG_AUTH && 
+                    user_error(
+                        sprintf("changeState(%s): keeping passed %s auth[%s] = %s ", 
+                                $newstate, "wanted", $val, $auth[$val]), 
 						E_USER_NOTICE);
 				$newauth[$val] = $auth[$val];
 			}
@@ -805,13 +824,14 @@ unknownState($auth, $states)
 
 	// check for valid token
 	if($auth['uid'] && $auth['token']){
-		user_error("unknownState(): uid and token present", E_USER_NOTICE);
+		COOP_DEBUG_AUTH && 
+            user_error("unknownState(): uid and token present", E_USER_NOTICE);
 		return changeState($auth, $states, 'verifytoken', 1);
 	}
 	
 	// if there's no password stored for this user
 	if($auth['uid'] && !getPass($auth['uid'])){
-		user_error(
+		COOP_DEBUG_AUTH && user_error(
 			sprintf("unknownState(): uid %d in db, but null password", 
 				$auth['uid']) , 
 			E_USER_NOTICE);
@@ -820,15 +840,17 @@ unknownState($auth, $states)
 
 	// ok, they supplied a password. now... let's check it.
 	if($auth['pwd'] && $auth['uid'] ){
-		user_error(
-			sprintf("unknownState(): uid %d , and pwd provided", 
-				$auth['uid']) , E_USER_NOTICE );
+		COOP_DEBUG_AUTH && 
+            user_error(
+                sprintf("unknownState(): uid %d , and pwd provided", 
+                        $auth['uid']) , E_USER_NOTICE );
 		return changeState($auth, $states, 'checklogin', 1);
 	} 
 
 	// no pass, no token, no uid, no dice!
 	if(!($auth['uid'] && $auth['pwd'])){
-		user_error("unknownState(): no uid, no nothing", E_USER_NOTICE);
+		COOP_DEBUG_AUTH && 
+            user_error("unknownState(): no uid, no nothing", E_USER_NOTICE);
 		//come back here after the user is done inputting data
 		return changeState($auth, $states, 'needlogin', 1);
 	}
@@ -864,7 +886,7 @@ checkLoginState($auth, $states)
 
 	// it is possible for a user to enter a password but have none in db!
 	if(!getPass($auth['uid'])){
-		user_error(
+		COOP_DEBUG_AUTH &&  user_error(
 			sprintf("checkLoginState(): uid %d in db, but null password", 
 				$auth['uid']) , 
 			E_USER_NOTICE);
@@ -873,7 +895,7 @@ checkLoginState($auth, $states)
 
 	//with new javascript thing, they may put in a BLANK password.
 	if(!$auth['pwd']){
-		user_error(
+		COOP_DEBUG_AUTH &&  user_error(
 			sprintf("checkLoginState(): uid %d  but null password", 
 				$auth['uid']) , 
 			E_USER_NOTICE);
@@ -883,7 +905,8 @@ checkLoginState($auth, $states)
 
 	$token = checkPass($auth['uid'], $auth['pwd']);
 	if($token){
-		user_error("checkLoginState(): password matches!", E_USER_NOTICE);
+		COOP_DEBUG_AUTH &&  
+            user_error("checkLoginState(): password matches!", E_USER_NOTICE);
 		//hooray!! the password is correct! pass it thru
 		$newauth = changeState($auth, $states, 'loggedin', 1);
 		$newauth['token'] = $token; // have to inject this manually. grr.
@@ -891,7 +914,8 @@ checkLoginState($auth, $states)
 	}
 
 	//incorrect password. let the pachinko machine handle it
-	user_error("checkLoginState(): password does not match", E_USER_NOTICE);
+	COOP_DEBUG_AUTH && 
+        user_error("checkLoginState(): password does not match", E_USER_NOTICE);
 	return changeState($auth, $states, 'wrongpass', 1);
 }/* END CHECKLOGINSTATE */
 
@@ -1155,7 +1179,9 @@ weakPass($clearpass)
 	*/
 	$rs = sprintf("/^\w{%d}/", MIN_PASS);
 	$matches = preg_match($rs, preg_quote($clearpass));
-	user_error("weakPass(): rs $rs, clearpass <$clearpass>, $matches matches", 
+	COOP_DEBUG_AUTH && 
+        user_error(
+            "weakPass(): rs $rs, clearpass <$clearpass>, $matches matches", 
 			E_USER_NOTICE);
 	if($matches == 1){
 		return 0;
@@ -1212,11 +1238,14 @@ fieldPerms($perms, $targetfamilyid, $p, $u, $targetlevel)
 
 	// no perms? no problem! default is i don't care.
 	if(!is_array($perms)){
-		user_error("fieldPerms(): no perms, using default (ACCEPT)", E_USER_NOTICE);
+		COOP_DEBUG_AUTH && 
+            user_error("fieldPerms(): no perms, using default (ACCEPT)",
+                       E_USER_NOTICE);
 		return 0;
 	}
 
-	user_error(sprintf("fieldPerms(): targetfamily %d, actualfamilyid %d, targetlevel %d, fieldgroup %d, actualgroup %d, fielduser %d, actualuser %d", $targetfamilyid, $u['family_id'], $targetlevel,
+	COOP_DEBUG_AUTH && 
+        user_error(sprintf("fieldPerms(): targetfamily %d, actualfamilyid %d, targetlevel %d, fieldgroup %d, actualgroup %d, fielduser %d, actualuser %d", $targetfamilyid, $u['family_id'], $targetlevel,
 		$perms[0], $p['group_level'], $perms[1], $p['user_level'] ), 
 		E_USER_NOTICE);
 
@@ -1228,11 +1257,11 @@ fieldPerms($perms, $targetfamilyid, $p, $u, $targetlevel)
 	if($group >= $targetlevel ||
 			($targetfamilyid == $u['family_id'] && $user >= $targetlevel ) ) 
 	{
-		user_error("fieldPerms(): ACCEPTING", E_USER_NOTICE);
+		COOP_DEBUG_AUTH &&  user_error("fieldPerms(): ACCEPTING", E_USER_NOTICE);
 		return 0;
 	}
 
-	user_error("fieldPerms(): REJECTING", E_USER_NOTICE);
+	COOP_DEBUG_AUTH &&  user_error("fieldPerms(): REJECTING", E_USER_NOTICE);
 	return 1;
 	
 }/* END FIELDPERMS */

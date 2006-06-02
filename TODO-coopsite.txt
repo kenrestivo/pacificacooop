@@ -7987,3 +7987,4 @@ clean up crufty old files too
 	update my include path to obviate the need for chdir() shit!
 		include the COOP_ABSOLUTE_FILE_PATH
 			i need DB_DataObject class_location, schema_loation too!
+		ah, the session stuff collides. session-init
