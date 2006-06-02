@@ -6,7 +6,7 @@
 	cleanups and code fixes (cleanme.txt)
 	re-read margolis UI notes, and implement if possible
 
-		
+			
 		
 ??PHP/SQL
 fixes for terry: enrollment summary calculations
@@ -7949,3 +7949,7 @@ clean up maint folder, move crap to old folder instead!
 ???PHP
 clean up my inclusion order in proparation h for phptal
 	remember the set names!!!
+
+??PHP/CVS
+create a 1.0 version. i'm not kidding. it's time for this old app to go gold
+	then, i'm ready to drupalise it!
