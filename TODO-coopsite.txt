@@ -6,12 +6,6 @@
 	cleanups and code fixes (cleanme.txt)
 	re-read margolis UI notes, and implement if possible
 
-
-get no_cvs out of the way
-	do not sync it live
-	if it doesn't exist, don't try to include it
-
-clean up crufty old files too
 				
 		
 ??PHP/SQL
@@ -3796,7 +3790,18 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	dammit! this SAFE_MODE shit will kill me on nfsn. wtf?
+
+
+update the "welcome" email, to tell them,
+	if they don't like their username, change it!
+
+
+ok, how do i do auth now? i no longer link to the users table
+	this needs serious thought. integrate with old app
+	i think i need to be a module, at least to add the perms in!
+		big, massive matrix of perms, too!
+
+			dammit! this SAFE_MODE shit will kill me on nfsn. wtf?
 		shouldn't be an issue if you have all the files on same nfs drive
 
 			find a better way to start this up, than dirname(__FILE__)!
@@ -7960,3 +7965,14 @@ clean up my inclusion order in proparation h for phptal
 create a 1.0 version. i'm not kidding. it's time for this old app to go gold
 	then, i'm ready to drupalise it!
 remove the login to post comments crap
+
+get no_cvs out of the way
+	do not sync it live
+	if it doesn't exist, don't try to include it
+
+push version 1.0 live of the new coop code
+	clean up cruft over there too
+
+clean up crufty old files too
+	on the live site.
+	everythign except managed pear and local pear no?

@@ -1,27 +1,56 @@
 redo the whole site in drupal or xoops or joomla or something
 
+open drupal questions
+	how to get email to every member, whenever a forum posting?
+	forums default perms? content types? what?
+		or, instead of the regular forum blocks, a custom block?
+	where are the event types set up?
+			content types? where to set those up?
+	auth strategy
+		auth via my current system, and force drupal to honor it?
+		auth via drupal, and somehow get that to my app?
+			remember, i have
+		custom login form with popup, just like auth.inc!
+			override user/login hook? build my own popup list?
+	how to alias? i saw a module that did that
+		i.e. node/12 => login.... or members, or something
+	all other default permissions
+	books
+		i think any page can also be a book page? or not really?
+		any way to get a book to print out in PDF format?
+		any way to IMPORT into a book? i.e. from word?
+	
 
-push version 1.0 live of the new coop code
-	clean up cruft over there too
 
+drupal fun
+	try all of their sample modules, and understand them
+    write a sample drupal module, with civicrm hooks
+    	use petition as an example/template?
+    	or do the tutorial. is there a 4.7.1 tutorial?
+    
+
+civicrm fun
+	write an import script using their API
+		to put in families, parents, kids, companies, etc!
+			it appears i can get the whole heirarghy in there
+	look at all of their api docs
+		
+		
 modules i'll want for the school
 	must have
 		tinymce
+			gah, fuck with custom layout, need a few options
 		images, of some kind (for the playground and such)
 		print friendly
 
 do the dance of the CVS
 	should be easy, compared to the clusterfuck i've been dealing with lately
-
+	do i want to sync the drupal completely?
+	
 then push the fucker live!
 
 
 	
-write a sample drupal module, with civicrm hooks
-	use petition as an example/template?
-	or do the tutorial. is there a 4.7.1 tutorial?
-	
-
 import the users!!
 	write an export script using csv python
 		drupal file: name, email, password, familyid, userid
@@ -35,22 +64,9 @@ import the users!!
 		
 
 set up forums: member only should see it
-	perms? content types? what?		
+
 
 oh wow, event types! cool, i can filter by those
-	content types? where to set those up?
-	
-
-ok, how do i do auth now? i no longer link to the users table
-	this needs serious thought. integrate with old app
-	i think i need to be a module, at least to add the perms in!
-		big, massive matrix of perms, too!
-		
-
-update the "welcome" email, to tell them,
-	if they don't like their username, change it!
-
-	
 
 
 how do i hide certain custom fields?	
@@ -86,16 +102,20 @@ migration plan
 		ad purchases?
 		attendees?
 		auction purchases?
-
+    start converting stuff to flexinodes or custom modules
+    	job descriptions
+    	enrollment?
+    	enhancement?
+    
 
 how would i join civicrm tables to coop tables??!!
 	i.e. for queries that check values in there?
 	do i make temporary tables?
 	
 			
-
 heh, cool, label printing via fpdf included now!
 	angel bueno pardo post to civicrm list
+		also in their "plugins" or somewhere on wiki
 
 by default, set simple_access defaults so that ALL nodes are members only
 	only privileged users can un-do that
@@ -122,11 +142,6 @@ use the files/foo stuff for andreas theme! make it all in drupal!
 		
 find a choose widget for linked tables??
 	or write your own?
-
-start converting stuff to flexinodes or custom modules
-	job descriptions
-	enrollment?
-	enhancement?
 	
 step through every section of the site, and look at what's required
 	invitations: inviting versus names? pick list? tricky.
