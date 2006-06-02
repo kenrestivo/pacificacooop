@@ -52,7 +52,7 @@ class CoopNewDispatcher
                                    'view', 
                                    'pop' => @$_REQUEST['pop'], 
                                    'id' =>@$_REQUEST[$atd->prependTable($atd->pk)],
-                                   'realm' => $_REQUEST['realm'] ? $_REQUEST['realm'] : 
+                                   'realm' => !empty($_REQUEST['realm']) ? $_REQUEST['realm'] : 
                                    $this->page->vars['last']['realm']);
             }
             // push is set by recordbuttons, actionbuttons, and some forms:

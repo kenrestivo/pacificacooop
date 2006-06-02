@@ -56,7 +56,8 @@ function dump($data, $close = false)
 		fwrite($fp, sprintf("<p>%s %s<br /> via %s .</p>",
 							$_SERVER['REQUEST_URI'], 
 							$_SERVER['REQUEST_METHOD'], 
-							$_SERVER['HTTP_REFERER']));
+							!empty($_SERVER['HTTP_REFERER']) ?
+                            $_SERVER['HTTP_REFERER'] : ''));
         fflush($fp);
 	}
 	fwrite($fp, $data);
@@ -370,6 +371,7 @@ class coopPage
 
 
             $res = '';
+            $tagstr = "";
             
 			$base = $base ? $base : $_SERVER['PHP_SELF'];
 
@@ -399,7 +401,6 @@ class coopPage
             if($value){
                 $par && $res .= '<p>';
                 if($tags){
-                    $tagstr = "";
                     foreach($tags as $tag=>$tagval){
                         $tagstr .= sprintf('%s="%s" ', $tag, $tagval);
                     }

@@ -3790,6 +3790,14 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
+	the include paths are going to be UGLAY!
+		because my coop app needs MY pear and local pear!
+			but civicrm has its own pear too... conflicts! DB, QF, Pager
+			i cannot break civicrm!
+
+		will work for everything except the PDF shit
+			should be a way around that, actually!
+			yes, there is. just PRINT to screen!
 
 
 update the "welcome" email, to tell them,
@@ -7976,3 +7984,6 @@ push version 1.0 live of the new coop code
 clean up crufty old files too
 	on the live site.
 	everythign except managed pear and local pear no?
+	update my include path to obviate the need for chdir() shit!
+		include the COOP_ABSOLUTE_FILE_PATH
+			i need DB_DataObject class_location, schema_loation too!

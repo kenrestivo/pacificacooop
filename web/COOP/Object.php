@@ -96,7 +96,10 @@ group by user_id,table_name,field_name";
 			$this->recurseLevel = $level;
 			$this->parentCO = $parentCO;
 			
-			$this->page->printDebug("CoopObject: instantiating $table from $parentCO->table", 3);
+			$this->page->printDebug("CoopObject: instantiating $table " .
+                                    !empty($parentCO->table) ?  
+                                    "from $parentCO->table" : 
+                                    'from nothing', 3);
 
  			$this->obj = CoopDBDO::factory($this->table); // & instead?
   			if (PEAR::isError($this->obj)){

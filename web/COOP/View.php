@@ -610,7 +610,9 @@ function innerRecordButtons($par, $wrap)
 
 			//confessObj($this, 'this');
 			// NOT EMPTY()! i want empty arrays to override!
-            $ra = is_array($this->obj->fb_recordActions) ? 
+			// the EMPTY is just to stop the spurious annoying error messages!
+            $ra = (!empty($this->obj->fb_recordActions) && 
+                   is_array($this->obj->fb_recordActions)) ? 
                 $this->obj->fb_recordActions : $this->recordActions;
 
 
@@ -1034,6 +1036,7 @@ function getAlert()
 
     function alphaPager()
         {
+            $res = "";
             $keyname= $this->obj->fb_pager['keyname'];
             if(!$keyname){
                 PEAR::raiseError('you CANNOT do a pager without a keyname', 

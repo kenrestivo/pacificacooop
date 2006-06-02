@@ -74,6 +74,17 @@ oh wow, event types! cool, i can filter by those
 
 
 how do i hide certain custom fields?	
+
+
+coop/drupal integration
+	log issues! too much SPEW into the logs!
+		reduce that, dammit. just do my PEAR ERROR stuff
+	make my shitty coopmenu a block, only for registered users
+	make my stuff a module, replace dispatcher/generic.php
+		drupal already sets up a session, so don't session_init()!
+		subclass or somehow tweak newdispatcher or Page to use drupal_goto()
+			and not header(location)
+
 	
 
 migration plan
@@ -112,6 +123,8 @@ migration plan
     	enhancement?
     
 
+
+	
 how would i join civicrm tables to coop tables??!!
 	i.e. for queries that check values in there?
 	do i make temporary tables?
@@ -226,19 +239,6 @@ coop_sendto should be integreated with drupal instead!
 			add the profiles and custom fields to the thankyou page!
 
 
-
-try to shoehorn it in
-	update my include path to obviate the need for chdir() shit!
-		include the COOP_ABSOLUTE_FILE_PATH
-			i need DB_DataObject class_location, schema_loation too!
-	make my stuff a module, replace dispatcher/generic.php
-		will work for everything except the PDF shit
-			should be a way around that, actually!
-	make my shitty coopmenu a block, only for registered users
-	the include paths are going to be UGLAY!
-		because my coop app needs MY pear and local pear!
-			but civicrm has its own pear too... conflicts! DB, QF, Pager
-			i cannot break civicrm!
 
 
 
