@@ -31,6 +31,10 @@ define('DB_DATAOBJECT_NO_OVERLOAD', true);
 
 // NOTE! i want the ISP's version of PEAR to override my local beta crap
 
+require_once(dirname(__FILE__)  . '/../settings/dbhost.inc');  // database and anything cvs'able
+require_once(dirname(__FILE__)  . '/../settings/no_cvs.inc'); /// for live/dev, these are NOT in CVS
+require_once(dirname(__FILE__)  . '/../settings/globals.inc'); // other globals, put AFTER above!
+require_once(dirname(__FILE__)  . '/session-init.php'); // include functions i need  below:
 
 
 /// THIS IS THE KEY TO THE WHOLE APPLICATION!
@@ -41,16 +45,12 @@ set_include_path(
         // XXXX don't do ../, it's stupid.
         // instead, explode the path, and grab all but last, and implode it
         // PHP probably has some path management functions to do this too
-        array(dirname(__FILE__) . DIRECTORY_SEPARATOR . '/..', 
-              'local_pear',
+        array(dirname(__FILE__)  . '/..', 
+              dirname(__FILE__) .  '/../local_pear',
               COOP_LOCAL_PEAR_PATH,
               get_include_path())));
 
 
-require_once('settings/dbhost.inc');  // database and anything cvs'able
-require_once('settings/no_cvs.inc'); /// for live/dev, these are NOT in CVS
-require_once('settings/globals.inc'); // other globals, put AFTER above!
-require_once("includes/session-init.php"); // include functions i need  below:
 
 
 setupDB();

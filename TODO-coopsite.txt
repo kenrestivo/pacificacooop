@@ -6,7 +6,13 @@
 	cleanups and code fixes (cleanme.txt)
 	re-read margolis UI notes, and implement if possible
 
-			
+
+get no_cvs out of the way
+	do not sync it live
+	if it doesn't exist, don't try to include it
+
+clean up crufty old files too
+				
 		
 ??PHP/SQL
 fixes for terry: enrollment summary calculations
@@ -7953,3 +7959,4 @@ clean up my inclusion order in proparation h for phptal
 ??PHP/CVS
 create a 1.0 version. i'm not kidding. it's time for this old app to go gold
 	then, i'm ready to drupalise it!
+remove the login to post comments crap

@@ -10,7 +10,7 @@ i tried to make it backwards-compatible to DB_DataObjects_FormBuilder ("FB")
         the app has grown well beyond the bounds of FB.
 
 
-the core of the application is basically a few files/classes:
+ the application is basically a few files/classes in the COOP directory:
 
 CoopObject: base class. wrapper around DB_DataObject, app-specific db stuff
 	CoopView: for displaying data, in tabular format. uses HTML_Table for now
@@ -20,7 +20,7 @@ CoopObject: base class. wrapper around DB_DataObject, app-specific db stuff
 CoopPage: "globals" for the application, and app-wide utility functions
 	does some of the stack handling too
     CoopTALPage: subclass of CoopPage for template-based rendering
-    CoopPDF: subclass for rendering as a PDF using PDML and FPDF libraries
+        CoopPDF: subclass for rendering as a PDF using PDML and FPDF libraries
 
 CoopNewDispatcher: for navigating states, the 'action' GET/POST var
 					callbacks in this will 'dispatch' to views, forms, etc
