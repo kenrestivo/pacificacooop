@@ -32,9 +32,11 @@ define('DB_DATAOBJECT_NO_OVERLOAD', true);
 
 global $coop_root;
 
-// NOTE! this must have a trailing slash! dirname gives me one
+// NOTE! no trailing slash necessary
+
 if(!$coop_root){
-    // XXXX don't do ../, it's stupid.
+    // if not runnning as drupal module, assume the first.inc/../ is home
+    // XXXX gah, don't do ../, it's stupid.
     // instead, explode the path, and grab all but last, and implode it
     // PHP probably has some path management functions to do this too
     $coop_root = dirname(__FILE__) . '/..';
