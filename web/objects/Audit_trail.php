@@ -298,8 +298,9 @@ class Audit_trail extends CoopDBDO
                 'SENDEMAIL_EXISTS');
 
             $res .= sprintf(
-                '<a href="" onclick="return sendEmailNotice(this,%d)">Send</a>', 
-                $this->{$co->pk});
+                '<a href="" onclick="return sendEmailNotice(this,%d, \'%s\')">Send</a>', 
+                $this->{$co->pk},
+                COOP_ABSOLUTE_URL_PATH);
           
           return $res;
       }

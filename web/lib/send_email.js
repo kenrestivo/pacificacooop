@@ -1,7 +1,7 @@
 // $Id$
 // a cheap and dirty non-rpc rpc.
 
-sendEmailNotice = function(self,audit_id){
+sendEmailNotice = function(self,audit_id, urlpath){
     ih=self.innerHTML;
     self=swapDOM(self,P({},'Sending', IMG({'src':'/images/spinner.gif'})));
     var trim = function(str){
@@ -31,12 +31,12 @@ sendEmailNotice = function(self,audit_id){
 
     //TODO: send as a cookie header instead of passing this silly way
     /// XXX also need a proper path or base_url here!!
-    d=doSimpleXMLHttpRequest('services/send_email.php', 
+    d=doSimpleXMLHttpRequest(urlpath + '/services/send_email.php', 
         {'audit_id': audit_id,
         'coop' : cookie});
     d.addCallback(function(data){ 
         self.innerHTML='Done'}); 
-    d.addErrback(function(err) { self.innerHTML= 'Error!'}); 
+    d.addErrback(function(err) { self.innerHTML= 'Error!' + err}); 
     return false;
 }
 

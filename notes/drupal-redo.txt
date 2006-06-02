@@ -1,5 +1,22 @@
 redo the whole site in drupal or xoops or joomla or something
 
+
+drupal fun
+	try writing a block or page for co-op application, variation on generic.php
+	try all of their sample modules, and understand them
+    write a sample drupal module, with civicrm hooks
+    	use petition as an example/template?
+    	or do the tutorial. is there a 4.7.1 tutorial?
+    
+
+civicrm fun
+	write an import script using their API
+		to put in families, parents, kids, companies, etc!
+			it appears i can get the whole heirarghy in there
+	look at all of their api docs
+		
+
+
 open drupal questions
 	how to get email to every member, whenever a forum posting?
 	forums default perms? content types? what?
@@ -22,19 +39,6 @@ open drupal questions
 	
 
 
-drupal fun
-	try all of their sample modules, and understand them
-    write a sample drupal module, with civicrm hooks
-    	use petition as an example/template?
-    	or do the tutorial. is there a 4.7.1 tutorial?
-    
-
-civicrm fun
-	write an import script using their API
-		to put in families, parents, kids, companies, etc!
-			it appears i can get the whole heirarghy in there
-	look at all of their api docs
-		
 		
 modules i'll want for the school
 	must have

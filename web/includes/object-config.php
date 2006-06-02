@@ -52,8 +52,11 @@ function hackDBURL()
         DIRECTORY_SEPARATOR . 	'objects';
 }
 
-parseIniFile('settings/coop-dbobj.ini');
-require_once("includes/session-init.php");
+
+
+parseIniFile(COOP_ABSOLUTE_FILE_PATH . '/settings/coop-dbobj.ini');
+require_once(COOP_ABSOLUTE_FILE_PATH . '/includes/session-init.php');
+
 setupDB(1);
 hackDBURL();
 
