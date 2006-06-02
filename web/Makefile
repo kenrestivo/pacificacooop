@@ -44,6 +44,7 @@ upload-live::
 		$(NFSNRSYNC) \
 		-avxWcC  \
 		--exclude $(XCLUDE) \
+		--exclude '*no_cvs.inc*' \
 		--exclude "*.#*" \
 		$(LIVEHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNLIVEPATH)
 
@@ -52,6 +53,7 @@ download-live::
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
+		--exclude '*no_cvs.inc*' \
 		--exclude '*.sql' \
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNLIVEPATH)/ $(LIVEHERE)
 
@@ -60,6 +62,7 @@ upload-dev::
 	rsync -e "ssh $(FUCKED)" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
+		--exclude '*no_cvs.inc*' \
 		--exclude "*.#*" \
 		$(DEVHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)
 
@@ -67,6 +70,7 @@ download-dev::
 	rsync -e "ssh $(FUCKED)" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
+		--exclude '*no_cvs.inc*' \
 		--exclude "*.#*" \
 		--exclude '*.sql' \
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)/ $(DEVHERE)
@@ -76,6 +80,7 @@ upload-head::
 	rsync -e "ssh $(FUCKED)" \
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
+		--exclude '*no_cvs.inc*' \
 		--exclude "*.#*" \
 		$(PLAYGROUND) $(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)
 
@@ -84,6 +89,7 @@ download-head::
 		$(NFSNRSYNC) -avxWcC  \
 		--exclude $(XCLUDE) \
 		--exclude "*.#*" \
+		--exclude '*no_cvs.inc*' \
 		--exclude '*.sql' \
 		$(NFSNUSR)@$(NFSNHOST):$(NFSNDEVPATH)/ $(PLAYGROUND)
 
@@ -93,6 +99,7 @@ upload-images::
 		$(NFSNRSYNC) \
 		-avxWcC  \
 		--exclude $(XCLUDE) \
+		--exclude '*no_cvs.inc*' \
 		--exclude "*.#*" \
 		$(IMAGEHERE) $(NFSNUSR)@$(NFSNHOST):$(NFSNIMAGEPATH)
 
