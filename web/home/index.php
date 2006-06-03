@@ -1,6 +1,7 @@
 <?php 
-chdir('members');  //XXX hack
-require_once("members/public_blog.php"); 
+
+require_once("members/includes/first.inc");
+require_once("members/public_blog.php");
 $cp=& new CoopPage();
 ?>
 <html>
