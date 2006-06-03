@@ -20,7 +20,7 @@
 
 
 require_once("includes/first.inc");
-require_once("CoopView.php");
+require_once("COOP/View.php");
 require_once("HTML/Table.php");
 
 PEAR::setErrorHandling(PEAR_ERROR_PRINT);
