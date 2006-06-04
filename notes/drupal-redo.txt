@@ -1,24 +1,25 @@
 redo the whole site in drupal or xoops or joomla or something
 
 svn gymnastics
-	all the modules i need... import los bastardos as vendors!
-		try to guess their version, as much as is possible
-	import my version 1.0 of coop
-		topskim it, perhaps. i want at least some history there
-			web qa sql notes scripts
-			TODO(interesting, how? move to notes?)
-		possibly re-import?
+	import my version 1.02 of coop
+		do all the shuffling around like i did last time
+			tinymce, symlinks, anything else?
+			test it!
+		get emacs to deal
+	possibly re-import via vendor branch
 			mochikit
-			maybe fonts
+			maybe fonts or fpdf, if i can do just files
 			local pear
 			phpserialize
-			
+	all the modules i need... import los bastardos as vendors!
+		try to guess their version, as much as is possible
 	finally merge in all my shit, and make sure it still works
 		all the vendor branches
-		all my files from the coop branch
-	migrate my commands in my Makefiles
-		
+		all my files from the coop branch too
+	migrate my commands in my Makefiles to new svn format
 
+
+	
 start going through the content, and doing it right
 	i.e. handbook, bylaws, etc., other links
 	try on local site first! file upload, how?
@@ -320,3 +321,7 @@ do i want to sync the drupal CVS completely?
 	well, umm, TRY it!
 	now that i think of it, this may be a time to try subversion!
 		yay, cool
+		topskim it, perhaps. i want at least some history there
+			web qa sql notes scripts
+			TODO(interesting, how? move to notes?)
+		gah, ugly. either i lose all modify info, or i keep all comments
