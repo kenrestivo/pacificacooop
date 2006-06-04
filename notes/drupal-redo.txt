@@ -1,19 +1,33 @@
 redo the whole site in drupal or xoops or joomla or something
 
-first commit my log cleanups and session tweeks!
+svn gymnastics
+	all the modules i need... import los bastardos as vendors!
+		try to guess their version, as much as is possible
+	import my version 1.0 of coop
+		topskim it, perhaps. i want at least some history there
+			web qa sql notes scripts
+			TODO(interesting, how? move to notes?)
+		possibly re-import?
+			mochikit
+			maybe fonts
+			local pear
+			phpserialize
+			
+	finally merge in all my shit, and make sure it still works
+		all the vendor branches
+		all my files from the coop branch
+	migrate my commands in my Makefiles
 		
-modules i'll want for the school
-	must have
-		tinymce
-			gah, fuck with custom layout, need a few options
-		images, of some kind (for the playground and such)
-		print friendly
 
-do the dance of the CVS
-	should be easy, compared to the clusterfuck i've been dealing with lately
-	do i want to sync the drupal completely?
+start going through the content, and doing it right
+	i.e. handbook, bylaws, etc., other links
+	try on local site first! file upload, how?
 
-then push the fucker live!
+what about the playground? weird special case
+
+rid the playground and documents then	
+	
+
 
 ----
 
@@ -21,7 +35,6 @@ drupal fun
 	try all of their sample modules, and understand them
     write a sample drupal module, with civicrm hooks
     	use petition as an example/template?
-    	or do the tutorial. is there a 4.7.1 tutorial?
 	write one to tweek the user passwords!
 	write another to use coop auth, perhaps
     
@@ -60,7 +73,7 @@ import the users!!
  	then do the drupal user import of same data; it should match up
 		do i have to write something? or does it exist already?
 	finally write another quick python script to replace passwords
-		based on email address... scary but it's all i've got
+		based on USER NAME, yah! maybe match email too, but not really
 
 		
 
@@ -74,6 +87,7 @@ how do i hide certain custom fields?
 
 
 coop/drupal/civicrm integration
+	look at phpbb module for drupal! example of how to hook together logins
 	try writing a block or page for co-op application, variation on generic.php
 		$_database = 'dbname' in extended classes. must do, or collides!
 		hmm. $_database_dsn instead?
@@ -222,11 +236,23 @@ how to start, goddammit!?
 ----------------
 BELOW THE LINE
 
+modules i'll want for the school
+	urlfilter
+	subscribe
+	masquerade
+	RSVP or civicrm equivalent
+
 coop_sendto should be integreated with drupal instead!
 
 	i can wait
       	amazon associate tools
 	ooh!
+		powells!! it's my damned library application!
+			i can extend that perhaps
+		wishlist-- for packages!!
+		rawlog, so i can fucking TAIL stuff!
+		s/p magic menus! -- my drupdown/popup menus?
+		ecommerce-- for selling auction shit, hey! it has auction module!
 		gallery2? or image? or does tinyhtml do that anyway? ing_assist?
 		activeselect: may be useful!
 		javascripttools! for my custom module things!
@@ -278,3 +304,19 @@ wow, i was able to get all the content in there!! cool!
      	calendar/event, i.e. food site
 			hmm. permissions for events: some public, some not
 			simpleaccess!
+    	or do the tutorial. is tahere a 4.7.1 tutorial? yes, examples
+do the dance of the CVS
+	should be easy, compared to the clusterfuck i've been dealing with lately
+	naw, upgrades will fucking kick my ass
+		i need to heavily CVS'ise this
+then push the fucker live!
+set up a live-backup!
+content types default not proomoted to front page
+
+filter formats!
+	input formats
+	this could be as massive as my linux kernel cvs: drupal is BIG: 43MB
+do i want to sync the drupal CVS completely?
+	well, umm, TRY it!
+	now that i think of it, this may be a time to try subversion!
+		yay, cool

@@ -31,6 +31,7 @@ define('DB_DATAOBJECT_NO_OVERLOAD', true);
 
 
 global $coop_root;
+global $debug;
 
 // NOTE! no trailing slash necessary
 
@@ -77,11 +78,13 @@ setupErrors(); //*sigh* have to do this SECOND since it looks at dbhost :-/
 
 sessionSetup();
 
-user_error(sprintf("first.inc: session [%s] [%s] auth [%s] set-up",
-                   session_id(), session_name(),
-                   $_SESSION['auth']['state']), 
-           E_USER_NOTICE);	
 
+if($debug > 3) {
+    user_error(sprintf("first.inc: session [%s] [%s] auth [%s] set-up",
+                       session_id(), session_name(),
+                       $_SESSION['auth']['state']), 
+               E_USER_NOTICE);	
+}
 
 
 

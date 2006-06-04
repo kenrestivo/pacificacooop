@@ -7988,3 +7988,13 @@ clean up crufty old files too
 		include the COOP_ABSOLUTE_FILE_PATH
 			i need DB_DataObject class_location, schema_loation too!
 		ah, the session stuff collides. session-init
+first commit my log cleanups and session tweeks!
+		print friendly
+
+i really want that session var to be common, either 'coop', or similar
+	easy! session_name() in settings.php
+		tinymce
+			gah, fuck with custom layout, need a few options
+	must have
+		images, of some kind (for the playground and such)
+		i really want to do this right

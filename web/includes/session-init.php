@@ -136,9 +136,13 @@ errorHandler($errno, $msg, $filename, $linenum, $vars)
 function
 sessionSetup()
 {
+    global $debug;
     if(session_id()){
-        user_error(sprintf('Coop session-init: using existing session %s %s', 
-                           session_name(), session_id()));
+        if($debug > 3){
+            user_error(
+                sprintf('Coop session-init: using existing session %s %s', 
+                        session_name(), session_id()));
+        }
         return true;
     }
 

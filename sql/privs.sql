@@ -34,6 +34,7 @@ update user set password = old_password('test') where User = 'input';
 update user set password = old_password('92xPi9') where User = 'springfest';
 flush privileges;
 
+
 ----  for the new drupal stuff
 GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX,
      ALTER, CREATE TEMPORARY TABLES, LOCK TABLES

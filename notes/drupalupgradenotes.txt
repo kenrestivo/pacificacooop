@@ -1,0 +1,14 @@
+things to note when doing a drupal upgrade
+
+modules
+	tinymce, you have to download the actual tinymce code
+	civicrm, massive module with its own stuff
+	
+themes
+	andreas01, not in the main thing
+
+settings
+	my sites/default are in cvs.
+
+
+this http://drupal.org/node/29161
