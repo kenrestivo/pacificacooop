@@ -42,5 +42,5 @@ user_level , group_level , realm_id , year_level , menu_level ) VALUES
 -- GO FIX! some of these documents  will need to edit from previous years
 -- so, perms to view history
 
-
---- the menu stuff
+--- upgrading to livesite version of drupal
+--  remember to tweak something in the menu permissions! force it to regen!

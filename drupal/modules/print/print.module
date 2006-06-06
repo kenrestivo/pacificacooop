@@ -1,0 +1,384 @@
+<?php
+/* $Id: print.module,v 1.6.2.7 2006/03/30 03:02:48 deekayen Exp $ */
+
+/**
+ * @file
+ * Display printer friendly versions of nodes (except books)
+ */
+
+/********************************************************************
+ * Drupal Hooks :: Overview
+ ********************************************************************/
+
+/**
+ * Implementation of hook_help().
+ */
+function print_help($section) {
+  switch ($section) {
+    case 'admin/modules#description':
+      return t('Allows users to create printer-friendly pages for nodes and profile pages.');
+  }
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function print_menu($may_cache) {
+  $items = array();
+
+  if (!$may_cache) {
+    $items[] = array('path' => 'node/'. arg(1) .'/print', 'title' => t('printer friendly'),
+      'callback' => 'print_node_controller', 'access' => user_access('access content'),
+      'type' => MENU_CALLBACK);
+
+    $items[] = array('path' => 'print', 'title' => t('printer friendly'),
+      'callback' => 'print_controller', 'access' => user_access('access content'),
+      'type' => MENU_CALLBACK);
+  }
+
+  return $items;
+}
+
+/********************************************************************
+ * Drupal Hooks :: Core
+ ********************************************************************/
+
+/**
+ * Implementation of hook_link().
+ */
+function print_link($type, $node = 0, $main) {
+  $links = array();
+
+  if ($node->type == 'book' && function_exists('book_link'))  {
+    return;
+  }
+
+  if ($type == 'node' && !isset($node->parent) && variable_get('print_show_link', 1) && $main == 0) {
+    $links[] = theme('print_link', $node);
+  }
+
+  return $links;
+}
+
+function print_settings() {
+  $form['print_show_link'] = array(
+    '#type' => 'radios',
+    '#title' => t('Printer friendly page link'),
+    '#default_value' => variable_get('print_show_link', 1),
+    '#options' => array(t("Disabled"), t("Enabled")),
+    '#description' => t("Enable or disable the printer friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to node/nid/print where nid is the numeric id of the node."),
+  );
+
+  $print_settings = variable_get('print_settings', NULL);
+
+  $form['print_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Print settings'),
+      '#tree' => TRUE,
+    );
+
+  $form['print_settings']['logo_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Logo URL'),
+    '#default_value' => !isset($print_settings['logo_url']) ? '' : $print_settings['logo_url'],
+    '#size' => 60,
+    '#maxlength' => 250,
+    '#description' => t('An alternative logo to display on the printer friendly version'),
+  );
+
+  $form['print_settings']['css'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Stylesheet URL'),
+    '#default_value' => !isset($print_settings['css']) ? 'misc/print.css' : $print_settings['css'],
+    '#size' => 60,
+    '#maxlength' => 64,
+    '#description' => t('The URL to your print cascading stylesheet.'),
+  );
+
+  $form['print_settings']['urls'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Printer friendly URLs'),
+    '#return_value' => 1,
+    '#default_value' => !isset($print_settings['urls']) ? 1 : $print_settings['urls'],
+  );
+
+  $print_robot_settings = variable_get('print_robot_settings', NULL);
+
+  $form['print_robot_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Robots META tags'),
+      '#tree' => TRUE,
+  );
+
+  $form['print_robot_settings']['noindex'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add noindex'),
+    '#return_value' => 1,
+    '#default_value' => empty($print_robot_settings['noindex']) ? 0 : 1,
+    '#description' => t('Instruct robots to not index printer friendly pages')
+  );
+
+  $form['print_robot_settings']['nofollow'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add nofollow'),
+    '#return_value' => 1,
+    '#default_value' => empty($print_robot_settings['nofollow']) ? 0 : 1,
+    '#description' => t('Instruct robots to not follow outgoing links on printer friendly pages')
+  );
+
+  $form['print_robot_settings']['noarchive'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add noarchive'),
+    '#return_value' => 1,
+    '#default_value' => empty($print_robot_settings['noarchive']) ? 0 : 1,
+    '#description' => t('Non-standard tag to instruct search engines to not show a "Cached" link for your printer friendly pages. Recognized by Googlebot.')
+  );
+
+  $form['print_robot_settings']['nocache'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add nocache'),
+    '#return_value' => 1,
+    '#default_value' => empty($print_robot_settings['nocache']) ? 0 : 1,
+    '#description' => t('Non-standard tag to instruct search engines to not show a "Cached" link for your printer friendly pages')
+  );
+
+  return $form;
+}
+
+/********************************************************************
+ * Module Functions :: Controllers
+ ********************************************************************/
+
+function print_node_controller() {
+  $nid = arg(1);
+  if (is_numeric($nid)) {
+    print_generate_node($nid);
+  }
+}
+
+function print_controller($module) {
+  $f = 'print_generate_'. $module;
+
+  if (function_exists($f)) {
+    $f();
+  }
+}
+
+/********************************************************************
+ * Module Functions
+ ********************************************************************/
+
+/**
+ * Generates a meta tag to tell robots what they may index based on module settings
+ *
+ * @return string
+ */
+function _print_robots_meta_generator() {
+  $robots_settings = variable_get('print_robot_settings', NULL);
+  $robots_meta = array();
+
+  if(!empty($robots_settings['noindex'])) {
+    $robots_meta[] = 'noindex';
+  }
+  if(!empty($robots_settings['nofollow'])) {
+    $robots_meta[] = 'nofollow';
+  }
+  if(!empty($robots_settings['noarchive'])) {
+    $robots_meta[] = 'noarchive';
+  }
+  if(!empty($robots_settings['nocache'])) {
+    $robots_meta[] = 'nocache';
+  }
+
+  if(sizeof($robots_meta) > 0) {
+    $robots_meta = isset($robots_meta[1]) ? implode(', ', $robots_meta) : $robots_meta[0];
+    $robots_meta = '<meta name="robots" content="'. $robots_meta ."\" />\n";
+  } else {
+    $robots_meta = '';
+  }
+
+  return $robots_meta;
+}
+
+/**
+ * Outputs a printer friendly page.
+ */
+function print_generate_node($title) {
+  global $base_url;
+
+  /* We can take a node id or a node title */
+  $node = (is_numeric($title)) ? node_load(array('nid' => $title)) : node_load(array('title' => $title));
+  if (!$node->title) return false;
+
+  $teaser = false;
+  $page = true;
+  /* This section is ripped from node_view.
+     This does everything node_view does except theme the node! */
+
+  // Remove the delimiter (if any) that separates the teaser from the body.
+  // TODO: this strips legitimate uses of '<!--break-->' also.
+  $node->body = str_replace('<!--break-->', '', $node->body);
+
+  // The 'view' hook can be implemented to overwrite the default function
+  // to display nodes.
+  if (node_hook($node, 'view'))
+    node_invoke($node, 'view', $teaser, $page);
+  else
+    $node = node_prepare($node, $teaser);
+  // Allow modules to change $node->body before viewing.
+  node_invoke_nodeapi($node, 'view', $teaser, $page);
+
+  /* End of code stealing from node_view() */
+
+  // associative array settings
+  $print_settings = variable_get('print_settings', NULL);
+
+  if (!isset($print_settings['urls']) || !empty($print_settings['urls'])) {
+    /* Collect links and display them at the bottom of the page. Code once taken from Kjartan Mannes' project.module  */
+    $pattern = "@<a.*?href=([\']?[\"]?)([^\"|^\'|^|^>]*)([^>]*)>(.+?)</a>@ise";
+    $node->body = preg_replace($pattern, "'<u>'.stripslashes('\\4').'</u> ['. print_friendly_urls(stripslashes('\\2')) .']'", $node->body);
+    $urls = print_friendly_urls();
+    if (count($urls)) {
+      $node->pfp_links = '';
+      $max = count($urls);
+      for ($i = 0; $i < $max; $i++) {
+        $node->pfp_links .= '['. ($i + 1) .'] '. $urls[$i] ."<br />\n";
+      }
+    }
+  }
+
+  init_theme(); 
+  $node->logo = !empty($print_settings['logo_url']) ? $print_settings['logo_url'] : theme_get_setting('logo');
+
+  /* Grab and format the src URL */
+  $node->source_url = $base_url . url("node/$node->nid");
+  $node->language = $GLOBALS['locale'];
+  $node->printcss = empty($print_settings['css']) ? 'misc/print.css' : $print_settings['css'];
+
+  $robots_meta = _print_robots_meta_generator();
+
+  include_once('print.node.tpl.php');
+}
+
+/**
+ * Renders a print friendly version of profile pages.
+ */
+function print_generate_profile() {
+  global $base_url;
+
+  $source_url = $base_url . substr($_GET['q'], 5);
+  $language = $GLOBALS['locale'];
+
+  $name = arg(2);
+  $value = arg(3);
+
+  $field = db_fetch_object(db_query("SELECT DISTINCT(fid), type, title, page, visibility FROM {profile_fields} WHERE name = '%s'", $name));
+  $robots_meta = _print_robots_meta_generator();
+
+  $print_settings = variable_get('print_settings', NULL);
+  $node->printcss = empty($print_settings['css']) ? 'misc/print.css' : $print_settings['css'];
+
+  if ($name && $field->fid) {
+    // Do not allow browsing of private fields by non-admins
+    if (!user_access('administer users') && $field->visibility == PROFILE_PRIVATE) {
+       drupal_access_denied();
+       return;
+    }
+
+    // Compile a list of fields to show
+    $fields = array();
+    $result = db_query('SELECT name, title, type FROM {profile_fields} WHERE fid != %d AND visibility = %d ORDER BY weight', $field->fid, PROFILE_PUBLIC_LISTINGS);
+    while ($record = db_fetch_object($result)) {
+      $fields[] = $record;
+    }
+
+    // Determine what query to use:
+    switch ($field->type) {
+      case 'checkbox':
+        $query = 'v.value = 1';
+        break;
+      case 'selection':
+        $query = "v.value = '". db_escape_string($value) ."'";
+        break;
+      case 'list':
+        $query = "v.value LIKE '%%". db_escape_string($value) ."%%'";
+        break;
+      default:
+        drupal_not_found();
+        return;
+    }
+
+    // Extract the affected users:
+    $result = db_query("SELECT u.uid FROM {users} u INNER JOIN {profile_values} v ON u.uid = v.uid WHERE v.fid = %d AND $query", $field->fid);
+
+    $output = '<div id="profile">';
+    while ($account = db_fetch_object($result)) {
+      $user = user_load(array('uid' => $account->uid));
+      $sort[$user->profile_lastname] = $user;
+    }
+    ksort($sort);
+    foreach ($sort as $user) {
+      $output .= theme('profile_profile', $user, $fields);
+    }
+
+    if ($field->type == 'selection' || $field->type == 'list') {
+      $title = strtr($field->page, array('%value' => theme('placeholder', $value)));
+    }
+    else {
+      $title = $field->page;
+    }
+    $output .= '</div>';
+
+    include_once('print.profile.tpl.php');
+  }
+  else if ($name && !$field->id) {
+    drupal_not_found();
+  }
+  else {
+    // Compile a list of fields to show
+    $fields = array();
+    $result = db_query('SELECT name, title, type FROM {profile_fields} WHERE visibility = %d', PROFILE_PUBLIC_LISTINGS);
+    while ($record = db_fetch_object($result)) {
+      $fields[] = $record;
+    }
+
+    // Extract the affected users:
+    $result = pager_query("SELECT uid FROM {users} WHERE uid > 0 ORDER BY access DESC", 20, 0, NULL);
+
+    $output = '<div id="profile">';
+    while ($account = db_fetch_object($result)) {
+      $output .= theme('profile_profile', user_load(array('uid' => $account->uid)), $fields);
+    }
+    $output .= '</div>';
+    $output .= theme('pager', NULL, 20);
+
+    $title = t('user list');
+
+    include_once('print.profile.tpl.php');
+  }
+}
+
+function print_friendly_urls($url = 0) {
+  global $base_url;
+  static $urls = array();
+  if ($url) {
+    if(strpos($url, '://') || preg_match("/^mailto:.*?@.*?\..*?$/iu", $url)) {
+      $urls[] = $url;
+    } else {
+      $base_url. '/'. url($url);
+    }
+    return count($urls);
+  }
+  return $urls;
+}
+
+/********************************************************************
+ * Module Functions :: Themeable Functions
+ ********************************************************************/
+
+function theme_print_link($node) {
+  $attributes = array('title' => t('Display a printer friendly version of this page.'));
+  $links = l(t('printer friendly version'), "node/$node->nid/print", $attributes);
+  return $links;
+}
+?>

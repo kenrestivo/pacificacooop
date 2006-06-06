@@ -32,16 +32,16 @@ order the damned meeting minutes
 mark the thank you's as sent. she did them all.
 
 		
-				
-??PHP
-put in details recordbuttons for on auction purchases report
-	regular, or packages. regular would be best
-
 
 4 hours PHP/UNIX
 start tracking this stuff in mantis!
 	install mantis
-	or maybe subversion instead of cvs?!
+
+					
+??PHP
+put in details recordbuttons for on auction purchases report
+	regular, or packages. regular would be best
+
 
 
 ???PHP/SQL
@@ -3790,7 +3790,15 @@ i do however WANT to be able to copy the insurance info in!
 
 ----------------
 NOWHERE
-	the include paths are going to be UGLAY!
+		in this case, i'm only merging in the livesite WEB portion?
+			but the sql needs to sync up. hmm. better way to do this?
+				maybe keep an sql-live around? merge when changing?
+		hmm. i don't like this. what happens when i commit?
+			if i commit at the top level, what will it do to my branches?
+				i.e. a livesite underneath?
+			fuck it! stick it in www/restivo!
+
+				the include paths are going to be UGLAY!
 		because my coop app needs MY pear and local pear!
 			but civicrm has its own pear too... conflicts! DB, QF, Pager
 			i cannot break civicrm!
@@ -7998,3 +8006,6 @@ i really want that session var to be common, either 'coop', or similar
 	must have
 		images, of some kind (for the playground and such)
 		i really want to do this right
+fopen(/mnt/kens/ki/proj/coop/web/logs/20060604015245-debug.html): failed to open stream: Permission denied in /u4/kens/ki/proj/coop/web/COOP/Page.php on line 55
+	logs, not log-dev
+		or maybe subversion instead of cvs?!

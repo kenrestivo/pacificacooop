@@ -1,0 +1,88 @@
+# LANGUAGE translation of Drupal (print.module)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from file: print.module,v 1.5 2005/01/26 13:02:05 km
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2005-06-01 17:34-0300\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: print.module:14
+msgid "Allows users to create printer-friendly pages for nodes."
+msgstr ""
+
+#: print.module:28
+msgid "printer friendly"
+msgstr ""
+
+#: print.module:58
+msgid "Stylesheet URL"
+msgstr ""
+
+#: print.module:58
+msgid "The URL to your print cascading stylesheet."
+msgstr ""
+
+#: print.module:60
+msgid "Printer friendly URLs"
+msgstr ""
+
+#: print.module:61
+msgid "Print page elements"
+msgstr ""
+
+#: print.module:62
+msgid "Printer friendly page link"
+msgstr ""
+
+#: print.module:62
+msgid "Disabled"
+msgstr ""
+
+#: print.module:62
+msgid "Enabled"
+msgstr ""
+
+#: print.module:62
+msgid "Enable or disable the 'printer friendly page' link for each node. Even if the link is disabled, you can still view the print version of a node by going to 'node/nid/print' where nid is the numeric id of the node."
+msgstr ""
+
+#: print.module:149
+msgid "printer friendly version"
+msgstr ""
+
+#: print.module:149
+msgid "Display a printer friendly version of this page."
+msgstr ""
+
+#: print.module:0
+msgid "print"
+msgstr ""
+
+#: print.tpl.php:17
+msgid "Published on"
+msgstr ""
+
+#: print.tpl.php:25
+msgid "By"
+msgstr ""
+
+#: print.tpl.php:29
+msgid "Created"
+msgstr ""
+
+#: print.tpl.php:39
+msgid "Source URL:"
+msgstr ""
+
+#: print.tpl.php:44
+msgid "Links:"
+msgstr ""

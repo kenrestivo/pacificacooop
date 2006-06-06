@@ -1,0 +1,65 @@
+div.minutes_header {
+    border-top: thin black solid;
+    border-bottom: thin black solid;
+    margin: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 0.9em;
+}
+
+p.minutes_event {
+    margin: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+span.minutes_event_title {
+    font-weight: bold;
+}
+span.minutes_event_from {
+    font-style: italic;
+    color: gray;
+}
+span.minutes_event_to {
+    font-style: italic;
+    color: gray;
+}
+span.minutes_event_type {
+    color: gray;
+}
+
+p.minutes_attendees {
+    margin: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+span.minutes_attendees_title {
+    font-weight: bold;
+}
+span.minutes_registered_users_title {
+    font-weight: bold;
+    color: gray;
+}
+span.minutes_registered_users {
+}
+span.minutes_extra_users_title {
+    font-weight: bold;
+    color: gray;
+}
+span.minutes_extra_users {
+}
+
+div.minutes_list_for_term {
+}
+
+div.minutes_list_for_type {
+}
+div.minutes_list_for_type h4 {
+    margin-bottom: 0.1em;
+    font-size: 1em;
+}
+div.minutes_list_for_type ul {
+    margin-top: 0;
+}
+div.minutes_list_for-type ul li {
+}
+

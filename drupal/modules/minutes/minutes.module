@@ -1,0 +1,419 @@
+<?php
+
+// $Id: minutes.module,v 1.2 2006/04/24 15:53:07 pukku Exp $
+
+/**
+ * @file
+ * Minutes module allows you to attach minutes to an event
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function minutes_help($section) {
+  switch ($section) {
+    case 'admin/help#minutes':
+      return t('The minutes module allows users to attach minutes to an event.  The minutes inherit the taxonomy and view restrictions of the event.  The module keeps track of who attended the event.');
+    case 'admin/modules#description':
+      return t('Allows the attachments of minutes to events');
+    case 'node/add#minutes':
+      return t('Minutes for an event.  You cannot add minutes through this interface; you must add them through the particular event');
+  }
+}
+
+
+/**
+ * Implementation of hook_node_info().
+ */
+function minutes_node_info() {
+  return array('minutes' => array('name' => t('minutes'), 'base' => 'minutes'));
+}
+
+
+/**
+ * Implementation of hook_perm().
+ */
+function minutes_perm() {
+  return array('create minutes', 'edit own minutes', 'edit all minutes');
+}
+
+
+/**
+ * Implementation of hook_access().
+ */
+function minutes_access($op, $node) {
+  global $user;
+  
+  if ($op == 'view') {
+    // explicitly punt to node_access
+    return null;
+  }
+  
+  if ($op == 'create') {
+    return user_access('create minutes');
+  }
+  
+  if (($op == 'update') or ($op == 'delete')) {
+    if (user_access('edit all minutes') and ($user->uid != $node->uid)) {
+      // if the user can edit all minutes and the minutes
+      // are not theirs, we punt to whether they are restricted
+      // from the minutes.
+      return null;
+    }
+  
+    if (user_access('edit own minutes') and ($user->uid == $node->uid)) {
+      // if they can edit their own minutes, and it is theirs,
+      // don't punt to node_access -- they may have misfiled them
+      // (although that shouldn't be able to happen such that they
+      // wouldn't still be allowed to view them)
+      return true;
+    }
+  }
+}
+
+
+/**
+ * Implementation of hook_link().
+ */
+function minutes_link($type, $node = NULL, $teaser = FALSE) {
+  global $user;
+  $links = array();
+  
+  if (($type == 'node') and ($node->type == 'minutes')) {
+    // this is a minutes node that is being viewed.
+    
+    // provide a link to the parent event
+    $links[] = l(t('event'), "node/" . $node->event_id);
+    
+    // If the user can edit the minutes, provide them a link.
+    if (!user_access('administer nodes') and node_access('update', $node)) {
+      $links[] = l(t('edit these minutes'), "node/$node->nid/edit");
+    }
+  }
+  elseif (($type == 'node') and (variable_get('event_nodeapi_' . $node->type, 'never') != 'never')) {
+    // this is an event of some type, so provide a link to either
+    // create or view the minutes
+  
+    // are there minutes for this node already?
+    $minutes_nid = db_result(db_query("SELECT nid FROM {minutes} WHERE event_id = %d", $node->nid));
+    if (user_access('create minutes') and (is_null($minutes_nid) or ($minutes_nid == ''))) {
+      $links[] = l(t('post minutes for this event'), "node/add/minutes/$node->nid");
+    }
+    elseif ($minutes_nid) {
+      if (node_access('view', node_load($minutes_nid), $user->uid)) {
+        $links[] = l(t('view minutes for this event'), "node/$minutes_nid");
+      }
+      else {
+        $links[] = t('minutes restricted');
+      }
+    }
+  }
+  
+  return $links;
+}
+
+
+/**
+ * Implementation of hook_menu().
+ */
+function minutes_menu($may_cache) {
+  $items = array();
+
+  if ($may_cache) {
+  }
+  else {
+    drupal_set_html_head(theme('stylesheet_import', base_path() . drupal_get_path('module', 'minutes') . '/minutes.css'));
+  }
+
+  return $items;
+}
+
+
+/**
+ * Implementation of hook_form().
+ */
+function minutes_form(&$node, &$param) {
+
+  // this module _must_ be accessed in such a way that there is an
+  // event passed to it.  Right now, we will verify this using 'arg'.
+  // Is there a better way to do this?
+  if ((arg(0) == 'node') && (arg(1) == 'add') && (arg(2) == 'minutes')) {
+    $node->event_id = arg(3); // arg == [ node add minutes event_id ]
+  }
+
+  if (is_null($node->event_id)) {
+    drupal_set_message("You must associate minutes with an event using the calendar.", 'error');
+    drupal_goto("node/add");
+  }
+
+  $event = node_load($node->event_id);
+
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Title'),
+    '#required' => TRUE,
+    '#default_value' => 'Minutes from "' . $event->title . '" on ' . $event->start_format,
+    '#weight' => -5
+  );
+  
+  $form['event_fs'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Event'),
+  );
+
+  $form['event_fs']['event_id'] = array(
+    '#type' => 'value',
+    '#value' => $node->event_id,
+  );
+
+  $form['event_fs']['event_description'] = array(
+    '#value' => '<p>"' . $event->title . '" from ' . $event->start_format . ' to ' . $event->end_format . '</p>',
+  );
+  
+  $form['attendees_fs'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Attendees'),
+    '#collapsible' => TRUE,
+    '#collapsed' => ((isset($node->attendees) and (count($node->attendees) > 0)) ? FALSE : TRUE),
+  );
+
+    
+  $form['attendees_fs']['attendees'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Attendees'),
+    '#default_value' => $node->attendees,
+    '#options' => _minutes_valid_users(),
+    '#description' => 'Registered users who were present during the event these minutes reflect.',
+  );  
+  
+  $form['extra_attendees_fs'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Extra Attendees'),
+    '#collapsible' => TRUE,
+    '#collapsed' => ((isset($node->extra_attendees) and ($node->extra_attendees != '')) ? FALSE : TRUE),
+  );
+  
+  $form['extra_attendees_fs']['extra_attendees'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Extra Attendees'),
+    '#default_value' => $node->extra_attendees,
+    '#cols' => 60,
+    '#rows' => 5,
+    '#description' => "Attendees who don't appear in the list above.  Please separate them with semicolons (';')",
+  );
+
+  $form['body_filter']['body'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Minutes'),
+    '#default_value' => $node->body,
+    '#required' => FALSE,
+    '#rows' => 30,
+  );
+  $form['body_filter']['filter'] = filter_form($node->format);
+
+  return $form;
+}
+
+
+/**
+ * Implementation of hook_validate().
+ */
+function minutes_validate(&$node) {
+    $invalid_users = false;
+    foreach (array_keys(array_filter($node->attendees)) as $uid) {
+        if ($uid != db_result(db_query("SELECT uid FROM {users} WHERE uid = %d", $uid))) {
+            $invalid_users = true;
+        }
+    }
+    if ($invalid_users) {
+        form_set_error('attendees', t('You have selected invalid users.  Are you trying to game the system?'));
+    }
+}
+
+
+/**
+ * Implementation of hook_insert().
+ */
+function minutes_insert($node) {
+  db_query("INSERT INTO {minutes} (nid, vid, event_id, extra_attendees) VALUES (%d, %d, %d, '%s')",
+            $node->nid, $node->vid, $node->event_id, $node->extra_attendees);
+  minutes_update_attendees($node);
+  minutes_update_taxonomy($node);
+}
+
+
+/**
+ * Implementation of hook_update().
+ */
+function minutes_update($node) {
+  if ($node->revision) {
+    minutes_insert($node);
+  }
+  else {
+    db_query("UPDATE {minutes} SET event_id = %d, extra_attendees = '%s' WHERE vid = %d",
+             $node->event_id, $node->extra_attendees, $node->vid);
+    minutes_update_attendees($node);
+    minutes_update_taxonomy($node);
+  }
+}
+
+/**
+ * helper function for hook_insert and hook_update
+ * to handle the {minutes_attendees} table
+ */
+function minutes_update_attendees($node) {
+  if (!$node->revision) {
+    db_query("DELETE FROM {minutes_attendees} WHERE vid = %d", $node->vid);
+  }
+  if (is_array($node->attendees)) {
+    foreach (array_keys(array_filter($node->attendees)) as $uid) {
+        db_query('INSERT INTO {minutes_attendees} (nid, vid, uid) VALUES (%d, %d, %d)',
+                 $node->nid, $node->vid, $uid);
+    }
+  }
+}
+
+/**
+ * helper function for hook_insert, hook_update, and hook_nodeapi
+ * makes sure that taxnonomy is kept in sync with the parent event
+ */
+function minutes_update_taxonomy($node, $taxonomy = false) {
+    if (!$taxonomy) {
+        $event = node_load($node->event_id);
+        $save_tax = $event->taxonomy;
+    }
+    else {
+        $save_tax = $taxonomy;
+    }
+    module_invoke('taxonomy', 'node_save', $node->nid, $save_tax);
+}
+
+
+/**
+ * Implementation of hook_delete().
+ */
+function minutes_delete(&$node) {
+  db_query('DELETE FROM {minutes} WHERE nid = %d', $node->nid);
+  db_query('DELETE FROM {minutes_attendees} WHERE nid = %d', $node->nid);
+}
+
+
+/**
+ * Implementation of hook_load().
+ */
+function minutes_load($node) {
+  $additions = db_fetch_array(db_query('SELECT event_id, extra_attendees FROM {minutes} WHERE vid = %d', $node->vid));
+  $additions['attendees'] = array();
+  $attendees_query = db_query("SELECT uid FROM {minutes_attendees} WHERE vid = %d", $node->vid);
+  while($attendee = db_fetch_array($attendees_query)) {
+    $additions['attendees'][] = $attendee['uid'];
+  }
+  return (object) $additions;
+}
+
+
+/**
+ * Implementation of hook_view().
+ */
+function minutes_view(&$node, $teaser = FALSE, $page = FALSE) {
+  $node = node_prepare($node, $teaser);
+  
+  $event_node = node_load($node->event_id);
+  $event = theme('minutes_event', $event_node);
+  $attendees = theme('minutes_attendees', $node->attendees, $node->extra_attendees);
+  
+  $minutes_header = theme('minutes_header', $event, $attendees);
+  
+  $node->body = $minutes_header . $node->body;
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+function minutes_nodeapi($node, $op, $arg = 0) {
+    // if there are any minutes associated with this event, then update any taxonomy changes
+    $minutes_nid = db_result(db_query("SELECT nid FROM {minutes} WHERE event_id = %d", $node->nid));
+    if (isset($minutes_nid) and ($minutes_nid != 0)) {
+        switch ($op) {
+            case 'insert':
+            case 'update':
+                minutes_update_taxonomy(node_load($minutes_nid), $node->taxonomy);
+                break;
+        }
+    }
+}
+
+/**
+ * theme functions for hook_view
+ */
+function theme_minutes_event($event) {
+    $output = '<p class="minutes_event">'
+            . '<span class="minutes_event_title">Minutes for:</span> '
+            . $event->title
+            . ' <span class="minutes_event_from">from</span> '
+            . $event->start_format
+            . ' <span class="minutes_event_to">to</span> '
+            . $event->end_format
+            //. ' <span class="minutes_event_type">(of type ' . _minutes_translate_type($event->type) . ')</span>'
+            . '</p>' . "\n";
+    return $output;
+}
+
+function theme_minutes_attendees($uids, $extra) {
+    $registered = implode("; ", array_map(_minutes_uid_to_display, $uids));
+    $output = '<p class="minutes_attendees">'
+            . '<span class="minutes_attendees_title">Attendees:</span> '
+            . '<span class="minutes_registered_users_title">(Users)</span> '
+            . '<span class="minutes_registered_users">' . $registered . '</span>'
+            . ((!is_null($extra) and ($extra != '')) ? ';&nbsp;&nbsp;&nbsp;<span class="minutes_extra_users_title">(Other)</span> <span class="minutes_extra_users">' . $extra . '</span>'
+                                                     : '')
+            . '</p>' . "\n";
+    return $output;
+}
+
+function theme_minutes_header($event, $attendees) {
+    $output = '<div class="minutes_header">'
+            . $event
+            . $attendees
+            . '</div>' . "\n";
+    return $output;
+}
+
+/**
+ * helper functions for attendees
+ */
+function _minutes_uid_to_display($uid) {
+    $display = '';
+    if (module_exist('contacts_db')) {
+        // we can use the contacts db to get names
+        $fname_col = variable_get('contacts_db_firstname_field', 'profile_firstname');
+        $lname_col = variable_get('contacts_db_lastname_field', 'profile_lastname');
+        
+        $display = db_result(db_query("SELECT concat($lname_col, ', ', $fname_col) FROM {contacts_database} WHERE uid = %d", $uid));
+    }
+    else {
+        // we can only provide email and user names
+        $display = db_result(db_query("SELECT concat(u.name, ' (', u.mail, ')') FROM {users} as u WHERE u.uid = %d", $uid));
+    }
+    if (!isset($display) or ($display == '')) {
+        $display = "(uid: $uid)";
+    }
+    return $display;
+}
+
+function _minutes_valid_users() {
+    $excluded_users = module_invoke('excluded_users', 'get_excluded_uids');
+    if (!isset($excluded_users)) {
+        $excluded_users = array(0);
+    }
+    $users_query = db_query("SELECT uid FROM {users} WHERE uid not in (" . implode(",",$excluded_users) . ") and status = 1");
+    
+    $users = array();
+    while($users_res = db_fetch_array($users_query)) {
+        $users[$users_res['uid']] = _minutes_uid_to_display($users_res['uid']);
+    }
+    
+    asort($users);
+    return $users;
+
+}

@@ -1,25 +1,19 @@
-redo the whole site in drupal or xoops or joomla or something
+noredo the whole site in drupal
+
 
 svn gymnastics
-	import my version 1.02 of coop
-		do all the shuffling around like i did last time
-			tinymce, symlinks, anything else?
-			test it!
-		get emacs to deal
-	possibly re-import via vendor branch
-			mochikit
-			maybe fonts or fpdf, if i can do just files
-			local pear
-			phpserialize
-	all the modules i need... import los bastardos as vendors!
-		try to guess their version, as much as is possible
-	finally merge in all my shit, and make sure it still works
-		all the vendor branches
-		all my files from the coop branch too
-	migrate my commands in my Makefiles to new svn format
-
+	merge in! check it out, and merge it
+		how to merge it? what to merge with?
+	finally merge a livesite branch! test and make sure that works too
+	fix the makefile stuff to make the syncing work properly
+	and then......push it live! and then test it. make sure it's solid!
+	remember to tweek the report perms so that it uses new paths!
 
 	
+fix this file flexinode file upload bug!
+	wtf is going on?
+
+		
 start going through the content, and doing it right
 	i.e. handbook, bylaws, etc., other links
 	try on local site first! file upload, how?
@@ -28,9 +22,16 @@ what about the playground? weird special case
 
 rid the playground and documents then	
 	
+square away the images/pictures paths
+	images should only be app-specific
+	move the surfboard shit to pictures, or into a files/images gallery!
 
+and font paths too!!
 
 ----
+
+fix the DB_DO $_database bug!
+
 
 drupal fun
 	try all of their sample modules, and understand them
@@ -111,6 +112,11 @@ coop/drupal/civicrm integration
 	
 
 migration plan
+	port permissions system
+		users
+		groups
+		realms
+		logins
 	immediately remove and convert data
 		bulletin board
 		files
@@ -118,11 +124,6 @@ migration plan
 		calendar
 		events
 		event types
-	port permissions system
-		users
-		groups
-		realms
-		logins
 	unknown
 		audit
 		instructions
@@ -274,9 +275,20 @@ coop_sendto should be integreated with drupal instead!
 			add the profiles and custom fields to the thankyou page!
 
 
+			what about the img_assist drupal plugin!!?
+				add a symlink? svn keeps track of them you know
 
+moer svn gymnastics
+	old coop possibly re-import via vendor branch
+		local pear
+		mochikit
+		maybe fonts or fpdf, if i can do just files
+		phpserialize
 
+move the cvs-specific settings out of the settings.php and civicrmsettings
+		both local(svn'ed) and nosvn (for live/dev)
 
+			
 				
 -----------------
 DONE
@@ -325,3 +337,40 @@ do i want to sync the drupal CVS completely?
 			web qa sql notes scripts
 			TODO(interesting, how? move to notes?)
 		gah, ugly. either i lose all modify info, or i keep all comments
+		get emacs to deal
+	import my version 1.02 of coop
+		do all the shuffling around like i did last time
+	all the drupal modules i need... import los bastardos as vendors!
+			tinymce, symlinks, anything else?
+			test it!
+			event 5/25/2005
+			eventrepeat 4/17/2006
+			flexinode 4/29/06
+			image 5/2/2006
+			img_assist 5/12/2006
+			minutes 4/24/2006
+			andreas theme 5/17/06
+			print 5/30/2006
+			simpleaccess 3/12/2006
+			tinymce MODULE 4/25/2006
+		try to guess their version, as much as is possible
+			tinymce CODE version 2.0.6.1 5/4/2005
+	make a copy of drupal branch into my coop dir!
+		re-read vendor branch docs
+		now make my drupal stuff go get from svn too!
+1.4-rev5548M
+	and vendor-branch all the modules and themes too
+		copy them in there
+	add the settings from the old-root
+		all the vendor branches
+		gotta put tinymce in there too, old or new version
+			ah, fuck it. try the new version.
+			local pear
+	migrate my commands in my Makefiles to new svn style
+		cvd, and ac -m too
+	finally merge in all my shit, and make sure it still works
+		all my files from the coop web branch too
+			either copy or move it, you decide!
+			/members from here on in
+		i think i need to have one tree, dev/livesite, with both drupal and members
+		livesite will be drupal *and* web combined

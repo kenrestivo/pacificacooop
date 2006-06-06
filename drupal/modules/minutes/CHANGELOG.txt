@@ -1,0 +1,3 @@
+2006 April 24:
+
+    Initial 4.7 version

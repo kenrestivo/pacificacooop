@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- TODO: whack this shell entirely, and use outtershell instead -->
+<div metal:define-macro="report_shell">
+  <div tal:replace="structure page/doctype" tal:comment="XXX hack" ></div>
+  <html  lang="en">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+      
+      <link rel="stylesheet" href="bid_sheet.css" title="bidsheet"     
+            tal:attributes="href string:${page/uri_path}/bid_sheet.css" />
+      <title tal:content="page/title"></title>
+    </head>
+    <body>
+      <!--[if gte IE 5.5000]> 
+          <script type="text/javascript" src="lib/pngfix.js"></script> 
+          <![endif]--> 
+
+      <!-- obnoxious. but, alas, necessary -->
+      <!--[if IE]>
+          <style  type="text/css"> @media print{ #printfooter {position: absolute;}} </style>
+          <![endif]-->
+
+      <div id="header">
+        <div  metal:use-macro="header.xhtml/header"></div>
+      </div>
+
+      <div tal:condition="page/auth/uid" 
+           metal:define-slot="inner_content">The Content of the Page</div>
+      
+      <div id="printfooter" class="printfooter">
+        Sunset Surf
+        <img class="logo" alt="Pacifica Co-Op Nursery School Logo" 
+             src="/round-small-logo.gif" />
+      </div>
+      
+      
+      <div id="footer">
+        <hr />
+        <div><a href="http://validator.w3.org/check/referer">
+          <img src="string:${page/uri_path}/images/html401.png" alt="Valid XHTML 1.0!"  /></a>
+          
+          <!--[if IE]><<a href="http://www.getfirefox.com"><img  alt="Get Firefox!" title="Get Firefox!" src="http://sfx-images.mozilla.org/affiliates/Buttons/110x32/get.gif"/></a><![endif]-->
+          
+        If anything on this site appears to be not working properly, email <a href='mailto:ken@restivo.org'>ken@restivo.org</a> or call ken at 650-355-1317</div>
+      </div>
+
+
+    </body>
+  </html> 
+</div>

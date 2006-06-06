@@ -1,0 +1,45 @@
+<?php
+
+// $Id: minutes.install,v 1.3.2.1 2006/05/02 17:32:06 pukku Exp $
+
+/**
+ * Implementation of hook_install()
+ */
+function minutes_install() {
+  switch($GLOBALS['db_type']) {
+    case 'mysql':
+    case 'mysqli':
+      db_query("CREATE TABLE {minutes} (
+                    nid int(10) unsigned not null default '0',
+                    vid int(10) unsigned not null default '0',
+                    event_id int(10) unsigned not null default '0',
+                    extra_attendees text
+                ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
+      );
+      db_query("CREATE TABLE {minutes_attendees} (
+                    nid int(10) unsigned not null default '0',
+                    vid int(10) unsigned not null default '0',
+                    uid int(10) unsigned
+                ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */"
+      );
+      break;
+      
+    case 'pgqsl':
+      db_query("CREATE TABLE {minutes} (
+                    nid int not null default '0',
+                    vid int not null default '0',
+                    event_id int, not null default '0'
+                    extra_attendees text
+                )"
+      );
+      db_query("CREATE TABLE {minutes_attendees} (
+                    nid int unsigned not null default '0',
+                    vid int unsigned not null default '0',
+                    uid int unsigned
+                )"
+      );
+      break;
+  }
+}
+
+?>

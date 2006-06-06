@@ -1,0 +1,208 @@
+/* $Id$ */
+/* for Drupal */
+
+/* print-fixes */
+@media print {
+  a.xml-icon,
+  a.feed-icon {
+  display: none;
+  }
+}
+
+/* For Admin-pages */
+tr.watchdog-notice td, 
+tr.watchdog-warning td, 
+tr.watchdog-error td {
+font-family: Verdana,Tahoma,Arial,sans-serif;
+font-size: 7px;
+}
+
+/* regular */
+h1 {
+font-size: 2em;
+margin: 0;
+padding: 0;
+}
+
+h2 {
+font-size: 1.3em;
+font-weight: bold;
+padding: 0;
+margin: 0;
+}
+
+h3 {
+font-weight: bold;
+padding: 0;
+margin: 0;
+}
+
+#header h1 a {
+color: black;
+text-decoration: none;
+display: block;
+}
+
+/* Styling of comments */
+.comment {
+background: #f4f4f4;
+margin-top: 10px;
+}
+.comment-title a {
+font-size: 1.25em;
+font-weight: bold;
+}
+
+.comment-author,
+.postmetadata {
+text-align: left;
+font-size: 0.75em;
+}
+
+.comment-author a,
+.postmetadata a {
+text-decoration: none;
+}
+
+.comment-author a:hover,
+.postmetadata a:hover {
+text-decoration: underline;
+}
+
+.comment .new {
+float: right;
+text-align: right;
+margin-right: 10px;
+margin-bottom: 10px;
+color: #ff6a4c;
+font-weight: bold;
+}
+
+.comment .header {
+float: right;
+}
+
+/* general page structure and layout */
+blockquote {
+margin: 10px;
+padding: 0 18px;
+font-style: italic;
+}
+
+/* Fix forms wrapping under the sidebars */
+.node-form .standard,
+.profile,
+.form-item,
+img .image preview,
+#tracker,
+#system_theme_settings {
+width: 95%;
+clear: none;
+}
+
+#content {
+padding: 0 20px 0 0;
+}
+
+#content-wrap {
+float: left;
+clear: none;
+width: 100%;
+border-left:1px solid #f0f0f0;
+border-right:1px solid #f0f0f0;
+padding:0 10px 0 10px;
+}
+
+/* Fix some login-form-thingies */
+#user-login-form .item-list ul {
+padding-top: 4px;
+}
+
+#user-login-form .item-list ul li {
+list-style: square;
+font-size: 0.75em;
+}
+
+/* fixes the sidebars
+  ------------------------------ */
+/* give them a little bit space between two blocks */
+#avmenu .announce .block,
+#avmenu .announce .block .item-list,
+#extras .block {
+padding-top: 5px;
+padding-bottom: 5px;
+}
+
+/* the block-title is too near at the content */
+#avmenu .announce .block h2,
+#extras .block h2 {
+padding-bottom: 5px;
+}
+
+/* links */
+.info {
+text-align: right;
+font-size: 0.75em;
+}
+
+.info a {
+text-decoration: none;
+}
+
+.info a:hover {
+text-decoration: underline;
+}
+
+/* Some styling for messages */
+.error {
+border: 1px solid #f0000c;
+padding: 5px;
+background: #FFCCCE;
+}
+
+.status {
+border: 1px solid #00CC00;
+padding: 5px;
+background: #CCFFCC;
+}
+
+/* workarounds and hacks */
+table {
+border-collapse: collapse;
+}
+
+.resizable-textarea,
+.form-textarea,
+#edit-comment,
+#edit-subject,
+#edit-site_mission,
+#edit-site_footer,
+#watchdog_form_overview {
+width: 95%;
+display: inline;
+}
+
+.clearfix:after {
+content: ".";
+display: block;
+height: 0;
+clear: both;
+visibility: hidden;
+}
+
+.clearfix {
+display: inline-table;
+}
+
+/* Hides from IE-mac \*/
+* html #wrap #avmenu .announce{
+width: 130px;
+}
+
+* html .clearfix {
+height: 1%;
+}
+.clearfix {
+display: block;
+}
+/* End hide from IE-mac */

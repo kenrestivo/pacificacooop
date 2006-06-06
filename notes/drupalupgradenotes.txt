@@ -1,14 +1,7 @@
 things to note when doing a drupal upgrade
 
-modules
-	tinymce, you have to download the actual tinymce code
-	civicrm, massive module with its own stuff
-	
-themes
-	andreas01, not in the main thing
+everything is now in svn, so life should be very, very good!
 
-settings
-	my sites/default are in cvs.
+follow the "vendor drop" procedures in subversion manual!
 
-
-this http://drupal.org/node/29161
+this http://drupal.org/node/29161 might be useful, might not

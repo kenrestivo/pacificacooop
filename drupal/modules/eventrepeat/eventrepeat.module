@@ -1,0 +1,1854 @@
+<?php
+// $Id: eventrepeat.module,v 1.29 2006/04/17 15:26:00 thehunmonkgroup Exp $
+
+//KNOWN BUGS
+//this module is currently in beta release.  known bugs include:
+//  1. exception editor not working
+//  2. editing the repeat sequence itself after it's already been created is inconsistent.  nodes don't map to the exact
+//     date they're being moved to
+//  3. bug: items getting rendered on day previous to creation day
+
+//TODO
+//  1. put form_set_error in place of drupal_set_message where appropriate.  change drupal_set_message to warning
+//     where appropriate
+//  2. add watchdog entries
+
+
+//  WISH LIST
+//  1. invoke hook 'delete pre' for multi deletions (single node only?)
+//  2. add ical support
+
+include(drupal_get_path('module', 'eventrepeat') .'/eventrepeat.theme');
+
+/**
+ * @defgroup eventrepeat_core Core drupal hooks
+ */
+
+/**
+ * Implementation of hook_menu()
+ *
+ * @ingroup eventrepeat_core
+ */
+function eventrepeat_cron() {
+
+  //this value determines the maximum number of rows that can be added to the calmap table in one cron run, and should be
+  //set to a reasonable value to avoid server timeouts that could occur. this will most likely only happen when initially
+  //seeding the table.  default value is 2000 rows
+  $_BAILOUT_VALUE = variable_get('eventrepeat_maximum_rows', 2000);
+
+  //the table values for event_repeat_calmap
+  //day_stamp: human readable date in the format Y-m-d.  also used in SQL queries
+  //date_stamp: date for which the RRULE values are being generated, timestamp is last second of the day, in UTC
+  //day_of_week: day of the week in the following format 'SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'
+  //day_in_month: iteration of the day of the week in the month in the following format '1SU', '3MO'
+  //day_in_month_R: iteration of the day of the week in the month, counting from the end, in the following format '-1SU', '-3MO'
+  //month_day: numeric day of the month in the following format '1', '15'
+  //month_day_R: numeric day of the month, counting from the end, in the following format '-1', '-15'
+  //month: numeric month number, in the following format '1', '12'
+  //year_day: numeric day of the year in the following format '1', '226'
+  //year_day_R: numeric day of the year, counting from the end, in the following format '-1', '-226'
+  //week_number: numeric ISO-8601 week in the following format '1', '24'
+  //week_number_R: numeric ISO-8601 week, counting from the end, in the following format '-1', '-24'
+
+  //first thing is to determine the exact range that's going to be rendered, and calculate start and end timestamps.
+  //current time is calculated in GMT, then we check the table for the last created date.  if no records are in the
+  //table, set start date to the end of the day on the day before the current date, and enable the seed.
+  $curtime = time();
+  $result = db_query("SELECT MAX(date_stamp) FROM {event_repeat_calendar_map}");
+  $start = db_fetch_array($result);
+  if ($start['MAX(date_stamp)']) {
+    $start = $start['MAX(date_stamp)'];
+  } else {
+    $start = gmmktime(23, 59, 59, (int) gmdate('n', $curtime), (int) gmdate('j', $curtime), (int) gmdate('Y', $curtime)) - 86400;
+    $seed = TRUE;
+  }
+
+  //end date is the current day, plus one day, plus the render support period
+  $curtime_end = gmmktime(23, 59, 59, (int) gmdate('n', $curtime), (int) gmdate('j', $curtime), (int) gmdate('Y', $curtime));
+  $end = $curtime_end + 86400 + (variable_get('eventrepeat_render_support', 2000) * 86400);
+
+  //next, we want to delete any table entries that are no longer needed.  leave yesterday's date in as a precaution.
+  //since cron will probably be run more than once a day, and it's also possible that the admin may have shortened the
+  //render period since the last cron run, we put in a few checks for that, too, and exit the function if it doesn't
+  //need to be run now
+  if ($end < $start) {
+    db_query('DELETE FROM {event_repeat_calendar_map} WHERE date_stamp > %d', $end);
+    return;
+  }
+  $result = db_query('SELECT date_stamp FROM {event_repeat_calendar_map} WHERE date_stamp < %d', $curtime - 86400);
+  if (db_num_rows($result) > 0 || $seed) {
+    $result = db_query('DELETE FROM {event_repeat_calendar_map} WHERE date_stamp < %d', $curtime - 86400);
+  } else {
+    return;
+  }
+
+  //set the insert query line, initialize the array where we'll dump the values initially, and start a bailout counter:
+  //this counter will count up and bail out of the calmap cycle when it hits _BAIL_OUT_VALUE, which can be set at the top
+  //of the function
+  $insert_line = "INSERT INTO {event_repeat_calendar_map} (day_stamp, date_stamp, day_of_week, day_in_month,
+    day_in_month_R, month_day ,month_day_R, month, year_day, year_day_R, week_number, week_number_R)  VALUES";
+  $values = array();
+  $bailout = 1;
+
+  //create timestamp for first day of the month which $start is in.  this is the easiest way to count to generate info
+  //for the date range that needs to be rendered.  also create the other initial calendar values we'll need here, based
+  //on the beginning of the month timestamp
+  $BOM = gmmktime(23, 59, 59, (int) gmdate('n', $start), 1, (int) gmdate('Y', $start));
+  $master_year = (int) gmdate('Y', $BOM);    //current year
+  $leap_year = (int) gmdate('L', $BOM);      //Whether it's a leap year
+  $days_in_month = (int) gmdate('t', $BOM);  //Number of days in the given month
+  $days_of_week = array('SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA');
+  $master_month = (int) gmdate('n', $BOM);     //current month
+  $master_month_day = 1;   //current numeric day of the month
+  $master_month_day_R = -$days_in_month;  //current numeric day of the month, counting backwards
+  $master_day = (int) gmdate('w', $BOM);    //day of the week of the first day of the month, for incrementing day counts
+  $master_last_day = (int) gmdate('w', gmmktime(23, 59, 59, (int) gmdate('n', $start), $days_in_month,
+    (int) gmdate('Y', $start)));
+  $DOW = $master_day;   //current day of the week
+
+  //1st day of the month will always be the first of it's kind with respect to the day of the week, so we set that
+  //to one here.  months will have certain days of the week that occur 4 times, and others that occur 5 times, so
+  //here we also build an incrementer that will help with correct reverse day in month calculations
+  $master_day_in_month = 1;
+  $master_day_in_month_R = -4;
+  $day_in_month_incrementer = _eventrepeat_day_in_month_incrementer($master_day, $days_in_month);
+
+  $master_year_day = (int) gmdate('z', $BOM) + 1;    //current numeric day of the year
+  $master_year_day_R = $master_year_day - 365 - $leap_year - 1;   //current numeric day of the year, counting backwards
+  $master_week_no = (int) gmdate('W', $BOM);  //generate the ISO-8601 week no.
+
+  //figure out how many ISO-8601 weeks are in the current year.  this seems like a hack but i wasn't sure how
+  //else to do it w/ php's date function
+  for ($n = 28; $n <= 31; $n++) {
+    $WN_stamp = gmmktime(23, 59, 59, 12, $n, $master_year);
+    $master_weeks_in_year = (int) gmdate('W', $WN_stamp) > $master_weeks_in_year ? (int) gmdate('W', $WN_stamp) :
+      $master_weeks_in_year;
+    }
+    $master_week_no_R = $master_week_no - $master_weeks_in_year - 1;   //ISO-8601 week no. in year counting backwards
+
+  //now we move from the beginning of the month to the day before the start of the rendering period, adjusting values
+  //for everything we set above as we go.  set the counter that increments by one day, and if the start of the rendering
+  //cycle is the beginning of the month, skip this step
+  $counter = $BOM + 86400;
+  if ($BOM != $start) {
+    while ($counter <= $start) {
+
+      //cycle through the numeric days of the week
+      if ($DOW == 6) {
+        $DOW = 0;
+      } else {
+        $DOW++;
+      }
+
+      //each time we get back around to the day of the week of the first day of the month, we increment the
+      //master_day_in_month counters
+      if ($master_day == $DOW) {
+        $master_day_in_month++;
+        $master_day_in_month_R++;
+      }
+
+      //increment the master_month_day and master_year_day counters
+      $master_month_day++;
+      $master_month_day_R++;
+      $master_year_day++;
+      $master_year_day_R++;
+
+      //increment the weekno. variables if the day of the week is monday
+      if ($DOW == 1) {
+        $master_week_no++;
+        $master_week_no_R++;
+      }
+      $counter += 86400;
+    }
+  }
+
+  //now we start the cycle for days where values need to be created
+  while ($counter <= $end) {
+
+    //cycle through the numeric days of the week
+    if ($DOW == 6) {
+      $DOW = 0;
+    } else {
+      $DOW++;
+    }
+
+    //each time we get back around to the day of the week of the first day of the month, we increment the
+    //master_day_in_month counters
+      if ($master_day == $DOW) {
+      $master_day_in_month++;
+      $master_day_in_month_R++;
+    }
+
+    //increment the master_month_day and master_year_day counters
+    $master_month_day++;
+    $master_month_day_R++;
+    $master_year_day++;
+    $master_year_day_R++;
+
+    //january 4th is the first day of the year that's guaranteed to be in the first ISO-8601 week of the year
+    //so here we check to see if it's the 4th and reset the week no. variables if so
+    if($master_month == 1 && $master_month_day == 4) {
+      $master_week_no = 1;
+
+      //figure out how many ISO-8601 weeks are in the current year.  this seems like a hack but i wasn't sure how
+      //else to do it w/ php's date function.  here also we need to set $master_weeks_in_year back to 52 so the
+      //hack will work
+      for ($n = 28; $n <= 31; $n++) {
+        $master_weeks_in_year = 52;
+        $WN_stamp = gmmktime(23, 59, 59, 12, $n, $master_year);
+        $master_weeks_in_year = (int) gmdate('W', $WN_stamp) > $master_weeks_in_year ? (int) gmdate('W', $WN_stamp) :
+          $master_weeks_in_year;
+      }
+
+      $master_week_no_R = $master_week_no - $master_weeks_in_year - 1;   //ISO-8601 week no. in year counting backwards
+
+    //it's not the 4th of january, so increment the weekno. variables if the day of the week is monday
+    } else {
+      if ($DOW == 1) {
+        $master_week_no++;
+        $master_week_no_R++;
+      }
+    }
+
+    //if the date is between december 28th and january 4th, then we need to manually calculate the weekno.
+    //variables, b/c days in this range can fall into either the last week of the year, or the first week
+    //of the next year, depending upon which year it is.
+    if (($master_month == 12 && $master_month_day > 28) || ($master_month == 1 && $master_month_day < 4)) {
+      $master_week_no = (int) gmdate('W', $counter);  //generate the ISO-8601 week no.
+
+      //if the weekno value calculates to 1, then the day is in week of the year we're changing to.  if it's
+      //still december then push the temp year forward by one to ensure accurate calculation of the total
+      //number of weeks in this new year.  don't forget to set $master_weeks_in_year to 52 again!
+      if ($master_week_no == 1) {
+        if ($master_month == 12) {
+          $master_year_temp = $master_year +1;
+        } else {
+          $master_year_temp = $master_year;
+        }
+        for ($n = 28; $n <= 31; $n++) {
+          $master_weeks_in_year = 52;
+          $WN_stamp = gmmktime(23, 59, 59, 12, $n, $master_year_temp);
+          $master_weeks_in_year = (int) gmdate('W', $WN_stamp) > $master_weeks_in_year ? (int) gmdate('W', $WN_stamp) :
+            $master_weeks_in_year;
+        }
+      }
+      $master_week_no_R = $master_week_no - $master_weeks_in_year - 1;   //ISO-8601 week no. in year counting backwards
+    }
+
+    //make day of the week the custom string value, and adjust the reverse day in month value according to the current
+    //month's incrementer array
+    $day_of_the_week = $days_of_week[$DOW];
+    $day_of_the_month_R = $master_day_in_month_R - $day_in_month_incrementer[$DOW];
+    $day_stamp = gmdate('Y-m-d', $counter);
+
+    //populate a new element of the values array with the RRULE data for the day in question
+    $values[] = "('$day_stamp', $counter,'$day_of_the_week','".$master_day_in_month.$day_of_the_week."','".
+      $day_of_the_month_R.$day_of_the_week."','".$master_month_day."','".$master_month_day_R."','".
+      $master_month."','".$master_year_day."','".$master_year_day_R."','".$master_week_no."','".$master_week_no_R."')";
+
+    //increment the bailout counter, and check to see if it's at 500.  if so
+    //then send the query and bail out
+    $bailout++;
+    if ($bailout > $_BAILOUT_VALUE) {
+      $result = db_query($insert_line.implode(',', $values));
+      return;
+    }
+    $counter += 86400;
+
+    //here we start checks to see if we're at the end of the current month--if it's december then increment the
+    //year counter and reset leap year, and set the month values for january (we need to set the month day values
+    //one less than they actually are, b/c they'll be incremented when the code swings around)
+    if ($days_in_month == $master_month_day) {
+      if ($master_month == 12) {
+        $master_year++;
+        $leap_year = (int) gmdate('L', $counter);
+        $days_in_month = 31;
+        $master_month = 1;
+        $master_month_day = 0;
+        $master_month_day_R = -32;
+
+        //set master day as the next day of the week in the cycle--this is the day of the week of the first
+        //day in january
+        if ($DOW == 6) {
+          $master_day = 0;
+        } else {
+          $master_day = $DOW + 1;
+        }
+
+        //set these 1 less than they need to be here, b/c they'll be incremented to their correct value on next
+        //cycle through
+        $master_day_in_month = 0;
+        $master_day_in_month_R = -5;
+        $day_in_month_incrementer = _eventrepeat_day_in_month_incrementer($master_day, $days_in_month);
+        $master_year_day = 0;
+        $master_year_day_R = -366 - $leap_year;
+
+      //it's not december, so increment the month value, and set the new days in month and month day values
+      //once again the month day values need to be one less than their actual value
+      } else {
+        $days_in_month = (int) gmdate('t', $counter);
+        $master_month++;
+        $master_month_day = 0;
+        $master_month_day_R = -$days_in_month -1;
+
+        //set master day as the next day of the week in the cycle--this is the day of the week of the first
+        //day of the next month
+        if ($DOW == 6) {
+          $master_day = 0;
+        } else {
+          $master_day = $DOW + 1;
+        }
+
+        //set these 1 less than they need to be here, b/c they'll be incremented to their correct value on next
+        //cycle through, and reset the incrementer for the new month
+        $master_day_in_month = 0;
+        $master_day_in_month_R = -5;
+        $day_in_month_incrementer = _eventrepeat_day_in_month_incrementer($master_day, $days_in_month);
+      }
+    }
+  }
+
+  //we didn't bail out, so insert the new rows into the table, if there any rows to insert
+  if (count($values)) {
+    $result = db_query($insert_line.implode(',', $values));
+  }
+
+  //we've added new data to the calmap table, so render nodes for all repeat sequences
+  $endtime = $curtime + (variable_get('eventrepeat_initial_render', 90) * 86400);
+  _eventrepeat_render_nodes('all', $endtime, FALSE, FALSE, FALSE);
+}
+
+/**
+ * Implementation of form API hook_elements()
+ */
+function eventrepeat_elements() {
+   $type['eventrepeat_date'] = array('#input' => TRUE,);
+   return $type;
+}
+
+/**
+ * Implementation of hook_form_alter()
+ *
+ * @ingroup eventrepeat_core
+ * @param $form_id The form being altered.
+ * @param $form The form array.
+ */
+function eventrepeat_form_alter($form_id, &$form) {
+
+  //check here to see if the node is part of a repeat sequence
+  if ($form_id == 'node_delete_confirm') {
+    $node = node_load($form['nid']['#value']);
+    if ($node->eventrepeat_rid) {
+
+      //create the option array
+      $options = array('this' => t('This occurance only'),
+      'future' => t('This occurance and all future occurances'),
+      'all' => t('All occurances')
+      );
+
+      //construct the radio buttons.  NOTE: in order to prevent name collisions in the admin
+      //delete process for multiple nodes, these form elements are named in array fashion, with nid to distinguish
+      //the elements of the array
+      $form['eventrepeat_delete_type']['#tree'] = TRUE;
+      $form['eventrepeat_delete_type'][$node->nid] = array('#type' => 'radios', '#title' => t('Repeat event--delete the following'), '#default_value' => 'this', '#options' => $options, '#description' => t('\'This occurance and all future occurances\' will delete repeat events from the date of the selected node forward, \'All occurances\' will delete repeat events after today\'s date.'));
+    }
+
+  //inject node type settings checkbox for repeat events
+  } elseif (isset($form['type']) && $form['type']['#value'] .'_node_settings' == $form_id) {
+    $type = $form['type']['#value'];
+    $form['workflow']["eventrepeat_nodeapi_$type"] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Allow repeat events'),
+      '#default_value' => variable_get("eventrepeat_nodeapi_$type", FALSE) == 1,
+      '#description' => t('if selected, users will be allowed to add repeating events for this node type'),
+    );
+
+  //inject the appropriate repeat data into the node form if the node type is repeat enabled
+  } elseif ($form['type']['#value'] .'_node_form' == $form_id && isset($form['nid']['#value'])) {
+    $node = node_load($form['nid']['#value']);
+
+    if (variable_get('event_nodeapi_'. $node->type, 'never') != 'never' &&
+      variable_get('eventrepeat_nodeapi_'. $node->type, 0) == 1) {
+
+      //if the node is part of a repeat sequence, then construct the radio buttons for mass edit
+      if ($node->eventrepeat_rid) {
+        $form['eventrepeat_rid'] = array('#type' => 'value', '#value' => $node->eventrepeat_rid);
+        $options = array(
+          'this' => t('This occurance only'),
+          'future' => t('This occurance and all future occurances'),
+          'all' => t('All occurances')
+        );
+        $form['eventrepeat_edit_type'] = array('#type' => 'radios', '#title' => t('Apply edit(s) to'), '#default_value' => 'this', '#options' => $options, '#description' => t('\'This occurance and all future occurances\' will edit repeat events from the date of the selected node forward, \'All occurances\' will edit repeat events after today\'s date. <br>Note: editing a single occurance will remove it from the repeat sequence.'), '#weight' => 15);
+
+        //display link to help if no pattern has been created
+      } else {
+        $form['eventrepeat_help'] = array('#type' => 'markup', '#value' => t('Need help creating a repeat pattern? Click ') . l(t('here'), 'repeat/help') .'<br />', '#weight' => 15);
+      }
+    }
+  /* this is a check for module dependencies.  the only way we
+    can ensure this check happening when the module is initially
+    enabled is to insert the check for when the form is initially
+    built, which will also be caught when the admin/module page is
+    reloaded upon submission.  this means we never want to call this
+    function when the form has been submitted, so make sure there's
+    no $_POST. */
+  }elseif ($form_id == 'system_modules' && !$_POST) {
+      _eventrepeat_system_module_validate($form);
+  }
+}
+
+/**
+ * Implementation of hook_help()
+ *
+ * @ingroup eventrepeat_core
+ * @param $section The page which is requesting help.
+ * @return The help text.
+ */
+function eventrepeat_help($section) {
+  switch ($section) {
+    case 'admin/modules#description':
+      return t('Adds support for repeating events.  Dependency: event.module');
+    case 'admin/help#eventrepeat':
+      return t("<p>Eventrepeat enables the creation of repeating event patterns for node types that are event-enabled.&nbsp; In order for repeating events to be created for a node type, you must first configure that node type to be enabled for repeating events.&nbsp; This is done in the configuration page for the specified node type (located in administer-&gt;settings-&gt;content types). While you're in the configuration screen, check that the node type is also able to be viewed in the event calendar.<br /> </p><p>To create a repeat sequence you first must create the event, then click the 'edit' tab, then the 'repeat' tab to get to the repeat settings screen (it's necessary to do it this way because the repeat code needs all of the node data in order to create more nodes). Read below for a quick repeat pattern tutorial:</p> <ol>   <li>Set 'Repeat type'&nbsp; to the type of repeating pattern you wish to create</li>   <li>&nbsp;Set either 'Repeat end date' or 'Count' to determine the how many repeating events will be created (you can only set one of these parameters).&nbsp; If you want the pattern to be indefinite, then leave both of these settings empty.</li>   <li>Set any other parameters for the repeat pattern</li>   <li>Set any exception dates to the pattern using the exception editor.&nbsp; Exception dates are dates where a repeat event will not be created even if it falls within the repeat sequence<br />   </li> <li>You can't create repeat events in the past--if you set a sequence starting in the past, it will begin to render on the current date (or possibly the day before)</li> </ol> <p> Except for the Count parameter, all other parameters operate as follows:<br /> </p><p>Multiple selections within the same parameter use an OR comparison for determining the pattern (ex. Monday OR Tuesday OR Wednesday).&nbsp; Choosing multiple parameters uses an AND comparison between the parameters (ex. on Monday AND in March).</p><p><br /> So, setting the days parameter to Monday, Wednesday--and the month parameter to July, August would result in this comparison logic: </p><p>Occurs on (Monday OR Wednesday) AND (July OR August)&nbsp;</p> <p>Eventrepeat's pattern creation was largely modeled on the iCal RRULE specification.&nbsp; At this time, it should support all RRULE parameters, with the following exceptions:</p>  <ol>   <li>Recurrance periods less than DAILY<br />   </li>   <li>BYDAY declarations greater than 5 and less than -5 (ex. 20th Monday of the year is not supported).&nbsp; Other similar patterns can be built that should approximate this functionality.</li>   <li>BYSETPOS parameter<br />   </li> <li>EXRULE parameter<br />   </li> </ol> <p> </p><p>&nbsp;</p> <p>&nbsp;</p> <blockquote> <p> </p></blockquote>");
+  }
+}
+
+/**
+ * Implementation of hook_menu()
+ *
+ * @ingroup eventrepeat_core
+ * @param $may_cache A boolean indicating whether cacheable menu items should be returned.
+ * @return An array of menu items. Each menu item is an associative array.
+ */
+function eventrepeat_menu($may_cache) {
+
+  $items = array();
+  if ($may_cache) {
+
+    //settings page, and user help page
+    $items[] = array('path' => 'admin/settings/event/eventrepeat', 'title' => t('repeat'),
+      'callback' => '_eventrepeat_settings_page', 'access' => user_access('access administration pages'));
+    $items[] = array('path' => 'repeat/help', 'title' => t('repeat help'),
+          'callback' => '_eventrepeat_user_help','access' => user_access('create repeat events'), 'type' => MENU_CALLBACK);
+  }
+  else {
+
+    //if it's a node edit or repeat page, check to make sure the node type is is event & eventrepeat enabled
+    //if so, display the repeat tab
+  	if (arg(0) == 'node' && is_numeric(arg(1))) {
+  	  $node = node_load(array('nid'=>arg(1)));
+      if (variable_get('event_nodeapi_'. $node->type, 'never') != 'never' &&
+        variable_get('eventrepeat_nodeapi_'. $node->type, 0)==1) {
+
+        $items[] = array('path' => 'node/'. arg(1) .'/repeat', 'title' => t('repeat'),
+          'callback' => '_eventrepeat_form', 'callback arguments' => array($node),
+          'access' => user_access('create repeat events'), 'type' => MENU_LOCAL_TASK, 'weight' => 20);
+      }
+  	}
+  }
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_perm().
+ * @ingroup eventrepeat_core
+ */
+function eventrepeat_perm() {
+  return array('create repeat events');
+}
+
+/**
+ * @defgroup eventrepeat_nodeapi Functions for nodeapi integration
+ */
+
+/**
+ * hook_nodeapi implementation
+ *
+ * @ingroup eventrepeat_nodeapi
+ * @param &$node The node the action is being performed on.
+ * @param $op What kind of action is being performed.
+ * @return This varies depending on the operation.
+ */
+function eventrepeat_nodeapi(&$node, $op) {
+
+  global $form_values;
+
+  //this holds the old start time of an event, for use in mass updates
+  static $old_times;
+
+  //for all ops except settings, make sure that the node is event & eventrepeat enabled before executing
+  switch ($op) {
+    case 'delete':
+      static $mass_delete;
+      if (variable_get('event_nodeapi_'. $node->type, 'never') != 'never' &&
+        variable_get('eventrepeat_nodeapi_'. $node->type, 0) == 1) {
+
+        //determine what kind of delete we're doing here.  check $form_values to see if it's a mass delete
+        //and mark it as such if so.  otherwise just delete the node from the detail table
+        if ($form_values['eventrepeat_delete_type'][$node->nid] &&
+          $form_values['eventrepeat_delete_type'][$node->nid] != 'this') {
+
+          $mass_delete = TRUE;
+          _eventrepeat_delete_nodes($form_values['eventrepeat_delete_type'][$node->nid], $node);
+          //this line necessary to clean up mods after eventrepeat
+          node_invoke_nodeapi($node, 'delete');
+        } else {
+          db_query("DELETE FROM {event_repeat_nodes} WHERE nid = %d", $node->nid);
+
+          //if not a mass delete, check to see if this is the last repeat event in this sequence.  if so, then
+          //delete the sequence
+          if (!$mass_delete) {
+            if (!db_num_rows(db_query('SELECT rid FROM {event_repeat_nodes} WHERE rid = %d', $node->eventrepeat_rid))) {
+              db_query("DELETE FROM {event_repeat} WHERE rid = %d", $node->eventrepeat_rid);
+            }
+          }
+        }
+
+      }
+      break;
+    /*
+
+    THIS SECTION IS ON HOLD UNTIL DELETE PRE IS IN CORE
+
+      case 'delete pre':
+
+      //also check here to see if the node is part of a repeat sequence
+      if (variable_get('event_nodeapi_'. $node->type, 'never') != 'never' &&
+        (variable_get('eventrepeat_nodeapi_'. $node->type, 0) == 1) && $node->eventrepeat_rid) {
+
+        //create the option array
+        $options = array('this' => t('This occurance only'),
+        'future' => t('This occurance and all future occurances'),
+        'all' => t('All occurances')
+        );
+
+        //construct the radio buttons.  NOTE: in order to prevent name collisions in the admin
+        //delete process for multiple nodes, these form elements are named in array fashion, with nid to distinguish
+        //the elements of the array
+        $data_to_inject['eventrepeat_delete_type']['#tree'] = TRUE;
+        $data_to_inject['eventrepeat_delete_type'][$node->nid] = array('#type' => 'radios', '#title' => t('Repeat event--delete the following'), '#default_value' => 'this', '#options' => $options, '#description' => t('\'This occurance and all future occurances\' will delete repeat events from the date of the selected node forward, \'All occurances\' will delete repeat events after today\'s date.'));
+        return $data_to_inject;
+      }
+      break;*/
+
+    case 'load':
+
+      if (variable_get('event_nodeapi_'. $node->type, 'never') != 'never') {
+
+        //if the old start time hasn't been saved to the update code yet, then save it.  this is a total hack,
+        //but i don't know any other way to do it
+        if (!$old_times && $_POST['op'] == t('Submit')) {
+          $old_times = db_query('SELECT e.event_start, e.event_end, timezone FROM {event} e WHERE e.nid = %d', $node->nid);
+          if (db_num_rows($old_times)) {
+            $old_times = db_fetch_object($old_times);
+            $old_times->eventrepeat_old_times = TRUE;
+            _eventrepeat_update_nodes($old_times, NULL);
+          }
+        }
+
+        //if it's a repeat node, grab the repeat data for the node
+        if (variable_get('eventrepeat_nodeapi_'. $node->type, 0) == 1) {
+          $object = db_fetch_object(db_query('SELECT e_r.rid, repeat_RRULE, repeat_end
+            FROM {event_repeat} e_r INNER JOIN {event_repeat_nodes} e_r_n ON
+            e_r.rid = e_r_n.rid WHERE e_r_n.nid = %d', $node->nid));
+
+          //if this node is in a repeat sequence, parse the RRULE, and return repeat data to the node
+          if ($object->rid) {
+
+            //append the repeat tag to the title if it's an event page
+            if (arg(0) == 'event') {
+              $node->title = theme("eventrepeat_title_tag", $node->title);
+            }
+            $items = _eventrepeat_parse_ical($object->repeat_RRULE);
+            return array('eventrepeat_rid' => $object->rid,
+                         'eventrepeat_FREQ' => $items[0]['FREQ'],
+                         'eventrepeat_COUNT' => $items[0]['COUNT'],
+                         'eventrepeat_INTERVAL' => $items[0]['INTERVAL'],
+                         'eventrepeat_BYDAY' => $items[0]['BYDAY'],
+                         'eventrepeat_BYWEEKNO' => $items[0]['BYWEEKNO'],
+                         'eventrepeat_BYMONTH' => $items[0]['BYMONTH'],
+                         'eventrepeat_BYMONTHDAY' => $items[0]['BYMONTHDAY'],
+                         'eventrepeat_BYYEARDAY' => $items[0]['BYYEARDAY'],
+                         'eventrepeat_EXDATE' => $items[0]['EXDATE'],
+                         'eventrepeat_endyear' => $object->repeat_end ? _event_date('Y', $object->repeat_end) : 0,
+                         'eventrepeat_endmonth' => $object->repeat_end ? _event_date('m', $object->repeat_end) : 0,
+                         'eventrepeat_endday' => $object->repeat_end ? _event_date('d', $object->repeat_end) : 0
+            );
+          }
+        }
+      }
+      break;
+
+    case 'update':
+      if (variable_get('event_nodeapi_'. $node->type, 'never') != 'never' &&
+        variable_get('eventrepeat_nodeapi_'. $node->type, 0) == 1) {
+
+        //determine what kind of update we're doing here.  it's either all (from current date
+        //forward), future (current node and all future nodes) or just an individual node update
+        //pass all and future to the mass edit code
+        if ($form_values['eventrepeat_edit_type'] == 'future') {
+          _eventrepeat_update_nodes($node, $node->event_start);
+        } elseif ($form_values['eventrepeat_edit_type'] == 'all') {
+          _eventrepeat_update_nodes($node, time());
+        } elseif ($node->eventrepeat_edit_type == 'this') {
+
+          //if it's an individual edit, and admin has selected that they are to be removed from sequences,
+          //then delete from detail table
+          if (!variable_get('eventrepeat_single_edit_in_sequence', FALSE)) {
+            db_query("DELETE FROM {event_repeat_nodes} WHERE nid = %d", $node->nid);
+          }
+        }
+      }
+      break;
+      case 'view':
+      if (variable_get('event_nodeapi_'. $node->type, 'never') != 'never' &&
+        variable_get('eventrepeat_nodeapi_'. $node->type, 0) == 1 && !$node->eventrepeat_rid &&
+        user_access('create repeat events') && arg(0) == 'node' && arg(2) == 'repeat') {
+
+        $node->body .= t('Need help creating a repeat pattern? Click ') . l(t('here'), 'repeat/help');
+      }
+      break;
+  }
+}
+
+/**
+ * @defgroup eventrepeat_event Functions which use hooks in event.module
+ */
+
+/**
+ * hook_event_edit_upcoming implementation
+ *
+ * @ingroup eventrepeat_event
+ * @param $node The node the action is being performed on (not a full node).
+ * @return None--edits are made directly to the $node object prior to rendering
+ */
+function eventrepeat_event_edit_upcoming(&$node) {
+
+  //if this node appears in the detail table, then add the repeat tag to it
+  if (db_num_rows(db_query('SELECT nid FROM {event_repeat_nodes} WHERE nid = %d', $node->nid))) {
+    $node->title = theme("eventrepeat_title_tag", $node->title);
+  }
+}
+
+/**
+ * hook_event_load implementation
+ *
+ * @ingroup eventrepeat_event
+ * @param $year The year of the rendered calendar view.
+ * @param $month The month of the rendered calendar view.
+ * @param $day The day of the rendered calendar view. No leading zeroes.
+ * @param $view The calendar view being rendered
+ * @param $types unused
+ * @param $terms unused
+ * @return None--allows for node creation which only.
+ */
+function eventrepeat_event_load($year, $month, $day, $view, $types, $terms) {
+
+  //only should be run once per page call
+  static $execute;
+  if (!$execute) {
+    $execute = 1;
+
+    //default $view to either the default view setting, or 'month' if it's not set
+    $view = $view ? $view : variable_get('event_overview', 'month');
+
+    //first thing is to determine the exact range that's going to be rendered, and calculate start and end timestamps
+    $calendar_period_start = _event_mktime(23, 59, 59, $month, $day, $year);
+    switch ($view) {
+      case 'day':
+        $endtime = $calendar_period_start;
+        break;
+      case 'week':
+
+        //calculate the end of the week (not perfect, but close enough!)
+        $endtime = $calendar_period_start + (86400*7);
+        break;
+      case 'month':
+
+        //generate the end date based on number of days in the month
+        $endtime = gmmktime(23, 59, 59, $month, gmdate('t', $calendar_period_start), $year);
+        break;
+      case ('table'):
+      case ('list'):
+
+        //table/list end is simply the start day of the viewing period plus the event_table_duration.  if duration
+        //is specified as an argument, then make sure it's not longer than a year.  if not, then just use the
+        //table duration default or 30 days
+        $duration = arg(6);
+        $numberofdays = $duration && $duration < 366 ? $duration : variable_get('event_table_duration', '30');
+        $endtime = gmmktime(23, 59, 59, $month, $day + $numberofdays, $year);
+        break;
+      default:
+        return;
+    }
+
+    //check here to see if the user is viewing a date outside of the rendering range. if so, warn and exit
+    $curtime = time();
+    $curtime_end = gmmktime(23, 59, 59, (int) gmdate('n', $curtime), (int) gmdate('j', $curtime),
+      (int) gmdate('Y', $curtime));
+    $render_support = $curtime_end + (variable_get('eventrepeat_render_support', 2000) * 86400);
+    if ($endtime > $render_support) {
+      drupal_set_message(t('This calendar view is outside of the range of repeat event support'));
+      return;
+    }
+
+    //check here to see if the calendar is outside of the initial render range. if so, then render all repeat
+    //sequences through the end time of the calendar period
+    $past_initial_render = $curtime_end - 86400 + (variable_get('eventrepeat_initial_render', 90) * 86400);
+    if ($endtime > $past_initial_render) {
+      _eventrepeat_render_nodes('all', $endtime, FALSE, FALSE, FALSE);
+    }
+  }
+}
+
+/**
+ * @defgroup eventrepeat_support Functions that support the eventrepeat system
+ */
+
+/**
+ * Helper function that corrects for date GMT date changes based on timezone
+ *
+ * @ingroup eventrepeat_support
+ * @param $starthour The start hour of the event.
+ * @param $startminute The start minute of the event.
+ * @param $offset The timezone offset of the event.
+ * @return Day offset in seconds.
+ */
+function _eventrepeat_day_correction($starthour, $startminute, $offset) {
+
+  //if the GMT day for the event falls on a different day than the local day, we have to account for that
+  //since the event_repeat_calendar map table has all of it's day info in GMT
+  //here we check that by adding the timezone offset to the starthour--if the result is less than zero, then
+  //we need to add a day to the rendering date, and if it's greater than 24, we need to subtract a day from the
+  //rendering date
+  if ($offset > 0) {
+    $day_offset = (((($starthour * 3600) + ($startminute * 60)) + $offset) > 86400) ? -86400 : 0;
+  } elseif ($offset < 0) {
+    $day_offset = (((($starthour * 3600) + ($startminute * 60)) + $offset) < 0) ? 86400 : 0;
+  } else {
+    $day_offset = 0;
+  }
+
+  return $day_offset;
+}
+
+/**
+ * Helper function that gives information on the number of each of the days in the month for each of the seven days
+ *
+ * @ingroup eventrepeat_support
+ * @param $master_day The day of the week of the first day of the month.
+ * @param $days_in_month The number of days in the month.
+ * @return An array in the same order as the days of the week (Sun-Sat), with values of 0 for days of the week with 4 occurances, and 1 for days of the week with 5 occurances.
+ */
+function _eventrepeat_day_in_month_incrementer($master_day, $days_in_month) {
+
+  //some days of the week in a month occur 4 times, and some occur 5 times.  here we're building an array that will
+  //store data of this kind for the current month.  any days of the week that occur five times in the month are given
+  //a value of 1 in this array, so that the $master_day_in_month_R counter can be adjusted correctly for these days
+  $day_in_month_incrementer = array(0,0,0,0,0,0,0);
+  for ($i = 29; $i <= $days_in_month; $i++) {
+    $day_in_month_incrementer[$master_day] = 1;
+    $master_day == 6 ? $master_day = 0 : $master_day++;
+  }
+  return $day_in_month_incrementer;
+}
+
+/**
+ * Helper function that handles mass deletion of nodes in a repeat sequence
+ *
+ * @ingroup eventrepeat_support
+ * @param $op The operation to be performed (either 'this', 'all', or 'future').
+ * @param $node The root node which the mass delete operation is based on.
+ * @return None.
+ */
+function _eventrepeat_delete_nodes($op, $node) {
+
+  global $form_values;
+
+  //unset eventrepeat_delete_type for this nid to prevent this function from being called mutliple times
+  //also set the current GMT timestamp
+  unset($form_values['eventrepeat_delete_type'][$node->nid]);
+  $curtime = time();
+
+  //delete the entry in the repeat_nodes table for the current node being deleted
+  db_query("DELETE FROM {event_repeat_nodes} WHERE nid = %d", $node->nid);
+
+  //set the proper timestamp for the nodes to delete query.  for 'all' this will be from the current
+  //date forward, and for 'future', it will be from the node's event->start time--if this is an update
+  //delete, it will be just after the passed in update end time
+  if ($op == 'all') {
+    $timestamp = $curtime;
+  } elseif ($op == 'future') {
+    $timestamp = $node->event_start;
+  }
+
+  //pull all of the nids for nodes that are to be deleted from this sequence
+  $result = db_query("SELECT e_r_n.nid FROM {event_repeat_nodes} e_r_n INNER JOIN {event} e ON
+    e_r_n.nid = e.nid WHERE e_r_n.rid = %d AND e.event_start >= %d", $node->eventrepeat_rid, $timestamp);
+
+  //loop through the nids,  calling node_delete for all nodes in the result set
+  if (db_num_rows($result)) {
+    while ($node_to_delete = db_fetch_object($result)) {
+      node_delete($node_to_delete->nid);
+    }
+  }
+
+  //pull the start times for the remaining nodes in this repeat sequence
+  $result = db_query("SELECT e.event_start FROM {event_repeat_nodes} e_r_n INNER JOIN {event} e ON
+    e_r_n.nid = e.nid WHERE e_r_n.rid = %d ORDER BY e.event_start DESC", $node->eventrepeat_rid);
+
+  if (db_num_rows($result)) {
+
+    //there are still nodes in the repeat sequence--in this case we want to keep the repeat sequence intact
+    //since it may still need to be mass edited/deleted, but we also want to end creation of any new nodes,
+    //so here we grab the start date of the latest node in the sequence and set the end date of the sequence equal
+    //to it.
+    $last_rendered = db_fetch_object($result);
+    $last_rendered = gmmktime(23, 59, 59, (int) gmdate('n', $last_rendered->event_start), (int) gmdate('j',
+      $last_rendered->event_start), (int) gmdate('Y', $last_rendered->event_start));
+    db_query("UPDATE {event_repeat} SET repeat_end = %d, repeat_last_rendered = %d WHERE rid = %d",
+      $last_rendered, $last_rendered, $node->eventrepeat_rid);
+  } else {
+
+    //no nodes left in the sequence, so delete the repeat data
+    db_query("DELETE FROM {event_repeat} WHERE rid = %d", $node->eventrepeat_rid);
+  }
+}
+
+/**
+ * Generates the repeat setting form under the repeat tab, and saves repeat data to the repeat tables.
+ *
+ * @ingroup eventrepeat_support
+ * @param $node The root node which the repeat sequence will be generated from.
+ * @return Fully themed page containing the repeat setting form.
+ */
+function _eventrepeat_form($node) {
+
+  $edit = $_POST['edit'];
+
+    //link to user help for repeat patterns
+    $form['help'] = array('#type' => 'markup', '#value' => t('Need help creating a repeat pattern? Click ') . l(t('here'), 'repeat/help') . t('<br>NOTE: Editing an existing repeat pattern maps previously created events to the new pattern, in sequential order, on all dates from the date where the edit is performed.'));
+
+    //FREQ param select box
+    $options = array(
+      'NONE' => t('none'),
+      'DAILY' => t('Daily'),
+  	  'WEEKLY' => t('Weekly'),
+  	  'MONTHLY' => t('Monthly'),
+  	  'YEARLY' => t('Yearly')
+    );
+    $form['eventrepeat_FREQ'] = array('#type' => 'select', '#title' => t('Repeat type'), '#default_value' => ($edit ? $edit['eventrepeat_FREQ'] : ($node->eventrepeat_FREQ ? $node->eventrepeat_FREQ : 'NONE')), '#options' => $options, '#description' => t('select \'none\' to disable repeats for this event'));
+
+    //put end controls in a group to make them less confusing
+    $form['end_controls'] = array('#type' => 'fieldset', '#title' => t('End Settings'), '#description' => t('Select only one of the above end parameters'));
+
+    //date box for end date
+    $form['end_controls']['end_date'] = array('#type' => 'eventrepeat_date', '#title' => t('Repeat end date'), '#process' => array('_eventrepeat_form_date' => array($edit, $node, 'eventrepeat_end')));
+
+    $form['end_controls']['or'] = array('#type' => 'markup', '#value' => '<b>---' . t('OR') . '---</b>');
+
+    //COUNT param select box
+    $options = array (0 => '--'.t('Select'.'--'));
+    for ($i = 2; $i <= 100; $i++) {
+      $options[$i] = $i;
+    }
+    $form['end_controls']['eventrepeat_COUNT'] = array('#type' => 'select', '#title' => t('Count'), '#default_value' => $edit ? $edit['eventrepeat_COUNT'] : ($node->eventrepeat_COUNT ? $node->eventrepeat_COUNT : 0), '#options' => $options, '#description' => t('Determines the number of repeat nodes that will be created for the repeat sequence'));
+
+    //INTERVAL param select box
+    $options = array ();
+    for ($i = 1; $i <= 60; $i++) {
+      $options[$i] = $i;
+    }
+    $form['eventrepeat_INTERVAL'] = array('#type' => 'select', '#title' => t('Interval'), '#default_value' => $edit ? $edit['eventrepeat_INTERVAL'] : ($node->eventrepeat_INTERVAL ? $node->eventrepeat_INTERVAL : 1), '#options' => $options, '#description' => t('Frequency of repeat: 1 = every, 2 = every other, 3 = every 3rd, etc.'));
+
+    //set days of the week array, and copy it into $DOW
+    $options = array(
+      'SU' => t('Sunday'),
+      'MO' => t('Monday'),
+      'TU' => t('Tuesday'),
+      'WE' => t('Wednesday'),
+      'TH' => t('Thursday'),
+      'FR' => t('Friday'),
+      'SA' => t('Saturday')
+    );
+    $DOW = $options;
+
+    //set the count options array
+    $DOWCount = array(
+      '1' => t('1st'),
+      '2' => t('2nd'),
+      '3' => t('3rd'),
+      '4' => t('4th'),
+      '5' => t('5th'),
+      '-1' => t('Last'),
+      '-2' => t('Next to Last'),
+      '-3' => t('2nd from Last'),
+      '-4' => t('3rd from Last'),
+      '-5' => t('4th from Last')
+    );
+
+    //loop through each day of the week, looping through each count option, and build an array of all combinations
+    foreach ($DOW as $DOWkey => $DOWvalue) {
+      foreach ($DOWCount as $Countkey => $Countvalue) {
+        $options[$Countkey.$DOWkey] = $Countvalue.' '.$DOWvalue;
+      }
+    }
+
+    //BYDAY param select box
+    $form['eventrepeat_BYDAY'] = array('#type' => 'select', '#title' => t('Day(s)'), '#default_value' => $edit ? $edit['eventrepeat_BYDAY'] : ($node->eventrepeat_BYDAY ? $node->eventrepeat_BYDAY : ''), '#options' => $options, '#description' => t('Determines what day(s) of the week/month this event repeats on (by day of the week).  Lots of options available, scroll down!'), '#attributes' => array('size' => '7'), '#multiple' => TRUE);
+
+    //BYMONTH param select box
+    $options = array(
+      1 => t('January'),
+      2 => t('February'),
+  	  3 => t('March'),
+  	  4 => t('April'),
+  	  5 => t('May'),
+  	  6 => t('June'),
+  	  7 => t('July'),
+  	  8 => t('August'),
+  	  9 => t('September'),
+  	  10 => t('October'),
+  	  11 => t('November'),
+  	  12 => t('December'),
+  	);
+  	$form['eventrepeat_BYMONTH'] = array('#type' => 'select', '#title' => t('Month(s)'), '#default_value' => $edit ? $edit['eventrepeat_BYMONTH'] : ($node->eventrepeat_BYMONTH ? $node->eventrepeat_BYMONTH : ''), '#options' => $options, '#description' => t('Selects what month(s) of the year this event repeats on'), '#multiple' => TRUE);
+
+    //BYMONTHDAY param select box
+    $options = array ();
+    for ($i = 1; $i <= 31; $i++) {
+      $options[$i] = $i;
+    }
+    for ($i = -1; $i >= -31; $i--) {
+      $options[$i] = $i;
+    }
+    $form['eventrepeat_BYMONTHDAY'] = array('#type' => 'select', '#title' => t('Day(s) of the Month'), '#default_value' => $edit ? $edit['eventrepeat_BYMONTHDAY'] : ($node->eventrepeat_BYMONTHDAY ? $node->eventrepeat_BYMONTHDAY : ''), '#options' => $options, '#description' => t('Determines what day(s) of the month this event repeats on (the actual day number in the month).  Negative numbers count from the end of the month.'), '#multiple' => TRUE);
+
+    //BYYEARDAY param select box
+    $options = array ();
+    for ($i = 1; $i <= 366; $i++) {
+      $options[$i] = $i;
+    }
+    for ($i = -1; $i >= -366; $i--) {
+      $options[$i] = $i;
+    }
+    $form['eventrepeat_BYYEARDAY'] = array('#type' => 'select', '#title' => t('Day(s) of the Year'), '#default_value' => $edit ? $edit['eventrepeat_BYYEARDAY'] : ($node->eventrepeat_BYYEARDAY ? $node->eventrepeat_BYYEARDAY : ''), '#options' => $options, '#description' => t('Determines what day(s) of the year this event repeats on.  Negative numbers count from the end of the year.'), '#multiple' => TRUE);
+
+    //BYWEEKNO param select box
+    $options = array ();
+    for ($i = 1; $i <= 54; $i++) {
+      $options[$i] = $i;
+    }
+    for ($i = -1; $i >= -54; $i--) {
+      $options[$i] = $i;
+    }
+    $form['eventrepeat_BYWEEKNO'] = array('#type' => 'select', '#title' => t('Week Number(s)'), '#default_value' => $edit ? $edit['eventrepeat_BYWEEKNO'] : ($node->eventrepeat_BYWEEKNO ? $node->eventrepeat_BYWEEKNO : ''), '#options' => $options, '#description' => t('Selects what week(s) of the year this event repeats on'), '#multiple' => TRUE);
+
+    //if there's any exception date data, display it
+    if ($node->eventrepeat_EXDATE) {
+
+      //calculate the hour, minute, and duration for the new node
+      $starthour = (int) gmdate("G", $node->event_start);
+      $startminute = (int) gmdate("i", $node->event_start);
+
+      //correct for GMT day offsets based on timezone
+      $day_offset = _eventrepeat_day_correction($starthour, $startminute, $node->start_offset);
+
+
+      //parse out the individual exception dates, and put them in human-readable format
+      $form['current_exceptions'] = array('#type' => 'markup', '#value' => '<b>'.t('Current Exceptions').':</b><br>');
+      $EXDATE = explode(',', $node->eventrepeat_EXDATE);
+      foreach ($EXDATE as $key => $value) {
+        $form[$value] = array('#type' => 'markup', '#value' => _event_date('F jS, Y', $value - $day_offset).'<br>');
+      }
+    }
+
+    //exception editor date box
+    $form['exception_editor'] = array('#type' => 'eventrepeat_date', '#title' => t('Exception Editor'), '#process' => array('_eventrepeat_form_date' => array(NULL, NULL, 'eventrepeat_EXDATE_edit')), '#description' => t('Enter exception dates here (dates that will not be rendered as part of the repeat sequence).  If you wish to delete an already existing exception, enter the date again. Don\'t forget to press the \'Submit\' button after editing the exception dates!'));
+
+    //rid, translated exception dates, and submit button
+    $form['eventrepeat_rid'] = array('#type' => 'value', '#value' => $rid ? $rid : $node->eventrepeat_rid);
+    $form['eventrepeat_EXDATE'] = array('#type' => 'hidden', '#value' => $edit ? $edit['eventrepeat_EXDATE'] : ($node->eventrepeat_EXDATE ? $node->eventrepeat_EXDATE : ''));
+    $form['node'] = array('#type' => 'value', '#value' => $node);
+    $form['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+
+    drupal_set_title(t('Repeat settings: %title<br>%event_start', array('%title' => $node->title,
+      '%event_start' => $node->start_format)));
+    return drupal_get_form('_eventrepeat_form', $form);
+}
+
+/**
+ * Constructs the time select boxes.
+ *
+ * @ingroup eventrepeat_support
+ * @param $element the form element to be expanded
+ * @return A form array containing a set of select boxes that contain options for month, day, year
+ */
+function _eventrepeat_form_date($element, $edit = NULL, $node = NULL, $prefix = NULL) {
+
+  //get current year, and drop next 10 years into an array
+  $date = getdate(time());
+  $curyear = $date['year'];
+  $years = array(0 => '--'.t('Select').'--');
+  while ($i < 10) {
+    $years[$curyear + $i] = $curyear + $i;
+    $i++;
+  }
+
+  //months array
+  $months = array(
+  	'--'.t('Select').'--',
+    t('January'),
+    t('February'),
+    t('March'),
+    t('April'),
+    t('May'),
+    t('June'),
+    t('July'),
+    t('August'),
+    t('September'),
+    t('October'),
+    t('November'),
+    t('December')
+  );
+
+  //days array
+  $days = array(0 => '--'.t('Select').'--');
+  for ($i = 1; $i <= 31; $i++) {
+  	$days[$i] = $i;
+  }
+
+  //compose the select boxes, and add the exception editor button if necessary
+  $element[$prefix.'month'] = array('#type' => 'select', '#default_value' => $edit ? $edit[$prefix.'month'] : ($node->{$prefix.'month'} ? $node->{$prefix.'month'} : 0), '#options' => $months);
+  $element[$prefix.'day'] = array('#type' => 'select', '#default_value' => $edit ? $edit[$prefix.'day'] : ($node->{$prefix.'day'} ? $node->{$prefix.'day'} : 0), '#options' => $days);
+  $element['comma'] = array('#type' => 'markup', '#value' => ', ');
+  $element[$prefix.'year'] = array('#type' => 'select', '#default_value' => $edit ? $edit[$prefix.'year'] : ($node->{$prefix.'year'} ? $node->{$prefix.'year'} : 0), '#options' => $years);
+
+  if ($prefix == 'eventrepeat_EXDATE_edit') {
+    $element['exception_button'] = array('#type' => 'submit', '#value' => t('Add/Delete Exception'));
+  }
+
+  return $element;
+}
+
+/**
+ * Themes the time select boxes.
+ *
+ * @ingroup eventrepeat_support
+ * @param $element the form element to be themed
+ * @return HTML string containing a set of select boxes that contain options for month, day, year
+ */
+function theme_eventrepeat_date($element) {
+  return theme('form_element', $element['#title'], '<div class="container-inline">'. $element['#children']. '</div>', $element['#description'], $element['#id'], $element['#required'], $element['#error']);
+}
+
+/**
+ * Executes the repeat form
+ *
+ * @ingroup eventrepeat_support
+ * @param $form_id The ID of the form being submitted.
+ * @param $form_values The constructed form values array of the submitted form.
+ */
+function _eventrepeat_form_submit($form_id, $form_values) {
+  $op = $_POST['op'];
+  $node = $form_values['node'];
+
+  //calculate the hour, minute, duration, and offset for the node
+  $starthour = (int) gmdate("G", $node->event_start);
+  $startminute = (int) gmdate("i", $node->event_start);
+  $duration = $node->event_end - $node->event_start;
+
+  //correct for GMT day offsets based on timezone
+  $day_offset = _eventrepeat_day_correction($starthour, $startminute, $node->start_offset);
+
+  //exceptions were added/deleted
+  if ($op == t('Add/Delete Exception')) {
+
+    //modify the exception date for timezone offsets
+    $form_values['eventrepeat_EXDATE_edit'] = $form_values['eventrepeat_EXDATE_edit'] + $day_offset;
+
+    //if there are already exceptions entered, we're going to compare those with the new exception to be added.
+    //if it's a match w/ any of the existing exceptions, then remove it from the exception list instead of
+    //adding it, if not then add it to the exception list, then reorder the list by date.  if this is the
+    //first exception being added, then simply add it
+    $exceptions = $form_values['eventrepeat_EXDATE'] ? explode(',', $form_values['eventrepeat_EXDATE']) : array();
+    if (in_array($form_values['eventrepeat_EXDATE_edit'], $exceptions)) {
+      $key = array_search($form_values['eventrepeat_EXDATE_edit'], $exceptions);
+      unset($exceptions[$key]);
+
+      //we've deleted an exception, so if this date is before the last rendered value, we need to add it back in
+      //query the calendar map table to see if this date needs to be added
+      if (_eventrepeat_render_nodes($node->eventrepeat_rid, NULL, TRUE, FALSE, 'date_stamp = '.
+        $form_values['eventrepeat_EXDATE_edit'])) {
+
+        //grab the repeat data for the node, and unserialize it
+        $repeat_data = db_fetch_object(db_query('SELECT repeat_data FROM {event_repeat} WHERE
+          rid = %d', $node->eventrepeat_rid));
+        $repeat_data = unserialize($repeat_data->repeat_data);
+
+        //set the event start and end times, accounting for possible day offsets from local to GMT
+        $repeat_data->event_start = _eventrepeat_start_time($form_values['eventrepeat_EXDATE_edit'], $starthour, $startminute);
+        $repeat_data->event_end = $repeat_data->event_start + $duration;
+
+        //unset nid to trigger new node insertion
+        unset($repeat_data->nid);
+
+        //save the new node
+        node_save($repeat_data);
+
+        //insert the newly created node into the repeat detail table
+        db_query("INSERT INTO {event_repeat_nodes} (rid, nid) VALUES (%d, %d)", $node->eventrepeat_rid,
+          $repeat_data->nid);
+      }
+    } else {
+      $exceptions[] = $form_values['eventrepeat_EXDATE_edit'];
+
+      //we need to check and see if any nodes have already been rendered for this exception date being added
+      //and delete if necessary
+
+      $node_to_delete = db_query("SELECT e_r_n.nid, e.event_start FROM {event_repeat_nodes} e_r_n INNER JOIN {event} e
+        ON e_r_n.nid = e.nid WHERE e_r_n.rid = %d AND e.event_start >= %d AND e.event_start <= %d",
+        $node->eventrepeat_rid, $form_values['eventrepeat_EXDATE_edit'] - 86399, $form_values['eventrepeat_EXDATE_edit']);
+      if (db_num_rows($node_to_delete)) {
+        $node_to_delete = db_fetch_object($node_to_delete);
+        node_delete($node_to_delete->nid);
+
+        //delete the entry in the repeat_nodes table for the current node being deleted
+        db_query("DELETE FROM {event_repeat_nodes} WHERE nid = %d", $node_to_delete->nid);
+      }
+    }
+    asort($exceptions);
+    $form_values['eventrepeat_EXDATE'] = implode(",", $exceptions);
+    $node->eventrepeat_EXDATE = implode(",", $exceptions);
+  }
+
+  //grab the RRULE data and put them into iCal RRULE format
+  $RRULE = 'RRULE:FREQ='.$form_values['eventrepeat_FREQ'];
+  if ((int) $form_values['eventrepeat_COUNT'] > 1) {
+    $RRULE .= ';COUNT='.$form_values['eventrepeat_COUNT'];
+  }
+  if ((int) $form_values['eventrepeat_INTERVAL' ] > 1) {
+    $RRULE .= ';INTERVAL='.$form_values['eventrepeat_INTERVAL'];
+  }
+  if ($form_values['eventrepeat_BYDAY']) {
+      $RRULE .= ';BYDAY='.implode(",", $form_values['eventrepeat_BYDAY']);
+  }
+  if ($form_values['eventrepeat_BYWEEKNO']) {
+    $RRULE .= ';BYWEEKNO='.implode(",", $form_values['eventrepeat_BYWEEKNO']);
+  }
+  if ($form_values['eventrepeat_BYMONTH']) {
+    $RRULE .= ';BYMONTH='.implode(",", $form_values['eventrepeat_BYMONTH']);
+  }
+  if ($form_values['eventrepeat_BYMONTHDAY']) {
+    $RRULE .= ';BYMONTHDAY='.implode(",", $form_values['eventrepeat_BYMONTHDAY']);
+  }
+  if ($form_values['eventrepeat_BYYEARDAY']) {
+    $RRULE .= ';BYYEARDAY='.implode(",", $form_values['eventrepeat_BYYEARDAY']);
+  }
+
+  //process the EXDATE values by looping through and recomposing them to iCal format
+  if ($form_values['eventrepeat_EXDATE']) {
+    $EXDATE = explode(',', $form_values['eventrepeat_EXDATE']);
+    foreach ($EXDATE as $key => $value) {
+      $EXDATE[$key] = gmdate("Ymd\THis\Z", $value);
+    }
+    $RRULE .= chr(13).chr(10).'EXDATE:'.implode(',', $EXDATE);
+  }
+
+  //the node already exists, so the already created nodes will need to be moved to accomodate the new pattern
+  if ($node->eventrepeat_rid) {
+
+    //save the new pattern's RRULE and end date, setting the last rendered value to the day before the end of the day
+    //of the node where the edit is being performed from--note we also have to account for timezone offset here
+    $last_rendered = gmmktime(23, 59, 59, (int) gmdate('n', $node->event_start), (int) gmdate('j',
+      $node->event_start), (int) gmdate('Y', $node->event_start)) - 86400 - $day_offset;
+    db_query("UPDATE {event_repeat} SET repeat_RRULE = '%s', repeat_end = %d, repeat_last_rendered = %d WHERE
+      rid = %d",$RRULE, $form_values['eventrepeat_end'], $last_rendered, $node->eventrepeat_rid);
+
+    //grab the next date to be rendered in the new sequence, and set the start date of the sequence to this timestamp
+    //we have to do this seperately so that the sequence start time can be reset to match this node--otherwise
+    //interval settings won't work properly.
+    $update_render_dates = _eventrepeat_render_nodes($node->eventrepeat_rid, NULL, $update = TRUE, $get_next = TRUE, FALSE);
+    if (db_num_rows($update_render_dates)) {
+      $update_render_dates = db_fetch_object($update_render_dates);
+      db_query("UPDATE {event_repeat} SET repeat_start = %d WHERE rid = %d",$update_render_dates->date_stamp,
+        $node->eventrepeat_rid);
+    }
+
+    //now that we've got the start time for the new sequence, pull the proper dates to render list.
+    $update_render_dates = _eventrepeat_render_nodes($node->eventrepeat_rid, NULL, $update = TRUE, FALSE, FALSE);
+
+    //pull all of the nids for nodes that are to be updated from this sequence, in chronological order
+    $old_render_dates = db_query("SELECT e_r_n.nid, e.event_start FROM {event_repeat_nodes} e_r_n INNER JOIN
+      {event} e ON e_r_n.nid = e.nid WHERE e_r_n.rid = %d AND e.event_start >= %d", $node->eventrepeat_rid,
+      $node->event_start);
+
+    if (db_num_rows($update_render_dates)) {
+
+      //loop through the new sequence, mapping the start/end dates from the old sequence to the new pattern
+      while (($new_date = db_fetch_object($update_render_dates)) && ($old_date = db_fetch_object($old_render_dates))) {
+
+        //here we generate new start and end timestamps for the node, based on present new render sequence
+        //and the start and end time of the node from which the edit is being performed, accounting for timezone
+        //offsets
+        $start_time = _eventrepeat_start_time($new_date->date_stamp, $starthour, $startminute) + $day_offset;
+        $end_time = $start_time + $duration;
+
+        //update the event start and end time
+        db_query("UPDATE {event} SET event_start = %d, event_end = %d WHERE nid = %d", $start_time, $end_time,
+          $old_date->nid);
+        $last_rendered = $new_date->date_stamp;
+      }
+
+      //update the last rendered value for the updated sequence
+      db_query("UPDATE {event_repeat} SET repeat_last_rendered = %d WHERE rid = %d", $last_rendered,
+        $node->eventrepeat_rid);
+
+      //still dates left to be rendered in this sequence, so make sure to render any that are within the
+      //initial rendering period
+      if ($new_date->date_stamp) {
+        $endtime = time() + (variable_get('eventrepeat_initial_render', 90) * 86400);
+        _eventrepeat_render_nodes($node->eventrepeat_rid, $endtime, FALSE, FALSE, FALSE);
+
+        //pull the start times for the remaining nodes in this repeat sequence and grab the latest one
+        $last_rendered = db_fetch_object(db_query("SELECT e.event_start FROM {event_repeat_nodes} e_r_n INNER JOIN
+        {event} e ON e_r_n.nid = e.nid WHERE e_r_n.rid = %d ORDER BY e.event_start DESC", $node->eventrepeat_rid));
+
+        //calculate the repeat_last_rendered value from the event start date
+        $endyear = (int) gmdate("Y", $last_rendered->event_start);
+        $endmonth = (int) gmdate("n", $last_rendered->event_start);
+        $endday = (int) gmdate("j", $last_rendered->event_start);
+        $last_rendered = gmmktime(23, 59, 59, $endmonth, $endday, $endyear);
+
+      //no new dates means that the sequence is completely rendered, so set last rendered to the sequence
+      //end date to close it
+      } else {
+        $last_rendered = $form_values['eventrepeat_end'];
+      }
+
+      //update the last rendered value for the updated sequence
+      db_query("UPDATE {event_repeat} SET repeat_last_rendered = %d WHERE rid = %d", $last_rendered,
+        $node->eventrepeat_rid);
+
+      //if any old dates are still remaining, they need to be deleted
+      while ($old_date = db_fetch_object($old_render_dates)) {
+        node_delete($old_date->nid);
+      }
+
+    //if no dates are returned, we're at the end of the sequence, so set the last rendered equal to the start date
+    } else {
+      db_query("UPDATE {event_repeat} SET repeat_last_rendered = %d WHERE rid = %d", $form_values['eventrepeat_end'],
+        $node->eventrepeat_rid);
+    }
+
+    drupal_set_message(t('repeat pattern updated--existing events have been mapped to the new pattern%add_delete',
+      array('%add_delete' => $add_delete)));
+
+  //new pattern creation
+  } else {
+
+    //calculate the repeat_last_rendered value from the event start date
+    $endyear = (int) gmdate("Y", $node->event_start);
+    $endmonth = (int) gmdate("n", $node->event_start);
+    $endday = (int) gmdate("j", $node->event_start);
+    $lastrendered = gmmktime(23, 59, 59, $endmonth, $endday, $endyear);
+
+    //insert the new repeat sequence into the event_repeat table, and save the current node to the
+    //detail table.  here we're also going to serialize the node data--we'll save
+    //this 'root node' data into the event_repeat table, and use it to generate future repeat nodes
+    $rid = db_next_id('event_repeat');
+    $repeat_data = serialize($node);
+    db_query("INSERT INTO {event_repeat} (rid, repeat_data, repeat_RRULE, repeat_COUNT_remaining,
+      repeat_start, repeat_end, repeat_last_rendered) VALUES (%d, '%s', '%s', %d, %d, %d, %d)", $rid,
+      $repeat_data, $RRULE, ($form_values['eventrepeat_COUNT'] == '0' ? 0 : (int) $form_values['eventrepeat_COUNT'] -  1),
+      $node->event_start, $form_values['eventrepeat_end'], $lastrendered);
+    db_query("INSERT INTO {event_repeat_nodes} (rid, nid) VALUES (%d, %d)",  $rid, $node->nid);
+
+    //since this repeat sequence has just been created, pass the sequence in for it's initial rendering cycle
+    //we're going to pass in the rid for this sequence to limit the rendering code to just this node for efficiency
+    $endtime = time() + (variable_get('eventrepeat_initial_render', 90) * 86400);
+    _eventrepeat_render_nodes($rid, $endtime, FALSE, FALSE, FALSE);
+    drupal_set_message(t('Repeat settings updated'));
+  }
+}
+
+/**
+ * Validates the repeat form
+ *
+ * @ingroup eventrepeat_support
+ * @param $form_id The ID of the form being validated.
+ * @param $form_values The constructed form values array of the submitted form.
+ */
+function _eventrepeat_form_validate($form_id, $form_values) {
+  $op = $_POST['op'];
+  $node = $form_values['node'];
+
+  //make sure a repeat type is selected
+  if ($form_values['eventrepeat_FREQ'] == 'NONE') {
+    form_set_error('eventrepeat_FREQ', t('You must select a Repeat Type in order to save the settings'));
+  }
+
+  //validate the repeat end date
+  _eventrepeat_validate_form_date('eventrepeat_end', 'Repeat end', $node);
+
+  //validate exception dates if submitted
+  if ($op == t('Add/Delete Exception')) {
+    _eventrepeat_validate_form_date('eventrepeat_EXDATE_edit', 'Exception', $node); //NEED TO ADD CHECK FOR 0 HERE
+  }
+
+  //warn if user entered values for both repeat end and COUNT
+  if ($form_values['eventrepeat_end'] && $form_values['eventrepeat_COUNT']) {
+    form_set_error('eventrepeat_end', t('\'Repeat end date\' and \'Count\' cannot both be set--select only one to
+      provide a valid end point for the sequence'));
+  }
+
+  //warn if user tries to edit a sequence based on COUNT--this is currently not supported
+  if ($node->eventrepeat_rid && $form_values['eventrepeat_COUNT']) {
+    form_set_error('eventrepeat_COUNT', t('Editing a sequence which uses the  \'Count\' parameter is not supported.
+      Delete the sequence and recreate it with the new parameters.'));
+  }
+}
+
+/**
+ * Parses the RRULE data into an array
+ *
+ * @ingroup eventrepeat_support
+ * @param $RRULE_data The RRULE data to be parsed.
+ * @param $array Operator which determines if array parameters will be returned as an array.
+ * @return The RRULE data parsed into an array.
+ */
+function _eventrepeat_parse_ical($RRULE_data, $array = 'yes') {
+
+  //parse the iCal repeat components--this is temp until ical.inc gets revamped so i can use it to do the parsing
+  //first, explode the RRULE and EXDATE apart
+  $items = array();
+  $RRULE = explode(chr(13).chr(10), $RRULE_data);
+
+  //explode the RRULE parameters
+  $RRULE[0] = explode(';', substr($RRULE[0], 6));
+
+  //here we're exploding each parameter, and checking to see whether the parameter values need to be exploded into an array or
+  //not.  this is done for efficiency's sake, as sometimes arrays aren't needed.  NOTE: code in the _eventrepeat_render_nodes
+  //function may need to be rewritten if this parser is scrapped for a generic drupal iCal parser at some point in the
+  //future
+  if ($array == 'yes') {
+    foreach ($RRULE[0] as $key => $value) {
+      $parameter = explode('=', $value);
+      $values = explode(',', $parameter[1]);
+
+      //determine whether the values need to be stored in an array or not
+      if ($parameter[0] == 'FREQ' ||  $parameter[0] == 'COUNT' || $parameter[0] == 'INTERVAL') {
+        $items[0][$parameter[0]] = $values[0];
+      } else {
+        $items[0][$parameter[0]] = $values;
+      }
+    }
+  } else {
+
+    //store values as a string
+    foreach ($RRULE[0] as $key => $value) {
+      $parameter = explode('=', $value);
+      $items[0][$parameter[0]] = $parameter[1];
+    }
+  }
+
+  //explode the EXDATE if it exists, convert to GMT, and implode
+  if ($RRULE[1]) {
+    $EXDATE = explode(',', substr($RRULE[1], 7));
+    foreach ($EXDATE as $key => $value) {
+      $EXDATE[$key] = gmmktime(23, 59, 59, substr($value, 4, 2), substr($value, 6, 2), substr($value, 0, 4));
+    }
+    $items[0]['EXDATE'] = implode(',', $EXDATE);
+  }
+  return $items;
+}
+
+/**
+ * Execute function for resetting the calendar map table
+ *
+ * @ingroup eventrepeat_support
+ * @param $form_id ID of the form
+ * @param $form_values The submitted form values
+ */
+function _eventrepeat_refresh_calendar_map_submit($form_id, $form_values) {
+
+  db_query('DELETE FROM {event_repeat_calendar_map}');
+  eventrepeat_cron();
+  drupal_set_message(t('The calendar mapping function has be reset.'));
+}
+
+/**
+ * Support function which renders new nodes in a repeat sequence
+ *
+ * @ingroup eventrepeat_support
+ * @param $rid Operator which determines if all repeat sequences should be rendered, or just one.
+ * @param $endtime Timestamp which is the end of the rendering cycle.
+ * @param $update Boolean indicating if this is a request for an update pattern.
+ * @param $get_next Boolean indicating if this is a request for the next date in an update pattern.
+ * @param $custom Custom addition to the where clause in place of the normal last rendered value.
+ * @return None.
+ */
+function _eventrepeat_render_nodes($rid = 'all', $endtime, $update = FALSE, $get_next = FALSE, $custom = FALSE) {
+
+  //if the view is set to 'initial render', then set $initial_render to restrict the query to only the repeat
+  //sequence requiring initial rendering--otherwise leave it empty.
+  if ($rid != "all" || $update) {
+    $where = "e_r.rid = ".$rid;
+  } else {
+    $where = "e_r.repeat_COUNT_remaining > -1 AND (e_r.repeat_last_rendered < e_r.repeat_end OR e_r.repeat_end = 0)";
+  }
+
+  //next we load all of the repeat patterns for which nodes may possibly need to be built
+  $repeatpatterns = db_query("SELECT e_r.rid, e_r.repeat_data, e_r.repeat_RRULE, e_r.repeat_COUNT_remaining,
+    e_r.repeat_start,  e_r.repeat_end, e_r.repeat_last_rendered FROM {event_repeat} e_r WHERE " . $where);
+
+  //no rows means we can exit the function now--no repeat patterns need to be rendered
+  if (db_num_rows($repeatpatterns) < 1) {
+    return;
+  } else {
+
+    //loop through each repeat pattern
+    while ($repeatpattern = db_fetch_array($repeatpatterns)) {
+
+      //load the root data that we'll be using for the repeats
+      $repeat_data = unserialize($repeatpattern['repeat_data']);
+
+      //parse out the RRULE for this sequence
+      $repeatpattern['repeat_RRULE'] = _eventrepeat_parse_ical($repeatpattern['repeat_RRULE']);
+
+      //calculate the start time and duration for all the repeat nodes we'll be creating
+      $days_of_week = array('SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA');
+      $starthour = (int) gmdate("G", $repeat_data->event_start);
+      $startminute = (int) gmdate("i", $repeat_data->event_start);
+      $duration = $repeat_data->event_end - $repeat_data->event_start;
+
+      //correct for GMT day offsets based on timezone
+      $day_offset = _eventrepeat_day_correction($starthour, $startminute, $repeat_data->start_offset);
+
+      //if FREQ is set to WEEKLY, MONTHLY, or YEARLY, and none of the BYDAY, BYMONTHDAY, or BYYEARDAY parameters
+      //are set, then this is one of the 'special case' settings
+      if ($repeatpattern['repeat_RRULE'][0]['FREQ'] != "DAILY" && !$repeatpattern['repeat_RRULE'][0]['BYDAY'] &&
+        !$repeatpattern['repeat_RRULE'][0]['BYMONTHDAY'] && !$repeatpattern['repeat_RRULE'][0]['BYYEARDAY']) {
+
+        //calculate the day of the week, month, and day of the month for the start date of this sequence
+        $BYDAY = (int) gmdate('w', ($repeat_data->event_start - $day_offset));
+        $BYMONTH = gmdate('n', ($repeat_data->event_start - $day_offset));
+        $BYMONTHDAY = gmdate('j', ($repeat_data->event_start - $day_offset));
+
+        //for weekly repeats, set the BYDAY parameter to the same day of the week as the start date for this sequence
+        if ($repeatpattern['repeat_RRULE'][0]['FREQ'] == "WEEKLY") {
+          $repeatpattern['repeat_RRULE'][0]['BYDAY'] = array($days_of_week[$BYDAY]);
+
+        //for monthly repeats, set the BYMONTHDAY parameter to the same day of the month as the start date for
+        //this sequence
+        } elseif ($repeatpattern['repeat_RRULE'][0]['FREQ'] == "MONTHLY") {
+          $repeatpattern['repeat_RRULE'][0]['BYMONTHDAY'] = array($BYMONTHDAY);
+
+        //for yearly repeats, set the BYMONTHDAY parameter to the same day of the month as the start date for
+        //this sequence, and set the BYMONTH parameter to the same month as the start date for this sequence
+        } elseif ($repeatpattern['repeat_RRULE'][0]['FREQ'] == "MONTHLY") {
+          $repeatpattern['repeat_RRULE'][0]['BYMONTHDAY'] = array($BYMONTHDAY);
+          $repeatpattern['repeat_RRULE'][0]['BYMONTH'] = array($BYMONTH);
+        }
+      }
+
+      //for each of the RRULE parameters, if they exist for this repeat pattern, add them to the WHERE clause
+      //of the calendar map table query
+      $where = array();
+
+      if ($repeatpattern['repeat_RRULE'][0]['BYDAY']) {
+        $BYDAY = _eventrepeat_stringifier($repeatpattern['repeat_RRULE'][0]['BYDAY']);
+        $where[] = "(day_of_week IN($BYDAY) OR day_in_month IN($BYDAY) OR day_in_month_R IN($BYDAY))";
+      }
+      if ($repeatpattern['repeat_RRULE'][0]['BYMONTHDAY']) {
+        $BYMONTHDAY = _eventrepeat_stringifier($repeatpattern['repeat_RRULE'][0]['BYMONTHDAY']);
+        $where[] = "(month_day IN($BYMONTHDAY) OR month_day_R IN($BYMONTHDAY))";
+      }
+      if ($repeatpattern['repeat_RRULE'][0]['BYMONTH']) {
+        $BYMONTH = _eventrepeat_stringifier($repeatpattern['repeat_RRULE'][0]['BYMONTH']);
+        $where[] = "(month IN($BYMONTH))";
+      }
+      if ($repeatpattern['repeat_RRULE'][0]['BYYEARDAY']) {
+        $BYYEARDAY = _eventrepeat_stringifier($repeatpattern['repeat_RRULE'][0]['BYYEARDAY']);
+        $where[] = "(year_day IN($BYYEARDAY) OR year_day_R IN($BYYEARDAY))";
+      }
+      if ($repeatpattern['repeat_RRULE'][0]['BYWEEKNO']) {
+        $BYWEEKNO = _eventrepeat_stringifier($repeatpattern['repeat_RRULE'][0]['BYWEEKNO']);
+        $where[] = "(week_number IN($BYWEEKNO) OR week_number_R IN($BYWEEKNO))";
+      }
+
+      //if the sequence has an INTERVAL parameter, then add the interval restriction to the where clause
+      //based on the set FREQ parameter (skip this for get next queries in the update cycle)
+      if (($interval = intval($repeatpattern['repeat_RRULE'][0]['INTERVAL'])) && !$get_next) {
+        $last_rendered = $repeatpattern['repeat_last_rendered'];
+        $last_rendered_formatted = gmdate('Y-m-d', $last_rendered);
+        switch ($repeatpattern['repeat_RRULE'][0]['FREQ']) {
+
+          //for all these cases, we're calculating the number of units (days, weeks, months, or years--depending
+          //on the case) between the last rendered node for this sequence, and the date being tested.  then, we
+          //divide the result by INTERVAL, and if there's no remainder, then we know we have reached the next
+          //rendering period for this sequence
+          case 'DAILY':
+            $where[] = "(((date_stamp - $last_rendered)/86400) % $interval = 0)";
+            break;
+
+          //for weekly, we have to calculate a start of the week for both the day being checked and the last
+          //rendered node, then use those respective week start timestamps to calculate the difference in the
+          //number of weeks
+          case 'WEEKLY':
+            $where[] = "(((($last_rendered - (DAYOFWEEK('$last_rendered_formatted')*86400)) - (date_stamp -  (DAYOFWEEK(day_stamp)*86400)))/604800) % $interval  = 0)";
+            break;
+          case 'MONTHLY':
+            $where[] = "((((YEAR(day_stamp) - YEAR('$last_rendered_formatted'))*12) + MONTH(day_stamp) - MONTH('$last_rendered_formatted')) % $interval = 0)";
+            break;
+          case 'YEARLY':
+            $where[] = "((YEAR(day_stamp) - YEAR('$last_rendered_formatted')) % $interval = 0)";
+            break;
+        }
+      }
+
+      //if there's an end date for this sequence, add it to the where clause
+      if ($repeatpattern['repeat_end'] != 0) {
+        $where[] = "date_stamp <= " . $repeatpattern['repeat_end'];
+      }
+
+      //include only dates that are greater than the last rendered date of this sequence (accounting for the determined
+      //$day_offset if necessary). if a custom last rendered value has been passed, use it instead
+      if ($custom) {
+        $where[] = $custom;
+      } else {
+        $where[] = "date_stamp > ". ($repeatpattern['repeat_last_rendered'] - $day_offset);
+      }
+
+      //if not an update insert the end of the rendering period (accounting for the determined $day_offset if necessary)
+      if (!$update) {
+        $endtime = (gmmktime(23, 59, 59, (int) gmdate('n', $endtime), (int) gmdate('j', $endtime), (int) gmdate('Y', $endtime)));
+        $where[] = "date_stamp <= ". ($endtime - $day_offset);
+      }
+
+      //eliminate any exception dates from the query
+      if ($repeatpattern['repeat_RRULE'][0]['EXDATE']) {
+        $where[] = "(date_stamp NOT IN(". $repeatpattern['repeat_RRULE'][0]['EXDATE'] ."))";
+      }
+
+      //grab all the possible nodes to render for this sequence from the calendar map table, using the
+      //constructed where clause
+      $nodes_to_render = db_query("SELECT date_stamp FROM {event_repeat_calendar_map} WHERE ". implode(' AND ', $where)
+        ." ORDER BY date_stamp");
+
+      //if this is an update request, then return the rendering pattern for the new sequence, or return
+      //NULL if no nodes are to be rendered
+      if ($update) {
+        return db_num_rows($nodes_to_render) ? $nodes_to_render : NULL;
+      }
+
+      //here we begin looping through the possible nodes to render.  if we've reached the number of nodes to be
+      //rendered in the remaining_COUNT field, then end the cycle
+      while (($date_to_render = db_fetch_object($nodes_to_render)) && !$end_count) {
+
+        //if we've rendered all nodes in a COUNT repeat sequence, then make sure no more nodes get rendered,
+        //and set $end_count to end this cycle--no need to keep looping if there are no more dates to check
+        //otherwise render the node
+        if ($repeatpattern['repeat_COUNT_remaining'] > -1) {
+
+          //unset nid to trigger new node insertion
+          unset($repeat_data->nid);
+
+          //set the event start and end times, accounting for possible day offsets from local to GMT
+          $repeat_data->event_start = _eventrepeat_start_time($date_to_render->date_stamp, $starthour, $startminute)
+            + $day_offset;
+          $repeat_data->event_end = $repeat_data->event_start + $duration;
+
+          //save the new node
+          node_save($repeat_data);
+
+          //insert the newly created node into the repeat detail table
+          db_query("INSERT INTO {event_repeat_nodes} (rid, nid) VALUES (%d, %d)",
+          $repeatpattern['rid'], $repeat_data->nid);
+
+          //update repeat last rendered for later saving to the repeat pattern
+          $repeatpattern['repeat_last_rendered'] = $date_to_render->date_stamp;
+
+          //here we're testing how many nodes are left to render, if the pattern is using COUNT.  if we've
+          //rendered the last one, then set COUNT to -1 (setting to -1 is done to avoid this pattern being
+          //mistakenly rendered as one w/ no end date--this check is done when loading the repeat patterns
+          //for the date range being rendered)
+          if ($repeatpattern['repeat_COUNT_remaining'] != 0) {
+            $repeatpattern['repeat_COUNT_remaining'] == $repeatpattern['repeat_COUNT_remaining'] > 1 ?
+            $repeatpattern['repeat_COUNT_remaining']-- : $repeatpattern['repeat_COUNT_remaining'] = -1;
+          }
+        } else {
+          $end_count = TRUE;
+        }
+      }
+
+      //we're at the end of the rendering cycle for this sequence, so update repeat_last_rendered
+      db_query("UPDATE {event_repeat} SET repeat_last_rendered = %d, repeat_COUNT_remaining = %d
+        WHERE rid = %d", $repeatpattern['repeat_last_rendered'], $repeatpattern['repeat_COUNT_remaining'],
+        $repeatpattern['rid']);
+
+      //now we need to run a check to see if this sequence should be closed.  run an update request based on the new
+      //last rendered value.  if no dates are returned, then close the sequence
+      $dates_to_render = _eventrepeat_render_nodes($repeatpattern['rid'], NULL, $update = TRUE, FALSE, FALSE);
+      $update = FALSE;
+      if (!$dates_to_render) {
+        db_query("UPDATE {event_repeat} SET repeat_last_rendered = %d WHERE rid = %d",
+          $repeatpattern['repeat_end'], $repeatpattern['rid']);
+      }
+    }
+  }
+}
+
+/**
+ * Prints the settings page under admin->settings->event->repeat
+ *
+ * @ingroup eventrepeat_support
+ */
+function _eventrepeat_settings_page() {
+
+  //print the settings forms
+  $output = '';
+  $form = array();
+  $form['eventrepeat_title_tag'] = array('#type' => 'textfield', '#title' => t('Title tag'), '#default_value' => variable_get('eventrepeat_title_tag', '[R]'), '#size' => 10, '#maxlength' => 10, '#description' => t('Enter a tag that will be prepended to all events in a repeat sequence--leave blank for no tag.'));
+  $form['eventrepeat_single_edit_in_sequence'] = array('#type' => 'checkbox', '#title' => t('Leave individual edits in sequence'), '#default_value' => variable_get('eventrepeat_single_edit_in_sequence', FALSE), '#description' => t('If selected, individually edited nodes will remain part of their repeat sequence<br>WARNING: Subsequent mass edits involving the individually edited node will overwrite the old data!'));
+  $form['eventrepeat_initial_render'] = array('#type' => 'textfield', '#title' => t('Initial render period'), '#default_value' => variable_get('eventrepeat_initial_render', 90), '#size' => 3, '#maxlength' => 3, '#description' => t('Initial period of time for which a repeat sequence is rendered upon it\'s creation--also the number of days from the current date that repeating nodes are automatically updated (events outside this range will only be rendered upon first viewing of a calendar period that contains them, up to the rendering support period). Default value is 90 days. Maximum allowed value is 730 days'));
+  $form['eventrepeat_render_support'] = array('#type' => 'textfield', '#title' => t('Render support period'), '#default_value' => variable_get('eventrepeat_render_support', 2000), '#size' => 5, '#maxlength' => 5, '#description' => t('Number of days from current date that repeat rendering is supported. Default is 2000 days, and it\'s recommended that this value be kept. Maximum allowed value is 10000.'));
+  $form['submit'] = array('#type' => 'submit', '#value' => t('Submit'));
+
+  $output .= drupal_get_form('_eventrepeat_settings_page', $form);
+
+  $form = array();
+  $form['eventrepeat_refresh_calendar_map'] = array('#type' => 'fieldset', '#title' => t('Reset calendar map'), '#description' => t('If for any reason repeating events are not mapping to the correct calendar dates, you may try to repair the functionality by resetting the calendar mapping function.  Note that this will not repair existing repeat sequences.'));
+  $form['eventrepeat_refresh_calendar_map']['submit'] = array('#type' => 'submit', '#value' => t('Reset'));
+
+  $output .= drupal_get_form('_eventrepeat_refresh_calendar_map', $form);
+
+  return $output;
+}
+
+/**
+ * Execute function for settings page form
+ *
+ * @ingroup eventrepeat_support
+ * @param $form_id ID of the form
+ * @param $form_values The submitted form values
+ */
+function _eventrepeat_settings_page_submit($form_id, $form_values) {
+
+  //set the submitted settings
+  variable_set('eventrepeat_title_tag', $form_values['eventrepeat_title_tag']);
+  variable_set('eventrepeat_single_edit_in_sequence', $form_values['eventrepeat_single_edit_in_sequence']);
+  if (is_numeric($form_values['eventrepeat_initial_render']) && (int) $form_values['eventrepeat_initial_render'] <= 730) {
+    variable_set('eventrepeat_initial_render', $form_values['eventrepeat_initial_render']);
+  }
+  if (is_numeric($form_values['eventrepeat_render_support']) && (int) $form_values['eventrepeat_render_support'] <= 10000) {
+    variable_set('eventrepeat_render_support', $form_values['eventrepeat_render_support']);
+  }
+  drupal_set_message(t('The settings have been updated.'));
+}
+
+/**
+ * Support function which generates a start timestamp for new nodes in a repeat sequence
+ *
+ * @ingroup eventrepeat_support
+ * @param $tracker Timestamp which is on the day that the repeat event occurs.
+ * @param $starthour The hour of the event start time.
+ * @param $startminute The minute of the event start time.
+ * @return GMT timestamp for the day on which the event occurs, adjusted to the start time of the event.
+ */
+function _eventrepeat_start_time($tracker, $starthour, $startminute) {
+  $startyear = (int) gmdate("Y", $tracker);
+  $startmonth = (int) gmdate("n", $tracker);
+  $startday = (int) gmdate("j", $tracker);
+  return gmmktime($starthour, $startminute, 0, $startmonth, $startday, $startyear);
+}
+
+/**
+ * helper function to turn an array of strings into a comma seperated, single quoted list.
+ *
+ * @ingroup eventrepeat_support
+ * @param $array An array of strings.
+ * @return A comma seperated, single quoted list containing the array values.
+ */
+function _eventrepeat_stringifier($array) {
+  foreach($array as $key=>$value) {
+    $array[$key] = "'$value'";
+  }
+  return implode(',', $array);
+}
+
+/**
+ * Validates module dependencies for the module.
+ *
+ * @param $form The form array passed from hook_form_alter.
+ *
+ * Set the $module variable to a string which is the name of the module, minus
+ * the .module extension.  Set $dependencies to an array of module names which
+ * the module is dependent on--each element is a string which is the module name
+ * minus the .module extension.  Note that this will not check for any dependencies
+ * for the modules this module depends on--only those that are explicitly listed in
+ * the $dependencies array.
+ */
+function _eventrepeat_system_module_validate(&$form) {
+
+  $module = 'eventrepeat';
+  $dependencies = array('event');
+
+  foreach ($dependencies as $dependency) {
+  	if (!in_array($dependency, $form['status']['#default_value'])) {
+  	  $missing_dependency = TRUE;
+  	  $missing_dependency_list[] = $dependency;
+  	}
+  }
+
+  if (in_array($module, $form['status']['#default_value']) && isset($missing_dependency)) {
+    db_query("UPDATE {system} SET status = 0 WHERE type = 'module' AND name = '%s'", $module);
+    $key = array_search($module, $form['status']['#default_value']);
+    unset($form['status']['#default_value'][$key]);
+    drupal_set_message(t('The module %module was deactivated--it requires the following disabled/non-existant modules to function properly: %dependencies', array('%module' => $module, '%dependencies' => implode(', ', $missing_dependency_list))), 'error');
+
+  }
+
+}
+
+/**
+ * Helper function that handles mass editing of nodes in a repeat sequence
+ *
+ * @ingroup eventrepeat_support.
+ * @param &$node The root node which the mass edit operation is based on, or a passed object which has the old start and end times of the node which is about to be updated.
+ * @param $timestamp The beginning timestamp from which to perform the mass edit.
+ * @return None.
+ */
+function _eventrepeat_update_nodes(&$node, $timestamp) {
+
+  global $form_values;
+
+  //here we store the old event start time from the load cycle.  seems like a hack, but i wasn't sure
+  //how else to do it!
+  static $old_event_times;
+  if ($node->eventrepeat_old_times) {
+    $old_event_times = $node;
+    return;
+  }
+
+  //unset eventrepeat_edit_type so this function isn't called multiple times
+  unset($form_values['eventrepeat_edit_type']);
+
+  //check here to make sure the user didn't edit the node to a whole different day.  if so, warn them and reset
+  //the day to the original value
+  $offset = event_get_offset($node->timezone, $node->event_start);
+  if (_event_date('Y-m-d', $node->event_start, $offset) != _event_date('Y-m-d', $old_event_times->event_start, $offset)) {
+    db_query('UPDATE {event} SET event_start = %d, event_end = %d WHERE nid = %d', $old_event_times->event_start,
+      $old_event_times->event_end, $node->nid);
+    drupal_set_message(t('You cannot edit an event start time to a day different than the one defined in the repeat
+      pattern in this manner.  Please visit the repeat settings page for this sequence to perform this kind of edit'));
+    return;
+  }
+
+  //pull all of the nids for nodes that are to be updated from this sequence
+  $result = db_query("SELECT e_r_n.nid, e.event_start FROM {event_repeat_nodes} e_r_n INNER JOIN {event} e
+    ON e_r_n.nid = e.nid WHERE e_r_n.rid = %d AND e.event_start >= %d",
+    $node->eventrepeat_rid, $timestamp);
+
+  //calculate time difference in start times pre/post edit, and duration for all the repeat nodes we'll be updating
+  $time_diff = $node->event_start - $old_event_times->event_start;
+  $duration = $node->event_end - $node->event_start;
+
+  //loop through the nids, calling node_save for all nodes besides the current one being updated
+  if ($result) {
+    while ($nid = db_fetch_object($result)) {
+      if ($nid->nid != $node->nid) {
+
+        //load the original node, and transfer some of the edited node data to it.  to avoid big problems, we're only going
+        //to allow overwrites of a few basic things that won't screw up any table relationships.
+        $edited_node = node_load($nid->nid);
+        $edited_node->title = $node->title;
+        $edited_node->body = $node->body;
+        $edited_node->teaser = $node->teaser;
+
+        //here we generate new start and end timestamps for the updated node, based on the date of the
+        //node we're editing, and the start and end time of the node we updated.  this is done in case
+        //the event start or end time was edited in the node we updated
+        $edited_node->event_start = $nid->event_start + $time_diff;
+        $edited_node->event_end = $edited_node->event_start + $duration;
+
+        node_save($edited_node);
+      }
+    }
+  }
+
+  //serialize the new root data to save and save it to the repeat pattern
+  $repeat_data = serialize($edited_node);
+  db_query("UPDATE {event_repeat} SET repeat_data = '%s' WHERE rid = %d", $repeat_data,
+    $node->eventrepeat_rid);
+}
+
+/**
+ * Prints the user help page for repeat events
+ *
+ * @ingroup eventrepeat_support
+ */
+function _eventrepeat_user_help() {
+
+  //print user help for repeat events
+  $output = t("<p>To create a repeat sequence you first must create the event, then click the 'edit' tab, then the 'repeat' tab to get to the repeat settings screen. Read below for a quick repeat pattern tutorial:</p>   <ol> <li>Set 'Repeat type'&nbsp; to the type of repeating pattern you wish to create</li><li>&nbsp;Set either 'Repeat end date' or 'Count' to determine the how many repeating events will be created (you can only set one of these parameters).&nbsp; If you want the pattern to be indefinite, then leave both of these settings empty.</li><li>Set any other parameters for the repeat pattern</li><li>Set any exception dates to the pattern using the exception editor.&nbsp; Exception dates are dates where a repeat event will not be created even if it falls within the repeat sequence<br />   </li> <li> You can't create repeat events in the past--if you set a sequence starting in the past, it will begin to render on the current date (or possibly the day before)</li> </ol>   <p> Except for the Count parameter, all other parameters operate as follows:<br /> </p> <p>Multiple selections within the same parameter use an OR comparison for determining the pattern (ex. Monday OR Tuesday OR Wednesday).&nbsp; Choosing multiple parameters uses an AND comparison between the parameters (ex. on Monday AND in March).</p> <p><br /> So, setting the days parameter to Monday, Wednesday--and the month parameter to July, August would result in this comparison logic: </p> <p>Occurs on (Monday OR Wednesday) AND (July OR August) <br /> </p>");
+  print theme('page', $output);
+}
+
+/**
+ * Validates the start and end times in a node form submission.
+ *
+ * @ingroup eventrepeat_support
+ * @param &$edit The submitted date information.
+ * @param $prefix The prefix to validate and set.
+ * @param $type The type of date box being validated.
+ * @param $node The root node for the sequence being created.
+ * @return Boolean indicating whether the validation was successful or not.
+ */
+function _eventrepeat_validate_form_date($prefix, $type, $node) {
+  global $form_values;
+
+  if ($form_values[$prefix.'year'] != 0 && $form_values[$prefix .'month'] != 0 && $form_values[$prefix.'day'] != 0) {
+
+    //translate the input values to the end of the day in local time.  we use local and not GMT time here
+    //because of the way end dates are handled in the rendering code.  also here we're going to validate
+    //that the end date doesn't occur on or before the start date of the selected event
+
+
+    if ($type != 'Exception') {
+      $offset = event_get_offset($node->timezone, gmmktime(23, 59, 59, $form_values[$prefix .'month'], $form_values[$prefix.'day'],
+      $form_values[$prefix.'year']));
+      $event_start = $node->event_start + $offset;
+      $event_start = gmmktime(23, 59, 59, (int) gmdate('n', $event_start), (int) gmdate('j', $event_start),
+        (int) gmdate('Y', $event_start));
+    }
+    $form_values[$prefix] = gmmktime(23, 59, 59, $form_values[$prefix.'month'], $form_values[$prefix.'day'], $form_values[$prefix.'year']);
+
+    //if the date is after the beginning of the node in question, or an exception date, then validate
+    //otherwise warn
+    if (($form_values[$prefix] > $event_start) || $type == 'Exception') {
+      return TRUE;
+    } else {
+      form_set_error('eventrepeat_endmonth', t('You have selected a date that is before or the same as the start of the selected event,
+       which is not allowed--check your repeat pattern settings and try again. <br> Note: If you are trying to shorten
+       the end date of a repeat cycle, perform that operation from an event date before the new end date.'));
+      return FALSE;
+    }
+
+  //set end date to no end
+  } elseif ($form_values[$prefix.'year'] == 0 && $form_values[$prefix.'month'] == 0 && $form_values[$prefix.'day'] == 0) {
+    $form_values[$prefix] = 0;
+    return TRUE;
+
+  //date data missing, so warn user
+  } elseif ($form_values[$prefix.'month'] == 0) {
+  	form_set_error($prefix.'month', t($type) . ' ' . t('date \'month\' value not selected'));
+  } elseif ($form_values[$prefix.'day'] == 0) {
+  	form_set_error($prefix.'day', t($type) . ' ' . t('date \'day\' value not selected'));
+  } elseif ($form_values[$prefix.'year'] == 0) {
+  	form_set_error($prefix.'year', t($type) . ' ' . t('date \'year\' value not selected'));
+  }
+}
+
+?>

@@ -1,0 +1,138 @@
+<?php
+/**
+ * Implementation of hook_install()
+ *
+ * This will automatically install the database tables for the Event Repeat module for both the MySQL and PostgreSQL databases.
+ *
+ * If you are using another database, you will have to install the tables by hand, using the queries below as a reference.
+ *
+ * Note that the curly braces around table names are a drupal-specific feature to allow for automatic database table prefixing,
+ * and will need to be removed.
+ */
+function eventrepeat_install() {
+  switch ($GLOBALS['db_type']) {
+    case 'mysqli':
+    case 'mysql':
+      $query1 = db_query("CREATE TABLE IF NOT EXISTS {event_repeat} (
+                            rid int(10) unsigned NOT NULL default '0',
+                            repeat_data longtext NOT NULL,
+                            repeat_RRULE longtext NOT NULL,
+                            repeat_COUNT_remaining int(4) NOT NULL default '-1',
+                            repeat_start int(10) unsigned NOT NULL default '0',
+                            repeat_end int(10) unsigned NOT NULL default '0',
+                            repeat_last_rendered int(10) unsigned NOT NULL default '0',
+                            PRIMARY KEY  (rid)
+                          ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
+
+      $query2 = db_query("CREATE TABLE IF NOT EXISTS {event_repeat_nodes} (
+                            rid int(10) unsigned NOT NULL default '0',
+                            nid int(10) unsigned NOT NULL default '0',
+                            repeat_edited int(2) unsigned NOT NULL default '0',
+                            UNIQUE KEY nid (nid),
+                            KEY rid (rid)
+                          ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
+
+      $query3 = db_query("CREATE TABLE IF NOT EXISTS {event_repeat_calendar_map} (
+                            day_stamp char(15) NOT NULL default '',
+                            date_stamp int(10) unsigned NOT NULL default '0',
+                            day_of_week char(2) NOT NULL default '',
+                            day_in_month char(3) NOT NULL default '',
+                            day_in_month_R char(4) NOT NULL default '',
+                            month_day char(2) NOT NULL default '',
+                            month_day_R char(3) NOT NULL default '',
+                            month char(2) NOT NULL default '',
+                            year_day char(3) NOT NULL default '',
+                            year_day_R char(4) NOT NULL default '',
+                            week_number char(2) NOT NULL default '',
+                            week_number_R char(3) NOT NULL default '',
+                            PRIMARY KEY  (date_stamp),
+                            KEY day_of_week (day_of_week),
+                            KEY day_in_month (day_in_month),
+                            KEY day_in_month_R (day_in_month_R),
+                            KEY month_day (month_day),
+                            KEY month_day_R (month_day_R),
+                            KEY month (month),
+                            KEY year_day (year_day),
+                            KEY year_day_R (year_day_R),
+                            KEY week_number (week_number),
+                            KEY week_number_R (week_number_R)
+                          ) TYPE=MyISAM /*!40100 DEFAULT CHARACTER SET utf8 */;");
+
+      if ($query1 && $query2 && $query3) {
+ 	      $created = TRUE;
+ 	    }
+      break;
+
+    case 'pgsql':
+      $query1 = db_query("CREATE TABLE {event_repeat} (
+                            rid SERIAL,
+                            repeat_data text NOT NULL default '',
+                            repeat_RRULE text NOT NULL default '',
+                            repeat_COUNT_remaining integer NOT NULL default '-1',
+                            repeat_start integer NOT NULL default '0',
+                            repeat_end integer NOT NULL default '0',
+                            repeat_last_rendered integer NOT NULL default '0',
+                            PRIMARY KEY  (rid)
+                          );");
+
+      $query2 = db_query("CREATE TABLE {event_repeat_nodes} (
+                            rid integer NOT NULL default '0',
+                            nid integer NOT NULL default '0',
+                            repeat_edited integer NOT NULL default '0'
+                          );");
+
+      $query3 = db_query('CREATE UNIQUE INDEX {event_repeat_nodes}_nid_idx ON event_repeat_nodes(nid);');
+      $query4 = db_query('CREATE INDEX {event_repeat_nodes}_rid_idx ON event_repeat_nodes(rid);');
+
+      $query5 = db_query("CREATE TABLE {event_repeat_calendar_map} (
+                            day_stamp text NOT NULL default '',
+                            date_stamp integer NOT NULL default '0',
+                            day_of_week text NOT NULL default '',
+                            day_in_month text NOT NULL default '',
+                            day_in_month_R text NOT NULL default '',
+                            month_day text NOT NULL default '',
+                            month_day_R text NOT NULL default '',
+                            month text NOT NULL default '',
+                            year_day text NOT NULL default '',
+                            year_day_R text NOT NULL default '',
+                            week_number text NOT NULL default '',
+                            week_number_R text NOT NULL default '',
+                            PRIMARY KEY  (date_stamp)
+                          );");
+
+      $query6 = db_query('CREATE UNIQUE INDEX {event_repeat_calendar_map}_date_stamp_idx ON event_repeat_calendar_map(date_stamp);');
+      $query7 = db_query('CREATE INDEX {event_repeat_calendar_map}_day_of_week_idx ON event_repeat_calendar_map(day_of_week);');
+      $query8 = db_query('CREATE INDEX {event_repeat_calendar_map}_day_in_month_idx ON event_repeat_calendar_map(day_in_month);');
+      $query9 = db_query('CREATE INDEX {event_repeat_calendar_map}_day_in_month_R_idx ON event_repeat_calendar_map(day_in_month_R);');
+      $query10 = db_query('CREATE INDEX {event_repeat_calendar_map}_month_day_idx ON event_repeat_calendar_map(month_day);');
+      $query11 = db_query('CREATE INDEX {event_repeat_calendar_map}_month_day_R_idx ON event_repeat_calendar_map(month_day_R);');
+      $query12 = db_query('CREATE INDEX {event_repeat_calendar_map}_month_idx ON event_repeat_calendar_map(month);');
+      $query13 = db_query('CREATE INDEX {event_repeat_calendar_map}_year_day_idx ON event_repeat_calendar_map(year_day);');
+      $query14 = db_query('CREATE INDEX {event_repeat_calendar_map}_year_day_R_idx ON event_repeat_calendar_map(year_day_R);');
+      $query15 = db_query('CREATE INDEX {event_repeat_calendar_map}_week_number_idx ON event_repeat_calendar_map(week_number);');
+      $query16 = db_query('CREATE INDEX {event_repeat_calendar_map}_week_number_R_idx ON event_repeat_calendar_map(week_number_R);');
+
+      if ($query1 && $query2 && $query3 && $query4 && $query5 && $query6 && $query7 && $query8 && $query9 && $query10 && $query11 && $query12 && $query13 && $query14 && $query15 && $query16) {
+ 	      $created = TRUE;
+ 	    }
+      break;
+  }
+
+  if ($created) {
+    eventrepeat_cron();
+    drupal_set_message(t('Event Repeat module installed successfully.'));
+  }
+  else {
+    drupal_set_message(t('Table installation for the Event Repeat module was unsuccessful. The tables may need to be installed by hand. See the eventrepeat.install file for a list of the installation queries.'), 'error');
+  }
+}
+
+/**
+ * UTF8 table update
+ */
+function eventrepeat_update_1() {
+  return _system_update_utf8(array('event_repeat', 'event_repeat_nodes', 'event_repeat_calendar_map'));
+}
+
+
+?>

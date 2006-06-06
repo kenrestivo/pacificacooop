@@ -1,0 +1,51 @@
+TO INSTALL:
+Note: It is assumed that you have Drupal up and running.  Be sure to
+check the Drupal web site if you need assistance.  If you run into
+problems, you should always read the INSTALL.txt that comes with the
+Drupal package and read the online documentation.
+
+:Preparing for Installation:
+
+Note: Backing up your database is a very good idea before you begin!
+
+1. Place the eventrepeat package into your Drupal modules/ directory.
+
+2. Enable the eventrepeat module by navigating to: administer > modules
+
+	Note: you must also install and enable the event package, as 
+              eventrepeat depends on it!
+
+   Click the 'Save configuration' button at the bottom to commit your
+   changes.
+
+3. Drupal will then try to install the database tables for the module automatically.
+   MySQL or PostgreSQL are supported for automatic installation.  If you are not using
+   either of these databases, or there are errors in the automatic install, you will have
+   to install the database tables by hand. You can get a list of the necessary table queries
+   from the eventrepeat.install file located in the eventrepeat module folder.
+
+4. For the final configuration of the module, navigate to
+   administer > settings > eventrepeat
+
+   Here you can configure the options for the module.
+
+5. In order for repeating events to be created for a node type, you must first 
+   configure that node type to be enabled for repeating events. Enable the node 
+   types that you wish to allow repeating events for under
+
+   administer > settings > content types > configure
+
+   While you're in the configuration settings screen, also make sure that
+   the node type is set to be visible in the event calendar--otherwise
+   eventrepeat will not work properly on that node type
+
+   You may wish to create a new content type if it seems appropriate.
+
+6. To enable users to create repeat events, set the 'create repeat events' permission for all applicable roles.  This can be found at administer > access control
+
+7. You must have cron running on your site (and be visiting your site's cron.php
+   page) for eventrepeat to work properly, and it's suggested that the cron runs
+   happen at least twice a day.
+
+7. Visit your site's administer->help->eventrepeat for details on how to begin 
+   creating repeating events.

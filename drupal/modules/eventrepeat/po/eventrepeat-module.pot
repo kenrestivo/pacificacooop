@@ -1,0 +1,409 @@
+# LANGUAGE translation of Drupal (eventrepeat.module)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from file: eventrepeat.module,v 1.16 2006/01/26 00:25:56 thehunmonkgroup
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2006-01-26 21:16+0100\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: eventrepeat.module:344;377
+msgid "This occurance only"
+msgstr ""
+
+#: eventrepeat.module:345;378
+msgid "This occurance and all future occurances"
+msgstr ""
+
+#: eventrepeat.module:346;379
+msgid "All occurances"
+msgstr ""
+
+#: eventrepeat.module:353
+msgid "Repeat event--delete the following"
+msgstr ""
+
+#: eventrepeat.module:353
+msgid "'This occurance and all future occurances' will delete repeat events from the date of the selected node forward, 'All occurances' will delete repeat events after today's date."
+msgstr ""
+
+#: eventrepeat.module:361
+msgid "Allow repeat events"
+msgstr ""
+
+#: eventrepeat.module:363
+msgid "if selected, users will be allowed to add repeating events for this node type"
+msgstr ""
+
+#: eventrepeat.module:381
+msgid "Apply edit(s) to"
+msgstr ""
+
+#: eventrepeat.module:381
+msgid "'This occurance and all future occurances' will edit repeat events from the date of the selected node forward, 'All occurances' will edit repeat events after today's date. <br>Note: editing a single occurance will remove it from the repeat sequence."
+msgstr ""
+
+#: eventrepeat.module:385;600;822
+msgid "Need help creating a repeat pattern? Click "
+msgstr ""
+
+#: eventrepeat.module:385;600;822
+msgid "here"
+msgstr ""
+
+#: eventrepeat.module:402
+msgid "Adds support for repeating events.  Dependency: event.module"
+msgstr ""
+
+#: eventrepeat.module:404
+msgid "<p>Eventrepeat enables the creation of repeating event patterns for node types that are event-enabled.&nbsp; In order for repeating events to be created for a node type, you must first configure that node type to be enabled for repeating events.&nbsp; This is done in the configuration page for the specified node type (located in administer-&gt;settings-&gt;content types). While you're in the configuration screen, check that the node type is also able to be viewed in the event calendar.<br /> </p><p>To create a repeat sequence you first must create the event, then click the 'edit' tab, then the 'repeat' tab to get to the repeat settings screen (it's necessary to do it this way because the repeat code needs all of the node data in order to create more nodes). Read below for a quick repeat pattern tutorial:</p> <ol>   <li>Set 'Repeat type'&nbsp; to the type of repeating pattern you wish to create</li>   <li>&nbsp;Set either 'Repeat end date' or 'Count' to determine the how many repeating events will be created (you can only set one of these parameters).&nbsp; If you want the pattern to be indefinite, then leave both of these settings empty.</li>   <li>Set any other parameters for the repeat pattern</li>   <li>Set any exception dates to the pattern using the exception editor.&nbsp; Exception dates are dates where a repeat event will not be created even if it falls within the repeat sequence<br />   </li> <li>You can't create repeat events in the past--if you set a sequence starting in the past, it will begin to render on the current date (or possibly the day before)</li> </ol> <p> Except for the Count parameter, all other parameters operate as follows:<br /> </p><p>Multiple selections within the same parameter use an OR comparison for determining the pattern (ex. Monday OR Tuesday OR Wednesday).&nbsp; Choosing multiple parameters uses an AND comparison between the parameters (ex. on Monday AND in March).</p><p><br /> So, setting the days parameter to Monday, Wednesday--and the month parameter to July, August would result in this comparison logic: </p><p>Occurs on (Monday OR Wednesday) AND (July OR August)&nbsp;</p> <p>Eventrepeat's pattern creation was largely modeled on the iCal RRULE specification.&nbsp; At this time, it should support all RRULE parameters, with the following exceptions:</p>  <ol>   <li>Recurrance periods less than DAILY<br />   </li>   <li>BYDAY declarations greater than 5 and less than -5 (ex. 20th Monday of the year is not supported).&nbsp; Other similar patterns can be built that should approximate this functionality.</li>   <li>BYSETPOS parameter<br />   </li> <li>EXRULE parameter<br />   </li> </ol> <p> </p><p>&nbsp;</p> <p>&nbsp;</p> <blockquote> <p> </p></blockquote>"
+msgstr ""
+
+#: eventrepeat.module:421;435
+msgid "repeat"
+msgstr ""
+
+#: eventrepeat.module:423
+msgid "repeat help"
+msgstr ""
+
+#: eventrepeat.module:533;965;1584
+msgid "Submit"
+msgstr ""
+
+#: eventrepeat.module:683
+msgid "This calendar view is outside of the range of repeat event support"
+msgstr ""
+
+#: eventrepeat.module:822
+msgid "<br>NOTE: Editing an existing repeat pattern maps previously created events to the new pattern, in sequential order, on all dates from the date where the edit is performed."
+msgstr ""
+
+#: eventrepeat.module:826
+msgid "none"
+msgstr ""
+
+#: eventrepeat.module:827
+msgid "Daily"
+msgstr ""
+
+#: eventrepeat.module:828
+msgid "Weekly"
+msgstr ""
+
+#: eventrepeat.module:829
+msgid "Monthly"
+msgstr ""
+
+#: eventrepeat.module:830
+msgid "Yearly"
+msgstr ""
+
+#: eventrepeat.module:832
+msgid "Repeat type"
+msgstr ""
+
+#: eventrepeat.module:832
+msgid "select 'none' to disable repeats for this event"
+msgstr ""
+
+#: eventrepeat.module:835
+msgid "End Settings"
+msgstr ""
+
+#: eventrepeat.module:835
+msgid "Select only one of the above end parameters"
+msgstr ""
+
+#: eventrepeat.module:838
+msgid "Repeat end date"
+msgstr ""
+
+#: eventrepeat.module:840
+msgid "OR"
+msgstr ""
+
+#: eventrepeat.module:847
+msgid "Count"
+msgstr ""
+
+#: eventrepeat.module:847
+msgid "Determines the number of repeat nodes that will be created for the repeat sequence"
+msgstr ""
+
+#: eventrepeat.module:854
+msgid "Interval"
+msgstr ""
+
+#: eventrepeat.module:854
+msgid "Frequency of repeat: 1 = every, 2 = every other, 3 = every 3rd, etc."
+msgstr ""
+
+#: eventrepeat.module:858
+msgid "Sunday"
+msgstr ""
+
+#: eventrepeat.module:859
+msgid "Monday"
+msgstr ""
+
+#: eventrepeat.module:860
+msgid "Tuesday"
+msgstr ""
+
+#: eventrepeat.module:861
+msgid "Wednesday"
+msgstr ""
+
+#: eventrepeat.module:862
+msgid "Thursday"
+msgstr ""
+
+#: eventrepeat.module:863
+msgid "Friday"
+msgstr ""
+
+#: eventrepeat.module:864
+msgid "Saturday"
+msgstr ""
+
+#: eventrepeat.module:870
+msgid "1st"
+msgstr ""
+
+#: eventrepeat.module:871
+msgid "2nd"
+msgstr ""
+
+#: eventrepeat.module:872
+msgid "3rd"
+msgstr ""
+
+#: eventrepeat.module:873
+msgid "4th"
+msgstr ""
+
+#: eventrepeat.module:874
+msgid "5th"
+msgstr ""
+
+#: eventrepeat.module:875
+msgid "Last"
+msgstr ""
+
+#: eventrepeat.module:876
+msgid "Next to Last"
+msgstr ""
+
+#: eventrepeat.module:877
+msgid "2nd from Last"
+msgstr ""
+
+#: eventrepeat.module:878
+msgid "3rd from Last"
+msgstr ""
+
+#: eventrepeat.module:879
+msgid "4th from Last"
+msgstr ""
+
+#: eventrepeat.module:890
+msgid "Day(s)"
+msgstr ""
+
+#: eventrepeat.module:890
+msgid "Determines what day(s) of the week/month this event repeats on (by day of the week).  Lots of options available, scroll down!"
+msgstr ""
+
+#: eventrepeat.module:894;993
+msgid "January"
+msgstr ""
+
+#: eventrepeat.module:895;994
+msgid "February"
+msgstr ""
+
+#: eventrepeat.module:896;995
+msgid "March"
+msgstr ""
+
+#: eventrepeat.module:897;996
+msgid "April"
+msgstr ""
+
+#: eventrepeat.module:898;997
+msgid "May"
+msgstr ""
+
+#: eventrepeat.module:899;998
+msgid "June"
+msgstr ""
+
+#: eventrepeat.module:900;999
+msgid "July"
+msgstr ""
+
+#: eventrepeat.module:901;1000
+msgid "August"
+msgstr ""
+
+#: eventrepeat.module:902;1001
+msgid "September"
+msgstr ""
+
+#: eventrepeat.module:903;1002
+msgid "October"
+msgstr ""
+
+#: eventrepeat.module:904;1003
+msgid "November"
+msgstr ""
+
+#: eventrepeat.module:905;1004
+msgid "December"
+msgstr ""
+
+#: eventrepeat.module:907
+msgid "Month(s)"
+msgstr ""
+
+#: eventrepeat.module:907
+msgid "Selects what month(s) of the year this event repeats on"
+msgstr ""
+
+#: eventrepeat.module:917
+msgid "Day(s) of the Month"
+msgstr ""
+
+#: eventrepeat.module:917
+msgid "Determines what day(s) of the month this event repeats on (the actual day number in the month).  Negative numbers count from the end of the month."
+msgstr ""
+
+#: eventrepeat.module:927
+msgid "Day(s) of the Year"
+msgstr ""
+
+#: eventrepeat.module:927
+msgid "Determines what day(s) of the year this event repeats on.  Negative numbers count from the end of the year."
+msgstr ""
+
+#: eventrepeat.module:937
+msgid "Week Number(s)"
+msgstr ""
+
+#: eventrepeat.module:937
+msgid "Selects what week(s) of the year this event repeats on"
+msgstr ""
+
+#: eventrepeat.module:951
+msgid "Current Exceptions"
+msgstr ""
+
+#: eventrepeat.module:959
+msgid "Exception Editor"
+msgstr ""
+
+#: eventrepeat.module:959
+msgid "Enter exception dates here (dates that will not be rendered as part of the repeat sequence).  If you wish to delete an already existing exception, enter the date again. Don't forget to press the 'Submit' button after editing the exception dates!"
+msgstr ""
+
+#: eventrepeat.module:967
+msgid "Repeat settings: %title<br>%event_start"
+msgstr ""
+
+#: eventrepeat.module:984;992;1008
+msgid "Select"
+msgstr ""
+
+#: eventrepeat.module:1020;1049;1285
+msgid "Add/Delete Exception"
+msgstr ""
+
+#: eventrepeat.module:1234
+msgid "repeat pattern updated--existing events have been mapped to the new pattern%add_delete"
+msgstr ""
+
+#: eventrepeat.module:1261
+msgid "Repeat settings updated"
+msgstr ""
+
+#: eventrepeat.module:1278
+msgid "You must select a Repeat Type in order to save the settings"
+msgstr ""
+
+#: eventrepeat.module:1291
+msgid "'Repeat end date' and 'Count' cannot both be set--select only one to\n      provide a valid end point for the sequence"
+msgstr ""
+
+#: eventrepeat.module:1580
+msgid "Title tag"
+msgstr ""
+
+#: eventrepeat.module:1580
+msgid "Enter a tag that will be prepended to all events in a repeat sequence--leave blank for no tag."
+msgstr ""
+
+#: eventrepeat.module:1581
+msgid "Leave individual edits in sequence"
+msgstr ""
+
+#: eventrepeat.module:1581
+msgid "If selected, individually edited nodes will remain part of their repeat sequence<br>WARNING: Subsequent mass edits involving the individually edited node will overwrite the old data!"
+msgstr ""
+
+#: eventrepeat.module:1582
+msgid "Initial render period"
+msgstr ""
+
+#: eventrepeat.module:1582
+msgid "Initial period of time for which a repeat sequence is rendered upon it's creation--also the number of days from the current date that repeating nodes are automatically updated (events outside this range will only be rendered upon first viewing of a calendar period that contains them, up to the rendering support period). Default value is 90 days. Maximum allowed value is 730 days"
+msgstr ""
+
+#: eventrepeat.module:1583
+msgid "Render support period"
+msgstr ""
+
+#: eventrepeat.module:1583
+msgid "Number of days from current date that repeat rendering is supported. Default is 2000 days, and it's recommended that this value be kept. Maximum allowed value is 10000."
+msgstr ""
+
+#: eventrepeat.module:1668
+msgid "You cannot edit an event start time to a day different than the one defined in the repeat\n      pattern in this manner.  Please visit the repeat settings page for this sequence to perform this kind of edit"
+msgstr ""
+
+#: eventrepeat.module:1717
+msgid "<p>To create a repeat sequence you first must create the event, then click the 'edit' tab, then the 'repeat' tab to get to the repeat settings screen. Read below for a quick repeat pattern tutorial:</p>   <ol> <li>Set 'Repeat type'&nbsp; to the type of repeating pattern you wish to create</li><li>&nbsp;Set either 'Repeat end date' or 'Count' to determine the how many repeating events will be created (you can only set one of these parameters).&nbsp; If you want the pattern to be indefinite, then leave both of these settings empty.</li><li>Set any other parameters for the repeat pattern</li><li>Set any exception dates to the pattern using the exception editor.&nbsp; Exception dates are dates where a repeat event will not be created even if it falls within the repeat sequence<br />   </li> <li> You can't create repeat events in the past--if you set a sequence starting in the past, it will begin to render on the current date (or possibly the day before)</li> </ol>   <p> Except for the Count parameter, all other parameters operate as follows:<br /> </p> <p>Multiple selections within the same parameter use an OR comparison for determining the pattern (ex. Monday OR Tuesday OR Wednesday).&nbsp; Choosing multiple parameters uses an AND comparison between the parameters (ex. on Monday AND in March).</p> <p><br /> So, setting the days parameter to Monday, Wednesday--and the month parameter to July, August would result in this comparison logic: </p> <p>Occurs on (Monday OR Wednesday) AND (July OR August) <br /> </p>"
+msgstr ""
+
+#: eventrepeat.module:1757
+msgid "You have selected a date that is before or the same as the start of the selected event,\n       which is not allowed--check your repeat pattern settings and try again. <br> Note: If you are trying to shorten\n       the end date of a repeat cycle, perform that operation from an event date before the new end date."
+msgstr ""
+
+#: eventrepeat.module:1770
+msgid "date 'month' value not selected"
+msgstr ""
+
+#: eventrepeat.module:1772
+msgid "date 'day' value not selected"
+msgstr ""
+
+#: eventrepeat.module:1774
+msgid "date 'year' value not selected"
+msgstr ""
+
+#: eventrepeat.module:450
+msgid "create repeat events"
+msgstr ""
+
+#: eventrepeat.module:0
+msgid "eventrepeat"
+msgstr ""
+

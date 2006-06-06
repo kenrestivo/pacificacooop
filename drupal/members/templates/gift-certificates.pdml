@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdml>
+  <head>
+  </head>
+
+  <body>
+    
+    <div tal:omit-tag="" 
+         tal:repeat="package giftcerts" 
+         tal:condition="package/package_description">
+      
+      <page />
+
+      <column count="1">
+
+        <font size="24pt">
+          <multicell align="center" >
+            <i tal:content="string:Gift Certificate for ${package/package_number}">package number</i>
+          </multicell>
+          
+          <br height="1in" />
+          
+          <div tal:omit-tag="" tal:condition="package/package_title">
+            <multicell align="center" >
+              <b tal:content="package/package_title">title</b>
+            </multicell>
+            <br height="0.5in"/>
+          </div>
+          
+          <font size="18pt">
+            <multicell align="left"  width="6.5in" inter="24pt"
+                   tal:content="php: strip_tags(unHTML(${package/package_description}))">Description</multicell>
+            
+            <br height="1in" />
+          </font>
+
+          <multicell align="center" >Value: ${package/package_value}</multicell>
+
+          <br height="1in"/>
+
+          <multicell align="center" >Date Issued: ${eventdate}</multicell>
+
+          <br />
+        </font>
+            
+        
+      </column>
+
+
+      <footer>    
+        <img border="0" left="7in" top="9.5in" height="48pt" 
+             src="string:${page/uri_path}/images/round-small-logo.png" />
+        <cell align="right" width="6in"  top="10in">Sunset Surf</cell>        
+      </footer>
+
+
+    </div>      
+
+
+
+    
+  </body>
+</pdml>

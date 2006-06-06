@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdml>
+  <head>
+  </head>
+
+  <body>
+    
+    <header>    
+      <img left="3.5in" border="0" src="string:${page/uri_path}/images/round-small-logo.png" />
+    </header>
+
+    
+    <div tal:omit-tag="" 
+         tal:repeat="note page/thank_you_notes" 
+         tal:condition="note">
+
+      
+      <page />
+
+      <br height="1.5in" tal:comment="just for good luck" />
+
+
+      <column count="1">
+        <multicell align="left"  width="6.5in" inter="15pt"
+                   tal:comment="leading spaces are still broken"><div metal:use-macro="obj://page/thank_you_notes/obj/main_body"></div>
+        </multicell>
+      </column>
+      
+    </div>      
+
+    
+  </body>
+</pdml>

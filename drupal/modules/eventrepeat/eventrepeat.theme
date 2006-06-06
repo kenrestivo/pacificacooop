@@ -1,0 +1,10 @@
+<?php
+
+//$Id: eventrepeat.theme,v 1.1 2005/09/13 05:22:21 thehunmonkgroup Exp $
+
+  //theme function that prepends the repeat tag onto events in a repeat sequence
+  function theme_eventrepeat_title_tag($title) {
+    return variable_get('eventrepeat_title_tag', '') . $title;
+  }
+
+?>
