@@ -24,6 +24,7 @@ require_once('COOP/Page.php');
 require_once('COOP/View.php');
 require_once('COOP/Form.php');
 require_once('HTML/Table.php');
+require_once('COOP/Enhancement.php');
 
 
 
